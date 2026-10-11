@@ -50,7 +50,8 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
 | DeepWiki (MCP) | **100%** | 20 | 3 tools | 70 | 175, 98% coverage | 3 | over $8 | *Parity* is the weighted
 share of checks (status, shape, content type, values, lengths, headers) on which the fake answered
 like the real service, over end-to-end scenarios run against both. *Reported cost* is what Claude
-Code reported for the sessions. The finished fakes are in [`examples/`](../examples/).
+Code reported for the sessions. The finished fakes are in [`examples/`](../examples/), except
+DeepWiki's (see below).
 
 **Reference API.** The hardest target: trading sessions per exchange, async uploads, cursor
 pagination, a fixed-window rate limit, an SSE stream and a WebSocket feed. The first session was cut
@@ -98,6 +99,13 @@ the review's fixes and couldn't be repeated: the approved budget was spent. **Th
 `ask_wiki_question` calls against an approval of 30**: a session stopped mid-recording (to restart it
 with the user's Jev key) hadn't saved the count of 6 calls, so the next one spent the full budget on
 top of them. They were read-only calls to a public service; the bug is fixed (`af370c3`).
+
+The DeepWiki fake is not in `examples/`. Its recordings are the wiki pages and answers DeepWiki
+generated, and nothing grants a right to republish them: Cognition, which runs DeepWiki, publishes
+no license for that content, and its [website terms](https://cognition.com/legal/website-terms-of-use)
+(section 3.1) and [acceptable use policy](https://cognition.com/acceptable-use-policy) forbid
+copying or republishing it. The results above describe how the fake performed without reproducing
+any of it.
 
 ## Integrity
 
