@@ -31,7 +31,7 @@ These were settled with the project owner before implementation (2026-10-10). Th
 | Check-ins | Key gates only: up-front plan (endpoints, credentials, Jev key, **one consolidated approval of all mutating calls**), genuinely ambiguous real-world behavior, final report. |
 | Mutating calls | Approved **once, up front** as a single plan (with cleanup steps); autonomous afterwards. The CLI refuses unapproved mutating calls. |
 | Secrets | Credentials live in a gitignored `.env` (pydantic-settings). Auth headers, tokens, cookies, keys are redacted from recordings. |
-| PII | **Pseudonymized** deterministically (keyed HMAC, key in `.env`), format-preserving, consistent across endpoints so references survive. |
+| PII | **Pseudonymized** deterministically (keyed HMAC, key in `.env`), format-preserving, consistent across endpoints so references survive. Names/addresses come from Faker, so Faker stays pinned in the lock file wherever recordings are made and parity tests run. |
 | Storage | **JSON/JSONL only** — no SQLite. Recordings, model and world are diffable text committed to git; fakes load the world into memory. Ad-hoc SQL over recordings is available through a throwaway in-memory SQLite (`fauxcall sql`). |
 | Jev | The build asks whether the user has a Jev (TypeSafe) key. It is used **only if they have one and a fake needs it**. Build-time judgment calls are made by the agent itself. |
 
