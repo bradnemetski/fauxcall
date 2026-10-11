@@ -806,6 +806,13 @@ def _write_workspace(
         "owned",
         result,
     )
+    # Images are built from the workspace root: secrets stay out of them, always.
+    _write(
+        workspace.root / ".dockerignore",
+        env.get_template("workspace/dockerignore.j2").render(),
+        "generated",
+        result,
+    )
 
 
 def _workspace_fakes(

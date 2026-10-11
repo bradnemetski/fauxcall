@@ -997,6 +997,7 @@ def test_rescaffold_keeps_owned_files_and_rewrites_generated_ones(tmp_path: Path
         layout.root / ".env.example",
         workspace.root / "README.md",
         workspace.root / "compose.yaml",
+        workspace.root / ".dockerignore",
         tmp_path / ".github" / "workflows" / "fauxcall.yml",
     ]
     originals = {path: path.read_text() for path in generated}
@@ -1016,6 +1017,14 @@ def test_rescaffold_keeps_owned_files_and_rewrites_generated_ones(tmp_path: Path
             assert path.read_text() == originals[path], path
     assert "Bearer your-token" in (layout.root / ".env.example").read_text()
     assert workspace.root / "pyproject.toml" in result.kept
+
+
+def test_images_never_get_credentials(tmp_path: Path) -> None:
+    workspace = Workspace(tmp_path / "fakes")
+    scaffold_tricky(workspace, tmp_path)
+    ignored = (workspace.root / ".dockerignore").read_text().splitlines()
+    for pattern in ("**/.env", "**/.env.*", "!**/.env.example", "**/.venv", "**/data/state"):
+        assert pattern in ignored  # COPY . /workspace would otherwise copy every fake's .env
 
 
 def test_readme_notes_survive_a_rescaffold(tmp_path: Path) -> None:
