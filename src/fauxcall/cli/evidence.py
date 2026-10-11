@@ -234,10 +234,14 @@ def plan_check(name: str, plan: Path) -> None:
         raise fail(f"invalid plan: {error}") from error
     model = load_model(fake)
     approvals = _approvals(fake)
-    unknown = [
+    undocumented = {
         c.endpoint
         for c in parsed.calls
         if model.find_endpoint(c.endpoint) is None and not c.endpoint.startswith("MCP ")
+    }
+    # Routing probes (purpose "edge") may target paths the API doesn't have: that's the point.
+    unknown = [
+        c.endpoint for c in parsed.calls if c.endpoint in undocumented and c.purpose != "edge"
     ]
     for call in parsed.calls:
         state = (
@@ -245,7 +249,8 @@ def plan_check(name: str, plan: Path) -> None:
             if not call.is_mutating
             else ("approved" if approvals.find(call) else "NEEDS APPROVAL")
         )
-        echo(f"- {call.id}: {call.endpoint} x{call.repeat} — {state}")
+        probe = " (routing probe: not in the model)" if call.endpoint in undocumented else ""
+        echo(f"- {call.id}: {call.endpoint} x{call.repeat} — {state}{probe}")
     if unknown:
         raise fail(f"unknown endpoints: {', '.join(sorted(set(unknown)))}")
 

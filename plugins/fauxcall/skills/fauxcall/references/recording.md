@@ -129,7 +129,9 @@ Errors are part of the contract — agents handle them. For each endpoint record
 missing required parameters, empty values (`?limit=`), wrong types, out-of-range values, unknown ids,
 invalid bodies, unsupported methods. Once per API (purpose `auth`): no credentials (`"auth": "none"`), invalid credentials
 (`"auth": "invalid"`). Once per API (purpose `edge`): the same path with different letter case and with
-a trailing slash (routing quirks), and a path that doesn't exist (the real 404).
+a trailing slash (routing quirks), and a path that doesn't exist (the real 404). File a probe of a path
+the model doesn't have under that path's own id (`"endpoint": "GET /v1/does-not-exist"`); `plan
+check` accepts unknown endpoints for purpose `edge` only.
 
 Do **not** probe rate limits by hammering the API unless the user explicitly approved it; read the
 limits from the documentation and from rate-limit headers instead.

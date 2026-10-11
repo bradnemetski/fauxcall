@@ -440,6 +440,11 @@ def test_plan_check(ws: Workspace, tmp_path: Path) -> None:
         "unknown endpoints: GET /v2/x"
         in invoke("plan", "check", "shop", str(unknown), code=1).output
     )
+    probe = write_plan(
+        fake, "routing", [{**get("nope", "/v1/nope", "GET /v1/nope"), "purpose": "edge"}]
+    )
+    checked = invoke("plan", "check", "shop", str(probe)).output
+    assert "- nope: GET /v1/nope x1 — read-only (routing probe: not in the model)" in checked
     broken = tmp_path / "broken.json"
     broken.write_text('{"name": "b"}')
     assert "invalid plan" in invoke("plan", "check", "shop", str(broken), code=1).output
