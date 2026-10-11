@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Widgets API Reference</title>
+  <style>body { font-family: sans-serif; }</style>
+  <script>window.dataLayer = window.dataLayer || [];</script>
+</head>
+<body>
+  <nav class="sidebar">
+    <a href="/">Home</a>
+    <a href="guides/auth">Authentication guide</a>
+    <a href="https://docs.example.com/api/widgets#create">Create a widget</a>
+  </nav>
+  <main>
+    <h1>Widgets API <a class="headerlink" href="#widgets-api">¶</a></h1>
+    <p>The Widgets API lets you <strong>create</strong> and
+       list widgets. Base URL: <code>https://api.example.com/v1</code>.</p>
+    <h2 id="auth">Authentication</h2>
+    <p>Send your key in the <code>X-Api-Key</code> header.<br>Keys never expire.</p>
+    <h2>List widgets</h2>
+    <pre><code class="language-bash">curl https://api.example.com/v1/widgets \
+  -H "X-Api-Key: $KEY"</code></pre>
+    <button class="copy">Copy</button>
+    <h3>Query parameters</h3>
+    <table>
+      <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>limit</code></td><td>integer</td><td>Max items (1-100)</td></tr>
+        <tr><td><code>color</code></td><td>string</td><td>Filter by color | name</td></tr>
+      </tbody>
+    </table>
+    <h3>Errors</h3>
+    <ul>
+      <li><code>401</code> - missing key</li>
+      <li><code>429</code> - rate limited
+        <ul><li>Retry after <code>Retry-After</code> seconds</li></ul>
+      </li>
+    </ul>
+    <ol><li>First</li><li>Second</li></ol>
+    <blockquote><p>Widgets are eventually consistent.</p></blockquote>
+    <dl><dt>color</dt><dd>One of red, green, blue.</dd></dl>
+    <hr>
+    <p>
+      See <a href="widgets#create">Create a widget</a>,
+      <a href="https://docs.example.com/api/errors">errors</a>,
+      <a href="https://www.docs.example.com/api/changelog">changelog</a>,
+      <a href="https://github.com/example/widgets">GitHub</a>,
+      <a href="mailto:help@example.com">email us</a>,
+      <a href="javascript:void(0)">nothing</a>,
+      <a href="#auth">this page</a>.
+    </p>
+  </main>
+  <footer>&copy; 2026 Example <a href="/terms">Terms</a></footer>
+</body>
+</html>

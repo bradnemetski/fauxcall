@@ -1,0 +1,256 @@
+# Hand-written fixture: $ref resolution (incl. ~0/~1 escapes, an external ref and a cycle), allOf,
+# path-level parameters with an operation-level override, server variables, three security
+# schemes, and YAML quirks (unquoted integer status keys, an `on:` key, an unquoted date).
+openapi: 3.0.3
+info:
+  title: Refs Demo API
+  version: "2.1"
+  description: |
+    Things, their attachments and their event streams.
+servers:
+  - url: https://{region}.api.example.com/{basePath}
+    description: Production
+    variables:
+      region:
+        default: eu
+        enum: [eu, us]
+      basePath:
+        default: v2
+  - url: https://sandbox.example.com/v2
+    description: Sandbox
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+tags:
+  - name: things
+paths:
+  /things:
+    get:
+      operationId: listThings
+      summary: List things
+      tags: [things]
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - name: tag
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        200:
+          description: A page of things
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+            Link:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Thing"
+        default:
+          $ref: "#/components/responses/Error"
+    post:
+      operationId: createThing
+      tags: [things]
+      description: |
+        Create a thing.
+        The second line is not part of the summary.
+      requestBody:
+        $ref: "#/components/requestBodies/NewThing"
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Thing"
+        4XX:
+          description: Client error
+      security:
+        - OAuth: ["things:write"]
+  /things/{thingId}:
+    parameters:
+      - $ref: "#/components/parameters/ThingId"
+      - name: X-Request-Id
+        in: header
+        schema:
+          type: string
+    get:
+      operationId: getThing
+      summary: Get a thing
+      tags: [things]
+      parameters:
+        - name: X-Request-Id
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: Accept
+          in: header
+          schema:
+            type: string
+      responses:
+        200:
+          description: The thing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Thing"
+        404:
+          $ref: "#/components/responses/Error"
+    delete:
+      operationId: deleteThing
+      summary: Delete a thing
+      deprecated: true
+      tags: [things]
+      responses:
+        204:
+          description: Deleted
+  /things/{thingId}/attachments:
+    parameters:
+      - $ref: "#/components/parameters/ThingId"
+    post:
+      operationId: uploadAttachment
+      summary: Upload an attachment
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: Stored
+  /things/{thingId}/events:
+    get:
+      operationId: streamThingEvents
+      summary: Stream thing events
+      parameters:
+        - $ref: "#/components/parameters/ThingId"
+      responses:
+        200:
+          description: Server-sent events
+          content:
+            text/event-stream:
+              schema:
+                type: string
+  /health:
+    get:
+      operationId: health
+      summary: Health check
+      security: []
+      responses:
+        200:
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      description: Page size
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    ThingId:
+      name: thingId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBodies:
+    NewThing:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NewThing"
+  responses:
+    Error:
+      description: Something went wrong
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Error"
+  schemas:
+    NewThing:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        on:
+          type: boolean
+          description: YAML 1.1 loaders turn this key into the boolean true
+        created:
+          type: string
+          format: date
+          example: 2024-01-15
+        nickname:
+          $ref: "#/components/schemas/weird~1name~0x"
+        metadata:
+          $ref: "common.yaml#/components/schemas/Metadata"
+    Thing:
+      allOf:
+        - $ref: "#/components/schemas/NewThing"
+        - type: object
+          properties:
+            id:
+              type: string
+            parent:
+              $ref: "#/components/schemas/Thing"
+            children:
+              type: array
+              items:
+                $ref: "#/components/schemas/Thing"
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+    weird/name~x:
+      type: string
+      maxLength: 40
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.example.com/authorize
+          tokenUrl: https://auth.example.com/token
+          scopes:
+            things:read: Read things
+            things:write: Write things
+        clientCredentials:
+          tokenUrl: https://auth.example.com/token
+          scopes:
+            things:read: Read things
+            admin: Administer everything

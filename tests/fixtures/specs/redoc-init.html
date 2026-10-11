@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Refs Demo API Reference</title>
+    <link rel="stylesheet" href="/assets/site.css" />
+  </head>
+  <body>
+    <header class="site-header"><a href="/">Example Developers</a></header>
+    <div id="redoc-container"></div>
+    <script src="https://cdn.redoc.ly/redoc/v2.1.5/bundles/redoc.standalone.js"></script>
+    <script>
+      Redoc.init(
+        'specs/refs-openapi.yaml',
+        {
+          scrollYOffset: 50,
+          hideDownloadButton: false,
+          theme: { colors: { primary: { main: '#32329f' } } }
+        },
+        document.getElementById('redoc-container')
+      );
+    </script>
+  </body>
+</html>

@@ -1,0 +1,570 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Time API Docs",
+    "description": "This is a Time API / Time Zone API",
+    "contact": {
+      "email": "support@timeapi.io"
+    },
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/v1/time/current/unix": {
+      "get": {
+        "tags": [
+          "Time"
+        ],
+        "summary": "Gets the current unix timestamp (seconds since 1970-01-01 UTC).",
+        "responses": {
+          "200": {
+            "description": "Current unix timestamp"
+          }
+        }
+      }
+    },
+    "/api/v1/time/current/unix_ms": {
+      "get": {
+        "tags": [
+          "Time"
+        ],
+        "summary": "Gets the current unix timestamp (milliseconds since 1970-01-01 UTC).",
+        "responses": {
+          "200": {
+            "description": "Current unix timestamp in milliseconds"
+          }
+        }
+      }
+    },
+    "/api/v1/time/current/unix_us": {
+      "get": {
+        "tags": [
+          "Time"
+        ],
+        "summary": "Gets the current unix timestamp (microseconds since 1970-01-01 UTC).",
+        "responses": {
+          "200": {
+            "description": "Current unix timestamp in microseconds"
+          }
+        }
+      }
+    },
+    "/api/v1/time/current/unix_ns": {
+      "get": {
+        "tags": [
+          "Time"
+        ],
+        "summary": "Gets the current unix timestamp (nanoseconds since 1970-01-01 UTC).\r\nDue to limitations in the OS clock resolution, the last 3 digits will often be zero.",
+        "responses": {
+          "200": {
+            "description": "Current unix timestamp in nanoseconds"
+          }
+        }
+      }
+    },
+    "/api/v1/time/current/utc": {
+      "get": {
+        "tags": [
+          "Time"
+        ],
+        "summary": "Gets the current UTC time.",
+        "responses": {
+          "200": {
+            "description": "Current UTC time"
+          }
+        }
+      }
+    },
+    "/api/v1/time/current/zone": {
+      "get": {
+        "tags": [
+          "Time"
+        ],
+        "summary": "Gets the current time of a time zone.",
+        "parameters": [
+          {
+            "name": "timezone",
+            "in": "query",
+            "description": "Full IANA time zone names.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Europe/Amsterdam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current time for specified timezone"
+          },
+          "400": {
+            "description": "Invalid timezone",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/time/current/coordinate": {
+      "get": {
+        "tags": [
+          "Time"
+        ],
+        "summary": "Gets the current time of a time zone by geo coordinates.",
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "query",
+            "description": "Latitude ranging from -90 to 90",
+            "schema": {
+              "type": "number",
+              "format": "float"
+            },
+            "example": 38.9
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "description": "Longitude ranging from -180 to 180",
+            "schema": {
+              "type": "number",
+              "format": "float"
+            },
+            "example": -77.03
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current time",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentTime"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentTime"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentTime"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error message.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/time/current/ip": {
+      "get": {
+        "tags": [
+          "Time"
+        ],
+        "summary": "Gets the current time of a time zone by IP address.",
+        "parameters": [
+          {
+            "name": "ipAddress",
+            "in": "query",
+            "description": "IPv4 address",
+            "schema": {
+              "type": "string"
+            },
+            "example": "127.0.0.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current time",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentTime"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentTime"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentTime"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error message.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/timezone/availabletimezones": {
+      "get": {
+        "tags": [
+          "Timezone"
+        ],
+        "summary": "Gets all the available IANA time zones.",
+        "responses": {
+          "200": {
+            "description": "List of IANA time zones",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/timezone/zone": {
+      "get": {
+        "tags": [
+          "Timezone"
+        ],
+        "summary": "Gets the timezone info and current time by IANA time zone name",
+        "parameters": [
+          {
+            "name": "timeZone",
+            "in": "query",
+            "description": "Full IANA time zone name.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Europe/Amsterdam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Time zone info",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimezoneModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimezoneModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimezoneModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error message.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/timezone/coordinate": {
+      "get": {
+        "tags": [
+          "Timezone"
+        ],
+        "summary": "Get the timezone info and current time by geo coordinates.",
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "query",
+            "description": "Latitude",
+            "schema": {
+              "type": "number",
+              "format": "float"
+            },
+            "example": 52.3667
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "description": "Longitude",
+            "schema": {
+              "type": "number",
+              "format": "float"
+            },
+            "example": 4.8945
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Time zone info",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimezoneModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimezoneModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimezoneModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error message.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health/check": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CurrentTime": {
+        "type": "object",
+        "properties": {
+          "date_time": {
+            "type": "string",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "nullable": true
+          },
+          "time": {
+            "type": "string",
+            "nullable": true
+          },
+          "day_of_week": {
+            "$ref": "#/components/schemas/IsoDayOfWeek"
+          },
+          "dst_active": {
+            "type": "boolean"
+          },
+          "timezone": {
+            "type": "string",
+            "nullable": true
+          },
+          "utc_offset_seconds": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IsoDayOfWeek": {
+        "enum": [
+          "None",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "type": "string"
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "TimezoneModel": {
+        "type": "object",
+        "properties": {
+          "timezone": {
+            "type": "string",
+            "nullable": true
+          },
+          "current_utc_offset_seconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "standard_utc_offset_seconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dst_utc_offset_seconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "has_dst": {
+            "type": "boolean"
+          },
+          "dst_offset_seconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dst_active": {
+            "type": "boolean"
+          },
+          "dst_from": {
+            "type": "string",
+            "nullable": true
+          },
+          "dst_until": {
+            "type": "string",
+            "nullable": true
+          },
+          "local_time": {
+            "type": "string",
+            "nullable": true
+          },
+          "day_of_week": {
+            "$ref": "#/components/schemas/IsoDayOfWeek"
+          },
+          "utc_time": {
+            "type": "string",
+            "nullable": true
+          },
+          "unix_timestamp": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
