@@ -235,6 +235,25 @@ def test_scaffold_with_a_project_root(ws: Workspace, tmp_path: Path) -> None:
     assert (project / ".github" / "workflows" / "fauxcall.yml").exists()
 
 
+def test_scaffold_from_inside_a_fake_writes_ci_at_the_project_root(
+    ws: Workspace, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fake = record_shop(ws)
+    (tmp_path / ".git").mkdir()
+    monkeypatch.setenv("FAUXCALL_WORKSPACE", "fakes")
+    monkeypatch.chdir(fake.root)
+    invoke("scaffold", "shop")
+    assert (tmp_path / ".github" / "workflows" / "fauxcall.yml").exists()
+    assert not (fake.root / ".github").exists()
+
+
+def test_the_project_of_a_workspace(tmp_path: Path) -> None:
+    assert building.project_of(tmp_path / "plain" / "fauxcall") == tmp_path / "plain"
+    (tmp_path / "repo" / ".git").mkdir(parents=True)
+    nested = tmp_path / "repo" / "tools" / "fauxcall"
+    assert building.project_of(nested) == tmp_path / "repo"
+
+
 def test_scaffold_unknown_fake(ws: Workspace) -> None:
     assert "no fake called 'shop'" in invoke("scaffold", "shop", code=1).output
 

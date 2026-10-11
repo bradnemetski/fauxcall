@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from collections import Counter
-from pathlib import Path
+from pathlib import Path  # noqa: TC003 - Typer resolves the annotations at runtime
 from typing import TYPE_CHECKING, Annotated
 
 import typer
@@ -98,13 +98,16 @@ def world_expand(name: str, collection: str) -> None:
 def scaffold(
     name: str,
     project_root: Annotated[
-        Path | None, typer.Option(help="Where .github/workflows goes (default: cwd).")
+        Path | None,
+        typer.Option(
+            help="Where .github/workflows goes (default: the project holding the workspace)."
+        ),
     ] = None,
 ) -> None:
     """Generate (or refresh) the fake's package, tests, Docker and CI files."""
     fake = layout(name)
     model = load_model(fake)
-    root = project_root or Path.cwd()
+    root = project_root or project_of(workspace().root)
     result = generate(
         fake,
         workspace(),
@@ -115,6 +118,18 @@ def scaffold(
     )
     echo(result.summary(root))
     echo(f"\nNext: `cd {fake.root} && uv sync && uv run pytest`")
+
+
+def project_of(workspace_root: Path) -> Path:
+    """The project a workspace belongs to: the git repository holding it, else its parent folder.
+
+    So CI lands in the project's ``.github`` wherever ``scaffold`` runs from (even inside a fake).
+    """
+    resolved = workspace_root.resolve()
+    for folder in (resolved, *resolved.parents):
+        if (folder / ".git").exists():
+            return folder
+    return resolved.parent
 
 
 def _coverage_lines(model: ApiModel, exchanges: int) -> list[str]:
