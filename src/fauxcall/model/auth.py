@@ -6,6 +6,7 @@ so the same fake can be run with different allowed/denied users per evaluation.
 
 from __future__ import annotations
 
+import fnmatch
 from typing import Literal
 
 from pydantic import Field, model_validator
@@ -59,3 +60,19 @@ class AuthModel(Model):
     forbidden_template: str | None = None
     expired_template: str | None = None
     insufficient_scope_template: str | None = None
+    required_scopes: dict[str, list[str]] = Field(
+        default_factory=dict,
+        description=(
+            "Endpoint glob -> scopes a caller must hold, e.g. {'POST *': ['write']}. Checked after "
+            "rate limiting (a refused call still counts); callers without scopes are unrestricted."
+        ),
+    )
+
+    def scopes_for(self, endpoint_id: str) -> set[str]:
+        """Every scope the endpoint requires (from all matching globs)."""
+        return {
+            scope
+            for pattern, scopes in self.required_scopes.items()
+            if fnmatch.fnmatchcase(endpoint_id, pattern)
+            for scope in scopes
+        }

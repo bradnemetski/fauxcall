@@ -334,6 +334,8 @@ class FakeRuntime:
         limited = self._rate_limit(ctx)
         if limited is not None:
             return limited
+        if self._lacks_scopes(ctx):
+            return self._auth_error(ctx, "insufficient_scope")
         try:
             ctx.params = parse_params(endpoint, request)  # type: ignore[arg-type]
         except ParamProblem as problem:
@@ -422,6 +424,17 @@ class FakeRuntime:
                 if fault.error_template:
                     return ctx.error("custom", template=fault.error_template, status=fault.status)
                 return ctx.error("custom", status=fault.status, values={"fault": "error"})
+
+    def _lacks_scopes(self, ctx: RequestContext) -> bool:
+        """Whether the caller misses a scope the endpoint requires (authorization, after counting).
+
+        Callers without scopes (any well-formed credential, users configured without scopes) are
+        unrestricted; only users and tokens that list scopes are held to them.
+        """
+        auth, identity = self.model.auth, ctx.identity
+        if auth is None or identity is None or not identity.scopes or ctx.endpoint is None:
+            return False
+        return not auth.scopes_for(ctx.endpoint.id) <= set(identity.scopes)
 
     def _auth_error(self, ctx: RequestContext, failure: AuthFailure) -> Response:
         auth = self.model.auth

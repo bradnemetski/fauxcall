@@ -163,9 +163,24 @@ condition (e.g. `not_found`) is the API-wide default for it.
 "default_headers": {}
 ```
 
-Which users the fake accepts is runtime configuration, not model: `FAUXCALL_AUTH__MODE` (`any`,
-`allowlist`, `off`) and `FAUXCALL_AUTH__USERS` (allowed / denied / expired / insufficient_scope users)
-— so evaluations can test auth failures.
+**Order of checks**, as most real APIs do it: faults → authentication (who is calling; failures get
+`missing`/`invalid`/`forbidden`/`expired` templates and are *not* counted by rate limits) → rate
+limits → authorization (`required_scopes`, e.g. `{"POST *": ["write"]}`: a caller listing scopes
+without the needed one gets `insufficient_scope_template`, else `forbidden_template`; the call *was*
+counted, so rate-limit headers are present) → parameters → the role handler.
+
+Rate limits: `key` `credential` (per API key/token), `session`, `ip` or `global`; `algorithm`
+`fixed_window` (the window starts at its first request), `sliding_window` or `token_bucket`;
+`endpoints` globs; `headers` templates with `{{limit}}`, `{{remaining}}`, `{{reset_epoch}}`,
+`{{reset_seconds}}`, `{{window_seconds}}`; `headers_on_success` (also on 2xx); `retry_after`
+(add `Retry-After` to the 429). Read limits from docs and headers; don't hammer the API to find them.
+
+Which users the fake accepts is runtime configuration, not model: `auth.mode` (`any`, `allowlist`,
+`off`) and `auth.users` in the fake's `fauxcall.toml` (or `FAUXCALL_AUTH__*`), so evaluations can
+test auth failures. When the real API has credentials with special powers that your scenarios use
+(a read-only key, a revoked key), add them as users there, with the same values, so both sides
+agree: e.g. `[[auth.users]]` `name = "readonly"`, `api_key = "readonly-key"`, `scopes = ["read"]`,
+or `status = "denied"` for a revoked key. Users without `scopes` are unrestricted.
 
 ## Runtime judgments (Jev)
 
