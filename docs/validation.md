@@ -90,7 +90,7 @@ Every problem a run hit became a fix in the tools or skills, never in the fake. 
 - **Missed endpoints.** Endpoints only the docs' prose mentions are imported with `fauxcall spec
   import` (`b4495df`); routing probes of paths the API lacks pass `plan check` (`ea5e5ba`).
 - **Model and data.** Map-shaped responses (a date per key) are inferred as one value schema, which
-  shrank Frankfurter's model from 60 MB to 136 KB (`52436e4`); policy kinds, endpoint roles and
+  shrank Frankfurter's model from 60 MB to 95 KB (`52436e4`); policy kinds, endpoint roles and
   parameter descriptions survive saving (`1740991`, `80cb62d`).
 - **Runtime.** Authorization by scope after rate limiting (`4853215`); advancing the fake's clock
   lifts rate limits (`b338c44`); a served fake admits exactly the real API's users while its tests
