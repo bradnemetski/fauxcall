@@ -38,7 +38,7 @@ The results land in the model's `mcp` section.
 | `issues_session`, `session_header`, `requires_session`, `missing_session_status` | session handling |
 | `get_stream`, `get_status` | `sse` (GET opens a stream) or `status` (GET answered with `get_status`, usually 405) |
 | `delete_status` | DELETE response |
-| `protocol_versions`, `default_protocol_version` | negotiation (requested → answered) |
+| `protocol_versions`, `default_protocol_version` | negotiation (requested → answered); the default is what the real server answers an unsupported version (probe one), and wins over the recorded handshake's version |
 
 ## Recording tool calls
 

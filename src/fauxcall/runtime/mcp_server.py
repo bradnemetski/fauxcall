@@ -22,6 +22,7 @@ from fauxcall import jsonfmt
 from fauxcall.clock import ns_to_datetime
 from fauxcall.logs import bind_context, clear_context, get_logger
 from fauxcall.mcpwire import protocol
+from fauxcall.model.mcp import FALLBACK_PROTOCOL_VERSION
 from fauxcall.runtime.inputs import json_inputs
 from fauxcall.runtime.journal import JournalEntry
 from fauxcall.runtime.matching import Candidate, match
@@ -86,10 +87,12 @@ class McpFake:
         mapping = self.transport.protocol_versions
         if isinstance(requested, str) and requested in mapping:
             return mapping[requested]
+        if self.transport.default_protocol_version is not None:  # modeled from the real server
+            return self.transport.default_protocol_version
         result = self.model.initialize_result
         if isinstance(result, dict) and isinstance(result.get("protocolVersion"), str):
             return str(result["protocolVersion"])
-        return self.transport.default_protocol_version
+        return FALLBACK_PROTOCOL_VERSION
 
     def _error(self, request_id: JsonValue, situation: str, code: int, message: str) -> JsonObject:
         recorded = self.model.errors.get(situation)

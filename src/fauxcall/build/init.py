@@ -15,6 +15,7 @@ from dotenv import dotenv_values
 from fauxcall import jsonfmt
 from fauxcall.errors import ConfigurationError, SpecError
 from fauxcall.model.api import ApiModel, RealTarget, RoutingModel, SourceInfo
+from fauxcall.model.mcp import FALLBACK_PROTOCOL_VERSION
 from fauxcall.model.progress import PhaseState, Progress
 from fauxcall.paths import FakeLayout, Workspace, slugify, validate_slug
 from fauxcall.privacy import Pseudonymizer
@@ -482,7 +483,8 @@ async def _init_mcp(
     transport = mcp.transport
     summary = (
         f"MCP server **{title}** at {endpoint} ({transport.kind}, answers with "
-        f"{transport.response_mode}, protocol {transport.default_protocol_version}).\n\n"
+        f"{transport.response_mode}, protocol "
+        f"{transport.default_protocol_version or FALLBACK_PROTOCOL_VERSION}).\n\n"
         f"### Tools\n\n{tools or '(none)'}\n\n"
         + "\n".join(f"- {note}" for note in introspection.notes)
     )

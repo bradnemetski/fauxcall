@@ -112,17 +112,19 @@ async def test_resources_and_prompts_replay_recordings(tmp_path: Path) -> None:
 
 
 @pytest.mark.parametrize(
-    ("requested", "initialize_result", "expected"),
+    ("requested", "initialize_result", "default", "expected"),
     [
-        ("2024-11-05", None, "2024-11-05"),  # mapped explicitly
-        ("1999-01-01", None, "2025-06-18"),  # unknown: the transport default
-        ("1999-01-01", {"protocolVersion": "2025-03-26"}, "2025-03-26"),  # what the server said
+        ("2024-11-05", None, "2025-11-25", "2024-11-05"),  # mapped explicitly
+        ("1999-01-01", None, None, "2025-06-18"),  # unknown, nothing recorded: the fallback
+        ("1999-01-01", {"protocolVersion": "2025-03-26"}, None, "2025-03-26"),  # as recorded
+        # What the real server answers an unsupported version wins over the recorded handshake.
+        ("1999-01-01", {"protocolVersion": "2025-06-18"}, "2025-11-25", "2025-11-25"),
     ],
 )
 async def test_protocol_version_negotiation(
-    tmp_path: Path, requested: str, initialize_result: JsonValue, expected: str
+    tmp_path: Path, requested: str, initialize_result: JsonValue, default: str | None, expected: str
 ) -> None:
-    model = mcp_model(transport=JSON_MODE)
+    model = mcp_model(transport=JSON_MODE.model_copy(update={"default_protocol_version": default}))
     assert model.mcp is not None
     model.mcp.initialize_result = initialize_result
     app, _ = mcp_app(tmp_path, model)

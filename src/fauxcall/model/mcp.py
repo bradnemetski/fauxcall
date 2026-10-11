@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Final, Literal
 
 from pydantic import Field, SerializerFunctionWrapHandler, model_serializer
 
 from fauxcall.model.common import Model, RawJson
 from fauxcall.model.realism import LatencyProfile
 from fauxcall.model.semantic import SemanticModel
+
+FALLBACK_PROTOCOL_VERSION: Final = "2025-06-18"
+"""What a fake answers an unsupported protocol version when nothing better was recorded."""
 
 
 class McpTransportModel(Model):
@@ -34,7 +37,14 @@ class McpTransportModel(Model):
     protocol_versions: dict[str, str] = Field(
         default_factory=dict, description="Protocol version requested -> version answered."
     )
-    default_protocol_version: str = "2025-06-18"
+    default_protocol_version: str | None = Field(
+        default=None,
+        description=(
+            "Version answered when the requested one is not in protocol_versions (what the real "
+            "server answers an unsupported version); unset: the recorded initialize result's, "
+            "else " + FALLBACK_PROTOCOL_VERSION + "."
+        ),
+    )
     sse_event_ids: bool = False
     content_type_json: str = "application/json"
     content_type_sse: str = "text/event-stream"
