@@ -18,7 +18,8 @@ The first release.
 - Inputs: OpenAPI 3.x and Swagger 2.0 documents, Swagger UI and Redoc pages, free-form API
   documentation pages, and remote MCP servers over Streamable HTTP or the SSE transport.
 - Recording: paced and capped real calls, one up-front approval for mutating calls, credential
-  redaction and consistent pseudonymization of personal data.
+  redaction and consistent pseudonymization of personal data (a sandbox's public demo values can be
+  kept exactly).
 - Analysis: schema and field-profile inference, time-format detection, clock-following fields,
   relations, async-job state machines, write semantics, error shapes, and ad-hoc SQL over
   recordings.
@@ -32,9 +33,11 @@ The first release.
 - Generated fakes: uv/FastAPI projects with tests, a Dockerfile, compose and CI, which pass ruff,
   mypy --strict and a 95% coverage gate out of the box.
 - Parity testing: a pytest plugin that runs scenarios against the real service and the fake, and
-  scores them with weighted checks (98% required).
+  scores them with weighted checks (98% required). Its real writes spend the same approved budget
+  as recording.
 - Optional Jev (TypeSafe) judgments for matching unseen requests, semantic outputs and job
   outcomes, with cached answers and deterministic fallbacks.
+- Examples: fakes FauxCall built on its own while it was validated, from a single prompt each.
 
 [Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/bradnemetski/fauxcall/releases/tag/v0.1.0
