@@ -311,7 +311,7 @@ def test_init_uses_the_credentials_the_user_prepared_in_env(
     serve_with(monkeypatch, httpx2.ASGITransport(app=server))
     env = ws.fake("demo").env_file
     env.parent.mkdir(parents=True)
-    env.write_text(f"FAUXCALL_REAL__HEADERS='{{\"Authorization\": \"Bearer {token}\"}}'\n")
+    env.write_text(f'FAUXCALL_REAL__HEADERS=\'{{"Authorization": "Bearer {token}"}}\'\n')
     result = invoke("init", MCP_URL, "--name", "demo")  # no --auth-env: the .env is enough
     assert "MCP server **Demo MCP**" in result.output
     assert token in env.read_text()  # the user's file is kept
