@@ -31,6 +31,10 @@ async def test_list_then_get_every_item(api: ApiClient) -> None:
 - Assertions should hold for the real API **and** the fake (they check behavior, not recorded values).
 - Parity compares the two runs call by call: status, content type, contract headers, body shape,
   values per field policy (time fields by behavior, random/volatile by type, pseudonyms via the key).
+- Ids the server makes up in a write (`id`, `…_id`, `…Id`, `uuid`, `random`/`counter` fields) are
+  compared by type, and later calls of the scenario are compared through them: the fake's
+  `No watchlist with id 1001.` matches the real `… id 1009.` when the scenario created both. No
+  `values=False` is needed for that.
 - `compare=CompareOptions(values=False)` for calls whose values legitimately differ (a shared sandbox's
   live listing); `lengths=False` when list lengths differ by design; `policies=[…]` for extra per-call
   field policies.

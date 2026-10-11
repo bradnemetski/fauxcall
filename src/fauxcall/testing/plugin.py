@@ -295,6 +295,7 @@ async def mcp(
     _keep(request, target, fauxcall_log, fauxcall_fake)
 
 
+_SAFE_METHODS: Final = frozenset({"GET", "HEAD", "OPTIONS"})
 _PACE_KEY: Final = pytest.StashKey[RealPace]()
 
 
@@ -323,6 +324,7 @@ def compare_logs(
     model = fake_spec.model
     matchers = endpoint_matcher(model)
     comparisons: list[Comparison] = []
+    aliases: dict[str, str] = {}  # fake id -> real id, learned from the scenario's writes
     for index, real_call in enumerate(real.calls):
         label = f"{real_call.method} {real_call.path}"
         if index >= len(fake.calls):
@@ -347,6 +349,8 @@ def compare_logs(
                 compare_lengths=options.lengths,
                 max_value_checks=200 if options.values else 0,
                 record_roots=record_roots(endpoint) if endpoint else None,
+                aliases=aliases,
+                created=real_call.method.upper() not in _SAFE_METHODS,
             )
         )
     return comparisons

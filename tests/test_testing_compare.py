@@ -36,6 +36,7 @@ from fauxcall.testing.compare import (
     compare,
     shape,
     shape_differences,
+    translate_ids,
     type_name,
 )
 from fauxcall.timefmt import TimeFormat
@@ -543,3 +544,63 @@ def test_list_index_policies_cover_every_element_and_first_policy_wins() -> None
 def test_invalid_policy_paths_are_skipped() -> None:
     hits = _policy_hits({"a": 1}, {"a": 2}, [IgnorePolicy(path="$..a"), IgnorePolicy(path="b")])
     assert hits == {"value $.a": False}
+
+
+def test_translating_ids_replaces_whole_tokens_only() -> None:
+    aliases = {"1001": "1009", "4048b3e9-aaaa": "02c9e9fa-bbbb"}
+    fake = obs(
+        {
+            "id": 1001,
+            "big": 21001,
+            "ref": "4048b3e9-aaaa",
+            "msg": "No upload with id '4048b3e9-aaaa'; see 1001 not 11001 or 1001x.",
+            "flag": True,
+            "none": None,
+            "ratio": 1001.5,
+            "tags": [1001, "1001"],
+        },
+        text="id 1001",
+    )
+    translated = translate_ids(fake, aliases)
+    assert translated.body == {
+        "id": 1009,
+        "big": 21001,
+        "ref": "02c9e9fa-bbbb",
+        "msg": "No upload with id '02c9e9fa-bbbb'; see 1009 not 11001 or 1001x.",
+        "flag": True,
+        "none": None,
+        "ratio": 1001.5,
+        "tags": [1009, "1009"],
+    }
+    assert translated.text == "id 1009"
+    assert translate_ids(fake, {}) is fake
+    word = translate_ids(obs({"id": "abc"}), {"abc": "xyz-not-a-number"})
+    assert word.body == {"id": "xyz-not-a-number"}
+    odd = translate_ids(obs({"n": 5}), {"5": "five"})  # a non-numeric counterpart: left alone
+    assert odd.body == {"n": 5}
+
+
+def test_writes_learn_generated_ids_and_compare_them_by_type() -> None:
+    aliases: dict[str, str] = {}
+    real = obs(
+        {"id": "r-1", "owner_id": 7, "uploadId": "u-1", "count": 3, "seq": 10, "rank_id": 1.5},
+        status=201,
+    )
+    fake = obs(
+        {"id": "f-1", "owner_id": 8, "uploadId": "u-2", "count": 3, "seq": 99, "rank_id": 2.5},
+        status=201,
+    )
+    result = compare(
+        "POST /x",
+        real,
+        fake,
+        policies=[CounterPolicy(path="$.seq", scope="body")],
+        aliases=aliases,
+        created=True,
+    )
+    assert result.failures() == []
+    assert aliases == {"f-1": "r-1", "8": "7", "u-2": "u-1", "99": "10"}
+    later = compare("GET /x", obs({"owner_id": 7}), obs({"owner_id": 8}), aliases=aliases)
+    assert later.failures() == []
+    unlearned = compare("PUT /x", obs({"id": 1}), obs({"id": 2}), aliases={}, created=False)
+    assert [c.name for c in unlearned.failures()] == ["value $.id"]

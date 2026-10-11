@@ -325,7 +325,69 @@ def _media_type(headers: Mapping[str, str]) -> str:
     return (headers.get("content-type") or "").split(";")[0].strip().lower()
 
 
-def compare(
+_ID_NAMES: Final = frozenset({"id", "uuid", "guid"})
+_ID_SUFFIXES: Final = ("_id", "-id", "_uuid", "_guid")
+_SUCCESS: Final = range(200, 300)
+
+
+def _id_like(trail: Trail) -> bool:
+    """Whether a leaf names an identifier (``id``, ``owner_id``, ``uploadId``, ``uuid``)."""
+    name = next((part for part in reversed(trail) if isinstance(part, str)), "")
+    lowered = name.lower()
+    camel = len(name) > 2 and name.endswith("Id") and name[-3].islower()  # noqa: PLR2004
+    return lowered in _ID_NAMES or lowered.endswith(_ID_SUFFIXES) or camel
+
+
+def _generated(trail: Trail, policy: FieldPolicy | None) -> bool:
+    """Whether a value in a write response is one the server makes up (so the sides differ)."""
+    return isinstance(policy, RandomPolicy | CounterPolicy) or (policy is None and _id_like(trail))
+
+
+def _id_text(value: JsonValue) -> str | None:
+    """An identifier as text (``None`` for values that can't be identifiers)."""
+    if isinstance(value, bool) or value is None:
+        return None
+    if isinstance(value, str):
+        return value or None
+    if isinstance(value, int):
+        return str(value)
+    return None
+
+
+def _aliased(value: JsonValue, aliases: Mapping[str, str], pattern: re.Pattern[str]) -> JsonValue:
+    """``value`` with the fake's generated ids replaced by the real ones (whole tokens only)."""
+    if isinstance(value, dict):
+        return {key: _aliased(item, aliases, pattern) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_aliased(item, aliases, pattern) for item in value]
+    if isinstance(value, bool) or value is None:
+        return value
+    if isinstance(value, int):
+        mapped = aliases.get(str(value))
+        return int(mapped) if mapped is not None and mapped.lstrip("-").isdigit() else value
+    if isinstance(value, str):
+        return pattern.sub(lambda match: aliases[match.group(0)], value)
+    return value
+
+
+def translate_ids(fake: Observation, aliases: Mapping[str, str]) -> Observation:
+    """The fake's answer as if it had generated the real API's ids (learned earlier in a run)."""
+    if not aliases:
+        return fake
+    keys = sorted(aliases, key=len, reverse=True)
+    pattern = re.compile(r"(?<![\w-])(?:" + "|".join(map(re.escape, keys)) + r")(?![\w-])")
+    text = pattern.sub(lambda match: aliases[match.group(0)], fake.text) if fake.text else fake.text
+    return Observation(
+        status=fake.status,
+        headers=fake.headers,
+        body=_aliased(fake.body, aliases, pattern),
+        text=text,
+        at_ns=fake.at_ns,
+        error=fake.error,
+    )
+
+
+def compare(  # noqa: PLR0913 - every option is a keyword
     label: str,
     real: Observation,
     fake: Observation,
@@ -335,6 +397,8 @@ def compare(
     compare_lengths: bool = True,
     max_value_checks: int = 200,
     record_roots: Sequence[str] | None = None,
+    aliases: dict[str, str] | None = None,
+    created: bool = False,
 ) -> Comparison:
     """Compare one real and one fake response.
 
@@ -348,8 +412,15 @@ def compare(
         max_value_checks: At most this many values are compared.
         record_roots: Where records sit in the body (``"$"``, ``"$[*]"``, ``"$.data[*]"``), for
             record-scope policies; guessed when ``None``.
+        aliases: Fake id -> real id, learned from earlier write responses of the same scenario:
+            the fake's answer is compared as if it had generated the real ids (``No watchlist
+            with id 1001`` on the fake matches ``… id 1009`` on the real API). Updated in place.
+        created: This call was a write: ids the server made up (id-like fields, ``random`` and
+            ``counter`` policies) are compared by type and learned into ``aliases``.
     """
     result = Comparison(label)
+    if aliases:
+        fake = translate_ids(fake, aliases)
     if real.error or fake.error:
         result.add(
             "transport", W_STATUS, real.error == fake.error, f"real={real.error} fake={fake.error}"
@@ -365,9 +436,40 @@ def compare(
     result.add("shape", W_SHAPE, not differences, "; ".join(differences[:5]))
     if compare_lengths:
         _check_lengths(result, real.body, fake.body)
-    if max_value_checks <= 0:
-        return result
     index = _policy_index(policies, real.body, record_roots)
+    learning = created and real.status in _SUCCESS and fake.status in _SUCCESS
+    if learning and aliases is not None:
+        aliases.update(_generated_ids(real.body, fake.body, index))
+    if max_value_checks > 0:
+        _check_values(result, real, fake, index, translate, max_value_checks, learning=learning)
+    return result
+
+
+def _generated_ids(
+    real: JsonValue, fake: JsonValue, index: Mapping[str, FieldPolicy]
+) -> dict[str, str]:
+    """Fake id -> real id for every server-made id that differs between two write responses."""
+    fake_leaves = dict(_leaves(fake))
+    learned: dict[str, str] = {}
+    for path, real_value in _leaves(real):
+        policy = index.get(jsonpath.format_path(_generalized(path)))
+        real_id, fake_id = _id_text(real_value), _id_text(fake_leaves.get(path))
+        if _generated(path, policy) and real_id and fake_id and real_id != fake_id:
+            learned[fake_id] = real_id
+    return learned
+
+
+def _check_values(
+    result: Comparison,
+    real: Observation,
+    fake: Observation,
+    index: Mapping[str, FieldPolicy],
+    translate: Translate | None,
+    max_value_checks: int,
+    *,
+    learning: bool,
+) -> None:
+    """Values field by field, as their policies say (made-up ids of a write: by type)."""
     fake_leaves = dict(_leaves(fake.body))
     checked = 0
     for path, real_value in _leaves(real.body):
@@ -376,13 +478,14 @@ def compare(
         if path not in fake_leaves:
             continue
         policy = index.get(jsonpath.format_path(_generalized(path)))
+        if learning and policy is None and _generated(path, policy):
+            policy = RandomPolicy(path="$", generator="uuid4")  # compared by type
         weight, ok, detail = _compare_value(
             real_value, fake_leaves[path], policy, real.at_ns, fake.at_ns, translate
         )
         if weight:
             result.add(f"value {jsonpath.format_path(path)}", weight, ok, detail)
             checked += 1
-    return result
 
 
 def _check_headers(result: Comparison, real: Mapping[str, str], fake: Mapping[str, str]) -> None:

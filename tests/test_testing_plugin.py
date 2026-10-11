@@ -10,7 +10,7 @@ from fauxcall.model.api import ApiModel, RealTarget, SourceInfo
 from fauxcall.model.endpoints import EndpointModel, ResponseShape
 from fauxcall.model.fields import IgnorePolicy
 from fauxcall.testing.client import CompareOptions, ExchangeLog, LoggedCall
-from fauxcall.testing.compare import Observation
+from fauxcall.testing.compare import W_SOFT_VALUE, Observation
 from fauxcall.testing.plugin import (
     FakeUnderTest,
     ParitySession,
@@ -696,3 +696,53 @@ def test_parity_session_lives_in_the_config_stash(pytester: pytest.Pytester) -> 
     assert isinstance(state, ParitySession)
     assert parity_session(config) is state
     assert parity_session(pytester.parseconfig()) is not state
+
+
+def _logged(method: str, path: str, body: object, status: int = 200) -> LoggedCall:
+    observation = Observation(status, {"content-type": "application/json"}, body, None, 0)  # type: ignore[arg-type]
+    return LoggedCall(f"{method} {path}", method, path, observation, CompareOptions())
+
+
+def test_ids_created_in_a_scenario_are_compared_through_their_counterparts() -> None:
+    spec = FakeUnderTest(app_factory=_no_app)
+    gone = "No watchlist with id {}."
+    real = ExchangeLog(
+        [
+            _logged("POST", "/watchlists", {"id": 1009, "name": "Tech"}, 201),
+            _logged(
+                "GET", "/watchlists/1009", {"id": 1009, "name": "Tech", "self": "/watchlists/1009"}
+            ),
+            _logged("DELETE", "/watchlists/1009", None, 204),
+            _logged("GET", "/watchlists/1009", {"error": {"message": gone.format(1009)}}, 404),
+        ]
+    )
+    fake = ExchangeLog(
+        [
+            _logged("POST", "/watchlists", {"id": 1001, "name": "Tech"}, 201),
+            _logged(
+                "GET", "/watchlists/1001", {"id": 1001, "name": "Tech", "self": "/watchlists/1001"}
+            ),
+            _logged("DELETE", "/watchlists/1001", None, 204),
+            _logged("GET", "/watchlists/1001", {"error": {"message": gone.format(1001)}}, 404),
+        ]
+    )
+    comparisons = compare_logs("s", real, fake, spec)
+    assert [c.failures() for c in comparisons] == [[], [], [], []]
+    made_up = next(check for check in comparisons[0].checks if check.name == "value $.id")
+    assert made_up.weight == W_SOFT_VALUE  # an id the server made up: compared by type
+
+
+def test_ids_are_learned_only_from_successful_writes() -> None:
+    spec = FakeUnderTest(app_factory=_no_app)
+    real = ExchangeLog(
+        [
+            _logged("POST", "/things", {"id": 7}, 422),  # refused: nothing was created
+            _logged("GET", "/things/7", {"id": 7}),
+        ]
+    )
+    fake = ExchangeLog(
+        [_logged("POST", "/things", {"id": 8}, 422), _logged("GET", "/things/7", {"id": 8})]
+    )
+    first, second = compare_logs("s", real, fake, spec)
+    assert [c.name for c in first.failures()] == ["value $.id"]
+    assert [c.name for c in second.failures()] == ["value $.id"]
