@@ -70,8 +70,8 @@ kept improving from what these runs revealed. So:
   own probes, no one else's data.
 - **FakeRESTApi keeps its users' passwords.** The demo returns the passwords it generates for its
   users (`Password1` …), so the run stopped redacting fields named `password`. The recordings were
-  checked: they hold only those demo passwords and the run's own probe values. FakeRESTApi's
-  `public_values` would now keep exactly those values instead.
+  checked: they hold only those demo passwords and the run's own probe values. FauxCall can now
+  keep exactly those values instead (`public_values` in `data/privacy.json`).
 - **Ports were reassigned.** Each fake was built in its own workspace and got port 8701. When they
   were brought together here, `fauxcall scaffold` moved four of them to 8702–8705 (in their
   `fauxcall.toml`). FakeRESTApi's README was regenerated with its new port; the older READMEs (from
