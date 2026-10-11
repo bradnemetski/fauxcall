@@ -1,0 +1,67 @@
+[project]
+name = "fauxcall-reference-api"
+version = "1.0.0"
+description = "A deliberately rich, deterministic market-data API (REST, SSE, WebSocket, MCP) used as ground truth to validate FauxCall end-to-end."
+readme = "README.md"
+license = "Apache-2.0"
+authors = [{ name = "Brad Nemetski", email = "brad.nemetski@gmail.com" }]
+requires-python = ">=3.12"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: FastAPI",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Testing :: Mocking",
+    "Typing :: Typed",
+]
+dependencies = [
+    "fastapi>=0.120",
+    "mcp>=2.3",
+    "pydantic>=2.12",
+    "pydantic-settings>=2.10",
+    "python-multipart>=0.0.20",
+    "tzdata>=2025.2",
+    "uvicorn[standard]>=0.35",
+]
+
+[project.scripts]
+fauxcall-reference-api = "fauxcall_reference_api.main:main"
+
+[build-system]
+requires = ["uv_build>=0.11.0,<0.12.0"]
+build-backend = "uv_build"
+
+# Lint with the repository's root configuration. The only additions: first-party paths relative to
+# this directory, and the root's test-file ignores (the root's "tests/**" pattern is anchored at the
+# repository root, so it does not reach reference_api/tests).
+[tool.ruff]
+extend = "../pyproject.toml"
+src = ["src", "tests"]
+
+# FastAPI and the MCP SDK read these functions' annotations at runtime.
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-decorators = [
+    "fastapi.APIRouter.get",
+    "fastapi.APIRouter.post",
+    "fastapi.APIRouter.put",
+    "fastapi.APIRouter.patch",
+    "fastapi.APIRouter.delete",
+    "fastapi.APIRouter.websocket",
+    "fauxcall_reference_api.mcp_server.mcp_function",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "S101",    # asserts are the point of tests
+    "PLR2004", # magic values are fine in tests
+    "D",       # tests are documented by their names
+    "SLF001",  # tests may poke at private members
+    "S105",    # fake secrets in tests
+    "S106",
+    "ARG001",  # unused fixture arguments
+    "ANN401",
+    "PLR0913",
+    "FBT001",
+    "INP001",  # test dirs are not packages
+]
