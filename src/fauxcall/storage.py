@@ -59,15 +59,36 @@ def read_json(path: Path) -> JsonValue:
     return jsonfmt.loads(path.read_text(encoding="utf-8"))
 
 
+def _merge_lexemes(json_node: object, python_node: object) -> object:
+    """Put :class:`JsonFloat` spellings from a python-mode dump back into a json-mode dump."""
+    if isinstance(python_node, jsonfmt.JsonFloat):
+        return python_node
+    if isinstance(json_node, dict) and isinstance(python_node, dict):
+        return {
+            key: _merge_lexemes(value, python_node.get(key)) for key, value in json_node.items()
+        }
+    parallel_lists = isinstance(json_node, list) and isinstance(python_node, (list, tuple))
+    if parallel_lists and len(json_node) == len(python_node):  # type: ignore[arg-type]
+        return [_merge_lexemes(a, b) for a, b in zip(json_node, python_node, strict=True)]  # type: ignore[call-overload]
+    return json_node
+
+
+def model_to_json(model: BaseModel, *, exclude_defaults: bool = True) -> JsonValue:
+    """Dump a model to JSON-compatible data, keeping float spellings inside raw JSON fields."""
+    as_json = model.model_dump(mode="json", by_alias=True, exclude_defaults=exclude_defaults)
+    as_python = model.model_dump(mode="python", by_alias=True, exclude_defaults=exclude_defaults)
+    merged: JsonValue = _merge_lexemes(as_json, as_python)  # type: ignore[assignment]
+    return merged
+
+
 def write_model(path: Path, model: BaseModel) -> None:
     """Atomically write a pydantic model as pretty JSON, omitting default values for lean diffs."""
-    text = model.model_dump_json(indent=2, exclude_defaults=True, by_alias=True)
-    atomic_write_text(path, text + "\n")
+    write_json(path, model_to_json(model))
 
 
 def read_model[ModelT: BaseModel](path: Path, model_type: type[ModelT]) -> ModelT:
-    """Read and validate a pydantic model from a JSON file."""
-    return model_type.model_validate_json(path.read_text(encoding="utf-8"))
+    """Read and validate a pydantic model from a JSON file (float spellings preserved)."""
+    return model_type.model_validate(read_json(path))
 
 
 def write_jsonl(path: Path, values: Iterable[JsonValue]) -> None:
