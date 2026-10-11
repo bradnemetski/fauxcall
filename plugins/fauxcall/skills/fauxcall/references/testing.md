@@ -41,6 +41,9 @@ async def test_list_then_get_every_item(api: ApiClient) -> None:
 - `compare=CompareOptions(values=False)` for calls whose values legitimately differ (a shared sandbox's
   live listing); `lengths=False` when list lengths differ by design; `policies=[…]` for extra per-call
   field policies.
+- Parse timestamps, never cut them at a fixed length: many APIs drop trailing zeros from
+  fractions (`13.0478700Z` comes back as `13.04787Z`), so a slice that works most runs fails on the
+  ones that end in zero.
 - Personal data in inputs: `api.pii("johndoe", "username")` gives the real value on the real API and
   its pseudonym on the fake.
 - Writes against the real API need `--allow-real-writes` and spend the user's up-front approval

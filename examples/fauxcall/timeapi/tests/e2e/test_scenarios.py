@@ -61,6 +61,16 @@ def _iso_seconds(text: str) -> float:
     return datetime.fromisoformat(text).timestamp()
 
 
+def _to_micros(text: str) -> str:
+    """``2026-10-11T19:27:13.04787Z`` -> ``2026-10-11T19:27:13.047870``: zone dropped, 6 digits.
+
+    The real API writes up to 7 decimals and drops trailing zeros, so the length varies.
+    """
+    stamp = text.removesuffix("Z")
+    whole, _, fraction = stamp.partition(".")
+    return f"{whole}.{(fraction + '000000')[:6]}"
+
+
 def assert_now(text: str) -> None:
     """An ISO timestamp with offset close to now."""
     assert abs(_iso_seconds(text) - time.time()) < NOW_TOLERANCE_S, text
@@ -85,7 +95,7 @@ async def test_utc_time_is_now(api: ApiClient) -> None:
     body = (await api.get("/api/v1/time/current/utc")).json()
     assert body["utc_time"].endswith("Z")
     assert len(body["utc_time"].split(".")[1]) <= 8  # up to 7 digits (zeros trimmed) + Z
-    assert_now(body["utc_time"][:26] + "Z")
+    assert_now(_to_micros(body["utc_time"]) + "Z")
 
 
 @pytest.mark.parametrize("zone", ZONES)
@@ -254,7 +264,7 @@ async def test_ip_zone_is_the_same_on_both_apis(api: ApiClient, address: str) ->
 async def test_unix_and_utc_agree(api: ApiClient) -> None:
     unix = (await api.get("/api/v1/time/current/unix")).json()["unix_timestamp"]
     utc = (await api.get("/api/v1/time/current/utc")).json()["utc_time"]
-    assert abs(_iso_seconds(utc[:26] + "+00:00") - unix) < NOW_TOLERANCE_S
+    assert abs(_iso_seconds(_to_micros(utc) + "+00:00") - unix) < NOW_TOLERANCE_S
 
 
 # -- legacy (v0.99) ------------------------------------------------------------------------------
@@ -379,5 +389,5 @@ async def test_wrong_method(api: ApiClient) -> None:
 async def test_now_is_now_on_both_api_generations(api: ApiClient) -> None:
     v1 = (await api.get("/api/v1/timezone/zone", params={"timeZone": "UTC"})).json()
     legacy = (await api.get("/api/time/current/zone", params={"timeZone": "UTC"})).json()
-    assert abs(_iso_seconds(legacy["dateTime"][:26] + "+00:00") - v1["unix_timestamp"]) < 5
+    assert abs(_iso_seconds(_to_micros(legacy["dateTime"]) + "+00:00") - v1["unix_timestamp"]) < 5
     assert abs(datetime.now(UTC).timestamp() - v1["unix_timestamp"]) < NOW_TOLERANCE_S
