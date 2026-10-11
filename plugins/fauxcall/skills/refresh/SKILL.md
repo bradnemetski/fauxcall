@@ -5,7 +5,6 @@ license: Apache-2.0
 compatibility: Needs uv, a shell and network access to the real service; the fake's .env must hold any credentials.
 metadata:
   author: Brad Nemetski
-  version: "0.1.0"
 allowed-tools: Bash(fauxcall *) Bash(uvx fauxcall *)
 ---
 

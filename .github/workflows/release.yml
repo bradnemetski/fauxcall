@@ -16,7 +16,7 @@ jobs:
       - uses: astral-sh/setup-uv@v7
       - name: Check the tag matches the package version
         run: |
-          version=$(uv version --short)
+          version=$(python3 -c "import json; print(json.load(open('plugins/fauxcall/.claude-plugin/plugin.json'))['version'])")
           test "v${version}" = "${GITHUB_REF_NAME}" || {
             echo "tag ${GITHUB_REF_NAME} does not match version ${version}"; exit 1; }
       - run: uv build

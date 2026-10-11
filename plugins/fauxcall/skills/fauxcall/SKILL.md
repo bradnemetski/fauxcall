@@ -6,7 +6,6 @@ compatibility: Needs uv (https://docs.astral.sh/uv), Python 3.12+, a shell and n
 metadata:
   author: Brad Nemetski
   homepage: https://github.com/bradnemetski/fauxcall
-  version: "0.1.0"
 allowed-tools: Bash(fauxcall *) Bash(uvx fauxcall *)
 ---
 

@@ -5,7 +5,6 @@ license: Apache-2.0
 compatibility: Needs uv and a shell; parity against the real API needs network access and the fake's .env credentials.
 metadata:
   author: Brad Nemetski
-  version: "0.1.0"
 allowed-tools: Bash(fauxcall *) Bash(uvx fauxcall *)
 ---
 

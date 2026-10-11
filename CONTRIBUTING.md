@@ -91,5 +91,15 @@ uv run fauxcall-reference-api --port 9100
   and they drift just like docs for people.
 - Add a line to `CHANGELOG.md` under "Unreleased".
 
+## Releasing
+
+The version is set in **one place**: `"version"` in `plugins/fauxcall/.claude-plugin/plugin.json`.
+The Python package reads it from there when it's built, the plugin's `fauxcall` command pins
+`uvx fauxcall==<version>` from it, and the release workflow checks the tag against it.
+
+1. Change the version in `plugin.json`, and move the "Unreleased" changelog entries under it.
+2. Commit, push, then tag that commit `v<version>` and push the tag. The release workflow
+   publishes to PyPI and creates the GitHub release.
+
 By contributing, you agree that your contributions are licensed under the
 [Apache License 2.0](LICENSE).

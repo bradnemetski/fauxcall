@@ -4,7 +4,13 @@
 # Runs the released package with uvx, pinned to the plugin's version so skills and engine always match.
 # Development: FAUXCALL_SOURCE=/path/to/fauxcall/checkout runs that checkout instead.
 set -eu
-FAUXCALL_VERSION="0.1.0"
+# The version is set in one place, the plugin manifest next to this script.
+MANIFEST="$(cd "$(dirname "$0")/.." && pwd)/.claude-plugin/plugin.json"
+FAUXCALL_VERSION="$(sed -n 's/^ *"version": *"\([^"]*\)".*/\1/p' "$MANIFEST" | head -n 1)"
+if [ -z "${FAUXCALL_VERSION}" ]; then
+  echo "fauxcall: no version in ${MANIFEST}" >&2
+  exit 1
+fi
 if [ -n "${FAUXCALL_SOURCE:-}" ] && [ -d "${FAUXCALL_SOURCE}" ]; then
   exec uv run --quiet --project "${FAUXCALL_SOURCE}" fauxcall "$@"
 fi

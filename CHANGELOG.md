@@ -6,6 +6,19 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.1.1]
+
+### Changed
+
+- Approvals allow 100 real calls per endpoint by default (`FAUXCALL_APPROVAL_BUDGET`), and the
+  skill asks for the number at the start of every build; approving an endpoint again adds calls.
+- The README is easier to read, explains how to use FauxCall with other agents (Codex, Gemini CLI,
+  Cursor, Copilot) and why it depends on `httpx2` and `httpcore2`.
+
+### Fixed
+
+- The call journal keeps deeply nested JSON as text on every Python version.
+
 ## [0.1.0]
 
 The first release.
@@ -40,5 +53,6 @@ The first release.
   outcomes, with cached answers and deterministic fallbacks.
 - Examples: fakes FauxCall built on its own while it was validated, from a single prompt each.
 
-[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/bradnemetski/fauxcall/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/bradnemetski/fauxcall/releases/tag/v0.1.0

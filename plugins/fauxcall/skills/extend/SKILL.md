@@ -5,7 +5,6 @@ license: Apache-2.0
 compatibility: Needs uv, a shell and network access to the real service.
 metadata:
   author: Brad Nemetski
-  version: "0.1.0"
 allowed-tools: Bash(fauxcall *) Bash(uvx fauxcall *)
 ---
 

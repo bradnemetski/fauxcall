@@ -1,6 +1,6 @@
 [project]
 name = "fauxcall"
-version = "0.1.0"
+dynamic = ["version"]  # the one place it is set: plugins/fauxcall/.claude-plugin/plugin.json
 description = "Record real APIs and MCP servers, then serve high-fidelity, consistent, time-aware fakes for repeatable agent testing."
 readme = "README.md"
 license = "Apache-2.0"
@@ -69,8 +69,17 @@ dev = [
 ]
 
 [build-system]
-requires = ["uv_build>=0.11.0,<0.12.0"]
-build-backend = "uv_build"
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+# The version lives only in the plugin manifest; the package, the plugin's launcher and the
+# release check all read it from there.
+path = "plugins/fauxcall/.claude-plugin/plugin.json"
+pattern = '"version": "(?P<version>[^"]+)"'
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fauxcall"]
 
 [tool.uv]
 default-groups = ["dev"]
