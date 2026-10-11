@@ -33,6 +33,13 @@ PRETTY: Final = JsonStyle(item_separator=",", key_separator=": ", indent=2, trai
 """Style for files humans review in diffs."""
 
 
+def _default_mode() -> int:
+    """Regular-file permissions honoring the umask (``mkstemp`` alone would give 0600)."""
+    umask = os.umask(0)
+    os.umask(umask)
+    return 0o666 & ~umask
+
+
 def atomic_write_text(path: Path, text: str) -> None:
     """Write ``text`` to ``path`` atomically, creating parent directories."""
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -42,6 +49,7 @@ def atomic_write_text(path: Path, text: str) -> None:
             handle.write(text)
             handle.flush()
             os.fsync(handle.fileno())
+        Path(temp_name).chmod(_default_mode())
         Path(temp_name).replace(path)
     except BaseException:
         with contextlib.suppress(FileNotFoundError):

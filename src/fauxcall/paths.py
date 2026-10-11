@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import re
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Final
@@ -13,6 +14,7 @@ if TYPE_CHECKING:
 
 _SLUG_RE: Final = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 MAX_SLUG_LENGTH: Final = 40
+MAX_ENDPOINT_SLUG: Final = 80
 
 
 def slugify(text: str) -> str:
@@ -30,6 +32,26 @@ def validate_slug(name: str) -> str:
             f"(max {MAX_SLUG_LENGTH} characters), starting with a letter"
         )
     return name
+
+
+def endpoint_slug(endpoint_id: str) -> str:
+    """Directory name for an endpoint's recordings.
+
+    ``"GET /api/v3/pet/{petId}"`` -> ``"get-api-v3-pet-petid"``;
+    ``"MCP tools/call:ask_question"`` -> ``"mcp-tools-call-ask-question"``. Very long ids are cut
+    and suffixed with a short hash; :func:`unique_endpoint_slug` resolves rare collisions.
+    """
+    slug = re.sub(r"[^a-z0-9]+", "-", endpoint_id.lower()).strip("-") or "endpoint"
+    digest = hashlib.sha256(endpoint_id.encode()).hexdigest()[:6]
+    if len(slug) > MAX_ENDPOINT_SLUG:
+        return f"{slug[:MAX_ENDPOINT_SLUG].rstrip('-')}-{digest}"
+    return slug
+
+
+def unique_endpoint_slug(endpoint_id: str) -> str:
+    """:func:`endpoint_slug` plus a short hash — used when the plain slug is already taken."""
+    digest = hashlib.sha256(endpoint_id.encode()).hexdigest()[:6]
+    return f"{endpoint_slug(endpoint_id)[:MAX_ENDPOINT_SLUG]}-{digest}"
 
 
 def package_name(name: str) -> str:

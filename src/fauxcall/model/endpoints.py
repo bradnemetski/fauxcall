@@ -57,6 +57,10 @@ class ParamModel(Model):
     on_invalid: Literal["error", "ignore", "coerce", "unknown"] = Field(
         default="unknown", description="Observed reaction to a malformed value."
     )
+    empty_as_absent: bool = Field(
+        default=False,
+        description="An empty value (?limit=) counts as not given, so the default applies.",
+    )
     maps_to: str | None = Field(
         default=None, description="Record field this parameter filters on (list/search roles)."
     )
@@ -195,7 +199,12 @@ class StreamModel(Model):
     speed: float = Field(default=1.0, gt=0, description="2.0 replays twice as fast.")
     loop: bool = False
     respond_to: Literal["none", "match", "echo"] = Field(
-        default="none", description="WebSocket: how client messages are answered."
+        default="match",
+        description=(
+            "WebSocket: 'match' sends the recorded greeting on connect, then the recorded reply to"
+            " each matching client message; 'none' pushes the server side on its own timeline;"
+            " 'echo' echoes."
+        ),
     )
     auth_failure_close_code: int | None = Field(
         default=None,
@@ -243,7 +252,7 @@ class EndpointModel(Model):
         expected = f"{self.method.value} {self.path}"
         if self.id != expected:
             raise ValueError(f"endpoint id {self.id!r} must be {expected!r}")
-        collection_roles = {"list", "get", "create", "replace", "update", "delete", "search"}
+        collection_roles = {"list", "get", "create", "replace", "update", "delete"}
         if self.role in collection_roles and self.collection is None:
             raise ValueError(f"role {self.role!r} needs a collection")
         if self.role in {"job_submit", "job_status"} and self.job is None:

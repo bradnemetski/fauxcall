@@ -22,9 +22,10 @@ from __future__ import annotations
 
 from typing import Annotated, Literal
 
-from pydantic import Field
+from pydantic import Field, SerializerFunctionWrapHandler, model_serializer
 
 from fauxcall.model.common import Model, RawJson, ZoneSpec
+from fauxcall.privacy.pii import PiiCategory
 from fauxcall.timefmt import TimeFormat
 
 PolicyScope = Literal["record", "body"]
@@ -37,6 +38,16 @@ class _Policy(Model):
         description="'record': path inside each collection record; 'body': inside the response.",
     )
     note: str | None = None
+
+    @model_serializer(mode="wrap")
+    def _keep_kind(self, handler: SerializerFunctionWrapHandler) -> dict[str, object]:
+        """Always write ``kind``, first.
+
+        It tells the policy types apart when reading back, so it must survive dumps that leave out
+        default values (``write_model``).
+        """
+        data: dict[str, object] = handler(self)
+        return {"kind": type(self).model_fields["kind"].default, **data}
 
 
 class StaticPolicy(_Policy):
@@ -149,7 +160,7 @@ class PseudonymPolicy(_Policy):
     """PII replaced at recording time; parity tests compare through the pseudonym key."""
 
     kind: Literal["pseudonym"] = "pseudonym"
-    category: str = Field(description="email, name, username, phone, address, ip, id, text …")
+    category: PiiCategory = Field(description="The PII category used to derive pseudonyms.")
 
 
 class ComputedPolicy(_Policy):

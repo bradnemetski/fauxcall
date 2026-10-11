@@ -146,7 +146,7 @@ class _Encoder:
             raise ValueError(f"{value!r} cannot be represented in JSON")
         return float.__repr__(value)
 
-    def encode(self, value: JsonValue, depth: int = 0) -> str:  # noqa: PLR0911
+    def encode(self, value: JsonValue, depth: int = 0) -> str:
         if value is None:
             return "null"
         if value is True:

@@ -176,6 +176,7 @@ def test_epoch_render_and_parse() -> None:
         ["2026-10-11T01:00:00Z", "2026-10-11T01:00:00+0000"],  # mixed offset spellings
         ["2026-10-11T01:00:00Z", 1791681447],
         ["99999999999999999999"],
+        [10**400],  # beyond float range: must not raise OverflowError
     ],
 )
 def test_non_time_samples_are_rejected(samples: list[JsonValue]) -> None:

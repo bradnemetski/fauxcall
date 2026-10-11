@@ -142,6 +142,7 @@ def configure_logging(
         uvicorn_logger = logging.getLogger(name)
         uvicorn_logger.handlers = []
         uvicorn_logger.propagate = True
+        uvicorn_logger.setLevel(logging.NOTSET)  # undo levels uvicorn's own config may have set
 
 
 def get_logger(name: str | None = None) -> structlog.stdlib.BoundLogger:

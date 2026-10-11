@@ -36,7 +36,7 @@ class CollectionModel(Model):
     sources: list[str] = Field(default_factory=list, description="Endpoint ids it was built from.")
     extract: dict[str, str] = Field(
         default_factory=dict,
-        description="Endpoint id -> JSON path of the records in its response, e.g. '$[*]', '$.data[*]', '$'.",
+        description="Endpoint id -> JSON path of its records, e.g. '$[*]', '$.data[*]', '$'.",
     )
     purposes: list[str] = Field(
         default_factory=lambda: [
@@ -47,8 +47,10 @@ class CollectionModel(Model):
             "time_profile",
             "series",
         ],
-        description="Recording purposes that feed the world (add write_readback/job_poll when the real "
-        "server keeps resources created while recording).",
+        description=(
+            "Recording purposes that feed the world (add write_readback/job_poll when the "
+            "real server keeps resources created while recording)."
+        ),
     )
     record_schema: RawJson = Field(default=None, description="Inferred JSON schema of a record.")
     order: Literal["recorded", "key_asc", "key_desc"] = "recorded"

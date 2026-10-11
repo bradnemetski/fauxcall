@@ -33,6 +33,14 @@ MODEL_FORMAT_VERSION: Final = 1
 SourceKind = Literal["openapi", "swagger_ui", "redoc", "html_docs", "mcp"]
 
 
+_STRATEGY_KEY_TYPES: Final[dict[str, frozenset[str]]] = {
+    "increment": frozenset({"int"}),
+    "random_int": frozenset({"int", "str"}),
+    "uuid4": frozenset({"uuid", "str"}),
+}
+"""Key types each server-side id strategy can produce (``client`` ids are checked per request)."""
+
+
 class SourceInfo(Model):
     """Where the fake's knowledge came from."""
 
@@ -161,8 +169,32 @@ class ApiModel(Model):
         found += _duplicates("calendar", [c.name for c in self.calendars])
         found += _duplicates("rate limit", [r.name for r in self.rate_limits])
         found += self._reference_problems()
+        found += self._key_problems()
         if self.kind == "mcp" and self.mcp is None:
             found.append("kind is 'mcp' but the model has no 'mcp' section")
+        return found
+
+    def _key_problems(self) -> list[str]:
+        """Ids the fake assigns must fit the collection's key type."""
+        key_types = {c.name: c.key_type for c in self.collections}
+        job_collections = {j.name: j.collection for j in self.jobs}
+        found: list[str] = []
+        for endpoint in self.endpoints:
+            if endpoint.role in {"create", "upload"}:
+                collection, strategy = endpoint.collection, "increment"
+            elif endpoint.role == "job_submit":
+                collection, strategy = job_collections.get(endpoint.job or ""), "uuid4"
+            else:
+                continue
+            if endpoint.write is not None:
+                strategy = endpoint.write.id_strategy
+            key_type = key_types.get(collection or "")
+            fits = _STRATEGY_KEY_TYPES.get(strategy)
+            if key_type is not None and fits is not None and key_type not in fits:
+                found.append(
+                    f"endpoint {endpoint.id!r}: id_strategy {strategy!r} can't make the"
+                    f" {key_type} keys of collection {collection!r}"
+                )
         return found
 
     def _reference_problems(self) -> list[str]:  # noqa: C901 - one flat checklist

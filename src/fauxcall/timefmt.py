@@ -291,7 +291,10 @@ def _string_candidates(texts: Sequence[str]) -> list[TimeFormat]:
 
 
 def _epoch_candidate(values: Sequence[JsonValue], *, as_string: bool) -> TimeFormat | None:
-    numbers = [float(str(v)) if isinstance(v, str) else float(v) for v in values]  # type: ignore[arg-type]
+    try:
+        numbers = [float(str(v)) if isinstance(v, str) else float(v) for v in values]  # type: ignore[arg-type]
+    except OverflowError:  # integers beyond float range are certainly not timestamps
+        return None
     for unit, (low, high) in _EPOCH_RANGES.items():
         if all(low <= n <= high for n in numbers):
             decimals = max(_decimals(v) for v in values)
