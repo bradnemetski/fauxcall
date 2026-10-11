@@ -33,6 +33,7 @@ from fauxcall.testing.client import (
     ApiClient,
     ExchangeLog,
     McpClient,
+    RealPace,
     placeholder_credentials,
     with_query,
 )
@@ -231,6 +232,7 @@ async def api(
         translate=fauxcall_fake.translate,
         query=query,
         log=fauxcall_log,
+        pace=real_pace(request.config, fauxcall_fake) if target == "real" else None,
     )
     async with http:
         yield client
@@ -263,12 +265,23 @@ async def mcp(
             allow_writes=bool(request.config.getoption("--allow-real-writes")),
             mutating=mutating,
             log=fauxcall_log,
+            pace=real_pace(request.config, fauxcall_fake) if target == "real" else None,
         )
         try:
             yield client
         finally:
             await client.close()
     _keep(request, target, fauxcall_log, fauxcall_fake)
+
+
+_PACE_KEY: Final = pytest.StashKey[RealPace]()
+
+
+def real_pace(config: pytest.Config, fake: FakeUnderTest) -> RealPace:
+    """The session's one pace for the real side (rate limits count every call of the run)."""
+    if _PACE_KEY not in config.stash:
+        config.stash[_PACE_KEY] = RealPace.for_model(fake.model)
+    return config.stash[_PACE_KEY]
 
 
 def record_roots(endpoint: EndpointModel) -> list[str] | None:

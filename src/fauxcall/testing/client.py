@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import re
 import time
@@ -19,6 +20,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Mapping
 
     from fauxcall.mcpwire.client import McpWireClient
+    from fauxcall.model.api import ApiModel
     from fauxcall.model.auth import AuthModel, AuthScheme
     from fauxcall.model.fields import FieldPolicy
     from fauxcall.privacy.pii import PiiCategory
@@ -164,6 +166,49 @@ def _midpoint(started_ns: int) -> int:
     return (started_ns + time.time_ns()) // 2
 
 
+_TOO_MANY_REQUESTS: Final = 429
+
+
+@dataclass(slots=True)
+class RealPace:
+    """Keeps the real side of a parity run inside the API's rate limits.
+
+    Calls are spaced by ``interval_s`` (from the model's strictest rate limit), and a ``429`` is
+    waited out (``Retry-After``, else one interval, at least a second) and retried up to
+    ``retries`` times. A throttled request was not processed, so retrying is safe, and scenarios see
+    the real API's answer instead of a throttle the fake doesn't emulate in tests. One pace is
+    shared by the whole session: rate limits count every call made with the same credentials.
+    """
+
+    interval_s: float = 0.0
+    retries: int = 3
+    max_wait_s: float = 60.0
+    _last: float = field(default=float("-inf"), init=False)
+
+    @classmethod
+    def for_model(cls, model: ApiModel | None) -> RealPace:
+        """The pace the model's recorded rate limits allow."""
+        limits = model.rate_limits if model is not None else []
+        interval = max((limit.window_seconds / limit.limit for limit in limits), default=0.0)
+        return cls(interval_s=interval)
+
+    async def wait_turn(self) -> None:
+        """Sleep until the next call may go out."""
+        if self.interval_s > 0:
+            delay = self._last + self.interval_s - time.monotonic()
+            if delay > 0:
+                await asyncio.sleep(delay)
+        self._last = time.monotonic()
+
+    def backoff(self, response: httpx2.Response) -> float | None:
+        """Seconds to wait before retrying a throttled call (``None``: it wasn't throttled)."""
+        if response.status_code != _TOO_MANY_REQUESTS:
+            return None
+        header = (response.headers.get("retry-after") or "").strip()
+        seconds = float(header) if header.isdigit() else max(self.interval_s, 1.0)
+        return min(seconds, self.max_wait_s)
+
+
 class ApiClient:
     """HTTP client that logs every call for parity comparison."""
 
@@ -176,6 +221,7 @@ class ApiClient:
         translate: Translate | None = None,
         query: Mapping[str, str] | None = None,
         log: ExchangeLog | None = None,
+        pace: RealPace | None = None,
     ) -> None:
         self.target: Target = target
         self.http = http
@@ -184,6 +230,8 @@ class ApiClient:
         self.query = dict(query or {})
         """Parameters (credentials) added to every request that does not set them itself."""
         self.log = log if log is not None else ExchangeLog()
+        self.pace = pace
+        """Rate-limit pacing for the real side (``None``: as fast as possible)."""
 
     @property
     def is_real(self) -> bool:
@@ -217,15 +265,26 @@ class ApiClient:
             )
         options = compare or CompareOptions()
         url = self._with_credentials(path, kwargs)
-        started_ns = time.time_ns()
-        try:
-            response = await self.http.request(upper, url, **kwargs)  # type: ignore[arg-type]
-        except httpx2.HTTPError as exc:
-            observation = Observation(None, {}, None, None, started_ns, error=type(exc).__name__)
-            self.log.calls.append(
-                LoggedCall(label or f"{upper} {path}", upper, path, observation, options)
-            )
-            raise
+        attempt = 0
+        while True:
+            if self.pace is not None:
+                await self.pace.wait_turn()
+            started_ns = time.time_ns()
+            try:
+                response = await self.http.request(upper, url, **kwargs)  # type: ignore[arg-type]
+            except httpx2.HTTPError as exc:
+                observation = Observation(
+                    None, {}, None, None, started_ns, error=type(exc).__name__
+                )
+                self.log.calls.append(
+                    LoggedCall(label or f"{upper} {path}", upper, path, observation, options)
+                )
+                raise
+            wait = self.pace.backoff(response) if self.pace is not None else None
+            if wait is None or self.pace is None or attempt >= self.pace.retries:
+                break
+            attempt += 1
+            await asyncio.sleep(wait)
         observation = _observe(response, _midpoint(started_ns))
         self.log.calls.append(
             LoggedCall(label or f"{upper} {path}", upper, path, observation, options)
@@ -291,12 +350,15 @@ class McpClient:
         allow_writes: bool,
         mutating: Callable[[str], bool],
         log: ExchangeLog | None = None,
+        pace: RealPace | None = None,
     ) -> None:
         self.target: Target = target
         self.wire = wire
         self.allow_writes = allow_writes
         self.mutating = mutating
         self.log = log if log is not None else ExchangeLog()
+        self.pace = pace
+        """Rate-limit pacing for the real side (``None``: as fast as possible)."""
         self._open = False
 
     async def _ensure(self) -> None:
@@ -319,6 +381,8 @@ class McpClient:
         await self._ensure()
         path = mcp_call_path(method, params)
         options = compare or CompareOptions()
+        if self.pace is not None:
+            await self.pace.wait_turn()
         started_ns = time.time_ns()
         try:
             call = await self.wire.call(method, params)

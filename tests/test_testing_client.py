@@ -25,6 +25,7 @@ from fauxcall.testing.client import (
     Credentials,
     ExchangeLog,
     McpClient,
+    RealPace,
     _observe,
     mcp_call_path,
     placeholder_credentials,
@@ -459,3 +460,70 @@ async def test_mcp_clients_can_share_a_log(tmp_path: Path) -> None:
         await client.close()
     assert client.log is shared
     assert [call.path for call in shared.calls] == ["tools/list"]
+
+
+# -- pacing the real side --------------------------------------------------------------------------
+
+
+def _limited_model(limit: int, window_seconds: float) -> ApiModel:
+    from fauxcall.model.realism import RateLimitModel  # noqa: PLC0415
+
+    return ApiModel(
+        name="limited",
+        title="Limited",
+        source=SourceInfo(
+            kind="openapi", url="https://x.test/openapi.json", fetched_at=datetime.now(UTC)
+        ),
+        real=RealTarget(base_url="https://x.test"),
+        rate_limits=[
+            RateLimitModel(name="slow", limit=limit, window_seconds=window_seconds),
+            RateLimitModel(name="fast", limit=100, window_seconds=1),
+        ],
+    )
+
+
+def test_pace_follows_the_strictest_recorded_limit() -> None:
+    assert RealPace.for_model(_limited_model(30, 10)).interval_s == pytest.approx(10 / 30)
+    assert RealPace.for_model(None).interval_s == 0.0
+    pace = RealPace(interval_s=0.25, max_wait_s=30)
+    ok = httpx2.Response(200)
+    assert pace.backoff(ok) is None
+    assert pace.backoff(httpx2.Response(429, headers={"retry-after": "7"})) == 7.0
+    assert pace.backoff(httpx2.Response(429, headers={"retry-after": "3600"})) == 30.0  # capped
+    assert pace.backoff(httpx2.Response(429)) == 1.0  # no hint: at least a second
+    date = "Wed, 21 Oct 2026 07:28:00 GMT"
+    assert pace.backoff(httpx2.Response(429, headers={"retry-after": date})) == 1.0
+
+
+async def test_real_calls_are_spaced_and_throttles_waited_out(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    waits: list[float] = []
+
+    async def fake_sleep(seconds: float) -> None:
+        waits.append(seconds)
+
+    monkeypatch.setattr("fauxcall.testing.client.asyncio.sleep", fake_sleep)
+    answers = iter([429, 429, 200, 200])
+
+    def handler(request: httpx2.Request) -> httpx2.Response:
+        status = next(answers)
+        return httpx2.Response(status, headers={"retry-after": "2"} if status == 429 else {})
+
+    pace = RealPace(interval_s=0.5)
+    http = httpx2.AsyncClient(transport=httpx2.MockTransport(handler), base_url="https://x.test")
+    async with http:
+        client = ApiClient("real", http, allow_writes=False, pace=pace)
+        first = await client.get("/items")
+        second = await client.get("/items")
+    assert (first.status_code, second.status_code) == (200, 200)
+    assert waits.count(2.0) == 2  # two throttles, each waited out
+    assert len(client.log.calls) == 2  # only the final answers are compared
+    gave_up = iter([429] * 5)
+    stubborn = httpx2.AsyncClient(
+        transport=httpx2.MockTransport(lambda _: httpx2.Response(next(gave_up))),
+        base_url="https://x.test",
+    )
+    async with stubborn:
+        persistent = ApiClient("real", stubborn, allow_writes=False, pace=RealPace(retries=2))
+        assert (await persistent.get("/items")).status_code == 429  # reported after the retries

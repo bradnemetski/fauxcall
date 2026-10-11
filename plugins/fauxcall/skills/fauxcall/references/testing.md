@@ -66,7 +66,9 @@ fauxcall verify <name> --target parity --allow-real-writes
 ```
 
 The run fails below the threshold (`--parity-threshold`, default 0.98). The report is written to
-`data/reports/parity.md` and `.json`.
+`data/reports/parity.md` and `.json`. Calls to the real API are spaced to the model's strictest rate
+limit (record `rate_limits` before running parity), and a `429` is waited out and retried, so scenarios
+compare real answers rather than throttling; test rate limiting itself on the fake.
 
 ## Reading the report
 
