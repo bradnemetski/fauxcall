@@ -1,0 +1,169 @@
+[project]
+name = "fauxcall"
+version = "0.1.0"
+description = "Record real APIs and MCP servers, then serve high-fidelity, consistent, time-aware fakes for repeatable agent testing."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "Brad Nemetski", email = "brad.nemetski@gmail.com" }]
+requires-python = ">=3.12"
+keywords = ["mock", "fake", "api", "mcp", "openapi", "agents", "testing", "evaluation", "claude-code"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: FastAPI",
+    "Intended Audience :: Developers",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Testing :: Mocking",
+    "Typing :: Typed",
+]
+dependencies = [
+    "beautifulsoup4>=4.12",
+    "faker>=30.0",
+    "fastapi>=0.120",
+    "httpx2[ws]>=2.10",
+    "jinja2>=3.1.6",
+    "jsonschema>=4.23",
+    "pydantic>=2.12",
+    "pydantic-settings>=2.10",
+    "python-multipart>=0.0.20",
+    "pyyaml>=6.0.2",
+    "structlog>=25.1",
+    "typer>=0.16",
+    "typesafe-sdk>=0.7",
+    "tzdata>=2025.2",
+    "uvicorn[standard]>=0.35",
+]
+
+[project.urls]
+Homepage = "https://github.com/bradnemetski/fauxcall"
+Repository = "https://github.com/bradnemetski/fauxcall"
+Issues = "https://github.com/bradnemetski/fauxcall/issues"
+Changelog = "https://github.com/bradnemetski/fauxcall/blob/main/CHANGELOG.md"
+
+[project.scripts]
+fauxcall = "fauxcall.cli.main:main"
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.140",
+    "mcp>=2.3",
+    "mypy>=2.0",
+    "pytest>=9.0",
+    "pytest-asyncio>=1.2",
+    "pytest-cov>=7.0",
+    "ruff>=0.15",
+    "types-jsonschema>=4.23",
+    "types-pyyaml>=6.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.0,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv]
+default-groups = ["dev"]
+
+# ---------------------------------------------------------------------------
+# Lint
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+extend-exclude = ["src/fauxcall/scaffold/templates"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "COM812",  # trailing-comma rules conflict with the formatter
+    "ISC001",  # implicit string concatenation conflicts with the formatter
+    "CPY001",  # LICENSE covers copyright; no per-file headers
+    "D105",    # magic methods are self-describing
+    "D107",    # __init__ args are documented on the class
+    "EM101",   # exception messages as literals are fine
+    "EM102",
+    "TRY003",  # long exception messages are fine
+    "S311",    # deterministic simulation intentionally uses non-crypto PRNGs
+    "TD002",   # TODOs don't need an author ...
+    "TD003",   # ... or an issue link
+    "FIX002",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "S101",    # asserts are the point of tests
+    "PLR2004", # magic values are fine in tests
+    "D",       # tests are documented by their names
+    "SLF001",  # tests may poke at private members
+    "S105",    # fake secrets in tests
+    "S106",
+    "ARG001",  # unused fixture arguments
+    "ANN401",
+    "PLR0913",
+    "FBT001",
+    "INP001",  # test dirs are not packages
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.pylint]
+max-args = 8
+
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = ["pydantic.BaseModel", "pydantic_settings.BaseSettings"]
+
+# ---------------------------------------------------------------------------
+# Types
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool", "possibly-undefined"]
+plugins = ["pydantic.mypy"]
+mypy_path = "src"
+files = ["src", "tests"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+# ---------------------------------------------------------------------------
+# Tests
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "9.0"
+testpaths = ["tests"]
+addopts = ["-ra", "--strict-markers", "--strict-config", "-m", "not network"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "network: talks to real external services (deselected by default; run with -m network)",
+    "slow: takes more than a few seconds",
+]
+filterwarnings = [
+    "error::DeprecationWarning:fauxcall.*",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["fauxcall"]
+
+[tool.coverage.report]
+fail_under = 95
+show_missing = true
+skip_covered = true
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "@overload",
+    "raise NotImplementedError",
+    "^\\s*\\.\\.\\.$",
+    "if __name__ == .__main__.:",
+]
