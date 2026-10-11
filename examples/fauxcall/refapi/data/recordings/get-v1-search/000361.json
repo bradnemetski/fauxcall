@@ -1,0 +1,94 @@
+{
+  "id": "000361",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-063",
+  "started_at": "2026-10-11T06:20:19.081493Z",
+  "started_ns": 1791699619081493000,
+  "elapsed_ms": 42.691,
+  "ttfb_ms": 42.551,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=gpu",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "gpu"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:20:18 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "28"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "26"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699628"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "gpu",
+        "results": []
+      },
+      "size": 28
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": "000168",
+  "endpoint": "GET /api/v1/time/current/coordinate",
+  "purpose": "invalid",
+  "plan_call": "currentco-missing-lon",
+  "started_at": "2026-10-11T10:35:42.924192Z",
+  "started_ns": 1791714942924192000,
+  "elapsed_ms": 139.475,
+  "ttfb_ms": 138.237,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/time/current/coordinate?latitude=52.3",
+    "path": "/api/v1/time/current/coordinate",
+    "query": [
+      [
+        "latitude",
+        "52.3"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:35:43 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "date_time": "2026-10-11T11:35:43.004084+01:00",
+        "date": "2026-10-11",
+        "time": "11:35:43.004084",
+        "day_of_week": "Sunday",
+        "dst_active": true,
+        "timezone": "Europe/London",
+        "utc_offset_seconds": 3600
+      },
+      "size": 187
+    }
+  }
+}

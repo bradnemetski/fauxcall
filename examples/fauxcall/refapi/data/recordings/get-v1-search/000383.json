@@ -1,0 +1,120 @@
+{
+  "id": "000383",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-085",
+  "started_at": "2026-10-11T06:20:30.124908Z",
+  "started_ns": 1791699630124908000,
+  "elapsed_ms": 42.435,
+  "ttfb_ms": 42.299,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=drug",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "drug"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:20:29 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "288"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "24"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699638"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "drug",
+        "results": [
+          {
+            "symbol": "AMGN",
+            "name": "Amgen Inc.",
+            "score": 0.5
+          },
+          {
+            "symbol": "AZN.L",
+            "name": "AstraZeneca PLC",
+            "score": 0.5
+          },
+          {
+            "symbol": "JNJ",
+            "name": "Johnson & Johnson",
+            "score": 0.5
+          },
+          {
+            "symbol": "PFE",
+            "name": "Pfizer Inc.",
+            "score": 0.5
+          },
+          {
+            "symbol": "SAN.PA",
+            "name": "Sanofi",
+            "score": 0.5
+          }
+        ]
+      },
+      "size": 288
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

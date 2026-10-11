@@ -1,0 +1,160 @@
+{
+  "id": "000839",
+  "endpoint": "GET /v1/ws/quotes",
+  "purpose": "variation",
+  "plan_call": "ws-extra-fields",
+  "started_at": "2026-10-11T10:40:26.083372Z",
+  "started_ns": 1791715226083372000,
+  "elapsed_ms": 1021.934,
+  "ttfb_ms": 4.013,
+  "request": {
+    "method": "GET",
+    "url": "ws://127.0.0.1:9100/v1/ws/quotes?api_key=[REDACTED]",
+    "path": "/v1/ws/quotes",
+    "query": [
+      [
+        "api_key",
+        "[REDACTED]"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "connection",
+        "upgrade"
+      ],
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "sec-websocket-key",
+        "RQUEUIWeLzZf+qe6XLHdag=="
+      ],
+      [
+        "sec-websocket-version",
+        "13"
+      ]
+    ]
+  },
+  "response": {
+    "status": 101,
+    "reason": "Switching Protocols",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "connection",
+        "Upgrade"
+      ],
+      [
+        "sec-websocket-accept",
+        "gT/77WXhUKe07Z7h5CmDfX55XB0="
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:40:25 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 4.047,
+      "kind": "ws_send",
+      "data": "{\"action\":\"subscribe\",\"symbols\":[\"7203.t\",\"0700.hk\"],\"foo\":1}"
+    },
+    {
+      "t_ms": 4.888,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"subscribed\",\"symbols\":[\"7203.T\",\"0700.HK\"]}"
+    },
+    {
+      "t_ms": 5.108,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"7203.T\",\"price\":\"2741.50\",\"as_of\":\"2026-10-09T06:30:00.000000Z\"}"
+    },
+    {
+      "t_ms": 5.302,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"0700.HK\",\"price\":\"412.60\",\"as_of\":\"2026-10-09T08:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 257.293,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"7203.T\",\"price\":\"2741.50\",\"as_of\":\"2026-10-09T06:30:00.000000Z\"}"
+    },
+    {
+      "t_ms": 257.61,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"0700.HK\",\"price\":\"412.60\",\"as_of\":\"2026-10-09T08:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 509.84,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"7203.T\",\"price\":\"2741.50\",\"as_of\":\"2026-10-09T06:30:00.000000Z\"}"
+    },
+    {
+      "t_ms": 510.104,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"0700.HK\",\"price\":\"412.60\",\"as_of\":\"2026-10-09T08:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 766.623,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"7203.T\",\"price\":\"2741.50\",\"as_of\":\"2026-10-09T06:30:00.000000Z\"}"
+    },
+    {
+      "t_ms": 766.952,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"0700.HK\",\"price\":\"412.60\",\"as_of\":\"2026-10-09T08:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 1020.421,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"7203.T\",\"price\":\"2741.50\",\"as_of\":\"2026-10-09T06:30:00.000000Z\"}"
+    },
+    {
+      "t_ms": 1020.831,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"0700.HK\",\"price\":\"412.60\",\"as_of\":\"2026-10-09T08:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 1021.129,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"done\"}"
+    },
+    {
+      "t_ms": 1021.209,
+      "kind": "ws_close",
+      "code": 1000
+    }
+  ],
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.query:api_key"
+  ]
+}

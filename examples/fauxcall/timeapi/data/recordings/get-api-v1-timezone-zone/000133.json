@@ -1,0 +1,98 @@
+{
+  "id": "000133",
+  "endpoint": "GET /api/v1/timezone/zone",
+  "purpose": "variation",
+  "plan_call": "tz-noDst",
+  "started_at": "2026-10-11T10:34:55.444604Z",
+  "started_ns": 1791714895444604000,
+  "elapsed_ms": 138.8,
+  "ttfb_ms": 137.492,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/timezone/zone?timeZone=Asia%2FShanghai",
+    "path": "/api/v1/timezone/zone",
+    "query": [
+      [
+        "timeZone",
+        "Asia/Shanghai"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:34:55 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "timezone": "Asia/Shanghai",
+        "current_utc_offset_seconds": 28800,
+        "standard_utc_offset_seconds": 28800,
+        "dst_utc_offset_seconds": 0,
+        "has_dst": false,
+        "dst_offset_seconds": 0,
+        "dst_active": false,
+        "dst_from": null,
+        "dst_until": null,
+        "local_time": "2026-10-11T18:34:55.523761+08:00",
+        "day_of_week": "Sunday",
+        "utc_time": "2026-10-11T10:34:55.523761+00:00",
+        "unix_timestamp": 1791714895
+      },
+      "size": 362
+    }
+  }
+}

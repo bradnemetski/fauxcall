@@ -1,0 +1,115 @@
+{
+  "id": "000536",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "variation",
+  "plan_call": "up-corrupt",
+  "started_at": "2026-10-11T06:24:24.377811Z",
+  "started_ns": 1791699864377811000,
+  "elapsed_ms": 24.954,
+  "ttfb_ms": 24.663,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-length",
+        "181"
+      ],
+      [
+        "content-type",
+        "multipart/form-data; boundary=f6e427c9189650b434bfdc4fbf51733d"
+      ]
+    ],
+    "body": {
+      "kind": "multipart",
+      "content_type": "multipart/form-data; boundary=f6e427c9189650b434bfdc4fbf51733d",
+      "size": 181,
+      "parts": [
+        {
+          "name": "file",
+          "filename": "bad.csv",
+          "content_type": "text/csv",
+          "text": "a,b\nCORRUPT,1\n",
+          "size": 14
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 202,
+    "reason": "Accepted",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:24:23 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "168"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699874"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": "becd7025-20c8-4d58-9b56-97447321cc9b",
+        "status": "queued",
+        "filename": "bad.csv",
+        "size": 14,
+        "label": null,
+        "created_at": "2026-10-11T06:24:24.400840+00:00",
+        "progress": 0
+      },
+      "size": 168
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

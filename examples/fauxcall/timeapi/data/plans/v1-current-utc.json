@@ -1,0 +1,75 @@
+{
+ "name": "v1-current-utc",
+ "created_at": "2026-10-11T10:30:00Z",
+ "calls": [
+  {
+   "id": "utc-1",
+   "endpoint": "GET /api/v1/time/current/utc",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/utc"
+   }
+  },
+  {
+   "id": "utc-2",
+   "endpoint": "GET /api/v1/time/current/utc",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/utc"
+   }
+  },
+  {
+   "id": "utc-time",
+   "endpoint": "GET /api/v1/time/current/utc",
+   "purpose": "time_profile",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/utc"
+   },
+   "repeat": 4,
+   "interval_ms": 10000
+  },
+  {
+   "id": "utc-q",
+   "endpoint": "GET /api/v1/time/current/utc",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/utc",
+    "query": [
+     [
+      "timezone",
+      "Asia/Tokyo"
+     ]
+    ]
+   },
+   "note": "ignored params?"
+  },
+  {
+   "id": "utc-slash",
+   "endpoint": "GET /api/v1/time/current/utc",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/utc/"
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "utc-case",
+   "endpoint": "GET /api/v1/time/current/utc",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/API/V1/Time/Current/UTC"
+   },
+   "tags": [
+    "routing"
+   ]
+  }
+ ]
+}

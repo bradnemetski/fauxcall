@@ -1,0 +1,95 @@
+{
+  "id": "000361",
+  "endpoint": "POST /api/calculation/current/decrement",
+  "purpose": "invalid",
+  "plan_call": "ccdecrement-badtz",
+  "started_at": "2026-10-11T10:40:06.211505Z",
+  "started_ns": 1791715206211505000,
+  "elapsed_ms": 132.435,
+  "ttfb_ms": 132.262,
+  "request": {
+    "method": "POST",
+    "url": "https://timeapi.io/api/calculation/current/decrement",
+    "path": "/api/calculation/current/decrement",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "50"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "timeZone": "Mars/Phobos",
+        "timeSpan": "1:00:00:00"
+      },
+      "size": 50
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:40:06 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": "Invalid timezone",
+      "size": 18
+    }
+  }
+}

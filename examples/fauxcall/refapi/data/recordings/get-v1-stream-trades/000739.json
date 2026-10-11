@@ -1,0 +1,102 @@
+{
+  "id": "000739",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "edge",
+  "plan_call": "st-count-1",
+  "started_at": "2026-10-11T06:27:36.567005Z",
+  "started_ns": 1791700056567005000,
+  "elapsed_ms": 57.335,
+  "ttfb_ms": 56.453,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=TSLA&count=1",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "TSLA"
+      ],
+      [
+        "count",
+        "1"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:27:36 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "19"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700057"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 56.951,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"TSLA\",\"price\":\"249.76\",\"size\":32,\"time\":\"2026-10-11T06:27:36.622Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "id": "000281",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s-62",
+  "started_at": "2026-10-11T06:18:56.226849Z",
+  "started_ns": 1791699536226849000,
+  "elapsed_ms": 42.771,
+  "ttfb_ms": 42.621,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=semi",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "semi"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:18:55 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "195"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "27"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699546"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "semi",
+        "results": [
+          {
+            "symbol": "0981.HK",
+            "name": "Semiconductor Manufacturing International",
+            "score": 0.6
+          },
+          {
+            "symbol": "TSM",
+            "name": "Taiwan Semiconductor Manufacturing Co., Ltd.",
+            "score": 0.6
+          }
+        ]
+      },
+      "size": 195
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

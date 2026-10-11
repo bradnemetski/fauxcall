@@ -1,0 +1,91 @@
+{
+  "id": "000107",
+  "endpoint": "GET /v1/tickers/{symbol}",
+  "plan_call": "ti-TSM",
+  "started_at": "2026-10-11T06:14:53.612030Z",
+  "started_ns": 1791699293612030000,
+  "elapsed_ms": 63.248,
+  "ttfb_ms": 62.555,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/TSM",
+    "path": "/v1/tickers/TSM",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:14:52 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "156"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "19"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699298"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "TSM",
+        "name": "Taiwan Semiconductor Manufacturing Co., Ltd.",
+        "exchange": "XNYS",
+        "currency": "USD",
+        "sector": "Semiconductors",
+        "listed_on": "1997-10-08"
+      },
+      "size": 156
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "id": "000120",
+  "endpoint": "GET /v1/tickers/{symbol}",
+  "purpose": "invalid",
+  "plan_call": "ti-trailing-dot",
+  "started_at": "2026-10-11T06:15:00.136963Z",
+  "started_ns": 1791699300136963000,
+  "elapsed_ms": 64.977,
+  "ttfb_ms": 64.465,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/AAPL.",
+    "path": "/v1/tickers/AAPL.",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:15:00 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "132"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699309"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "ticker_not_found",
+          "message": "No ticker with symbol 'AAPL.'.",
+          "request_id": "a0047ebb-3e79-4f56-b413-3475c347ac8d"
+        }
+      },
+      "size": 132
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

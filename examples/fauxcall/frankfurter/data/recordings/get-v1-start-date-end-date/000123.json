@@ -1,0 +1,118 @@
+{
+  "id": "000123",
+  "endpoint": "GET /v1/{start_date}..{end_date}",
+  "purpose": "invalid",
+  "plan_call": "p-bad-end",
+  "started_at": "2026-10-11T06:22:14.981806Z",
+  "started_ns": 1791699734981806000,
+  "elapsed_ms": 146.402,
+  "ttfb_ms": 145.659,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/2026-10-01..2026-02-30?symbols=USD",
+    "path": "/v1/2026-10-01..2026-02-30",
+    "path_params": {
+      "start_date": "2026-10-01",
+      "end_date": "2026-02-30"
+    },
+    "query": [
+      [
+        "symbols",
+        "USD"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 422,
+    "reason": "Unprocessable Entity",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:22:15 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "content-length",
+        "26"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "x-robots-tag",
+        "noindex"
+      ],
+      [
+        "cache-control",
+        "no-store"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/rates>; rel=\"successor-version\""
+      ],
+      [
+        "cf-cache-status",
+        "BYPASS"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=Auj1rvFHVUU6%2FCxCgtUGV71XqDbPFxGwGwXsXntOInwxQmgTE5MRT29sKxWEnACPglKEJyCC14Mqig0dXvePARHzi7CYFxgFmNdE%2FzmbwEsIUNMt7MMBTm%2FT%2Bhg0XxQVkiUDx6U%3D\"}]}"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bc4efbd09dd64-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "message": "invalid date"
+      },
+      "size": 26
+    }
+  }
+}

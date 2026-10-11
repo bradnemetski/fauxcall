@@ -1,0 +1,156 @@
+{
+  "id": "000038",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "pagination",
+  "plan_call": "tk-p5",
+  "started_at": "2026-10-11T06:13:09.510337Z",
+  "started_ns": 1791699189510337000,
+  "elapsed_ms": 46.193,
+  "ttfb_ms": 45.934,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?limit=7&cursor=eyJhZnRlciI6IkNPU1QifQ",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "limit",
+        "7"
+      ],
+      [
+        "cursor",
+        "eyJhZnRlciI6IkNPU1QifQ"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:13:08 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "990"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "22"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699197"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "CSCO",
+            "name": "Cisco Systems, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1990-02-16"
+          },
+          {
+            "symbol": "CVX",
+            "name": "Chevron Corporation",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Energy",
+            "listed_on": "1921-06-24"
+          },
+          {
+            "symbol": "DIS",
+            "name": "The Walt Disney Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "1957-11-12"
+          },
+          {
+            "symbol": "F",
+            "name": "Ford Motor Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Automotive",
+            "listed_on": "1956-03-07"
+          },
+          {
+            "symbol": "GM",
+            "name": "General Motors Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Automotive",
+            "listed_on": "2010-11-18"
+          },
+          {
+            "symbol": "GOOGL",
+            "name": "Alphabet Inc. Class A",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "2004-08-19"
+          },
+          {
+            "symbol": "GS",
+            "name": "The Goldman Sachs Group, Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1999-05-04"
+          }
+        ],
+        "next_cursor": "eyJhZnRlciI6IkdTIn0",
+        "total": 60
+      },
+      "size": 990
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

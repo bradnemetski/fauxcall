@@ -1,0 +1,136 @@
+{
+  "id": "000268",
+  "endpoint": "GET /api/timezone/zone",
+  "purpose": "variation",
+  "plan_call": "ltz-6",
+  "started_at": "2026-10-11T10:38:29.036282Z",
+  "started_ns": 1791715109036282000,
+  "elapsed_ms": 141.528,
+  "ttfb_ms": 140.869,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/timezone/zone?timeZone=America%2FSt_Johns",
+    "path": "/api/timezone/zone",
+    "query": [
+      [
+        "timeZone",
+        "America/St_Johns"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:38:29 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "timeZone": "America/St_Johns",
+        "currentLocalTime": "2026-10-11T08:08:29.1189241",
+        "currentUtcOffset": {
+          "seconds": -9000,
+          "milliseconds": -9000000,
+          "ticks": -90000000000,
+          "nanoseconds": -9000000000000
+        },
+        "standardUtcOffset": {
+          "seconds": -12600,
+          "milliseconds": -12600000,
+          "ticks": -126000000000,
+          "nanoseconds": -12600000000000
+        },
+        "hasDayLightSaving": true,
+        "isDayLightSavingActive": true,
+        "dstInterval": {
+          "dstName": "NDT",
+          "dstOffsetToUtc": {
+            "seconds": -9000,
+            "milliseconds": -9000000,
+            "ticks": -90000000000,
+            "nanoseconds": -9000000000000
+          },
+          "dstOffsetToStandardTime": {
+            "seconds": 3600,
+            "milliseconds": 3600000,
+            "ticks": 36000000000,
+            "nanoseconds": 3600000000000
+          },
+          "dstStart": "2026-03-08T05:30:00Z",
+          "dstEnd": "2026-11-01T04:30:00Z",
+          "dstDuration": {
+            "days": 237,
+            "nanosecondOfDay": 82800000000000,
+            "hours": 23,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "subsecondTicks": 0,
+            "subsecondNanoseconds": 0,
+            "bclCompatibleTicks": 205596000000000,
+            "totalDays": 237.95833333333334,
+            "totalHours": 5711,
+            "totalMinutes": 342660,
+            "totalSeconds": 20559600,
+            "totalMilliseconds": 20559600000,
+            "totalTicks": 205596000000000,
+            "totalNanoseconds": 20559600000000000
+          }
+        }
+      },
+      "size": 1069
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "id": "000694",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "variation",
+  "plan_call": "up2-label-space",
+  "started_at": "2026-10-11T06:27:08.947908Z",
+  "started_ns": 1791700028947908000,
+  "elapsed_ms": 20.798,
+  "ttfb_ms": 20.602,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-length",
+        "264"
+      ],
+      [
+        "content-type",
+        "multipart/form-data; boundary=ec52192e5a60212bc886f4d12993693a"
+      ]
+    ],
+    "body": {
+      "kind": "multipart",
+      "content_type": "multipart/form-data; boundary=ec52192e5a60212bc886f4d12993693a",
+      "size": 264,
+      "parts": [
+        {
+          "name": "label",
+          "text": "  padded  ",
+          "size": 10
+        },
+        {
+          "name": "file",
+          "filename": "s.txt",
+          "content_type": "text/plain",
+          "text": "s",
+          "size": 1
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 202,
+    "reason": "Accepted",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:27:08 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "173"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "24"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700037"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": "b63f28e9-832a-41e8-a49a-95394b46b5db",
+        "status": "queued",
+        "filename": "s.txt",
+        "size": 1,
+        "label": "  padded  ",
+        "created_at": "2026-10-11T06:27:08.967780+00:00",
+        "progress": 0
+      },
+      "size": 173
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

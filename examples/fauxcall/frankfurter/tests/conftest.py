@@ -1,0 +1,23 @@
+"""Pytest setup: how to reach this fake (in-process) and the real API it imitates (``.env``).
+
+FauxCall's parity plugin is enabled in ``pyproject.toml`` (``-p fauxcall.testing.plugin``).
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+import pytest
+from fauxcall.testing.support import fake_under_test
+
+from fauxcall_frankfurter.app import build_app
+from fauxcall_frankfurter.settings import Settings
+
+if TYPE_CHECKING:
+    from fauxcall.testing import FakeUnderTest
+
+
+@pytest.fixture(scope="session")
+def fauxcall_fake() -> FakeUnderTest:
+    """This fake (fast mode) and the real API (base URL and credentials from ``.env``)."""
+    return fake_under_test(Settings, build_app)

@@ -1,0 +1,3447 @@
+{
+  "name": "frankfurter",
+  "title": "Frankfurter API",
+  "source": {
+    "kind": "openapi",
+    "url": "https://api.frankfurter.dev/v1/openapi.json",
+    "spec_url": "https://api.frankfurter.dev/v1/openapi.json",
+    "spec_file": "source/openapi.json",
+    "spec_version": "3.1.2",
+    "title": "Frankfurter API",
+    "api_version": "1.0.0",
+    "fetched_at": "2026-10-11T06:14:01.880235Z"
+  },
+  "real": {
+    "base_url": "https://api.frankfurter.dev",
+    "base_path": "/v1"
+  },
+  "routing": {
+    "case_insensitive": false,
+    "trailing_slash": "strict",
+    "unknown_route_template": "unknown_route",
+    "method_not_allowed_template": "unknown_route",
+    "spec_paths": [
+      "/v1/openapi.json"
+    ]
+  },
+  "endpoints": [
+    {
+      "id": "GET /v1/latest",
+      "method": "GET",
+      "path": "/v1/latest",
+      "spec_path": "/latest",
+      "summary": "Get the latest rates",
+      "tags": [
+        "current-rates"
+      ],
+      "params": [
+        {
+          "name": "base",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "symbols",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "amount",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "from",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "to",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Latest rates",
+          "content_type": "application/json; charset=utf-8",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "description": "The amount to convert",
+                "exclusiveMinimum": 0
+              },
+              "base": {
+                "type": "string",
+                "enum": [
+                  "AUD",
+                  "BGN",
+                  "BRL",
+                  "CAD",
+                  "CHF",
+                  "CNY",
+                  "CZK",
+                  "DKK",
+                  "EUR",
+                  "GBP",
+                  "HKD",
+                  "HUF",
+                  "IDR",
+                  "ILS",
+                  "INR",
+                  "ISK",
+                  "JPY",
+                  "KRW",
+                  "MXN",
+                  "MYR",
+                  "NOK",
+                  "NZD",
+                  "PHP",
+                  "PLN",
+                  "RON",
+                  "SEK",
+                  "SGD",
+                  "THB",
+                  "TRY",
+                  "USD",
+                  "ZAR"
+                ],
+                "description": "The base currency code following ISO4217"
+              },
+              "date": {
+                "type": "string",
+                "format": "date",
+                "example": "2024-01-15",
+                "description": "Date in YYYY-MM-DD format, all dates stored in UTC."
+              },
+              "rates": {
+                "type": "object",
+                "description": "Exchange rates keyed by currency code",
+                "propertyNames": {
+                  "type": "string",
+                  "enum": [
+                    "AUD",
+                    "BGN",
+                    "BRL",
+                    "CAD",
+                    "CHF",
+                    "CNY",
+                    "CZK",
+                    "DKK",
+                    "EUR",
+                    "GBP",
+                    "HKD",
+                    "HUF",
+                    "IDR",
+                    "ILS",
+                    "INR",
+                    "ISK",
+                    "JPY",
+                    "KRW",
+                    "MXN",
+                    "MYR",
+                    "NOK",
+                    "NZD",
+                    "PHP",
+                    "PLN",
+                    "RON",
+                    "SEK",
+                    "SGD",
+                    "THB",
+                    "TRY",
+                    "USD",
+                    "ZAR"
+                  ],
+                  "description": "The base currency code following ISO4217"
+                },
+                "additionalProperties": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "multipleOf": 1e-05
+                },
+                "minProperties": 1,
+                "example": {
+                  "AUD": 1.91,
+                  "CAD": 1.8004,
+                  "CHF": 1.6168,
+                  "CYP": 0.58231
+                }
+              }
+            },
+            "required": [
+              "base",
+              "date",
+              "rates"
+            ]
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "examples": [
+                  1.0,
+                  10.0,
+                  1.5
+                ]
+              },
+              "base": {
+                "type": "string",
+                "examples": [
+                  "EUR",
+                  "USD",
+                  "JPY"
+                ]
+              },
+              "date": {
+                "type": "string",
+                "format": "date",
+                "x-time-format": {
+                  "kind": "date"
+                },
+                "examples": [
+                  "2026-10-09"
+                ]
+              },
+              "rates": {
+                "type": "object",
+                "properties": {
+                  "AUD": {
+                    "type": "number",
+                    "examples": [
+                      1.6052,
+                      1.4324,
+                      0.00905
+                    ]
+                  },
+                  "BRL": {
+                    "type": "number",
+                    "examples": [
+                      5.6086,
+                      5.005,
+                      0.03163
+                    ]
+                  },
+                  "CAD": {
+                    "type": "number",
+                    "examples": [
+                      1.5942,
+                      1.4226,
+                      0.00899
+                    ]
+                  },
+                  "CHF": {
+                    "type": "number",
+                    "examples": [
+                      0.9313,
+                      0.83107,
+                      0.00525
+                    ]
+                  },
+                  "CNY": {
+                    "type": "number",
+                    "examples": [
+                      7.4992,
+                      6.6921,
+                      0.04229
+                    ]
+                  },
+                  "CZK": {
+                    "type": "number",
+                    "examples": [
+                      24.369,
+                      21.746,
+                      0.13741
+                    ]
+                  },
+                  "DKK": {
+                    "type": "number",
+                    "examples": [
+                      7.4751,
+                      6.6706,
+                      0.04215
+                    ]
+                  },
+                  "GBP": {
+                    "type": "number",
+                    "examples": [
+                      0.84763,
+                      0.75641,
+                      0.00478
+                    ]
+                  },
+                  "HKD": {
+                    "type": "number",
+                    "examples": [
+                      8.794,
+                      7.8476,
+                      0.04959
+                    ]
+                  },
+                  "HUF": {
+                    "type": "number",
+                    "examples": [
+                      365.08,
+                      325.79,
+                      2.0586
+                    ]
+                  },
+                  "IDR": {
+                    "type": "number",
+                    "examples": [
+                      20036.94,
+                      17881,
+                      112.99
+                    ]
+                  },
+                  "ILS": {
+                    "type": "number",
+                    "examples": [
+                      3.426,
+                      3.0573,
+                      0.01932
+                    ]
+                  },
+                  "INR": {
+                    "type": "number",
+                    "examples": [
+                      108.3965,
+                      96.73,
+                      0.61126
+                    ]
+                  },
+                  "ISK": {
+                    "type": "number",
+                    "examples": [
+                      136.8,
+                      122.08,
+                      0.7714
+                    ]
+                  },
+                  "JPY": {
+                    "type": "number",
+                    "examples": [
+                      177.34,
+                      158.25,
+                      209.22
+                    ]
+                  },
+                  "KRW": {
+                    "type": "number",
+                    "examples": [
+                      1503.27,
+                      1341.49,
+                      8.4768
+                    ]
+                  },
+                  "MXN": {
+                    "type": "number",
+                    "examples": [
+                      20.395,
+                      18.2001,
+                      0.11501
+                    ]
+                  },
+                  "MYR": {
+                    "type": "number",
+                    "examples": [
+                      4.5777,
+                      4.085,
+                      0.02581
+                    ]
+                  },
+                  "NOK": {
+                    "type": "number",
+                    "examples": [
+                      10.7155,
+                      9.5623,
+                      0.06042
+                    ]
+                  },
+                  "NZD": {
+                    "type": "number",
+                    "examples": [
+                      1.9961,
+                      1.7813,
+                      0.01126
+                    ]
+                  },
+                  "PHP": {
+                    "type": "number",
+                    "examples": [
+                      70.397,
+                      62.821,
+                      0.39696
+                    ]
+                  },
+                  "PLN": {
+                    "type": "number",
+                    "examples": [
+                      4.3835,
+                      3.9117,
+                      0.02472
+                    ]
+                  },
+                  "RON": {
+                    "type": "number",
+                    "examples": [
+                      5.3406,
+                      4.7658,
+                      0.03012
+                    ]
+                  },
+                  "SEK": {
+                    "type": "number",
+                    "examples": [
+                      11.1675,
+                      9.9656,
+                      0.06297
+                    ]
+                  },
+                  "SGD": {
+                    "type": "number",
+                    "examples": [
+                      1.4348,
+                      1.2804,
+                      0.00809
+                    ]
+                  },
+                  "THB": {
+                    "type": "number",
+                    "examples": [
+                      37.574,
+                      33.53,
+                      0.21188
+                    ]
+                  },
+                  "TRY": {
+                    "type": "number",
+                    "examples": [
+                      55.1033,
+                      49.173,
+                      0.31072
+                    ]
+                  },
+                  "USD": {
+                    "type": "number",
+                    "examples": [
+                      1.1206,
+                      0.00632,
+                      1.322
+                    ]
+                  },
+                  "ZAR": {
+                    "type": "number",
+                    "examples": [
+                      18.527,
+                      16.5331,
+                      0.10447
+                    ]
+                  },
+                  "EUR": {
+                    "type": "number",
+                    "examples": [
+                      0.89238,
+                      0.00564,
+                      1.1798
+                    ]
+                  }
+                }
+              }
+            },
+            "required": [
+              "amount",
+              "base",
+              "date",
+              "rates"
+            ]
+          },
+          "examples": [
+            "000013",
+            "000014",
+            "000015",
+            "000016",
+            "000017"
+          ]
+        },
+        {
+          "status": 404,
+          "description": "Resource not found",
+          "content_type": "application/json; charset=utf-8",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "not found"
+              }
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "examples": [
+                  "not found"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  404
+                ]
+              }
+            },
+            "required": [
+              "message"
+            ]
+          },
+          "examples": [
+            "000026",
+            "000037",
+            "000038",
+            "000039",
+            "000040"
+          ]
+        },
+        {
+          "status": 422,
+          "content_type": "application/json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "examples": [
+                  "invalid amount"
+                ]
+              }
+            },
+            "required": [
+              "message"
+            ]
+          },
+          "examples": [
+            "000031",
+            "000032",
+            "000033",
+            "000034"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          25.079,
+          28.472,
+          32.831,
+          34.319,
+          35.452,
+          101.792,
+          107.803,
+          116.96,
+          239.619,
+          244.864,
+          252.314,
+          262.769,
+          265.867,
+          271.558,
+          272.063,
+          272.488,
+          273.98,
+          275.974,
+          276.003,
+          277.513,
+          277.822,
+          278.891,
+          280.919,
+          282.869,
+          283.363,
+          284.151,
+          291.286,
+          302.219,
+          305.833,
+          316.627,
+          525.208,
+          536.753,
+          540.379,
+          548.091,
+          564.53
+        ],
+        "p50_ms": 275.974,
+        "p90_ms": 532.135,
+        "p99_ms": 558.9407399999999
+      },
+      "role": "custom",
+      "handler": "rates",
+      "errors": [
+        {
+          "when": "not_found",
+          "template": "not_found",
+          "note": "no ECB fixing for the request (window/base/symbols): Quote#not_found?"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_amount",
+          "param": "amount",
+          "note": "amount.to_f <= 0"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_date",
+          "param": "date",
+          "note": "YYYY-MM-DD that Date.parse rejects"
+        },
+        {
+          "when": "custom",
+          "template": "bad_currency_pair",
+          "note": "explicit base/from and symbols == [base]"
+        },
+        {
+          "when": "unknown_route",
+          "template": "unknown_route",
+          "note": "path segment not matching \\d{4}-\\d{2}-\\d{2}"
+        }
+      ],
+      "notes": [
+        "Computed by handler `rates` from the ECB history collection (recorded 1999-01-04..2026-10-09, exchange 000138). Reproduces lib/versions/v1 (Query, Quote::EndOfDay/Interval, Roundable, CarryForward) — verified against all 179 recorded data responses (exact bodies).",
+        "Dates (date/start_date/end_date) are derived from the request and the data, not time policies.",
+        "ETag W/\"md5(result date)\" (EndOfDay: the date; Interval: end_date); Cloudflare weakens it."
+      ],
+      "deprecated": true
+    },
+    {
+      "id": "GET /v1/{date}",
+      "method": "GET",
+      "path": "/v1/{date}",
+      "spec_path": "/{date}",
+      "summary": "Get rates for a past date",
+      "tags": [
+        "historical-rates"
+      ],
+      "params": [
+        {
+          "name": "date",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "base",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "symbols",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "amount",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "from",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "to",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Historical rates",
+          "content_type": "application/json; charset=utf-8",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "description": "The amount to convert",
+                "exclusiveMinimum": 0
+              },
+              "base": {
+                "type": "string",
+                "enum": [
+                  "AUD",
+                  "BGN",
+                  "BRL",
+                  "CAD",
+                  "CHF",
+                  "CNY",
+                  "CZK",
+                  "DKK",
+                  "EUR",
+                  "GBP",
+                  "HKD",
+                  "HUF",
+                  "IDR",
+                  "ILS",
+                  "INR",
+                  "ISK",
+                  "JPY",
+                  "KRW",
+                  "MXN",
+                  "MYR",
+                  "NOK",
+                  "NZD",
+                  "PHP",
+                  "PLN",
+                  "RON",
+                  "SEK",
+                  "SGD",
+                  "THB",
+                  "TRY",
+                  "USD",
+                  "ZAR"
+                ],
+                "description": "The base currency code following ISO4217"
+              },
+              "date": {
+                "type": "string",
+                "format": "date",
+                "example": "2024-01-15",
+                "description": "Date in YYYY-MM-DD format, all dates stored in UTC."
+              },
+              "rates": {
+                "type": "object",
+                "description": "Exchange rates keyed by currency code",
+                "propertyNames": {
+                  "type": "string",
+                  "enum": [
+                    "AUD",
+                    "BGN",
+                    "BRL",
+                    "CAD",
+                    "CHF",
+                    "CNY",
+                    "CZK",
+                    "DKK",
+                    "EUR",
+                    "GBP",
+                    "HKD",
+                    "HUF",
+                    "IDR",
+                    "ILS",
+                    "INR",
+                    "ISK",
+                    "JPY",
+                    "KRW",
+                    "MXN",
+                    "MYR",
+                    "NOK",
+                    "NZD",
+                    "PHP",
+                    "PLN",
+                    "RON",
+                    "SEK",
+                    "SGD",
+                    "THB",
+                    "TRY",
+                    "USD",
+                    "ZAR"
+                  ],
+                  "description": "The base currency code following ISO4217"
+                },
+                "additionalProperties": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "multipleOf": 1e-05
+                },
+                "minProperties": 1,
+                "example": {
+                  "AUD": 1.91,
+                  "CAD": 1.8004,
+                  "CHF": 1.6168,
+                  "CYP": 0.58231
+                }
+              }
+            },
+            "required": [
+              "base",
+              "date",
+              "rates"
+            ]
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "examples": [
+                  1.0,
+                  250.0,
+                  3.5
+                ]
+              },
+              "base": {
+                "type": "string",
+                "examples": [
+                  "EUR",
+                  "USD",
+                  "GBP"
+                ]
+              },
+              "date": {
+                "type": "string",
+                "format": "date",
+                "x-time-format": {
+                  "kind": "date"
+                },
+                "examples": [
+                  "2026-10-08",
+                  "2026-10-01",
+                  "2026-10-09"
+                ]
+              },
+              "rates": {
+                "type": "object",
+                "properties": {
+                  "AUD": {
+                    "type": "number",
+                    "examples": [
+                      1.611,
+                      1.6255,
+                      1.6052
+                    ]
+                  },
+                  "BRL": {
+                    "type": "number",
+                    "examples": [
+                      5.6118,
+                      5.862,
+                      5.6086
+                    ]
+                  },
+                  "CAD": {
+                    "type": "number",
+                    "examples": [
+                      1.5953,
+                      1.6095,
+                      1.5942
+                    ]
+                  },
+                  "CHF": {
+                    "type": "number",
+                    "examples": [
+                      0.9326,
+                      0.9437,
+                      0.9313
+                    ]
+                  },
+                  "CNY": {
+                    "type": "number",
+                    "examples": [
+                      7.4972,
+                      7.5748,
+                      7.4992
+                    ]
+                  },
+                  "CZK": {
+                    "type": "number",
+                    "examples": [
+                      24.403,
+                      24.459,
+                      24.369
+                    ]
+                  },
+                  "DKK": {
+                    "type": "number",
+                    "examples": [
+                      7.4739,
+                      7.4758,
+                      7.4751
+                    ]
+                  },
+                  "GBP": {
+                    "type": "number",
+                    "examples": [
+                      0.84698,
+                      0.85373,
+                      0.84763
+                    ]
+                  },
+                  "HKD": {
+                    "type": "number",
+                    "examples": [
+                      8.7783,
+                      8.8658,
+                      8.794
+                    ]
+                  },
+                  "HUF": {
+                    "type": "number",
+                    "examples": [
+                      366.25,
+                      367.18,
+                      365.08
+                    ]
+                  },
+                  "IDR": {
+                    "type": "number",
+                    "examples": [
+                      20045.31,
+                      20274.71,
+                      20036.94
+                    ]
+                  },
+                  "ILS": {
+                    "type": "number",
+                    "examples": [
+                      3.4423,
+                      3.4755,
+                      3.426
+                    ]
+                  },
+                  "INR": {
+                    "type": "number",
+                    "examples": [
+                      108.2635,
+                      108.832,
+                      108.3965
+                    ]
+                  },
+                  "ISK": {
+                    "type": "number",
+                    "examples": [
+                      137.0,
+                      136.8,
+                      148.0
+                    ]
+                  },
+                  "JPY": {
+                    "type": "number",
+                    "examples": [
+                      177.05,
+                      178.49,
+                      177.34
+                    ]
+                  },
+                  "KRW": {
+                    "type": "number",
+                    "examples": [
+                      1502.79,
+                      1537.96,
+                      1503.27
+                    ]
+                  },
+                  "MXN": {
+                    "type": "number",
+                    "examples": [
+                      20.1486,
+                      20.5251,
+                      20.395
+                    ]
+                  },
+                  "MYR": {
+                    "type": "number",
+                    "examples": [
+                      4.5768,
+                      4.6147,
+                      4.5777
+                    ]
+                  },
+                  "NOK": {
+                    "type": "number",
+                    "examples": [
+                      10.717,
+                      10.875,
+                      10.7155
+                    ]
+                  },
+                  "NZD": {
+                    "type": "number",
+                    "examples": [
+                      2.0014,
+                      2.0121,
+                      1.9961
+                    ]
+                  },
+                  "PHP": {
+                    "type": "number",
+                    "examples": [
+                      70.475,
+                      70.95,
+                      70.397
+                    ]
+                  },
+                  "PLN": {
+                    "type": "number",
+                    "examples": [
+                      4.3753,
+                      4.3735,
+                      4.3835
+                    ]
+                  },
+                  "RON": {
+                    "type": "number",
+                    "examples": [
+                      5.3434,
+                      5.283,
+                      5.3406
+                    ]
+                  },
+                  "SEK": {
+                    "type": "number",
+                    "examples": [
+                      11.194,
+                      11.331,
+                      11.1675
+                    ]
+                  },
+                  "SGD": {
+                    "type": "number",
+                    "examples": [
+                      1.434,
+                      1.446,
+                      1.4348
+                    ]
+                  },
+                  "THB": {
+                    "type": "number",
+                    "examples": [
+                      37.68,
+                      38.023,
+                      37.574
+                    ]
+                  },
+                  "TRY": {
+                    "type": "number",
+                    "examples": [
+                      55.0523,
+                      55.3993,
+                      55.1033
+                    ]
+                  },
+                  "USD": {
+                    "type": "number",
+                    "examples": [
+                      1.1186,
+                      1.1298,
+                      1.1206
+                    ]
+                  },
+                  "ZAR": {
+                    "type": "number",
+                    "examples": [
+                      18.6252,
+                      18.6934,
+                      18.527
+                    ]
+                  },
+                  "BGN": {
+                    "type": "number",
+                    "examples": [
+                      1.9558,
+                      1.9559,
+                      670.35
+                    ]
+                  },
+                  "CYP": {
+                    "type": "number",
+                    "examples": [
+                      0.58231,
+                      0.5767,
+                      0.58
+                    ]
+                  },
+                  "EEK": {
+                    "type": "number",
+                    "examples": [
+                      15.6466,
+                      26.977,
+                      46.452
+                    ]
+                  },
+                  "GRD": {
+                    "type": "number",
+                    "examples": [
+                      327.15,
+                      329.85,
+                      971.25
+                    ]
+                  },
+                  "LTL": {
+                    "type": "number",
+                    "examples": [
+                      4.717,
+                      4.0454,
+                      3.4528
+                    ]
+                  },
+                  "LVL": {
+                    "type": "number",
+                    "examples": [
+                      0.6668,
+                      0.5916,
+                      0.6964
+                    ]
+                  },
+                  "MTL": {
+                    "type": "number",
+                    "examples": [
+                      0.4432,
+                      0.4151,
+                      0.4343
+                    ]
+                  },
+                  "RUB": {
+                    "type": "number",
+                    "examples": [
+                      25.2875,
+                      27.7548,
+                      37.4442
+                    ]
+                  },
+                  "SIT": {
+                    "type": "number",
+                    "examples": [
+                      189.045,
+                      198.8925,
+                      239.78
+                    ]
+                  },
+                  "SKK": {
+                    "type": "number",
+                    "examples": [
+                      42.991,
+                      42.317,
+                      38.655
+                    ]
+                  },
+                  "ARS": {
+                    "type": "number",
+                    "examples": [
+                      4.02,
+                      4.8122,
+                      9.7894
+                    ]
+                  },
+                  "DZD": {
+                    "type": "number",
+                    "examples": [
+                      97.3859,
+                      91.6875,
+                      106.553
+                    ]
+                  },
+                  "HRK": {
+                    "type": "number",
+                    "examples": [
+                      7.626,
+                      7.213,
+                      7.6755
+                    ]
+                  },
+                  "MAD": {
+                    "type": "number",
+                    "examples": [
+                      11.1921,
+                      11.0255,
+                      10.7986
+                    ]
+                  },
+                  "TWD": {
+                    "type": "number",
+                    "examples": [
+                      42.975,
+                      39.63,
+                      35.2428
+                    ]
+                  },
+                  "EUR": {
+                    "type": "number",
+                    "examples": [
+                      0.81579,
+                      342.75,
+                      0.5113
+                    ]
+                  }
+                }
+              }
+            },
+            "required": [
+              "amount",
+              "base",
+              "date",
+              "rates"
+            ]
+          },
+          "examples": [
+            "000048",
+            "000049",
+            "000050",
+            "000051",
+            "000052"
+          ]
+        },
+        {
+          "status": 404,
+          "description": "Resource not found",
+          "content_type": "application/json; charset=utf-8",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "not found"
+              }
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "examples": [
+                  "not found"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  404
+                ]
+              }
+            },
+            "required": [
+              "message"
+            ]
+          },
+          "examples": [
+            "000060",
+            "000061",
+            "000062",
+            "000064",
+            "000065"
+          ]
+        },
+        {
+          "status": 422,
+          "content_type": "application/json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "examples": [
+                  "invalid date",
+                  "invalid amount"
+                ]
+              }
+            },
+            "required": [
+              "message"
+            ]
+          },
+          "examples": [
+            "000082",
+            "000083",
+            "000091",
+            "000191",
+            "000192"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          24.184,
+          106.069,
+          163.645,
+          238.598,
+          240.93,
+          244.078,
+          244.893,
+          245.795,
+          248.33,
+          249.244,
+          251.571,
+          252.287,
+          253.943,
+          257.171,
+          258.351,
+          258.676,
+          261.11,
+          262.376,
+          263.924,
+          265.02,
+          269.082,
+          269.494,
+          269.709,
+          270.123,
+          270.664,
+          271.344,
+          271.678,
+          273.076,
+          274.392,
+          274.456,
+          274.626,
+          274.924,
+          275.26,
+          275.935,
+          275.954,
+          276.769,
+          276.89,
+          279.452,
+          279.614,
+          280.279,
+          280.498,
+          281.096,
+          281.302,
+          282.324,
+          283.18,
+          284.114,
+          292.166,
+          295.965,
+          296.994,
+          301.695,
+          308.079,
+          312.54,
+          314.043,
+          317.141,
+          320.679,
+          324.91,
+          335.706,
+          336.835,
+          338.171,
+          346.203,
+          353.397,
+          361.551,
+          384.439,
+          425.731,
+          438.923,
+          458.248,
+          474.96,
+          517.478,
+          522.541,
+          538.825,
+          613.862
+        ],
+        "p50_ms": 276.769,
+        "p90_ms": 425.731,
+        "p99_ms": 561.3361
+      },
+      "role": "custom",
+      "handler": "rates",
+      "errors": [
+        {
+          "when": "not_found",
+          "template": "not_found",
+          "note": "no ECB fixing for the request (window/base/symbols): Quote#not_found?"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_amount",
+          "param": "amount",
+          "note": "amount.to_f <= 0"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_date",
+          "param": "date",
+          "note": "YYYY-MM-DD that Date.parse rejects"
+        },
+        {
+          "when": "custom",
+          "template": "bad_currency_pair",
+          "note": "explicit base/from and symbols == [base]"
+        },
+        {
+          "when": "unknown_route",
+          "template": "unknown_route",
+          "note": "path segment not matching \\d{4}-\\d{2}-\\d{2}"
+        }
+      ],
+      "notes": [
+        "Computed by handler `rates` from the ECB history collection (recorded 1999-01-04..2026-10-09, exchange 000138). Reproduces lib/versions/v1 (Query, Quote::EndOfDay/Interval, Roundable, CarryForward) — verified against all 179 recorded data responses (exact bodies).",
+        "Dates (date/start_date/end_date) are derived from the request and the data, not time policies.",
+        "ETag W/\"md5(result date)\" (EndOfDay: the date; Interval: end_date); Cloudflare weakens it."
+      ],
+      "deprecated": true
+    },
+    {
+      "id": "GET /v1/{start_date}..",
+      "method": "GET",
+      "path": "/v1/{start_date}..",
+      "spec_path": "/{start_date}..",
+      "summary": "Get rates for a time period",
+      "tags": [
+        "historical-rates"
+      ],
+      "params": [
+        {
+          "name": "start_date",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "base",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "symbols",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "amount",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "from",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "to",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Historical rates for the period",
+          "content_type": "application/json; charset=utf-8",
+          "documented_schema": {
+            "title": "RatesDuringPeriod",
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "description": "The amount to convert",
+                "exclusiveMinimum": 0
+              },
+              "base": {
+                "type": "string",
+                "enum": [
+                  "AUD",
+                  "BGN",
+                  "BRL",
+                  "CAD",
+                  "CHF",
+                  "CNY",
+                  "CZK",
+                  "DKK",
+                  "EUR",
+                  "GBP",
+                  "HKD",
+                  "HUF",
+                  "IDR",
+                  "ILS",
+                  "INR",
+                  "ISK",
+                  "JPY",
+                  "KRW",
+                  "MXN",
+                  "MYR",
+                  "NOK",
+                  "NZD",
+                  "PHP",
+                  "PLN",
+                  "RON",
+                  "SEK",
+                  "SGD",
+                  "THB",
+                  "TRY",
+                  "USD",
+                  "ZAR"
+                ],
+                "description": "The base currency code following ISO4217"
+              },
+              "start_date": {
+                "type": "string",
+                "format": "date",
+                "example": "2024-01-15",
+                "description": "Date in YYYY-MM-DD format, all dates stored in UTC."
+              },
+              "end_date": {
+                "type": "string",
+                "format": "date",
+                "example": "2024-01-15",
+                "description": "Date in YYYY-MM-DD format, all dates stored in UTC."
+              },
+              "rates": {
+                "type": "object",
+                "description": "Mapping of date → rates object",
+                "propertyNames": {
+                  "type": "string",
+                  "format": "date",
+                  "example": "2024-01-15",
+                  "description": "Date in YYYY-MM-DD format, all dates stored in UTC."
+                },
+                "additionalProperties": {
+                  "type": "object",
+                  "description": "Exchange rates keyed by currency code",
+                  "propertyNames": {
+                    "type": "string",
+                    "enum": [
+                      "AUD",
+                      "BGN",
+                      "BRL",
+                      "CAD",
+                      "CHF",
+                      "CNY",
+                      "CZK",
+                      "DKK",
+                      "EUR",
+                      "GBP",
+                      "HKD",
+                      "HUF",
+                      "IDR",
+                      "ILS",
+                      "INR",
+                      "ISK",
+                      "JPY",
+                      "KRW",
+                      "MXN",
+                      "MYR",
+                      "NOK",
+                      "NZD",
+                      "PHP",
+                      "PLN",
+                      "RON",
+                      "SEK",
+                      "SGD",
+                      "THB",
+                      "TRY",
+                      "USD",
+                      "ZAR"
+                    ],
+                    "description": "The base currency code following ISO4217"
+                  },
+                  "additionalProperties": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "multipleOf": 1e-05
+                  },
+                  "minProperties": 1,
+                  "example": {
+                    "AUD": 1.91,
+                    "CAD": 1.8004,
+                    "CHF": 1.6168,
+                    "CYP": 0.58231
+                  }
+                },
+                "minProperties": 1,
+                "example": {
+                  "1999-01-04": {
+                    "AUD": 1.91
+                  },
+                  "1999-01-05": {
+                    "AUD": 1.8944
+                  },
+                  "1999-01-06": {
+                    "AUD": 1.882
+                  }
+                }
+              }
+            },
+            "required": [
+              "base",
+              "start_date",
+              "end_date",
+              "rates"
+            ]
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "examples": [
+                  1.0
+                ]
+              },
+              "base": {
+                "type": "string",
+                "examples": [
+                  "EUR",
+                  "GBP"
+                ]
+              },
+              "start_date": {
+                "type": "string",
+                "format": "date",
+                "x-time-format": {
+                  "kind": "date"
+                },
+                "examples": [
+                  "2026-09-28",
+                  "2026-09-14",
+                  "2026-10-09"
+                ]
+              },
+              "end_date": {
+                "type": "string",
+                "format": "date",
+                "x-time-format": {
+                  "kind": "date"
+                },
+                "examples": [
+                  "2026-10-09"
+                ]
+              },
+              "rates": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "AUD": {
+                      "type": "number",
+                      "examples": [
+                        1.6199
+                      ]
+                    },
+                    "BRL": {
+                      "type": "number",
+                      "examples": [
+                        5.9186
+                      ]
+                    },
+                    "CAD": {
+                      "type": "number",
+                      "examples": [
+                        1.6118
+                      ]
+                    },
+                    "CHF": {
+                      "type": "number",
+                      "examples": [
+                        0.9464
+                      ]
+                    },
+                    "CNY": {
+                      "type": "number",
+                      "examples": [
+                        7.6352
+                      ]
+                    },
+                    "CZK": {
+                      "type": "number",
+                      "examples": [
+                        24.397
+                      ]
+                    },
+                    "DKK": {
+                      "type": "number",
+                      "examples": [
+                        7.4752
+                      ]
+                    },
+                    "GBP": {
+                      "type": "number",
+                      "examples": [
+                        0.85785
+                      ]
+                    },
+                    "HKD": {
+                      "type": "number",
+                      "examples": [
+                        8.9258
+                      ]
+                    },
+                    "HUF": {
+                      "type": "number",
+                      "examples": [
+                        367.1
+                      ]
+                    },
+                    "IDR": {
+                      "type": "number",
+                      "examples": [
+                        20453.78
+                      ]
+                    },
+                    "ILS": {
+                      "type": "number",
+                      "examples": [
+                        3.4854
+                      ]
+                    },
+                    "INR": {
+                      "type": "number",
+                      "examples": [
+                        109.2095
+                      ]
+                    },
+                    "ISK": {
+                      "type": "number",
+                      "examples": [
+                        137.0
+                      ]
+                    },
+                    "JPY": {
+                      "type": "number",
+                      "examples": [
+                        178.5,
+                        208.08
+                      ]
+                    },
+                    "KRW": {
+                      "type": "number",
+                      "examples": [
+                        1545.05
+                      ]
+                    },
+                    "MXN": {
+                      "type": "number",
+                      "examples": [
+                        20.2133
+                      ]
+                    },
+                    "MYR": {
+                      "type": "number",
+                      "examples": [
+                        4.6456
+                      ]
+                    },
+                    "NOK": {
+                      "type": "number",
+                      "examples": [
+                        10.817
+                      ]
+                    },
+                    "NZD": {
+                      "type": "number",
+                      "examples": [
+                        2.0071
+                      ]
+                    },
+                    "PHP": {
+                      "type": "number",
+                      "examples": [
+                        71.099
+                      ]
+                    },
+                    "PLN": {
+                      "type": "number",
+                      "examples": [
+                        4.373
+                      ]
+                    },
+                    "RON": {
+                      "type": "number",
+                      "examples": [
+                        5.2785
+                      ]
+                    },
+                    "SEK": {
+                      "type": "number",
+                      "examples": [
+                        11.3205
+                      ]
+                    },
+                    "SGD": {
+                      "type": "number",
+                      "examples": [
+                        1.4538
+                      ]
+                    },
+                    "THB": {
+                      "type": "number",
+                      "examples": [
+                        38.196
+                      ]
+                    },
+                    "TRY": {
+                      "type": "number",
+                      "examples": [
+                        55.7318
+                      ]
+                    },
+                    "USD": {
+                      "type": "number",
+                      "examples": [
+                        1.1378,
+                        1.3263
+                      ]
+                    },
+                    "ZAR": {
+                      "type": "number",
+                      "examples": [
+                        18.651
+                      ]
+                    },
+                    "BGN": {
+                      "type": "number",
+                      "examples": [
+                        1.9558
+                      ]
+                    },
+                    "CYP": {
+                      "type": "number",
+                      "examples": [
+                        0.58231
+                      ]
+                    },
+                    "EEK": {
+                      "type": "number",
+                      "examples": [
+                        15.6466
+                      ]
+                    },
+                    "GRD": {
+                      "type": "number",
+                      "examples": [
+                        327.15
+                      ]
+                    },
+                    "LTL": {
+                      "type": "number",
+                      "examples": [
+                        4.717
+                      ]
+                    },
+                    "LVL": {
+                      "type": "number",
+                      "examples": [
+                        0.6668
+                      ]
+                    },
+                    "MTL": {
+                      "type": "number",
+                      "examples": [
+                        0.4432
+                      ]
+                    },
+                    "RUB": {
+                      "type": "number",
+                      "examples": [
+                        25.2875
+                      ]
+                    },
+                    "SIT": {
+                      "type": "number",
+                      "examples": [
+                        189.045
+                      ]
+                    },
+                    "SKK": {
+                      "type": "number",
+                      "examples": [
+                        42.991
+                      ]
+                    },
+                    "ARS": {
+                      "type": "number",
+                      "examples": [
+                        1.02745
+                      ]
+                    },
+                    "DZD": {
+                      "type": "number",
+                      "examples": [
+                        70.2806
+                      ]
+                    },
+                    "HRK": {
+                      "type": "number",
+                      "examples": [
+                        7.74
+                      ]
+                    },
+                    "MAD": {
+                      "type": "number",
+                      "examples": [
+                        10.2297
+                      ]
+                    },
+                    "TWD": {
+                      "type": "number",
+                      "examples": [
+                        31.702
+                      ]
+                    }
+                  }
+                },
+                "propertyNames": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "x-observed-keys": {
+                  "count": 7111,
+                  "first": "1999-01-04",
+                  "last": "2026-10-09"
+                }
+              }
+            },
+            "required": [
+              "amount",
+              "base",
+              "start_date",
+              "end_date",
+              "rates"
+            ]
+          },
+          "examples": [
+            "000128",
+            "000129",
+            "000130",
+            "000131",
+            "000135"
+          ]
+        },
+        {
+          "status": 404,
+          "description": "Resource not found",
+          "content_type": "application/json; charset=utf-8",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "not found"
+              }
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "examples": [
+                  "not found"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  404
+                ]
+              }
+            },
+            "required": [
+              "message"
+            ]
+          },
+          "examples": [
+            "000132",
+            "000134"
+          ]
+        },
+        {
+          "status": 422,
+          "content_type": "application/json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "examples": [
+                  "invalid date"
+                ]
+              }
+            },
+            "required": [
+              "message"
+            ]
+          },
+          "examples": [
+            "000133"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          143.95,
+          145.958,
+          235.799,
+          252.958,
+          266.458,
+          269.845,
+          270.569,
+          272.682,
+          279.025,
+          285.948
+        ],
+        "p50_ms": 269.845,
+        "p90_ms": 285.948,
+        "p99_ms": 285.948
+      },
+      "role": "custom",
+      "handler": "rates",
+      "errors": [
+        {
+          "when": "not_found",
+          "template": "not_found",
+          "note": "no ECB fixing for the request (window/base/symbols): Quote#not_found?"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_amount",
+          "param": "amount",
+          "note": "amount.to_f <= 0"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_date",
+          "param": "date",
+          "note": "YYYY-MM-DD that Date.parse rejects"
+        },
+        {
+          "when": "custom",
+          "template": "bad_currency_pair",
+          "note": "explicit base/from and symbols == [base]"
+        },
+        {
+          "when": "unknown_route",
+          "template": "unknown_route",
+          "note": "path segment not matching \\d{4}-\\d{2}-\\d{2}"
+        }
+      ],
+      "notes": [
+        "Computed by handler `rates` from the ECB history collection (recorded 1999-01-04..2026-10-09, exchange 000138). Reproduces lib/versions/v1 (Query, Quote::EndOfDay/Interval, Roundable, CarryForward) — verified against all 179 recorded data responses (exact bodies).",
+        "Dates (date/start_date/end_date) are derived from the request and the data, not time policies.",
+        "ETag W/\"md5(result date)\" (EndOfDay: the date; Interval: end_date); Cloudflare weakens it."
+      ],
+      "deprecated": true
+    },
+    {
+      "id": "GET /v1/{start_date}..{end_date}",
+      "method": "GET",
+      "path": "/v1/{start_date}..{end_date}",
+      "spec_path": "/{start_date}..{end_date}",
+      "summary": "Get rates for a time period",
+      "tags": [
+        "historical-rates"
+      ],
+      "params": [
+        {
+          "name": "start_date",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "end_date",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "base",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "symbols",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "amount",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "from",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "to",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Historical rates for the period",
+          "content_type": "application/json; charset=utf-8",
+          "documented_schema": {
+            "title": "RatesDuringPeriod",
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "description": "The amount to convert",
+                "exclusiveMinimum": 0
+              },
+              "base": {
+                "type": "string",
+                "enum": [
+                  "AUD",
+                  "BGN",
+                  "BRL",
+                  "CAD",
+                  "CHF",
+                  "CNY",
+                  "CZK",
+                  "DKK",
+                  "EUR",
+                  "GBP",
+                  "HKD",
+                  "HUF",
+                  "IDR",
+                  "ILS",
+                  "INR",
+                  "ISK",
+                  "JPY",
+                  "KRW",
+                  "MXN",
+                  "MYR",
+                  "NOK",
+                  "NZD",
+                  "PHP",
+                  "PLN",
+                  "RON",
+                  "SEK",
+                  "SGD",
+                  "THB",
+                  "TRY",
+                  "USD",
+                  "ZAR"
+                ],
+                "description": "The base currency code following ISO4217"
+              },
+              "start_date": {
+                "type": "string",
+                "format": "date",
+                "example": "2024-01-15",
+                "description": "Date in YYYY-MM-DD format, all dates stored in UTC."
+              },
+              "end_date": {
+                "type": "string",
+                "format": "date",
+                "example": "2024-01-15",
+                "description": "Date in YYYY-MM-DD format, all dates stored in UTC."
+              },
+              "rates": {
+                "type": "object",
+                "description": "Mapping of date → rates object",
+                "propertyNames": {
+                  "type": "string",
+                  "format": "date",
+                  "example": "2024-01-15",
+                  "description": "Date in YYYY-MM-DD format, all dates stored in UTC."
+                },
+                "additionalProperties": {
+                  "type": "object",
+                  "description": "Exchange rates keyed by currency code",
+                  "propertyNames": {
+                    "type": "string",
+                    "enum": [
+                      "AUD",
+                      "BGN",
+                      "BRL",
+                      "CAD",
+                      "CHF",
+                      "CNY",
+                      "CZK",
+                      "DKK",
+                      "EUR",
+                      "GBP",
+                      "HKD",
+                      "HUF",
+                      "IDR",
+                      "ILS",
+                      "INR",
+                      "ISK",
+                      "JPY",
+                      "KRW",
+                      "MXN",
+                      "MYR",
+                      "NOK",
+                      "NZD",
+                      "PHP",
+                      "PLN",
+                      "RON",
+                      "SEK",
+                      "SGD",
+                      "THB",
+                      "TRY",
+                      "USD",
+                      "ZAR"
+                    ],
+                    "description": "The base currency code following ISO4217"
+                  },
+                  "additionalProperties": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "multipleOf": 1e-05
+                  },
+                  "minProperties": 1,
+                  "example": {
+                    "AUD": 1.91,
+                    "CAD": 1.8004,
+                    "CHF": 1.6168,
+                    "CYP": 0.58231
+                  }
+                },
+                "minProperties": 1,
+                "example": {
+                  "1999-01-04": {
+                    "AUD": 1.91
+                  },
+                  "1999-01-05": {
+                    "AUD": 1.8944
+                  },
+                  "1999-01-06": {
+                    "AUD": 1.882
+                  }
+                }
+              }
+            },
+            "required": [
+              "base",
+              "start_date",
+              "end_date",
+              "rates"
+            ]
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "examples": [
+                  1.0,
+                  100.0,
+                  3.0
+                ]
+              },
+              "base": {
+                "type": "string",
+                "examples": [
+                  "EUR",
+                  "USD",
+                  "BGN"
+                ]
+              },
+              "start_date": {
+                "type": "string",
+                "format": "date",
+                "x-time-format": {
+                  "kind": "date"
+                },
+                "examples": [
+                  "2026-09-28",
+                  "2026-10-02",
+                  "2026-10-05"
+                ]
+              },
+              "end_date": {
+                "type": "string",
+                "format": "date",
+                "x-time-format": {
+                  "kind": "date"
+                },
+                "examples": [
+                  "2026-10-09",
+                  "2026-10-08",
+                  "2026-10-02"
+                ]
+              },
+              "rates": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "AUD": {
+                      "type": "number",
+                      "examples": [
+                        1.6199
+                      ]
+                    },
+                    "BRL": {
+                      "type": "number",
+                      "examples": [
+                        5.9186
+                      ]
+                    },
+                    "CAD": {
+                      "type": "number",
+                      "examples": [
+                        1.6118
+                      ]
+                    },
+                    "CHF": {
+                      "type": "number",
+                      "examples": [
+                        0.9464
+                      ]
+                    },
+                    "CNY": {
+                      "type": "number",
+                      "examples": [
+                        7.6352
+                      ]
+                    },
+                    "CZK": {
+                      "type": "number",
+                      "examples": [
+                        24.397
+                      ]
+                    },
+                    "DKK": {
+                      "type": "number",
+                      "examples": [
+                        7.4752
+                      ]
+                    },
+                    "GBP": {
+                      "type": "number",
+                      "examples": [
+                        0.85785
+                      ]
+                    },
+                    "HKD": {
+                      "type": "number",
+                      "examples": [
+                        8.9258
+                      ]
+                    },
+                    "HUF": {
+                      "type": "number",
+                      "examples": [
+                        367.1
+                      ]
+                    },
+                    "IDR": {
+                      "type": "number",
+                      "examples": [
+                        20453.78,
+                        1797660
+                      ]
+                    },
+                    "ILS": {
+                      "type": "number",
+                      "examples": [
+                        3.4854
+                      ]
+                    },
+                    "INR": {
+                      "type": "number",
+                      "examples": [
+                        109.2095
+                      ]
+                    },
+                    "ISK": {
+                      "type": "number",
+                      "examples": [
+                        137.0
+                      ]
+                    },
+                    "JPY": {
+                      "type": "number",
+                      "examples": [
+                        178.5,
+                        15688
+                      ]
+                    },
+                    "KRW": {
+                      "type": "number",
+                      "examples": [
+                        1545.05
+                      ]
+                    },
+                    "MXN": {
+                      "type": "number",
+                      "examples": [
+                        20.2133
+                      ]
+                    },
+                    "MYR": {
+                      "type": "number",
+                      "examples": [
+                        4.6456
+                      ]
+                    },
+                    "NOK": {
+                      "type": "number",
+                      "examples": [
+                        10.817
+                      ]
+                    },
+                    "NZD": {
+                      "type": "number",
+                      "examples": [
+                        2.0071
+                      ]
+                    },
+                    "PHP": {
+                      "type": "number",
+                      "examples": [
+                        71.099
+                      ]
+                    },
+                    "PLN": {
+                      "type": "number",
+                      "examples": [
+                        4.373
+                      ]
+                    },
+                    "RON": {
+                      "type": "number",
+                      "examples": [
+                        5.2785
+                      ]
+                    },
+                    "SEK": {
+                      "type": "number",
+                      "examples": [
+                        11.3205
+                      ]
+                    },
+                    "SGD": {
+                      "type": "number",
+                      "examples": [
+                        1.4538
+                      ]
+                    },
+                    "THB": {
+                      "type": "number",
+                      "examples": [
+                        38.196
+                      ]
+                    },
+                    "TRY": {
+                      "type": "number",
+                      "examples": [
+                        55.7318
+                      ]
+                    },
+                    "USD": {
+                      "type": "number",
+                      "examples": [
+                        1.1378
+                      ]
+                    },
+                    "ZAR": {
+                      "type": "number",
+                      "examples": [
+                        18.651
+                      ]
+                    },
+                    "EUR": {
+                      "type": "number",
+                      "examples": [
+                        87.89
+                      ]
+                    },
+                    "BGN": {
+                      "type": "number",
+                      "examples": [
+                        1.9558
+                      ]
+                    }
+                  }
+                },
+                "propertyNames": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "x-observed-keys": {
+                  "count": 853,
+                  "first": "1999-01-04",
+                  "last": "2026-10-09"
+                }
+              }
+            }
+          },
+          "examples": [
+            "000104",
+            "000105",
+            "000106",
+            "000107",
+            "000108"
+          ]
+        },
+        {
+          "status": 404,
+          "description": "Resource not found",
+          "content_type": "application/json; charset=utf-8",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "not found"
+              }
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "examples": [
+                  "not found"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  404
+                ]
+              }
+            },
+            "required": [
+              "message"
+            ]
+          },
+          "examples": [
+            "000110",
+            "000113",
+            "000115",
+            "000116",
+            "000117"
+          ]
+        },
+        {
+          "status": 422,
+          "content_type": "application/json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "examples": [
+                  "invalid date",
+                  "invalid amount"
+                ]
+              }
+            },
+            "required": [
+              "message"
+            ]
+          },
+          "examples": [
+            "000122",
+            "000123",
+            "000126"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          32.16,
+          146.402,
+          155.754,
+          174.737,
+          242.363,
+          247.552,
+          251.188,
+          252.929,
+          260.191,
+          263.357,
+          264.904,
+          266.471,
+          267.748,
+          273.553,
+          274.108,
+          274.844,
+          276.377,
+          277.265,
+          277.803,
+          278.299,
+          278.842,
+          281.911,
+          282.518,
+          291.526,
+          319.254,
+          329.547,
+          342.972,
+          356.756,
+          363.529,
+          366.878,
+          382.462,
+          428.038,
+          475.253,
+          545.086
+        ],
+        "p50_ms": 276.82099999999997,
+        "p90_ms": 377.7868,
+        "p99_ms": 522.04111
+      },
+      "role": "custom",
+      "handler": "rates",
+      "errors": [
+        {
+          "when": "not_found",
+          "template": "not_found",
+          "note": "no ECB fixing for the request (window/base/symbols): Quote#not_found?"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_amount",
+          "param": "amount",
+          "note": "amount.to_f <= 0"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_date",
+          "param": "date",
+          "note": "YYYY-MM-DD that Date.parse rejects"
+        },
+        {
+          "when": "custom",
+          "template": "bad_currency_pair",
+          "note": "explicit base/from and symbols == [base]"
+        },
+        {
+          "when": "unknown_route",
+          "template": "unknown_route",
+          "note": "path segment not matching \\d{4}-\\d{2}-\\d{2}"
+        }
+      ],
+      "notes": [
+        "Computed by handler `rates` from the ECB history collection (recorded 1999-01-04..2026-10-09, exchange 000138). Reproduces lib/versions/v1 (Query, Quote::EndOfDay/Interval, Roundable, CarryForward) — verified against all 179 recorded data responses (exact bodies).",
+        "Dates (date/start_date/end_date) are derived from the request and the data, not time policies.",
+        "ETag W/\"md5(result date)\" (EndOfDay: the date; Interval: end_date); Cloudflare weakens it."
+      ],
+      "deprecated": true
+    },
+    {
+      "id": "GET /v1/currencies",
+      "method": "GET",
+      "path": "/v1/currencies",
+      "spec_path": "/currencies",
+      "summary": "Get available currencies",
+      "tags": [
+        "metadata"
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "List of available currencies",
+          "content_type": "application/json; charset=utf-8",
+          "documented_schema": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "enum": [
+                "AUD",
+                "BGN",
+                "BRL",
+                "CAD",
+                "CHF",
+                "CNY",
+                "CZK",
+                "DKK",
+                "EUR",
+                "GBP",
+                "HKD",
+                "HUF",
+                "IDR",
+                "ILS",
+                "INR",
+                "ISK",
+                "JPY",
+                "KRW",
+                "MXN",
+                "MYR",
+                "NOK",
+                "NZD",
+                "PHP",
+                "PLN",
+                "RON",
+                "SEK",
+                "SGD",
+                "THB",
+                "TRY",
+                "USD",
+                "ZAR"
+              ],
+              "description": "The base currency code following ISO4217"
+            },
+            "additionalProperties": {
+              "type": "string",
+              "description": "Full name of the currency",
+              "minLength": 1
+            },
+            "minProperties": 1,
+            "example": {
+              "AUD": "Australian Dollar",
+              "BGN": "Bulgarian Lev",
+              "EUR": "Euro",
+              "USD": "US Dollar"
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "AUD": {
+                "type": "string",
+                "examples": [
+                  "Australian Dollar"
+                ]
+              },
+              "BRL": {
+                "type": "string",
+                "examples": [
+                  "Brazilian Real"
+                ]
+              },
+              "CAD": {
+                "type": "string",
+                "examples": [
+                  "Canadian Dollar"
+                ]
+              },
+              "CHF": {
+                "type": "string",
+                "examples": [
+                  "Swiss Franc"
+                ]
+              },
+              "CNY": {
+                "type": "string",
+                "examples": [
+                  "Chinese Renminbi Yuan"
+                ]
+              },
+              "CZK": {
+                "type": "string",
+                "examples": [
+                  "Czech Koruna"
+                ]
+              },
+              "DKK": {
+                "type": "string",
+                "examples": [
+                  "Danish Krone"
+                ]
+              },
+              "EUR": {
+                "type": "string",
+                "examples": [
+                  "Euro"
+                ]
+              },
+              "GBP": {
+                "type": "string",
+                "examples": [
+                  "British Pound"
+                ]
+              },
+              "HKD": {
+                "type": "string",
+                "examples": [
+                  "Hong Kong Dollar"
+                ]
+              },
+              "HUF": {
+                "type": "string",
+                "examples": [
+                  "Hungarian Forint"
+                ]
+              },
+              "IDR": {
+                "type": "string",
+                "examples": [
+                  "Indonesian Rupiah"
+                ]
+              },
+              "ILS": {
+                "type": "string",
+                "examples": [
+                  "Israeli New Shekel"
+                ]
+              },
+              "INR": {
+                "type": "string",
+                "examples": [
+                  "Indian Rupee"
+                ]
+              },
+              "ISK": {
+                "type": "string",
+                "examples": [
+                  "Icelandic Króna"
+                ]
+              },
+              "JPY": {
+                "type": "string",
+                "examples": [
+                  "Japanese Yen"
+                ]
+              },
+              "KRW": {
+                "type": "string",
+                "examples": [
+                  "South Korean Won"
+                ]
+              },
+              "MXN": {
+                "type": "string",
+                "examples": [
+                  "Mexican Peso"
+                ]
+              },
+              "MYR": {
+                "type": "string",
+                "examples": [
+                  "Malaysian Ringgit"
+                ]
+              },
+              "NOK": {
+                "type": "string",
+                "examples": [
+                  "Norwegian Krone"
+                ]
+              },
+              "NZD": {
+                "type": "string",
+                "examples": [
+                  "New Zealand Dollar"
+                ]
+              },
+              "PHP": {
+                "type": "string",
+                "examples": [
+                  "Philippine Peso"
+                ]
+              },
+              "PLN": {
+                "type": "string",
+                "examples": [
+                  "Polish Złoty"
+                ]
+              },
+              "RON": {
+                "type": "string",
+                "examples": [
+                  "Romanian Leu"
+                ]
+              },
+              "SEK": {
+                "type": "string",
+                "examples": [
+                  "Swedish Krona"
+                ]
+              },
+              "SGD": {
+                "type": "string",
+                "examples": [
+                  "Singapore Dollar"
+                ]
+              },
+              "THB": {
+                "type": "string",
+                "examples": [
+                  "Thai Baht"
+                ]
+              },
+              "TRY": {
+                "type": "string",
+                "examples": [
+                  "Turkish Lira"
+                ]
+              },
+              "USD": {
+                "type": "string",
+                "examples": [
+                  "United States Dollar"
+                ]
+              },
+              "ZAR": {
+                "type": "string",
+                "examples": [
+                  "South African Rand"
+                ]
+              }
+            }
+          },
+          "examples": [
+            "000001",
+            "000002",
+            "000003",
+            "000004",
+            "000005"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          26.457,
+          31.371,
+          34.985,
+          95.449,
+          109.658,
+          161.454,
+          254.453,
+          278.559,
+          287.661,
+          310.475,
+          572.495,
+          788.797
+        ],
+        "p50_ms": 207.9535,
+        "p90_ms": 546.293,
+        "p99_ms": 765.00378
+      },
+      "role": "custom",
+      "handler": "currencies",
+      "notes": [
+        "Computed by handler `currencies`: ECB currencies quoted within the 14-day carry-forward window before today (UTC) + EUR, sorted, with Money-gem names (lib/versions/v1/currency_names.rb). BGN dropped after 2025-12-31 (Bulgaria joined the euro)."
+      ],
+      "deprecated": true
+    },
+    {
+      "id": "GET /v1/current",
+      "method": "GET",
+      "path": "/v1/current",
+      "summary": "Undocumented alias of /latest (route regex latest|current in lib/versions/v1.rb)",
+      "tags": [
+        "current-rates"
+      ],
+      "params": [
+        {
+          "name": "base",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "symbols",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "amount",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "from",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "to",
+          "location": "query",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        }
+      ],
+      "role": "custom",
+      "handler": "rates",
+      "errors": [
+        {
+          "when": "not_found",
+          "template": "not_found",
+          "note": "no ECB fixing for the request (window/base/symbols): Quote#not_found?"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_amount",
+          "param": "amount",
+          "note": "amount.to_f <= 0"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_date",
+          "param": "date",
+          "note": "YYYY-MM-DD that Date.parse rejects"
+        },
+        {
+          "when": "custom",
+          "template": "bad_currency_pair",
+          "note": "explicit base/from and symbols == [base]"
+        },
+        {
+          "when": "unknown_route",
+          "template": "unknown_route",
+          "note": "path segment not matching \\d{4}-\\d{2}-\\d{2}"
+        }
+      ],
+      "notes": [
+        "Computed by handler `rates` from the ECB history collection (recorded 1999-01-04..2026-10-09, exchange 000138). Reproduces lib/versions/v1 (Query, Quote::EndOfDay/Interval, Roundable, CarryForward) — verified against all 179 recorded data responses (exact bodies).",
+        "Dates (date/start_date/end_date) are derived from the request and the data, not time policies.",
+        "ETag W/\"md5(result date)\" (EndOfDay: the date; Interval: end_date); Cloudflare weakens it.",
+        "Undocumented alias of /latest (route regex /latest|current/)."
+      ],
+      "deprecated": true,
+      "latency": {
+        "samples_ms": [
+          25.079,
+          28.472,
+          32.831,
+          34.319,
+          35.452,
+          101.792,
+          107.803,
+          116.96,
+          239.619,
+          244.864,
+          252.314,
+          262.769,
+          265.867,
+          271.558,
+          272.063,
+          272.488,
+          273.98,
+          275.974,
+          276.003,
+          277.513,
+          277.822,
+          278.891,
+          280.919,
+          282.869,
+          283.363,
+          284.151,
+          291.286,
+          302.219,
+          305.833,
+          316.627,
+          525.208,
+          536.753,
+          540.379,
+          548.091,
+          564.53
+        ],
+        "p50_ms": 275.974,
+        "p90_ms": 532.135,
+        "p99_ms": 558.9407399999999
+      }
+    },
+    {
+      "id": "GET /v1",
+      "method": "GET",
+      "path": "/v1",
+      "summary": "v1 index (undocumented)",
+      "tags": [
+        "metadata"
+      ],
+      "role": "replay",
+      "deprecated": true,
+      "responses": [
+        {
+          "status": 200,
+          "content_type": "application/json; charset=utf-8",
+          "examples": [
+            "000193"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          26.457,
+          31.371,
+          34.985,
+          95.449,
+          109.658,
+          161.454,
+          254.453,
+          278.559,
+          287.661,
+          310.475,
+          572.495,
+          788.797
+        ],
+        "p50_ms": 207.9535,
+        "p90_ms": 546.293,
+        "p99_ms": 765.00378
+      }
+    },
+    {
+      "id": "GET /v1/",
+      "method": "GET",
+      "path": "/v1/",
+      "summary": "v1 index with trailing slash (undocumented)",
+      "tags": [
+        "metadata"
+      ],
+      "role": "replay",
+      "deprecated": true,
+      "responses": [
+        {
+          "status": 200,
+          "content_type": "application/json; charset=utf-8",
+          "examples": [
+            "000194"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          26.457,
+          31.371,
+          34.985,
+          95.449,
+          109.658,
+          161.454,
+          254.453,
+          278.559,
+          287.661,
+          310.475,
+          572.495,
+          788.797
+        ],
+        "p50_ms": 207.9535,
+        "p90_ms": 546.293,
+        "p99_ms": 765.00378
+      }
+    },
+    {
+      "id": "GET /",
+      "method": "GET",
+      "path": "/",
+      "summary": "Site index outside /v1 (undocumented)",
+      "tags": [
+        "metadata"
+      ],
+      "role": "replay",
+      "responses": [
+        {
+          "status": 200,
+          "content_type": "application/json",
+          "examples": [
+            "000195"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          26.457,
+          31.371,
+          34.985,
+          95.449,
+          109.658,
+          161.454,
+          254.453,
+          278.559,
+          287.661,
+          310.475,
+          572.495,
+          788.797
+        ],
+        "p50_ms": 207.9535,
+        "p90_ms": 546.293,
+        "p99_ms": 765.00378
+      }
+    }
+  ],
+  "errors": [
+    {
+      "name": "not_found",
+      "status": 404,
+      "content_type": "application/json; charset=utf-8",
+      "headers": {},
+      "body_json": {
+        "message": "not found"
+      },
+      "examples": [
+        "000026",
+        "000037",
+        "000060"
+      ]
+    },
+    {
+      "name": "invalid_amount",
+      "status": 422,
+      "content_type": "application/json; charset=utf-8",
+      "headers": {},
+      "body_json": {
+        "message": "invalid amount"
+      },
+      "examples": [
+        "000031",
+        "000033",
+        "000034"
+      ]
+    },
+    {
+      "name": "invalid_date",
+      "status": 422,
+      "content_type": "application/json; charset=utf-8",
+      "headers": {},
+      "body_json": {
+        "message": "invalid date"
+      },
+      "examples": [
+        "000082",
+        "000083",
+        "000122"
+      ]
+    },
+    {
+      "name": "bad_currency_pair",
+      "status": 422,
+      "content_type": "application/json; charset=utf-8",
+      "headers": {},
+      "body_json": {
+        "message": "bad currency pair"
+      },
+      "examples": [
+        "000149",
+        "000182",
+        "000187"
+      ]
+    },
+    {
+      "name": "unknown_route",
+      "status": 404,
+      "content_type": "application/json",
+      "headers": {},
+      "body_json": {
+        "status": 404,
+        "message": "not found"
+      },
+      "examples": [
+        "000008",
+        "000011",
+        "000085"
+      ]
+    }
+  ],
+  "default_headers": {},
+  "calendars": [
+    {
+      "name": "ecb",
+      "zone": "Europe/Berlin",
+      "weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "publications": [
+        "16:30"
+      ],
+      "holidays": [
+        "2026-01-01",
+        "2026-04-03",
+        "2026-04-06",
+        "2026-05-01",
+        "2026-12-25",
+        "2026-12-26",
+        "2027-01-01",
+        "2027-03-26",
+        "2027-03-29",
+        "2027-05-01",
+        "2027-12-25",
+        "2027-12-26",
+        "2028-01-01",
+        "2028-04-14",
+        "2028-04-17",
+        "2028-05-01",
+        "2028-12-25",
+        "2028-12-26",
+        "2029-01-01",
+        "2029-03-30",
+        "2029-04-02",
+        "2029-05-01",
+        "2029-12-25",
+        "2029-12-26",
+        "2030-01-01",
+        "2030-04-19",
+        "2030-04-22",
+        "2030-05-01",
+        "2030-12-25",
+        "2030-12-26",
+        "2031-01-01",
+        "2031-04-11",
+        "2031-04-14",
+        "2031-05-01",
+        "2031-12-25",
+        "2031-12-26",
+        "2032-01-01",
+        "2032-03-26",
+        "2032-03-29",
+        "2032-05-01",
+        "2032-12-25",
+        "2032-12-26",
+        "2033-01-01",
+        "2033-04-15",
+        "2033-04-18",
+        "2033-05-01",
+        "2033-12-25",
+        "2033-12-26",
+        "2034-01-01",
+        "2034-04-07",
+        "2034-04-10",
+        "2034-05-01",
+        "2034-12-25",
+        "2034-12-26",
+        "2035-01-01",
+        "2035-03-23",
+        "2035-03-26",
+        "2035-05-01",
+        "2035-12-25",
+        "2035-12-26",
+        "2036-01-01",
+        "2036-04-11",
+        "2036-04-14",
+        "2036-05-01",
+        "2036-12-25",
+        "2036-12-26",
+        "2037-01-01",
+        "2037-04-03",
+        "2037-04-06",
+        "2037-05-01",
+        "2037-12-25",
+        "2037-12-26",
+        "2038-01-01",
+        "2038-04-23",
+        "2038-04-26",
+        "2038-05-01",
+        "2038-12-25",
+        "2038-12-26",
+        "2039-01-01",
+        "2039-04-08",
+        "2039-04-11",
+        "2039-05-01",
+        "2039-12-25",
+        "2039-12-26",
+        "2040-01-01",
+        "2040-03-30",
+        "2040-04-02",
+        "2040-05-01",
+        "2040-12-25",
+        "2040-12-26"
+      ],
+      "note": "ECB euro reference rates: published ~16:00 CET on TARGET business days; Frankfurter polls ECB at cron '*/30 14-16 * * 1-5' UTC (db/seeds/providers/ecb.json), so new data lands ~16:00-16:30 Berlin. 2026 holidays confirmed by recordings (000053-000058: 12-25/26, 01-01, Good Friday, Easter Monday, May 1 absent); 2027-2028 from the TARGET calendar (ECB). 2029-2040 generated from the same TARGET rule (New Year, Good Friday, Easter Monday, 1 May, 25/26 Dec; Easter via the Gregorian computus) — documentation, not recordings."
+    }
+  ],
+  "collections": [
+    {
+      "name": "ecb_history",
+      "key": "start_date",
+      "key_type": "str",
+      "sources": [
+        "GET /v1/{start_date}.."
+      ],
+      "extract": {
+        "GET /v1/{start_date}..": "$"
+      },
+      "purposes": [
+        "series"
+      ],
+      "description": "One record: the full EUR-base daily ECB history (GET /v1/1999-01-04.., exchange 000138). The rates handler flattens it to date -> {currency: rate}."
+    },
+    {
+      "name": "currency_names",
+      "key": "EUR",
+      "key_type": "str",
+      "sources": [
+        "GET /v1/currencies"
+      ],
+      "extract": {
+        "GET /v1/currencies": "$"
+      },
+      "purposes": [
+        "sample"
+      ],
+      "description": "The recorded /currencies object (code -> name); a single record keyed by its EUR name."
+    }
+  ],
+  "notes": [
+    "Frankfurter v1 is deprecated (Deprecation: @1779103800, Link rel=successor-version to /v2/...). The fake mirrors the real Rack middlewares (V1::Deprecation, NoStoreOnError, Noindex, Rack::Cors) in middleware.py.",
+    "Data: the ECB history is frozen at the last recording (2026-10-09). When the fake clock passes later ECB publications (calendar 'ecb'), those fixings are synthesized by carrying the 2026-10-09 rates forward: dates advance exactly like the real API but values do NOT move (zero day-over-day change). For trend/volatility evaluations pin the fake clock inside the recorded window (<= 2026-10-09) via the admin API.",
+    "Writes: none exist. Non-GET verbs (POST/PUT/PATCH/DELETE) were not probed (mutations not approved). Per source (Roda r.is matches any verb) they are served like GET, and the fake does the same (middleware.py rewrites the method) — source-derived, unverified against the live API.",
+    "Today = the fake clock's UTC date (Ruby Date.today on a UTC server).",
+    "Publication rollover: /latest switches at 16:30 Europe/Berlin on TARGET days (Frankfurter's ECB poll cron). The real API sits behind Cloudflare (cf-cache-status HIT, age up to 1399 s, cache-control max-age=86400), so real clients may see the new fixing later than 16:30. The exact real rollover was not observed: recordings and parity ran on Sunday 2026-10-11.",
+    "Some recordings are filed under the wrong endpoint by the recorder (/v1, /v1/, /v1/openapi.json under /v1/currencies; 304s for /v1/2026-10-08 under /v1/latest; /v1/.. under {start_date}..{end_date}). Their properties were removed from the affected observed_schemas by hand; date-keyed rate maps are collapsed into additionalProperties."
+  ],
+  "invariants": [
+    {
+      "name": "currency_names_cover_history",
+      "kind": "custom",
+      "collection": "currency_names",
+      "function": "fauxcall_frankfurter.handlers:names_cover_quotes",
+      "description": "Every currency that /latest, /{date} or the periods can return also has a name for /currencies (recorded names + documented legacy names)."
+    }
+  ],
+  "relations": []
+}

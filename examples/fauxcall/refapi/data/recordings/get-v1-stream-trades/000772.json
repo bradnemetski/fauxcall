@@ -1,0 +1,445 @@
+{
+  "id": "000772",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "series",
+  "plan_call": "st50-BAC",
+  "started_at": "2026-10-11T06:32:03.253555Z",
+  "started_ns": 1791700323253555000,
+  "elapsed_ms": 9961.424,
+  "ttfb_ms": 52.143,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=BAC&count=50",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "BAC"
+      ],
+      [
+        "count",
+        "50"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:32:03 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700334"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 52.416,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.68\",\"size\":481,\"time\":\"2026-10-11T06:32:03.305Z\"}"
+    },
+    {
+      "t_ms": 255.707,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.68\",\"size\":555,\"time\":\"2026-10-11T06:32:03.507Z\"}"
+    },
+    {
+      "t_ms": 458.062,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.71\",\"size\":922,\"time\":\"2026-10-11T06:32:03.710Z\"}"
+    },
+    {
+      "t_ms": 661.285,
+      "kind": "sse",
+      "event": "trade",
+      "id": "4",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.75\",\"size\":216,\"time\":\"2026-10-11T06:32:03.913Z\"}"
+    },
+    {
+      "t_ms": 864.274,
+      "kind": "sse",
+      "event": "trade",
+      "id": "5",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.75\",\"size\":5,\"time\":\"2026-10-11T06:32:04.116Z\"}"
+    },
+    {
+      "t_ms": 1066.687,
+      "kind": "sse",
+      "event": "trade",
+      "id": "6",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.74\",\"size\":750,\"time\":\"2026-10-11T06:32:04.319Z\"}"
+    },
+    {
+      "t_ms": 1270.175,
+      "kind": "sse",
+      "event": "trade",
+      "id": "7",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.76\",\"size\":889,\"time\":\"2026-10-11T06:32:04.522Z\"}"
+    },
+    {
+      "t_ms": 1471.735,
+      "kind": "sse",
+      "event": "trade",
+      "id": "8",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.80\",\"size\":586,\"time\":\"2026-10-11T06:32:04.724Z\"}"
+    },
+    {
+      "t_ms": 1674.332,
+      "kind": "sse",
+      "event": "trade",
+      "id": "9",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.80\",\"size\":634,\"time\":\"2026-10-11T06:32:04.926Z\"}"
+    },
+    {
+      "t_ms": 1877.551,
+      "kind": "sse",
+      "event": "trade",
+      "id": "10",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.76\",\"size\":877,\"time\":\"2026-10-11T06:32:05.129Z\"}"
+    },
+    {
+      "t_ms": 2080.597,
+      "kind": "sse",
+      "event": "trade",
+      "id": "11",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.76\",\"size\":205,\"time\":\"2026-10-11T06:32:05.332Z\"}"
+    },
+    {
+      "t_ms": 2283.955,
+      "kind": "sse",
+      "event": "trade",
+      "id": "12",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.78\",\"size\":868,\"time\":\"2026-10-11T06:32:05.536Z\"}"
+    },
+    {
+      "t_ms": 2485.37,
+      "kind": "sse",
+      "event": "trade",
+      "id": "13",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.75\",\"size\":257,\"time\":\"2026-10-11T06:32:05.737Z\"}"
+    },
+    {
+      "t_ms": 2687.936,
+      "kind": "sse",
+      "event": "trade",
+      "id": "14",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.76\",\"size\":694,\"time\":\"2026-10-11T06:32:05.940Z\"}"
+    },
+    {
+      "t_ms": 2890.18,
+      "kind": "sse",
+      "event": "trade",
+      "id": "15",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.72\",\"size\":952,\"time\":\"2026-10-11T06:32:06.142Z\"}"
+    },
+    {
+      "t_ms": 3092.357,
+      "kind": "sse",
+      "event": "trade",
+      "id": "16",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.73\",\"size\":847,\"time\":\"2026-10-11T06:32:06.344Z\"}"
+    },
+    {
+      "t_ms": 3294.841,
+      "kind": "sse",
+      "event": "trade",
+      "id": "17",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.76\",\"size\":348,\"time\":\"2026-10-11T06:32:06.547Z\"}"
+    },
+    {
+      "t_ms": 3497.242,
+      "kind": "sse",
+      "event": "trade",
+      "id": "18",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.73\",\"size\":920,\"time\":\"2026-10-11T06:32:06.749Z\"}"
+    },
+    {
+      "t_ms": 3698.415,
+      "kind": "sse",
+      "event": "trade",
+      "id": "19",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.76\",\"size\":174,\"time\":\"2026-10-11T06:32:06.950Z\"}"
+    },
+    {
+      "t_ms": 3898.985,
+      "kind": "sse",
+      "event": "trade",
+      "id": "20",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.78\",\"size\":823,\"time\":\"2026-10-11T06:32:07.151Z\"}"
+    },
+    {
+      "t_ms": 4101.804,
+      "kind": "sse",
+      "event": "trade",
+      "id": "21",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.76\",\"size\":843,\"time\":\"2026-10-11T06:32:07.353Z\"}"
+    },
+    {
+      "t_ms": 4303.69,
+      "kind": "sse",
+      "event": "trade",
+      "id": "22",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.80\",\"size\":209,\"time\":\"2026-10-11T06:32:07.556Z\"}"
+    },
+    {
+      "t_ms": 4507.025,
+      "kind": "sse",
+      "event": "trade",
+      "id": "23",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.79\",\"size\":336,\"time\":\"2026-10-11T06:32:07.759Z\"}"
+    },
+    {
+      "t_ms": 4707.902,
+      "kind": "sse",
+      "event": "trade",
+      "id": "24",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.83\",\"size\":716,\"time\":\"2026-10-11T06:32:07.959Z\"}"
+    },
+    {
+      "t_ms": 4909.866,
+      "kind": "sse",
+      "event": "trade",
+      "id": "25",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.83\",\"size\":937,\"time\":\"2026-10-11T06:32:08.162Z\"}"
+    },
+    {
+      "t_ms": 5111.255,
+      "kind": "sse",
+      "event": "trade",
+      "id": "26",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.80\",\"size\":308,\"time\":\"2026-10-11T06:32:08.364Z\"}"
+    },
+    {
+      "t_ms": 5312.051,
+      "kind": "sse",
+      "event": "trade",
+      "id": "27",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.82\",\"size\":73,\"time\":\"2026-10-11T06:32:08.564Z\"}"
+    },
+    {
+      "t_ms": 5514.864,
+      "kind": "sse",
+      "event": "trade",
+      "id": "28",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.84\",\"size\":291,\"time\":\"2026-10-11T06:32:08.766Z\"}"
+    },
+    {
+      "t_ms": 5717.193,
+      "kind": "sse",
+      "event": "trade",
+      "id": "29",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.80\",\"size\":252,\"time\":\"2026-10-11T06:32:08.969Z\"}"
+    },
+    {
+      "t_ms": 5919.418,
+      "kind": "sse",
+      "event": "trade",
+      "id": "30",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.83\",\"size\":442,\"time\":\"2026-10-11T06:32:09.171Z\"}"
+    },
+    {
+      "t_ms": 6122.041,
+      "kind": "sse",
+      "event": "trade",
+      "id": "31",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.87\",\"size\":169,\"time\":\"2026-10-11T06:32:09.374Z\"}"
+    },
+    {
+      "t_ms": 6323.905,
+      "kind": "sse",
+      "event": "trade",
+      "id": "32",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.87\",\"size\":359,\"time\":\"2026-10-11T06:32:09.576Z\"}"
+    },
+    {
+      "t_ms": 6525.221,
+      "kind": "sse",
+      "event": "trade",
+      "id": "33",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.89\",\"size\":331,\"time\":\"2026-10-11T06:32:09.778Z\"}"
+    },
+    {
+      "t_ms": 6727.317,
+      "kind": "sse",
+      "event": "trade",
+      "id": "34",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.92\",\"size\":383,\"time\":\"2026-10-11T06:32:09.979Z\"}"
+    },
+    {
+      "t_ms": 6929.717,
+      "kind": "sse",
+      "event": "trade",
+      "id": "35",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.95\",\"size\":99,\"time\":\"2026-10-11T06:32:10.182Z\"}"
+    },
+    {
+      "t_ms": 7130.997,
+      "kind": "sse",
+      "event": "trade",
+      "id": "36",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.98\",\"size\":626,\"time\":\"2026-10-11T06:32:10.383Z\"}"
+    },
+    {
+      "t_ms": 7331.002,
+      "kind": "sse",
+      "event": "trade",
+      "id": "37",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.97\",\"size\":82,\"time\":\"2026-10-11T06:32:10.583Z\"}"
+    },
+    {
+      "t_ms": 7532.227,
+      "kind": "sse",
+      "event": "trade",
+      "id": "38",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.99\",\"size\":406,\"time\":\"2026-10-11T06:32:10.784Z\"}"
+    },
+    {
+      "t_ms": 7735.757,
+      "kind": "sse",
+      "event": "trade",
+      "id": "39",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"40.01\",\"size\":54,\"time\":\"2026-10-11T06:32:10.987Z\"}"
+    },
+    {
+      "t_ms": 7935.415,
+      "kind": "sse",
+      "event": "trade",
+      "id": "40",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.97\",\"size\":22,\"time\":\"2026-10-11T06:32:11.187Z\"}"
+    },
+    {
+      "t_ms": 8136.7,
+      "kind": "sse",
+      "event": "trade",
+      "id": "41",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"40.00\",\"size\":641,\"time\":\"2026-10-11T06:32:11.389Z\"}"
+    },
+    {
+      "t_ms": 8340.619,
+      "kind": "sse",
+      "event": "trade",
+      "id": "42",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.98\",\"size\":737,\"time\":\"2026-10-11T06:32:11.593Z\"}"
+    },
+    {
+      "t_ms": 8543.249,
+      "kind": "sse",
+      "event": "trade",
+      "id": "43",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.97\",\"size\":913,\"time\":\"2026-10-11T06:32:11.795Z\"}"
+    },
+    {
+      "t_ms": 8747.236,
+      "kind": "sse",
+      "event": "trade",
+      "id": "44",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.98\",\"size\":530,\"time\":\"2026-10-11T06:32:11.999Z\"}"
+    },
+    {
+      "t_ms": 8948.766,
+      "kind": "sse",
+      "event": "trade",
+      "id": "45",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.94\",\"size\":454,\"time\":\"2026-10-11T06:32:12.201Z\"}"
+    },
+    {
+      "t_ms": 9149.897,
+      "kind": "sse",
+      "event": "trade",
+      "id": "46",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.94\",\"size\":916,\"time\":\"2026-10-11T06:32:12.403Z\"}"
+    },
+    {
+      "t_ms": 9352.965,
+      "kind": "sse",
+      "event": "trade",
+      "id": "47",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.92\",\"size\":810,\"time\":\"2026-10-11T06:32:12.605Z\"}"
+    },
+    {
+      "t_ms": 9555.118,
+      "kind": "sse",
+      "event": "trade",
+      "id": "48",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.95\",\"size\":219,\"time\":\"2026-10-11T06:32:12.808Z\"}"
+    },
+    {
+      "t_ms": 9758.075,
+      "kind": "sse",
+      "event": "trade",
+      "id": "49",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.92\",\"size\":303,\"time\":\"2026-10-11T06:32:13.010Z\"}"
+    },
+    {
+      "t_ms": 9960.952,
+      "kind": "sse",
+      "event": "trade",
+      "id": "50",
+      "data": "{\"symbol\":\"BAC\",\"price\":\"39.93\",\"size\":872,\"time\":\"2026-10-11T06:32:13.213Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

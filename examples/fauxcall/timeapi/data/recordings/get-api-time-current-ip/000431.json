@@ -1,0 +1,88 @@
+{
+  "id": "000431",
+  "endpoint": "GET /api/time/current/ip",
+  "purpose": "invalid",
+  "plan_call": "lcurip-missing",
+  "started_at": "2026-10-11T10:41:41.178538Z",
+  "started_ns": 1791715301178538000,
+  "elapsed_ms": 142.066,
+  "ttfb_ms": 141.855,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/time/current/ip",
+    "path": "/api/time/current/ip",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:41:41 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "ipAddress": [
+            "The ipAddress field is required."
+          ]
+        },
+        "traceId": "00-b4459283f312a6a3897935501f9313fb-2244aa5b3d1288ce-00"
+      },
+      "size": 252
+    }
+  }
+}

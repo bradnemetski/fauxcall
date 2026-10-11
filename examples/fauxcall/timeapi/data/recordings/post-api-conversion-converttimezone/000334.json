@@ -1,0 +1,111 @@
+{
+  "id": "000334",
+  "endpoint": "POST /api/conversion/converttimezone",
+  "purpose": "invalid",
+  "plan_call": "cv-empty",
+  "started_at": "2026-10-11T10:39:32.628247Z",
+  "started_ns": 1791715172628247000,
+  "elapsed_ms": 134.845,
+  "ttfb_ms": 134.675,
+  "request": {
+    "method": "POST",
+    "url": "https://timeapi.io/api/conversion/converttimezone",
+    "path": "/api/conversion/converttimezone",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "2"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {},
+      "size": 2
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:39:32 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "DateTime": [
+            "The DateTime field is required."
+          ],
+          "ToTimeZone": [
+            "The ToTimeZone field is required."
+          ],
+          "DstAmbiguity": [
+            "The DstAmbiguity field is required."
+          ],
+          "FromTimeZone": [
+            "The FromTimeZone field is required."
+          ]
+        },
+        "traceId": "00-ac2c84742f6c7871c7c6d0e721608146-b05f306e54df2bc1-00"
+      },
+      "size": 411
+    }
+  }
+}

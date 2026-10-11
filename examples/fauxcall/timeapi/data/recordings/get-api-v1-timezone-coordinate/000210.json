@@ -1,0 +1,88 @@
+{
+  "id": "000210",
+  "endpoint": "GET /api/v1/timezone/coordinate",
+  "purpose": "invalid",
+  "plan_call": "tzco-comma",
+  "started_at": "2026-10-11T10:36:33.751308Z",
+  "started_ns": 1791714993751308000,
+  "elapsed_ms": 132.961,
+  "ttfb_ms": 132.779,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/timezone/coordinate?latitude=52%2C3667&longitude=4%2C8945",
+    "path": "/api/v1/timezone/coordinate",
+    "query": [
+      [
+        "latitude",
+        "52,3667"
+      ],
+      [
+        "longitude",
+        "4,8945"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:36:33 GMT"
+      ],
+      [
+        "content-type",
+        "text/plain; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/plain; charset=utf-8",
+      "text": "Longitude has to between 180 and -180",
+      "size": 37
+    }
+  }
+}

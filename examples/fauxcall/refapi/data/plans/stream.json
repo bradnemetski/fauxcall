@@ -1,0 +1,321 @@
+{
+ "name": "stream",
+ "created_at": "2026-10-11T08:20:00Z",
+ "calls": [
+  {
+   "id": "st-aapl",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "AAPL"
+     ],
+     [
+      "count",
+      "10"
+     ]
+    ]
+   },
+   "stream": {
+    "kind": "sse",
+    "duration_s": 15,
+    "max_events": 60
+   }
+  },
+  {
+   "id": "st-aapl-again",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "AAPL"
+     ],
+     [
+      "count",
+      "10"
+     ]
+    ]
+   },
+   "stream": {
+    "kind": "sse",
+    "duration_s": 15,
+    "max_events": 60
+   }
+  },
+  {
+   "id": "st-msft-5",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "MSFT"
+     ],
+     [
+      "count",
+      "5"
+     ]
+    ]
+   },
+   "stream": {
+    "kind": "sse",
+    "duration_s": 15,
+    "max_events": 60
+   }
+  },
+  {
+   "id": "st-7203-default",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "7203.T"
+     ]
+    ]
+   },
+   "stream": {
+    "kind": "sse",
+    "duration_s": 15,
+    "max_events": 60
+   }
+  },
+  {
+   "id": "st-lower",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "bp.l"
+     ],
+     [
+      "count",
+      "3"
+     ]
+    ]
+   },
+   "stream": {
+    "kind": "sse",
+    "duration_s": 15,
+    "max_events": 60
+   }
+  },
+  {
+   "id": "st-count-1",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "TSLA"
+     ],
+     [
+      "count",
+      "1"
+     ]
+    ]
+   },
+   "stream": {
+    "kind": "sse",
+    "duration_s": 15,
+    "max_events": 60
+   }
+  },
+  {
+   "id": "st-count-50",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "NVDA"
+     ],
+     [
+      "count",
+      "50"
+     ]
+    ]
+   },
+   "stream": {
+    "kind": "sse",
+    "duration_s": 15,
+    "max_events": 60
+   }
+  },
+  {
+   "id": "st-missing",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": []
+   }
+  },
+  {
+   "id": "st-unknown",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "ZZZZ"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "st-count-0",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "AAPL"
+     ],
+     [
+      "count",
+      "0"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "st-count-51",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "AAPL"
+     ],
+     [
+      "count",
+      "51"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "st-count-abc",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "AAPL"
+     ],
+     [
+      "count",
+      "abc"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "st-count-empty",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "AAPL"
+     ],
+     [
+      "count",
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "id": "st-symbol-empty",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "id": "st-both-bad",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "ZZZZ"
+     ],
+     [
+      "count",
+      "0"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "st-noauth",
+   "endpoint": "GET /v1/stream/trades",
+   "purpose": "auth",
+   "request": {
+    "method": "GET",
+    "path": "/v1/stream/trades",
+    "query": [
+     [
+      "symbol",
+      "AAPL"
+     ]
+    ],
+    "auth": "none"
+   }
+  }
+ ]
+}

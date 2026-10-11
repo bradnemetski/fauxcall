@@ -1,0 +1,445 @@
+{
+  "id": "000800",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "series",
+  "plan_call": "st50-RR.L",
+  "started_at": "2026-10-11T06:36:42.488999Z",
+  "started_ns": 1791700602488999000,
+  "elapsed_ms": 9963.186,
+  "ttfb_ms": 55.269,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=RR.L&count=50",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "RR.L"
+      ],
+      [
+        "count",
+        "50"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:36:41 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700613"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 55.959,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":566,\"time\":\"2026-10-11T06:36:42.543Z\"}"
+    },
+    {
+      "t_ms": 257.784,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":582,\"time\":\"2026-10-11T06:36:42.745Z\"}"
+    },
+    {
+      "t_ms": 460.971,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":752,\"time\":\"2026-10-11T06:36:42.948Z\"}"
+    },
+    {
+      "t_ms": 662.977,
+      "kind": "sse",
+      "event": "trade",
+      "id": "4",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":546,\"time\":\"2026-10-11T06:36:43.151Z\"}"
+    },
+    {
+      "t_ms": 863.373,
+      "kind": "sse",
+      "event": "trade",
+      "id": "5",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":288,\"time\":\"2026-10-11T06:36:43.351Z\"}"
+    },
+    {
+      "t_ms": 1065.628,
+      "kind": "sse",
+      "event": "trade",
+      "id": "6",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":452,\"time\":\"2026-10-11T06:36:43.553Z\"}"
+    },
+    {
+      "t_ms": 1269.242,
+      "kind": "sse",
+      "event": "trade",
+      "id": "7",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":833,\"time\":\"2026-10-11T06:36:43.756Z\"}"
+    },
+    {
+      "t_ms": 1471.766,
+      "kind": "sse",
+      "event": "trade",
+      "id": "8",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":81,\"time\":\"2026-10-11T06:36:43.959Z\"}"
+    },
+    {
+      "t_ms": 1674.328,
+      "kind": "sse",
+      "event": "trade",
+      "id": "9",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":380,\"time\":\"2026-10-11T06:36:44.162Z\"}"
+    },
+    {
+      "t_ms": 1877.043,
+      "kind": "sse",
+      "event": "trade",
+      "id": "10",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":738,\"time\":\"2026-10-11T06:36:44.364Z\"}"
+    },
+    {
+      "t_ms": 2078.925,
+      "kind": "sse",
+      "event": "trade",
+      "id": "11",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":542,\"time\":\"2026-10-11T06:36:44.566Z\"}"
+    },
+    {
+      "t_ms": 2281.789,
+      "kind": "sse",
+      "event": "trade",
+      "id": "12",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":895,\"time\":\"2026-10-11T06:36:44.768Z\"}"
+    },
+    {
+      "t_ms": 2483.123,
+      "kind": "sse",
+      "event": "trade",
+      "id": "13",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":204,\"time\":\"2026-10-11T06:36:44.970Z\"}"
+    },
+    {
+      "t_ms": 2683.571,
+      "kind": "sse",
+      "event": "trade",
+      "id": "14",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":564,\"time\":\"2026-10-11T06:36:45.171Z\"}"
+    },
+    {
+      "t_ms": 2886.785,
+      "kind": "sse",
+      "event": "trade",
+      "id": "15",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":429,\"time\":\"2026-10-11T06:36:45.374Z\"}"
+    },
+    {
+      "t_ms": 3089.948,
+      "kind": "sse",
+      "event": "trade",
+      "id": "16",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":712,\"time\":\"2026-10-11T06:36:45.577Z\"}"
+    },
+    {
+      "t_ms": 3291.521,
+      "kind": "sse",
+      "event": "trade",
+      "id": "17",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":504,\"time\":\"2026-10-11T06:36:45.778Z\"}"
+    },
+    {
+      "t_ms": 3492.952,
+      "kind": "sse",
+      "event": "trade",
+      "id": "18",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.39\",\"size\":72,\"time\":\"2026-10-11T06:36:45.980Z\"}"
+    },
+    {
+      "t_ms": 3696.702,
+      "kind": "sse",
+      "event": "trade",
+      "id": "19",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.39\",\"size\":846,\"time\":\"2026-10-11T06:36:46.184Z\"}"
+    },
+    {
+      "t_ms": 3898.745,
+      "kind": "sse",
+      "event": "trade",
+      "id": "20",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.39\",\"size\":908,\"time\":\"2026-10-11T06:36:46.386Z\"}"
+    },
+    {
+      "t_ms": 4101.649,
+      "kind": "sse",
+      "event": "trade",
+      "id": "21",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.39\",\"size\":63,\"time\":\"2026-10-11T06:36:46.589Z\"}"
+    },
+    {
+      "t_ms": 4302.541,
+      "kind": "sse",
+      "event": "trade",
+      "id": "22",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.39\",\"size\":89,\"time\":\"2026-10-11T06:36:46.790Z\"}"
+    },
+    {
+      "t_ms": 4504.532,
+      "kind": "sse",
+      "event": "trade",
+      "id": "23",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.39\",\"size\":891,\"time\":\"2026-10-11T06:36:46.992Z\"}"
+    },
+    {
+      "t_ms": 4708.41,
+      "kind": "sse",
+      "event": "trade",
+      "id": "24",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.39\",\"size\":112,\"time\":\"2026-10-11T06:36:47.195Z\"}"
+    },
+    {
+      "t_ms": 4911.263,
+      "kind": "sse",
+      "event": "trade",
+      "id": "25",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.39\",\"size\":707,\"time\":\"2026-10-11T06:36:47.398Z\"}"
+    },
+    {
+      "t_ms": 5113.478,
+      "kind": "sse",
+      "event": "trade",
+      "id": "26",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":808,\"time\":\"2026-10-11T06:36:47.601Z\"}"
+    },
+    {
+      "t_ms": 5314.223,
+      "kind": "sse",
+      "event": "trade",
+      "id": "27",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":193,\"time\":\"2026-10-11T06:36:47.802Z\"}"
+    },
+    {
+      "t_ms": 5516.736,
+      "kind": "sse",
+      "event": "trade",
+      "id": "28",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":520,\"time\":\"2026-10-11T06:36:48.004Z\"}"
+    },
+    {
+      "t_ms": 5719.094,
+      "kind": "sse",
+      "event": "trade",
+      "id": "29",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":207,\"time\":\"2026-10-11T06:36:48.207Z\"}"
+    },
+    {
+      "t_ms": 5921.675,
+      "kind": "sse",
+      "event": "trade",
+      "id": "30",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":514,\"time\":\"2026-10-11T06:36:48.409Z\"}"
+    },
+    {
+      "t_ms": 6123.334,
+      "kind": "sse",
+      "event": "trade",
+      "id": "31",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":15,\"time\":\"2026-10-11T06:36:48.611Z\"}"
+    },
+    {
+      "t_ms": 6326.56,
+      "kind": "sse",
+      "event": "trade",
+      "id": "32",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":973,\"time\":\"2026-10-11T06:36:48.813Z\"}"
+    },
+    {
+      "t_ms": 6528.985,
+      "kind": "sse",
+      "event": "trade",
+      "id": "33",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.38\",\"size\":410,\"time\":\"2026-10-11T06:36:49.016Z\"}"
+    },
+    {
+      "t_ms": 6731.816,
+      "kind": "sse",
+      "event": "trade",
+      "id": "34",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":367,\"time\":\"2026-10-11T06:36:49.219Z\"}"
+    },
+    {
+      "t_ms": 6935.261,
+      "kind": "sse",
+      "event": "trade",
+      "id": "35",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":23,\"time\":\"2026-10-11T06:36:49.422Z\"}"
+    },
+    {
+      "t_ms": 7137.669,
+      "kind": "sse",
+      "event": "trade",
+      "id": "36",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":286,\"time\":\"2026-10-11T06:36:49.625Z\"}"
+    },
+    {
+      "t_ms": 7340.372,
+      "kind": "sse",
+      "event": "trade",
+      "id": "37",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":550,\"time\":\"2026-10-11T06:36:49.828Z\"}"
+    },
+    {
+      "t_ms": 7543.325,
+      "kind": "sse",
+      "event": "trade",
+      "id": "38",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":429,\"time\":\"2026-10-11T06:36:50.031Z\"}"
+    },
+    {
+      "t_ms": 7745.669,
+      "kind": "sse",
+      "event": "trade",
+      "id": "39",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":30,\"time\":\"2026-10-11T06:36:50.233Z\"}"
+    },
+    {
+      "t_ms": 7948.362,
+      "kind": "sse",
+      "event": "trade",
+      "id": "40",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":694,\"time\":\"2026-10-11T06:36:50.436Z\"}"
+    },
+    {
+      "t_ms": 8150.004,
+      "kind": "sse",
+      "event": "trade",
+      "id": "41",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":43,\"time\":\"2026-10-11T06:36:50.638Z\"}"
+    },
+    {
+      "t_ms": 8353.184,
+      "kind": "sse",
+      "event": "trade",
+      "id": "42",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":438,\"time\":\"2026-10-11T06:36:50.840Z\"}"
+    },
+    {
+      "t_ms": 8554.193,
+      "kind": "sse",
+      "event": "trade",
+      "id": "43",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":331,\"time\":\"2026-10-11T06:36:51.042Z\"}"
+    },
+    {
+      "t_ms": 8754.714,
+      "kind": "sse",
+      "event": "trade",
+      "id": "44",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":56,\"time\":\"2026-10-11T06:36:51.243Z\"}"
+    },
+    {
+      "t_ms": 8957.276,
+      "kind": "sse",
+      "event": "trade",
+      "id": "45",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":661,\"time\":\"2026-10-11T06:36:51.445Z\"}"
+    },
+    {
+      "t_ms": 9158.265,
+      "kind": "sse",
+      "event": "trade",
+      "id": "46",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":97,\"time\":\"2026-10-11T06:36:51.646Z\"}"
+    },
+    {
+      "t_ms": 9359.092,
+      "kind": "sse",
+      "event": "trade",
+      "id": "47",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":574,\"time\":\"2026-10-11T06:36:51.847Z\"}"
+    },
+    {
+      "t_ms": 9559.243,
+      "kind": "sse",
+      "event": "trade",
+      "id": "48",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":583,\"time\":\"2026-10-11T06:36:52.047Z\"}"
+    },
+    {
+      "t_ms": 9760.704,
+      "kind": "sse",
+      "event": "trade",
+      "id": "49",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":315,\"time\":\"2026-10-11T06:36:52.249Z\"}"
+    },
+    {
+      "t_ms": 9962.971,
+      "kind": "sse",
+      "event": "trade",
+      "id": "50",
+      "data": "{\"symbol\":\"RR.L\",\"price\":\"5.37\",\"size\":832,\"time\":\"2026-10-11T06:36:52.451Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

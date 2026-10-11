@@ -1,0 +1,102 @@
+{
+  "id": "000438",
+  "endpoint": "GET /api/timezone/ip",
+  "purpose": "variation",
+  "plan_call": "ltzip-5",
+  "started_at": "2026-10-11T10:41:44.917659Z",
+  "started_ns": 1791715304917659000,
+  "elapsed_ms": 131.958,
+  "ttfb_ms": 131.788,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/timezone/ip?ipAddress=200.221.11.100",
+    "path": "/api/timezone/ip",
+    "query": [
+      [
+        "ipAddress",
+        "200.221.11.100"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:41:44 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "timeZone": "America/Sao_Paulo",
+        "currentLocalTime": "2026-10-11T07:41:44.9950463",
+        "currentUtcOffset": {
+          "seconds": -10800,
+          "milliseconds": -10800000,
+          "ticks": -108000000000,
+          "nanoseconds": -10800000000000
+        },
+        "standardUtcOffset": {
+          "seconds": -10800,
+          "milliseconds": -10800000,
+          "ticks": -108000000000,
+          "nanoseconds": -10800000000000
+        },
+        "hasDayLightSaving": false,
+        "isDayLightSavingActive": false,
+        "dstInterval": null
+      },
+      "size": 388
+    }
+  }
+}

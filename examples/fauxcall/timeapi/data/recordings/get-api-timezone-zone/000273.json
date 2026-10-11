@@ -1,0 +1,136 @@
+{
+  "id": "000273",
+  "endpoint": "GET /api/timezone/zone",
+  "purpose": "variation",
+  "plan_call": "ltz-11",
+  "started_at": "2026-10-11T10:38:31.545930Z",
+  "started_ns": 1791715111545930000,
+  "elapsed_ms": 140.233,
+  "ttfb_ms": 139.511,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/timezone/zone?timeZone=Antarctica%2FTroll",
+    "path": "/api/timezone/zone",
+    "query": [
+      [
+        "timeZone",
+        "Antarctica/Troll"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:38:31 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "timeZone": "Antarctica/Troll",
+        "currentLocalTime": "2026-10-11T12:38:31.6241502",
+        "currentUtcOffset": {
+          "seconds": 7200,
+          "milliseconds": 7200000,
+          "ticks": 72000000000,
+          "nanoseconds": 7200000000000
+        },
+        "standardUtcOffset": {
+          "seconds": 0,
+          "milliseconds": 0,
+          "ticks": 0,
+          "nanoseconds": 0
+        },
+        "hasDayLightSaving": true,
+        "isDayLightSavingActive": true,
+        "dstInterval": {
+          "dstName": "+02",
+          "dstOffsetToUtc": {
+            "seconds": 7200,
+            "milliseconds": 7200000,
+            "ticks": 72000000000,
+            "nanoseconds": 7200000000000
+          },
+          "dstOffsetToStandardTime": {
+            "seconds": 7200,
+            "milliseconds": 7200000,
+            "ticks": 72000000000,
+            "nanoseconds": 7200000000000
+          },
+          "dstStart": "2026-03-29T01:00:00Z",
+          "dstEnd": "2026-10-25T01:00:00Z",
+          "dstDuration": {
+            "days": 210,
+            "nanosecondOfDay": 0,
+            "hours": 0,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "subsecondTicks": 0,
+            "subsecondNanoseconds": 0,
+            "bclCompatibleTicks": 181440000000000,
+            "totalDays": 210,
+            "totalHours": 5040,
+            "totalMinutes": 302400,
+            "totalSeconds": 18144000,
+            "totalMilliseconds": 18144000000,
+            "totalTicks": 181440000000000,
+            "totalNanoseconds": 18144000000000000
+          }
+        }
+      },
+      "size": 993
+    }
+  }
+}

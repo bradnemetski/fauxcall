@@ -1,0 +1,112 @@
+{
+  "id": "000356",
+  "endpoint": "POST /api/calculation/current/decrement",
+  "purpose": "variation",
+  "plan_call": "ccdecrement-2",
+  "started_at": "2026-10-11T10:39:54.058038Z",
+  "started_ns": 1791715194058038000,
+  "elapsed_ms": 134.588,
+  "ttfb_ms": 133.77,
+  "request": {
+    "method": "POST",
+    "url": "https://timeapi.io/api/calculation/current/decrement",
+    "path": "/api/calculation/current/decrement",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "59"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "timeZone": "America/New_York",
+        "timeSpan": "0:01:30:00.500"
+      },
+      "size": 59
+    }
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:39:54 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "timeZone": "America/New_York",
+        "originalDateTime": "2026-10-11T06:39:54.1336029",
+        "usedTimeSpan": "0:01:30:00.5",
+        "calculationResult": {
+          "year": 2026,
+          "month": 10,
+          "day": 11,
+          "hour": 5,
+          "minute": 9,
+          "seconds": 53,
+          "milliSeconds": 633,
+          "dateTime": "2026-10-11T05:09:53.6336029",
+          "date": "10/11/2026",
+          "time": "05:09",
+          "dstActive": true
+        }
+      },
+      "size": 309
+    }
+  }
+}

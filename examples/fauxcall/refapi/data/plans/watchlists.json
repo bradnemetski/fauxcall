@@ -1,0 +1,847 @@
+{
+ "name": "watchlists",
+ "created_at": "2026-10-11T07:50:00Z",
+ "calls": [
+  {
+   "id": "wl-list-0",
+   "endpoint": "GET /v1/watchlists",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists"
+   }
+  },
+  {
+   "id": "wl-create-min",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-min"
+    }
+   },
+   "capture": {
+    "w1": "$.id"
+   }
+  },
+  {
+   "id": "wl-rb-min",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/{{w1}}"
+   }
+  },
+  {
+   "id": "wl-create-full",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-full",
+     "symbols": [
+      "aapl",
+      "MSFT",
+      "AAPL",
+      "7203.t"
+     ]
+    }
+   },
+   "capture": {
+    "w2": "$.id"
+   }
+  },
+  {
+   "id": "wl-rb-full",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/{{w2}}"
+   }
+  },
+  {
+   "id": "wl-list-1",
+   "endpoint": "GET /v1/watchlists",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists"
+   }
+  },
+  {
+   "id": "wl-create-unknown-sym",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-x",
+     "symbols": [
+      "AAPL",
+      "ZZZZ"
+     ]
+    }
+   }
+  },
+  {
+   "id": "wl-create-missing-name",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "symbols": [
+      "AAPL"
+     ]
+    }
+   }
+  },
+  {
+   "id": "wl-create-empty-name",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": ""
+    }
+   }
+  },
+  {
+   "id": "wl-create-blank-name",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "   "
+    }
+   },
+   "capture": {
+    "wblank": "$.id"
+   }
+  },
+  {
+   "id": "wl-create-name-51",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
+    }
+   }
+  },
+  {
+   "id": "wl-create-name-50",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
+    }
+   },
+   "capture": {
+    "w50": "$.id"
+   }
+  },
+  {
+   "id": "wl-create-name-null",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": null
+    }
+   }
+  },
+  {
+   "id": "wl-create-name-int",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": 5
+    }
+   }
+  },
+  {
+   "id": "wl-create-symbols-str",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-x",
+     "symbols": "AAPL"
+    }
+   }
+  },
+  {
+   "id": "wl-create-symbols-int",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-x",
+     "symbols": [
+      1
+     ]
+    }
+   }
+  },
+  {
+   "id": "wl-create-symbols-null",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-x",
+     "symbols": null
+    }
+   }
+  },
+  {
+   "id": "wl-create-unknown-field",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-uf",
+     "color": "red"
+    }
+   },
+   "capture": {
+    "wuf": "$.id"
+   }
+  },
+  {
+   "id": "wl-create-empty-obj",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "wl-create-array",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": [
+     {
+      "name": "x"
+     }
+    ]
+   }
+  },
+  {
+   "id": "wl-create-badjson",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "text_body": "{\"name\": ",
+    "content_type": "application/json"
+   }
+  },
+  {
+   "id": "wl-create-nobody",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists"
+   }
+  },
+  {
+   "id": "wl-create-form",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "form": {
+     "name": "fauxcall-probe-form"
+    }
+   }
+  },
+  {
+   "id": "wl-create-readonly",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "auth",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-ro"
+    },
+    "auth": "none",
+    "headers": {
+     "X-API-Key": "readonly-key"
+    }
+   }
+  },
+  {
+   "id": "wl-create-noauth",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "auth",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-na"
+    },
+    "auth": "none"
+   }
+  },
+  {
+   "id": "wl-create-two-bad",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "",
+     "symbols": [
+      "ZZZZ"
+     ]
+    }
+   }
+  },
+  {
+   "id": "wl-create-two-unknown",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-x",
+     "symbols": [
+      "YYYY",
+      "ZZZZ"
+     ]
+    }
+   }
+  },
+  {
+   "id": "wl-create-sym-empty",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-x",
+     "symbols": [
+      ""
+     ]
+    }
+   }
+  },
+  {
+   "id": "wl-get-404",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/999999"
+   }
+  },
+  {
+   "id": "wl-get-abc",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/abc"
+   }
+  },
+  {
+   "id": "wl-get-neg",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/-1"
+   }
+  },
+  {
+   "id": "wl-get-zero",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/0"
+   }
+  },
+  {
+   "id": "wl-get-huge",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/99999999999999999999999"
+   }
+  },
+  {
+   "id": "wl-get-float",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/1001.0"
+   }
+  },
+  {
+   "id": "wl-get-lead0",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/0{{w1}}"
+   }
+  },
+  {
+   "id": "wl-get-time",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "time_profile",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/{{w2}}"
+   },
+   "repeat": 3,
+   "interval_ms": 5000
+  },
+  {
+   "id": "wl-put",
+   "endpoint": "PUT /v1/watchlists/{id}",
+   "purpose": "variation",
+   "request": {
+    "method": "PUT",
+    "path": "/v1/watchlists/{{w1}}",
+    "json_body": {
+     "name": "fauxcall-probe-min-put",
+     "symbols": [
+      "tsla",
+      "nvda",
+      "TSLA"
+     ]
+    }
+   }
+  },
+  {
+   "id": "wl-rb-put",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/{{w1}}"
+   }
+  },
+  {
+   "id": "wl-put-missing-symbols",
+   "endpoint": "PUT /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/v1/watchlists/{{w1}}",
+    "json_body": {
+     "name": "x"
+    }
+   }
+  },
+  {
+   "id": "wl-put-missing-name",
+   "endpoint": "PUT /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/v1/watchlists/{{w1}}",
+    "json_body": {
+     "symbols": []
+    }
+   }
+  },
+  {
+   "id": "wl-put-unknown-sym",
+   "endpoint": "PUT /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/v1/watchlists/{{w1}}",
+    "json_body": {
+     "name": "x",
+     "symbols": [
+      "ZZZZ"
+     ]
+    }
+   }
+  },
+  {
+   "id": "wl-put-404",
+   "endpoint": "PUT /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/v1/watchlists/999999",
+    "json_body": {
+     "name": "x",
+     "symbols": []
+    }
+   }
+  },
+  {
+   "id": "wl-put-404-badbody",
+   "endpoint": "PUT /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/v1/watchlists/999999",
+    "json_body": {
+     "name": ""
+    }
+   }
+  },
+  {
+   "id": "wl-put-abc",
+   "endpoint": "PUT /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/v1/watchlists/abc",
+    "json_body": {
+     "name": "x",
+     "symbols": []
+    }
+   }
+  },
+  {
+   "id": "wl-put-empty-symbols",
+   "endpoint": "PUT /v1/watchlists/{id}",
+   "purpose": "edge",
+   "request": {
+    "method": "PUT",
+    "path": "/v1/watchlists/{{w2}}",
+    "json_body": {
+     "name": "fauxcall-probe-full-put",
+     "symbols": []
+    }
+   }
+  },
+  {
+   "id": "wl-patch-name",
+   "endpoint": "PATCH /v1/watchlists/{id}",
+   "purpose": "variation",
+   "request": {
+    "method": "PATCH",
+    "path": "/v1/watchlists/{{w2}}",
+    "json_body": {
+     "name": "fauxcall-probe-patched"
+    }
+   }
+  },
+  {
+   "id": "wl-rb-patch",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/{{w2}}"
+   }
+  },
+  {
+   "id": "wl-patch-symbols",
+   "endpoint": "PATCH /v1/watchlists/{id}",
+   "purpose": "variation",
+   "request": {
+    "method": "PATCH",
+    "path": "/v1/watchlists/{{w2}}",
+    "json_body": {
+     "symbols": [
+      "amd",
+      "AAPL"
+     ]
+    }
+   }
+  },
+  {
+   "id": "wl-rb-patch2",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/{{w2}}"
+   }
+  },
+  {
+   "id": "wl-patch-empty",
+   "endpoint": "PATCH /v1/watchlists/{id}",
+   "purpose": "edge",
+   "request": {
+    "method": "PATCH",
+    "path": "/v1/watchlists/{{w2}}",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "wl-patch-null-name",
+   "endpoint": "PATCH /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PATCH",
+    "path": "/v1/watchlists/{{w2}}",
+    "json_body": {
+     "name": null
+    }
+   }
+  },
+  {
+   "id": "wl-patch-null-symbols",
+   "endpoint": "PATCH /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PATCH",
+    "path": "/v1/watchlists/{{w2}}",
+    "json_body": {
+     "symbols": null
+    }
+   }
+  },
+  {
+   "id": "wl-patch-unknown-sym",
+   "endpoint": "PATCH /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PATCH",
+    "path": "/v1/watchlists/{{w2}}",
+    "json_body": {
+     "symbols": [
+      "ZZZZ"
+     ]
+    }
+   }
+  },
+  {
+   "id": "wl-patch-404",
+   "endpoint": "PATCH /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PATCH",
+    "path": "/v1/watchlists/999999",
+    "json_body": {
+     "name": "x"
+    }
+   }
+  },
+  {
+   "id": "wl-patch-unknown-field",
+   "endpoint": "PATCH /v1/watchlists/{id}",
+   "purpose": "edge",
+   "request": {
+    "method": "PATCH",
+    "path": "/v1/watchlists/{{w2}}",
+    "json_body": {
+     "color": "red"
+    }
+   }
+  },
+  {
+   "id": "wl-patch-readonly",
+   "endpoint": "PATCH /v1/watchlists/{id}",
+   "purpose": "auth",
+   "request": {
+    "method": "PATCH",
+    "path": "/v1/watchlists/{{w2}}",
+    "json_body": {
+     "name": "x"
+    },
+    "auth": "none",
+    "headers": {
+     "X-API-Key": "readonly-key"
+    }
+   }
+  },
+  {
+   "id": "wl-list-2",
+   "endpoint": "GET /v1/watchlists",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists"
+   }
+  },
+  {
+   "id": "wl-delete-readonly",
+   "endpoint": "DELETE /v1/watchlists/{id}",
+   "purpose": "auth",
+   "request": {
+    "method": "DELETE",
+    "path": "/v1/watchlists/{{w2}}",
+    "auth": "none",
+    "headers": {
+     "X-API-Key": "readonly-key"
+    }
+   }
+  },
+  {
+   "id": "wl-delete-1",
+   "endpoint": "DELETE /v1/watchlists/{id}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/v1/watchlists/{{w1}}"
+   }
+  },
+  {
+   "id": "wl-rb-deleted",
+   "endpoint": "GET /v1/watchlists/{id}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists/{{w1}}"
+   }
+  },
+  {
+   "id": "wl-delete-again",
+   "endpoint": "DELETE /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "DELETE",
+    "path": "/v1/watchlists/{{w1}}"
+   }
+  },
+  {
+   "id": "wl-delete-abc",
+   "endpoint": "DELETE /v1/watchlists/{id}",
+   "purpose": "invalid",
+   "request": {
+    "method": "DELETE",
+    "path": "/v1/watchlists/abc"
+   }
+  },
+  {
+   "id": "wl-create-after-delete",
+   "endpoint": "POST /v1/watchlists",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "fauxcall-probe-after"
+    }
+   },
+   "capture": {
+    "w3": "$.id"
+   }
+  },
+  {
+   "id": "wl-delete-2",
+   "endpoint": "DELETE /v1/watchlists/{id}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/v1/watchlists/{{w2}}"
+   }
+  },
+  {
+   "id": "wl-delete-3",
+   "endpoint": "DELETE /v1/watchlists/{id}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/v1/watchlists/{{w3}}"
+   }
+  },
+  {
+   "id": "wl-delete-50",
+   "endpoint": "DELETE /v1/watchlists/{id}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/v1/watchlists/{{w50}}"
+   }
+  },
+  {
+   "id": "wl-delete-wuf",
+   "endpoint": "DELETE /v1/watchlists/{id}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/v1/watchlists/{{wuf}}"
+   }
+  },
+  {
+   "id": "wl-delete-wblank",
+   "endpoint": "DELETE /v1/watchlists/{id}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/v1/watchlists/{{wblank}}"
+   }
+  },
+  {
+   "id": "wl-list-3",
+   "endpoint": "GET /v1/watchlists",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists"
+   }
+  },
+  {
+   "id": "wl-list-noauth",
+   "endpoint": "GET /v1/watchlists",
+   "purpose": "auth",
+   "request": {
+    "method": "GET",
+    "path": "/v1/watchlists",
+    "auth": "none"
+   }
+  },
+  {
+   "id": "wl-coll-put",
+   "endpoint": "GET /v1/watchlists",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/v1/watchlists",
+    "json_body": {
+     "name": "x"
+    }
+   },
+   "mutating": true
+  }
+ ]
+}

@@ -1,0 +1,106 @@
+{
+  "id": "000366",
+  "endpoint": "POST /api/calculation/custom/increment",
+  "purpose": "variation",
+  "plan_call": "cuincrement-frac",
+  "started_at": "2026-10-11T10:40:08.968942Z",
+  "started_ns": 1791715208968942000,
+  "elapsed_ms": 135.178,
+  "ttfb_ms": 135.006,
+  "request": {
+    "method": "POST",
+    "url": "https://timeapi.io/api/calculation/custom/increment",
+    "path": "/api/calculation/custom/increment",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "95"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "timeZone": "Asia/Kolkata",
+        "dateTime": "2024-02-28 23:59:59.999999",
+        "timeSpan": "0:00:00:00.001"
+      },
+      "size": 95
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:40:09 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "DstAmbiguity": [
+            "The DstAmbiguity field is required."
+          ]
+        },
+        "traceId": "00-66c790a0cd8da6f63af24f501e3f893a-6fc5256d02aedcec-00"
+      },
+      "size": 258
+    }
+  }
+}

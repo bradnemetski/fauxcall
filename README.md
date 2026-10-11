@@ -98,6 +98,9 @@ uv run pytest                                 # unit + offline end-to-end tests
 uv run pytest tests/e2e --target=parity       # real and fake side by side; fails below 98%
 ```
 
+[`examples/`](examples/) holds fakes FauxCall built on its own while it was being validated, each from
+a single prompt: Frankfurter, timeapi.io and this repository's reference API, all at 100% parity.
+
 ## Using fakes in evaluations
 
 Every fake has an admin API under `/__fauxcall`:
@@ -156,6 +159,8 @@ uvx fauxcall --help                 # everything else
 
 ## Learn more
 
+- [Examples](examples/): fakes FauxCall built on its own, ready to run
+- [How it was validated](docs/validation.md): the method, the targets and the results
 - [How it works](docs/architecture.md): the pipeline, the model and the runtime
 - [Configuration](docs/configuration.md): every setting of fakes and of the CLI
 - [Design decisions](docs/decisions.md): what was decided and why

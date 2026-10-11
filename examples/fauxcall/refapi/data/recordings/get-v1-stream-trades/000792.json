@@ -1,0 +1,445 @@
+{
+  "id": "000792",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "series",
+  "plan_call": "st50-MSFT",
+  "started_at": "2026-10-11T06:35:22.708227Z",
+  "started_ns": 1791700522708227000,
+  "elapsed_ms": 9951.275,
+  "ttfb_ms": 57.282,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=MSFT&count=50",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "MSFT"
+      ],
+      [
+        "count",
+        "50"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:35:22 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700533"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 57.577,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.09\",\"size\":279,\"time\":\"2026-10-11T06:35:22.765Z\"}"
+    },
+    {
+      "t_ms": 258.536,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.26\",\"size\":707,\"time\":\"2026-10-11T06:35:22.966Z\"}"
+    },
+    {
+      "t_ms": 460.823,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.18\",\"size\":649,\"time\":\"2026-10-11T06:35:23.168Z\"}"
+    },
+    {
+      "t_ms": 662.937,
+      "kind": "sse",
+      "event": "trade",
+      "id": "4",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.39\",\"size\":768,\"time\":\"2026-10-11T06:35:23.370Z\"}"
+    },
+    {
+      "t_ms": 865.337,
+      "kind": "sse",
+      "event": "trade",
+      "id": "5",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.47\",\"size\":310,\"time\":\"2026-10-11T06:35:23.573Z\"}"
+    },
+    {
+      "t_ms": 1066.647,
+      "kind": "sse",
+      "event": "trade",
+      "id": "6",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.05\",\"size\":570,\"time\":\"2026-10-11T06:35:23.774Z\"}"
+    },
+    {
+      "t_ms": 1269.169,
+      "kind": "sse",
+      "event": "trade",
+      "id": "7",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.22\",\"size\":159,\"time\":\"2026-10-11T06:35:23.977Z\"}"
+    },
+    {
+      "t_ms": 1470.223,
+      "kind": "sse",
+      "event": "trade",
+      "id": "8",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.85\",\"size\":771,\"time\":\"2026-10-11T06:35:24.178Z\"}"
+    },
+    {
+      "t_ms": 1671.571,
+      "kind": "sse",
+      "event": "trade",
+      "id": "9",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.97\",\"size\":792,\"time\":\"2026-10-11T06:35:24.379Z\"}"
+    },
+    {
+      "t_ms": 1873.957,
+      "kind": "sse",
+      "event": "trade",
+      "id": "10",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.01\",\"size\":573,\"time\":\"2026-10-11T06:35:24.581Z\"}"
+    },
+    {
+      "t_ms": 2075.712,
+      "kind": "sse",
+      "event": "trade",
+      "id": "11",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.72\",\"size\":10,\"time\":\"2026-10-11T06:35:24.783Z\"}"
+    },
+    {
+      "t_ms": 2277.97,
+      "kind": "sse",
+      "event": "trade",
+      "id": "12",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.93\",\"size\":646,\"time\":\"2026-10-11T06:35:24.985Z\"}"
+    },
+    {
+      "t_ms": 2480.259,
+      "kind": "sse",
+      "event": "trade",
+      "id": "13",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.56\",\"size\":116,\"time\":\"2026-10-11T06:35:25.188Z\"}"
+    },
+    {
+      "t_ms": 2682.053,
+      "kind": "sse",
+      "event": "trade",
+      "id": "14",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.85\",\"size\":475,\"time\":\"2026-10-11T06:35:25.390Z\"}"
+    },
+    {
+      "t_ms": 2884.408,
+      "kind": "sse",
+      "event": "trade",
+      "id": "15",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.77\",\"size\":20,\"time\":\"2026-10-11T06:35:25.592Z\"}"
+    },
+    {
+      "t_ms": 3087.392,
+      "kind": "sse",
+      "event": "trade",
+      "id": "16",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.18\",\"size\":799,\"time\":\"2026-10-11T06:35:25.795Z\"}"
+    },
+    {
+      "t_ms": 3289.57,
+      "kind": "sse",
+      "event": "trade",
+      "id": "17",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.85\",\"size\":231,\"time\":\"2026-10-11T06:35:25.997Z\"}"
+    },
+    {
+      "t_ms": 3492.327,
+      "kind": "sse",
+      "event": "trade",
+      "id": "18",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.97\",\"size\":238,\"time\":\"2026-10-11T06:35:26.200Z\"}"
+    },
+    {
+      "t_ms": 3694.7,
+      "kind": "sse",
+      "event": "trade",
+      "id": "19",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.93\",\"size\":956,\"time\":\"2026-10-11T06:35:26.402Z\"}"
+    },
+    {
+      "t_ms": 3897.234,
+      "kind": "sse",
+      "event": "trade",
+      "id": "20",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.60\",\"size\":413,\"time\":\"2026-10-11T06:35:26.605Z\"}"
+    },
+    {
+      "t_ms": 4098.72,
+      "kind": "sse",
+      "event": "trade",
+      "id": "21",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.93\",\"size\":504,\"time\":\"2026-10-11T06:35:26.806Z\"}"
+    },
+    {
+      "t_ms": 4300.818,
+      "kind": "sse",
+      "event": "trade",
+      "id": "22",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.85\",\"size\":932,\"time\":\"2026-10-11T06:35:27.008Z\"}"
+    },
+    {
+      "t_ms": 4503.137,
+      "kind": "sse",
+      "event": "trade",
+      "id": "23",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.77\",\"size\":904,\"time\":\"2026-10-11T06:35:27.211Z\"}"
+    },
+    {
+      "t_ms": 4705.285,
+      "kind": "sse",
+      "event": "trade",
+      "id": "24",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.10\",\"size\":441,\"time\":\"2026-10-11T06:35:27.413Z\"}"
+    },
+    {
+      "t_ms": 4905.167,
+      "kind": "sse",
+      "event": "trade",
+      "id": "25",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.02\",\"size\":595,\"time\":\"2026-10-11T06:35:27.613Z\"}"
+    },
+    {
+      "t_ms": 5106.88,
+      "kind": "sse",
+      "event": "trade",
+      "id": "26",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.69\",\"size\":314,\"time\":\"2026-10-11T06:35:27.814Z\"}"
+    },
+    {
+      "t_ms": 5308.993,
+      "kind": "sse",
+      "event": "trade",
+      "id": "27",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.94\",\"size\":444,\"time\":\"2026-10-11T06:35:28.016Z\"}"
+    },
+    {
+      "t_ms": 5510.233,
+      "kind": "sse",
+      "event": "trade",
+      "id": "28",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.11\",\"size\":470,\"time\":\"2026-10-11T06:35:28.218Z\"}"
+    },
+    {
+      "t_ms": 5710.671,
+      "kind": "sse",
+      "event": "trade",
+      "id": "29",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.86\",\"size\":490,\"time\":\"2026-10-11T06:35:28.418Z\"}"
+    },
+    {
+      "t_ms": 5912.076,
+      "kind": "sse",
+      "event": "trade",
+      "id": "30",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.65\",\"size\":244,\"time\":\"2026-10-11T06:35:28.620Z\"}"
+    },
+    {
+      "t_ms": 6114.271,
+      "kind": "sse",
+      "event": "trade",
+      "id": "31",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.06\",\"size\":235,\"time\":\"2026-10-11T06:35:28.822Z\"}"
+    },
+    {
+      "t_ms": 6315.522,
+      "kind": "sse",
+      "event": "trade",
+      "id": "32",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.31\",\"size\":360,\"time\":\"2026-10-11T06:35:29.023Z\"}"
+    },
+    {
+      "t_ms": 6517.619,
+      "kind": "sse",
+      "event": "trade",
+      "id": "33",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.23\",\"size\":287,\"time\":\"2026-10-11T06:35:29.225Z\"}"
+    },
+    {
+      "t_ms": 6719.795,
+      "kind": "sse",
+      "event": "trade",
+      "id": "34",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.15\",\"size\":180,\"time\":\"2026-10-11T06:35:29.427Z\"}"
+    },
+    {
+      "t_ms": 6922.119,
+      "kind": "sse",
+      "event": "trade",
+      "id": "35",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.73\",\"size\":778,\"time\":\"2026-10-11T06:35:29.630Z\"}"
+    },
+    {
+      "t_ms": 7124.391,
+      "kind": "sse",
+      "event": "trade",
+      "id": "36",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.48\",\"size\":347,\"time\":\"2026-10-11T06:35:29.832Z\"}"
+    },
+    {
+      "t_ms": 7326.663,
+      "kind": "sse",
+      "event": "trade",
+      "id": "37",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.07\",\"size\":866,\"time\":\"2026-10-11T06:35:30.034Z\"}"
+    },
+    {
+      "t_ms": 7528.893,
+      "kind": "sse",
+      "event": "trade",
+      "id": "38",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.24\",\"size\":115,\"time\":\"2026-10-11T06:35:30.236Z\"}"
+    },
+    {
+      "t_ms": 7729.491,
+      "kind": "sse",
+      "event": "trade",
+      "id": "39",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.24\",\"size\":472,\"time\":\"2026-10-11T06:35:30.437Z\"}"
+    },
+    {
+      "t_ms": 7932.048,
+      "kind": "sse",
+      "event": "trade",
+      "id": "40",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.45\",\"size\":743,\"time\":\"2026-10-11T06:35:30.640Z\"}"
+    },
+    {
+      "t_ms": 8133.61,
+      "kind": "sse",
+      "event": "trade",
+      "id": "41",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.66\",\"size\":60,\"time\":\"2026-10-11T06:35:30.841Z\"}"
+    },
+    {
+      "t_ms": 8335.998,
+      "kind": "sse",
+      "event": "trade",
+      "id": "42",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.41\",\"size\":814,\"time\":\"2026-10-11T06:35:31.043Z\"}"
+    },
+    {
+      "t_ms": 8537.867,
+      "kind": "sse",
+      "event": "trade",
+      "id": "43",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.00\",\"size\":730,\"time\":\"2026-10-11T06:35:31.245Z\"}"
+    },
+    {
+      "t_ms": 8738.907,
+      "kind": "sse",
+      "event": "trade",
+      "id": "44",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.25\",\"size\":519,\"time\":\"2026-10-11T06:35:31.446Z\"}"
+    },
+    {
+      "t_ms": 8940.463,
+      "kind": "sse",
+      "event": "trade",
+      "id": "45",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.25\",\"size\":712,\"time\":\"2026-10-11T06:35:31.648Z\"}"
+    },
+    {
+      "t_ms": 9143.185,
+      "kind": "sse",
+      "event": "trade",
+      "id": "46",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.62\",\"size\":299,\"time\":\"2026-10-11T06:35:31.851Z\"}"
+    },
+    {
+      "t_ms": 9345.245,
+      "kind": "sse",
+      "event": "trade",
+      "id": "47",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.21\",\"size\":828,\"time\":\"2026-10-11T06:35:32.053Z\"}"
+    },
+    {
+      "t_ms": 9547.27,
+      "kind": "sse",
+      "event": "trade",
+      "id": "48",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.38\",\"size\":777,\"time\":\"2026-10-11T06:35:32.255Z\"}"
+    },
+    {
+      "t_ms": 9748.8,
+      "kind": "sse",
+      "event": "trade",
+      "id": "49",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.21\",\"size\":618,\"time\":\"2026-10-11T06:35:32.456Z\"}"
+    },
+    {
+      "t_ms": 9951.085,
+      "kind": "sse",
+      "event": "trade",
+      "id": "50",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"414.46\",\"size\":56,\"time\":\"2026-10-11T06:35:32.659Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

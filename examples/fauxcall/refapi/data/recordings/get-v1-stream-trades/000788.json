@@ -1,0 +1,445 @@
+{
+  "id": "000788",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "series",
+  "plan_call": "st50-JPM",
+  "started_at": "2026-10-11T06:34:42.786758Z",
+  "started_ns": 1791700482786758000,
+  "elapsed_ms": 9965.899,
+  "ttfb_ms": 53.018,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=JPM&count=50",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "JPM"
+      ],
+      [
+        "count",
+        "50"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:34:42 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700493"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 53.421,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.34\",\"size\":652,\"time\":\"2026-10-11T06:34:42.839Z\"}"
+    },
+    {
+      "t_ms": 255.296,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.53\",\"size\":58,\"time\":\"2026-10-11T06:34:43.040Z\"}"
+    },
+    {
+      "t_ms": 459.866,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.47\",\"size\":51,\"time\":\"2026-10-11T06:34:43.243Z\"}"
+    },
+    {
+      "t_ms": 661.055,
+      "kind": "sse",
+      "event": "trade",
+      "id": "4",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.55\",\"size\":841,\"time\":\"2026-10-11T06:34:43.446Z\"}"
+    },
+    {
+      "t_ms": 863.738,
+      "kind": "sse",
+      "event": "trade",
+      "id": "5",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.76\",\"size\":316,\"time\":\"2026-10-11T06:34:43.649Z\"}"
+    },
+    {
+      "t_ms": 1067.034,
+      "kind": "sse",
+      "event": "trade",
+      "id": "6",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.95\",\"size\":460,\"time\":\"2026-10-11T06:34:43.852Z\"}"
+    },
+    {
+      "t_ms": 1268.778,
+      "kind": "sse",
+      "event": "trade",
+      "id": "7",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"212.08\",\"size\":733,\"time\":\"2026-10-11T06:34:44.054Z\"}"
+    },
+    {
+      "t_ms": 1471.034,
+      "kind": "sse",
+      "event": "trade",
+      "id": "8",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"212.29\",\"size\":472,\"time\":\"2026-10-11T06:34:44.256Z\"}"
+    },
+    {
+      "t_ms": 1673.835,
+      "kind": "sse",
+      "event": "trade",
+      "id": "9",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"212.46\",\"size\":534,\"time\":\"2026-10-11T06:34:44.459Z\"}"
+    },
+    {
+      "t_ms": 1876.341,
+      "kind": "sse",
+      "event": "trade",
+      "id": "10",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"212.42\",\"size\":669,\"time\":\"2026-10-11T06:34:44.661Z\"}"
+    },
+    {
+      "t_ms": 2079.688,
+      "kind": "sse",
+      "event": "trade",
+      "id": "11",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"212.42\",\"size\":771,\"time\":\"2026-10-11T06:34:44.864Z\"}"
+    },
+    {
+      "t_ms": 2282.621,
+      "kind": "sse",
+      "event": "trade",
+      "id": "12",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"212.27\",\"size\":182,\"time\":\"2026-10-11T06:34:45.067Z\"}"
+    },
+    {
+      "t_ms": 2483.807,
+      "kind": "sse",
+      "event": "trade",
+      "id": "13",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"212.29\",\"size\":472,\"time\":\"2026-10-11T06:34:45.269Z\"}"
+    },
+    {
+      "t_ms": 2684.05,
+      "kind": "sse",
+      "event": "trade",
+      "id": "14",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"212.08\",\"size\":365,\"time\":\"2026-10-11T06:34:45.469Z\"}"
+    },
+    {
+      "t_ms": 2887.095,
+      "kind": "sse",
+      "event": "trade",
+      "id": "15",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"212.00\",\"size\":169,\"time\":\"2026-10-11T06:34:45.672Z\"}"
+    },
+    {
+      "t_ms": 3089.224,
+      "kind": "sse",
+      "event": "trade",
+      "id": "16",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.98\",\"size\":131,\"time\":\"2026-10-11T06:34:45.874Z\"}"
+    },
+    {
+      "t_ms": 3290.41,
+      "kind": "sse",
+      "event": "trade",
+      "id": "17",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"212.06\",\"size\":383,\"time\":\"2026-10-11T06:34:46.075Z\"}"
+    },
+    {
+      "t_ms": 3491.144,
+      "kind": "sse",
+      "event": "trade",
+      "id": "18",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.95\",\"size\":88,\"time\":\"2026-10-11T06:34:46.277Z\"}"
+    },
+    {
+      "t_ms": 3692.478,
+      "kind": "sse",
+      "event": "trade",
+      "id": "19",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.91\",\"size\":932,\"time\":\"2026-10-11T06:34:46.477Z\"}"
+    },
+    {
+      "t_ms": 3895.363,
+      "kind": "sse",
+      "event": "trade",
+      "id": "20",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.70\",\"size\":71,\"time\":\"2026-10-11T06:34:46.680Z\"}"
+    },
+    {
+      "t_ms": 4097.938,
+      "kind": "sse",
+      "event": "trade",
+      "id": "21",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.66\",\"size\":943,\"time\":\"2026-10-11T06:34:46.883Z\"}"
+    },
+    {
+      "t_ms": 4301.577,
+      "kind": "sse",
+      "event": "trade",
+      "id": "22",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.64\",\"size\":966,\"time\":\"2026-10-11T06:34:47.086Z\"}"
+    },
+    {
+      "t_ms": 4504.97,
+      "kind": "sse",
+      "event": "trade",
+      "id": "23",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.47\",\"size\":351,\"time\":\"2026-10-11T06:34:47.290Z\"}"
+    },
+    {
+      "t_ms": 4707.826,
+      "kind": "sse",
+      "event": "trade",
+      "id": "24",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.45\",\"size\":136,\"time\":\"2026-10-11T06:34:47.493Z\"}"
+    },
+    {
+      "t_ms": 4910.235,
+      "kind": "sse",
+      "event": "trade",
+      "id": "25",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.53\",\"size\":598,\"time\":\"2026-10-11T06:34:47.695Z\"}"
+    },
+    {
+      "t_ms": 5112.607,
+      "kind": "sse",
+      "event": "trade",
+      "id": "26",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.42\",\"size\":557,\"time\":\"2026-10-11T06:34:47.898Z\"}"
+    },
+    {
+      "t_ms": 5315.097,
+      "kind": "sse",
+      "event": "trade",
+      "id": "27",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.57\",\"size\":116,\"time\":\"2026-10-11T06:34:48.100Z\"}"
+    },
+    {
+      "t_ms": 5519.025,
+      "kind": "sse",
+      "event": "trade",
+      "id": "28",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.72\",\"size\":23,\"time\":\"2026-10-11T06:34:48.304Z\"}"
+    },
+    {
+      "t_ms": 5721.641,
+      "kind": "sse",
+      "event": "trade",
+      "id": "29",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.70\",\"size\":159,\"time\":\"2026-10-11T06:34:48.507Z\"}"
+    },
+    {
+      "t_ms": 5924.535,
+      "kind": "sse",
+      "event": "trade",
+      "id": "30",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.57\",\"size\":615,\"time\":\"2026-10-11T06:34:48.710Z\"}"
+    },
+    {
+      "t_ms": 6126.252,
+      "kind": "sse",
+      "event": "trade",
+      "id": "31",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.38\",\"size\":533,\"time\":\"2026-10-11T06:34:48.911Z\"}"
+    },
+    {
+      "t_ms": 6326.816,
+      "kind": "sse",
+      "event": "trade",
+      "id": "32",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.51\",\"size\":854,\"time\":\"2026-10-11T06:34:49.112Z\"}"
+    },
+    {
+      "t_ms": 6527.429,
+      "kind": "sse",
+      "event": "trade",
+      "id": "33",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.53\",\"size\":662,\"time\":\"2026-10-11T06:34:49.313Z\"}"
+    },
+    {
+      "t_ms": 6729.818,
+      "kind": "sse",
+      "event": "trade",
+      "id": "34",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.70\",\"size\":897,\"time\":\"2026-10-11T06:34:49.515Z\"}"
+    },
+    {
+      "t_ms": 6933.295,
+      "kind": "sse",
+      "event": "trade",
+      "id": "35",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.51\",\"size\":442,\"time\":\"2026-10-11T06:34:49.718Z\"}"
+    },
+    {
+      "t_ms": 7137.454,
+      "kind": "sse",
+      "event": "trade",
+      "id": "36",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.64\",\"size\":208,\"time\":\"2026-10-11T06:34:49.922Z\"}"
+    },
+    {
+      "t_ms": 7336.863,
+      "kind": "sse",
+      "event": "trade",
+      "id": "37",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.51\",\"size\":514,\"time\":\"2026-10-11T06:34:50.123Z\"}"
+    },
+    {
+      "t_ms": 7538.823,
+      "kind": "sse",
+      "event": "trade",
+      "id": "38",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.32\",\"size\":615,\"time\":\"2026-10-11T06:34:50.324Z\"}"
+    },
+    {
+      "t_ms": 7739.849,
+      "kind": "sse",
+      "event": "trade",
+      "id": "39",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.28\",\"size\":308,\"time\":\"2026-10-11T06:34:50.526Z\"}"
+    },
+    {
+      "t_ms": 7943.246,
+      "kind": "sse",
+      "event": "trade",
+      "id": "40",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.24\",\"size\":835,\"time\":\"2026-10-11T06:34:50.728Z\"}"
+    },
+    {
+      "t_ms": 8146.146,
+      "kind": "sse",
+      "event": "trade",
+      "id": "41",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.32\",\"size\":528,\"time\":\"2026-10-11T06:34:50.931Z\"}"
+    },
+    {
+      "t_ms": 8348.761,
+      "kind": "sse",
+      "event": "trade",
+      "id": "42",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.36\",\"size\":762,\"time\":\"2026-10-11T06:34:51.134Z\"}"
+    },
+    {
+      "t_ms": 8549.045,
+      "kind": "sse",
+      "event": "trade",
+      "id": "43",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.49\",\"size\":469,\"time\":\"2026-10-11T06:34:51.334Z\"}"
+    },
+    {
+      "t_ms": 8750.378,
+      "kind": "sse",
+      "event": "trade",
+      "id": "44",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.53\",\"size\":676,\"time\":\"2026-10-11T06:34:51.536Z\"}"
+    },
+    {
+      "t_ms": 8953.248,
+      "kind": "sse",
+      "event": "trade",
+      "id": "45",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.34\",\"size\":440,\"time\":\"2026-10-11T06:34:51.738Z\"}"
+    },
+    {
+      "t_ms": 9154.7,
+      "kind": "sse",
+      "event": "trade",
+      "id": "46",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.49\",\"size\":728,\"time\":\"2026-10-11T06:34:51.940Z\"}"
+    },
+    {
+      "t_ms": 9357.341,
+      "kind": "sse",
+      "event": "trade",
+      "id": "47",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.41\",\"size\":813,\"time\":\"2026-10-11T06:34:52.143Z\"}"
+    },
+    {
+      "t_ms": 9560.059,
+      "kind": "sse",
+      "event": "trade",
+      "id": "48",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.24\",\"size\":932,\"time\":\"2026-10-11T06:34:52.346Z\"}"
+    },
+    {
+      "t_ms": 9763.01,
+      "kind": "sse",
+      "event": "trade",
+      "id": "49",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"211.07\",\"size\":653,\"time\":\"2026-10-11T06:34:52.548Z\"}"
+    },
+    {
+      "t_ms": 9964.904,
+      "kind": "sse",
+      "event": "trade",
+      "id": "50",
+      "data": "{\"symbol\":\"JPM\",\"price\":\"210.99\",\"size\":844,\"time\":\"2026-10-11T06:34:52.750Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

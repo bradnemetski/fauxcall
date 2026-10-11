@@ -1,0 +1,90 @@
+{
+  "id": "000151",
+  "endpoint": "GET /v1/tickers/{symbol}/quote",
+  "plan_call": "q-BNP.PA",
+  "started_at": "2026-10-11T06:15:26.470091Z",
+  "started_ns": 1791699326470091000,
+  "elapsed_ms": 29.409,
+  "ttfb_ms": 29.008,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/BNP.PA/quote",
+    "path": "/v1/tickers/BNP.PA/quote",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:15:25 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "114"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699335"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "BNP.PA",
+        "price": "61.74",
+        "currency": "EUR",
+        "market_state": "closed",
+        "as_of": "2026-10-09T15:30:00.000000Z"
+      },
+      "size": 114
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

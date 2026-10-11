@@ -1,0 +1,98 @@
+{
+  "id": "000093",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "invalid",
+  "plan_call": "tk2-ex-padded",
+  "started_at": "2026-10-11T06:14:46.422489Z",
+  "started_ns": 1791699286422489000,
+  "elapsed_ms": 44.989,
+  "ttfb_ms": 44.815,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?exchange=+XNAS",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "exchange",
+        " XNAS"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:14:45 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "147"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "12"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699288"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Unknown exchange ' XNAS'.",
+          "request_id": "0ba27e65-25e5-4704-bca6-9ea7e7cf05ed",
+          "param": "exchange"
+        }
+      },
+      "size": 147
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

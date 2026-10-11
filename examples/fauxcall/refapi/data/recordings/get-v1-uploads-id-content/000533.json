@@ -1,0 +1,88 @@
+{
+  "id": "000533",
+  "endpoint": "GET /v1/uploads/{id}/content",
+  "plan_call": "up-ok-1-content",
+  "started_at": "2026-10-11T06:24:20.334219Z",
+  "started_ns": 1791699860334219000,
+  "elapsed_ms": 54.383,
+  "ttfb_ms": 54.219,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/uploads/8e31eaf1-65a8-43e6-bb70-77d98bd22ff8/content",
+    "path": "/v1/uploads/8e31eaf1-65a8-43e6-bb70-77d98bd22ff8/content",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:24:19 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-type",
+        "text/csv"
+      ],
+      [
+        "content-disposition",
+        "attachment; filename=\"prices.csv\""
+      ],
+      [
+        "content-length",
+        "37"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "11"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699862"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/csv",
+      "text": "symbol,price\nAAPL,227.48\nMSFT,415.26\n",
+      "size": 37
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

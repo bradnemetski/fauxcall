@@ -1,0 +1,119 @@
+{
+  "id": "000124",
+  "endpoint": "GET /v1/{start_date}..{end_date}",
+  "purpose": "invalid",
+  "plan_call": "p-abc",
+  "started_at": "2026-10-11T06:22:15.484197Z",
+  "started_ns": 1791699735484197000,
+  "elapsed_ms": 252.929,
+  "ttfb_ms": 252.033,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/abc..2026-10-01?symbols=USD",
+    "path": "/v1/abc..2026-10-01",
+    "path_params": {
+      "start_date": "abc",
+      "end_date": "2026-10-01"
+    },
+    "query": [
+      [
+        "symbols",
+        "USD"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:22:15 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "36"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "x-robots-tag",
+        "noindex"
+      ],
+      [
+        "cache-control",
+        "no-store"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/rates>; rel=\"successor-version\""
+      ],
+      [
+        "cf-cache-status",
+        "BYPASS"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=I02hIyFoUtS7NhlI0zVKCr69lqqRmzGd%2BeEzK0z11tgwistvKilYbhjBWW8C4C2XIcohaP4soRI4ZmJYU9ySTnaq2l9hZg4lmf56fm4vp0YW82hTTDJBb1Z4u56X4pt2RagOU1Q%3D\"}]}"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bc4f2ea88dd64-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "status": 404,
+        "message": "not found"
+      },
+      "size": 36
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "id": "000407",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-109",
+  "started_at": "2026-10-11T06:20:42.168607Z",
+  "started_ns": 1791699642168607000,
+  "elapsed_ms": 49.125,
+  "ttfb_ms": 48.21,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=household",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "household"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:20:41 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "34"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "20"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699648"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "household",
+        "results": []
+      },
+      "size": 34
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

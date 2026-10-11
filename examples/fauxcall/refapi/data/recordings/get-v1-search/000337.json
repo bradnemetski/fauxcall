@@ -1,0 +1,100 @@
+{
+  "id": "000337",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-039",
+  "started_at": "2026-10-11T06:20:07.034157Z",
+  "started_ns": 1791699607034157000,
+  "elapsed_ms": 48.285,
+  "ttfb_ms": 47.517,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=walt",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "walt"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:20:06 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "90"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "10"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699608"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "walt",
+        "results": [
+          {
+            "symbol": "DIS",
+            "name": "The Walt Disney Company",
+            "score": 0.8
+          }
+        ]
+      },
+      "size": 90
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

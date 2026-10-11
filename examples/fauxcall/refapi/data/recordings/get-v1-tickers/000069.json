@@ -1,0 +1,124 @@
+{
+  "id": "000069",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "edge",
+  "plan_call": "tk-cursor-handmade",
+  "started_at": "2026-10-11T06:13:25.076065Z",
+  "started_ns": 1791699205076065000,
+  "elapsed_ms": 47.398,
+  "ttfb_ms": 47.083,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?cursor=eyJhZnRlciI6IkFBUEwifQ&limit=3",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "cursor",
+        "eyJhZnRlciI6IkFBUEwifQ"
+      ],
+      [
+        "limit",
+        "3"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:13:24 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "441"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "11"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699207"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "ADBE",
+            "name": "Adobe Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1986-08-20"
+          },
+          {
+            "symbol": "AIR.PA",
+            "name": "Airbus SE",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Industrials",
+            "listed_on": "2000-07-10"
+          },
+          {
+            "symbol": "AMD",
+            "name": "Advanced Micro Devices, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Semiconductors",
+            "listed_on": "1972-09-27"
+          }
+        ],
+        "next_cursor": "eyJhZnRlciI6IkFNRCJ9",
+        "total": 60
+      },
+      "size": 441
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "id": "000039",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "pagination",
+  "plan_call": "tk-p6",
+  "started_at": "2026-10-11T06:13:10.012588Z",
+  "started_ns": 1791699190012588000,
+  "elapsed_ms": 49.597,
+  "ttfb_ms": 49.047,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?limit=7&cursor=eyJhZnRlciI6IkdTIn0",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "limit",
+        "7"
+      ],
+      [
+        "cursor",
+        "eyJhZnRlciI6IkdTIn0"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:13:09 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "1011"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "21"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699197"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "HSBA.L",
+            "name": "HSBC Holdings plc",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Financials",
+            "listed_on": "1992-07-10"
+          },
+          {
+            "symbol": "INTC",
+            "name": "Intel Corporation",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Semiconductors",
+            "listed_on": "1971-10-13"
+          },
+          {
+            "symbol": "JNJ",
+            "name": "Johnson & Johnson",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Healthcare",
+            "listed_on": "1944-09-25"
+          },
+          {
+            "symbol": "JPM",
+            "name": "JPMorgan Chase & Co.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1969-03-05"
+          },
+          {
+            "symbol": "KO",
+            "name": "The Coca-Cola Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Consumer Staples",
+            "listed_on": "1919-09-05"
+          },
+          {
+            "symbol": "MC.PA",
+            "name": "LVMH Moët Hennessy Louis Vuitton SE",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Consumer Discretionary",
+            "listed_on": "1987-06-03"
+          },
+          {
+            "symbol": "META",
+            "name": "Meta Platforms, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "2012-05-18"
+          }
+        ],
+        "next_cursor": "eyJhZnRlciI6Ik1FVEEifQ",
+        "total": 60
+      },
+      "size": 1011
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

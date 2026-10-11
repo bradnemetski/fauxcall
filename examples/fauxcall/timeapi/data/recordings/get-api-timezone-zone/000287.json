@@ -1,0 +1,94 @@
+{
+  "id": "000287",
+  "endpoint": "GET /api/timezone/zone",
+  "purpose": "invalid",
+  "plan_call": "ltz-empty",
+  "started_at": "2026-10-11T10:39:08.102703Z",
+  "started_ns": 1791715148102703000,
+  "elapsed_ms": 136.483,
+  "ttfb_ms": 136.063,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/timezone/zone?timeZone=",
+    "path": "/api/timezone/zone",
+    "query": [
+      [
+        "timeZone",
+        ""
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:39:08 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "timeZone": [
+            "The timeZone field is required."
+          ]
+        },
+        "traceId": "00-f10b7ec7bd9644f27805b5dcd5782def-363a05d9beae8553-00"
+      },
+      "size": 250
+    }
+  }
+}

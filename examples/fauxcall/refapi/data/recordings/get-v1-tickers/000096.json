@@ -1,0 +1,128 @@
+{
+  "id": "000096",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "pagination",
+  "plan_call": "tk2-sector-auto-p2",
+  "started_at": "2026-10-11T06:14:47.927831Z",
+  "started_ns": 1791699287927831000,
+  "elapsed_ms": 49.847,
+  "ttfb_ms": 49.142,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?sector=Automotive&limit=4&cursor=eyJhZnRlciI6IkYifQ",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "sector",
+        "Automotive"
+      ],
+      [
+        "limit",
+        "4"
+      ],
+      [
+        "cursor",
+        "eyJhZnRlciI6IkYifQ"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:14:47 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "423"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699298"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "GM",
+            "name": "General Motors Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Automotive",
+            "listed_on": "2010-11-18"
+          },
+          {
+            "symbol": "RIVN",
+            "name": "Rivian Automotive, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Automotive",
+            "listed_on": "2021-11-10"
+          },
+          {
+            "symbol": "TSLA",
+            "name": "Tesla, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Automotive",
+            "listed_on": "2010-06-29"
+          }
+        ],
+        "next_cursor": null,
+        "total": 7
+      },
+      "size": 423
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "id": "000086",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "edge",
+  "plan_call": "tk2-cursor-std-b64",
+  "started_at": "2026-10-11T06:14:42.908734Z",
+  "started_ns": 1791699282908734000,
+  "elapsed_ms": 44.976,
+  "ttfb_ms": 44.797,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?cursor=eyJhZnRlciI6Ijk5ODguSEsifQ%3D%3D&limit=2",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "cursor",
+        "eyJhZnRlciI6Ijk5ODguSEsifQ=="
+      ],
+      [
+        "limit",
+        "2"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:14:42 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "300"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "19"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699288"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "AAPL",
+            "name": "Apple Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1980-12-12"
+          },
+          {
+            "symbol": "ADBE",
+            "name": "Adobe Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1986-08-20"
+          }
+        ],
+        "next_cursor": "eyJhZnRlciI6IkFEQkUifQ",
+        "total": 60
+      },
+      "size": 300
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

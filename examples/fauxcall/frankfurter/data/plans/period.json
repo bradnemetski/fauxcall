@@ -1,0 +1,632 @@
+{
+  "name": "period",
+  "created_at": "2026-10-11T07:00:00Z",
+  "calls": [
+    {
+      "id": "p-short",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-09-28",
+          "end_date": "2026-10-09"
+        }
+      }
+    },
+    {
+      "id": "p-short-sym",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-09-28",
+          "end_date": "2026-10-09"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD,GBP"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-start-weekend",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-10-03",
+          "end_date": "2026-10-09"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      },
+      "note": "start Saturday"
+    },
+    {
+      "id": "p-end-weekend",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-10-05",
+          "end_date": "2026-10-11"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      },
+      "note": "end Sunday"
+    },
+    {
+      "id": "p-only-weekend",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-10-10",
+          "end_date": "2026-10-11"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-same-day",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-10-08",
+          "end_date": "2026-10-08"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-reversed",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-10-09",
+          "end_date": "2026-10-01"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-base-amt",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-09-28",
+          "end_date": "2026-10-02"
+        },
+        "query": [
+          [
+            "base",
+            "USD"
+          ],
+          [
+            "symbols",
+            "EUR,JPY,IDR"
+          ],
+          [
+            "amount",
+            "100"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-bgn-switch",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2025-12-29",
+          "end_date": "2026-01-05"
+        },
+        "query": [
+          [
+            "symbols",
+            "BGN,USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-bgn-only-after",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-01-02",
+          "end_date": "2026-01-09"
+        },
+        "query": [
+          [
+            "symbols",
+            "BGN"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-pre1999",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "1998-12-01",
+          "end_date": "1999-01-08"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-all-pre1999",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "1998-01-01",
+          "end_date": "1998-12-31"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-future",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-10-12",
+          "end_date": "2026-10-20"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-farfuture",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2027-01-01",
+          "end_date": "2027-02-01"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-90d",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-01-01",
+          "end_date": "2026-03-31"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      },
+      "note": "sampling?"
+    },
+    {
+      "id": "p-1y",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2025-01-01",
+          "end_date": "2025-12-31"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      },
+      "note": "sampling?"
+    },
+    {
+      "id": "p-366d",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2024-01-01",
+          "end_date": "2024-12-31"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-2y",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2023-01-01",
+          "end_date": "2024-12-31"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-bad-start",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-13-01",
+          "end_date": "2026-10-01"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-bad-end",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-10-01",
+          "end_date": "2026-02-30"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-abc",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "abc",
+          "end_date": "2026-10-01"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-abc-end",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-10-01",
+          "end_date": "abc"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-bad-amt",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-09-28",
+          "end_date": "2026-10-02"
+        },
+        "query": [
+          [
+            "amount",
+            "-1"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p-bad-base",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-09-28",
+          "end_date": "2026-10-02"
+        },
+        "query": [
+          [
+            "base",
+            "XYZ"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "o-recent",
+      "endpoint": "GET /v1/{start_date}..",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..",
+        "path_params": {
+          "start_date": "2026-09-28"
+        }
+      }
+    },
+    {
+      "id": "o-recent-sym",
+      "endpoint": "GET /v1/{start_date}..",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..",
+        "path_params": {
+          "start_date": "2026-09-14"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD,JPY"
+          ],
+          [
+            "base",
+            "GBP"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "o-weekend",
+      "endpoint": "GET /v1/{start_date}..",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..",
+        "path_params": {
+          "start_date": "2026-10-10"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      },
+      "note": "open from Saturday after latest"
+    },
+    {
+      "id": "o-today",
+      "endpoint": "GET /v1/{start_date}..",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..",
+        "path_params": {
+          "start_date": "2026-10-11"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "o-future",
+      "endpoint": "GET /v1/{start_date}..",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..",
+        "path_params": {
+          "start_date": "2026-10-12"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "o-bad",
+      "endpoint": "GET /v1/{start_date}..",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..",
+        "path_params": {
+          "start_date": "2026-02-30"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "o-abc",
+      "endpoint": "GET /v1/{start_date}..",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..",
+        "path_params": {
+          "start_date": "abc"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "o-long",
+      "endpoint": "GET /v1/{start_date}..",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..",
+        "path_params": {
+          "start_date": "2025-06-01"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      },
+      "note": "sampling over >1y?"
+    },
+    {
+      "id": "o-time",
+      "endpoint": "GET /v1/{start_date}..",
+      "purpose": "time_profile",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..",
+        "path_params": {
+          "start_date": "2026-10-01"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      },
+      "repeat": 2,
+      "interval_ms": 10000
+    }
+  ]
+}

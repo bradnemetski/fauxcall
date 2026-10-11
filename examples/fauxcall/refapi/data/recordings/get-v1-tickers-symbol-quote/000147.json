@@ -1,0 +1,90 @@
+{
+  "id": "000147",
+  "endpoint": "GET /v1/tickers/{symbol}/quote",
+  "plan_call": "q-AZN.L",
+  "started_at": "2026-10-11T06:15:24.460691Z",
+  "started_ns": 1791699324460691000,
+  "elapsed_ms": 62.829,
+  "ttfb_ms": 62.658,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/AZN.L/quote",
+    "path": "/v1/tickers/AZN.L/quote",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:15:23 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "114"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699335"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "AZN.L",
+        "price": "118.46",
+        "currency": "GBP",
+        "market_state": "closed",
+        "as_of": "2026-10-09T15:30:00.000000Z"
+      },
+      "size": 114
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

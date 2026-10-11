@@ -1,0 +1,186 @@
+{
+  "id": "000670",
+  "endpoint": "GET /v1/uploads",
+  "purpose": "write_readback",
+  "plan_call": "up-list-1",
+  "started_at": "2026-10-11T06:25:37.864550Z",
+  "started_ns": 1791699937864550000,
+  "elapsed_ms": 65.029,
+  "ttfb_ms": 64.48,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:25:37 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "2229"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699946"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": [
+        {
+          "id": "2bae5243-08f6-44eb-9b67-ee241b64cd5c",
+          "status": "queued",
+          "filename": "big.txt",
+          "size": 1048576,
+          "label": null,
+          "created_at": "2026-10-11T06:25:36.888821+00:00",
+          "progress": 0
+        },
+        {
+          "id": "fbcf8a2a-e8e4-4f98-b490-10af61624c1b",
+          "status": "done",
+          "filename": "résumé données.csv",
+          "size": 2,
+          "label": "ünïcode label",
+          "created_at": "2026-10-11T06:25:28.059973+00:00",
+          "progress": 100,
+          "completed_at": "2026-10-11T06:25:36.059973+00:00"
+        },
+        {
+          "id": "4e7bedba-4aa0-427b-b485-faa6207718ba",
+          "status": "done",
+          "filename": "noext",
+          "size": 2,
+          "label": null,
+          "created_at": "2026-10-11T06:25:19.062651+00:00",
+          "progress": 100,
+          "completed_at": "2026-10-11T06:25:27.062651+00:00"
+        },
+        {
+          "id": "07363adc-aef5-4ba9-8635-624a0e2c1002",
+          "status": "done",
+          "filename": "lower.txt",
+          "size": 18,
+          "label": null,
+          "created_at": "2026-10-11T06:25:10.056076+00:00",
+          "progress": 100,
+          "completed_at": "2026-10-11T06:25:18.056076+00:00"
+        },
+        {
+          "id": "4c3fd5d6-fbfa-46fb-81b2-c587d7e0a331",
+          "status": "done",
+          "filename": "empty.txt",
+          "size": 0,
+          "label": null,
+          "created_at": "2026-10-11T06:25:01.355877+00:00",
+          "progress": 100,
+          "completed_at": "2026-10-11T06:25:09.355877+00:00"
+        },
+        {
+          "id": "7f7872a2-7607-4642-abea-98a0cd0ddac3",
+          "status": "done",
+          "filename": "blob.bin",
+          "size": 14,
+          "label": null,
+          "created_at": "2026-10-11T06:24:51.987610+00:00",
+          "progress": 100,
+          "completed_at": "2026-10-11T06:24:59.987610+00:00"
+        },
+        {
+          "id": "33b722fb-7bf9-4e33-b682-5e23ae49a14c",
+          "status": "done",
+          "filename": "data.json",
+          "size": 8,
+          "label": null,
+          "created_at": "2026-10-11T06:24:42.789072+00:00",
+          "progress": 100,
+          "completed_at": "2026-10-11T06:24:50.789072+00:00"
+        },
+        {
+          "id": "9fe353a7-885e-460b-81b8-2cf40b4b84d9",
+          "status": "done",
+          "filename": "notes.txt",
+          "size": 15,
+          "label": null,
+          "created_at": "2026-10-11T06:24:33.420574+00:00",
+          "progress": 100,
+          "completed_at": "2026-10-11T06:24:41.420574+00:00"
+        },
+        {
+          "id": "becd7025-20c8-4d58-9b56-97447321cc9b",
+          "status": "failed",
+          "filename": "bad.csv",
+          "size": 14,
+          "label": null,
+          "created_at": "2026-10-11T06:24:24.400840+00:00",
+          "progress": 100,
+          "completed_at": "2026-10-11T06:24:32.400840+00:00",
+          "error": "corrupt_file"
+        },
+        {
+          "id": "8e31eaf1-65a8-43e6-bb70-77d98bd22ff8",
+          "status": "done",
+          "filename": "prices.csv",
+          "size": 37,
+          "label": "fauxcall-probe daily prices",
+          "created_at": "2026-10-11T06:24:11.465149+00:00",
+          "progress": 100,
+          "completed_at": "2026-10-11T06:24:19.465149+00:00"
+        }
+      ],
+      "size": 2229
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

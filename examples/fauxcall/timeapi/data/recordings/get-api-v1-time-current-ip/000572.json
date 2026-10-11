@@ -1,0 +1,84 @@
+{
+  "id": "000572",
+  "endpoint": "GET /api/v1/time/current/ip",
+  "purpose": "edge",
+  "plan_call": "ip-big",
+  "started_at": "2026-10-11T11:26:22.475954Z",
+  "started_ns": 1791717982475954000,
+  "elapsed_ms": 145.194,
+  "ttfb_ms": 144.167,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/time/current/ip?ipAddress=4294967296",
+    "path": "/api/v1/time/current/ip",
+    "query": [
+      [
+        "ipAddress",
+        "4294967296"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:26:22 GMT"
+      ],
+      [
+        "content-type",
+        "text/plain; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/plain; charset=utf-8",
+      "text": "Invalid IP address",
+      "size": 18
+    }
+  }
+}

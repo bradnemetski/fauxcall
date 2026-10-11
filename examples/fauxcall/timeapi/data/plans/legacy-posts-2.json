@@ -1,0 +1,280 @@
+{
+ "name": "legacy-posts-2",
+ "created_at": "2026-10-11T10:50:00Z",
+ "calls": [
+  {
+   "id": "cv-frac2",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "Asia/Tokyo",
+     "dateTime": "2026-10-11 09:30:15.123456",
+     "toTimeZone": "Asia/Kathmandu",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "cv-badtz2",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "Mars/Phobos",
+     "dateTime": "2021-03-14 17:45:00",
+     "toTimeZone": "UTC",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "cv-amb-default",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "Europe/Amsterdam",
+     "dateTime": "2025-10-26 02:30:00",
+     "toTimeZone": "UTC",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "ci-dst2",
+   "endpoint": "POST /api/calculation/custom/increment",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/increment",
+    "json_body": {
+     "timeZone": "Europe/Amsterdam",
+     "dateTime": "2025-10-25 12:00:00",
+     "timeSpan": "1:00:00:00",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "ci-frac2",
+   "endpoint": "POST /api/calculation/custom/increment",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/increment",
+    "json_body": {
+     "timeZone": "Asia/Kolkata",
+     "dateTime": "2024-02-28 23:59:59.999999",
+     "timeSpan": "0:00:00:00.001",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "ci-big2",
+   "endpoint": "POST /api/calculation/custom/increment",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/increment",
+    "json_body": {
+     "timeZone": "UTC",
+     "dateTime": "2000-01-01 00:00:00",
+     "timeSpan": "400:00:00:00",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "ci-iso2",
+   "endpoint": "POST /api/calculation/custom/increment",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/increment",
+    "json_body": {
+     "timeZone": "UTC",
+     "dateTime": "2021-11-27T05:45:00",
+     "timeSpan": "1:00:00:00",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "ci-badspan2",
+   "endpoint": "POST /api/calculation/custom/increment",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/increment",
+    "json_body": {
+     "timeZone": "UTC",
+     "dateTime": "2021-11-27 05:45:00",
+     "timeSpan": "1 day",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "ci-badtz2",
+   "endpoint": "POST /api/calculation/custom/increment",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/increment",
+    "json_body": {
+     "timeZone": "Mars/Phobos",
+     "dateTime": "2021-11-27 05:45:00",
+     "timeSpan": "1:00:00:00",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "ci-gap2",
+   "endpoint": "POST /api/calculation/custom/increment",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/increment",
+    "json_body": {
+     "timeZone": "Europe/Amsterdam",
+     "dateTime": "2025-03-30 02:30:00",
+     "timeSpan": "0:00:00:00",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "ci-empty",
+   "endpoint": "POST /api/calculation/custom/increment",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/increment",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "cd-dst2",
+   "endpoint": "POST /api/calculation/custom/decrement",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/decrement",
+    "json_body": {
+     "timeZone": "Europe/Amsterdam",
+     "dateTime": "2025-10-27 12:00:00",
+     "timeSpan": "1:00:00:00",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "cd-baddate2",
+   "endpoint": "POST /api/calculation/custom/decrement",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/decrement",
+    "json_body": {
+     "timeZone": "UTC",
+     "dateTime": "2021-02-30 10:00:00",
+     "timeSpan": "1:00:00:00",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "cd-amb-default",
+   "endpoint": "POST /api/calculation/custom/decrement",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/decrement",
+    "json_body": {
+     "timeZone": "Europe/Amsterdam",
+     "dateTime": "2025-10-26 02:30:00",
+     "timeSpan": "0:00:10:00",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "cd-amb-upper",
+   "endpoint": "POST /api/calculation/custom/decrement",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/decrement",
+    "json_body": {
+     "timeZone": "Europe/Amsterdam",
+     "dateTime": "2025-10-26 02:30:00",
+     "timeSpan": "0:00:10:00",
+     "dstAmbiguity": "LATER"
+    }
+   }
+  },
+  {
+   "id": "cd-emptystr",
+   "endpoint": "POST /api/calculation/custom/decrement",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/decrement",
+    "json_body": {
+     "timeZone": "",
+     "dateTime": "",
+     "timeSpan": "",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "cc-frac1",
+   "endpoint": "POST /api/calculation/current/increment",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/current/increment",
+    "json_body": {
+     "timeZone": "UTC",
+     "timeSpan": "0:00:00:01.5"
+    }
+   }
+  },
+  {
+   "id": "cc-lower-tz",
+   "endpoint": "POST /api/calculation/current/increment",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/current/increment",
+    "json_body": {
+     "timeZone": "europe/amsterdam",
+     "timeSpan": "0:00:00:00"
+    }
+   }
+  },
+  {
+   "id": "tr-iso",
+   "endpoint": "POST /api/conversion/translate",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/translate",
+    "json_body": {
+     "dateTime": "2021-03-14T17:45:00",
+     "languageCode": "de"
+    }
+   }
+  }
+ ]
+}

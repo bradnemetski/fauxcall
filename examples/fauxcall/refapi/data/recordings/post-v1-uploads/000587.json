@@ -1,0 +1,115 @@
+{
+  "id": "000587",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "variation",
+  "plan_call": "up-bin",
+  "started_at": "2026-10-11T06:24:51.967603Z",
+  "started_ns": 1791699891967603000,
+  "elapsed_ms": 20.96,
+  "ttfb_ms": 20.709,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-length",
+        "198"
+      ],
+      [
+        "content-type",
+        "multipart/form-data; boundary=26e0badf32b9b3d354dbd282c0c383a1"
+      ]
+    ],
+    "body": {
+      "kind": "multipart",
+      "content_type": "multipart/form-data; boundary=26e0badf32b9b3d354dbd282c0c383a1",
+      "size": 198,
+      "parts": [
+        {
+          "name": "file",
+          "filename": "blob.bin",
+          "content_type": "application/octet-stream",
+          "file": "000587.part0.bin",
+          "size": 14
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 202,
+    "reason": "Accepted",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:24:51 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "169"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "15"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699895"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": "7f7872a2-7607-4642-abea-98a0cd0ddac3",
+        "status": "queued",
+        "filename": "blob.bin",
+        "size": 14,
+        "label": null,
+        "created_at": "2026-10-11T06:24:51.987610+00:00",
+        "progress": 0
+      },
+      "size": 169
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

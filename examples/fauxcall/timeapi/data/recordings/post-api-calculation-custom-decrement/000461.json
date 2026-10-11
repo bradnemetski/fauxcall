@@ -1,0 +1,97 @@
+{
+  "id": "000461",
+  "endpoint": "POST /api/calculation/custom/decrement",
+  "purpose": "edge",
+  "plan_call": "cd-amb-default",
+  "started_at": "2026-10-11T10:43:43.493228Z",
+  "started_ns": 1791715423493228000,
+  "elapsed_ms": 140.913,
+  "ttfb_ms": 140.063,
+  "request": {
+    "method": "POST",
+    "url": "https://timeapi.io/api/calculation/custom/decrement",
+    "path": "/api/calculation/custom/decrement",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "106"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "timeZone": "Europe/Amsterdam",
+        "dateTime": "2025-10-26 02:30:00",
+        "timeSpan": "0:00:10:00",
+        "dstAmbiguity": ""
+      },
+      "size": 106
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:43:43 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": "Time given is ambiguous. This could be because of DST switching. Provide a DstAmbiguity in the request to solve this.",
+      "size": 119
+    }
+  }
+}

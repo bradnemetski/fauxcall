@@ -1,0 +1,94 @@
+{
+  "id": "000265",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s-46",
+  "started_at": "2026-10-11T06:18:48.196123Z",
+  "started_ns": 1791699528196123000,
+  "elapsed_ms": 42.713,
+  "ttfb_ms": 42.561,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=qwerty",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "qwerty"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:18:47 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "31"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "23"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699536"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "qwerty",
+        "results": []
+      },
+      "size": 31
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

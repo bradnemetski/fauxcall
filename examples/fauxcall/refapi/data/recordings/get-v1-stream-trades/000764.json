@@ -1,0 +1,445 @@
+{
+  "id": "000764",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "series",
+  "plan_call": "st50-ADBE",
+  "started_at": "2026-10-11T06:30:43.429808Z",
+  "started_ns": 1791700243429808000,
+  "elapsed_ms": 9973.587,
+  "ttfb_ms": 56.543,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=ADBE&count=50",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "ADBE"
+      ],
+      [
+        "count",
+        "50"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:30:42 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700254"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 57.18,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.88\",\"size\":96,\"time\":\"2026-10-11T06:30:43.485Z\"}"
+    },
+    {
+      "t_ms": 259.04,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.39\",\"size\":574,\"time\":\"2026-10-11T06:30:43.687Z\"}"
+    },
+    {
+      "t_ms": 462.11,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.70\",\"size\":102,\"time\":\"2026-10-11T06:30:43.890Z\"}"
+    },
+    {
+      "t_ms": 664.636,
+      "kind": "sse",
+      "event": "trade",
+      "id": "4",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"514.06\",\"size\":697,\"time\":\"2026-10-11T06:30:44.092Z\"}"
+    },
+    {
+      "t_ms": 865.275,
+      "kind": "sse",
+      "event": "trade",
+      "id": "5",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.80\",\"size\":750,\"time\":\"2026-10-11T06:30:44.294Z\"}"
+    },
+    {
+      "t_ms": 1068.297,
+      "kind": "sse",
+      "event": "trade",
+      "id": "6",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.39\",\"size\":737,\"time\":\"2026-10-11T06:30:44.496Z\"}"
+    },
+    {
+      "t_ms": 1269.849,
+      "kind": "sse",
+      "event": "trade",
+      "id": "7",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.65\",\"size\":362,\"time\":\"2026-10-11T06:30:44.699Z\"}"
+    },
+    {
+      "t_ms": 1471.482,
+      "kind": "sse",
+      "event": "trade",
+      "id": "8",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"514.06\",\"size\":864,\"time\":\"2026-10-11T06:30:44.900Z\"}"
+    },
+    {
+      "t_ms": 1674.416,
+      "kind": "sse",
+      "event": "trade",
+      "id": "9",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"514.06\",\"size\":708,\"time\":\"2026-10-11T06:30:45.103Z\"}"
+    },
+    {
+      "t_ms": 1877.75,
+      "kind": "sse",
+      "event": "trade",
+      "id": "10",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"514.11\",\"size\":701,\"time\":\"2026-10-11T06:30:45.306Z\"}"
+    },
+    {
+      "t_ms": 2080.02,
+      "kind": "sse",
+      "event": "trade",
+      "id": "11",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"514.52\",\"size\":217,\"time\":\"2026-10-11T06:30:45.508Z\"}"
+    },
+    {
+      "t_ms": 2282.222,
+      "kind": "sse",
+      "event": "trade",
+      "id": "12",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"514.06\",\"size\":835,\"time\":\"2026-10-11T06:30:45.711Z\"}"
+    },
+    {
+      "t_ms": 2485.437,
+      "kind": "sse",
+      "event": "trade",
+      "id": "13",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"514.06\",\"size\":505,\"time\":\"2026-10-11T06:30:45.914Z\"}"
+    },
+    {
+      "t_ms": 2688.903,
+      "kind": "sse",
+      "event": "trade",
+      "id": "14",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.96\",\"size\":112,\"time\":\"2026-10-11T06:30:46.117Z\"}"
+    },
+    {
+      "t_ms": 2891.118,
+      "kind": "sse",
+      "event": "trade",
+      "id": "15",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"514.22\",\"size\":594,\"time\":\"2026-10-11T06:30:46.320Z\"}"
+    },
+    {
+      "t_ms": 3094.352,
+      "kind": "sse",
+      "event": "trade",
+      "id": "16",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.71\",\"size\":394,\"time\":\"2026-10-11T06:30:46.523Z\"}"
+    },
+    {
+      "t_ms": 3296.208,
+      "kind": "sse",
+      "event": "trade",
+      "id": "17",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.25\",\"size\":943,\"time\":\"2026-10-11T06:30:46.724Z\"}"
+    },
+    {
+      "t_ms": 3498.518,
+      "kind": "sse",
+      "event": "trade",
+      "id": "18",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.10\",\"size\":227,\"time\":\"2026-10-11T06:30:46.926Z\"}"
+    },
+    {
+      "t_ms": 3701.247,
+      "kind": "sse",
+      "event": "trade",
+      "id": "19",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.89\",\"size\":289,\"time\":\"2026-10-11T06:30:47.130Z\"}"
+    },
+    {
+      "t_ms": 3902.951,
+      "kind": "sse",
+      "event": "trade",
+      "id": "20",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.58\",\"size\":912,\"time\":\"2026-10-11T06:30:47.332Z\"}"
+    },
+    {
+      "t_ms": 4104.215,
+      "kind": "sse",
+      "event": "trade",
+      "id": "21",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.73\",\"size\":941,\"time\":\"2026-10-11T06:30:47.532Z\"}"
+    },
+    {
+      "t_ms": 4307.294,
+      "kind": "sse",
+      "event": "trade",
+      "id": "22",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.63\",\"size\":996,\"time\":\"2026-10-11T06:30:47.735Z\"}"
+    },
+    {
+      "t_ms": 4510.364,
+      "kind": "sse",
+      "event": "trade",
+      "id": "23",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.27\",\"size\":251,\"time\":\"2026-10-11T06:30:47.938Z\"}"
+    },
+    {
+      "t_ms": 4712.813,
+      "kind": "sse",
+      "event": "trade",
+      "id": "24",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"511.81\",\"size\":518,\"time\":\"2026-10-11T06:30:48.141Z\"}"
+    },
+    {
+      "t_ms": 4913.505,
+      "kind": "sse",
+      "event": "trade",
+      "id": "25",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"511.76\",\"size\":954,\"time\":\"2026-10-11T06:30:48.342Z\"}"
+    },
+    {
+      "t_ms": 5116.655,
+      "kind": "sse",
+      "event": "trade",
+      "id": "26",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"511.40\",\"size\":996,\"time\":\"2026-10-11T06:30:48.545Z\"}"
+    },
+    {
+      "t_ms": 5319.291,
+      "kind": "sse",
+      "event": "trade",
+      "id": "27",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"511.35\",\"size\":939,\"time\":\"2026-10-11T06:30:48.748Z\"}"
+    },
+    {
+      "t_ms": 5520.533,
+      "kind": "sse",
+      "event": "trade",
+      "id": "28",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"510.99\",\"size\":586,\"time\":\"2026-10-11T06:30:48.949Z\"}"
+    },
+    {
+      "t_ms": 5723.788,
+      "kind": "sse",
+      "event": "trade",
+      "id": "29",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"510.68\",\"size\":921,\"time\":\"2026-10-11T06:30:49.152Z\"}"
+    },
+    {
+      "t_ms": 5926.057,
+      "kind": "sse",
+      "event": "trade",
+      "id": "30",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"510.58\",\"size\":378,\"time\":\"2026-10-11T06:30:49.355Z\"}"
+    },
+    {
+      "t_ms": 6127.959,
+      "kind": "sse",
+      "event": "trade",
+      "id": "31",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"510.99\",\"size\":855,\"time\":\"2026-10-11T06:30:49.557Z\"}"
+    },
+    {
+      "t_ms": 6330.026,
+      "kind": "sse",
+      "event": "trade",
+      "id": "32",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"511.30\",\"size\":520,\"time\":\"2026-10-11T06:30:49.758Z\"}"
+    },
+    {
+      "t_ms": 6531.768,
+      "kind": "sse",
+      "event": "trade",
+      "id": "33",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"511.66\",\"size\":911,\"time\":\"2026-10-11T06:30:49.960Z\"}"
+    },
+    {
+      "t_ms": 6734.519,
+      "kind": "sse",
+      "event": "trade",
+      "id": "34",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.17\",\"size\":967,\"time\":\"2026-10-11T06:30:50.163Z\"}"
+    },
+    {
+      "t_ms": 6936.601,
+      "kind": "sse",
+      "event": "trade",
+      "id": "35",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.37\",\"size\":521,\"time\":\"2026-10-11T06:30:50.365Z\"}"
+    },
+    {
+      "t_ms": 7139.688,
+      "kind": "sse",
+      "event": "trade",
+      "id": "36",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.68\",\"size\":406,\"time\":\"2026-10-11T06:30:50.568Z\"}"
+    },
+    {
+      "t_ms": 7341.23,
+      "kind": "sse",
+      "event": "trade",
+      "id": "37",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.89\",\"size\":435,\"time\":\"2026-10-11T06:30:50.770Z\"}"
+    },
+    {
+      "t_ms": 7544.703,
+      "kind": "sse",
+      "event": "trade",
+      "id": "38",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.15\",\"size\":345,\"time\":\"2026-10-11T06:30:50.972Z\"}"
+    },
+    {
+      "t_ms": 7746.279,
+      "kind": "sse",
+      "event": "trade",
+      "id": "39",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.89\",\"size\":203,\"time\":\"2026-10-11T06:30:51.175Z\"}"
+    },
+    {
+      "t_ms": 7948.052,
+      "kind": "sse",
+      "event": "trade",
+      "id": "40",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.20\",\"size\":641,\"time\":\"2026-10-11T06:30:51.377Z\"}"
+    },
+    {
+      "t_ms": 8151.115,
+      "kind": "sse",
+      "event": "trade",
+      "id": "41",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.15\",\"size\":818,\"time\":\"2026-10-11T06:30:51.579Z\"}"
+    },
+    {
+      "t_ms": 8353.733,
+      "kind": "sse",
+      "event": "trade",
+      "id": "42",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.74\",\"size\":861,\"time\":\"2026-10-11T06:30:51.782Z\"}"
+    },
+    {
+      "t_ms": 8555.436,
+      "kind": "sse",
+      "event": "trade",
+      "id": "43",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.53\",\"size\":806,\"time\":\"2026-10-11T06:30:51.984Z\"}"
+    },
+    {
+      "t_ms": 8758.522,
+      "kind": "sse",
+      "event": "trade",
+      "id": "44",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.63\",\"size\":709,\"time\":\"2026-10-11T06:30:52.186Z\"}"
+    },
+    {
+      "t_ms": 8960.384,
+      "kind": "sse",
+      "event": "trade",
+      "id": "45",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.63\",\"size\":191,\"time\":\"2026-10-11T06:30:52.389Z\"}"
+    },
+    {
+      "t_ms": 9163.395,
+      "kind": "sse",
+      "event": "trade",
+      "id": "46",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.94\",\"size\":145,\"time\":\"2026-10-11T06:30:52.591Z\"}"
+    },
+    {
+      "t_ms": 9365.724,
+      "kind": "sse",
+      "event": "trade",
+      "id": "47",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.04\",\"size\":766,\"time\":\"2026-10-11T06:30:52.794Z\"}"
+    },
+    {
+      "t_ms": 9568.194,
+      "kind": "sse",
+      "event": "trade",
+      "id": "48",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"512.99\",\"size\":215,\"time\":\"2026-10-11T06:30:52.996Z\"}"
+    },
+    {
+      "t_ms": 9769.126,
+      "kind": "sse",
+      "event": "trade",
+      "id": "49",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.30\",\"size\":888,\"time\":\"2026-10-11T06:30:53.198Z\"}"
+    },
+    {
+      "t_ms": 9971.966,
+      "kind": "sse",
+      "event": "trade",
+      "id": "50",
+      "data": "{\"symbol\":\"ADBE\",\"price\":\"513.66\",\"size\":811,\"time\":\"2026-10-11T06:30:53.398Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

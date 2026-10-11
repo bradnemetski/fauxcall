@@ -1,0 +1,92 @@
+{
+  "id": "000087",
+  "endpoint": "GET /api/v1/time/current/zone",
+  "purpose": "edge",
+  "plan_call": "cz-param-case",
+  "started_at": "2026-10-11T10:34:02.444680Z",
+  "started_ns": 1791714842444680000,
+  "elapsed_ms": 140.547,
+  "ttfb_ms": 139.711,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/time/current/zone?timeZone=Asia%2FTokyo",
+    "path": "/api/v1/time/current/zone",
+    "query": [
+      [
+        "timeZone",
+        "Asia/Tokyo"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:34:02 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "date_time": "2026-10-11T19:34:02.526081+09:00",
+        "date": "2026-10-11",
+        "time": "19:34:02.526081",
+        "day_of_week": "Sunday",
+        "dst_active": false,
+        "timezone": "Asia/Tokyo",
+        "utc_offset_seconds": 32400
+      },
+      "size": 186
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "id": "000172",
+  "endpoint": "GET /v1/latest",
+  "purpose": "edge",
+  "plan_call": "x-origin",
+  "started_at": "2026-10-11T06:24:26.402425Z",
+  "started_ns": 1791699866402425000,
+  "elapsed_ms": 329.702,
+  "ttfb_ms": 328.486,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/latest?symbols=USD",
+    "path": "/v1/latest",
+    "query": [
+      [
+        "symbols",
+        "USD"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "origin",
+        "https://example.com"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:24:26 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, OPTIONS"
+      ],
+      [
+        "access-control-expose-headers",
+        ""
+      ],
+      [
+        "access-control-max-age",
+        "7200"
+      ],
+      [
+        "cache-control",
+        "public, max-age=86400"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "x-robots-tag",
+        "noindex"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/rates>; rel=\"successor-version\""
+      ],
+      [
+        "etag",
+        "W/\"ff31a6aa978368a0d5990e1c2ecc1fc2\""
+      ],
+      [
+        "cf-cache-status",
+        "MISS"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=CbiR3r0ps%2BbFIga6vfL1Op6l0sPClT1wYM5yJ71di%2FTs50MVLlkZl%2FeUA2j6o87rQXJWu1AbOecdin%2FVqc4CPao2fEt0v9SWjmAlZTJ6wQIVQar%2Fx0EHmJCOD72xiog%2BgcZAOWg%3D\"}]}"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bc8252b32c439-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "amount": 1.0,
+        "base": "EUR",
+        "date": "2026-10-09",
+        "rates": {
+          "USD": 1.1206
+        }
+      },
+      "size": 70
+    }
+  }
+}

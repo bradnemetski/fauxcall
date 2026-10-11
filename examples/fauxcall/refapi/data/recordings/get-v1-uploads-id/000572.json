@@ -1,0 +1,96 @@
+{
+  "id": "000572",
+  "endpoint": "GET /v1/uploads/{id}",
+  "purpose": "job_poll",
+  "plan_call": "up-json",
+  "started_at": "2026-10-11T06:24:43.820383Z",
+  "started_ns": 1791699883820383000,
+  "elapsed_ms": 44.672,
+  "ttfb_ms": 44.531,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/uploads/33b722fb-7bf9-4e33-b682-5e23ae49a14c",
+    "path": "/v1/uploads/33b722fb-7bf9-4e33-b682-5e23ae49a14c",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:24:43 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "169"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "11"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699884"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": "33b722fb-7bf9-4e33-b682-5e23ae49a14c",
+        "status": "queued",
+        "filename": "data.json",
+        "size": 8,
+        "label": null,
+        "created_at": "2026-10-11T06:24:42.789072+00:00",
+        "progress": 0
+      },
+      "size": 169
+    }
+  },
+  "tags": [
+    "poll:up-json"
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

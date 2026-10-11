@@ -1,0 +1,94 @@
+{
+  "id": "000322",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-024",
+  "started_at": "2026-10-11T06:19:59.501688Z",
+  "started_ns": 1791699599501688000,
+  "elapsed_ms": 43.994,
+  "ttfb_ms": 43.772,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=hk",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "hk"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:19:58 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "27"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699608"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "hk",
+        "results": []
+      },
+      "size": 27
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

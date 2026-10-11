@@ -1,0 +1,100 @@
+{
+  "id": "000350",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-052",
+  "started_at": "2026-10-11T06:20:13.560424Z",
+  "started_ns": 1791699613560424000,
+  "elapsed_ms": 42.266,
+  "ttfb_ms": 42.122,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=aapl+aapl",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "aapl aapl"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:20:12 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "83"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "17"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699618"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "aapl aapl",
+        "results": [
+          {
+            "symbol": "AAPL",
+            "name": "Apple Inc.",
+            "score": 1.0
+          }
+        ]
+      },
+      "size": 83
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

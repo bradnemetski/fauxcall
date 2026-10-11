@@ -1,0 +1,288 @@
+{
+ "name": "probes-2",
+ "created_at": "2026-10-11T11:00:00Z",
+ "calls": [
+  {
+   "id": "get-on-post",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/conversion/converttimezone"
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "get-on-post2",
+   "endpoint": "POST /api/calculation/current/increment",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/calculation/current/increment"
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "dow-space",
+   "endpoint": "GET /api/conversion/dayoftheweek/{date}",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/conversion/dayoftheweek/2021-03-14%20"
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "dow-extra",
+   "endpoint": "GET /api/conversion/dayoftheweek/{date}",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/conversion/dayoftheweek/2021-03-14/extra"
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "v1-tz-lowerparam-legacy",
+   "endpoint": "GET /api/timezone/zone",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/timezone/zone",
+    "query": [
+     [
+      "timezone",
+      "Asia/Tokyo"
+     ]
+    ]
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "v1-dup-lat",
+   "endpoint": "GET /api/v1/time/current/coordinate",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/coordinate",
+    "query": [
+     [
+      "latitude",
+      "52.37"
+     ],
+     [
+      "latitude",
+      "35.67"
+     ],
+     [
+      "longitude",
+      "4.89"
+     ]
+    ]
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "v1-factory",
+   "endpoint": "GET /api/v1/timezone/zone",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/timezone/zone",
+    "query": [
+     [
+      "timeZone",
+      "Factory"
+     ]
+    ]
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "v1-cz-factory",
+   "endpoint": "GET /api/v1/time/current/zone",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/zone",
+    "query": [
+     [
+      "timezone",
+      "Factory"
+     ]
+    ]
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "v1-nan",
+   "endpoint": "GET /api/v1/time/current/coordinate",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/coordinate",
+    "query": [
+     [
+      "latitude",
+      "NaN"
+     ],
+     [
+      "longitude",
+      "0"
+     ]
+    ]
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "v1-ws",
+   "endpoint": "GET /api/v1/time/current/coordinate",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/coordinate",
+    "query": [
+     [
+      "latitude",
+      " 52.37 "
+     ],
+     [
+      "longitude",
+      "4.89"
+     ]
+    ]
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "v1-lon7.5",
+   "endpoint": "GET /api/v1/timezone/coordinate",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/timezone/coordinate",
+    "query": [
+     [
+      "latitude",
+      "0"
+     ],
+     [
+      "longitude",
+      "7.5"
+     ]
+    ]
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "v1-lon-22.5",
+   "endpoint": "GET /api/v1/timezone/coordinate",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/timezone/coordinate",
+    "query": [
+     [
+      "latitude",
+      "-40"
+     ],
+     [
+      "longitude",
+      "-22.5"
+     ]
+    ]
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "v1-pacific",
+   "endpoint": "GET /api/v1/timezone/coordinate",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/timezone/coordinate",
+    "query": [
+     [
+      "latitude",
+      "-10"
+     ],
+     [
+      "longitude",
+      "-140"
+     ]
+    ]
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "v1-atlantic",
+   "endpoint": "GET /api/v1/timezone/coordinate",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/timezone/coordinate",
+    "query": [
+     [
+      "latitude",
+      "30"
+     ],
+     [
+      "longitude",
+      "-40"
+     ]
+    ]
+   },
+   "tags": [
+    "routing"
+   ]
+  },
+  {
+   "id": "v1-coast",
+   "endpoint": "GET /api/v1/timezone/coordinate",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/timezone/coordinate",
+    "query": [
+     [
+      "latitude",
+      "52.5"
+     ],
+     [
+      "longitude",
+      "4.4"
+     ]
+    ]
+   },
+   "tags": [
+    "routing"
+   ]
+  }
+ ]
+}

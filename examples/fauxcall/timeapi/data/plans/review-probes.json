@@ -1,0 +1,197 @@
+{
+ "name": "review-probes",
+ "created_at": "2026-10-11T12:00:00Z",
+ "calls": [
+  {
+   "id": "ws-zone",
+   "endpoint": "GET /api/v1/time/current/zone",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/zone",
+    "query": [
+     [
+      "timezone",
+      " "
+     ]
+    ]
+   }
+  },
+  {
+   "id": "ws-ip",
+   "endpoint": "GET /api/v1/time/current/ip",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/ip",
+    "query": [
+     [
+      "ipAddress",
+      " "
+     ]
+    ]
+   }
+  },
+  {
+   "id": "ws-lat",
+   "endpoint": "GET /api/v1/time/current/coordinate",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/coordinate",
+    "query": [
+     [
+      "latitude",
+      " "
+     ],
+     [
+      "longitude",
+      "1"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "uni-lat",
+   "endpoint": "GET /api/v1/time/current/coordinate",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/coordinate",
+    "query": [
+     [
+      "latitude",
+      "٥٢"
+     ],
+     [
+      "longitude",
+      "4"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "ip-junk",
+   "endpoint": "GET /api/v1/time/current/ip",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/ip",
+    "query": [
+     [
+      "ipAddress",
+      "8.8.8.8 abc"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "ip-big",
+   "endpoint": "GET /api/v1/time/current/ip",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/ip",
+    "query": [
+     [
+      "ipAddress",
+      "4294967296"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "ip-bracket",
+   "endpoint": "GET /api/v1/time/current/ip",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/time/current/ip",
+    "query": [
+     [
+      "ipAddress",
+      "[::1]"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "canary-edmonton",
+   "endpoint": "GET /api/v1/timezone/zone",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/timezone/zone",
+    "query": [
+     [
+      "timeZone",
+      "America/Edmonton"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "uni-date",
+   "endpoint": "GET /api/conversion/dayoftheweek/{date}",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/conversion/dayoftheweek/２021-03-14"
+   }
+  },
+  {
+   "id": "tr-th",
+   "endpoint": "POST /api/conversion/translate",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/translate",
+    "json_body": {
+     "dateTime": "2021-03-14 17:45:00",
+     "languageCode": "th"
+    }
+   }
+  },
+  {
+   "id": "tr-fa",
+   "endpoint": "POST /api/conversion/translate",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/translate",
+    "json_body": {
+     "dateTime": "2021-03-14 17:45:00",
+     "languageCode": "fa"
+    }
+   }
+  },
+  {
+   "id": "cc-maxspan",
+   "endpoint": "POST /api/calculation/current/increment",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/current/increment",
+    "json_body": {
+     "timeZone": "UTC",
+     "timeSpan": "99999999:00:00:00"
+    }
+   }
+  },
+  {
+   "id": "cd-minvalue",
+   "endpoint": "POST /api/calculation/custom/decrement",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/decrement",
+    "json_body": {
+     "timeZone": "UTC",
+     "dateTime": "0001-01-01 00:00:00",
+     "timeSpan": "1:00:00:00",
+     "dstAmbiguity": ""
+    }
+   }
+  }
+ ]
+}

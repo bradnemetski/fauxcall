@@ -1,0 +1,106 @@
+{
+  "id": "000380",
+  "endpoint": "POST /api/calculation/custom/decrement",
+  "purpose": "invalid",
+  "plan_call": "cudecrement-badspan",
+  "started_at": "2026-10-11T10:40:16.222771Z",
+  "started_ns": 1791715216222771000,
+  "elapsed_ms": 132.082,
+  "ttfb_ms": 131.916,
+  "request": {
+    "method": "POST",
+    "url": "https://timeapi.io/api/calculation/custom/decrement",
+    "path": "/api/calculation/custom/decrement",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "70"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "timeZone": "UTC",
+        "dateTime": "2021-11-27 05:45:00",
+        "timeSpan": "1 day"
+      },
+      "size": 70
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:40:16 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "DstAmbiguity": [
+            "The DstAmbiguity field is required."
+          ]
+        },
+        "traceId": "00-9a13409ab88c6d666c2e9ad811e35e4b-20647fe7799e63c7-00"
+      },
+      "size": 258
+    }
+  }
+}

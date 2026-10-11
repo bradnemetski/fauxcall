@@ -1,0 +1,94 @@
+{
+  "id": "000380",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-082",
+  "started_at": "2026-10-11T06:20:28.618666Z",
+  "started_ns": 1791699628618666000,
+  "elapsed_ms": 42.597,
+  "ttfb_ms": 42.418,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=fuel",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "fuel"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:20:28 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "29"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "27"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699638"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "fuel",
+        "results": []
+      },
+      "size": 29
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

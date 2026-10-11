@@ -1,0 +1,161 @@
+{
+  "fake": "frankfurter",
+  "source": "https://api.frankfurter.dev/v1/openapi.json",
+  "started_at": "2026-10-11T06:14:01.880235Z",
+  "updated_at": "2026-10-11T10:22:59.242999Z",
+  "phases": {
+    "discover": {
+      "status": "done",
+      "started_at": "2026-10-11T06:14:01.880235Z",
+      "finished_at": "2026-10-11T06:14:01.880235Z"
+    },
+    "gate": {
+      "status": "done",
+      "finished_at": "2026-10-11T06:14:09.453964Z"
+    },
+    "record": {
+      "status": "done",
+      "finished_at": "2026-10-11T06:35:41.929806Z"
+    },
+    "model": {
+      "status": "done",
+      "finished_at": "2026-10-11T06:35:42.421903Z"
+    },
+    "world": {
+      "status": "done",
+      "finished_at": "2026-10-11T06:46:04.040252Z"
+    },
+    "scaffold": {
+      "status": "done",
+      "finished_at": "2026-10-11T06:46:04.556482Z"
+    },
+    "implement": {
+      "status": "done",
+      "finished_at": "2026-10-11T06:46:05.080656Z"
+    },
+    "unit_tests": {
+      "status": "done",
+      "finished_at": "2026-10-11T06:46:05.639146Z"
+    },
+    "e2e_tests": {
+      "status": "done",
+      "finished_at": "2026-10-11T06:49:12.619380Z"
+    },
+    "parity": {
+      "status": "done",
+      "finished_at": "2026-10-11T10:22:57.306523Z"
+    },
+    "review": {
+      "status": "done",
+      "finished_at": "2026-10-11T10:22:57.857496Z"
+    },
+    "report": {
+      "status": "done",
+      "finished_at": "2026-10-11T10:22:59.242619Z"
+    }
+  },
+  "endpoints": [
+    {
+      "endpoint": "GET /v1/latest",
+      "steps": {
+        "recorded": "done",
+        "analyzed": "done",
+        "modeled": "done",
+        "implemented": "done",
+        "tested": "done"
+      }
+    },
+    {
+      "endpoint": "GET /v1/{date}",
+      "steps": {
+        "recorded": "done",
+        "analyzed": "done",
+        "modeled": "done",
+        "implemented": "done",
+        "tested": "done"
+      }
+    },
+    {
+      "endpoint": "GET /v1/{start_date}..",
+      "steps": {
+        "recorded": "done",
+        "analyzed": "done",
+        "modeled": "done",
+        "implemented": "done",
+        "tested": "done"
+      }
+    },
+    {
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "steps": {
+        "recorded": "done",
+        "analyzed": "done",
+        "modeled": "done",
+        "implemented": "done",
+        "tested": "done"
+      }
+    },
+    {
+      "endpoint": "GET /v1/currencies",
+      "steps": {
+        "recorded": "done",
+        "analyzed": "done",
+        "modeled": "done",
+        "implemented": "done",
+        "tested": "done"
+      }
+    },
+    {
+      "endpoint": "GET /v1/current",
+      "steps": {
+        "recorded": "done",
+        "analyzed": "done",
+        "modeled": "done",
+        "implemented": "done",
+        "tested": "done"
+      }
+    },
+    {
+      "endpoint": "GET /v1",
+      "steps": {
+        "recorded": "done",
+        "analyzed": "done",
+        "modeled": "done",
+        "implemented": "done",
+        "tested": "done"
+      }
+    },
+    {
+      "endpoint": "GET /v1/",
+      "steps": {
+        "recorded": "done",
+        "analyzed": "done",
+        "modeled": "done",
+        "implemented": "done",
+        "tested": "done"
+      }
+    },
+    {
+      "endpoint": "GET /",
+      "steps": {
+        "recorded": "done",
+        "analyzed": "done",
+        "modeled": "done",
+        "implemented": "done",
+        "tested": "done"
+      }
+    }
+  ],
+  "gate": {
+    "answered_at": "2026-10-11T06:14:09.453254Z"
+  },
+  "log": [
+    "2026-10-11 06:14 Gate from answers.json: public API, no creds, no Jev, all 5 endpoints are GET (no writes). User: keep recording polite; ECB publishes once per working day.",
+    "2026-10-11 06:21 Rounding: rebased/amount!=1 rates rounded >5000 int, >80 2dp, >20 3dp, >1 4dp, else 5dp; EUR base amount 1 = raw. Base excluded, EUR added, keys sorted. last repeated symbols wins; unknown symbols dropped; empty result -> 404 {message:not found}. amount invalid/<=0/empty -> 422 invalid amount.",
+    "2026-10-11 06:21 Routing: /v1/<non YYYY-MM-DD> -> router 404 {status:404,message} ct application/json; YYYY-MM-DD invalid -> 422 invalid date. Weekend/holiday -> previous fixing; <1999-01-04 -> 404; 2026-10-12 ok but 2027-01-04 404 (lookback window?). Currency set date-dependent. Deprecation + Link successor headers on all /v1.",
+    "2026-10-11 06:35 Algorithm verified offline vs 179/179 data recordings (exact) using lib/versions/v1 source logic: first-stage rounding = exact decimal product + half-even; second stage float + %.Nf; >5000 half-up int; <=0.0001 -> 6dp. Group order = first appearance in window scan.",
+    "2026-10-11 06:46 Implemented handlers.py (rate engine) + middleware.py (Deprecation/NoStoreOnError/Noindex/CORS/HEAD). Unit: 247 passed, 98.7% cov; ruff+mypy clean. Next: e2e scenarios + parity.",
+    "2026-10-11 06:49 Parity 100% (127 scenarios, run 2026-10-11 06:48Z, Sunday). Tooling note: 'fauxcall verify' must be run from inside fauxcall/frankfurter (relative test path bug from workspace root). Next: independent review.",
+    "2026-10-11 10:22 Review fixes: test_huge_amounts used invented value (now recorded 10-09 case); TARGET holidays generated to 2040; observed schemas de-polluted + date maps collapsed (model 60MB->95KB); notes fixed (non-GET served like GET; frozen post-10-09 rates; Cloudflare rollover uncertainty). Parity re-run 2026-10-11 10:22Z: 100% / 142 scenarios."
+  ]
+}

@@ -1,0 +1,1219 @@
+{
+  "score": 1.0,
+  "threshold": 0.98,
+  "ok": true,
+  "unmatched_scenarios": [],
+  "endpoints": {
+    "GET /": {
+      "passed": 18.0,
+      "total": 18.0,
+      "score": 1.0
+    },
+    "GET /currencies": {
+      "passed": 11.0,
+      "total": 11.0,
+      "score": 1.0
+    },
+    "GET /v1": {
+      "passed": 13.5,
+      "total": 13.5,
+      "score": 1.0
+    },
+    "GET /v1/": {
+      "passed": 13.5,
+      "total": 13.5,
+      "score": 1.0
+    },
+    "GET /v1/currencies": {
+      "passed": 130.0,
+      "total": 130.0,
+      "score": 1.0
+    },
+    "GET /v1/current": {
+      "passed": 14.5,
+      "total": 14.5,
+      "score": 1.0
+    },
+    "GET /v1/latest": {
+      "passed": 1493.0,
+      "total": 1493.0,
+      "score": 1.0
+    },
+    "GET /v1/{date}": {
+      "passed": 1279.0,
+      "total": 1279.0,
+      "score": 1.0
+    },
+    "GET /v1/{start_date}..": {
+      "passed": 70.5,
+      "total": 70.5,
+      "score": 1.0
+    },
+    "GET /v1/{start_date}..{end_date}": {
+      "passed": 1022.0,
+      "total": 1022.0,
+      "score": 1.0
+    },
+    "HEAD /v1/latest": {
+      "passed": 6.5,
+      "total": 6.5,
+      "score": 1.0
+    },
+    "HEAD /v1/openapi.json": {
+      "passed": 6.5,
+      "total": 6.5,
+      "score": 1.0
+    },
+    "OPTIONS /v1/latest": {
+      "passed": 33.0,
+      "total": 33.0,
+      "score": 1.0
+    }
+  },
+  "scenarios": {
+    "tests/e2e/test_scenarios.py::test_v1_index": [
+      {
+        "call": "GET /v1",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_site_index": [
+      {
+        "call": "GET /",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_currencies": [
+      {
+        "call": "GET /v1/currencies",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_currencies_match_latest_rates": [
+      {
+        "call": "GET /v1/currencies",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_currencies_ignore_query": [
+      {
+        "call": "GET /v1/currencies",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_default": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_is_a_recent_working_day": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_is_latest": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/current",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_equals_its_date": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2026-10-09",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_rebased[USD]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_rebased[JPY]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_rebased[GBP]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_rebased[CHF]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_rebased[INR]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_rebased[TRY]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_rebased[IDR]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_symbols": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_rebased_symbols_include_eur": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_base_in_symbols_is_dropped": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_amount[10]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_amount[1.5]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_amount[0.001]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_amount[1000000]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_amount[250]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_amount_with_rebase": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_amount_one_keeps_raw_rates": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_amount_parsed_like_ruby_to_f[1e2-100.0]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_amount_parsed_like_ruby_to_f[10abc-10.0]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_amount_parsed_like_ruby_to_f[1,5-1.0]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_amount_parsed_like_ruby_to_f[.5-0.5]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_invalid_amount[0]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_invalid_amount[-5]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_invalid_amount[abc]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_invalid_amount[]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_invalid_amount[NaN]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_lowercase_codes": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_from_to_aliases_take_precedence": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_last_repeated_parameter_wins": [
+      {
+        "call": "GET /v1/latest?symbols=USD&symbols=GBP&base=USD&base=JPY",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_symbols_are_ignored": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_not_found[params0]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_not_found[params1]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_not_found[params2]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_not_found[params3]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_not_found[params4]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_not_found[params5]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_latest_not_found[params6]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_bad_currency_pair[params0]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_bad_currency_pair[params1]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_bad_currency_pair[params2]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_bad_currency_pair[params3]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_bad_currency_pair[params4]": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_amount_error_wins": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_head_latest": [
+      {
+        "call": "HEAD /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_cors_headers": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_cors_preflight": [
+      {
+        "call": "OPTIONS /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_falls_back_to_previous_fixing[2026-10-08-2026-10-08]": [
+      {
+        "call": "GET /v1/2026-10-08",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_falls_back_to_previous_fixing[2024-02-29-2024-02-29]": [
+      {
+        "call": "GET /v1/2024-02-29",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_falls_back_to_previous_fixing[2025-12-25-2025-12-24]": [
+      {
+        "call": "GET /v1/2025-12-25",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_falls_back_to_previous_fixing[2025-12-26-2025-12-24]": [
+      {
+        "call": "GET /v1/2025-12-26",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_falls_back_to_previous_fixing[2026-01-01-2025-12-31]": [
+      {
+        "call": "GET /v1/2026-01-01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_falls_back_to_previous_fixing[2026-04-03-2026-04-02]": [
+      {
+        "call": "GET /v1/2026-04-03",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_falls_back_to_previous_fixing[2026-04-06-2026-04-02]": [
+      {
+        "call": "GET /v1/2026-04-06",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_falls_back_to_previous_fixing[2026-05-01-2026-04-30]": [
+      {
+        "call": "GET /v1/2026-05-01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_falls_back_to_previous_fixing[1999-01-04-1999-01-04]": [
+      {
+        "call": "GET /v1/1999-01-04",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_falls_back_to_previous_fixing[2020-03-15-2020-03-13]": [
+      {
+        "call": "GET /v1/2020-03-15",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_currency_set_depends_on_the_date[1999-01-04-present0-absent0]": [
+      {
+        "call": "GET /v1/1999-01-04",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_currency_set_depends_on_the_date[2005-01-03-present1-absent1]": [
+      {
+        "call": "GET /v1/2005-01-03",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_currency_set_depends_on_the_date[2015-03-02-present2-absent2]": [
+      {
+        "call": "GET /v1/2015-03-02",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_currency_set_depends_on_the_date[2022-03-02-present3-absent3]": [
+      {
+        "call": "GET /v1/2022-03-02",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_currency_set_depends_on_the_date[2025-12-31-present4-absent4]": [
+      {
+        "call": "GET /v1/2025-12-31",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_currency_set_depends_on_the_date[2026-01-02-present5-absent5]": [
+      {
+        "call": "GET /v1/2026-01-02",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_historic_rebase": [
+      {
+        "call": "GET /v1/2010-06-15",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_double_rounding_of_cross_rates": [
+      {
+        "call": "GET /v1/2015-03-02",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/1999-01-04",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_base": [
+      {
+        "call": "GET /v1/2005-01-03",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_carry_forward_follows_the_base": [
+      {
+        "call": "GET /v1/2026-01-05",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_carry_forward_first_group_wins": [
+      {
+        "call": "GET /v1/2026-01-05",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2008-01-03",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2008-01-03",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_lookback_is_fourteen_days[2026-01-14-200]": [
+      {
+        "call": "GET /v1/2026-01-14",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_lookback_is_fourteen_days[2026-01-15-404]": [
+      {
+        "call": "GET /v1/2026-01-15",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_near_future_date_carries_the_last_fixing": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2026-10-12",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_without_data[1999-01-01]": [
+      {
+        "call": "GET /v1/1999-01-01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_without_data[1990-01-01]": [
+      {
+        "call": "GET /v1/1990-01-01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_without_data[2100-01-01]": [
+      {
+        "call": "GET /v1/2100-01-01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_invalid_date[2026-13-01]": [
+      {
+        "call": "GET /v1/2026-13-01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_invalid_date[2026-02-30]": [
+      {
+        "call": "GET /v1/2026-02-30",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_invalid_date[2025-02-29]": [
+      {
+        "call": "GET /v1/2025-02-29",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_invalid_date_beats_bad_pair": [
+      {
+        "call": "GET /v1/2026-02-30",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_date_is_an_unknown_route[abc]": [
+      {
+        "call": "GET /v1/abc",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_date_is_an_unknown_route[20261009]": [
+      {
+        "call": "GET /v1/20261009",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_date_is_an_unknown_route[2026-10-9]": [
+      {
+        "call": "GET /v1/2026-10-9",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_date_is_an_unknown_route[2026-1-05]": [
+      {
+        "call": "GET /v1/2026-1-05",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_date_is_an_unknown_route[2026-10-09T00:00:00]": [
+      {
+        "call": "GET /v1/2026-10-09T00:00:00",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_date_is_an_unknown_route[2026]": [
+      {
+        "call": "GET /v1/2026",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period": [
+      {
+        "call": "GET /v1/2026-09-28..2026-10-09",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_days_match_single_dates": [
+      {
+        "call": "GET /v1/2026-10-05..2026-10-09",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2026-10-05",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2026-10-06",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_boundaries[/v1/2026-10-03..2026-10-09-2026-10-02-2026-10-09]": [
+      {
+        "call": "GET /v1/2026-10-03..2026-10-09",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_boundaries[/v1/2026-10-05..2026-10-11-2026-10-05-2026-10-09]": [
+      {
+        "call": "GET /v1/2026-10-05..2026-10-11",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_boundaries[/v1/2026-10-10..2026-10-11-2026-10-09-2026-10-09]": [
+      {
+        "call": "GET /v1/2026-10-10..2026-10-11",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_boundaries[/v1/2026-10-08..2026-10-08-2026-10-08-2026-10-08]": [
+      {
+        "call": "GET /v1/2026-10-08..2026-10-08",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_boundaries[/v1/2026-04-06..2026-04-10-2026-04-02-2026-04-10]": [
+      {
+        "call": "GET /v1/2026-04-06..2026-04-10",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_boundaries[/v1/1998-12-01..1999-01-08-1999-01-04-1999-01-08]": [
+      {
+        "call": "GET /v1/1998-12-01..1999-01-08",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_boundaries[/v1/2024-01-01..2024-12-31-2023-12-29-2024-12-31]": [
+      {
+        "call": "GET /v1/2024-01-01..2024-12-31",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_long_period_is_daily": [
+      {
+        "call": "GET /v1/2023-01-01..2024-12-31",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_rebased_with_amount": [
+      {
+        "call": "GET /v1/2026-09-28..2026-10-02",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_drops_days_without_symbols_or_base": [
+      {
+        "call": "GET /v1/2025-12-29..2026-01-09",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2025-12-29..2026-01-06",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2025-12-29..2026-01-05",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_not_found[/v1/2026-10-09..2026-10-01]": [
+      {
+        "call": "GET /v1/2026-10-09..2026-10-01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_not_found[/v1/1998-01-01..1998-12-31]": [
+      {
+        "call": "GET /v1/1998-01-01..1998-12-31",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_not_found[/v1/2027-01-01..2027-02-01]": [
+      {
+        "call": "GET /v1/2027-01-01..2027-02-01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_not_found[/v1/2026-01-02..2026-01-09?symbols=BGN]": [
+      {
+        "call": "GET /v1/2026-01-02..2026-01-09?symbols=BGN",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_not_found[/v1/2026-09-28..2026-10-02?base=XYZ]": [
+      {
+        "call": "GET /v1/2026-09-28..2026-10-02?base=XYZ",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_starting_tomorrow_is_not_found": [
+      {
+        "call": "GET /v1/2026-10-12..2026-10-19",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2026-10-12..",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_errors[/v1/2026-13-01..2026-10-01-422-body0]": [
+      {
+        "call": "GET /v1/2026-13-01..2026-10-01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_errors[/v1/2026-10-01..2026-02-30-422-body1]": [
+      {
+        "call": "GET /v1/2026-10-01..2026-02-30",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_errors[/v1/2026-02-30..-422-body2]": [
+      {
+        "call": "GET /v1/2026-02-30..",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_errors[/v1/2026-09-28..2026-10-02?amount=-1-422-body3]": [
+      {
+        "call": "GET /v1/2026-09-28..2026-10-02?amount=-1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_errors[/v1/abc..2026-10-01-404-body4]": [
+      {
+        "call": "GET /v1/abc..2026-10-01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_errors[/v1/2026-10-01..abc-404-body5]": [
+      {
+        "call": "GET /v1/2026-10-01..abc",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_errors[/v1/abc..-404-body6]": [
+      {
+        "call": "GET /v1/abc..",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_errors[/v1/2026-10-01...2026-10-09-404-body7]": [
+      {
+        "call": "GET /v1/2026-10-01...2026-10-09",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_period_errors[/v1/2026-10-01..2026-10-09/-404-body8]": [
+      {
+        "call": "GET /v1/2026-10-01..2026-10-09/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_open_period": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2026-09-28..",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_open_period_from_the_weekend": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2026-10-11..",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routing_is_strict[/v1/latest/]": [
+      {
+        "call": "GET /v1/latest/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routing_is_strict[/v1/LATEST]": [
+      {
+        "call": "GET /v1/LATEST",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routing_is_strict[/v1/Currencies]": [
+      {
+        "call": "GET /v1/Currencies",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routing_is_strict[/v1/currencies/]": [
+      {
+        "call": "GET /v1/currencies/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routing_is_strict[/v1/2026-10-08/]": [
+      {
+        "call": "GET /v1/2026-10-08/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_route_outside_v1": [
+      {
+        "call": "GET /currencies",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tiny_amount_with_rebase_fails_like_ruby": [
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_huge_amounts": [
+      {
+        "call": "GET /v1/2026-10-09",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_year_zero_range_start": [
+      {
+        "call": "GET /v1/0000-01-01..1999-01-08",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_parameter_on_periods[abc-invalid date]": [
+      {
+        "call": "GET /v1/2026-09-28..2026-10-02",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_date_parameter_on_periods[2026-01-01-undefined method 'begin' for an instance of Date]": [
+      {
+        "call": "GET /v1/2026-09-28..2026-10-02",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_bracketed_parameters[symbols%5B%5D=USD-undefined method 'upcase' for an instance of Array]": [
+      {
+        "call": "GET /v1/latest?symbols%5B%5D=USD",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_bracketed_parameters[amount%5B%5D=1-undefined method 'to_f' for an instance of Array]": [
+      {
+        "call": "GET /v1/latest?amount%5B%5D=1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_bracketed_parameters[base%5Bx%5D=USD-undefined method 'upcase' for an instance of Roda::RodaPlugins::IndifferentParams::QueryParser::Params]": [
+      {
+        "call": "GET /v1/latest?base%5Bx%5D=USD",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_first_carry_forward_group_quirks": [
+      {
+        "call": "GET /v1/2020-11-05",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2022-03-07",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_percent_encoded_path": [
+      {
+        "call": "GET /v1/2026%2D10%2D08",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_conditional_get": [
+      {
+        "call": "GET /v1/2026-10-08",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/2026-10-08",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_preflight_echoes_requested_headers": [
+      {
+        "call": "OPTIONS /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_preflight_for_a_disallowed_method": [
+      {
+        "call": "OPTIONS /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_plain_options_is_served_like_get": [
+      {
+        "call": "OPTIONS /v1/latest",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_openapi_spec": [
+      {
+        "call": "HEAD /v1/openapi.json",
+        "score": 1.0,
+        "failures": []
+      }
+    ]
+  }
+}

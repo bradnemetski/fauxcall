@@ -1,0 +1,546 @@
+{
+  "id": "000169",
+  "endpoint": "GET /v1/currencies",
+  "purpose": "edge",
+  "plan_call": "x-openapi",
+  "started_at": "2026-10-11T06:24:24.894272Z",
+  "started_ns": 1791699864894272000,
+  "elapsed_ms": 36.632,
+  "ttfb_ms": 35.89,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/openapi.json",
+    "path": "/v1/openapi.json",
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:24:24 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "last-modified",
+        "Fri, 02 Oct 2026 09:10:55 GMT"
+      ],
+      [
+        "cache-control",
+        "public, max-age=86400"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/openapi.json>; rel=\"successor-version\""
+      ],
+      [
+        "age",
+        "668"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "cf-cache-status",
+        "HIT"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=PdP3nWtSyBG4Au%2F5VDnHvKiOuLiFbguBp6VQdgVCdQPu3NYsKe29MphB3V8dZR5yqOKjxy56cdkd0bod0XFVC9M5GspZ8WBkNOG%2Fi1TCQ9LtPzj8O5ED81%2FEYlCK5LuzJLZWMPo%3D\"}]}"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bc81bb81ec439-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "openapi": "3.1.2",
+        "info": {
+          "title": "Frankfurter API",
+          "description": "Frankfurter is an open-source API for current and historical foreign exchange rates, sourcing currency data from public providers like the European Central Bank.",
+          "version": "1.0.0",
+          "license": {
+            "name": "MIT",
+            "url": "https://github.com/lineofflight/frankfurter/blob/main/LICENSE"
+          },
+          "contact": {
+            "url": "https://github.com/lineofflight/frankfurter/issues"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://api.frankfurter.dev/v1"
+          }
+        ],
+        "tags": [
+          {
+            "name": "current-rates",
+            "description": "Latest foreign exchange rates"
+          },
+          {
+            "name": "historical-rates",
+            "description": "Historical exchange rates for specific dates and periods"
+          },
+          {
+            "name": "metadata",
+            "description": "API reference data like available currencies"
+          }
+        ],
+        "paths": {
+          "/latest": {
+            "get": {
+              "tags": [
+                "current-rates"
+              ],
+              "summary": "Get the latest rates",
+              "description": "Returns the last working day's rates",
+              "parameters": [
+                {
+                  "$ref": "#/components/parameters/base"
+                },
+                {
+                  "$ref": "#/components/parameters/symbols"
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Latest rates",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ratesOnDate"
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "$ref": "#/components/responses/NotFound"
+                }
+              }
+            }
+          },
+          "/{date}": {
+            "get": {
+              "tags": [
+                "historical-rates"
+              ],
+              "summary": "Get rates for a past date",
+              "description": "Returns historical rates for the working day closest to the specified date",
+              "parameters": [
+                {
+                  "name": "date",
+                  "in": "path",
+                  "description": "The date for the historical rates",
+                  "required": true,
+                  "schema": {
+                    "$ref": "#/components/schemas/date"
+                  }
+                },
+                {
+                  "$ref": "#/components/parameters/base"
+                },
+                {
+                  "$ref": "#/components/parameters/symbols"
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Historical rates",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ratesOnDate"
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "$ref": "#/components/responses/NotFound"
+                }
+              }
+            }
+          },
+          "/{start_date}..": {
+            "get": {
+              "tags": [
+                "historical-rates"
+              ],
+              "summary": "Get rates for a time period",
+              "description": "Returns historical rates for every day within a time period starting from the provided date until today.",
+              "parameters": [
+                {
+                  "$ref": "#/components/parameters/start_date"
+                },
+                {
+                  "$ref": "#/components/parameters/base"
+                },
+                {
+                  "$ref": "#/components/parameters/symbols"
+                }
+              ],
+              "responses": {
+                "200": {
+                  "$ref": "#/components/responses/PeriodRateGetResponse"
+                },
+                "404": {
+                  "$ref": "#/components/responses/NotFound"
+                }
+              }
+            }
+          },
+          "/{start_date}..{end_date}": {
+            "get": {
+              "tags": [
+                "historical-rates"
+              ],
+              "summary": "Get rates for a time period",
+              "description": "Returns historical rates for every day within a time period. The end date defaults to today if not provided.",
+              "parameters": [
+                {
+                  "$ref": "#/components/parameters/start_date"
+                },
+                {
+                  "$ref": "#/components/parameters/end_date"
+                },
+                {
+                  "$ref": "#/components/parameters/base"
+                },
+                {
+                  "$ref": "#/components/parameters/symbols"
+                }
+              ],
+              "responses": {
+                "200": {
+                  "$ref": "#/components/responses/PeriodRateGetResponse"
+                },
+                "404": {
+                  "$ref": "#/components/responses/NotFound"
+                }
+              }
+            }
+          },
+          "/currencies": {
+            "get": {
+              "tags": [
+                "metadata"
+              ],
+              "summary": "Get available currencies",
+              "description": "Returns a list of available currencies with their full names",
+              "responses": {
+                "200": {
+                  "description": "List of available currencies",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/currencies"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "components": {
+          "parameters": {
+            "base": {
+              "name": "base",
+              "in": "query",
+              "description": "Base currency to convert from",
+              "required": false,
+              "schema": {
+                "$ref": "#/components/schemas/baseIn"
+              }
+            },
+            "symbols": {
+              "name": "symbols",
+              "in": "query",
+              "description": "Comma-separated list of currencies to convert to",
+              "required": false,
+              "schema": {
+                "type": "array",
+                "description": "A list of currencies",
+                "items": {
+                  "$ref": "#/components/schemas/base"
+                },
+                "minItems": 1
+              },
+              "explode": false,
+              "example": "USD,GBP"
+            },
+            "start_date": {
+              "name": "start_date",
+              "in": "path",
+              "required": true,
+              "description": "The start date for the period",
+              "schema": {
+                "$ref": "#/components/schemas/date"
+              }
+            },
+            "end_date": {
+              "name": "end_date",
+              "in": "path",
+              "required": true,
+              "description": "The end date for the period",
+              "schema": {
+                "$ref": "#/components/schemas/date"
+              }
+            }
+          },
+          "responses": {
+            "PeriodRateGetResponse": {
+              "description": "Historical rates for the period",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "title": "RatesDuringPeriod",
+                    "type": "object",
+                    "properties": {
+                      "amount": {
+                        "$ref": "#/components/schemas/amount"
+                      },
+                      "base": {
+                        "$ref": "#/components/schemas/base"
+                      },
+                      "start_date": {
+                        "$ref": "#/components/schemas/date"
+                      },
+                      "end_date": {
+                        "$ref": "#/components/schemas/date"
+                      },
+                      "rates": {
+                        "$ref": "#/components/schemas/ratesByDate"
+                      }
+                    },
+                    "required": [
+                      "base",
+                      "start_date",
+                      "end_date",
+                      "rates"
+                    ]
+                  }
+                }
+              }
+            },
+            "NotFound": {
+              "description": "Resource not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "schemas": {
+            "amount": {
+              "type": "number",
+              "description": "The amount to convert",
+              "exclusiveMinimum": 0
+            },
+            "date": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-01-15",
+              "description": "Date in YYYY-MM-DD format, all dates stored in UTC."
+            },
+            "base": {
+              "type": "string",
+              "enum": [
+                "AUD",
+                "BGN",
+                "BRL",
+                "CAD",
+                "CHF",
+                "CNY",
+                "CZK",
+                "DKK",
+                "EUR",
+                "GBP",
+                "HKD",
+                "HUF",
+                "IDR",
+                "ILS",
+                "INR",
+                "ISK",
+                "JPY",
+                "KRW",
+                "MXN",
+                "MYR",
+                "NOK",
+                "NZD",
+                "PHP",
+                "PLN",
+                "RON",
+                "SEK",
+                "SGD",
+                "THB",
+                "TRY",
+                "USD",
+                "ZAR"
+              ],
+              "description": "The base currency code following ISO4217"
+            },
+            "baseIn": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/base"
+                }
+              ],
+              "default": "EUR"
+            },
+            "rates": {
+              "type": "object",
+              "description": "Exchange rates keyed by currency code",
+              "propertyNames": {
+                "$ref": "#/components/schemas/base"
+              },
+              "additionalProperties": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "multipleOf": 0.00001
+              },
+              "minProperties": 1,
+              "example": {
+                "AUD": 1.91,
+                "CAD": 1.8004,
+                "CHF": 1.6168,
+                "CYP": 0.58231
+              }
+            },
+            "ratesOnDate": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "$ref": "#/components/schemas/amount"
+                },
+                "base": {
+                  "$ref": "#/components/schemas/base"
+                },
+                "date": {
+                  "$ref": "#/components/schemas/date"
+                },
+                "rates": {
+                  "$ref": "#/components/schemas/rates"
+                }
+              },
+              "required": [
+                "base",
+                "date",
+                "rates"
+              ]
+            },
+            "ratesByDate": {
+              "type": "object",
+              "description": "Mapping of date → rates object",
+              "propertyNames": {
+                "$ref": "#/components/schemas/date"
+              },
+              "additionalProperties": {
+                "$ref": "#/components/schemas/rates"
+              },
+              "minProperties": 1,
+              "example": {
+                "1999-01-04": {
+                  "AUD": 1.91
+                },
+                "1999-01-05": {
+                  "AUD": 1.8944
+                },
+                "1999-01-06": {
+                  "AUD": 1.882
+                }
+              }
+            },
+            "currencies": {
+              "type": "object",
+              "propertyNames": {
+                "$ref": "#/components/schemas/base"
+              },
+              "additionalProperties": {
+                "type": "string",
+                "description": "Full name of the currency",
+                "minLength": 1
+              },
+              "minProperties": 1,
+              "example": {
+                "AUD": "Australian Dollar",
+                "BGN": "Bulgarian Lev",
+                "EUR": "Euro",
+                "USD": "US Dollar"
+              }
+            }
+          }
+        }
+      },
+      "style": {
+        "key_separator": ": ",
+        "indent": 2,
+        "trailing_newline": true
+      },
+      "text": "{\n  \"openapi\": \"3.1.2\",\n  \"info\": {\n    \"title\": \"Frankfurter API\",\n    \"description\": \"Frankfurter is an open-source API for current and historical foreign exchange rates, sourcing currency data from public providers like the European Central Bank.\",\n    \"version\": \"1.0.0\",\n    \"license\": {\n      \"name\": \"MIT\",\n      \"url\": \"https://github.com/lineofflight/frankfurter/blob/main/LICENSE\"\n    },\n    \"contact\": {\n      \"url\": \"https://github.com/lineofflight/frankfurter/issues\"\n    }\n  },\n  \"servers\": [\n    {\n      \"url\": \"https://api.frankfurter.dev/v1\"\n    }\n  ],\n  \"tags\": [\n    {\n      \"name\": \"current-rates\",\n      \"description\": \"Latest foreign exchange rates\"\n    },\n    {\n      \"name\": \"historical-rates\",\n      \"description\": \"Historical exchange rates for specific dates and periods\"\n    },\n    {\n      \"name\": \"metadata\",\n      \"description\": \"API reference data like available currencies\"\n    }\n  ],\n  \"paths\": {\n    \"/latest\": {\n      \"get\": {\n        \"tags\": [\"current-rates\"],\n        \"summary\": \"Get the latest rates\",\n        \"description\": \"Returns the last working day's rates\",\n        \"parameters\": [\n          { \"$ref\": \"#/components/parameters/base\" },\n          { \"$ref\": \"#/components/parameters/symbols\" }\n        ],\n        \"responses\": {\n          \"200\": {\n            \"description\": \"Latest rates\",\n            \"content\": {\n              \"application/json\": {\n                \"schema\": { \"$ref\": \"#/components/schemas/ratesOnDate\" }\n              }\n            }\n          },\n          \"404\": { \"$ref\": \"#/components/responses/NotFound\" }\n        }\n      }\n    },\n    \"/{date}\": {\n      \"get\": {\n        \"tags\": [\"historical-rates\"],\n        \"summary\": \"Get rates for a past date\",\n        \"description\": \"Returns historical rates for the working day closest to the specified date\",\n        \"parameters\": [\n          {\n            \"name\": \"date\",\n            \"in\": \"path\",\n            \"description\": \"The date for the historical rates\",\n            \"required\": true,\n            \"schema\": { \"$ref\": \"#/components/schemas/date\" }\n          },\n          { \"$ref\": \"#/components/parameters/base\" },\n          { \"$ref\": \"#/components/parameters/symbols\" }\n        ],\n        \"responses\": {\n          \"200\": {\n            \"description\": \"Historical rates\",\n            \"content\": {\n              \"application/json\": {\n                \"schema\": { \"$ref\": \"#/components/schemas/ratesOnDate\" }\n              }\n            }\n          },\n          \"404\": { \"$ref\": \"#/components/responses/NotFound\" }\n        }\n      }\n    },\n    \"/{start_date}..\": {\n      \"get\": {\n        \"tags\": [\"historical-rates\"],\n        \"summary\": \"Get rates for a time period\",\n        \"description\": \"Returns historical rates for every day within a time period starting from the provided date until today.\",\n        \"parameters\": [\n          { \"$ref\": \"#/components/parameters/start_date\" },\n          { \"$ref\": \"#/components/parameters/base\" },\n          { \"$ref\": \"#/components/parameters/symbols\" }\n        ],\n        \"responses\": {\n          \"200\": { \"$ref\": \"#/components/responses/PeriodRateGetResponse\" },\n          \"404\": { \"$ref\": \"#/components/responses/NotFound\" }\n        }\n      }\n    },\n    \"/{start_date}..{end_date}\": {\n      \"get\": {\n        \"tags\": [\"historical-rates\"],\n        \"summary\": \"Get rates for a time period\",\n        \"description\": \"Returns historical rates for every day within a time period. The end date defaults to today if not provided.\",\n        \"parameters\": [\n          { \"$ref\": \"#/components/parameters/start_date\" },\n          { \"$ref\": \"#/components/parameters/end_date\" },\n          { \"$ref\": \"#/components/parameters/base\" },\n          { \"$ref\": \"#/components/parameters/symbols\" }\n        ],\n        \"responses\": {\n          \"200\": { \"$ref\": \"#/components/responses/PeriodRateGetResponse\" },\n          \"404\": { \"$ref\": \"#/components/responses/NotFound\" }\n        }\n      }\n    },\n    \"/currencies\": {\n      \"get\": {\n        \"tags\": [\"metadata\"],\n        \"summary\": \"Get available currencies\",\n        \"description\": \"Returns a list of available currencies with their full names\",\n        \"responses\": {\n          \"200\": {\n            \"description\": \"List of available currencies\",\n            \"content\": {\n              \"application/json\": {\n                \"schema\": { \"$ref\": \"#/components/schemas/currencies\" }\n              }\n            }\n          }\n        }\n      }\n    }\n  },\n  \"components\": {\n    \"parameters\": {\n      \"base\": {\n        \"name\": \"base\",\n        \"in\": \"query\",\n        \"description\": \"Base currency to convert from\",\n        \"required\": false,\n        \"schema\": { \"$ref\": \"#/components/schemas/baseIn\" }\n      },\n      \"symbols\": {\n        \"name\": \"symbols\",\n        \"in\": \"query\",\n        \"description\": \"Comma-separated list of currencies to convert to\",\n        \"required\": false,\n        \"schema\": {\n          \"type\": \"array\",\n          \"description\": \"A list of currencies\",\n          \"items\": { \"$ref\": \"#/components/schemas/base\" },\n          \"minItems\": 1\n        },\n        \"explode\": false,\n        \"example\": \"USD,GBP\"\n      },\n      \"start_date\": {\n        \"name\": \"start_date\",\n        \"in\": \"path\",\n        \"required\": true,\n        \"description\": \"The start date for the period\",\n        \"schema\": { \"$ref\": \"#/components/schemas/date\" }\n      },\n      \"end_date\": {\n        \"name\": \"end_date\",\n        \"in\": \"path\",\n        \"required\": true,\n        \"description\": \"The end date for the period\",\n        \"schema\": { \"$ref\": \"#/components/schemas/date\" }\n      }\n    },\n    \"responses\": {\n      \"PeriodRateGetResponse\": {\n        \"description\": \"Historical rates for the period\",\n        \"content\": {\n          \"application/json\": {\n            \"schema\": {\n              \"title\": \"RatesDuringPeriod\",\n              \"type\": \"object\",\n              \"properties\": {\n                \"amount\": { \"$ref\": \"#/components/schemas/amount\" },\n                \"base\": { \"$ref\": \"#/components/schemas/base\" },\n                \"start_date\": { \"$ref\": \"#/components/schemas/date\" },\n                \"end_date\": { \"$ref\": \"#/components/schemas/date\" },\n                \"rates\": { \"$ref\": \"#/components/schemas/ratesByDate\" }\n              },\n              \"required\": [\n                \"base\",\n                \"start_date\",\n                \"end_date\",\n                \"rates\"\n              ]\n            }\n          }\n        }\n      },\n      \"NotFound\": {\n        \"description\": \"Resource not found\",\n        \"content\": {\n          \"application/json\": {\n            \"schema\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"message\": {\n                  \"type\": \"string\",\n                  \"example\": \"not found\"\n                }\n              }\n            }\n          }\n        }\n      }\n    },\n    \"schemas\": {\n      \"amount\": {\n        \"type\": \"number\",\n        \"description\": \"The amount to convert\",\n        \"exclusiveMinimum\": 0\n      },\n      \"date\": {\n        \"type\": \"string\",\n        \"format\": \"date\",\n        \"example\": \"2024-01-15\",\n        \"description\": \"Date in YYYY-MM-DD format, all dates stored in UTC.\"\n      },\n      \"base\": {\n        \"type\": \"string\",\n        \"enum\": [\n          \"AUD\",\n          \"BGN\",\n          \"BRL\",\n          \"CAD\",\n          \"CHF\",\n          \"CNY\",\n          \"CZK\",\n          \"DKK\",\n          \"EUR\",\n          \"GBP\",\n          \"HKD\",\n          \"HUF\",\n          \"IDR\",\n          \"ILS\",\n          \"INR\",\n          \"ISK\",\n          \"JPY\",\n          \"KRW\",\n          \"MXN\",\n          \"MYR\",\n          \"NOK\",\n          \"NZD\",\n          \"PHP\",\n          \"PLN\",\n          \"RON\",\n          \"SEK\",\n          \"SGD\",\n          \"THB\",\n          \"TRY\",\n          \"USD\",\n          \"ZAR\"\n        ],\n        \"description\": \"The base currency code following ISO4217\"\n      },\n      \"baseIn\": {\n        \"allOf\": [\n          { \"$ref\": \"#/components/schemas/base\" }\n        ],\n        \"default\": \"EUR\"\n      },\n      \"rates\": {\n        \"type\": \"object\",\n        \"description\": \"Exchange rates keyed by currency code\",\n        \"propertyNames\": { \"$ref\": \"#/components/schemas/base\" },\n        \"additionalProperties\": {\n          \"type\": \"number\",\n          \"exclusiveMinimum\": 0,\n          \"multipleOf\": 0.00001\n        },\n        \"minProperties\": 1,\n        \"example\": {\n          \"AUD\": 1.91,\n          \"CAD\": 1.8004,\n          \"CHF\": 1.6168,\n          \"CYP\": 0.58231\n        }\n      },\n      \"ratesOnDate\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"amount\": { \"$ref\": \"#/components/schemas/amount\" },\n          \"base\": { \"$ref\": \"#/components/schemas/base\" },\n          \"date\": { \"$ref\": \"#/components/schemas/date\" },\n          \"rates\": { \"$ref\": \"#/components/schemas/rates\" }\n        },\n        \"required\": [\"base\", \"date\", \"rates\"]\n      },\n      \"ratesByDate\": {\n        \"type\": \"object\",\n        \"description\": \"Mapping of date → rates object\",\n        \"propertyNames\": { \"$ref\": \"#/components/schemas/date\" },\n        \"additionalProperties\": { \"$ref\": \"#/components/schemas/rates\" },\n        \"minProperties\": 1,\n        \"example\": {\n          \"1999-01-04\": {\n            \"AUD\": 1.91\n          },\n          \"1999-01-05\": {\n            \"AUD\": 1.8944\n          },\n          \"1999-01-06\": {\n            \"AUD\": 1.882\n          }\n        }\n      },\n      \"currencies\": {\n        \"type\": \"object\",\n        \"propertyNames\": { \"$ref\": \"#/components/schemas/base\" },\n        \"additionalProperties\": {\n          \"type\": \"string\",\n          \"description\": \"Full name of the currency\",\n          \"minLength\": 1\n        },\n        \"minProperties\": 1,\n        \"example\": {\n          \"AUD\": \"Australian Dollar\",\n          \"BGN\": \"Bulgarian Lev\",\n          \"EUR\": \"Euro\",\n          \"USD\": \"US Dollar\"\n        }\n      }\n    }\n  }\n}\n",
+      "size": 9777
+    }
+  }
+}

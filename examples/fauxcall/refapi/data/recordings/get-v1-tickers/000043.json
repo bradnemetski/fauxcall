@@ -1,0 +1,156 @@
+{
+  "id": "000043",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "variation",
+  "plan_call": "tk-ex-xlon",
+  "started_at": "2026-10-11T06:13:12.018627Z",
+  "started_ns": 1791699192018627000,
+  "elapsed_ms": 50.019,
+  "ttfb_ms": 49.257,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?exchange=XLON&limit=100",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "exchange",
+        "XLON"
+      ],
+      [
+        "limit",
+        "100"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:13:11 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "915"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "17"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699197"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "AZN.L",
+            "name": "AstraZeneca PLC",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Healthcare",
+            "listed_on": "1999-04-06"
+          },
+          {
+            "symbol": "BARC.L",
+            "name": "Barclays PLC",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Financials",
+            "listed_on": "1985-05-01"
+          },
+          {
+            "symbol": "BP.L",
+            "name": "BP p.l.c.",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Energy",
+            "listed_on": "1954-03-01"
+          },
+          {
+            "symbol": "HSBA.L",
+            "name": "HSBC Holdings plc",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Financials",
+            "listed_on": "1992-07-10"
+          },
+          {
+            "symbol": "RR.L",
+            "name": "Rolls-Royce Holdings plc",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Industrials",
+            "listed_on": "2011-05-23"
+          },
+          {
+            "symbol": "SHEL.L",
+            "name": "Shell plc",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Energy",
+            "listed_on": "2005-07-20"
+          },
+          {
+            "symbol": "ULVR.L",
+            "name": "Unilever PLC",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Consumer Staples",
+            "listed_on": "1930-01-02"
+          }
+        ],
+        "next_cursor": null,
+        "total": 7
+      },
+      "size": 915
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": "000109",
+  "endpoint": "GET /v1/tickers/{symbol}",
+  "purpose": "variation",
+  "plan_call": "ti-mixed",
+  "started_at": "2026-10-11T06:14:54.615783Z",
+  "started_ns": 1791699294615783000,
+  "elapsed_ms": 58.644,
+  "ttfb_ms": 58.04,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/Air.pa",
+    "path": "/v1/tickers/Air.pa",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:14:53 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "121"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "17"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699298"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "AIR.PA",
+        "name": "Airbus SE",
+        "exchange": "XPAR",
+        "currency": "EUR",
+        "sector": "Industrials",
+        "listed_on": "2000-07-10"
+      },
+      "size": 121
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

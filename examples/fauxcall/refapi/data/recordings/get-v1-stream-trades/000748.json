@@ -1,0 +1,102 @@
+{
+  "id": "000748",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "invalid",
+  "plan_call": "st-both-bad",
+  "started_at": "2026-10-11T06:27:50.574198Z",
+  "started_ns": 1791700070574198000,
+  "elapsed_ms": 56.988,
+  "ttfb_ms": 56.292,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=ZZZZ&count=0",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "ZZZZ"
+      ],
+      [
+        "count",
+        "0"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:27:50 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "192"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "23"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700078"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'count': must be an integer between 1 and 50.",
+          "request_id": "0e502988-5a3a-4a71-a92d-4219f5edb30d",
+          "param": "count"
+        }
+      },
+      "size": 192
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

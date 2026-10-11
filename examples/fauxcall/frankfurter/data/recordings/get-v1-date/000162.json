@@ -1,0 +1,167 @@
+{
+  "id": "000162",
+  "endpoint": "GET /v1/{date}",
+  "purpose": "variation",
+  "plan_call": "d2-old-amt",
+  "started_at": "2026-10-11T06:24:21.378102Z",
+  "started_ns": 1791699861378102000,
+  "elapsed_ms": 336.835,
+  "ttfb_ms": 335.433,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/1999-01-04?base=USD&amount=3.5",
+    "path": "/v1/1999-01-04",
+    "path_params": {
+      "date": "1999-01-04"
+    },
+    "query": [
+      [
+        "base",
+        "USD"
+      ],
+      [
+        "amount",
+        "3.5"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:24:21 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "cache-control",
+        "public, max-age=86400"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "x-robots-tag",
+        "noindex"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/rates>; rel=\"successor-version\""
+      ],
+      [
+        "etag",
+        "W/\"8fe65c90b26dda5039447c658b57519f\""
+      ],
+      [
+        "cf-cache-status",
+        "MISS"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=5E1nfv3nA44Ck51NvqA6ugZAMo7TdjyKoQqw33uku%2BOFnCc5VI8k2JgWUM3Acd3ILojBWwtrcbXq39Qed8%2F9r%2Bp6NXS6eqWI%2BeWPImem5R6%2FschaSn%2Bxzf3AX5uI9uAsNE%2Fiicg%3D\"}]}"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bc805bf51c439-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "amount": 3.5,
+        "base": "USD",
+        "date": "1999-01-04",
+        "rates": {
+          "AUD": 5.6705,
+          "CAD": 5.3451,
+          "CHF": 4.8,
+          "CYP": 1.7288,
+          "CZK": 104.22,
+          "DKK": 22.118,
+          "EEK": 46.452,
+          "EUR": 2.9688,
+          "GBP": 2.1111,
+          "GRD": 971.25,
+          "HKD": 27.115,
+          "HUF": 746.6,
+          "IDR": 28007,
+          "ISK": 241.9,
+          "JPY": 397.03,
+          "KRW": 4152.18,
+          "LTL": 14.004,
+          "LVL": 1.9796,
+          "MTL": 1.3158,
+          "MXN": 34.571,
+          "MYR": 13.2998,
+          "NOK": 26.289,
+          "NZD": 6.5995,
+          "PHP": 135.11,
+          "PLN": 12.0867,
+          "RON": 3.8924,
+          "RUB": 75.078,
+          "SEK": 28.114,
+          "SGD": 5.8053,
+          "SIT": 561.25,
+          "SKK": 127.63,
+          "THB": 126.71,
+          "TRY": 1.1053,
+          "ZAR": 20.591
+        }
+      },
+      "size": 496
+    }
+  }
+}

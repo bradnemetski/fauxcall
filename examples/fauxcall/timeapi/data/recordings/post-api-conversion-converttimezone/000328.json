@@ -1,0 +1,106 @@
+{
+  "id": "000328",
+  "endpoint": "POST /api/conversion/converttimezone",
+  "purpose": "invalid",
+  "plan_call": "cv-iso",
+  "started_at": "2026-10-11T10:39:29.617027Z",
+  "started_ns": 1791715169617027000,
+  "elapsed_ms": 135.337,
+  "ttfb_ms": 135.167,
+  "request": {
+    "method": "POST",
+    "url": "https://timeapi.io/api/conversion/converttimezone",
+    "path": "/api/conversion/converttimezone",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "83"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "fromTimeZone": "UTC",
+        "dateTime": "2021-03-14T17:45:00",
+        "toTimeZone": "Asia/Kolkata"
+      },
+      "size": 83
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:39:29 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "DstAmbiguity": [
+            "The DstAmbiguity field is required."
+          ]
+        },
+        "traceId": "00-3a1ff3f0cfd843e29d4cf7cd16ad8b36-b34ea9bbbe6f2532-00"
+      },
+      "size": 258
+    }
+  }
+}

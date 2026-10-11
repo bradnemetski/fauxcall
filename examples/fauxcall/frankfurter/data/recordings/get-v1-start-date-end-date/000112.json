@@ -1,0 +1,149 @@
+{
+  "id": "000112",
+  "endpoint": "GET /v1/{start_date}..{end_date}",
+  "purpose": "variation",
+  "plan_call": "p-bgn-switch",
+  "started_at": "2026-10-11T06:22:09.401863Z",
+  "started_ns": 1791699729401863000,
+  "elapsed_ms": 329.547,
+  "ttfb_ms": 328.18,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/2025-12-29..2026-01-05?symbols=BGN%2CUSD",
+    "path": "/v1/2025-12-29..2026-01-05",
+    "path_params": {
+      "start_date": "2025-12-29",
+      "end_date": "2026-01-05"
+    },
+    "query": [
+      [
+        "symbols",
+        "BGN,USD"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:22:09 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "cache-control",
+        "public, max-age=86400"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "x-robots-tag",
+        "noindex"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/rates>; rel=\"successor-version\""
+      ],
+      [
+        "etag",
+        "W/\"d327a0e364d1ce88dfdbe930bdbd9a82\""
+      ],
+      [
+        "cf-cache-status",
+        "MISS"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=6RXjv%2B6KeFiIwLdYLaiE%2BtOUVQ51ygphSZX5i7hBBUW7fjbWVdtuPS%2Bi9mUpzHLp38WmItXrya7gFZFoQ0F5RXbcIwncxuEcQXwY4%2FeMfqdTF6oPZr50o0T079fxLgfCU11BBhg%3D\"}]}"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bc4ccee50dd64-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "amount": 1.0,
+        "base": "EUR",
+        "start_date": "2025-12-29",
+        "end_date": "2026-01-05",
+        "rates": {
+          "2025-12-29": {
+            "BGN": 1.9558,
+            "USD": 1.1766
+          },
+          "2025-12-30": {
+            "BGN": 1.9558,
+            "USD": 1.1757
+          },
+          "2025-12-31": {
+            "BGN": 1.9558,
+            "USD": 1.175
+          },
+          "2026-01-02": {
+            "USD": 1.1721
+          },
+          "2026-01-05": {
+            "USD": 1.1664
+          }
+        }
+      },
+      "size": 265
+    }
+  }
+}

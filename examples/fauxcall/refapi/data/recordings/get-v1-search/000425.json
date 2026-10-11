@@ -1,0 +1,145 @@
+{
+  "id": "000425",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s3-00",
+  "started_at": "2026-10-11T06:21:27.699198Z",
+  "started_ns": 1791699687699198000,
+  "elapsed_ms": 55.407,
+  "ttfb_ms": 55.21,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=apple+apple+bank",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "apple apple bank"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:21:27 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "692"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699698"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "apple apple bank",
+        "results": [
+          {
+            "symbol": "AAPL",
+            "name": "Apple Inc.",
+            "score": 0.533
+          },
+          {
+            "symbol": "BAC",
+            "name": "Bank of America Corporation",
+            "score": 0.267
+          },
+          {
+            "symbol": "0005.HK",
+            "name": "HSBC Holdings plc",
+            "score": 0.167
+          },
+          {
+            "symbol": "0388.HK",
+            "name": "Hong Kong Exchanges and Clearing Limited",
+            "score": 0.167
+          },
+          {
+            "symbol": "8306.T",
+            "name": "Mitsubishi UFJ Financial Group, Inc.",
+            "score": 0.167
+          },
+          {
+            "symbol": "BARC.L",
+            "name": "Barclays PLC",
+            "score": 0.167
+          },
+          {
+            "symbol": "BNP.PA",
+            "name": "BNP Paribas SA",
+            "score": 0.167
+          },
+          {
+            "symbol": "GS",
+            "name": "The Goldman Sachs Group, Inc.",
+            "score": 0.167
+          },
+          {
+            "symbol": "HSBA.L",
+            "name": "HSBC Holdings plc",
+            "score": 0.167
+          },
+          {
+            "symbol": "JPM",
+            "name": "JPMorgan Chase & Co.",
+            "score": 0.167
+          }
+        ]
+      },
+      "size": 692
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

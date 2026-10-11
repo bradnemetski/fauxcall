@@ -1,0 +1,109 @@
+{
+  "id": "000579",
+  "endpoint": "POST /api/calculation/custom/decrement",
+  "purpose": "edge",
+  "plan_call": "cd-minvalue",
+  "started_at": "2026-10-11T11:26:25.991852Z",
+  "started_ns": 1791717985991852000,
+  "elapsed_ms": 145.055,
+  "ttfb_ms": 144.62,
+  "request": {
+    "method": "POST",
+    "url": "https://timeapi.io/api/calculation/custom/decrement",
+    "path": "/api/calculation/custom/decrement",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "93"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "timeZone": "UTC",
+        "dateTime": "0001-01-01 00:00:00",
+        "timeSpan": "1:00:00:00",
+        "dstAmbiguity": ""
+      },
+      "size": 93
+    }
+  },
+  "response": {
+    "status": 500,
+    "reason": "Internal Server Error",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:26:26 GMT"
+      ],
+      [
+        "content-type",
+        "text/html; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "cache-control",
+        "no-cache,no-store"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "expires",
+        "-1"
+      ],
+      [
+        "pragma",
+        "no-cache"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/html; charset=utf-8",
+      "text": "\n<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <meta name=\"description\"\n        content=\"Get fast and accurate time and timezone data for any location with our Time/Timezone API. Easy to integrate into your projects, with a user-friendly interface and reliable data. Try it today and see why it's a top choice among developers.\">\n    <meta name=\"keywords\" content=\"time, timezone, API, data, location, integration, reliable, fast, swagger, accurate, daylight saving, multiple languages, real-time, historical, conversion, flexible\">\n    <title>TimeAPI | Error</title>\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />\n    <link\n        href=\"https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i\"\n        rel=\"stylesheet\">\n    <link rel=\"stylesheet\"\n        href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200\" />\n    <link rel=\"stylesheet\" href=\"/css/output.css\" />\n    <script defer src=\"https://unpkg.com/alpinejs@3.2.4/dist/cdn.min.js\"></script>\n</head>\n\n<body class=\"bg-slate-50\">\n    <div class=\"flex flex-col min-h-screen justify-content-between\">\n<header x-data=\"{ open : false}\">\n    <div class=\"relative bg-white shadow-lg lg:shadow-none lg:bg-slate-50\">\n        <div class=\"max-w-7xl mx-auto px-4 sm:px-6\">\n            <div class=\"flex h-16\">\n                <div class=\"flex justify-start self-center\">\n                    <a href=\"/\">\n                        <img src=\"/img/logos/Asset1.svg\" width=\"150\" />\n                    </a>\n                </div>\n                <div class=\"flex-auto\">\n                    <nav>\n                        <div class=\"hidden lg:flex flex-row justify-center\">\n                            <a href=\"/swagger/\"\n                                class=\"text-base font-medium text-slate-700 hover:text-slate-500 navbar-outline-btn p-6\">\n                                API Docs\n                            </a>\n                            <div class=\"self-center\" x-data=\"{ open: false }\" @mouseleave=\"open = false\" x-clock>\n                                <a href=\"#\"\n                                    class=\"text-base font-medium text-slate-700 hover:text-slate-500 navbar-outline-btn p-6\"\n                                    @mouseover=\"open = true\">\n                                    Resources\n                                </a>\n                                <div x-show=\"open\" x-transition:enter.duration.500ms x-transition:leave.duration.800ms\n                                    class=\"absolute pt-2 mt-2 bg-white rounded-md shadow-xl z-20\">\n                                    <div class=\"rounded-md\">\n                                        <div class=\"text-left ml-4\">\n                                            <p class=\"text-base font-semibold text-slate-700\">\n                                                <span class=\"material-symbols-outlined relative top-[6px] mr-1\">\n                                                    menu_book\n                                                </span>\n                                                Documentation\n                                            </p>\n                                            <p class=\"text-sm font-medium text-slate-500\">\n                                                Learn more about how to use TimeAPI.\n                                            </p>\n                                        </div>\n                                        <div class=\"ml-4 my-6\">\n                                            <ul class=\"list-none\">\n                                                <li class=\"my-2\">\n                                                    <a href=\"/swagger/\" class=\"btn-light-ref-sm\">API\n                                                        Documentation</a>\n                                                </li>\n                                                <li class=\"my-2\">\n                                                    <a class=\"btn-light-ref-sm\" href=\"/documentation/iana-timezones\">IANA Timezones</a>\n                                                </li>\n                                                <li class=\"my-2\">\n                                                    <a href=\"/home/contact\" class=\"btn-light-ref-sm\">Support</a>\n                                                </li>\n                                            </ul>\n                                        </div>\n                                    </div>\n                                    <div class=\"flex flex-row bg-slate-50 rounded-md\">\n                                        <a href=\"#\"\n                                            class=\"text-sm font-medium text-slate-700 hover:text-slate-500 navbar-outline-btn p-6\">\n                                            <span\n                                                class=\"material-symbols-outlined relative top-[6px] mr-1 text-green-500\">\n                                                check_circle\n                                            </span>API Status\n                                        </a>\n                                        <a href=\"/home/changelog/\"\n                                            class=\"text-sm font-medium text-slate-700 hover:text-slate-500 navbar-outline-btn p-6\">\n                                            <span class=\"material-symbols-outlined relative top-[6px] mr-1\">\n                                                library_books\n                                            </span>API Changelog\n                                        </a>\n                                    </div>\n                                </div>\n                            </div>\n                            <a href=\"/home/faqs\"\n                                class=\"text-base font-medium text-slate-700 hover:text-slate-500 navbar-outline-btn p-6\">\n                                FAQs\n                            </a>\n                        </div>\n                    </nav>\n                </div>\n\n                <div class=\"flex flex-row lg:hidden items-center ml-8\">\n                    <button class=\"text-gray-500 w-10 h-10 relative focus:outline-none bg-white\" @click=\"open = !open\">\n                        <span class=\"sr-only\">Open main menu</span>\n                        <div class=\"block w-5 absolute left-1/2 top-1/2   transform  -translate-x-1/2 -translate-y-1/2\">\n                            <span aria-hidden=\"true\" class=\"block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out\" :class=\"{'rotate-45': open,' -translate-y-1.5': !open }\"></span>\n                            <span aria-hidden=\"true\" class=\"block absolute  h-0.5 w-5 bg-current   transform transition duration-500 ease-in-out\" :class=\"{'opacity-0': open } \"></span>\n                            <span aria-hidden=\"true\" class=\"block absolute  h-0.5 w-5 bg-current transform  transition duration-500 ease-in-out\" :class=\"{'-rotate-45': open, ' translate-y-1.5': !open}\"></span>\n                        </div>\n                    </button>\n                </div>\n            </div>\n            <div id=\"mobile-menu\" x-show=\"open\" x-transition class=\"lg:hidden\">\n                <div class=\"grid grid-cols-2\">\n                    <a href=\"/swagger/\"\n                        class=\"text-base font-medium text-slate-700 hover:text-slate-500 btn-light-ref justify-start p-6\">\n                        API Docs\n                    </a>\n                    <a href=\"/documentation/iana-timezones\"\n                        class=\"text-base font-medium text-slate-700 hover:text-slate-500 btn-light-ref justify-start p-6\">\n                        IANA Timezones\n                    </a>\n                    <a href=\"/home/contact\"\n                        class=\"text-base font-medium text-slate-700 hover:text-slate-500 btn-light-ref justify-start p-6\">\n                        Support\n                    </a>\n                    <a href=\"/home/changelog\"\n                        class=\"text-base font-medium text-slate-700 hover:text-slate-500 btn-light-ref justify-start p-6\">\n                        API Changelog\n                    </a>\n                    <a href=\"/home/faqs\"\n                        class=\"text-base font-medium text-slate-700 hover:text-slate-500 btn-light-ref justify-start p-6\">\n                        FAQs\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n</header>\n\n        <main class=\"main-content\" role=\"main\">\n            <div class=\"max-w-7xl mx-auto px-4 sm:px-6 my-24 \">\n    <div class=\"text-center mt-8 mb-8\">\n        <h1 class=\"\">500 Server Error.</h1>\n        <h2 class=\"\">An error occurred while processing your request. </h2>\n        <br>\n        <p>If the problem persists, please contact our support team at <a class=\"text-base text-indigo-500 hover:text-indigo-700\" href=\"mailto:support@timeapi.io\" >support@timeapi.io</a> </p>\n    </div>\n</div>\n\n\n\n        </main>\n        <footer class=\"text-gray-600 body-font\">\n    <div class=\"container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col\">\n        <a href=\"/\">\n            <img src=\"/img/logos/Asset1.svg\" width=\"150\" />\n        </a>\n        <p class=\"text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4\">\n            © 2022 TimeAPI\n        </p>\n    </div>\n</footer>\n    </div>\n    <script defer type=\"module\" src=\"/js/vendors.js\"></script>\n    \n</body>\n\n\n</html>\n",
+      "size": 9680
+    }
+  }
+}

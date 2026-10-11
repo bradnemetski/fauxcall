@@ -1,0 +1,78 @@
+{
+  "id": "000315",
+  "endpoint": "GET /api/conversion/dayoftheyear/{date}",
+  "purpose": "invalid",
+  "plan_call": "dayoftheyear-bad-2",
+  "started_at": "2026-10-11T10:39:22.855199Z",
+  "started_ns": 1791715162855199000,
+  "elapsed_ms": 137.034,
+  "ttfb_ms": 136.865,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/conversion/dayoftheyear/14-03-2021",
+    "path": "/api/conversion/dayoftheyear/14-03-2021",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:39:22 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": "Invalid date",
+      "size": 14
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "id": "000270",
+  "endpoint": "GET /api/timezone/zone",
+  "purpose": "variation",
+  "plan_call": "ltz-8",
+  "started_at": "2026-10-11T10:38:30.038703Z",
+  "started_ns": 1791715110038703000,
+  "elapsed_ms": 141.468,
+  "ttfb_ms": 140.497,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/timezone/zone?timeZone=Africa%2FCasablanca",
+    "path": "/api/timezone/zone",
+    "query": [
+      [
+        "timeZone",
+        "Africa/Casablanca"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:38:30 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "timeZone": "Africa/Casablanca",
+        "currentLocalTime": "2026-10-11T11:38:30.1202243",
+        "currentUtcOffset": {
+          "seconds": 3600,
+          "milliseconds": 3600000,
+          "ticks": 36000000000,
+          "nanoseconds": 3600000000000
+        },
+        "standardUtcOffset": {
+          "seconds": 3600,
+          "milliseconds": 3600000,
+          "ticks": 36000000000,
+          "nanoseconds": 3600000000000
+        },
+        "hasDayLightSaving": true,
+        "isDayLightSavingActive": false,
+        "dstInterval": {
+          "dstName": "+00",
+          "dstOffsetToUtc": {
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 0,
+            "nanoseconds": 0
+          },
+          "dstOffsetToStandardTime": {
+            "seconds": -3600,
+            "milliseconds": -3600000,
+            "ticks": -36000000000,
+            "nanoseconds": -3600000000000
+          },
+          "dstStart": "2027-02-07T02:00:00Z",
+          "dstEnd": "2027-03-14T02:00:00Z",
+          "dstDuration": {
+            "days": 35,
+            "nanosecondOfDay": 0,
+            "hours": 0,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "subsecondTicks": 0,
+            "subsecondNanoseconds": 0,
+            "bclCompatibleTicks": 30240000000000,
+            "totalDays": 35,
+            "totalHours": 840,
+            "totalMinutes": 50400,
+            "totalSeconds": 3024000,
+            "totalMilliseconds": 3024000000,
+            "totalTicks": 30240000000000,
+            "totalNanoseconds": 3024000000000000
+          }
+        }
+      },
+      "size": 990
+    }
+  }
+}

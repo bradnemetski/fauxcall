@@ -1,0 +1,95 @@
+{
+  "id": "000464",
+  "endpoint": "POST /api/calculation/current/increment",
+  "purpose": "edge",
+  "plan_call": "cc-frac1",
+  "started_at": "2026-10-11T10:43:44.999125Z",
+  "started_ns": 1791715424999125000,
+  "elapsed_ms": 135.747,
+  "ttfb_ms": 135.32,
+  "request": {
+    "method": "POST",
+    "url": "https://timeapi.io/api/calculation/current/increment",
+    "path": "/api/calculation/current/increment",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "44"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "timeZone": "UTC",
+        "timeSpan": "0:00:00:01.5"
+      },
+      "size": 44
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:43:45 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": "Invalid TimeSpan or incorrect format.",
+      "size": 39
+    }
+  }
+}

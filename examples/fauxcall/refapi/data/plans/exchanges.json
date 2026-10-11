@@ -1,0 +1,21 @@
+{
+  "name": "exchanges",
+  "created_at": "2026-10-11T06:05:00Z",
+  "calls": [
+    {"id": "health-1", "endpoint": "GET /healthz", "purpose": "sample", "request": {"method": "GET", "path": "/healthz"}},
+    {"id": "health-noauth", "endpoint": "GET /healthz", "purpose": "auth", "request": {"method": "GET", "path": "/healthz", "auth": "none"}},
+    {"id": "health-invalid", "endpoint": "GET /healthz", "purpose": "auth", "request": {"method": "GET", "path": "/healthz", "auth": "invalid"}},
+    {"id": "ex-list-1", "endpoint": "GET /v1/exchanges", "purpose": "sample", "request": {"method": "GET", "path": "/v1/exchanges"}},
+    {"id": "ex-list-2", "endpoint": "GET /v1/exchanges", "purpose": "sample", "request": {"method": "GET", "path": "/v1/exchanges"}},
+    {"id": "ex-list-noauth", "endpoint": "GET /v1/exchanges", "purpose": "auth", "request": {"method": "GET", "path": "/v1/exchanges", "auth": "none"}},
+    {"id": "ex-list-badkey", "endpoint": "GET /v1/exchanges", "purpose": "auth", "request": {"method": "GET", "path": "/v1/exchanges", "auth": "invalid"}},
+    {"id": "ex-list-revoked", "endpoint": "GET /v1/exchanges", "purpose": "auth", "note": "documented revoked demo key -> 403", "request": {"method": "GET", "path": "/v1/exchanges", "auth": "none", "headers": {"X-API-Key": "revoked-key"}}},
+    {"id": "ex-list-readonly", "endpoint": "GET /v1/exchanges", "purpose": "auth", "note": "documented readonly demo key, GET allowed", "request": {"method": "GET", "path": "/v1/exchanges", "auth": "none", "headers": {"X-API-Key": "readonly-key"}}},
+    {"id": "ex-list-slash", "endpoint": "GET /v1/exchanges", "purpose": "edge", "request": {"method": "GET", "path": "/v1/exchanges/"}},
+    {"id": "ex-list-case", "endpoint": "GET /v1/exchanges", "purpose": "edge", "request": {"method": "GET", "path": "/V1/Exchanges"}},
+    {"id": "unknown-route", "endpoint": "GET /v1/exchanges", "purpose": "edge", "note": "unknown route", "request": {"method": "GET", "path": "/v1/nonexistent"}},
+    {"id": "unknown-route-noauth", "endpoint": "GET /v1/exchanges", "purpose": "edge", "note": "unknown route without key", "request": {"method": "GET", "path": "/v1/nonexistent", "auth": "none"}},
+    {"id": "ex-list-post", "endpoint": "GET /v1/exchanges", "purpose": "invalid", "mutating": true, "note": "unsupported method", "request": {"method": "POST", "path": "/v1/exchanges", "json_body": {}}},
+    {"id": "ex-list-query", "endpoint": "GET /v1/exchanges", "purpose": "variation", "note": "unknown query param", "request": {"method": "GET", "path": "/v1/exchanges", "query": [["foo", "bar"]]}}
+  ]
+}

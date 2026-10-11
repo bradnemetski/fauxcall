@@ -1,0 +1,115 @@
+{
+  "id": "000325",
+  "endpoint": "POST /api/conversion/converttimezone",
+  "purpose": "edge",
+  "plan_call": "cv-amb-late",
+  "started_at": "2026-10-11T10:39:28.110984Z",
+  "started_ns": 1791715168110984000,
+  "elapsed_ms": 141.854,
+  "ttfb_ms": 140.886,
+  "request": {
+    "method": "POST",
+    "url": "https://timeapi.io/api/conversion/converttimezone",
+    "path": "/api/conversion/converttimezone",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "110"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "fromTimeZone": "Europe/Amsterdam",
+        "dateTime": "2025-10-26 02:30:00",
+        "toTimeZone": "UTC",
+        "dstAmbiguity": "later"
+      },
+      "size": 110
+    }
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:39:28 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "fromTimezone": "Europe/Amsterdam",
+        "fromDateTime": "2025-10-26T02:30:00",
+        "toTimeZone": "UTC",
+        "conversionResult": {
+          "year": 2025,
+          "month": 10,
+          "day": 26,
+          "hour": 1,
+          "minute": 30,
+          "seconds": 0,
+          "milliSeconds": 0,
+          "dateTime": "2025-10-26T01:30:00",
+          "date": "10/26/2025",
+          "time": "01:30",
+          "timeZone": "UTC",
+          "dstActive": false
+        }
+      },
+      "size": 297
+    }
+  }
+}

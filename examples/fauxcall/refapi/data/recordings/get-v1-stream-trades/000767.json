@@ -1,0 +1,445 @@
+{
+  "id": "000767",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "series",
+  "plan_call": "st50-AMGN",
+  "started_at": "2026-10-11T06:31:13.371034Z",
+  "started_ns": 1791700273371034000,
+  "elapsed_ms": 9968.702,
+  "ttfb_ms": 51.813,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=AMGN&count=50",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "AMGN"
+      ],
+      [
+        "count",
+        "50"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:31:13 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700274"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 52.095,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"300.94\",\"size\":913,\"time\":\"2026-10-11T06:31:13.422Z\"}"
+    },
+    {
+      "t_ms": 254.528,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"301.00\",\"size\":845,\"time\":\"2026-10-11T06:31:13.624Z\"}"
+    },
+    {
+      "t_ms": 460.396,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"301.06\",\"size\":820,\"time\":\"2026-10-11T06:31:13.827Z\"}"
+    },
+    {
+      "t_ms": 662.238,
+      "kind": "sse",
+      "event": "trade",
+      "id": "4",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"300.82\",\"size\":760,\"time\":\"2026-10-11T06:31:14.031Z\"}"
+    },
+    {
+      "t_ms": 864.474,
+      "kind": "sse",
+      "event": "trade",
+      "id": "5",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"300.61\",\"size\":828,\"time\":\"2026-10-11T06:31:14.234Z\"}"
+    },
+    {
+      "t_ms": 1066.496,
+      "kind": "sse",
+      "event": "trade",
+      "id": "6",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"300.49\",\"size\":456,\"time\":\"2026-10-11T06:31:14.436Z\"}"
+    },
+    {
+      "t_ms": 1268.944,
+      "kind": "sse",
+      "event": "trade",
+      "id": "7",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"300.19\",\"size\":743,\"time\":\"2026-10-11T06:31:14.638Z\"}"
+    },
+    {
+      "t_ms": 1471.478,
+      "kind": "sse",
+      "event": "trade",
+      "id": "8",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.92\",\"size\":16,\"time\":\"2026-10-11T06:31:14.840Z\"}"
+    },
+    {
+      "t_ms": 1672.979,
+      "kind": "sse",
+      "event": "trade",
+      "id": "9",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.74\",\"size\":988,\"time\":\"2026-10-11T06:31:15.041Z\"}"
+    },
+    {
+      "t_ms": 1874.029,
+      "kind": "sse",
+      "event": "trade",
+      "id": "10",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.62\",\"size\":48,\"time\":\"2026-10-11T06:31:15.242Z\"}"
+    },
+    {
+      "t_ms": 2075.563,
+      "kind": "sse",
+      "event": "trade",
+      "id": "11",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.62\",\"size\":886,\"time\":\"2026-10-11T06:31:15.445Z\"}"
+    },
+    {
+      "t_ms": 2278.811,
+      "kind": "sse",
+      "event": "trade",
+      "id": "12",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.32\",\"size\":250,\"time\":\"2026-10-11T06:31:15.648Z\"}"
+    },
+    {
+      "t_ms": 2480.817,
+      "kind": "sse",
+      "event": "trade",
+      "id": "13",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.14\",\"size\":739,\"time\":\"2026-10-11T06:31:15.850Z\"}"
+    },
+    {
+      "t_ms": 2681.215,
+      "kind": "sse",
+      "event": "trade",
+      "id": "14",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.44\",\"size\":740,\"time\":\"2026-10-11T06:31:16.051Z\"}"
+    },
+    {
+      "t_ms": 2883.55,
+      "kind": "sse",
+      "event": "trade",
+      "id": "15",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.65\",\"size\":622,\"time\":\"2026-10-11T06:31:16.253Z\"}"
+    },
+    {
+      "t_ms": 3086.868,
+      "kind": "sse",
+      "event": "trade",
+      "id": "16",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.56\",\"size\":216,\"time\":\"2026-10-11T06:31:16.456Z\"}"
+    },
+    {
+      "t_ms": 3289.184,
+      "kind": "sse",
+      "event": "trade",
+      "id": "17",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.50\",\"size\":436,\"time\":\"2026-10-11T06:31:16.658Z\"}"
+    },
+    {
+      "t_ms": 3491.018,
+      "kind": "sse",
+      "event": "trade",
+      "id": "18",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.53\",\"size\":127,\"time\":\"2026-10-11T06:31:16.861Z\"}"
+    },
+    {
+      "t_ms": 3695.375,
+      "kind": "sse",
+      "event": "trade",
+      "id": "19",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.26\",\"size\":683,\"time\":\"2026-10-11T06:31:17.064Z\"}"
+    },
+    {
+      "t_ms": 3897.597,
+      "kind": "sse",
+      "event": "trade",
+      "id": "20",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.38\",\"size\":97,\"time\":\"2026-10-11T06:31:17.268Z\"}"
+    },
+    {
+      "t_ms": 4098.301,
+      "kind": "sse",
+      "event": "trade",
+      "id": "21",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.44\",\"size\":414,\"time\":\"2026-10-11T06:31:17.468Z\"}"
+    },
+    {
+      "t_ms": 4301.602,
+      "kind": "sse",
+      "event": "trade",
+      "id": "22",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.47\",\"size\":855,\"time\":\"2026-10-11T06:31:17.671Z\"}"
+    },
+    {
+      "t_ms": 4503.797,
+      "kind": "sse",
+      "event": "trade",
+      "id": "23",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.41\",\"size\":47,\"time\":\"2026-10-11T06:31:17.873Z\"}"
+    },
+    {
+      "t_ms": 4705.477,
+      "kind": "sse",
+      "event": "trade",
+      "id": "24",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.62\",\"size\":959,\"time\":\"2026-10-11T06:31:18.075Z\"}"
+    },
+    {
+      "t_ms": 4908.637,
+      "kind": "sse",
+      "event": "trade",
+      "id": "25",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.32\",\"size\":808,\"time\":\"2026-10-11T06:31:18.278Z\"}"
+    },
+    {
+      "t_ms": 5111.729,
+      "kind": "sse",
+      "event": "trade",
+      "id": "26",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.38\",\"size\":969,\"time\":\"2026-10-11T06:31:18.481Z\"}"
+    },
+    {
+      "t_ms": 5313.394,
+      "kind": "sse",
+      "event": "trade",
+      "id": "27",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.32\",\"size\":188,\"time\":\"2026-10-11T06:31:18.683Z\"}"
+    },
+    {
+      "t_ms": 5516.778,
+      "kind": "sse",
+      "event": "trade",
+      "id": "28",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.47\",\"size\":765,\"time\":\"2026-10-11T06:31:18.886Z\"}"
+    },
+    {
+      "t_ms": 5720.756,
+      "kind": "sse",
+      "event": "trade",
+      "id": "29",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.68\",\"size\":690,\"time\":\"2026-10-11T06:31:19.090Z\"}"
+    },
+    {
+      "t_ms": 5924.143,
+      "kind": "sse",
+      "event": "trade",
+      "id": "30",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.50\",\"size\":451,\"time\":\"2026-10-11T06:31:19.293Z\"}"
+    },
+    {
+      "t_ms": 6126.903,
+      "kind": "sse",
+      "event": "trade",
+      "id": "31",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.26\",\"size\":743,\"time\":\"2026-10-11T06:31:19.495Z\"}"
+    },
+    {
+      "t_ms": 6327.486,
+      "kind": "sse",
+      "event": "trade",
+      "id": "32",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.29\",\"size\":525,\"time\":\"2026-10-11T06:31:19.697Z\"}"
+    },
+    {
+      "t_ms": 6530.882,
+      "kind": "sse",
+      "event": "trade",
+      "id": "33",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.41\",\"size\":635,\"time\":\"2026-10-11T06:31:19.900Z\"}"
+    },
+    {
+      "t_ms": 6733.872,
+      "kind": "sse",
+      "event": "trade",
+      "id": "34",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.26\",\"size\":403,\"time\":\"2026-10-11T06:31:20.103Z\"}"
+    },
+    {
+      "t_ms": 6934.826,
+      "kind": "sse",
+      "event": "trade",
+      "id": "35",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.23\",\"size\":204,\"time\":\"2026-10-11T06:31:20.304Z\"}"
+    },
+    {
+      "t_ms": 7136.616,
+      "kind": "sse",
+      "event": "trade",
+      "id": "36",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.05\",\"size\":712,\"time\":\"2026-10-11T06:31:20.506Z\"}"
+    },
+    {
+      "t_ms": 7337.851,
+      "kind": "sse",
+      "event": "trade",
+      "id": "37",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.26\",\"size\":996,\"time\":\"2026-10-11T06:31:20.707Z\"}"
+    },
+    {
+      "t_ms": 7539.157,
+      "kind": "sse",
+      "event": "trade",
+      "id": "38",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.11\",\"size\":392,\"time\":\"2026-10-11T06:31:20.909Z\"}"
+    },
+    {
+      "t_ms": 7740.568,
+      "kind": "sse",
+      "event": "trade",
+      "id": "39",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.38\",\"size\":957,\"time\":\"2026-10-11T06:31:21.110Z\"}"
+    },
+    {
+      "t_ms": 7942.748,
+      "kind": "sse",
+      "event": "trade",
+      "id": "40",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.20\",\"size\":341,\"time\":\"2026-10-11T06:31:21.312Z\"}"
+    },
+    {
+      "t_ms": 8145.054,
+      "kind": "sse",
+      "event": "trade",
+      "id": "41",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.26\",\"size\":58,\"time\":\"2026-10-11T06:31:21.515Z\"}"
+    },
+    {
+      "t_ms": 8346.096,
+      "kind": "sse",
+      "event": "trade",
+      "id": "42",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.14\",\"size\":778,\"time\":\"2026-10-11T06:31:21.716Z\"}"
+    },
+    {
+      "t_ms": 8549.109,
+      "kind": "sse",
+      "event": "trade",
+      "id": "43",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.41\",\"size\":960,\"time\":\"2026-10-11T06:31:21.918Z\"}"
+    },
+    {
+      "t_ms": 8751.653,
+      "kind": "sse",
+      "event": "trade",
+      "id": "44",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.68\",\"size\":209,\"time\":\"2026-10-11T06:31:22.121Z\"}"
+    },
+    {
+      "t_ms": 8955.49,
+      "kind": "sse",
+      "event": "trade",
+      "id": "45",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.53\",\"size\":865,\"time\":\"2026-10-11T06:31:22.324Z\"}"
+    },
+    {
+      "t_ms": 9157.819,
+      "kind": "sse",
+      "event": "trade",
+      "id": "46",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.80\",\"size\":347,\"time\":\"2026-10-11T06:31:22.527Z\"}"
+    },
+    {
+      "t_ms": 9360.783,
+      "kind": "sse",
+      "event": "trade",
+      "id": "47",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.59\",\"size\":709,\"time\":\"2026-10-11T06:31:22.730Z\"}"
+    },
+    {
+      "t_ms": 9564.166,
+      "kind": "sse",
+      "event": "trade",
+      "id": "48",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.80\",\"size\":956,\"time\":\"2026-10-11T06:31:22.933Z\"}"
+    },
+    {
+      "t_ms": 9765.849,
+      "kind": "sse",
+      "event": "trade",
+      "id": "49",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.92\",\"size\":515,\"time\":\"2026-10-11T06:31:23.135Z\"}"
+    },
+    {
+      "t_ms": 9968.204,
+      "kind": "sse",
+      "event": "trade",
+      "id": "50",
+      "data": "{\"symbol\":\"AMGN\",\"price\":\"299.71\",\"size\":869,\"time\":\"2026-10-11T06:31:23.338Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

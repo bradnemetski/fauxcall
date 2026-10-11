@@ -1,0 +1,92 @@
+{
+  "id": "000084",
+  "endpoint": "GET /api/v1/time/current/zone",
+  "purpose": "time_profile",
+  "plan_call": "cz-time",
+  "started_at": "2026-10-11T10:34:00.937730Z",
+  "started_ns": 1791714840937730000,
+  "elapsed_ms": 431.584,
+  "ttfb_ms": 430.567,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/time/current/zone?timezone=America%2FNew_York",
+    "path": "/api/v1/time/current/zone",
+    "query": [
+      [
+        "timezone",
+        "America/New_York"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:34:01 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "date_time": "2026-10-11T06:34:01.309123-04:00",
+        "date": "2026-10-11",
+        "time": "06:34:01.309123",
+        "day_of_week": "Sunday",
+        "dst_active": true,
+        "timezone": "America/New_York",
+        "utc_offset_seconds": -14400
+      },
+      "size": 192
+    }
+  }
+}

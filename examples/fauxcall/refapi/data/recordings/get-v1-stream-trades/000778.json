@@ -1,0 +1,445 @@
+{
+  "id": "000778",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "series",
+  "plan_call": "st50-CSCO",
+  "started_at": "2026-10-11T06:33:03.011497Z",
+  "started_ns": 1791700383011497000,
+  "elapsed_ms": 9945.452,
+  "ttfb_ms": 51.341,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=CSCO&count=50",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "CSCO"
+      ],
+      [
+        "count",
+        "50"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:33:02 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700394"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 51.505,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.88\",\"size\":152,\"time\":\"2026-10-11T06:33:03.062Z\"}"
+    },
+    {
+      "t_ms": 253.697,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.87\",\"size\":999,\"time\":\"2026-10-11T06:33:03.264Z\"}"
+    },
+    {
+      "t_ms": 455.895,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.92\",\"size\":226,\"time\":\"2026-10-11T06:33:03.467Z\"}"
+    },
+    {
+      "t_ms": 658.137,
+      "kind": "sse",
+      "event": "trade",
+      "id": "4",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.95\",\"size\":20,\"time\":\"2026-10-11T06:33:03.669Z\"}"
+    },
+    {
+      "t_ms": 860.273,
+      "kind": "sse",
+      "event": "trade",
+      "id": "5",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.91\",\"size\":142,\"time\":\"2026-10-11T06:33:03.871Z\"}"
+    },
+    {
+      "t_ms": 1062.605,
+      "kind": "sse",
+      "event": "trade",
+      "id": "6",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.89\",\"size\":801,\"time\":\"2026-10-11T06:33:04.073Z\"}"
+    },
+    {
+      "t_ms": 1264.839,
+      "kind": "sse",
+      "event": "trade",
+      "id": "7",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.85\",\"size\":50,\"time\":\"2026-10-11T06:33:04.276Z\"}"
+    },
+    {
+      "t_ms": 1465.013,
+      "kind": "sse",
+      "event": "trade",
+      "id": "8",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.84\",\"size\":472,\"time\":\"2026-10-11T06:33:04.476Z\"}"
+    },
+    {
+      "t_ms": 1665.248,
+      "kind": "sse",
+      "event": "trade",
+      "id": "9",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.81\",\"size\":400,\"time\":\"2026-10-11T06:33:04.676Z\"}"
+    },
+    {
+      "t_ms": 1866.125,
+      "kind": "sse",
+      "event": "trade",
+      "id": "10",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.78\",\"size\":96,\"time\":\"2026-10-11T06:33:04.877Z\"}"
+    },
+    {
+      "t_ms": 2068.564,
+      "kind": "sse",
+      "event": "trade",
+      "id": "11",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.81\",\"size\":319,\"time\":\"2026-10-11T06:33:05.079Z\"}"
+    },
+    {
+      "t_ms": 2269.48,
+      "kind": "sse",
+      "event": "trade",
+      "id": "12",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.85\",\"size\":251,\"time\":\"2026-10-11T06:33:05.280Z\"}"
+    },
+    {
+      "t_ms": 2469.996,
+      "kind": "sse",
+      "event": "trade",
+      "id": "13",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.86\",\"size\":409,\"time\":\"2026-10-11T06:33:05.481Z\"}"
+    },
+    {
+      "t_ms": 2672.222,
+      "kind": "sse",
+      "event": "trade",
+      "id": "14",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.85\",\"size\":121,\"time\":\"2026-10-11T06:33:05.683Z\"}"
+    },
+    {
+      "t_ms": 2874.583,
+      "kind": "sse",
+      "event": "trade",
+      "id": "15",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.83\",\"size\":200,\"time\":\"2026-10-11T06:33:05.885Z\"}"
+    },
+    {
+      "t_ms": 3076.9,
+      "kind": "sse",
+      "event": "trade",
+      "id": "16",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.78\",\"size\":566,\"time\":\"2026-10-11T06:33:06.088Z\"}"
+    },
+    {
+      "t_ms": 3279.137,
+      "kind": "sse",
+      "event": "trade",
+      "id": "17",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.77\",\"size\":965,\"time\":\"2026-10-11T06:33:06.290Z\"}"
+    },
+    {
+      "t_ms": 3481.386,
+      "kind": "sse",
+      "event": "trade",
+      "id": "18",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.73\",\"size\":828,\"time\":\"2026-10-11T06:33:06.492Z\"}"
+    },
+    {
+      "t_ms": 3683.701,
+      "kind": "sse",
+      "event": "trade",
+      "id": "19",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.76\",\"size\":601,\"time\":\"2026-10-11T06:33:06.694Z\"}"
+    },
+    {
+      "t_ms": 3885.891,
+      "kind": "sse",
+      "event": "trade",
+      "id": "20",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.72\",\"size\":946,\"time\":\"2026-10-11T06:33:06.897Z\"}"
+    },
+    {
+      "t_ms": 4087.326,
+      "kind": "sse",
+      "event": "trade",
+      "id": "21",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.67\",\"size\":417,\"time\":\"2026-10-11T06:33:07.098Z\"}"
+    },
+    {
+      "t_ms": 4289.562,
+      "kind": "sse",
+      "event": "trade",
+      "id": "22",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.63\",\"size\":218,\"time\":\"2026-10-11T06:33:07.300Z\"}"
+    },
+    {
+      "t_ms": 4491.833,
+      "kind": "sse",
+      "event": "trade",
+      "id": "23",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.60\",\"size\":410,\"time\":\"2026-10-11T06:33:07.503Z\"}"
+    },
+    {
+      "t_ms": 4693.992,
+      "kind": "sse",
+      "event": "trade",
+      "id": "24",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.57\",\"size\":599,\"time\":\"2026-10-11T06:33:07.705Z\"}"
+    },
+    {
+      "t_ms": 4895.211,
+      "kind": "sse",
+      "event": "trade",
+      "id": "25",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.60\",\"size\":362,\"time\":\"2026-10-11T06:33:07.906Z\"}"
+    },
+    {
+      "t_ms": 5097.558,
+      "kind": "sse",
+      "event": "trade",
+      "id": "26",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.65\",\"size\":884,\"time\":\"2026-10-11T06:33:08.108Z\"}"
+    },
+    {
+      "t_ms": 5299.825,
+      "kind": "sse",
+      "event": "trade",
+      "id": "27",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.69\",\"size\":80,\"time\":\"2026-10-11T06:33:08.311Z\"}"
+    },
+    {
+      "t_ms": 5502.095,
+      "kind": "sse",
+      "event": "trade",
+      "id": "28",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.73\",\"size\":525,\"time\":\"2026-10-11T06:33:08.513Z\"}"
+    },
+    {
+      "t_ms": 5703.263,
+      "kind": "sse",
+      "event": "trade",
+      "id": "29",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.71\",\"size\":892,\"time\":\"2026-10-11T06:33:08.714Z\"}"
+    },
+    {
+      "t_ms": 5905.367,
+      "kind": "sse",
+      "event": "trade",
+      "id": "30",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.74\",\"size\":219,\"time\":\"2026-10-11T06:33:08.916Z\"}"
+    },
+    {
+      "t_ms": 6107.901,
+      "kind": "sse",
+      "event": "trade",
+      "id": "31",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.71\",\"size\":350,\"time\":\"2026-10-11T06:33:09.119Z\"}"
+    },
+    {
+      "t_ms": 6307.984,
+      "kind": "sse",
+      "event": "trade",
+      "id": "32",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.68\",\"size\":701,\"time\":\"2026-10-11T06:33:09.319Z\"}"
+    },
+    {
+      "t_ms": 6508.293,
+      "kind": "sse",
+      "event": "trade",
+      "id": "33",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.71\",\"size\":566,\"time\":\"2026-10-11T06:33:09.519Z\"}"
+    },
+    {
+      "t_ms": 6710.736,
+      "kind": "sse",
+      "event": "trade",
+      "id": "34",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.68\",\"size\":115,\"time\":\"2026-10-11T06:33:09.721Z\"}"
+    },
+    {
+      "t_ms": 6912.339,
+      "kind": "sse",
+      "event": "trade",
+      "id": "35",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.63\",\"size\":410,\"time\":\"2026-10-11T06:33:09.923Z\"}"
+    },
+    {
+      "t_ms": 7114.649,
+      "kind": "sse",
+      "event": "trade",
+      "id": "36",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.64\",\"size\":604,\"time\":\"2026-10-11T06:33:10.125Z\"}"
+    },
+    {
+      "t_ms": 7317.162,
+      "kind": "sse",
+      "event": "trade",
+      "id": "37",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.59\",\"size\":662,\"time\":\"2026-10-11T06:33:10.328Z\"}"
+    },
+    {
+      "t_ms": 7518.425,
+      "kind": "sse",
+      "event": "trade",
+      "id": "38",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.56\",\"size\":775,\"time\":\"2026-10-11T06:33:10.529Z\"}"
+    },
+    {
+      "t_ms": 7720.91,
+      "kind": "sse",
+      "event": "trade",
+      "id": "39",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.57\",\"size\":400,\"time\":\"2026-10-11T06:33:10.732Z\"}"
+    },
+    {
+      "t_ms": 7923.283,
+      "kind": "sse",
+      "event": "trade",
+      "id": "40",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.55\",\"size\":977,\"time\":\"2026-10-11T06:33:10.934Z\"}"
+    },
+    {
+      "t_ms": 8126.087,
+      "kind": "sse",
+      "event": "trade",
+      "id": "41",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.52\",\"size\":937,\"time\":\"2026-10-11T06:33:11.137Z\"}"
+    },
+    {
+      "t_ms": 8327.315,
+      "kind": "sse",
+      "event": "trade",
+      "id": "42",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.57\",\"size\":108,\"time\":\"2026-10-11T06:33:11.338Z\"}"
+    },
+    {
+      "t_ms": 8529.492,
+      "kind": "sse",
+      "event": "trade",
+      "id": "43",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.59\",\"size\":186,\"time\":\"2026-10-11T06:33:11.540Z\"}"
+    },
+    {
+      "t_ms": 8731.806,
+      "kind": "sse",
+      "event": "trade",
+      "id": "44",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.56\",\"size\":177,\"time\":\"2026-10-11T06:33:11.743Z\"}"
+    },
+    {
+      "t_ms": 8933.979,
+      "kind": "sse",
+      "event": "trade",
+      "id": "45",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.58\",\"size\":401,\"time\":\"2026-10-11T06:33:11.945Z\"}"
+    },
+    {
+      "t_ms": 9135.356,
+      "kind": "sse",
+      "event": "trade",
+      "id": "46",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.53\",\"size\":771,\"time\":\"2026-10-11T06:33:12.146Z\"}"
+    },
+    {
+      "t_ms": 9337.691,
+      "kind": "sse",
+      "event": "trade",
+      "id": "47",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.51\",\"size\":177,\"time\":\"2026-10-11T06:33:12.348Z\"}"
+    },
+    {
+      "t_ms": 9539.642,
+      "kind": "sse",
+      "event": "trade",
+      "id": "48",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.47\",\"size\":938,\"time\":\"2026-10-11T06:33:12.550Z\"}"
+    },
+    {
+      "t_ms": 9741.68,
+      "kind": "sse",
+      "event": "trade",
+      "id": "49",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.51\",\"size\":313,\"time\":\"2026-10-11T06:33:12.752Z\"}"
+    },
+    {
+      "t_ms": 9943.822,
+      "kind": "sse",
+      "event": "trade",
+      "id": "50",
+      "data": "{\"symbol\":\"CSCO\",\"price\":\"54.49\",\"size\":772,\"time\":\"2026-10-11T06:33:12.955Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

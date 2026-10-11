@@ -1,0 +1,90 @@
+{
+  "id": "000166",
+  "endpoint": "GET /api/v1/time/current/coordinate",
+  "purpose": "invalid",
+  "plan_call": "currentco-nonnum-lon",
+  "started_at": "2026-10-11T10:35:41.920677Z",
+  "started_ns": 1791714941920677000,
+  "elapsed_ms": 141.738,
+  "ttfb_ms": 140.791,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/time/current/coordinate?latitude=52.3&longitude=xyz",
+    "path": "/api/v1/time/current/coordinate",
+    "query": [
+      [
+        "latitude",
+        "52.3"
+      ],
+      [
+        "longitude",
+        "xyz"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:35:42 GMT"
+      ],
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "longitude": [
+            "The value 'xyz' is not valid."
+          ]
+        },
+        "traceId": "00-6a7db00571d0daa804be2604ab47d268-c88e1b3020898931-00"
+      },
+      "size": 249
+    }
+  }
+}

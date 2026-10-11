@@ -1,0 +1,111 @@
+{
+ "name": "legacy-current-increment",
+ "created_at": "2026-10-11T10:40:00Z",
+ "calls": [
+  {
+   "id": "ccincrement-1",
+   "endpoint": "POST /api/calculation/current/increment",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/current/increment",
+    "json_body": {
+     "timeZone": "Europe/Amsterdam",
+     "timeSpan": "16:03:45:17"
+    }
+   }
+  },
+  {
+   "id": "ccincrement-2",
+   "endpoint": "POST /api/calculation/current/increment",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/current/increment",
+    "json_body": {
+     "timeZone": "America/New_York",
+     "timeSpan": "0:01:30:00.500"
+    }
+   }
+  },
+  {
+   "id": "ccincrement-time",
+   "endpoint": "POST /api/calculation/current/increment",
+   "purpose": "time_profile",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/current/increment",
+    "json_body": {
+     "timeZone": "UTC",
+     "timeSpan": "1:00:00:00"
+    }
+   },
+   "repeat": 2,
+   "interval_ms": 10000
+  },
+  {
+   "id": "ccincrement-noday",
+   "endpoint": "POST /api/calculation/current/increment",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/current/increment",
+    "json_body": {
+     "timeZone": "UTC",
+     "timeSpan": "01:30:00"
+    }
+   }
+  },
+  {
+   "id": "ccincrement-bad",
+   "endpoint": "POST /api/calculation/current/increment",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/current/increment",
+    "json_body": {
+     "timeZone": "UTC",
+     "timeSpan": "abc"
+    }
+   }
+  },
+  {
+   "id": "ccincrement-badtz",
+   "endpoint": "POST /api/calculation/current/increment",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/current/increment",
+    "json_body": {
+     "timeZone": "Mars/Phobos",
+     "timeSpan": "1:00:00:00"
+    }
+   }
+  },
+  {
+   "id": "ccincrement-missing",
+   "endpoint": "POST /api/calculation/current/increment",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/current/increment",
+    "json_body": {
+     "timeZone": "UTC"
+    }
+   }
+  },
+  {
+   "id": "ccincrement-neg",
+   "endpoint": "POST /api/calculation/current/increment",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/current/increment",
+    "json_body": {
+     "timeZone": "UTC",
+     "timeSpan": "-1:00:00:00"
+    }
+   }
+  }
+ ]
+}

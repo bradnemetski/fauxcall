@@ -1,0 +1,2161 @@
+{
+  "score": 1.0,
+  "threshold": 0.98,
+  "ok": true,
+  "unmatched_scenarios": [],
+  "endpoints": {
+    "DELETE /v1/tickers/AAPL": {
+      "passed": 23.0,
+      "total": 23.0,
+      "score": 1.0
+    },
+    "DELETE /v1/uploads/{id}": {
+      "passed": 41.0,
+      "total": 41.0,
+      "score": 1.0
+    },
+    "DELETE /v1/watchlists/{id}": {
+      "passed": 53.0,
+      "total": 53.0,
+      "score": 1.0
+    },
+    "GET /V1/Exchanges": {
+      "passed": 11.5,
+      "total": 11.5,
+      "score": 1.0
+    },
+    "GET /healthz": {
+      "passed": 10.0,
+      "total": 10.0,
+      "score": 1.0
+    },
+    "GET /v1": {
+      "passed": 11.5,
+      "total": 11.5,
+      "score": 1.0
+    },
+    "GET /v1/exchanges": {
+      "passed": 303.0,
+      "total": 303.0,
+      "score": 1.0
+    },
+    "GET /v1/exchanges/{code}": {
+      "passed": 288.5,
+      "total": 288.5,
+      "score": 1.0
+    },
+    "GET /v1/nonexistent": {
+      "passed": 11.5,
+      "total": 11.5,
+      "score": 1.0
+    },
+    "GET /v1/search": {
+      "passed": 861.0,
+      "total": 861.0,
+      "score": 1.0
+    },
+    "GET /v1/stream/trades": {
+      "passed": 120.0,
+      "total": 120.0,
+      "score": 1.0
+    },
+    "GET /v1/tickers": {
+      "passed": 2967.0,
+      "total": 2967.0,
+      "score": 1.0
+    },
+    "GET /v1/tickers/{symbol}": {
+      "passed": 617.0,
+      "total": 617.0,
+      "score": 1.0
+    },
+    "GET /v1/tickers/{symbol}/quote": {
+      "passed": 401.0,
+      "total": 401.0,
+      "score": 1.0
+    },
+    "GET /v1/time": {
+      "passed": 117.0,
+      "total": 117.0,
+      "score": 1.0
+    },
+    "GET /v1/uploads": {
+      "passed": 17.0,
+      "total": 17.0,
+      "score": 1.0
+    },
+    "GET /v1/uploads/{id}": {
+      "passed": 83.0,
+      "total": 83.0,
+      "score": 1.0
+    },
+    "GET /v1/uploads/{id}/content": {
+      "passed": 70.0,
+      "total": 70.0,
+      "score": 1.0
+    },
+    "GET /v1/watchlists": {
+      "passed": 15.5,
+      "total": 15.5,
+      "score": 1.0
+    },
+    "GET /v1/watchlists/{id}": {
+      "passed": 192.0,
+      "total": 192.0,
+      "score": 1.0
+    },
+    "GET /v1/ws/quotes": {
+      "passed": 11.5,
+      "total": 11.5,
+      "score": 1.0
+    },
+    "PATCH /v1": {
+      "passed": 11.5,
+      "total": 11.5,
+      "score": 1.0
+    },
+    "PATCH /v1/uploads": {
+      "passed": 23.0,
+      "total": 23.0,
+      "score": 1.0
+    },
+    "PATCH /v1/watchlists/{id}": {
+      "passed": 64.5,
+      "total": 64.5,
+      "score": 1.0
+    },
+    "POST /healthz": {
+      "passed": 23.0,
+      "total": 23.0,
+      "score": 1.0
+    },
+    "POST /v1/exchanges": {
+      "passed": 23.0,
+      "total": 23.0,
+      "score": 1.0
+    },
+    "POST /v1/nonexistent": {
+      "passed": 11.5,
+      "total": 11.5,
+      "score": 1.0
+    },
+    "POST /v1/time": {
+      "passed": 23.0,
+      "total": 23.0,
+      "score": 1.0
+    },
+    "POST /v1/uploads": {
+      "passed": 105.5,
+      "total": 105.5,
+      "score": 1.0
+    },
+    "POST /v1/watchlists": {
+      "passed": 311.0,
+      "total": 311.0,
+      "score": 1.0
+    },
+    "POST /v1/ws/quotes": {
+      "passed": 11.5,
+      "total": 11.5,
+      "score": 1.0
+    },
+    "PUT /nope": {
+      "passed": 11.5,
+      "total": 11.5,
+      "score": 1.0
+    },
+    "PUT /v1/watchlists": {
+      "passed": 23.0,
+      "total": 23.0,
+      "score": 1.0
+    },
+    "PUT /v1/watchlists/{id}": {
+      "passed": 63.5,
+      "total": 63.5,
+      "score": 1.0
+    }
+  },
+  "scenarios": {
+    "tests/e2e/test_scenarios.py::test_healthz_needs_no_key": [
+      {
+        "call": "GET /healthz",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_exchanges_list_matches_items": [
+      {
+        "call": "GET /v1/exchanges",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/xhkg",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/xlon",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/xnas",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/xnys",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/xpar",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/xtks",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_exchanges_ignore_query_parameters": [
+      {
+        "call": "GET /v1/exchanges",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_exchange_not_found[XXXX]": [
+      {
+        "call": "GET /v1/exchanges/XXXX",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_exchange_not_found[123]": [
+      {
+        "call": "GET /v1/exchanges/123",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_exchange_not_found[x]": [
+      {
+        "call": "GET /v1/exchanges/x",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_exchange_not_found[XNAS ]": [
+      {
+        "call": "GET /v1/exchanges/XNAS ",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_exchange_not_found[xnys1]": [
+      {
+        "call": "GET /v1/exchanges/xnys1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_default_page": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_pagination_walk": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_by_exchange_reference_real_exchanges[XHKG]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/XHKG",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_by_exchange_reference_real_exchanges[XLON]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/XLON",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_by_exchange_reference_real_exchanges[XNAS]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/XNAS",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_by_exchange_reference_real_exchanges[XNYS]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/XNYS",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_by_exchange_reference_real_exchanges[XPAR]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/XPAR",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_by_exchange_reference_real_exchanges[XTKS]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/XTKS",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_by_exchange_reference_real_exchanges[xtks]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/exchanges/xtks",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_by_sector[Technology]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_by_sector[financials]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_by_sector[CONSUMER STAPLES]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_by_sector[Semiconductors]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_by_sector[energy]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_combined_filters_paginate": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_filters_that_match_nothing": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_parameter_spellings[exchange=&sector=&cursor=-20]": [
+      {
+        "call": "GET /v1/tickers?exchange=&sector=&cursor=",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_parameter_spellings[exchange=XNAS&exchange=XLON-7]": [
+      {
+        "call": "GET /v1/tickers?exchange=XNAS&exchange=XLON",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_parameter_spellings[limit=2&limit=4-4]": [
+      {
+        "call": "GET /v1/tickers?limit=2&limit=4",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_parameter_spellings[limit=+5-5]": [
+      {
+        "call": "GET /v1/tickers?limit=+5",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_parameter_spellings[limit=05-5]": [
+      {
+        "call": "GET /v1/tickers?limit=05",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_parameter_spellings[limit=5.0-5]": [
+      {
+        "call": "GET /v1/tickers?limit=5.0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_parameter_spellings[limit=%205%20-5]": [
+      {
+        "call": "GET /v1/tickers?limit=%205%20",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_parameter_spellings[limit=1-1]": [
+      {
+        "call": "GET /v1/tickers?limit=1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_parameter_spellings[limit=100-60]": [
+      {
+        "call": "GET /v1/tickers?limit=100",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_parameter_spellings[foo=bar-20]": [
+      {
+        "call": "GET /v1/tickers?foo=bar",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[limit=0-limit]": [
+      {
+        "call": "GET /v1/tickers?limit=0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[limit=101-limit]": [
+      {
+        "call": "GET /v1/tickers?limit=101",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[limit=-3-limit]": [
+      {
+        "call": "GET /v1/tickers?limit=-3",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[limit=ten-limit]": [
+      {
+        "call": "GET /v1/tickers?limit=ten",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[limit=-limit]": [
+      {
+        "call": "GET /v1/tickers?limit=",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[limit=2.5-limit]": [
+      {
+        "call": "GET /v1/tickers?limit=2.5",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[limit=true-limit]": [
+      {
+        "call": "GET /v1/tickers?limit=true",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[exchange=NYSE-exchange]": [
+      {
+        "call": "GET /v1/tickers?exchange=NYSE",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[exchange=%20XNAS-exchange]": [
+      {
+        "call": "GET /v1/tickers?exchange=%20XNAS",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[sector=Tech-sector]": [
+      {
+        "call": "GET /v1/tickers?sector=Tech",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[sector=Financial-sector]": [
+      {
+        "call": "GET /v1/tickers?sector=Financial",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[cursor=not-a-cursor-cursor]": [
+      {
+        "call": "GET /v1/tickers?cursor=not-a-cursor",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[cursor=eyJhZnRlciI6Ik5PUEUifQ-cursor]": [
+      {
+        "call": "GET /v1/tickers?cursor=eyJhZnRlciI6Ik5PUEUifQ",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[cursor=eyJhZnRlciI6bnVsbH0-cursor]": [
+      {
+        "call": "GET /v1/tickers?cursor=eyJhZnRlciI6bnVsbH0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[cursor=eyJhZnRlciI6N30-cursor]": [
+      {
+        "call": "GET /v1/tickers?cursor=eyJhZnRlciI6N30",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[limit=0&exchange=NYSE&sector=Tech&cursor=x-limit]": [
+      {
+        "call": "GET /v1/tickers?limit=0&exchange=NYSE&sector=Tech&cursor=x",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[exchange=NYSE&sector=Tech&cursor=x-exchange]": [
+      {
+        "call": "GET /v1/tickers?exchange=NYSE&sector=Tech&cursor=x",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_invalid_parameters[sector=Tech&cursor=x-sector]": [
+      {
+        "call": "GET /v1/tickers?sector=Tech&cursor=x",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_handmade_cursors[aapl]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_handmade_cursors[AZN.L]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_handmade_cursors[XOM]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_handmade_cursors[0005.HK]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_tickers_handmade_cursors[msft]": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ticker_cursor_from_another_filter": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_every_listed_ticker_resolves": [
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/0005.hk",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/1211.hk",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/7267.t",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/9988.hk",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/amd",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/azn.l",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/bnp.pa",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/csco",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/gm",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/intc",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/mc.pa",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/nvda",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/qcom",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/shel.l",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/ulvr.l",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ticker_not_found[ZZZZ]": [
+      {
+        "call": "GET /v1/tickers/ZZZZ",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ticker_not_found[brk.b]": [
+      {
+        "call": "GET /v1/tickers/brk.b",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ticker_not_found[A$B]": [
+      {
+        "call": "GET /v1/tickers/A$B",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ticker_not_found[A B]": [
+      {
+        "call": "GET /v1/tickers/A B",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ticker_not_found[AAPL.]": [
+      {
+        "call": "GET /v1/tickers/AAPL.",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ticker_not_found[1234]": [
+      {
+        "call": "GET /v1/tickers/1234",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ticker_not_found[\\xc9]": [
+      {
+        "call": "GET /v1/tickers/É",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ticker_not_found[TSLA-X]": [
+      {
+        "call": "GET /v1/tickers/TSLA-X",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_quotes_are_consistent_with_tickers": [
+      {
+        "call": "GET /v1/exchanges",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/0005.HK/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/0981.HK/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/6861.T/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/8035.T/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/9988.HK/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/AIR.PA/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/AMZN/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/BA/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/BNP.PA/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/COST/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/DIS/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/GOOGL/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/INTC/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/KO/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/MSFT/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/PEP/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/QCOM/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/SAN.PA/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/TSM/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/V/quote",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_quote_is_static_and_case_insensitive": [
+      {
+        "call": "GET /v1/tickers/nvda/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/NVDA/quote",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_quote_unknown_symbol": [
+      {
+        "call": "GET /v1/tickers/nope/quote",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_server_time_is_now": [
+      {
+        "call": "GET /v1/time",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/time",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[apple]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[AAPL]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[microsoft corporation]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[bank of america]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[tesla motors]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[amazon inc]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[visa]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[oil gas]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[semi conductor]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[chips]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[nflx]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[goo]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[co]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[inc.]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[japan tech]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[the coca-cola company]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[Holdings plc]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[group inc]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[ford]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[general]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[mitsubishi ufj]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[rolls]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[software cloud]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[telecom media]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[zz]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[ab]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[mo\\xebt hennessy]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[  spaced  out  ]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[123]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[0700]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[luxury retail ecommerce]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[pharma biotech drugs]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[exchange clearing]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_queries[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_invalid[params0]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_invalid[params1]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_invalid[params2]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_invalid[params3]": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_ranking_examples": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_search_hits_resolve_to_tickers": [
+      {
+        "call": "GET /v1/search",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/7203.T",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/7267.T",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/F",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/GM",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_lifecycle": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/1033",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "PUT /v1/watchlists/1033",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "PATCH /v1/watchlists/1033",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "PATCH /v1/watchlists/1033",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/XOM",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "DELETE /v1/watchlists/1033",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/1033",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "DELETE /v1/watchlists/1033",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_id_spellings": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/01034",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/+1034",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/1034.0",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/%201034",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/1034.00",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/1034.5",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/1e3",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/abc",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/nan",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/-1",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/0",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/99999999",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "DELETE /v1/watchlists/1034",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body0-missing_parameter-name]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body1-missing_parameter-name]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body2-invalid_parameter-name]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body3-invalid_parameter-name]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body4-invalid_parameter-name]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body5-invalid_parameter-name]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body6-invalid_parameter-name]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body7-invalid_parameter-symbols]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body8-invalid_parameter-symbols]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body9-invalid_parameter-symbols]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body10-unknown_symbol-symbols]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body11-unknown_symbol-symbols]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body12-invalid_parameter-name]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body13-invalid_parameter-symbols]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[body14-invalid_body-None]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[just a string-invalid_body-None]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_validation[None-invalid_body-None]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_bad_bodies[{\"name\": -application/json]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_bad_bodies[{\"name\": \"fauxcall-e2e\"}-text/plain]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_bad_bodies[name=fauxcall-e2e-application/x-www-form-urlencoded]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_create_bad_bodies[-application/json]": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_watchlist_changes_validate_before_lookup": [
+      {
+        "call": "PUT /v1/watchlists/99999999",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "PUT /v1/watchlists/99999999",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "PATCH /v1/watchlists/99999999",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "PATCH /v1/watchlists/99999999",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "PUT /v1/watchlists/abc",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "DELETE /v1/watchlists/abc",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_read_only_key_cannot_write": [
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "POST /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "PUT /v1/watchlists/1035",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "PATCH /v1/watchlists/1035",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "DELETE /v1/watchlists/1035",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/watchlists/1035",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "POST /v1/uploads",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "DELETE /v1/watchlists/1035",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_upload_lifecycle": [
+      {
+        "call": "POST /v1/uploads",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/bb05ad4a-d9d3-410e-b094-5ec75b0a739a/content",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/bb05ad4a-d9d3-410e-b094-5ec75b0a739a",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/bb05ad4a-d9d3-410e-b094-5ec75b0a739a/content",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "DELETE /v1/uploads/bb05ad4a-d9d3-410e-b094-5ec75b0a739a",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/bb05ad4a-d9d3-410e-b094-5ec75b0a739a",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/bb05ad4a-d9d3-410e-b094-5ec75b0a739a/content",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_corrupt_upload_fails": [
+      {
+        "call": "POST /v1/uploads",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/d4247c59-9d7c-4a4a-a330-50afe2caeee2",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/d4247c59-9d7c-4a4a-a330-50afe2caeee2/content",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "DELETE /v1/uploads/d4247c59-9d7c-4a4a-a330-50afe2caeee2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_upload_details": [
+      {
+        "call": "POST /v1/uploads",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/04ced940-8e6a-4b4e-ae97-99d40a7ce749",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/04ced940-8e6a-4b4e-ae97-99d40a7ce749/content",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "DELETE /v1/uploads/04ced940-8e6a-4b4e-ae97-99d40a7ce749",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_upload_validation": [
+      {
+        "call": "POST /v1/uploads",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "POST /v1/uploads",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "POST /v1/uploads",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "POST /v1/uploads",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/abc",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/abc/content",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "DELETE /v1/uploads/abc",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/00000000-0000-4000-8000-000000000000",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/uploads/00000000-0000-4000-8000-000000000000/content",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "DELETE /v1/uploads/00000000-0000-4000-8000-000000000000",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_trade_stream": [
+      {
+        "call": "GET /v1/stream/trades",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/stream/trades",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/MSFT/quote",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_trade_stream_errors[params0-missing_parameter]": [
+      {
+        "call": "GET /v1/stream/trades",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_trade_stream_errors[params1-unknown_symbol]": [
+      {
+        "call": "GET /v1/stream/trades",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_trade_stream_errors[params2-unknown_symbol]": [
+      {
+        "call": "GET /v1/stream/trades",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_trade_stream_errors[params3-invalid_parameter]": [
+      {
+        "call": "GET /v1/stream/trades",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_trade_stream_errors[params4-invalid_parameter]": [
+      {
+        "call": "GET /v1/stream/trades",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_trade_stream_errors[params5-invalid_parameter]": [
+      {
+        "call": "GET /v1/stream/trades",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_trade_stream_errors[params6-invalid_parameter]": [
+      {
+        "call": "GET /v1/stream/trades",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_trade_stream_errors[params7-missing_parameter]": [
+      {
+        "call": "GET /v1/stream/trades",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_auth_failures[/v1/exchanges]": [
+      {
+        "call": "GET /v1/exchanges",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_auth_failures[/v1/time]": [
+      {
+        "call": "GET /v1/time",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_auth_failures[/v1/search?q=apple]": [
+      {
+        "call": "GET /v1/search?q=apple",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_empty_api_key_is_missing": [
+      {
+        "call": "GET /v1/exchanges",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_routes[/v1/nonexistent]": [
+      {
+        "call": "GET /v1/nonexistent",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_routes[/V1/Exchanges]": [
+      {
+        "call": "GET /V1/Exchanges",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_routes[/v1/exchanges/]": [
+      {
+        "call": "GET /v1/exchanges/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_routes[/v1/tickers/AAPL/quote/]": [
+      {
+        "call": "GET /v1/tickers/AAPL/quote/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_routes[/v1]": [
+      {
+        "call": "GET /v1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_methods_not_allowed[POST-/v1/exchanges-GET]": [
+      {
+        "call": "POST /v1/exchanges",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "POST /v1/exchanges",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_methods_not_allowed[DELETE-/v1/tickers/AAPL-GET]": [
+      {
+        "call": "DELETE /v1/tickers/AAPL",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "DELETE /v1/tickers/AAPL",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_methods_not_allowed[PUT-/v1/watchlists-GET, POST]": [
+      {
+        "call": "PUT /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "PUT /v1/watchlists",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_methods_not_allowed[POST-/v1/time-GET]": [
+      {
+        "call": "POST /v1/time",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "POST /v1/time",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_methods_not_allowed[PATCH-/v1/uploads-GET, POST]": [
+      {
+        "call": "PATCH /v1/uploads",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "PATCH /v1/uploads",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_methods_not_allowed[POST-/healthz-GET]": [
+      {
+        "call": "POST /healthz",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "POST /healthz",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_read_only_writes_to_unknown_routes[POST-/v1/nonexistent]": [
+      {
+        "call": "POST /v1/nonexistent",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_read_only_writes_to_unknown_routes[PATCH-/v1]": [
+      {
+        "call": "PATCH /v1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_read_only_writes_to_unknown_routes[POST-/v1/ws/quotes]": [
+      {
+        "call": "POST /v1/ws/quotes",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_read_only_writes_to_unknown_routes[PUT-/nope]": [
+      {
+        "call": "PUT /nope",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_subscription_matches_rest_quotes": [
+      {
+        "call": "GET /v1/exchanges",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/MSFT",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/MSFT/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/AAPL",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/AAPL/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/7203.T",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/7203.T/quote",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/0700.HK",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /v1/tickers/0700.HK/quote",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_errors_then_recover[hello-Invalid JSON.]": [
+      {
+        "call": "GET /v1/tickers/NVDA",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_errors_then_recover[[1]-Messages must be JSON objects.]": [
+      {
+        "call": "GET /v1/tickers/NVDA",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_errors_then_recover[null-Messages must be JSON objects.]": [
+      {
+        "call": "GET /v1/tickers/NVDA",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_errors_then_recover[{\"action\": \"unsubscribe\", \"symbols\": [\"AAPL\"]}-Unknown action: \"unsubscribe\".]": [
+      {
+        "call": "GET /v1/tickers/NVDA",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_errors_then_recover[{\"action\": \"SUBSCRIBE\"}-Unknown action: \"SUBSCRIBE\".]": [
+      {
+        "call": "GET /v1/tickers/NVDA",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_errors_then_recover[{\"action\": true}-Unknown action: true.]": [
+      {
+        "call": "GET /v1/tickers/NVDA",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_errors_then_recover[{\"action\": {\"a\": 1, \"b\": [\"x\", \"y\"]}}-Unknown action: {\"a\":1,\"b\":[\"x\",\"y\"]}.]": [
+      {
+        "call": "GET /v1/tickers/NVDA",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_errors_then_recover[{\"action\": \"subscribe\", \"symbols\": {}}-symbols must be a non-empty array of strings.]": [
+      {
+        "call": "GET /v1/tickers/NVDA",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_errors_then_recover[{\"action\": \"subscribe\", \"symbols\": [null]}-symbols must be a non-empty array of strings.]": [
+      {
+        "call": "GET /v1/tickers/NVDA",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_errors_then_recover[{\"action\": \"subscribe\", \"symbols\": [\"aapl\", \"nvdx\", \"zz\"]}-Unknown symbol 'nvdx'.]": [
+      {
+        "call": "GET /v1/tickers/NVDA",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_errors_then_recover[{\"action\": \"subscribe\", \"symbols\": [\"O'NEIL\"]}-Unknown symbol 'O'NEIL'.]": [
+      {
+        "call": "GET /v1/tickers/NVDA",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_auth_failures[params0-headers0-Missing api_key query parameter.]": [
+      {
+        "call": "GET /v1/time",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_auth_failures[params1-headers1-Missing api_key query parameter.]": [
+      {
+        "call": "GET /v1/time",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_auth_failures[params2-headers2-Missing api_key query parameter.]": [
+      {
+        "call": "GET /v1/time",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_auth_failures[params3-headers3-Invalid API key.]": [
+      {
+        "call": "GET /v1/time",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_auth_failures[params4-headers4-Invalid API key.]": [
+      {
+        "call": "GET /v1/time",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_auth_failures[params5-headers5-This API key has been revoked.]": [
+      {
+        "call": "GET /v1/time",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_binary_frames_then_recover": [
+      {
+        "call": "GET /v1/ws/quotes",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_ws_scenarios.py::test_ws_does_not_count_against_the_rate_limit": [
+      {
+        "call": "GET /v1/time",
+        "score": 1.0,
+        "failures": []
+      }
+    ]
+  }
+}

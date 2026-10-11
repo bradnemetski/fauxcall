@@ -1,0 +1,120 @@
+{
+  "id": "000237",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s-18",
+  "started_at": "2026-10-11T06:18:34.132835Z",
+  "started_ns": 1791699514132835000,
+  "elapsed_ms": 42.243,
+  "ttfb_ms": 42.106,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=holdings",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "holdings"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:18:33 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "343"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "11"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699516"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "holdings",
+        "results": [
+          {
+            "symbol": "0005.HK",
+            "name": "HSBC Holdings plc",
+            "score": 0.8
+          },
+          {
+            "symbol": "0700.HK",
+            "name": "Tencent Holdings Limited",
+            "score": 0.8
+          },
+          {
+            "symbol": "HSBA.L",
+            "name": "HSBC Holdings plc",
+            "score": 0.8
+          },
+          {
+            "symbol": "PYPL",
+            "name": "PayPal Holdings, Inc.",
+            "score": 0.8
+          },
+          {
+            "symbol": "RR.L",
+            "name": "Rolls-Royce Holdings plc",
+            "score": 0.8
+          }
+        ]
+      },
+      "size": 343
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

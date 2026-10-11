@@ -1,0 +1,91 @@
+{
+  "id": "000012",
+  "endpoint": "GET /v1/exchanges",
+  "purpose": "edge",
+  "plan_call": "unknown-route",
+  "started_at": "2026-10-11T06:04:26.747723Z",
+  "started_ns": 1791698666747723000,
+  "elapsed_ms": 41.465,
+  "ttfb_ms": 41.327,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/nonexistent",
+    "path": "/v1/nonexistent",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:04:26 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "132"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "26"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791698673"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "not_found",
+          "message": "No route matches GET /v1/nonexistent.",
+          "request_id": "43dd2ed4-c96a-4f60-9534-573e25f4ed49"
+        }
+      },
+      "size": 132
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

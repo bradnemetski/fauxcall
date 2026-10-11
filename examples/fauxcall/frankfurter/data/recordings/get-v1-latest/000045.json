@@ -1,0 +1,132 @@
+{
+  "id": "000045",
+  "endpoint": "GET /v1/latest",
+  "purpose": "edge",
+  "plan_call": "lat-from-to",
+  "started_at": "2026-10-11T06:17:54.313104Z",
+  "started_ns": 1791699474313104000,
+  "elapsed_ms": 265.867,
+  "ttfb_ms": 265.135,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/latest?from=USD&to=EUR%2CGBP",
+    "path": "/v1/latest",
+    "query": [
+      [
+        "from",
+        "USD"
+      ],
+      [
+        "to",
+        "EUR,GBP"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:17:54 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "cache-control",
+        "public, max-age=86400"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "x-robots-tag",
+        "noindex"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/rates>; rel=\"successor-version\""
+      ],
+      [
+        "etag",
+        "W/\"ff31a6aa978368a0d5990e1c2ecc1fc2\""
+      ],
+      [
+        "cf-cache-status",
+        "MISS"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=l8fLY6JZjYwvqS%2FoDGD%2F1LVCSUlyyPgTS4iP6FR934HBSHOmOPWZDVx6XqKUt54ew%2B12z668aRcy6wI68NdXdSoXKz39bqF%2B3oPXIXZpGdrFRWlORhWZoFjiYcTzEKjQJpisLVc%3D\"}]}"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bbe9299519a43-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "amount": 1.0,
+        "base": "USD",
+        "date": "2026-10-09",
+        "rates": {
+          "EUR": 0.89238,
+          "GBP": 0.75641
+        }
+      },
+      "size": 85
+    }
+  }
+}

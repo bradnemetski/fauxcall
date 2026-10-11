@@ -1,0 +1,98 @@
+{
+  "id": "000831",
+  "endpoint": "GET /v1/ws/quotes",
+  "purpose": "auth",
+  "plan_call": "ws-empty-key",
+  "started_at": "2026-10-11T10:39:01.719900Z",
+  "started_ns": 1791715141719900000,
+  "elapsed_ms": 4.47,
+  "ttfb_ms": 3.635,
+  "request": {
+    "method": "GET",
+    "url": "ws://127.0.0.1:9100/v1/ws/quotes?api_key=",
+    "path": "/v1/ws/quotes",
+    "query": [
+      [
+        "api_key",
+        ""
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "connection",
+        "upgrade"
+      ],
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "sec-websocket-key",
+        "DejSUwExTCwOLGqyZcUxFw=="
+      ],
+      [
+        "sec-websocket-version",
+        "13"
+      ]
+    ]
+  },
+  "response": {
+    "status": 101,
+    "reason": "Switching Protocols",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "connection",
+        "Upgrade"
+      ],
+      [
+        "sec-websocket-accept",
+        "bP9rpUUoWC3cC30fQ9qnNCDWHcw="
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:39:01 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 3.663,
+      "kind": "ws_send",
+      "data": "{\"action\":\"subscribe\",\"symbols\":[\"AAPL\"]}"
+    },
+    {
+      "t_ms": 4.017,
+      "kind": "ws_close",
+      "data": "Missing api_key query parameter.",
+      "code": 4401
+    }
+  ],
+  "tags": [
+    "auth:none"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "id": "000202",
+  "endpoint": "GET /v1/time",
+  "purpose": "time_profile",
+  "plan_call": "time-profile",
+  "started_at": "2026-10-11T06:17:38.829205Z",
+  "started_ns": 1791699458829205000,
+  "elapsed_ms": 30.573,
+  "ttfb_ms": 30.198,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/time",
+    "path": "/v1/time",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:17:38 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "75"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699469"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "utc": "2026-10-11T06:17:38.8563970Z",
+        "unix_ms": 1791699458856,
+        "zone": "UTC"
+      },
+      "size": 75
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

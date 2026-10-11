@@ -1,0 +1,214 @@
+{
+  "id": "000129",
+  "endpoint": "GET /v1/{start_date}..",
+  "purpose": "variation",
+  "plan_call": "o-recent-sym",
+  "started_at": "2026-10-11T06:22:17.994788Z",
+  "started_ns": 1791699737994788000,
+  "elapsed_ms": 272.682,
+  "ttfb_ms": 270.808,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/2026-09-14..?symbols=USD%2CJPY&base=GBP",
+    "path": "/v1/2026-09-14..",
+    "path_params": {
+      "start_date": "2026-09-14"
+    },
+    "query": [
+      [
+        "symbols",
+        "USD,JPY"
+      ],
+      [
+        "base",
+        "GBP"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:22:18 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "cache-control",
+        "public, max-age=86400"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "x-robots-tag",
+        "noindex"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/rates>; rel=\"successor-version\""
+      ],
+      [
+        "etag",
+        "W/\"ff31a6aa978368a0d5990e1c2ecc1fc2\""
+      ],
+      [
+        "cf-cache-status",
+        "MISS"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=%2FcDDsexJiLeNolpsCMCsv99mqyMhS4y3VNVHZCfWvg%2FeC02FLY%2Bmnr%2FUbV3kkUEzNcmaNUfRj8YqXKANhICLpx%2BR4jOfBPj%2FGL1x4bNknSE5ypkn4lGfFRJ4p5AMozfudWPmM8c%3D\"}]}"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bc5029a34dd64-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "amount": 1.0,
+        "base": "GBP",
+        "start_date": "2026-09-14",
+        "end_date": "2026-10-09",
+        "rates": {
+          "2026-09-14": {
+            "JPY": 208.56,
+            "USD": 1.3494
+          },
+          "2026-09-15": {
+            "JPY": 209.0,
+            "USD": 1.3483
+          },
+          "2026-09-16": {
+            "JPY": 208.63,
+            "USD": 1.3456
+          },
+          "2026-09-17": {
+            "JPY": 208.26,
+            "USD": 1.3376
+          },
+          "2026-09-18": {
+            "JPY": 210.69,
+            "USD": 1.3344
+          },
+          "2026-09-21": {
+            "JPY": 210.66,
+            "USD": 1.3395
+          },
+          "2026-09-22": {
+            "JPY": 210.04,
+            "USD": 1.3363
+          },
+          "2026-09-23": {
+            "JPY": 209.66,
+            "USD": 1.3276
+          },
+          "2026-09-24": {
+            "JPY": 210.0,
+            "USD": 1.322
+          },
+          "2026-09-25": {
+            "JPY": 208.84,
+            "USD": 1.3252
+          },
+          "2026-09-28": {
+            "JPY": 208.08,
+            "USD": 1.3263
+          },
+          "2026-09-29": {
+            "JPY": 208.14,
+            "USD": 1.3247
+          },
+          "2026-09-30": {
+            "JPY": 208.59,
+            "USD": 1.3286
+          },
+          "2026-10-01": {
+            "JPY": 209.07,
+            "USD": 1.3234
+          },
+          "2026-10-02": {
+            "JPY": 208.14,
+            "USD": 1.3201
+          },
+          "2026-10-05": {
+            "JPY": 209.25,
+            "USD": 1.3225
+          },
+          "2026-10-06": {
+            "JPY": 209.88,
+            "USD": 1.3276
+          },
+          "2026-10-07": {
+            "JPY": 208.93,
+            "USD": 1.3205
+          },
+          "2026-10-08": {
+            "JPY": 209.04,
+            "USD": 1.3207
+          },
+          "2026-10-09": {
+            "JPY": 209.22,
+            "USD": 1.322
+          }
+        }
+      },
+      "size": 903
+    }
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "id": "000136",
+  "endpoint": "GET /v1/{start_date}..",
+  "purpose": "time_profile",
+  "plan_call": "o-time",
+  "started_at": "2026-10-11T06:22:21.512421Z",
+  "started_ns": 1791699741512421000,
+  "elapsed_ms": 279.025,
+  "ttfb_ms": 277.76,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/2026-10-01..?symbols=USD",
+    "path": "/v1/2026-10-01..",
+    "path_params": {
+      "start_date": "2026-10-01"
+    },
+    "query": [
+      [
+        "symbols",
+        "USD"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:22:21 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "cache-control",
+        "public, max-age=86400"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "x-robots-tag",
+        "noindex"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/rates>; rel=\"successor-version\""
+      ],
+      [
+        "etag",
+        "W/\"ff31a6aa978368a0d5990e1c2ecc1fc2\""
+      ],
+      [
+        "cf-cache-status",
+        "MISS"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=vFsRasp9uueq0tHCgzY%2FRCzO5blDam4E0Mgtj%2Fc5G2PdP%2FnHVABDguIExLIiM%2BI%2BNNnqT0gi3aoTtJwxmZKh0HzbKhkrmAnEK5xgzL%2FNpB075CtUnqA5sdVSukG4rJ4KEX4%2BPUA%3D\"}]}"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bc5189cdddd64-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "amount": 1.0,
+        "base": "EUR",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-09",
+        "rates": {
+          "2026-10-01": {
+            "USD": 1.1298
+          },
+          "2026-10-02": {
+            "USD": 1.1225
+          },
+          "2026-10-05": {
+            "USD": 1.1204
+          },
+          "2026-10-06": {
+            "USD": 1.1269
+          },
+          "2026-10-07": {
+            "USD": 1.1177
+          },
+          "2026-10-08": {
+            "USD": 1.1186
+          },
+          "2026-10-09": {
+            "USD": 1.1206
+          }
+        }
+      },
+      "size": 283
+    }
+  }
+}

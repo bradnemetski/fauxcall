@@ -1,0 +1,90 @@
+{
+  "id": "000146",
+  "endpoint": "GET /v1/tickers/{symbol}/quote",
+  "plan_call": "q-AVGO",
+  "started_at": "2026-10-11T06:15:23.958782Z",
+  "started_ns": 1791699323958782000,
+  "elapsed_ms": 68.577,
+  "ttfb_ms": 68.012,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/AVGO/quote",
+    "path": "/v1/tickers/AVGO/quote",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:15:23 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "113"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "10"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699325"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "AVGO",
+        "price": "171.24",
+        "currency": "USD",
+        "market_state": "closed",
+        "as_of": "2026-10-09T20:00:00.000000Z"
+      },
+      "size": 113
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

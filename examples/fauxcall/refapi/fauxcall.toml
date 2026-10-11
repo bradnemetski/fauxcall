@@ -1,0 +1,15 @@
+# Runtime settings of the FauxCall Reference Market API fake (overridden by .env and FAUXCALL_* variables).
+name = "refapi"
+port = 8702
+
+# Who the fake lets in, mirroring the real API: unknown keys are 401 invalid_api_key.
+# These are the API's documented demo keys (see the OpenAPI description), not private credentials;
+# "fauxcall-test" is the placeholder key the FauxCall test harness sends to the fake.
+[auth]
+mode = "allowlist"
+users = [
+    { name = "demo", api_key = "demo-key" },
+    { name = "readonly", api_key = "readonly-key" },
+    { name = "revoked", api_key = "revoked-key", status = "denied" },
+    { name = "fauxcall-test", api_key = "fauxcall-test-key" },
+]

@@ -1,0 +1,120 @@
+{
+  "id": "000378",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-080",
+  "started_at": "2026-10-11T06:20:27.614462Z",
+  "started_ns": 1791699627614462000,
+  "elapsed_ms": 42.552,
+  "ttfb_ms": 42.424,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=petroleum",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "petroleum"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:20:27 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "311"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699638"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "petroleum",
+        "results": [
+          {
+            "symbol": "BP.L",
+            "name": "BP p.l.c.",
+            "score": 0.5
+          },
+          {
+            "symbol": "CVX",
+            "name": "Chevron Corporation",
+            "score": 0.5
+          },
+          {
+            "symbol": "SHEL.L",
+            "name": "Shell plc",
+            "score": 0.5
+          },
+          {
+            "symbol": "TTE.PA",
+            "name": "TotalEnergies SE",
+            "score": 0.5
+          },
+          {
+            "symbol": "XOM",
+            "name": "Exxon Mobil Corporation",
+            "score": 0.5
+          }
+        ]
+      },
+      "size": 311
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

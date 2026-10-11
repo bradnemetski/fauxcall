@@ -1,0 +1,105 @@
+{
+ "name": "time",
+ "created_at": "2026-10-11T07:20:00Z",
+ "calls": [
+  {
+   "id": "time-1",
+   "endpoint": "GET /v1/time",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/time"
+   }
+  },
+  {
+   "id": "time-profile",
+   "endpoint": "GET /v1/time",
+   "purpose": "time_profile",
+   "request": {
+    "method": "GET",
+    "path": "/v1/time"
+   },
+   "repeat": 5,
+   "interval_ms": 10000
+  },
+  {
+   "id": "time-query",
+   "endpoint": "GET /v1/time",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/time",
+    "query": [
+     [
+      "zone",
+      "Asia/Tokyo"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "time-noauth",
+   "endpoint": "GET /v1/time",
+   "purpose": "auth",
+   "request": {
+    "method": "GET",
+    "path": "/v1/time",
+    "auth": "none"
+   }
+  },
+  {
+   "id": "time-readonly",
+   "endpoint": "GET /v1/time",
+   "purpose": "auth",
+   "request": {
+    "method": "GET",
+    "path": "/v1/time",
+    "auth": "none",
+    "headers": {
+     "X-API-Key": "readonly-key"
+    }
+   }
+  },
+  {
+   "id": "time-burst",
+   "endpoint": "GET /v1/time",
+   "purpose": "series",
+   "request": {
+    "method": "GET",
+    "path": "/v1/time"
+   },
+   "repeat": 6,
+   "interval_ms": 150
+  },
+  {
+   "id": "health-time",
+   "endpoint": "GET /healthz",
+   "purpose": "time_profile",
+   "request": {
+    "method": "GET",
+    "path": "/healthz"
+   },
+   "repeat": 2,
+   "interval_ms": 1000
+  },
+  {
+   "id": "health-slash",
+   "endpoint": "GET /healthz",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/healthz/"
+   }
+  },
+  {
+   "id": "health-post",
+   "endpoint": "GET /healthz",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/healthz"
+   },
+   "mutating": true
+  }
+ ]
+}

@@ -1,0 +1,94 @@
+{
+  "id": "000397",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-099",
+  "started_at": "2026-10-11T06:20:37.147161Z",
+  "started_ns": 1791699637147161000,
+  "elapsed_ms": 43.358,
+  "ttfb_ms": 43.21,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=investment",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "investment"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:20:36 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "35"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "10"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699638"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "investment",
+        "results": []
+      },
+      "size": 35
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

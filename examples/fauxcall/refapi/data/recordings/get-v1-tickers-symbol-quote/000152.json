@@ -1,0 +1,90 @@
+{
+  "id": "000152",
+  "endpoint": "GET /v1/tickers/{symbol}/quote",
+  "plan_call": "q-BP.L",
+  "started_at": "2026-10-11T06:15:26.972343Z",
+  "started_ns": 1791699326972343000,
+  "elapsed_ms": 50.053,
+  "ttfb_ms": 49.657,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/BP.L/quote",
+    "path": "/v1/tickers/BP.L/quote",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:15:26 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "111"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "24"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699335"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "BP.L",
+        "price": "4.12",
+        "currency": "GBP",
+        "market_state": "closed",
+        "as_of": "2026-10-09T15:30:00.000000Z"
+      },
+      "size": 111
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

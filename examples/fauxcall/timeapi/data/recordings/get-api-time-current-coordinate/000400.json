@@ -1,0 +1,101 @@
+{
+  "id": "000400",
+  "endpoint": "GET /api/time/current/coordinate",
+  "purpose": "invalid",
+  "plan_call": "lcurco-empty",
+  "started_at": "2026-10-11T10:40:46.077791Z",
+  "started_ns": 1791715246077791000,
+  "elapsed_ms": 132.708,
+  "ttfb_ms": 132.531,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/time/current/coordinate?latitude=&longitude=",
+    "path": "/api/time/current/coordinate",
+    "query": [
+      [
+        "latitude",
+        ""
+      ],
+      [
+        "longitude",
+        ""
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:40:46 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "latitude": [
+            "The value '' is invalid."
+          ],
+          "longitude": [
+            "The value '' is invalid."
+          ]
+        },
+        "traceId": "00-bcfab5a3cb52afa691ecf75f1a926732-23396a13644f8de7-00"
+      },
+      "size": 284
+    }
+  }
+}

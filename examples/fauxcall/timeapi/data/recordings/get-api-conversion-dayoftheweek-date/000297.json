@@ -1,0 +1,78 @@
+{
+  "id": "000297",
+  "endpoint": "GET /api/conversion/dayoftheweek/{date}",
+  "purpose": "invalid",
+  "plan_call": "dayoftheweek-bad-1",
+  "started_at": "2026-10-11T10:39:13.520274Z",
+  "started_ns": 1791715153520274000,
+  "elapsed_ms": 135.379,
+  "ttfb_ms": 134.427,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/conversion/dayoftheweek/2021-13-01",
+    "path": "/api/conversion/dayoftheweek/2021-13-01",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:39:13 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": "Invalid date",
+      "size": 14
+    }
+  }
+}

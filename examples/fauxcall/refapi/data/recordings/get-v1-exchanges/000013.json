@@ -1,0 +1,75 @@
+{
+  "id": "000013",
+  "endpoint": "GET /v1/exchanges",
+  "purpose": "edge",
+  "plan_call": "unknown-route-noauth",
+  "started_at": "2026-10-11T06:04:27.249806Z",
+  "started_ns": 1791698667249806000,
+  "elapsed_ms": 44.023,
+  "ttfb_ms": 43.872,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/nonexistent",
+    "path": "/v1/nonexistent",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 401,
+    "reason": "Unauthorized",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:04:27 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "150"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "missing_api_key",
+          "message": "Missing API key. Send it in the X-API-Key header.",
+          "request_id": "ff42cb7d-e23f-4138-8615-eb1935cda660"
+        }
+      },
+      "size": 150
+    }
+  },
+  "tags": [
+    "auth:none"
+  ]
+}

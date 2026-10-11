@@ -1,0 +1,98 @@
+{
+  "id": "000120",
+  "endpoint": "GET /api/v1/timezone/zone",
+  "purpose": "time_profile",
+  "plan_call": "tz-time",
+  "started_at": "2026-10-11T10:34:19.386770Z",
+  "started_ns": 1791714859386770000,
+  "elapsed_ms": 138.584,
+  "ttfb_ms": 137.588,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/timezone/zone?timeZone=Europe%2FAmsterdam",
+    "path": "/api/v1/timezone/zone",
+    "query": [
+      [
+        "timeZone",
+        "Europe/Amsterdam"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:34:19 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "timezone": "Europe/Amsterdam",
+        "current_utc_offset_seconds": 7200,
+        "standard_utc_offset_seconds": 3600,
+        "dst_utc_offset_seconds": 7200,
+        "has_dst": true,
+        "dst_offset_seconds": 3600,
+        "dst_active": true,
+        "dst_from": "2026-03-29T01:00:00.000000+00:00",
+        "dst_until": "2026-10-25T01:00:00.000000+00:00",
+        "local_time": "2026-10-11T12:34:19.465476+02:00",
+        "day_of_week": "Sunday",
+        "utc_time": "2026-10-11T10:34:19.465476+00:00",
+        "unix_timestamp": 1791714859
+      },
+      "size": 427
+    }
+  }
+}

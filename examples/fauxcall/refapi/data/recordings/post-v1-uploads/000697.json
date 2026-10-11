@@ -1,0 +1,97 @@
+{
+  "id": "000697",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "auth",
+  "plan_call": "up2-noauth",
+  "started_at": "2026-10-11T06:27:10.455005Z",
+  "started_ns": 1791700030455005000,
+  "elapsed_ms": 21.422,
+  "ttfb_ms": 21.092,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-length",
+        "168"
+      ],
+      [
+        "content-type",
+        "multipart/form-data; boundary=4e795a78010e5d8f8e3b86b2509a7e9d"
+      ]
+    ],
+    "body": {
+      "kind": "multipart",
+      "content_type": "multipart/form-data; boundary=4e795a78010e5d8f8e3b86b2509a7e9d",
+      "size": 168,
+      "parts": [
+        {
+          "name": "file",
+          "filename": "a.txt",
+          "content_type": "text/plain",
+          "text": "a",
+          "size": 1
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 401,
+    "reason": "Unauthorized",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:27:09 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "150"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "missing_api_key",
+          "message": "Missing API key. Send it in the X-API-Key header.",
+          "request_id": "70b24f10-c044-47ce-ac55-f2b7199d516b"
+        }
+      },
+      "size": 150
+    }
+  },
+  "tags": [
+    "auth:none"
+  ]
+}

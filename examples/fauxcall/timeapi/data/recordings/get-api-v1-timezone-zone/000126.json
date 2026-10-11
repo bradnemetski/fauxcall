@@ -1,0 +1,84 @@
+{
+  "id": "000126",
+  "endpoint": "GET /api/v1/timezone/zone",
+  "purpose": "invalid",
+  "plan_call": "tz-bad",
+  "started_at": "2026-10-11T10:34:51.930547Z",
+  "started_ns": 1791714891930547000,
+  "elapsed_ms": 134.981,
+  "ttfb_ms": 134.512,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/timezone/zone?timeZone=Mars%2FPhobos",
+    "path": "/api/v1/timezone/zone",
+    "query": [
+      [
+        "timeZone",
+        "Mars/Phobos"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:34:52 GMT"
+      ],
+      [
+        "content-type",
+        "text/plain; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/plain; charset=utf-8",
+      "text": "Timezone not found",
+      "size": 18
+    }
+  }
+}

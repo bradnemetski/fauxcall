@@ -1,0 +1,113 @@
+{
+  "name": "currencies",
+  "created_at": "2026-10-11T06:20:00Z",
+  "calls": [
+    {
+      "id": "cur-1",
+      "endpoint": "GET /v1/currencies",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/currencies"
+      }
+    },
+    {
+      "id": "cur-time",
+      "endpoint": "GET /v1/currencies",
+      "purpose": "time_profile",
+      "request": {
+        "method": "GET",
+        "path": "/v1/currencies"
+      },
+      "repeat": 3,
+      "interval_ms": 10000
+    },
+    {
+      "id": "cur-unknown-q",
+      "endpoint": "GET /v1/currencies",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/currencies",
+        "query": [
+          [
+            "base",
+            "USD"
+          ],
+          [
+            "foo",
+            "bar"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cur-trailing",
+      "endpoint": "GET /v1/currencies",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/currencies/"
+      }
+    },
+    {
+      "id": "cur-case",
+      "endpoint": "GET /v1/currencies",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/Currencies"
+      }
+    },
+    {
+      "id": "route-unknown",
+      "endpoint": "GET /v1/currencies",
+      "purpose": "edge",
+      "note": "unknown route",
+      "request": {
+        "method": "GET",
+        "path": "/v1/does-not-exist"
+      }
+    },
+    {
+      "id": "route-root",
+      "endpoint": "GET /v1/currencies",
+      "purpose": "edge",
+      "note": "api root",
+      "request": {
+        "method": "GET",
+        "path": "/v1/"
+      }
+    },
+    {
+      "id": "route-root2",
+      "endpoint": "GET /v1/currencies",
+      "purpose": "edge",
+      "note": "api root no slash",
+      "request": {
+        "method": "GET",
+        "path": "/v1"
+      }
+    },
+    {
+      "id": "route-nov1",
+      "endpoint": "GET /v1/currencies",
+      "purpose": "edge",
+      "note": "unversioned path",
+      "request": {
+        "method": "GET",
+        "path": "/currencies"
+      }
+    },
+    {
+      "id": "cur-head",
+      "endpoint": "GET /v1/currencies",
+      "purpose": "edge",
+      "note": "HEAD (safe method) instead of a POST probe: writes not approved",
+      "request": {
+        "method": "HEAD",
+        "path": "/v1/currencies"
+      }
+    }
+  ]
+}

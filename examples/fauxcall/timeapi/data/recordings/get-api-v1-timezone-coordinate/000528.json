@@ -1,0 +1,105 @@
+{
+  "id": "000528",
+  "endpoint": "GET /api/v1/timezone/coordinate",
+  "purpose": "edge",
+  "plan_call": "v1-coast",
+  "started_at": "2026-10-11T10:47:56.512352Z",
+  "started_ns": 1791715676512352000,
+  "elapsed_ms": 142.606,
+  "ttfb_ms": 142.352,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/timezone/coordinate?latitude=52.5&longitude=4.4",
+    "path": "/api/v1/timezone/coordinate",
+    "query": [
+      [
+        "latitude",
+        "52.5"
+      ],
+      [
+        "longitude",
+        "4.4"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:47:56 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "timezone": "Europe/Amsterdam",
+        "current_utc_offset_seconds": 7200,
+        "standard_utc_offset_seconds": 3600,
+        "dst_utc_offset_seconds": 7200,
+        "has_dst": true,
+        "dst_offset_seconds": 3600,
+        "dst_active": true,
+        "dst_from": "2026-03-29T01:00:00.000000+00:00",
+        "dst_until": "2026-10-25T01:00:00.000000+00:00",
+        "local_time": "2026-10-11T12:47:56.594122+02:00",
+        "day_of_week": "Sunday",
+        "utc_time": "2026-10-11T10:47:56.594122+00:00",
+        "unix_timestamp": 1791715676
+      },
+      "size": 427
+    }
+  },
+  "tags": [
+    "routing"
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "id": "000236",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s-17",
+  "started_at": "2026-10-11T06:18:33.630773Z",
+  "started_ns": 1791699513630773000,
+  "elapsed_ms": 42.113,
+  "ttfb_ms": 41.973,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=hsbc",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "hsbc"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:18:33 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "147"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "12"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699516"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "hsbc",
+        "results": [
+          {
+            "symbol": "0005.HK",
+            "name": "HSBC Holdings plc",
+            "score": 0.8
+          },
+          {
+            "symbol": "HSBA.L",
+            "name": "HSBC Holdings plc",
+            "score": 0.8
+          }
+        ]
+      },
+      "size": 147
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

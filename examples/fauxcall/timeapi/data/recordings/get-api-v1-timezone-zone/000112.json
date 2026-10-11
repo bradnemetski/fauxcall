@@ -1,0 +1,98 @@
+{
+  "id": "000112",
+  "endpoint": "GET /api/v1/timezone/zone",
+  "purpose": "variation",
+  "plan_call": "tz-12",
+  "started_at": "2026-10-11T10:34:15.370520Z",
+  "started_ns": 1791714855370520000,
+  "elapsed_ms": 140.341,
+  "ttfb_ms": 139.273,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/timezone/zone?timeZone=Pacific%2FKiritimati",
+    "path": "/api/v1/timezone/zone",
+    "query": [
+      [
+        "timeZone",
+        "Pacific/Kiritimati"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:34:15 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "timezone": "Pacific/Kiritimati",
+        "current_utc_offset_seconds": 50400,
+        "standard_utc_offset_seconds": 50400,
+        "dst_utc_offset_seconds": 0,
+        "has_dst": false,
+        "dst_offset_seconds": 0,
+        "dst_active": false,
+        "dst_from": null,
+        "dst_until": null,
+        "local_time": "2026-10-12T00:34:15.448573+14:00",
+        "day_of_week": "Monday",
+        "utc_time": "2026-10-11T10:34:15.448573+00:00",
+        "unix_timestamp": 1791714855
+      },
+      "size": 367
+    }
+  }
+}

@@ -1,0 +1,1696 @@
+{
+  "score": 1.0,
+  "threshold": 0.98,
+  "ok": true,
+  "unmatched_scenarios": [],
+  "endpoints": {
+    "GET /api/calculation/custom/increment": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "GET /api/conversion/dayoftheweek/": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "GET /api/conversion/dayoftheweek/{date}": {
+      "passed": 120.0,
+      "total": 120.0,
+      "score": 1.0
+    },
+    "GET /api/conversion/dayoftheyear/{date}": {
+      "passed": 120.0,
+      "total": 120.0,
+      "score": 1.0
+    },
+    "GET /api/health/check": {
+      "passed": 18.0,
+      "total": 18.0,
+      "score": 1.0
+    },
+    "GET /api/time/current/coordinate": {
+      "passed": 92.5,
+      "total": 92.5,
+      "score": 1.0
+    },
+    "GET /api/time/current/ip": {
+      "passed": 62.0,
+      "total": 62.0,
+      "score": 1.0
+    },
+    "GET /api/time/current/zone": {
+      "passed": 169.0,
+      "total": 169.0,
+      "score": 1.0
+    },
+    "GET /api/timezone/availabletimezones": {
+      "passed": 210.0,
+      "total": 210.0,
+      "score": 1.0
+    },
+    "GET /api/timezone/coordinate": {
+      "passed": 246.0,
+      "total": 246.0,
+      "score": 1.0
+    },
+    "GET /api/timezone/ip": {
+      "passed": 360.0,
+      "total": 360.0,
+      "score": 1.0
+    },
+    "GET /api/timezone/zone": {
+      "passed": 892.5,
+      "total": 892.5,
+      "score": 1.0
+    },
+    "GET /api/v1/time/current/coordinate": {
+      "passed": 372.0,
+      "total": 372.0,
+      "score": 1.0
+    },
+    "GET /api/v1/time/current/ip": {
+      "passed": 298.5,
+      "total": 298.5,
+      "score": 1.0
+    },
+    "GET /api/v1/time/current/unix": {
+      "passed": 30.0,
+      "total": 30.0,
+      "score": 1.0
+    },
+    "GET /api/v1/time/current/unix_ms": {
+      "passed": 10.0,
+      "total": 10.0,
+      "score": 1.0
+    },
+    "GET /api/v1/time/current/unix_ns": {
+      "passed": 10.0,
+      "total": 10.0,
+      "score": 1.0
+    },
+    "GET /api/v1/time/current/unix_us": {
+      "passed": 10.0,
+      "total": 10.0,
+      "score": 1.0
+    },
+    "GET /api/v1/time/current/utc": {
+      "passed": 20.0,
+      "total": 20.0,
+      "score": 1.0
+    },
+    "GET /api/v1/time/current/zone": {
+      "passed": 384.0,
+      "total": 384.0,
+      "score": 1.0
+    },
+    "GET /api/v1/time/current/zone/x": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "GET /api/v1/timezone/availabletimezones": {
+      "passed": 630.0,
+      "total": 630.0,
+      "score": 1.0
+    },
+    "GET /api/v1/timezone/coordinate": {
+      "passed": 351.5,
+      "total": 351.5,
+      "score": 1.0
+    },
+    "GET /api/v1/timezone/zone": {
+      "passed": 666.5,
+      "total": 666.5,
+      "score": 1.0
+    },
+    "GET /api/v2/time": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "HEAD /api/v1/time/current/utc": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    }
+  },
+  "scenarios": {
+    "tests/e2e/test_posts.py::test_convert_across_dst_rules": [],
+    "tests/e2e/test_posts.py::test_translate_languages[2026-12-24 18:30:00-it]": [],
+    "tests/e2e/test_posts.py::test_translate_languages[2027-01-01 00:00:01-pt]": [],
+    "tests/e2e/test_posts.py::test_translate_languages[2026-05-05 05:05:05-ko]": [],
+    "tests/e2e/test_posts.py::test_current_increment[Pacific/Chatham-0:12:00:00]": [],
+    "tests/e2e/test_posts.py::test_current_increment[America/Santiago-200:00:00:00.250]": [],
+    "tests/e2e/test_posts.py::test_current_increment[UTC-1:2:3:4]": [],
+    "tests/e2e/test_posts.py::test_current_decrement[Europe/Dublin-30:00:00:00]": [],
+    "tests/e2e/test_posts.py::test_current_decrement[asia/kathmandu-0:00:00:01.999]": [],
+    "tests/e2e/test_posts.py::test_current_decrement[Etc/GMT-14-]": [],
+    "tests/e2e/test_posts.py::test_custom_increment_across_spring_forward": [],
+    "tests/e2e/test_posts.py::test_custom_decrement_dst_edges[body0]": [],
+    "tests/e2e/test_posts.py::test_custom_decrement_dst_edges[body1]": [],
+    "tests/e2e/test_scenarios.py::test_unix_timestamps_are_now[unix-1]": [
+      {
+        "call": "GET /api/v1/time/current/unix",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unix_timestamps_are_now[unix_ms-1000.0]": [
+      {
+        "call": "GET /api/v1/time/current/unix_ms",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unix_timestamps_are_now[unix_us-1000000.0]": [
+      {
+        "call": "GET /api/v1/time/current/unix_us",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unix_timestamps_are_now[unix_ns-1000000000.0]": [
+      {
+        "call": "GET /api/v1/time/current/unix_ns",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_utc_time_is_now": [
+      {
+        "call": "GET /api/v1/time/current/utc",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[Europe/Amsterdam]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[America/New_York]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[Asia/Kolkata]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[Asia/Kathmandu]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[Australia/Lord_Howe]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[Pacific/Chatham]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[Europe/Dublin]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[Africa/Casablanca]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[Antarctica/Troll]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[America/Santiago]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[Asia/Tehran]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[Pacific/Kiritimati]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[Etc/GMT+12]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[UTC]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[EST]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[US/Pacific]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_in_zone[America/Edmonton]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_zone_name_is_case_insensitive": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_first_of_repeated_values_wins": [
+      {
+        "call": "GET /api/v1/time/current/zone?timezone=Asia/Tokyo&timezone=Europe/Paris",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_invalid_zone[Mars/Phobos]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_invalid_zone[Amsterdam]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_invalid_zone[ UTC]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_invalid_zone[Factory]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_invalid_zone[GMT+2]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_zone_required[]": [
+      {
+        "call": "GET /api/v1/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_zone_required[?timezone=]": [
+      {
+        "call": "GET /api/v1/time/current/zone?timezone=",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[38.9--77.03]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[52.3667-4.8945]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[-33.8688-151.2093]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[27.7172-85.324]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[-43.95--176.55]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[64.1466--21.9426]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[0-0]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[90-180]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[-90--180]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[30--40]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[-10--140]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[1.3521-103.8198]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[40.4168--3.7038]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_at_coordinate[-34.6037--58.3816]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_coordinate_binding[query0-400]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_coordinate_binding[query1-400]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_coordinate_binding[query2-400]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_coordinate_binding[query3-400]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_coordinate_binding[query4-400]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_coordinate_binding[query5-200]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_coordinate_binding[query6-200]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_coordinate_binding[query7-200]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_coordinate_binding[query8-200]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_coordinate_binding[query9-200]": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_ip[8.8.8.8]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_ip[1.1.1.1]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_ip[77.88.8.8]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_ip[180.76.76.76]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_ip[200.221.11.100]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_ip[81.2.69.142]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_ip[8.8.8]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_ip[134744072]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_ip[::ffff:1.1.1.1]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_ip[127.0.0.1]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_invalid_ip[999.1.1.1]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_invalid_ip[not-an-ip]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_invalid_ip[ 8.8.8.8]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_by_invalid_ip[1.2.3.4.5]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_current_time_ip_required": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[Europe/Amsterdam]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[America/New_York]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[Asia/Kolkata]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[Asia/Kathmandu]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[Australia/Lord_Howe]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[Pacific/Chatham]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[Europe/Dublin]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[Africa/Casablanca]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[Antarctica/Troll]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[America/Santiago]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[Asia/Tehran]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[Pacific/Kiritimati]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[Etc/GMT+12]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[UTC]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[EST]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[US/Pacific]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info[America/Edmonton]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_unknown[Mars/Phobos]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_unknown[]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_unknown[EUROPE/Nowhere]": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[38.9--77.03]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[52.3667-4.8945]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[-33.8688-151.2093]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[27.7172-85.324]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[-43.95--176.55]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[64.1466--21.9426]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[0-0]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[90-180]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[-90--180]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[30--40]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[-10--140]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[1.3521-103.8198]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[40.4168--3.7038]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_at_coordinate[-34.6037--58.3816]": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_zone_info_coordinate_errors": [
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_available_zones": [
+      {
+        "call": "GET /api/v1/timezone/availabletimezones",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_listed_zones_are_accepted_everywhere": [
+      {
+        "call": "GET /api/v1/timezone/availabletimezones",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_coordinate_zone_matches_zone_info": [
+      {
+        "call": "GET /api/v1/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ip_zone_is_the_same_on_both_apis[8.8.8.8]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ip_zone_is_the_same_on_both_apis[1.1.1.1]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ip_zone_is_the_same_on_both_apis[77.88.8.8]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ip_zone_is_the_same_on_both_apis[180.76.76.76]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ip_zone_is_the_same_on_both_apis[200.221.11.100]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_ip_zone_is_the_same_on_both_apis[81.2.69.142]": [
+      {
+        "call": "GET /api/v1/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unix_and_utc_agree": [
+      {
+        "call": "GET /api/v1/time/current/unix",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/time/current/utc",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_current_time[Europe/Amsterdam]": [
+      {
+        "call": "GET /api/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_current_time[America/New_York]": [
+      {
+        "call": "GET /api/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_current_time[Asia/Kolkata]": [
+      {
+        "call": "GET /api/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_current_time[Asia/Kathmandu]": [
+      {
+        "call": "GET /api/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_current_time[Australia/Lord_Howe]": [
+      {
+        "call": "GET /api/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_current_time[Pacific/Chatham]": [
+      {
+        "call": "GET /api/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_current_time[Europe/Dublin]": [
+      {
+        "call": "GET /api/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_current_time[Africa/Casablanca]": [
+      {
+        "call": "GET /api/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_mixed_case_path": [
+      {
+        "call": "GET /api/Time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_current_time_errors[query0]": [
+      {
+        "call": "GET /api/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_current_time_errors[query1]": [
+      {
+        "call": "GET /api/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_current_time_errors[query2]": [
+      {
+        "call": "GET /api/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[Europe/Amsterdam]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[America/New_York]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[Asia/Kolkata]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[Asia/Kathmandu]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[Australia/Lord_Howe]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[Pacific/Chatham]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[Europe/Dublin]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[Africa/Casablanca]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[Antarctica/Troll]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[America/Santiago]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[Asia/Tehran]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[Pacific/Kiritimati]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[Etc/GMT+12]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[UTC]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[EST]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[US/Pacific]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info[America/Edmonton]": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_zone_info_unknown_is_404": [
+      {
+        "call": "GET /api/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_coordinate_endpoints[38.9--77.03]": [
+      {
+        "call": "GET /api/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_coordinate_endpoints[52.3667-4.8945]": [
+      {
+        "call": "GET /api/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_coordinate_endpoints[-33.8688-151.2093]": [
+      {
+        "call": "GET /api/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_coordinate_endpoints[27.7172-85.324]": [
+      {
+        "call": "GET /api/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_coordinate_endpoints[-43.95--176.55]": [
+      {
+        "call": "GET /api/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_coordinate_endpoints[64.1466--21.9426]": [
+      {
+        "call": "GET /api/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_coordinate_errors": [
+      {
+        "call": "GET /api/timezone/coordinate",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/time/current/coordinate",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_ip_endpoints[8.8.8.8]": [
+      {
+        "call": "GET /api/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_ip_endpoints[1.1.1.1]": [
+      {
+        "call": "GET /api/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_ip_endpoints[77.88.8.8]": [
+      {
+        "call": "GET /api/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_ip_endpoints[10.1.2.3]": [
+      {
+        "call": "GET /api/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_ip_endpoints[bad]": [
+      {
+        "call": "GET /api/time/current/ip",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/timezone/ip",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_legacy_available_zones_match_v1": [
+      {
+        "call": "GET /api/timezone/availabletimezones",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/timezone/availabletimezones",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_day_of_week_and_year[2021-03-14]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/2021-03-14",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/conversion/dayoftheyear/2021-03-14",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_day_of_week_and_year[2024-02-29]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/2024-02-29",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/conversion/dayoftheyear/2024-02-29",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_day_of_week_and_year[1900-02-28]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/1900-02-28",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/conversion/dayoftheyear/1900-02-28",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_day_of_week_and_year[2000-02-29]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/2000-02-29",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/conversion/dayoftheyear/2000-02-29",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_day_of_week_and_year[0001-01-01]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/0001-01-01",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/conversion/dayoftheyear/0001-01-01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_day_of_week_and_year[9999-12-31]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/9999-12-31",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/conversion/dayoftheyear/9999-12-31",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_day_of_week_and_year[2026-07-04]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/2026-07-04",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/conversion/dayoftheyear/2026-07-04",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_day_conversions_reject_bad_dates[2023-02-29]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/2023-02-29",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/conversion/dayoftheyear/2023-02-29",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_day_conversions_reject_bad_dates[1900-02-29]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/1900-02-29",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/conversion/dayoftheyear/1900-02-29",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_day_conversions_reject_bad_dates[2021-1-01]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/2021-1-01",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/conversion/dayoftheyear/2021-1-01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_day_conversions_reject_bad_dates[today]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/today",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/conversion/dayoftheyear/today",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_day_conversions_reject_bad_dates[2021-03-14T00:00]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/2021-03-14T00:00",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/conversion/dayoftheyear/2021-03-14T00:00",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routing_is_lenient[/api/health/check]": [
+      {
+        "call": "GET /api/health/check",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routing_is_lenient[/API/HEALTH/CHECK]": [
+      {
+        "call": "GET /API/HEALTH/CHECK",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routing_is_lenient[/api/health/check/]": [
+      {
+        "call": "GET /api/health/check/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routing_is_lenient[/api/V1/Time/Current/Unix/]": [
+      {
+        "call": "GET /api/V1/Time/Current/Unix/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_routes[/api/v2/time]": [
+      {
+        "call": "GET /api/v2/time",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_routes[/api/v1/time/current/zone/x]": [
+      {
+        "call": "GET /api/v1/time/current/zone/x",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_routes[/api/conversion/dayoftheweek/]": [
+      {
+        "call": "GET /api/conversion/dayoftheweek/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_wrong_method": [
+      {
+        "call": "HEAD /api/v1/time/current/utc",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/calculation/custom/increment",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_now_is_now_on_both_api_generations": [
+      {
+        "call": "GET /api/v1/timezone/zone",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/time/current/zone",
+        "score": 1.0,
+        "failures": []
+      }
+    ]
+  }
+}

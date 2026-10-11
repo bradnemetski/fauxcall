@@ -1,0 +1,98 @@
+{
+  "id": "000437",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s3-12",
+  "started_at": "2026-10-11T06:21:33.721669Z",
+  "started_ns": 1791699693721669000,
+  "elapsed_ms": 51.3,
+  "ttfb_ms": 50.477,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=b",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "b"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:21:33 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "187"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "17"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699698"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'q': must be a string of 2 to 64 characters.",
+          "request_id": "fb637421-7916-4774-acbb-d5d815b61447",
+          "param": "q"
+        }
+      },
+      "size": 187
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

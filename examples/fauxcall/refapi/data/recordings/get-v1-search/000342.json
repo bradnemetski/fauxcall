@@ -1,0 +1,100 @@
+{
+  "id": "000342",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-044",
+  "started_at": "2026-10-11T06:20:09.542719Z",
+  "started_ns": 1791699609542719000,
+  "elapsed_ms": 49.608,
+  "ttfb_ms": 49.28,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=rolls",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "rolls"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:20:08 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "93"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699618"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "rolls",
+        "results": [
+          {
+            "symbol": "RR.L",
+            "name": "Rolls-Royce Holdings plc",
+            "score": 0.8
+          }
+        ]
+      },
+      "size": 93
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

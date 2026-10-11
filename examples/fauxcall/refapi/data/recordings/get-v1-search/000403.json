@@ -1,0 +1,115 @@
+{
+  "id": "000403",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-105",
+  "started_at": "2026-10-11T06:20:40.160666Z",
+  "started_ns": 1791699640160666000,
+  "elapsed_ms": 47.612,
+  "ttfb_ms": 47.257,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=beverage",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "beverage"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:20:39 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "265"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "24"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699648"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "beverage",
+        "results": [
+          {
+            "symbol": "COST",
+            "name": "Costco Wholesale Corporation",
+            "score": 0.5
+          },
+          {
+            "symbol": "KO",
+            "name": "The Coca-Cola Company",
+            "score": 0.5
+          },
+          {
+            "symbol": "PEP",
+            "name": "PepsiCo, Inc.",
+            "score": 0.5
+          },
+          {
+            "symbol": "ULVR.L",
+            "name": "Unilever PLC",
+            "score": 0.5
+          }
+        ]
+      },
+      "size": 265
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+ "name": "v1-availabletimezones",
+ "created_at": "2026-10-11T10:30:00Z",
+ "calls": [
+  {
+   "id": "atz-1",
+   "endpoint": "GET /api/v1/timezone/availabletimezones",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/timezone/availabletimezones"
+   }
+  },
+  {
+   "id": "atz-2",
+   "endpoint": "GET /api/v1/timezone/availabletimezones",
+   "purpose": "time_profile",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/timezone/availabletimezones"
+   },
+   "repeat": 2,
+   "interval_ms": 10000
+  },
+  {
+   "id": "atz-q",
+   "endpoint": "GET /api/v1/timezone/availabletimezones",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v1/timezone/availabletimezones",
+    "query": [
+     [
+      "foo",
+      "bar"
+     ]
+    ]
+   }
+  }
+ ]
+}

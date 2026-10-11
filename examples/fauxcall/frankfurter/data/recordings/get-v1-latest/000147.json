@@ -1,0 +1,155 @@
+{
+  "id": "000147",
+  "endpoint": "GET /v1/latest",
+  "purpose": "invalid",
+  "plan_call": "l2-amt-comma",
+  "started_at": "2026-10-11T06:24:13.770800Z",
+  "started_ns": 1791699853770800000,
+  "elapsed_ms": 281.455,
+  "ttfb_ms": 280.823,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/latest?amount=1%2C5",
+    "path": "/v1/latest",
+    "query": [
+      [
+        "amount",
+        "1,5"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:24:14 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "cache-control",
+        "public, max-age=86400"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "x-robots-tag",
+        "noindex"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/rates>; rel=\"successor-version\""
+      ],
+      [
+        "etag",
+        "W/\"ff31a6aa978368a0d5990e1c2ecc1fc2\""
+      ],
+      [
+        "cf-cache-status",
+        "MISS"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=KSbKBFM9QOTJUMLRHKC8vYFyFDX2j1onO8GlEbidvELg7w%2B%2FGxR%2BmHtVImfDpFSNd89Q4%2FEVzdE7VjkWP8OkCjFG%2BPH6BCmVcfO9ZhY6g9PN3Qfbmx4qZ1fr3oK2eUJ8WJvlbjE%3D\"}]}"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bc7d63c71c439-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "amount": 1.0,
+        "base": "EUR",
+        "date": "2026-10-09",
+        "rates": {
+          "AUD": 1.6052,
+          "BRL": 5.6086,
+          "CAD": 1.5942,
+          "CHF": 0.9313,
+          "CNY": 7.4992,
+          "CZK": 24.369,
+          "DKK": 7.4751,
+          "GBP": 0.84763,
+          "HKD": 8.794,
+          "HUF": 365.08,
+          "IDR": 20036.94,
+          "ILS": 3.426,
+          "INR": 108.3965,
+          "ISK": 136.8,
+          "JPY": 177.34,
+          "KRW": 1503.27,
+          "MXN": 20.395,
+          "MYR": 4.5777,
+          "NOK": 10.7155,
+          "NZD": 1.9961,
+          "PHP": 70.397,
+          "PLN": 4.3835,
+          "RON": 5.3406,
+          "SEK": 11.1675,
+          "SGD": 1.4348,
+          "THB": 37.574,
+          "TRY": 55.1033,
+          "USD": 1.1206,
+          "ZAR": 18.527
+        }
+      },
+      "size": 440
+    }
+  }
+}

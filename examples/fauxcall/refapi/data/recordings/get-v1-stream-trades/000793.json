@@ -1,0 +1,445 @@
+{
+  "id": "000793",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "series",
+  "plan_call": "st50-NFLX",
+  "started_at": "2026-10-11T06:35:32.664842Z",
+  "started_ns": 1791700532664842000,
+  "elapsed_ms": 9947.067,
+  "ttfb_ms": 50.036,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=NFLX&count=50",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "NFLX"
+      ],
+      [
+        "count",
+        "50"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:35:32 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700533"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 50.229,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"701.68\",\"size\":176,\"time\":\"2026-10-11T06:35:32.714Z\"}"
+    },
+    {
+      "t_ms": 251.988,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"701.05\",\"size\":878,\"time\":\"2026-10-11T06:35:32.916Z\"}"
+    },
+    {
+      "t_ms": 453.616,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"700.77\",\"size\":759,\"time\":\"2026-10-11T06:35:33.118Z\"}"
+    },
+    {
+      "t_ms": 655.863,
+      "kind": "sse",
+      "event": "trade",
+      "id": "4",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"701.12\",\"size\":101,\"time\":\"2026-10-11T06:35:33.320Z\"}"
+    },
+    {
+      "t_ms": 857.781,
+      "kind": "sse",
+      "event": "trade",
+      "id": "5",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"700.98\",\"size\":946,\"time\":\"2026-10-11T06:35:33.522Z\"}"
+    },
+    {
+      "t_ms": 1059.92,
+      "kind": "sse",
+      "event": "trade",
+      "id": "6",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"700.63\",\"size\":120,\"time\":\"2026-10-11T06:35:33.724Z\"}"
+    },
+    {
+      "t_ms": 1262.256,
+      "kind": "sse",
+      "event": "trade",
+      "id": "7",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"701.33\",\"size\":495,\"time\":\"2026-10-11T06:35:33.926Z\"}"
+    },
+    {
+      "t_ms": 1464.56,
+      "kind": "sse",
+      "event": "trade",
+      "id": "8",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"701.40\",\"size\":418,\"time\":\"2026-10-11T06:35:34.129Z\"}"
+    },
+    {
+      "t_ms": 1666.841,
+      "kind": "sse",
+      "event": "trade",
+      "id": "9",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"701.75\",\"size\":20,\"time\":\"2026-10-11T06:35:34.331Z\"}"
+    },
+    {
+      "t_ms": 1868.155,
+      "kind": "sse",
+      "event": "trade",
+      "id": "10",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"702.38\",\"size\":991,\"time\":\"2026-10-11T06:35:34.532Z\"}"
+    },
+    {
+      "t_ms": 2070.494,
+      "kind": "sse",
+      "event": "trade",
+      "id": "11",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"702.24\",\"size\":348,\"time\":\"2026-10-11T06:35:34.735Z\"}"
+    },
+    {
+      "t_ms": 2272.572,
+      "kind": "sse",
+      "event": "trade",
+      "id": "12",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"702.87\",\"size\":429,\"time\":\"2026-10-11T06:35:34.937Z\"}"
+    },
+    {
+      "t_ms": 2473.921,
+      "kind": "sse",
+      "event": "trade",
+      "id": "13",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.29\",\"size\":693,\"time\":\"2026-10-11T06:35:35.138Z\"}"
+    },
+    {
+      "t_ms": 2676.26,
+      "kind": "sse",
+      "event": "trade",
+      "id": "14",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.15\",\"size\":513,\"time\":\"2026-10-11T06:35:35.340Z\"}"
+    },
+    {
+      "t_ms": 2878.644,
+      "kind": "sse",
+      "event": "trade",
+      "id": "15",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.36\",\"size\":904,\"time\":\"2026-10-11T06:35:35.543Z\"}"
+    },
+    {
+      "t_ms": 3080.039,
+      "kind": "sse",
+      "event": "trade",
+      "id": "16",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"704.06\",\"size\":23,\"time\":\"2026-10-11T06:35:35.744Z\"}"
+    },
+    {
+      "t_ms": 3281.834,
+      "kind": "sse",
+      "event": "trade",
+      "id": "17",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.43\",\"size\":851,\"time\":\"2026-10-11T06:35:35.946Z\"}"
+    },
+    {
+      "t_ms": 3483.341,
+      "kind": "sse",
+      "event": "trade",
+      "id": "18",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"704.06\",\"size\":99,\"time\":\"2026-10-11T06:35:36.147Z\"}"
+    },
+    {
+      "t_ms": 3684.043,
+      "kind": "sse",
+      "event": "trade",
+      "id": "19",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.57\",\"size\":414,\"time\":\"2026-10-11T06:35:36.348Z\"}"
+    },
+    {
+      "t_ms": 3885.357,
+      "kind": "sse",
+      "event": "trade",
+      "id": "20",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.71\",\"size\":196,\"time\":\"2026-10-11T06:35:36.549Z\"}"
+    },
+    {
+      "t_ms": 4086.837,
+      "kind": "sse",
+      "event": "trade",
+      "id": "21",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.29\",\"size\":664,\"time\":\"2026-10-11T06:35:36.751Z\"}"
+    },
+    {
+      "t_ms": 4289.01,
+      "kind": "sse",
+      "event": "trade",
+      "id": "22",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.01\",\"size\":511,\"time\":\"2026-10-11T06:35:36.953Z\"}"
+    },
+    {
+      "t_ms": 4491.353,
+      "kind": "sse",
+      "event": "trade",
+      "id": "23",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.22\",\"size\":175,\"time\":\"2026-10-11T06:35:37.155Z\"}"
+    },
+    {
+      "t_ms": 4693.452,
+      "kind": "sse",
+      "event": "trade",
+      "id": "24",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.08\",\"size\":820,\"time\":\"2026-10-11T06:35:37.358Z\"}"
+    },
+    {
+      "t_ms": 4895.636,
+      "kind": "sse",
+      "event": "trade",
+      "id": "25",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"702.94\",\"size\":758,\"time\":\"2026-10-11T06:35:37.560Z\"}"
+    },
+    {
+      "t_ms": 5096.929,
+      "kind": "sse",
+      "event": "trade",
+      "id": "26",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.01\",\"size\":374,\"time\":\"2026-10-11T06:35:37.761Z\"}"
+    },
+    {
+      "t_ms": 5299.522,
+      "kind": "sse",
+      "event": "trade",
+      "id": "27",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.08\",\"size\":95,\"time\":\"2026-10-11T06:35:37.964Z\"}"
+    },
+    {
+      "t_ms": 5501.696,
+      "kind": "sse",
+      "event": "trade",
+      "id": "28",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.15\",\"size\":603,\"time\":\"2026-10-11T06:35:38.166Z\"}"
+    },
+    {
+      "t_ms": 5703.234,
+      "kind": "sse",
+      "event": "trade",
+      "id": "29",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"702.80\",\"size\":674,\"time\":\"2026-10-11T06:35:38.367Z\"}"
+    },
+    {
+      "t_ms": 5905.003,
+      "kind": "sse",
+      "event": "trade",
+      "id": "30",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.43\",\"size\":672,\"time\":\"2026-10-11T06:35:38.569Z\"}"
+    },
+    {
+      "t_ms": 6106.791,
+      "kind": "sse",
+      "event": "trade",
+      "id": "31",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.36\",\"size\":920,\"time\":\"2026-10-11T06:35:38.771Z\"}"
+    },
+    {
+      "t_ms": 6308.835,
+      "kind": "sse",
+      "event": "trade",
+      "id": "32",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"702.66\",\"size\":596,\"time\":\"2026-10-11T06:35:38.973Z\"}"
+    },
+    {
+      "t_ms": 6510.906,
+      "kind": "sse",
+      "event": "trade",
+      "id": "33",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"702.17\",\"size\":650,\"time\":\"2026-10-11T06:35:39.175Z\"}"
+    },
+    {
+      "t_ms": 6712.001,
+      "kind": "sse",
+      "event": "trade",
+      "id": "34",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"702.31\",\"size\":733,\"time\":\"2026-10-11T06:35:39.376Z\"}"
+    },
+    {
+      "t_ms": 6914.225,
+      "kind": "sse",
+      "event": "trade",
+      "id": "35",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"701.96\",\"size\":179,\"time\":\"2026-10-11T06:35:39.578Z\"}"
+    },
+    {
+      "t_ms": 7116.007,
+      "kind": "sse",
+      "event": "trade",
+      "id": "36",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"702.31\",\"size\":517,\"time\":\"2026-10-11T06:35:39.780Z\"}"
+    },
+    {
+      "t_ms": 7318.592,
+      "kind": "sse",
+      "event": "trade",
+      "id": "37",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"702.45\",\"size\":333,\"time\":\"2026-10-11T06:35:39.983Z\"}"
+    },
+    {
+      "t_ms": 7519.976,
+      "kind": "sse",
+      "event": "trade",
+      "id": "38",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"702.87\",\"size\":24,\"time\":\"2026-10-11T06:35:40.184Z\"}"
+    },
+    {
+      "t_ms": 7722.37,
+      "kind": "sse",
+      "event": "trade",
+      "id": "39",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.22\",\"size\":432,\"time\":\"2026-10-11T06:35:40.386Z\"}"
+    },
+    {
+      "t_ms": 7924.586,
+      "kind": "sse",
+      "event": "trade",
+      "id": "40",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.71\",\"size\":21,\"time\":\"2026-10-11T06:35:40.589Z\"}"
+    },
+    {
+      "t_ms": 8126.986,
+      "kind": "sse",
+      "event": "trade",
+      "id": "41",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.92\",\"size\":275,\"time\":\"2026-10-11T06:35:40.791Z\"}"
+    },
+    {
+      "t_ms": 8329.585,
+      "kind": "sse",
+      "event": "trade",
+      "id": "42",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"704.55\",\"size\":607,\"time\":\"2026-10-11T06:35:40.994Z\"}"
+    },
+    {
+      "t_ms": 8531.55,
+      "kind": "sse",
+      "event": "trade",
+      "id": "43",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"704.41\",\"size\":871,\"time\":\"2026-10-11T06:35:41.196Z\"}"
+    },
+    {
+      "t_ms": 8733.886,
+      "kind": "sse",
+      "event": "trade",
+      "id": "44",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.78\",\"size\":91,\"time\":\"2026-10-11T06:35:41.398Z\"}"
+    },
+    {
+      "t_ms": 8936.128,
+      "kind": "sse",
+      "event": "trade",
+      "id": "45",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.71\",\"size\":854,\"time\":\"2026-10-11T06:35:41.600Z\"}"
+    },
+    {
+      "t_ms": 9138.495,
+      "kind": "sse",
+      "event": "trade",
+      "id": "46",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.01\",\"size\":655,\"time\":\"2026-10-11T06:35:41.803Z\"}"
+    },
+    {
+      "t_ms": 9340.819,
+      "kind": "sse",
+      "event": "trade",
+      "id": "47",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.50\",\"size\":671,\"time\":\"2026-10-11T06:35:42.005Z\"}"
+    },
+    {
+      "t_ms": 9543.061,
+      "kind": "sse",
+      "event": "trade",
+      "id": "48",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.01\",\"size\":465,\"time\":\"2026-10-11T06:35:42.207Z\"}"
+    },
+    {
+      "t_ms": 9745.62,
+      "kind": "sse",
+      "event": "trade",
+      "id": "49",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"703.15\",\"size\":672,\"time\":\"2026-10-11T06:35:42.410Z\"}"
+    },
+    {
+      "t_ms": 9946.882,
+      "kind": "sse",
+      "event": "trade",
+      "id": "50",
+      "data": "{\"symbol\":\"NFLX\",\"price\":\"702.52\",\"size\":58,\"time\":\"2026-10-11T06:35:42.611Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

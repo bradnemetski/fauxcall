@@ -1,0 +1,774 @@
+{
+ "name": "tickers",
+ "created_at": "2026-10-11T07:00:00Z",
+ "calls": [
+  {
+   "id": "tk-default",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers"
+   }
+  },
+  {
+   "id": "tk-default-2",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers"
+   }
+  },
+  {
+   "id": "tk-all",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "pagination",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "100"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-p1",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "pagination",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "7"
+     ]
+    ]
+   },
+   "capture": {
+    "c1": "$.next_cursor"
+   }
+  },
+  {
+   "id": "tk-p2",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "pagination",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "7"
+     ],
+     [
+      "cursor",
+      "{{c1}}"
+     ]
+    ]
+   },
+   "capture": {
+    "c2": "$.next_cursor"
+   }
+  },
+  {
+   "id": "tk-p3",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "pagination",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "7"
+     ],
+     [
+      "cursor",
+      "{{c2}}"
+     ]
+    ]
+   },
+   "capture": {
+    "c3": "$.next_cursor"
+   }
+  },
+  {
+   "id": "tk-p4",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "pagination",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "7"
+     ],
+     [
+      "cursor",
+      "{{c3}}"
+     ]
+    ]
+   },
+   "capture": {
+    "c4": "$.next_cursor"
+   }
+  },
+  {
+   "id": "tk-p5",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "pagination",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "7"
+     ],
+     [
+      "cursor",
+      "{{c4}}"
+     ]
+    ]
+   },
+   "capture": {
+    "c5": "$.next_cursor"
+   }
+  },
+  {
+   "id": "tk-p6",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "pagination",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "7"
+     ],
+     [
+      "cursor",
+      "{{c5}}"
+     ]
+    ]
+   },
+   "capture": {
+    "c6": "$.next_cursor"
+   }
+  },
+  {
+   "id": "tk-ex-xnas",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "exchange",
+      "XNAS"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-ex-xnas-lower",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "exchange",
+      "xnas"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-ex-xnys",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "exchange",
+      "XNYS"
+     ],
+     [
+      "limit",
+      "100"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-ex-xlon",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "exchange",
+      "XLON"
+     ],
+     [
+      "limit",
+      "100"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-ex-xpar",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "exchange",
+      "XPAR"
+     ],
+     [
+      "limit",
+      "100"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-ex-xtks",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "exchange",
+      "XTKS"
+     ],
+     [
+      "limit",
+      "100"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-ex-xhkg",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "exchange",
+      "XHKG"
+     ],
+     [
+      "limit",
+      "100"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-sector-tech",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "sector",
+      "Technology"
+     ],
+     [
+      "limit",
+      "100"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-sector-tech-lower",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "sector",
+      "technology"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-ex-sector",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "exchange",
+      "XNAS"
+     ],
+     [
+      "sector",
+      "Technology"
+     ],
+     [
+      "limit",
+      "3"
+     ]
+    ]
+   },
+   "capture": {
+    "fc1": "$.next_cursor"
+   }
+  },
+  {
+   "id": "tk-ex-sector-p2",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "pagination",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "exchange",
+      "XNAS"
+     ],
+     [
+      "sector",
+      "Technology"
+     ],
+     [
+      "limit",
+      "3"
+     ],
+     [
+      "cursor",
+      "{{fc1}}"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-ex-repeat",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "exchange",
+      "XNAS"
+     ],
+     [
+      "exchange",
+      "XNYS"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-ex-empty",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "exchange",
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-sector-empty",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "sector",
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-cursor-empty",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "cursor",
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-limit-1",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "1"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-limit-100",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "100"
+     ],
+     [
+      "exchange",
+      "XNAS"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-unknown-param",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "foo",
+      "bar"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-ex-unknown",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "exchange",
+      "XXXX"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-sector-unknown",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "sector",
+      "Nope"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-limit-0",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "0"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-limit-101",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "101"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-limit-neg",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "-1"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-limit-abc",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "abc"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-limit-float",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "2.5"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-limit-empty",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-cursor-garbage",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "cursor",
+      "garbage!!"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-cursor-b64-notjson",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "cursor",
+      "aGVsbG8"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-cursor-unknown-sym",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "cursor",
+      "eyJhZnRlciI6IlpaWlpaWiJ9"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-cursor-handmade",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "cursor",
+      "eyJhZnRlciI6IkFBUEwifQ"
+     ],
+     [
+      "limit",
+      "3"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-cursor-padded",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "cursor",
+      "eyJhZnRlciI6IkFBUEwifQ=="
+     ],
+     [
+      "limit",
+      "3"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-cursor-lower",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "cursor",
+      "eyJhZnRlciI6ImFhcGwifQ"
+     ],
+     [
+      "limit",
+      "3"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-cursor-wrongkey",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "cursor",
+      "eyJmb28iOiJBQVBMIn0"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-limit-and-bad-ex",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "query": [
+     [
+      "limit",
+      "0"
+     ],
+     [
+      "exchange",
+      "XXXX"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "tk-readonly",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "auth",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers",
+    "auth": "none",
+    "headers": {
+     "X-API-Key": "readonly-key"
+    }
+   }
+  },
+  {
+   "id": "tk-post",
+   "endpoint": "GET /v1/tickers",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/v1/tickers",
+    "json_body": {
+     "symbol": "X"
+    }
+   },
+   "mutating": true
+  }
+ ]
+}

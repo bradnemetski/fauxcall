@@ -1,0 +1,128 @@
+{
+  "id": "000091",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "edge",
+  "plan_call": "tk2-sector-space",
+  "started_at": "2026-10-11T06:14:45.419427Z",
+  "started_ns": 1791699285419427000,
+  "elapsed_ms": 44.614,
+  "ttfb_ms": 44.316,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?sector=consumer+staples",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "sector",
+        "consumer staples"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:14:44 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "576"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "14"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699288"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "COST",
+            "name": "Costco Wholesale Corporation",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Consumer Staples",
+            "listed_on": "1985-12-05"
+          },
+          {
+            "symbol": "KO",
+            "name": "The Coca-Cola Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Consumer Staples",
+            "listed_on": "1919-09-05"
+          },
+          {
+            "symbol": "PEP",
+            "name": "PepsiCo, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Consumer Staples",
+            "listed_on": "1972-06-01"
+          },
+          {
+            "symbol": "ULVR.L",
+            "name": "Unilever PLC",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Consumer Staples",
+            "listed_on": "1930-01-02"
+          }
+        ],
+        "next_cursor": null,
+        "total": 4
+      },
+      "size": 576
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

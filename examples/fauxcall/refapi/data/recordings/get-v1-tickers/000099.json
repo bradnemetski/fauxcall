@@ -1,0 +1,88 @@
+{
+  "id": "000099",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "auth",
+  "plan_call": "tk2-badkey",
+  "started_at": "2026-10-11T06:14:49.434336Z",
+  "started_ns": 1791699289434336000,
+  "elapsed_ms": 45.914,
+  "ttfb_ms": 45.569,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?exchange=XXXX",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "exchange",
+        "XXXX"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 401,
+    "reason": "Unauthorized",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:14:48 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "117"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_api_key",
+          "message": "Invalid API key.",
+          "request_id": "6bbc36b7-f782-4d37-81ec-19c5b84b0c54"
+        }
+      },
+      "size": 117
+    }
+  },
+  "tags": [
+    "auth:invalid"
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

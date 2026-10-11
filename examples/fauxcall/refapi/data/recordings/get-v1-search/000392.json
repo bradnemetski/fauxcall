@@ -1,0 +1,94 @@
+{
+  "id": "000392",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-094",
+  "started_at": "2026-10-11T06:20:34.637558Z",
+  "started_ns": 1791699634637558000,
+  "elapsed_ms": 42.528,
+  "ttfb_ms": 42.397,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=insurance",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "insurance"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:20:34 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "34"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "15"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699638"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "insurance",
+        "results": []
+      },
+      "size": 34
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

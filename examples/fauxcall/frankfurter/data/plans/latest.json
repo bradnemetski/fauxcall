@@ -1,0 +1,516 @@
+{
+  "name": "latest",
+  "created_at": "2026-10-11T06:30:00Z",
+  "calls": [
+    {
+      "id": "lat-1",
+      "endpoint": "GET /v1/latest",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest"
+      }
+    },
+    {
+      "id": "lat-time",
+      "endpoint": "GET /v1/latest",
+      "purpose": "time_profile",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest"
+      },
+      "repeat": 3,
+      "interval_ms": 15000
+    },
+    {
+      "id": "lat-base-usd",
+      "endpoint": "GET /v1/latest",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-base-jpy",
+      "endpoint": "GET /v1/latest",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            "JPY"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-base-gbp",
+      "endpoint": "GET /v1/latest",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            "GBP"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-base-eur",
+      "endpoint": "GET /v1/latest",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            "EUR"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-sym-usd",
+      "endpoint": "GET /v1/latest",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-sym-2",
+      "endpoint": "GET /v1/latest",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "symbols",
+            "USD,GBP"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-sym-order",
+      "endpoint": "GET /v1/latest",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "symbols",
+            "JPY,AUD,CHF"
+          ]
+        ]
+      },
+      "note": "order of symbols in output"
+    },
+    {
+      "id": "lat-base-usd-sym",
+      "endpoint": "GET /v1/latest",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            "USD"
+          ],
+          [
+            "symbols",
+            "EUR,GBP,JPY"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-base-in-sym",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            "USD"
+          ],
+          [
+            "symbols",
+            "USD,EUR"
+          ]
+        ]
+      },
+      "note": "base listed in symbols"
+    },
+    {
+      "id": "lat-eur-sym-eur",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "symbols",
+            "EUR"
+          ]
+        ]
+      },
+      "note": "only symbol is the base"
+    },
+    {
+      "id": "lat-amount-10",
+      "endpoint": "GET /v1/latest",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "10"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-amount-frac",
+      "endpoint": "GET /v1/latest",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "1.5"
+          ],
+          [
+            "symbols",
+            "USD,JPY"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-amount-big",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "1000000"
+          ],
+          [
+            "base",
+            "USD"
+          ],
+          [
+            "symbols",
+            "JPY,EUR"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-amount-small",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "0.001"
+          ],
+          [
+            "symbols",
+            "USD,JPY,IDR"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-amount-0",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "0"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-amount-neg",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "-5"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-amount-abc",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "abc"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-amount-empty",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-base-lower",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            "usd"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-sym-lower",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "symbols",
+            "usd,gbp"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-base-bad",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            "XXX"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-base-bgn",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            "BGN"
+          ]
+        ]
+      },
+      "note": "BGN in spec enum but not in /currencies"
+    },
+    {
+      "id": "lat-base-empty",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-sym-bad",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "symbols",
+            "XXX"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-sym-partbad",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "symbols",
+            "USD,XXX"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-sym-empty",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "symbols",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-sym-repeat",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ],
+          [
+            "symbols",
+            "GBP"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-sym-space",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "symbols",
+            "USD, GBP"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "lat-from-to",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "from",
+            "USD"
+          ],
+          [
+            "to",
+            "EUR,GBP"
+          ]
+        ]
+      },
+      "note": "legacy from/to aliases"
+    },
+    {
+      "id": "lat-trailing",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest/"
+      }
+    },
+    {
+      "id": "lat-case",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/LATEST"
+      }
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+ "name": "legacy-posts-3",
+ "created_at": "2026-10-11T10:55:00Z",
+ "calls": [
+  {
+   "id": "cd-iso3",
+   "endpoint": "POST /api/calculation/custom/decrement",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/calculation/custom/decrement",
+    "json_body": {
+     "timeZone": "UTC",
+     "dateTime": "2021-11-27T05:45:00",
+     "timeSpan": "1:00:00:00",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "cv-gap3",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "Europe/Amsterdam",
+     "dateTime": "2025-03-30 02:30:00",
+     "toTimeZone": "UTC",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "cv-badto3",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "UTC",
+     "dateTime": "2021-03-14 17:45:00",
+     "toTimeZone": "Mars/Phobos",
+     "dstAmbiguity": ""
+    }
+   }
+  }
+ ]
+}

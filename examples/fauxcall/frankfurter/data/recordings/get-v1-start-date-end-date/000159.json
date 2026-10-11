@@ -1,0 +1,160 @@
+{
+  "id": "000159",
+  "endpoint": "GET /v1/{start_date}..{end_date}",
+  "purpose": "variation",
+  "plan_call": "p2-amt-eur",
+  "started_at": "2026-10-11T06:24:19.871634Z",
+  "started_ns": 1791699859871634000,
+  "elapsed_ms": 382.462,
+  "ttfb_ms": 381.322,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/2026-10-05..2026-10-09?amount=3&symbols=INR%2CIDR%2CGBP",
+    "path": "/v1/2026-10-05..2026-10-09",
+    "path_params": {
+      "start_date": "2026-10-05",
+      "end_date": "2026-10-09"
+    },
+    "query": [
+      [
+        "amount",
+        "3"
+      ],
+      [
+        "symbols",
+        "INR,IDR,GBP"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:24:20 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "cache-control",
+        "public, max-age=86400"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "x-robots-tag",
+        "noindex"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/rates>; rel=\"successor-version\""
+      ],
+      [
+        "etag",
+        "W/\"ff31a6aa978368a0d5990e1c2ecc1fc2\""
+      ],
+      [
+        "cf-cache-status",
+        "MISS"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=cQI2FjB7DKo5bljdE%2FurKZ%2Bu1clQKQ1dDyjNWlH0SN1N1IhiKKbwzTv6tK1LGkeYN%2Fm4BCwer4H%2BED1sjfGltiO1AuMozhdf8AotvEZmXqno21mGjdOlsYY%2B%2FvwoXMdpmJQ0NT0%3D\"}]}"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bc7fc4b37c439-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "amount": 3.0,
+        "base": "EUR",
+        "start_date": "2026-10-05",
+        "end_date": "2026-10-09",
+        "rates": {
+          "2026-10-05": {
+            "GBP": 2.5416,
+            "IDR": 60210,
+            "INR": 323.67
+          },
+          "2026-10-06": {
+            "GBP": 2.5464,
+            "IDR": 60314,
+            "INR": 325.98
+          },
+          "2026-10-07": {
+            "GBP": 2.5394,
+            "IDR": 59923,
+            "INR": 324.35
+          },
+          "2026-10-08": {
+            "GBP": 2.5409,
+            "IDR": 60136,
+            "INR": 324.79
+          },
+          "2026-10-09": {
+            "GBP": 2.5429,
+            "IDR": 60111,
+            "INR": 325.19
+          }
+        }
+      },
+      "size": 352
+    }
+  }
+}

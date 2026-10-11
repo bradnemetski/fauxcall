@@ -1,0 +1,87 @@
+{
+  "id": "000521",
+  "endpoint": "GET /api/v1/time/current/zone",
+  "purpose": "edge",
+  "plan_call": "v1-cz-factory",
+  "started_at": "2026-10-11T10:47:52.996945Z",
+  "started_ns": 1791715672996945000,
+  "elapsed_ms": 134.02,
+  "ttfb_ms": 133.648,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/time/current/zone?timezone=Factory",
+    "path": "/api/v1/time/current/zone",
+    "query": [
+      [
+        "timezone",
+        "Factory"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:47:53 GMT"
+      ],
+      [
+        "content-type",
+        "text/plain; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/plain; charset=utf-8",
+      "text": "Invalid Timezone",
+      "size": 16
+    }
+  },
+  "tags": [
+    "routing"
+  ]
+}

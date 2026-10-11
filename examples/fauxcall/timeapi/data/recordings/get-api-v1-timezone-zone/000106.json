@@ -1,0 +1,98 @@
+{
+  "id": "000106",
+  "endpoint": "GET /api/v1/timezone/zone",
+  "purpose": "variation",
+  "plan_call": "tz-6",
+  "started_at": "2026-10-11T10:34:12.357105Z",
+  "started_ns": 1791714852357105000,
+  "elapsed_ms": 136.659,
+  "ttfb_ms": 136.485,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/v1/timezone/zone?timeZone=Australia%2FLord_Howe",
+    "path": "/api/v1/timezone/zone",
+    "query": [
+      [
+        "timeZone",
+        "Australia/Lord_Howe"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:34:12 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "timezone": "Australia/Lord_Howe",
+        "current_utc_offset_seconds": 39600,
+        "standard_utc_offset_seconds": 37800,
+        "dst_utc_offset_seconds": 39600,
+        "has_dst": true,
+        "dst_offset_seconds": 1800,
+        "dst_active": true,
+        "dst_from": "2026-10-03T15:30:00.000000+00:00",
+        "dst_until": "2027-04-03T15:00:00.000000+00:00",
+        "local_time": "2026-10-11T21:34:12.435705+11:00",
+        "day_of_week": "Sunday",
+        "utc_time": "2026-10-11T10:34:12.435705+00:00",
+        "unix_timestamp": 1791714852
+      },
+      "size": 433
+    }
+  }
+}

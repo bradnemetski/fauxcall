@@ -1,0 +1,74 @@
+{
+  "id": "000001",
+  "endpoint": "GET /healthz",
+  "plan_call": "health-1",
+  "started_at": "2026-10-11T06:04:21.224457Z",
+  "started_ns": 1791698661224457000,
+  "elapsed_ms": 80.685,
+  "ttfb_ms": 80.485,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/healthz",
+    "path": "/healthz",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:04:20 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "15"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "status": "ok"
+      },
+      "size": 15
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

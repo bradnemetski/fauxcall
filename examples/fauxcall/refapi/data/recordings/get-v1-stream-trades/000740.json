@@ -1,0 +1,445 @@
+{
+  "id": "000740",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "edge",
+  "plan_call": "st-count-50",
+  "started_at": "2026-10-11T06:27:37.069487Z",
+  "started_ns": 1791700057069487000,
+  "elapsed_ms": 9977.148,
+  "ttfb_ms": 54.388,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=NVDA&count=50",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "NVDA"
+      ],
+      [
+        "count",
+        "50"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:27:36 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700068"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 54.791,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.72\",\"size\":197,\"time\":\"2026-10-11T06:27:37.123Z\"}"
+    },
+    {
+      "t_ms": 257.544,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.72\",\"size\":561,\"time\":\"2026-10-11T06:27:37.325Z\"}"
+    },
+    {
+      "t_ms": 460.604,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.81\",\"size\":444,\"time\":\"2026-10-11T06:27:37.528Z\"}"
+    },
+    {
+      "t_ms": 663.879,
+      "kind": "sse",
+      "event": "trade",
+      "id": "4",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.73\",\"size\":632,\"time\":\"2026-10-11T06:27:37.731Z\"}"
+    },
+    {
+      "t_ms": 865.62,
+      "kind": "sse",
+      "event": "trade",
+      "id": "5",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.70\",\"size\":314,\"time\":\"2026-10-11T06:27:37.934Z\"}"
+    },
+    {
+      "t_ms": 1069.225,
+      "kind": "sse",
+      "event": "trade",
+      "id": "6",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.81\",\"size\":376,\"time\":\"2026-10-11T06:27:38.136Z\"}"
+    },
+    {
+      "t_ms": 1272.491,
+      "kind": "sse",
+      "event": "trade",
+      "id": "7",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.89\",\"size\":44,\"time\":\"2026-10-11T06:27:38.339Z\"}"
+    },
+    {
+      "t_ms": 1472.35,
+      "kind": "sse",
+      "event": "trade",
+      "id": "8",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.88\",\"size\":257,\"time\":\"2026-10-11T06:27:38.541Z\"}"
+    },
+    {
+      "t_ms": 1675.537,
+      "kind": "sse",
+      "event": "trade",
+      "id": "9",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.88\",\"size\":837,\"time\":\"2026-10-11T06:27:38.743Z\"}"
+    },
+    {
+      "t_ms": 1877.585,
+      "kind": "sse",
+      "event": "trade",
+      "id": "10",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.83\",\"size\":399,\"time\":\"2026-10-11T06:27:38.946Z\"}"
+    },
+    {
+      "t_ms": 2080.784,
+      "kind": "sse",
+      "event": "trade",
+      "id": "11",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.90\",\"size\":657,\"time\":\"2026-10-11T06:27:39.149Z\"}"
+    },
+    {
+      "t_ms": 2281.527,
+      "kind": "sse",
+      "event": "trade",
+      "id": "12",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.82\",\"size\":717,\"time\":\"2026-10-11T06:27:39.350Z\"}"
+    },
+    {
+      "t_ms": 2484.003,
+      "kind": "sse",
+      "event": "trade",
+      "id": "13",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.86\",\"size\":987,\"time\":\"2026-10-11T06:27:39.553Z\"}"
+    },
+    {
+      "t_ms": 2686.939,
+      "kind": "sse",
+      "event": "trade",
+      "id": "14",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.77\",\"size\":709,\"time\":\"2026-10-11T06:27:39.754Z\"}"
+    },
+    {
+      "t_ms": 2889.12,
+      "kind": "sse",
+      "event": "trade",
+      "id": "15",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.72\",\"size\":763,\"time\":\"2026-10-11T06:27:39.957Z\"}"
+    },
+    {
+      "t_ms": 3091.73,
+      "kind": "sse",
+      "event": "trade",
+      "id": "16",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.60\",\"size\":254,\"time\":\"2026-10-11T06:27:40.160Z\"}"
+    },
+    {
+      "t_ms": 3294.282,
+      "kind": "sse",
+      "event": "trade",
+      "id": "17",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.65\",\"size\":617,\"time\":\"2026-10-11T06:27:40.362Z\"}"
+    },
+    {
+      "t_ms": 3496.252,
+      "kind": "sse",
+      "event": "trade",
+      "id": "18",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.77\",\"size\":369,\"time\":\"2026-10-11T06:27:40.563Z\"}"
+    },
+    {
+      "t_ms": 3697.642,
+      "kind": "sse",
+      "event": "trade",
+      "id": "19",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.72\",\"size\":498,\"time\":\"2026-10-11T06:27:40.765Z\"}"
+    },
+    {
+      "t_ms": 3898.707,
+      "kind": "sse",
+      "event": "trade",
+      "id": "20",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.73\",\"size\":2,\"time\":\"2026-10-11T06:27:40.967Z\"}"
+    },
+    {
+      "t_ms": 4101.699,
+      "kind": "sse",
+      "event": "trade",
+      "id": "21",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.77\",\"size\":551,\"time\":\"2026-10-11T06:27:41.169Z\"}"
+    },
+    {
+      "t_ms": 4302.313,
+      "kind": "sse",
+      "event": "trade",
+      "id": "22",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.72\",\"size\":587,\"time\":\"2026-10-11T06:27:41.371Z\"}"
+    },
+    {
+      "t_ms": 4506.172,
+      "kind": "sse",
+      "event": "trade",
+      "id": "23",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.63\",\"size\":816,\"time\":\"2026-10-11T06:27:41.574Z\"}"
+    },
+    {
+      "t_ms": 4708.737,
+      "kind": "sse",
+      "event": "trade",
+      "id": "24",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.72\",\"size\":885,\"time\":\"2026-10-11T06:27:41.777Z\"}"
+    },
+    {
+      "t_ms": 4910.702,
+      "kind": "sse",
+      "event": "trade",
+      "id": "25",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.68\",\"size\":363,\"time\":\"2026-10-11T06:27:41.979Z\"}"
+    },
+    {
+      "t_ms": 5112.935,
+      "kind": "sse",
+      "event": "trade",
+      "id": "26",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.63\",\"size\":319,\"time\":\"2026-10-11T06:27:42.181Z\"}"
+    },
+    {
+      "t_ms": 5314.535,
+      "kind": "sse",
+      "event": "trade",
+      "id": "27",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.50\",\"size\":581,\"time\":\"2026-10-11T06:27:42.383Z\"}"
+    },
+    {
+      "t_ms": 5518.075,
+      "kind": "sse",
+      "event": "trade",
+      "id": "28",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.47\",\"size\":392,\"time\":\"2026-10-11T06:27:42.585Z\"}"
+    },
+    {
+      "t_ms": 5719.357,
+      "kind": "sse",
+      "event": "trade",
+      "id": "29",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.44\",\"size\":423,\"time\":\"2026-10-11T06:27:42.788Z\"}"
+    },
+    {
+      "t_ms": 5923.879,
+      "kind": "sse",
+      "event": "trade",
+      "id": "30",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.55\",\"size\":567,\"time\":\"2026-10-11T06:27:42.990Z\"}"
+    },
+    {
+      "t_ms": 6124.789,
+      "kind": "sse",
+      "event": "trade",
+      "id": "31",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.54\",\"size\":690,\"time\":\"2026-10-11T06:27:43.193Z\"}"
+    },
+    {
+      "t_ms": 6327.33,
+      "kind": "sse",
+      "event": "trade",
+      "id": "32",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.59\",\"size\":899,\"time\":\"2026-10-11T06:27:43.396Z\"}"
+    },
+    {
+      "t_ms": 6530.478,
+      "kind": "sse",
+      "event": "trade",
+      "id": "33",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.60\",\"size\":284,\"time\":\"2026-10-11T06:27:43.598Z\"}"
+    },
+    {
+      "t_ms": 6732.797,
+      "kind": "sse",
+      "event": "trade",
+      "id": "34",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.64\",\"size\":877,\"time\":\"2026-10-11T06:27:43.801Z\"}"
+    },
+    {
+      "t_ms": 6936.056,
+      "kind": "sse",
+      "event": "trade",
+      "id": "35",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.51\",\"size\":423,\"time\":\"2026-10-11T06:27:44.004Z\"}"
+    },
+    {
+      "t_ms": 7138.639,
+      "kind": "sse",
+      "event": "trade",
+      "id": "36",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.47\",\"size\":400,\"time\":\"2026-10-11T06:27:44.207Z\"}"
+    },
+    {
+      "t_ms": 7341.184,
+      "kind": "sse",
+      "event": "trade",
+      "id": "37",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.48\",\"size\":282,\"time\":\"2026-10-11T06:27:44.410Z\"}"
+    },
+    {
+      "t_ms": 7543.738,
+      "kind": "sse",
+      "event": "trade",
+      "id": "38",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.43\",\"size\":831,\"time\":\"2026-10-11T06:27:44.611Z\"}"
+    },
+    {
+      "t_ms": 7750.059,
+      "kind": "sse",
+      "event": "trade",
+      "id": "39",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.35\",\"size\":170,\"time\":\"2026-10-11T06:27:44.814Z\"}"
+    },
+    {
+      "t_ms": 7948.681,
+      "kind": "sse",
+      "event": "trade",
+      "id": "40",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.30\",\"size\":601,\"time\":\"2026-10-11T06:27:45.017Z\"}"
+    },
+    {
+      "t_ms": 8151.581,
+      "kind": "sse",
+      "event": "trade",
+      "id": "41",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.33\",\"size\":579,\"time\":\"2026-10-11T06:27:45.220Z\"}"
+    },
+    {
+      "t_ms": 8355.221,
+      "kind": "sse",
+      "event": "trade",
+      "id": "42",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.46\",\"size\":200,\"time\":\"2026-10-11T06:27:45.423Z\"}"
+    },
+    {
+      "t_ms": 8557.241,
+      "kind": "sse",
+      "event": "trade",
+      "id": "43",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.42\",\"size\":13,\"time\":\"2026-10-11T06:27:45.625Z\"}"
+    },
+    {
+      "t_ms": 8760.151,
+      "kind": "sse",
+      "event": "trade",
+      "id": "44",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.45\",\"size\":975,\"time\":\"2026-10-11T06:27:45.828Z\"}"
+    },
+    {
+      "t_ms": 8961.45,
+      "kind": "sse",
+      "event": "trade",
+      "id": "45",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.49\",\"size\":595,\"time\":\"2026-10-11T06:27:46.030Z\"}"
+    },
+    {
+      "t_ms": 9165.417,
+      "kind": "sse",
+      "event": "trade",
+      "id": "46",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.45\",\"size\":110,\"time\":\"2026-10-11T06:27:46.233Z\"}"
+    },
+    {
+      "t_ms": 9366.342,
+      "kind": "sse",
+      "event": "trade",
+      "id": "47",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.57\",\"size\":6,\"time\":\"2026-10-11T06:27:46.434Z\"}"
+    },
+    {
+      "t_ms": 9569.646,
+      "kind": "sse",
+      "event": "trade",
+      "id": "48",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.70\",\"size\":532,\"time\":\"2026-10-11T06:27:46.638Z\"}"
+    },
+    {
+      "t_ms": 9773.358,
+      "kind": "sse",
+      "event": "trade",
+      "id": "49",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.83\",\"size\":917,\"time\":\"2026-10-11T06:27:46.841Z\"}"
+    },
+    {
+      "t_ms": 9975.852,
+      "kind": "sse",
+      "event": "trade",
+      "id": "50",
+      "data": "{\"symbol\":\"NVDA\",\"price\":\"131.87\",\"size\":930,\"time\":\"2026-10-11T06:27:47.043Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

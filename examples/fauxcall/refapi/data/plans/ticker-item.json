@@ -1,0 +1,256 @@
+{
+ "name": "ticker-item",
+ "created_at": "2026-10-11T07:10:00Z",
+ "calls": [
+  {
+   "id": "ti-AAPL",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/AAPL"
+   }
+  },
+  {
+   "id": "ti-0005.HK",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/0005.HK"
+   }
+  },
+  {
+   "id": "ti-7203.T",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/7203.T"
+   }
+  },
+  {
+   "id": "ti-AIR.PA",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/AIR.PA"
+   }
+  },
+  {
+   "id": "ti-AZN.L",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/AZN.L"
+   }
+  },
+  {
+   "id": "ti-XOM",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/XOM"
+   }
+  },
+  {
+   "id": "ti-MC.PA",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/MC.PA"
+   }
+  },
+  {
+   "id": "ti-TSM",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/TSM"
+   }
+  },
+  {
+   "id": "ti-lower",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/aapl"
+   }
+  },
+  {
+   "id": "ti-mixed",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/Air.pa"
+   }
+  },
+  {
+   "id": "ti-404",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/ZZZZ"
+   }
+  },
+  {
+   "id": "ti-404-2",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/brk.b"
+   }
+  },
+  {
+   "id": "ti-bad-dollar",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/A$B"
+   }
+  },
+  {
+   "id": "ti-bad-space",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/A%20B"
+   }
+  },
+  {
+   "id": "ti-bad-long",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/ABCDEFGHIJKLMNOPQRSTU"
+   }
+  },
+  {
+   "id": "ti-long-12",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/ABCDEFGHIJKL"
+   }
+  },
+  {
+   "id": "ti-long-10",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/ABCDEFGHIJ"
+   }
+  },
+  {
+   "id": "ti-dash",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/BRK-B"
+   }
+  },
+  {
+   "id": "ti-underscore",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/BRK_B"
+   }
+  },
+  {
+   "id": "ti-dot-only",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/.."
+   }
+  },
+  {
+   "id": "ti-trailing-dot",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/AAPL."
+   }
+  },
+  {
+   "id": "ti-digits",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/1234"
+   }
+  },
+  {
+   "id": "ti-unicode",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/%C3%89"
+   }
+  },
+  {
+   "id": "ti-noauth",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "auth",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/AAPL",
+    "auth": "none"
+   }
+  },
+  {
+   "id": "ti-revoked",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "auth",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/AAPL",
+    "auth": "none",
+    "headers": {
+     "X-API-Key": "revoked-key"
+    }
+   }
+  },
+  {
+   "id": "ti-slash",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/v1/tickers/AAPL/"
+   }
+  },
+  {
+   "id": "ti-put",
+   "endpoint": "GET /v1/tickers/{symbol}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/v1/tickers/AAPL",
+    "json_body": {}
+   },
+   "mutating": true
+  }
+ ]
+}

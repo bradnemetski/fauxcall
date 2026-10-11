@@ -1,0 +1,587 @@
+{
+  "name": "probes2",
+  "created_at": "2026-10-11T07:15:00Z",
+  "calls": [
+    {
+      "id": "l2-amt-1",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "1"
+          ]
+        ]
+      },
+      "note": "explicit amount=1: raw or rounded?"
+    },
+    {
+      "id": "l2-amt-1.0",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "1.0"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "l2-amt-2",
+      "endpoint": "GET /v1/latest",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "2"
+          ]
+        ]
+      },
+      "note": "EUR base amount 2 rounding"
+    },
+    {
+      "id": "l2-amt-exp",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "1e2"
+          ],
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "l2-amt-junk",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "10abc"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "l2-amt-nan",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "NaN"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "l2-amt-inf",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "Infinity"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "l2-amt-space",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            " 5"
+          ],
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "l2-amt-comma",
+      "endpoint": "GET /v1/latest",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "1,5"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "l2-amt-tiny",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "amount",
+            "0.0000001"
+          ],
+          [
+            "symbols",
+            "USD,IDR"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "l2-base-sym-self",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            "USD"
+          ],
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      },
+      "note": "only symbol is the base"
+    },
+    {
+      "id": "l2-base-repeat",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            "USD"
+          ],
+          [
+            "base",
+            "GBP"
+          ]
+        ]
+      },
+      "note": "repeated base"
+    },
+    {
+      "id": "l2-from-base",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "from",
+            "USD"
+          ],
+          [
+            "base",
+            "GBP"
+          ]
+        ]
+      },
+      "note": "from vs base precedence"
+    },
+    {
+      "id": "l2-to-sym",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "to",
+            "JPY"
+          ],
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      },
+      "note": "to vs symbols precedence"
+    },
+    {
+      "id": "l2-base-mixed",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "base",
+            "uSd"
+          ],
+          [
+            "symbols",
+            "Eur"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "l2-date-param",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "date",
+            "2020-01-02"
+          ],
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      },
+      "note": "ignored?"
+    },
+    {
+      "id": "p2-bgn-gap",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2025-12-29",
+          "end_date": "2026-01-09"
+        },
+        "query": [
+          [
+            "symbols",
+            "BGN"
+          ]
+        ]
+      },
+      "note": "days without the symbol"
+    },
+    {
+      "id": "p2-base-bgn-switch",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2025-12-29",
+          "end_date": "2026-01-06"
+        },
+        "query": [
+          [
+            "base",
+            "BGN"
+          ],
+          [
+            "symbols",
+            "USD,EUR"
+          ]
+        ]
+      },
+      "note": "base disappears mid-range"
+    },
+    {
+      "id": "p2-easter",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-04-06",
+          "end_date": "2026-04-10"
+        },
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      },
+      "note": "start on Easter Monday"
+    },
+    {
+      "id": "p2-cyp-end",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2007-12-27",
+          "end_date": "2008-01-04"
+        },
+        "query": [
+          [
+            "base",
+            "CYP"
+          ],
+          [
+            "symbols",
+            "USD"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p2-amt-eur",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-10-05",
+          "end_date": "2026-10-09"
+        },
+        "query": [
+          [
+            "amount",
+            "3"
+          ],
+          [
+            "symbols",
+            "INR,IDR,GBP"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p2-lower",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{start_date}..{end_date}",
+        "path_params": {
+          "start_date": "2026-10-05",
+          "end_date": "2026-10-09"
+        },
+        "query": [
+          [
+            "base",
+            "jpy"
+          ],
+          [
+            "symbols",
+            "usd,eur"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "d2-bgn-2026",
+      "endpoint": "GET /v1/{date}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{date}",
+        "path_params": {
+          "date": "2026-01-05"
+        },
+        "query": [
+          [
+            "base",
+            "BGN"
+          ]
+        ]
+      },
+      "note": "base not quoted that day"
+    },
+    {
+      "id": "d2-old-amt",
+      "endpoint": "GET /v1/{date}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{date}",
+        "path_params": {
+          "date": "1999-01-04"
+        },
+        "query": [
+          [
+            "base",
+            "USD"
+          ],
+          [
+            "amount",
+            "3.5"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "d2-rub",
+      "endpoint": "GET /v1/{date}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/{date}",
+        "path_params": {
+          "date": "2022-02-28"
+        },
+        "query": [
+          [
+            "base",
+            "RUB"
+          ],
+          [
+            "symbols",
+            "USD,EUR"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "x-trailing-range",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "note": "trailing slash on range",
+      "request": {
+        "method": "GET",
+        "path": "/v1/2026-10-01..2026-10-09/"
+      }
+    },
+    {
+      "id": "x-triple-dot",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "note": "three dots",
+      "request": {
+        "method": "GET",
+        "path": "/v1/2026-10-01...2026-10-09"
+      }
+    },
+    {
+      "id": "x-no-start",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "note": "missing start",
+      "request": {
+        "method": "GET",
+        "path": "/v1/..2026-10-09"
+      }
+    },
+    {
+      "id": "x-dots-only",
+      "endpoint": "GET /v1/{start_date}..{end_date}",
+      "purpose": "edge",
+      "note": "only dots",
+      "request": {
+        "method": "GET",
+        "path": "/v1/.."
+      }
+    },
+    {
+      "id": "x-date-trailing",
+      "endpoint": "GET /v1/{date}",
+      "purpose": "edge",
+      "note": "trailing slash on date",
+      "request": {
+        "method": "GET",
+        "path": "/v1/2026-10-08/"
+      }
+    },
+    {
+      "id": "x-openapi",
+      "endpoint": "GET /v1/currencies",
+      "purpose": "edge",
+      "note": "served spec",
+      "request": {
+        "method": "GET",
+        "path": "/v1/openapi.json"
+      }
+    },
+    {
+      "id": "x-head-latest",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "request": {
+        "method": "HEAD",
+        "path": "/v1/latest"
+      }
+    },
+    {
+      "id": "x-options",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "note": "CORS preflight",
+      "request": {
+        "method": "OPTIONS",
+        "path": "/v1/latest",
+        "headers": {
+          "Origin": "https://example.com",
+          "Access-Control-Request-Method": "GET"
+        }
+      }
+    },
+    {
+      "id": "x-origin",
+      "endpoint": "GET /v1/latest",
+      "purpose": "edge",
+      "note": "CORS headers",
+      "request": {
+        "method": "GET",
+        "path": "/v1/latest",
+        "query": [
+          [
+            "symbols",
+            "USD"
+          ]
+        ],
+        "headers": {
+          "Origin": "https://example.com"
+        }
+      }
+    }
+  ]
+}

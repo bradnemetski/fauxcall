@@ -1,0 +1,445 @@
+{
+  "id": "000768",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "series",
+  "plan_call": "st50-AMZN",
+  "started_at": "2026-10-11T06:31:23.352222Z",
+  "started_ns": 1791700283352222000,
+  "elapsed_ms": 9967.91,
+  "ttfb_ms": 51.118,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=AMZN&count=50",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "AMZN"
+      ],
+      [
+        "count",
+        "50"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:31:23 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791700294"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 51.502,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.53\",\"size\":463,\"time\":\"2026-10-11T06:31:23.403Z\"}"
+    },
+    {
+      "t_ms": 253.891,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.72\",\"size\":303,\"time\":\"2026-10-11T06:31:23.605Z\"}"
+    },
+    {
+      "t_ms": 454.957,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.76\",\"size\":96,\"time\":\"2026-10-11T06:31:23.806Z\"}"
+    },
+    {
+      "t_ms": 657.831,
+      "kind": "sse",
+      "event": "trade",
+      "id": "4",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.82\",\"size\":620,\"time\":\"2026-10-11T06:31:24.009Z\"}"
+    },
+    {
+      "t_ms": 859.992,
+      "kind": "sse",
+      "event": "trade",
+      "id": "5",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.69\",\"size\":935,\"time\":\"2026-10-11T06:31:24.211Z\"}"
+    },
+    {
+      "t_ms": 1062.62,
+      "kind": "sse",
+      "event": "trade",
+      "id": "6",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.82\",\"size\":132,\"time\":\"2026-10-11T06:31:24.413Z\"}"
+    },
+    {
+      "t_ms": 1264.875,
+      "kind": "sse",
+      "event": "trade",
+      "id": "7",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.73\",\"size\":863,\"time\":\"2026-10-11T06:31:24.616Z\"}"
+    },
+    {
+      "t_ms": 1467.251,
+      "kind": "sse",
+      "event": "trade",
+      "id": "8",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.90\",\"size\":824,\"time\":\"2026-10-11T06:31:24.818Z\"}"
+    },
+    {
+      "t_ms": 1670.486,
+      "kind": "sse",
+      "event": "trade",
+      "id": "9",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.84\",\"size\":566,\"time\":\"2026-10-11T06:31:25.021Z\"}"
+    },
+    {
+      "t_ms": 1873.732,
+      "kind": "sse",
+      "event": "trade",
+      "id": "10",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.80\",\"size\":615,\"time\":\"2026-10-11T06:31:25.224Z\"}"
+    },
+    {
+      "t_ms": 2074.583,
+      "kind": "sse",
+      "event": "trade",
+      "id": "11",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.78\",\"size\":851,\"time\":\"2026-10-11T06:31:25.426Z\"}"
+    },
+    {
+      "t_ms": 2275.885,
+      "kind": "sse",
+      "event": "trade",
+      "id": "12",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.91\",\"size\":567,\"time\":\"2026-10-11T06:31:25.626Z\"}"
+    },
+    {
+      "t_ms": 2478.961,
+      "kind": "sse",
+      "event": "trade",
+      "id": "13",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.93\",\"size\":904,\"time\":\"2026-10-11T06:31:25.829Z\"}"
+    },
+    {
+      "t_ms": 2680.466,
+      "kind": "sse",
+      "event": "trade",
+      "id": "14",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.80\",\"size\":520,\"time\":\"2026-10-11T06:31:26.032Z\"}"
+    },
+    {
+      "t_ms": 2881.348,
+      "kind": "sse",
+      "event": "trade",
+      "id": "15",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.84\",\"size\":832,\"time\":\"2026-10-11T06:31:26.233Z\"}"
+    },
+    {
+      "t_ms": 3084.318,
+      "kind": "sse",
+      "event": "trade",
+      "id": "16",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.65\",\"size\":924,\"time\":\"2026-10-11T06:31:26.435Z\"}"
+    },
+    {
+      "t_ms": 3287.416,
+      "kind": "sse",
+      "event": "trade",
+      "id": "17",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.59\",\"size\":295,\"time\":\"2026-10-11T06:31:26.638Z\"}"
+    },
+    {
+      "t_ms": 3499.593,
+      "kind": "sse",
+      "event": "trade",
+      "id": "18",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.42\",\"size\":355,\"time\":\"2026-10-11T06:31:26.847Z\"}"
+    },
+    {
+      "t_ms": 3702.474,
+      "kind": "sse",
+      "event": "trade",
+      "id": "19",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.49\",\"size\":320,\"time\":\"2026-10-11T06:31:27.051Z\"}"
+    },
+    {
+      "t_ms": 3904.269,
+      "kind": "sse",
+      "event": "trade",
+      "id": "20",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.36\",\"size\":614,\"time\":\"2026-10-11T06:31:27.254Z\"}"
+    },
+    {
+      "t_ms": 4106.746,
+      "kind": "sse",
+      "event": "trade",
+      "id": "21",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.43\",\"size\":13,\"time\":\"2026-10-11T06:31:27.457Z\"}"
+    },
+    {
+      "t_ms": 4308.859,
+      "kind": "sse",
+      "event": "trade",
+      "id": "22",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.58\",\"size\":779,\"time\":\"2026-10-11T06:31:27.660Z\"}"
+    },
+    {
+      "t_ms": 4511.304,
+      "kind": "sse",
+      "event": "trade",
+      "id": "23",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.49\",\"size\":582,\"time\":\"2026-10-11T06:31:27.861Z\"}"
+    },
+    {
+      "t_ms": 4712.7,
+      "kind": "sse",
+      "event": "trade",
+      "id": "24",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.60\",\"size\":908,\"time\":\"2026-10-11T06:31:28.064Z\"}"
+    },
+    {
+      "t_ms": 4914.859,
+      "kind": "sse",
+      "event": "trade",
+      "id": "25",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.56\",\"size\":829,\"time\":\"2026-10-11T06:31:28.266Z\"}"
+    },
+    {
+      "t_ms": 5117.091,
+      "kind": "sse",
+      "event": "trade",
+      "id": "26",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.37\",\"size\":896,\"time\":\"2026-10-11T06:31:28.468Z\"}"
+    },
+    {
+      "t_ms": 5318.974,
+      "kind": "sse",
+      "event": "trade",
+      "id": "27",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.52\",\"size\":1000,\"time\":\"2026-10-11T06:31:28.669Z\"}"
+    },
+    {
+      "t_ms": 5521.293,
+      "kind": "sse",
+      "event": "trade",
+      "id": "28",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.41\",\"size\":47,\"time\":\"2026-10-11T06:31:28.871Z\"}"
+    },
+    {
+      "t_ms": 5723.044,
+      "kind": "sse",
+      "event": "trade",
+      "id": "29",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.58\",\"size\":671,\"time\":\"2026-10-11T06:31:29.074Z\"}"
+    },
+    {
+      "t_ms": 5925.255,
+      "kind": "sse",
+      "event": "trade",
+      "id": "30",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.51\",\"size\":655,\"time\":\"2026-10-11T06:31:29.276Z\"}"
+    },
+    {
+      "t_ms": 6128.111,
+      "kind": "sse",
+      "event": "trade",
+      "id": "31",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.44\",\"size\":258,\"time\":\"2026-10-11T06:31:29.479Z\"}"
+    },
+    {
+      "t_ms": 6331.889,
+      "kind": "sse",
+      "event": "trade",
+      "id": "32",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.42\",\"size\":447,\"time\":\"2026-10-11T06:31:29.682Z\"}"
+    },
+    {
+      "t_ms": 6532.751,
+      "kind": "sse",
+      "event": "trade",
+      "id": "33",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.53\",\"size\":366,\"time\":\"2026-10-11T06:31:29.884Z\"}"
+    },
+    {
+      "t_ms": 6735.904,
+      "kind": "sse",
+      "event": "trade",
+      "id": "34",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.34\",\"size\":810,\"time\":\"2026-10-11T06:31:30.086Z\"}"
+    },
+    {
+      "t_ms": 6937.274,
+      "kind": "sse",
+      "event": "trade",
+      "id": "35",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.34\",\"size\":425,\"time\":\"2026-10-11T06:31:30.288Z\"}"
+    },
+    {
+      "t_ms": 7139.453,
+      "kind": "sse",
+      "event": "trade",
+      "id": "36",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.51\",\"size\":580,\"time\":\"2026-10-11T06:31:30.490Z\"}"
+    },
+    {
+      "t_ms": 7341.847,
+      "kind": "sse",
+      "event": "trade",
+      "id": "37",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.68\",\"size\":299,\"time\":\"2026-10-11T06:31:30.693Z\"}"
+    },
+    {
+      "t_ms": 7544.345,
+      "kind": "sse",
+      "event": "trade",
+      "id": "38",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.77\",\"size\":963,\"time\":\"2026-10-11T06:31:30.894Z\"}"
+    },
+    {
+      "t_ms": 7745.34,
+      "kind": "sse",
+      "event": "trade",
+      "id": "39",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.94\",\"size\":305,\"time\":\"2026-10-11T06:31:31.096Z\"}"
+    },
+    {
+      "t_ms": 7945.945,
+      "kind": "sse",
+      "event": "trade",
+      "id": "40",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.94\",\"size\":415,\"time\":\"2026-10-11T06:31:31.297Z\"}"
+    },
+    {
+      "t_ms": 8147.39,
+      "kind": "sse",
+      "event": "trade",
+      "id": "41",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"186.83\",\"size\":786,\"time\":\"2026-10-11T06:31:31.498Z\"}"
+    },
+    {
+      "t_ms": 8348.593,
+      "kind": "sse",
+      "event": "trade",
+      "id": "42",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"187.00\",\"size\":900,\"time\":\"2026-10-11T06:31:31.699Z\"}"
+    },
+    {
+      "t_ms": 8550.912,
+      "kind": "sse",
+      "event": "trade",
+      "id": "43",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"187.09\",\"size\":826,\"time\":\"2026-10-11T06:31:31.901Z\"}"
+    },
+    {
+      "t_ms": 8752.554,
+      "kind": "sse",
+      "event": "trade",
+      "id": "44",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"187.20\",\"size\":581,\"time\":\"2026-10-11T06:31:32.103Z\"}"
+    },
+    {
+      "t_ms": 8954.251,
+      "kind": "sse",
+      "event": "trade",
+      "id": "45",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"187.09\",\"size\":238,\"time\":\"2026-10-11T06:31:32.305Z\"}"
+    },
+    {
+      "t_ms": 9157.135,
+      "kind": "sse",
+      "event": "trade",
+      "id": "46",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"187.18\",\"size\":997,\"time\":\"2026-10-11T06:31:32.508Z\"}"
+    },
+    {
+      "t_ms": 9361.777,
+      "kind": "sse",
+      "event": "trade",
+      "id": "47",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"187.07\",\"size\":20,\"time\":\"2026-10-11T06:31:32.712Z\"}"
+    },
+    {
+      "t_ms": 9563.019,
+      "kind": "sse",
+      "event": "trade",
+      "id": "48",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"187.11\",\"size\":372,\"time\":\"2026-10-11T06:31:32.914Z\"}"
+    },
+    {
+      "t_ms": 9765.842,
+      "kind": "sse",
+      "event": "trade",
+      "id": "49",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"187.00\",\"size\":520,\"time\":\"2026-10-11T06:31:33.116Z\"}"
+    },
+    {
+      "t_ms": 9967.381,
+      "kind": "sse",
+      "event": "trade",
+      "id": "50",
+      "data": "{\"symbol\":\"AMZN\",\"price\":\"187.09\",\"size\":648,\"time\":\"2026-10-11T06:31:33.318Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

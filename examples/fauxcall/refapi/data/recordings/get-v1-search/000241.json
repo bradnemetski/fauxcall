@@ -1,0 +1,130 @@
+{
+  "id": "000241",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s-22",
+  "started_at": "2026-10-11T06:18:36.140133Z",
+  "started_ns": 1791699516140133000,
+  "elapsed_ms": 41.234,
+  "ttfb_ms": 41.1,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=plc",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "plc"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:18:35 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "425"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "27"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699526"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "plc",
+        "results": [
+          {
+            "symbol": "0005.HK",
+            "name": "HSBC Holdings plc",
+            "score": 0.8
+          },
+          {
+            "symbol": "AZN.L",
+            "name": "AstraZeneca PLC",
+            "score": 0.8
+          },
+          {
+            "symbol": "BARC.L",
+            "name": "Barclays PLC",
+            "score": 0.8
+          },
+          {
+            "symbol": "HSBA.L",
+            "name": "HSBC Holdings plc",
+            "score": 0.8
+          },
+          {
+            "symbol": "RR.L",
+            "name": "Rolls-Royce Holdings plc",
+            "score": 0.8
+          },
+          {
+            "symbol": "SHEL.L",
+            "name": "Shell plc",
+            "score": 0.8
+          },
+          {
+            "symbol": "ULVR.L",
+            "name": "Unilever PLC",
+            "score": 0.8
+          }
+        ]
+      },
+      "size": 425
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

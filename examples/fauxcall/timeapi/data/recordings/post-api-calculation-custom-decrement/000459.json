@@ -1,0 +1,114 @@
+{
+  "id": "000459",
+  "endpoint": "POST /api/calculation/custom/decrement",
+  "purpose": "edge",
+  "plan_call": "cd-dst2",
+  "started_at": "2026-10-11T10:43:42.489073Z",
+  "started_ns": 1791715422489073000,
+  "elapsed_ms": 145.047,
+  "ttfb_ms": 144.093,
+  "request": {
+    "method": "POST",
+    "url": "https://timeapi.io/api/calculation/custom/decrement",
+    "path": "/api/calculation/custom/decrement",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "106"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "timeZone": "Europe/Amsterdam",
+        "dateTime": "2025-10-27 12:00:00",
+        "timeSpan": "1:00:00:00",
+        "dstAmbiguity": ""
+      },
+      "size": 106
+    }
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:43:42 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "timeZone": "Europe/Amsterdam",
+        "originalDateTime": "2025-10-27T12:00:00",
+        "usedTimeSpan": "1:00:00:00",
+        "calculationResult": {
+          "year": 2025,
+          "month": 10,
+          "day": 26,
+          "hour": 12,
+          "minute": 0,
+          "seconds": 0,
+          "milliSeconds": 0,
+          "dateTime": "2025-10-26T12:00:00",
+          "date": "10/26/2025",
+          "time": "12:00",
+          "dstActive": false
+        }
+      },
+      "size": 290
+    }
+  }
+}

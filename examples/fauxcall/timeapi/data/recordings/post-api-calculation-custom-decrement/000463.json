@@ -1,0 +1,113 @@
+{
+  "id": "000463",
+  "endpoint": "POST /api/calculation/custom/decrement",
+  "purpose": "invalid",
+  "plan_call": "cd-emptystr",
+  "started_at": "2026-10-11T10:43:44.496929Z",
+  "started_ns": 1791715424496929000,
+  "elapsed_ms": 136.771,
+  "ttfb_ms": 135.625,
+  "request": {
+    "method": "POST",
+    "url": "https://timeapi.io/api/calculation/custom/decrement",
+    "path": "/api/calculation/custom/decrement",
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "61"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "timeZone": "",
+        "dateTime": "",
+        "timeSpan": "",
+        "dstAmbiguity": ""
+      },
+      "size": 61
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:43:44 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "DateTime": [
+            "The DateTime field is required."
+          ],
+          "TimeSpan": [
+            "The TimeSpan field is required."
+          ],
+          "TimeZone": [
+            "The TimeZone field is required."
+          ]
+        },
+        "traceId": "00-05973c0b560dc8e20c82db73e1143798-986ff25f49d5fe7d-00"
+      },
+      "size": 344
+    }
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "id": "000037",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "pagination",
+  "plan_call": "tk-p4",
+  "started_at": "2026-10-11T06:13:09.009244Z",
+  "started_ns": 1791699189009244000,
+  "elapsed_ms": 50.13,
+  "ttfb_ms": 49.55,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?limit=7&cursor=eyJhZnRlciI6IkFaTi5MIn0",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "limit",
+        "7"
+      ],
+      [
+        "cursor",
+        "eyJhZnRlciI6IkFaTi5MIn0"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:13:08 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "958"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "23"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1791699197"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "BA",
+            "name": "The Boeing Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Industrials",
+            "listed_on": "1962-01-02"
+          },
+          {
+            "symbol": "BAC",
+            "name": "Bank of America Corporation",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1973-09-04"
+          },
+          {
+            "symbol": "BARC.L",
+            "name": "Barclays PLC",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Financials",
+            "listed_on": "1985-05-01"
+          },
+          {
+            "symbol": "BNP.PA",
+            "name": "BNP Paribas SA",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Financials",
+            "listed_on": "1993-10-18"
+          },
+          {
+            "symbol": "BP.L",
+            "name": "BP p.l.c.",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Energy",
+            "listed_on": "1954-03-01"
+          },
+          {
+            "symbol": "CAT",
+            "name": "Caterpillar Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Industrials",
+            "listed_on": "1929-12-02"
+          },
+          {
+            "symbol": "COST",
+            "name": "Costco Wholesale Corporation",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Consumer Staples",
+            "listed_on": "1985-12-05"
+          }
+        ],
+        "next_cursor": "eyJhZnRlciI6IkNPU1QifQ",
+        "total": 60
+      },
+      "size": 958
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

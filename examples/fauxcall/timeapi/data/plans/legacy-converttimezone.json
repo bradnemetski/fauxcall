@@ -1,0 +1,187 @@
+{
+ "name": "legacy-converttimezone",
+ "created_at": "2026-10-11T10:40:00Z",
+ "calls": [
+  {
+   "id": "cv-1",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "Europe/Amsterdam",
+     "dateTime": "2021-03-14 17:45:00",
+     "toTimeZone": "America/Los_Angeles",
+     "dstAmbiguity": ""
+    }
+   }
+  },
+  {
+   "id": "cv-2",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "Asia/Tokyo",
+     "dateTime": "2026-10-11 09:30:15.123456",
+     "toTimeZone": "Asia/Kathmandu"
+    }
+   }
+  },
+  {
+   "id": "cv-amb-early",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "Europe/Amsterdam",
+     "dateTime": "2025-10-26 02:30:00",
+     "toTimeZone": "UTC",
+     "dstAmbiguity": "earlier"
+    }
+   }
+  },
+  {
+   "id": "cv-amb-late",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "Europe/Amsterdam",
+     "dateTime": "2025-10-26 02:30:00",
+     "toTimeZone": "UTC",
+     "dstAmbiguity": "later"
+    }
+   }
+  },
+  {
+   "id": "cv-amb-none",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "Europe/Amsterdam",
+     "dateTime": "2025-10-26 02:30:00",
+     "toTimeZone": "UTC"
+    }
+   }
+  },
+  {
+   "id": "cv-gap",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "Europe/Amsterdam",
+     "dateTime": "2025-03-30 02:30:00",
+     "toTimeZone": "UTC"
+    }
+   }
+  },
+  {
+   "id": "cv-iso",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "UTC",
+     "dateTime": "2021-03-14T17:45:00",
+     "toTimeZone": "Asia/Kolkata"
+    }
+   }
+  },
+  {
+   "id": "cv-badtz",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "Mars/Phobos",
+     "dateTime": "2021-03-14 17:45:00",
+     "toTimeZone": "UTC"
+    }
+   }
+  },
+  {
+   "id": "cv-badtz-to",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "UTC",
+     "dateTime": "2021-03-14 17:45:00",
+     "toTimeZone": "EST"
+    }
+   }
+  },
+  {
+   "id": "cv-missing",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "UTC",
+     "toTimeZone": "Asia/Tokyo"
+    }
+   }
+  },
+  {
+   "id": "cv-baddate",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "UTC",
+     "dateTime": "2021-02-30 10:00:00",
+     "toTimeZone": "Asia/Tokyo"
+    }
+   }
+  },
+  {
+   "id": "cv-badamb",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {
+     "fromTimeZone": "Europe/Amsterdam",
+     "dateTime": "2025-10-26 02:30:00",
+     "toTimeZone": "UTC",
+     "dstAmbiguity": "sometimes"
+    }
+   }
+  },
+  {
+   "id": "cv-empty",
+   "endpoint": "POST /api/conversion/converttimezone",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/conversion/converttimezone",
+    "json_body": {}
+   }
+  }
+ ]
+}

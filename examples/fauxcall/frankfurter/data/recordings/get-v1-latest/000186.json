@@ -1,0 +1,118 @@
+{
+  "id": "000186",
+  "endpoint": "GET /v1/latest",
+  "purpose": "edge",
+  "plan_call": "l3-from-to-same",
+  "started_at": "2026-10-11T06:26:15.165919Z",
+  "started_ns": 1791699975165919000,
+  "elapsed_ms": 269.061,
+  "ttfb_ms": 268.047,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/latest?from=JPY&to=JPY",
+    "path": "/v1/latest",
+    "query": [
+      [
+        "from",
+        "JPY"
+      ],
+      [
+        "to",
+        "JPY"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 422,
+    "reason": "Unprocessable Entity",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:26:15 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "content-length",
+        "31"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "x-robots-tag",
+        "noindex"
+      ],
+      [
+        "cache-control",
+        "no-store"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/rates>; rel=\"successor-version\""
+      ],
+      [
+        "cf-cache-status",
+        "BYPASS"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=IqQTo%2F83qwUYCU%2F%2B6cU3Jk1lwQylT47V1pIR6CcG3cAF584hs3YSd1Zz06Hzi%2FraSK5ec3%2Fi5ox8cU08JPpksnODYR%2FhJ5s%2BqFnwq4Y8ELNgG%2FnS00y7m2ww2zMOQM%2FrybVQLXQ%3D\"}]}"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bcacce8a50956-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "message": "bad currency pair"
+      },
+      "size": 31
+    }
+  }
+}

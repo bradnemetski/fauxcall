@@ -1,0 +1,101 @@
+{
+  "id": "000261",
+  "endpoint": "GET /api/time/current/zone",
+  "purpose": "edge",
+  "plan_call": "lcz-slash",
+  "started_at": "2026-10-11T10:38:25.233495Z",
+  "started_ns": 1791715105233495000,
+  "elapsed_ms": 135.469,
+  "ttfb_ms": 134.246,
+  "request": {
+    "method": "GET",
+    "url": "https://timeapi.io/api/time/current/zone/?timeZone=UTC",
+    "path": "/api/time/current/zone/",
+    "query": [
+      [
+        "timeZone",
+        "UTC"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "timeapi.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "server",
+        "nginx/1.29.4"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 10:38:25 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "year": 2026,
+        "month": 10,
+        "day": 11,
+        "hour": 10,
+        "minute": 38,
+        "seconds": 25,
+        "milliSeconds": 310,
+        "dateTime": "2026-10-11T10:38:25.310731",
+        "date": "10/11/2026",
+        "time": "10:38",
+        "timeZone": "UTC",
+        "dayOfWeek": "Sunday",
+        "dstActive": false
+      },
+      "size": 218
+    }
+  },
+  "tags": [
+    "routing"
+  ]
+}

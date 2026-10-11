@@ -1,0 +1,144 @@
+{
+  "id": "000158",
+  "endpoint": "GET /v1/{start_date}..{end_date}",
+  "purpose": "edge",
+  "plan_call": "p2-cyp-end",
+  "started_at": "2026-10-11T06:24:19.371438Z",
+  "started_ns": 1791699859371438000,
+  "elapsed_ms": 291.526,
+  "ttfb_ms": 290.512,
+  "request": {
+    "method": "GET",
+    "url": "https://api.frankfurter.dev/v1/2007-12-27..2008-01-04?base=CYP&symbols=USD",
+    "path": "/v1/2007-12-27..2008-01-04",
+    "path_params": {
+      "start_date": "2007-12-27",
+      "end_date": "2008-01-04"
+    },
+    "query": [
+      [
+        "base",
+        "CYP"
+      ],
+      [
+        "symbols",
+        "USD"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "api.frankfurter.dev"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 06:24:19 GMT"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "cache-control",
+        "public, max-age=86400"
+      ],
+      [
+        "nel",
+        "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+      ],
+      [
+        "vary",
+        "Origin"
+      ],
+      [
+        "x-robots-tag",
+        "noindex"
+      ],
+      [
+        "deprecation",
+        "@1779103800"
+      ],
+      [
+        "link",
+        "<https://api.frankfurter.dev/v2/rates>; rel=\"successor-version\""
+      ],
+      [
+        "etag",
+        "W/\"131b117cd209ca2d36747a1bb2eb07c5\""
+      ],
+      [
+        "cf-cache-status",
+        "MISS"
+      ],
+      [
+        "report-to",
+        "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=5QOSNYR6UNLnj727OYPmf6X0crNR8ClGURUFLtTMnGVRVq01rLpf6JJSo7m%2F165%2BfhvzlPRSm76K0JhLNmIt0VVarXmdlgUoytuZ6EMlBifPFtvbqwpNhBMPKWFgmNIAMgkt%2BHU%3D\"}]}"
+      ],
+      [
+        "content-encoding",
+        "gzip"
+      ],
+      [
+        "server",
+        "cloudflare"
+      ],
+      [
+        "cf-ray",
+        "a48bc7f93a14c439-EWR"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "amount": 1.0,
+        "base": "CYP",
+        "start_date": "2007-12-27",
+        "end_date": "2007-12-31",
+        "rates": {
+          "2007-12-27": {
+            "USD": 2.4802
+          },
+          "2007-12-28": {
+            "USD": 2.5103
+          },
+          "2007-12-31": {
+            "USD": 2.5152
+          }
+        }
+      },
+      "size": 171
+    }
+  }
+}
