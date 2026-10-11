@@ -1,0 +1,33 @@
+"""The fake's ASGI app."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+{% if mcp %}
+from fauxcall.runtime import create_app, register_tool
+
+from {{ package }}.handlers import TOOL_HANDLERS
+from {{ package }}.routes import router
+from {{ package }}.settings import Settings
+{% else %}
+from fauxcall.runtime import create_app
+
+from {{ package }}.routes import router
+from {{ package }}.settings import Settings
+{% endif %}
+
+if TYPE_CHECKING:
+    from fastapi import FastAPI
+
+
+def build_app(settings: Settings | None = None) -> FastAPI:
+    """Build the app (used by ``__main__`` and the tests)."""
+{% if mcp %}
+    app = create_app(settings or Settings(), routers=[router])
+    for name, handler in TOOL_HANDLERS.items():
+        register_tool(app, name, handler)
+    return app
+{% else %}
+    return create_app(settings or Settings(), routers=[router])
+{% endif %}

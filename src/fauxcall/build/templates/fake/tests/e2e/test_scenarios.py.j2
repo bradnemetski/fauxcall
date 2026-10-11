@@ -1,0 +1,22 @@
+"""End-to-end scenarios for this fake.
+
+Each runs against the fake (default), the real API (``--target=real``) or both with a compliance
+report (``--target=parity``). Write many: happy paths, parameter variations, errors, cross-endpoint
+consistency (every reference resolves), time behavior, pagination walks, async jobs, auth failures.
+Writes to the real API additionally need ``--allow-real-writes``.
+"""
+
+from __future__ import annotations
+{% if scenarios %}
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from fauxcall.testing import {{ fixture_type }}
+{% for scenario in scenarios %}
+
+
+async def test_{{ scenario.name }}({{ fixture }}: {{ fixture_type }}) -> None:
+{{ scenario.body }}
+{% endfor %}
+{% endif %}

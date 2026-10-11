@@ -1,0 +1,11 @@
+# Build from the workspace root so the shared uv.lock is available:
+#   docker build -f {{ name }}/Dockerfile -t fauxcall-{{ name }} .
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy FAUXCALL_HOST=0.0.0.0
+WORKDIR /workspace
+COPY . /workspace
+RUN uv sync --package fauxcall-{{ name }} --no-dev --frozen
+
+EXPOSE {{ port }}
+CMD ["uv", "run", "--no-sync", "--package", "fauxcall-{{ name }}", "fauxcall-{{ name }}"]

@@ -1,0 +1,21 @@
+"""Every recorded request, replayed against the fake, gets the recorded status and body shape.
+
+Stateful endpoints (writes, jobs, downloads) are excluded here because a fresh fake does not hold
+the resources created while recording; cover them with scenarios in ``tests/e2e``.
+"""
+
+from __future__ import annotations
+
+import pytest
+from fauxcall.testing.support import RecordedCase, recorded_cases, replay_against
+
+from {{ package }}.app import build_app
+from {{ package }}.settings import Settings
+
+CASES = recorded_cases(Settings().data_dir)
+
+
+@pytest.mark.parametrize("case", CASES, ids=[case.id for case in CASES])
+async def test_recorded_request(case: RecordedCase) -> None:
+    outcome = await replay_against(build_app(Settings(fast=True, log_level="WARNING")), case)
+    assert outcome.ok, outcome.explain()
