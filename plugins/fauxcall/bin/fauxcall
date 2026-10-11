@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+# The `fauxcall` command for the Claude Code plugin (this directory is on PATH while the plugin is enabled).
+#
+# Runs the released package with uvx, pinned to the plugin's version so skills and engine always match.
+# Development: FAUXCALL_SOURCE=/path/to/fauxcall/checkout runs that checkout instead.
+set -eu
+FAUXCALL_VERSION="0.1.0"
+if [ -n "${FAUXCALL_SOURCE:-}" ] && [ -d "${FAUXCALL_SOURCE}" ]; then
+  exec uv run --quiet --project "${FAUXCALL_SOURCE}" fauxcall "$@"
+fi
+if ! command -v uvx >/dev/null 2>&1; then
+  echo "fauxcall needs uv: https://docs.astral.sh/uv/getting-started/installation/" >&2
+  exit 127
+fi
+exec uvx --quiet "fauxcall==${FAUXCALL_VERSION}" "$@"
