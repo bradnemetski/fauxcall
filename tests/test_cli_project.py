@@ -490,6 +490,20 @@ def test_model_schema_and_show(ws: Workspace) -> None:
     part = json.loads(invoke("model", "schema", "--part", "EndpointModel").output)
     assert part["title"] == "EndpointModel"
     assert "unknown part 'Nope'" in invoke("model", "schema", "--part", "Nope", code=1).output
+    brief = invoke("model", "schema", "--brief").output
+    assert brief.startswith("## ApiModel\nRoot of")
+    assert "\n## EndpointModel\n" in brief
+    assert "- name: str (required)" in brief
+    assert '- kind: "rest" | "mcp" = "rest"' in brief
+    assert "- endpoints: list[EndpointModel]" in brief
+    assert "- auth: AuthModel | null = null" in brief
+    assert "- default_headers: dict[str, str] — Contract headers on every response." in brief
+    one = invoke("model", "schema", "--part", "HttpMethod", "--brief").output
+    assert one.startswith("## HttpMethod")
+    assert "one of: " in one
+    assert "## ApiModel" not in one
+    whole = json.loads(invoke("model", "schema", "--part", "ApiModel").output)
+    assert whole == schema
     write_fake(ws, "shop", rest_model())
     assert json.loads(invoke("model", "show", "shop").output)["title"] == "Shop"
 

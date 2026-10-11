@@ -1,8 +1,9 @@
 # The model (`data/model.json`)
 
 Everything the fake knows lives in one validated JSON document. Edit it directly; validate with
-`fauxcall model check <name>`; print the full schema (with field descriptions) with
-`fauxcall model schema [--part EndpointModel]`. Fields left out take their defaults.
+`fauxcall model check <name>`. `fauxcall model schema --brief` lists every part's fields, types,
+defaults and descriptions (`--part EndpointModel` for one part; without `--brief`, the JSON Schema).
+Fields left out take their defaults.
 
 ## Contents
 

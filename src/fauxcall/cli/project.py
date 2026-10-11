@@ -7,7 +7,7 @@ import os
 import shutil
 import sys
 from pathlib import Path  # noqa: TC003 - Typer resolves the annotations at runtime
-from typing import TYPE_CHECKING, Annotated, Final, cast, get_args
+from typing import TYPE_CHECKING, Annotated, Any, Final, cast, get_args
 
 import typer
 
@@ -302,15 +302,66 @@ def model_schema(
     part: Annotated[
         str | None, typer.Option(help="Only one definition, e.g. EndpointModel.")
     ] = None,
+    brief: Annotated[
+        bool,
+        typer.Option("--brief", help="Readable summary: every part's fields, types and defaults."),
+    ] = False,
 ) -> None:
     """Print the JSON Schema of data/model.json (with field descriptions)."""
     schema = ApiModel.model_json_schema()
-    if part:
-        definitions = schema.get("$defs", {})
-        if part not in definitions:
-            raise fail(f"unknown part {part!r}; one of: {', '.join(sorted(definitions))}")
+    definitions: dict[str, Any] = schema.get("$defs", {})
+    if part and part not in {*definitions, "ApiModel"}:
+        raise fail(f"unknown part {part!r}; one of: {', '.join(sorted(definitions))}")
+    if brief:
+        parts = {"ApiModel": schema, **definitions}
+        chosen = {part: parts[part]} if part else parts
+        echo("\n\n".join(_brief_part(name, value) for name, value in chosen.items()))
+        return
+    if part and part != "ApiModel":
         schema = definitions[part]
     echo(json.dumps(schema, indent=2))
+
+
+def _type_name(spec: dict[str, Any]) -> str:
+    """A JSON-schema property type, briefly: ``str``, ``list[EndpointModel]``, ``a | b``."""
+    if "$ref" in spec:
+        return str(spec["$ref"]).rsplit("/", 1)[-1]
+    if "enum" in spec:
+        return " | ".join(json.dumps(value) for value in spec["enum"])
+    if "const" in spec:
+        return json.dumps(spec["const"])
+    for combined in ("anyOf", "oneOf"):
+        if combined in spec:
+            return " | ".join(_type_name(option) for option in spec[combined])
+    kind = spec.get("type")
+    if kind == "array":
+        return f"list[{_type_name(spec.get('items', {}))}]"
+    if kind == "object" and isinstance(spec.get("additionalProperties"), dict):
+        return f"dict[str, {_type_name(spec['additionalProperties'])}]"
+    names = {"string": "str", "integer": "int", "number": "float", "boolean": "bool"}
+    return names.get(str(kind), str(kind) if kind else "any")
+
+
+def _brief_part(name: str, spec: dict[str, Any]) -> str:
+    """One model as text: its description, then a line per field."""
+    lines = [f"## {name}"]
+    description = str(spec.get("description", "")).strip()
+    if description:
+        lines.append(description.splitlines()[0])
+    if "enum" in spec:
+        lines.append(f"one of: {_type_name(spec)}")
+    required = set(spec.get("required", []))
+    for field_name, field_spec in spec.get("properties", {}).items():
+        text = f"- {field_name}: {_type_name(field_spec)}"
+        if field_name in required:
+            text += " (required)"
+        elif "default" in field_spec:
+            text += f" = {json.dumps(field_spec['default'])}"
+        hint = str(field_spec.get("description", "")).strip()
+        if hint:
+            text += f" — {hint.splitlines()[0]}"
+        lines.append(text)
+    return "\n".join(lines)
 
 
 @model_app.command("show")
