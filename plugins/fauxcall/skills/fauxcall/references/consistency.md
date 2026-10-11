@@ -35,6 +35,11 @@ its status endpoint. Each evaluation session gets its own copy-on-write view (`X
   recordings feed the world. Add `write_readback` / `job_poll` only when the real server keeps those
   resources (then they also exist in the real API during parity runs).
 - `order`: `recorded` (default), `key_asc`, `key_desc`.
+- A record is a JSON **object** holding its own key; an array at the extract path contributes its
+  items. Maps keyed by id (`{"AUD": "Australian Dollar"}`, `{"rates": {"AUD": 1.62}}`) are not split
+  into records: keep the map inside a larger record (one record per date with its whole `rates`
+  map, key `date`) and answer lookups and conversions in a `computed` handler, or serve the map
+  unchanged with `replay`.
 
 ## Build, check, repeat
 
