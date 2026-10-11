@@ -5,12 +5,10 @@ from __future__ import annotations
 import hashlib
 import re
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Final
+from pathlib import Path
+from typing import Final
 
 from fauxcall.errors import ConfigurationError
-
-if TYPE_CHECKING:
-    from pathlib import Path
 
 _SLUG_RE: Final = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 MAX_SLUG_LENGTH: Final = 40
@@ -149,6 +147,36 @@ class FakeLayout:
     def exists(self) -> bool:
         """Whether this fake has been started (a model or progress file exists)."""
         return self.model_path.exists() or self.progress_path.exists()
+
+
+def _holds_fakes(directory: Path) -> bool:
+    if not directory.is_dir():
+        return False
+    return any((child / "data" / "model.json").is_file() for child in directory.iterdir())
+
+
+def find_workspace(configured: Path, start: Path | None = None) -> Path:
+    """Where a project's fakes live: ``configured`` itself when absolute, else found from ``start``.
+
+    Commands then work from anywhere inside a project: its root (``./fauxcall``), the workspace
+    folder, or one fake's folder. The upward search only accepts a folder that holds fakes and
+    stops at the project root (the first folder with ``.git``) or the home folder; with nothing
+    found, the workspace is ``start / configured`` (where ``init`` creates it).
+    """
+    if configured.is_absolute():
+        return configured
+    here = (start or Path.cwd()).resolve()
+    if (here / configured).is_dir():
+        return here / configured
+    home = Path.home().resolve()
+    for directory in (here, *here.parents):
+        if directory.name == configured.name and _holds_fakes(directory):
+            return directory
+        if _holds_fakes(directory / configured):
+            return directory / configured
+        if (directory / ".git").exists() or directory == home:
+            break
+    return here / configured
 
 
 @dataclass(frozen=True, slots=True)

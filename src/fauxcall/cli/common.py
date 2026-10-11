@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import functools
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Final
 
 import httpx2
@@ -15,7 +17,7 @@ from fauxcall.config import CliSettings, FakeSettings
 from fauxcall.errors import ConfigurationError, FauxcallError
 from fauxcall.model.api import ApiModel
 from fauxcall.model.progress import Progress
-from fauxcall.paths import FakeLayout, Workspace
+from fauxcall.paths import FakeLayout, Workspace, find_workspace
 from fauxcall.storage import read_model, write_model
 
 if TYPE_CHECKING:
@@ -34,8 +36,17 @@ def cli_settings() -> CliSettings:
 
 
 def workspace() -> Workspace:
-    """The configured workspace (``./fauxcall`` by default)."""
-    return Workspace(cli_settings().workspace)
+    """The configured workspace (``./fauxcall`` by default), found from anywhere in the project.
+
+    A relative setting stays relative to the current folder when the workspace is inside it, so
+    messages stay short; an absolute setting is used as it is.
+    """
+    configured = cli_settings().workspace
+    found = find_workspace(configured)
+    if not configured.is_absolute():
+        with contextlib.suppress(ValueError):
+            found = found.relative_to(Path.cwd().resolve())
+    return Workspace(found)
 
 
 def layout(name: str) -> FakeLayout:

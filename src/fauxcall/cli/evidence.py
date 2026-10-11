@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import fnmatch
 import json
 from collections import Counter, defaultdict
 from pathlib import Path  # noqa: TC003 - Typer resolves the annotations at runtime
 from typing import TYPE_CHECKING, Annotated, Final
+from urllib.parse import urlencode
 
 import typer
 
@@ -303,6 +305,83 @@ def sql(name: str, query: Annotated[str, typer.Argument(help="SELECT … FROM ex
     finally:
         connection.close()
     echo(as_table(columns, rows))
+
+
+_PREVIEW: Final = 110
+
+
+def _preview(exchange: Exchange) -> str:
+    response = exchange.response
+    if response is None:
+        return "(no response)"
+    if exchange.stream:
+        first = next((event.data for event in exchange.stream if event.data), "")
+        text = f"<{len(exchange.stream)} stream events> {first}"
+    elif response.body.kind == "binary":
+        text = f"<{response.body.size} bytes>"
+    else:
+        text = response.body.raw_text() or ""
+    text = " ".join(text.split())
+    return text if len(text) <= _PREVIEW else text[: _PREVIEW - 1] + "…"
+
+
+def _row(exchange: Exchange) -> str:
+    request, response = exchange.request, exchange.response
+    query = "?" + urlencode(request.query) if request.query else ""
+    if response is None:
+        outcome = "no response"
+    else:
+        content_type = (response.header("content-type") or "").split(";")[0]
+        outcome = f"{response.status} {exchange.elapsed_ms:.0f}ms {content_type}".rstrip()
+    label = exchange.plan_call or "-"
+    return (
+        f"{exchange.id} {label} [{exchange.purpose}] {request.method.value} {request.path}{query}"
+        f" -> {outcome}  {_preview(exchange)}"
+    )
+
+
+@clean_errors
+def recordings(
+    name: str,
+    endpoint: Annotated[
+        str | None, typer.Option(help="Endpoint id or glob, e.g. 'GET /v1/tickers*'.")
+    ] = None,
+    purpose: Annotated[str | None, typer.Option(help="sample, invalid, auth, edge …")] = None,
+    status: Annotated[int | None, typer.Option(help="Only this response status.")] = None,
+    grep: Annotated[
+        str | None, typer.Option(help="Only exchanges containing this text anywhere.")
+    ] = None,
+    show: Annotated[str | None, typer.Option(help="Print one exchange in full (by id).")] = None,
+    limit: Annotated[int, typer.Option(min=1, help="Most rows to print (the newest).")] = 60,
+) -> None:
+    """Browse recordings: one line per exchange (id, plan call, request, status, time, body)."""
+    store = RecordingStore(layout(name).recordings)
+    if show is not None:
+        for path, exchange in store.iter_exchanges():
+            if exchange.id == show or (
+                show.isdigit() and exchange.id.lstrip("0") == show.lstrip("0")
+            ):
+                echo(path.read_text(encoding="utf-8").rstrip())
+                return
+        raise fail(f"no recording {show!r} (list them with: fauxcall recordings {name})")
+    rows: list[str] = []
+    for _, exchange in store.iter_exchanges():
+        response = exchange.response
+        if (
+            (endpoint is not None and not fnmatch.fnmatchcase(exchange.endpoint, endpoint))
+            or (purpose is not None and exchange.purpose != purpose)
+            or (status is not None and (response is None or response.status != status))
+            or (grep is not None and grep not in exchange.model_dump_json())
+        ):
+            continue
+        rows.append(_row(exchange))
+    if not rows:
+        echo("no recordings match")
+        return
+    if len(rows) > limit:
+        echo(f"… {len(rows) - limit} earlier recordings not shown (filter, or raise --limit)")
+    for row in rows[-limit:]:
+        echo(row)
 
 
 # -- analyze --------------------------------------------------------------------------------------

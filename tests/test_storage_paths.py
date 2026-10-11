@@ -7,7 +7,14 @@ from pydantic import BaseModel
 
 from fauxcall.errors import ConfigurationError
 from fauxcall.jsonfmt import JsonFloat
-from fauxcall.paths import FakeLayout, Workspace, package_name, slugify, validate_slug
+from fauxcall.paths import (
+    FakeLayout,
+    Workspace,
+    find_workspace,
+    package_name,
+    slugify,
+    validate_slug,
+)
 from fauxcall.storage import (
     append_jsonl,
     atomic_write_text,
@@ -130,3 +137,34 @@ def test_workspace_lists_started_fakes_only(tmp_path: Path) -> None:
     (workspace.root / "Not_A_Slug" / "data").mkdir(parents=True)
     (workspace.root / "file.txt").write_text("")
     assert workspace.fakes() == [FakeLayout(root=started.root, name="alpha")]
+
+
+def _project_with_a_fake(root: Path) -> Path:
+    (root / ".git").mkdir(parents=True)
+    model = root / "fauxcall" / "petstore" / "data" / "model.json"
+    model.parent.mkdir(parents=True)
+    model.write_text("{}")
+    return root / "fauxcall"
+
+
+def test_find_workspace_from_anywhere_in_the_project(tmp_path: Path) -> None:
+    workspace = _project_with_a_fake(tmp_path / "project")
+    relative = Path("fauxcall")
+    assert find_workspace(relative, tmp_path / "project") == workspace  # the project root
+    assert find_workspace(relative, workspace) == workspace  # the workspace itself
+    assert find_workspace(relative, workspace / "petstore" / "data") == workspace  # inside a fake
+    deeper = tmp_path / "project" / "src" / "app"
+    deeper.mkdir(parents=True)
+    assert find_workspace(relative, deeper) == workspace
+    assert find_workspace(tmp_path / "elsewhere", deeper) == tmp_path / "elsewhere"  # absolute
+
+
+def test_find_workspace_never_leaves_the_project(tmp_path: Path) -> None:
+    _project_with_a_fake(tmp_path)  # fakes above the project's own root must not be used
+    project = tmp_path / "other"
+    (project / ".git").mkdir(parents=True)
+    assert find_workspace(Path("fauxcall"), project) == project / "fauxcall"
+    empty = tmp_path / "other" / "plain" / "folder"
+    empty.mkdir(parents=True)
+    (tmp_path / "other" / "plain" / "fauxcall").mkdir()  # a folder of that name without fakes
+    assert find_workspace(Path("fauxcall"), empty) == empty / "fauxcall"

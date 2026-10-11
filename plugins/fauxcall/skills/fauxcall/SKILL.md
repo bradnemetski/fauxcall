@@ -91,6 +91,8 @@ Order: independent collections' reads → dependent reads → writes → async j
    ([recording](references/recording.md) says exactly what each kind of endpoint needs).
    `fauxcall plan check <name> data/plans/<slug>.json`.
 3. **Record** — `fauxcall record <name> data/plans/<slug>.json`. Read the report; re-plan on surprises.
+   Browse what was recorded with `fauxcall recordings <name> --endpoint "<E>"` (one line per
+   exchange; `--status`, `--purpose`, `--grep` filter, `--show <id>` prints one in full).
 4. **Analyze** — `fauxcall analyze endpoint <name> "<E>" --apply` (statuses, field profiles,
    timestamp behavior, documented-vs-observed schema, latency). Add `analyze errors`, `analyze writes`,
    `analyze jobs`, `fauxcall sql` as needed.

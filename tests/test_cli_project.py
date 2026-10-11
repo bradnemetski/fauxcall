@@ -366,6 +366,18 @@ def test_status_of_a_fresh_fake_without_endpoints(ws: Workspace) -> None:
     assert "Recent notes" not in detail
 
 
+def test_commands_work_from_inside_a_fake(
+    ws: Workspace, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("FAUXCALL_WORKSPACE", "fakes")  # the usual relative setting
+    (tmp_path / ".git").mkdir()
+    write_fake(ws, "shop", rest_model())
+    monkeypatch.chdir(ws.fake("shop").root / "data")
+    assert invoke("status", "shop").output.startswith("# shop")
+    monkeypatch.chdir(tmp_path)
+    assert "| shop |" in invoke("status").output
+
+
 def test_status_of_an_unknown_fake(ws: Workspace) -> None:
     write_fake(ws, "shop", rest_model())
     result = invoke("status", "nope", code=1)

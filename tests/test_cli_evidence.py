@@ -22,7 +22,7 @@ from fauxcall.model.endpoints import EndpointModel, ParamModel, RequestBodyModel
 from fauxcall.model.mcp import McpModel, McpToolModel, McpTransportModel
 from fauxcall.model.plan import Approvals, RecordingPlan
 from fauxcall.model.progress import Progress
-from fauxcall.model.recording import Body, CapturedRequest, CapturedResponse, Exchange
+from fauxcall.model.recording import Body, CapturedRequest, CapturedResponse, Exchange, StreamEvent
 from fauxcall.model.world import CollectionModel, WorldRecord
 from fauxcall.paths import Workspace
 from fauxcall.recording.store import RecordingStore
@@ -647,6 +647,58 @@ def test_sql(ws: Workspace, monkeypatch: pytest.MonkeyPatch) -> None:
     assert "| GET /v1/items | 2 |" in table
     assert "read-only" in invoke("sql", "shop", "DELETE FROM exchanges", code=1).output
     assert "OperationalError" in invoke("sql", "shop", "SELECT nope FROM exchanges", code=1).output
+
+
+def test_recordings_lists_filters_and_shows(ws: Workspace, monkeypatch: pytest.MonkeyPatch) -> None:
+    record_shop(ws, monkeypatch)
+    listing = invoke("recordings", "shop").output
+    assert " GET /v1/items -> 200 " in listing
+    assert "application/json" in listing
+    only_404 = invoke("recordings", "shop", "--status", "404").output.strip().splitlines()
+    assert len(only_404) == 1
+    assert "-> 404" in only_404[0]
+    one_endpoint = invoke("recordings", "shop", "--endpoint", "GET /v1/items/*").output
+    assert all("/v1/items/" in line for line in one_endpoint.strip().splitlines())
+    assert invoke("recordings", "shop", "--grep", "no-such-text").output.strip() == (
+        "no recordings match"
+    )
+    limited = invoke("recordings", "shop", "--limit", "1").output.splitlines()
+    assert limited[0].startswith("… ")
+    assert len(limited) == 2
+    first_id = listing.split()[0]
+    shown = invoke("recordings", "shop", "--show", first_id.lstrip("0")).output
+    assert json.loads(shown)["id"] == first_id
+    assert "no recording" in invoke("recordings", "shop", "--show", "999999", code=1).output
+
+
+def test_recordings_summarize_streams_binaries_and_failures(ws: Workspace) -> None:
+    fake = make_fake(ws, shop_model())
+    store = RecordingStore(fake.recordings)
+    request = CapturedRequest(method=HttpMethod.GET, url=f"{BASE}/v1/items", path="/v1/items")
+    when = datetime(2026, 1, 5, tzinfo=UTC)
+    long_text = "x" * 200
+    for response, stream in (
+        (None, []),
+        (CapturedResponse(status=200, body=Body(kind="binary", size=42)), []),
+        (CapturedResponse(status=200), [StreamEvent(t_ms=1, kind="sse", data='{"n":1}')]),
+        (CapturedResponse(status=200, body=Body(kind="text", text=long_text)), []),
+    ):
+        store.save(
+            Exchange(
+                id=store.next_id(),
+                endpoint="GET /v1/items",
+                started_at=when,
+                started_ns=0,
+                request=request,
+                response=response,
+                stream=stream,
+            )
+        )
+    lines = invoke("recordings", "shop").output.strip().splitlines()
+    assert lines[0].endswith("-> no response  (no response)")
+    assert lines[1].endswith("<42 bytes>")
+    assert lines[2].endswith('<1 stream events> {"n":1}')
+    assert lines[3].endswith("x…")
 
 
 # -- analyze --------------------------------------------------------------------------------------
