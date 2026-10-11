@@ -6,6 +6,15 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.1.2]
+
+### Fixed
+
+- `fauxcall init` reads credentials from the fake's `.env` (`FAUXCALL_REAL__HEADERS`), so a
+  service that needs a key just to connect, like an MCP server behind a token, works without
+  exporting it to the shell. The skill asks for such credentials before init and never touches
+  `.env` itself.
+
 ## [0.1.1]
 
 ### Changed
@@ -53,6 +62,7 @@ The first release.
   outcomes, with cached answers and deterministic fallbacks.
 - Examples: fakes FauxCall built on its own while it was validated, from a single prompt each.
 
-[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/bradnemetski/fauxcall/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/bradnemetski/fauxcall/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/bradnemetski/fauxcall/releases/tag/v0.1.0
