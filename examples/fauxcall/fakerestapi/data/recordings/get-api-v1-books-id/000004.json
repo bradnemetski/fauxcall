@@ -1,0 +1,76 @@
+{
+  "id": "000004",
+  "endpoint": "GET /api/v1/Books/{id}",
+  "plan_call": "books-get-1",
+  "started_at": "2026-10-11T12:32:00.977095Z",
+  "started_ns": 1791721920977095000,
+  "elapsed_ms": 97.569,
+  "ttfb_ms": 97.366,
+  "request": {
+    "method": "GET",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Books/1",
+    "path": "/api/v1/Books/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/json; charset=utf-8; v=1.0"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:32:01 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "api-supported-versions",
+        "1.0"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8; v=1.0",
+      "json": {
+        "id": 1,
+        "title": "Book 1",
+        "description": "Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\n",
+        "pageCount": 100,
+        "excerpt": "Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\n",
+        "publishDate": "2026-10-10T12:32:01.0875972+00:00"
+      },
+      "size": 469
+    }
+  }
+}

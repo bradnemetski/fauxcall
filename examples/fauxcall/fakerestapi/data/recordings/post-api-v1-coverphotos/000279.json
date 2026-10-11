@@ -1,0 +1,92 @@
+{
+  "id": "000279",
+  "endpoint": "POST /api/v1/CoverPhotos",
+  "purpose": "invalid",
+  "plan_call": "c-id-bool",
+  "started_at": "2026-10-11T12:45:34.682297Z",
+  "started_ns": 1791722734682297000,
+  "elapsed_ms": 102.83,
+  "ttfb_ms": 101.645,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/CoverPhotos",
+    "path": "/api/v1/CoverPhotos",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "11"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": true
+      },
+      "size": 11
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:45:34 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-f5d7951124d5ae47bf616d9a94a7e6c9-0a2906d640d0474c-00",
+        "errors": {
+          "$.id": [
+            "The JSON value could not be converted to System.Int32. Path: $.id | LineNumber: 0 | BytePositionInLine: 10."
+          ]
+        }
+      },
+      "size": 321
+    }
+  }
+}

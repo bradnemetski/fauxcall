@@ -45,8 +45,9 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
 | Frankfurter | **100%** | 142 | 9 | 219 | 427, 99% coverage | 2 | $14.06 |
 | timeapi.io | **100%** | 192 | 28 | 576 | 1,366, 98% coverage | 1 | $19.72 |
 | Swagger Petstore | **99.71%** | 96 (98.48% over 80 with real writes) | 19 | 370 | 361, 99% coverage | 1 | $15.21 |
+| FakeRESTApi | **100%** | 115 | 27 | 323 | 671, 99% coverage | 1 | $13.02 |
 
-FakeRESTApi and DeepWiki are added here as their runs complete. *Parity* is the weighted
+DeepWiki is added here when its run completes. *Parity* is the weighted
 share of checks (status, shape, content type, values, lengths, headers) on which the fake answered
 like the real service, over end-to-end scenarios run against both. *Reported cost* is what Claude
 Code reported for the sessions. The finished fakes are in [`examples/`](../examples/).
@@ -79,6 +80,13 @@ differences: the sandbox's listing changed during the run, login returns a rando
 OPTIONS names the host it was called on. The run with real writes came before the review's fixes and
 wasn't repeated, because the write budget was nearly spent.
 
+**FakeRESTApi.** A .NET demo API whose writes are echoed but never stored, and whose authors are
+random on every request. The fake generates its data from the same rules (book N has N×100 pages),
+binds request bodies the way ASP.NET Core does (case-insensitive names, numbers in strings, the
+exact error messages with byte positions, a maximum depth of 32) and parses ids like .NET
+(`+5`, `0x10`). Its run with writes scored 99.98%; the one difference (how a malformed `true` is
+quoted in an error message) was fixed and re-checked.
+
 ## Integrity
 
 After the runs, every session transcript was searched for reads of the reference API's source, its
@@ -110,9 +118,13 @@ Every problem a run hit became a fix in the tools or skills, never in the fake. 
   from the project root and never reprints an old report (`29cc733`); scaffold writes CI where the
   project is (`97747ee`), keeps the known limitations in a fake's README (`8982487`) and gives fakes
   brought together their own ports (`450871b`).
+- **Write budgets.** Parity runs with real writes didn't spend the user's approved budget at all;
+  FakeRESTApi counted its writes by hand. They now spend it exactly as recording does, and stop when
+  it runs out (`3f11da1`).
 - **Privacy and images.** `public_values` keeps a sandbox's public demo users as they are while
   everyone else's data in the same fields is still pseudonymized; Petstore had to switch
-  pseudonymization off for every user field instead (`63bc5a2`). Every Docker image used to receive
+  pseudonymization off for every user field instead (`63bc5a2`). The same option keeps a demo's
+  generated passwords without switching off password redaction (`c586f90`). Every Docker image used to receive
   every fake's `.env`; a generated `.dockerignore` now keeps credentials out (`db6570c`).
 - **Docs for agents.** Where auth probes go, how to probe an approved rate limit, how to record when
   the user prepared `.env` first, and a readable `fauxcall model schema --brief` (`ebcaa3d`,

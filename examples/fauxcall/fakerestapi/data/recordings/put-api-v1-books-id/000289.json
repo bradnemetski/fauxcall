@@ -1,0 +1,90 @@
+{
+  "id": "000289",
+  "endpoint": "PUT /api/v1/Books/{id}",
+  "purpose": "invalid",
+  "plan_call": "p-b-after-root",
+  "started_at": "2026-10-11T12:50:26.198134Z",
+  "started_ns": 1791723026198134000,
+  "elapsed_ms": 106.917,
+  "ttfb_ms": 105.93,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Books/1",
+    "path": "/api/v1/Books/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "11"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json",
+      "text": "{\"id\": 1} x",
+      "size": 11
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:50:26 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-46b0fa45fa87484f95b3f2062a433470-61a961494c44a04b-00",
+        "errors": {
+          "$": [
+            "'x' is invalid after a single JSON value. Expected end of data. Path: $ | LineNumber: 0 | BytePositionInLine: 10."
+          ]
+        }
+      },
+      "size": 324
+    }
+  }
+}

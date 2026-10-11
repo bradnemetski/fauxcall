@@ -9,6 +9,7 @@ folder per fake, sharing a uv workspace.
 
 | Fake | Imitates | Built from | Endpoints | Recordings | Parity with the real API | Offline tests |
 |---|---|---|---|---|---|---|
+| [`fakerestapi`](fauxcall/fakerestapi/README.md) | [FakeRESTApi](https://fakerestapi.azurewebsites.net), a demo API that echoes writes without storing them | Swagger UI page | 27 | 323 | **100%** over 115 scenarios | 671, 99% coverage |
 | [`frankfurter`](fauxcall/frankfurter/README.md) | [Frankfurter](https://frankfurter.dev), ECB exchange rates | OpenAPI document | 9 | 219 | **100%** over 142 scenarios | 427, 99% coverage |
 | [`petstore`](fauxcall/petstore/README.md) | [Swagger Petstore v3](https://petstore3.swagger.io), a shared public sandbox | Swagger UI page | 19 | 370 | **99.71%** over 96 scenarios; 98.48% over 80 with real writes | 361, 99% coverage |
 | [`refapi`](fauxcall/refapi/README.md) | The [reference API](../reference_api/) in this repository | Swagger UI page | 21 | 877 | **100%** over 188 scenarios, real writes included | 818, 99% coverage |
@@ -28,7 +29,8 @@ uv run --project .. fauxcall down             # stop them
 ```
 
 They listen on `http://127.0.0.1:8701` (Frankfurter), `:8702` (reference API), `:8703`
-(timeapi.io) and `:8704` (Petstore). Point an agent at one of those instead of the real service.
+(timeapi.io), `:8704` (Petstore) and `:8705` (FakeRESTApi). Point an agent at one of those instead
+of the real service.
 Every fake also has an admin API under `/__fauxcall` to reset its state, control its clock, read the
 calls an agent made and inject faults.
 
@@ -40,8 +42,9 @@ uv run pytest                                # everything offline: unit tests, r
 uv run pytest tests/e2e --target=parity      # the same scenarios against the real API and the fake
 ```
 
-Parity runs need the real service. Frankfurter, timeapi.io and Petstore are public and need no
-credentials (Petstore's write scenarios run only with `--allow-real-writes`). For the reference API,
+Parity runs need the real service. Frankfurter, timeapi.io, Petstore and FakeRESTApi are public and
+need no credentials. Scenarios that write to the real service run only with `--allow-real-writes`,
+and spend the write budget in the fake's `data/approvals.json`, much of which the builds used up. For the reference API,
 start it from the repository root (`uv run fauxcall-reference-api --port 9100`) and put its
 documented demo key in `fauxcall/refapi/.env`: `FAUXCALL_REAL__HEADERS='{"X-API-Key": "demo-key"}'`.
 
@@ -65,10 +68,15 @@ kept improving from what these runs revealed. So:
   from pseudonymization. FauxCall now has a precise option for this (`public_values` in
   `data/privacy.json`). The recordings were checked: they hold only the seeded users and the run's
   own probes, no one else's data.
+- **FakeRESTApi keeps its users' passwords.** The demo returns the passwords it generates for its
+  users (`Password1` …), so the run stopped redacting fields named `password`. The recordings were
+  checked: they hold only those demo passwords and the run's own probe values. FakeRESTApi's
+  `public_values` would now keep exactly those values instead.
 - **Ports were reassigned.** Each fake was built in its own workspace and got port 8701. When they
-  were brought together here, `fauxcall scaffold` moved three of them to 8702, 8703 and 8704 (in
-  their `fauxcall.toml`), and the port numbers in their READMEs were updated to match. That is the
-  only change made to the generated files.
+  were brought together here, `fauxcall scaffold` moved four of them to 8702–8705 (in their
+  `fauxcall.toml`). FakeRESTApi's README was regenerated with its new port; the older READMEs (from
+  before scaffold kept a README's notes) had their port numbers updated to match. That is the only
+  change made to the generated files.
 
 ## About the data
 
@@ -76,4 +84,5 @@ The recordings are real responses from the services, captured by `fauxcall recor
 redacted and personal data is pseudonymized before anything is written to disk. Frankfurter
 publishes the European Central Bank's reference rates, timeapi.io answers with computed times, and
 Petstore's data is the sandbox's seeded demo data plus the run's own probes (which it cleaned up
-on the real sandbox). The reference API is this repository's own test server.
+on the real sandbox), and FakeRESTApi generates all of its data. The reference API is this
+repository's own test server.

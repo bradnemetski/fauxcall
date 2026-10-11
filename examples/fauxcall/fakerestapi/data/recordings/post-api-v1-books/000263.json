@@ -1,0 +1,90 @@
+{
+  "id": "000263",
+  "endpoint": "POST /api/v1/Books",
+  "purpose": "invalid",
+  "plan_call": "b-null",
+  "started_at": "2026-10-11T12:45:26.646674Z",
+  "started_ns": 1791722726646674000,
+  "elapsed_ms": 95.185,
+  "ttfb_ms": 94.935,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Books",
+    "path": "/api/v1/Books",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "4"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json",
+      "text": "null",
+      "size": 4
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:45:26 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-a6331f37dd48fd4ba62781e0829efec0-38d262c04a15454c-00",
+        "errors": {
+          "": [
+            "A non-empty request body is required."
+          ]
+        }
+      },
+      "size": 247
+    }
+  }
+}

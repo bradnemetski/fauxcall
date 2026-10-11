@@ -1,0 +1,456 @@
+{
+  "name": "probes-3",
+  "created_at": "2026-10-11T14:00:00Z",
+  "calls": [
+    {
+      "id": "p-b-escaping",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "json_body": {
+          "id": 1,
+          "title": "fauxcall-probe \u00e9\u20ac<>&'+`\"\\/",
+          "description": "line1\nline2\ttab\u0001",
+          "excerpt": "\ud83d\ude00"
+        }
+      }
+    },
+    {
+      "id": "p-b-badid-badbody",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/abc",
+        "text_body": "{not json",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-b-textplain",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "text_body": "{\"id\": 1}",
+        "content_type": "text/plain"
+      }
+    },
+    {
+      "id": "p-b-eof-comma",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "text_body": "{\"id\": 1,",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-b-eof-name",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "text_body": "{\"id\"",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-b-eof-open",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "text_body": "{",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-b-eof-string",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "text_body": "{\"title\": \"abc",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-b-num-garbage",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "text_body": "{\"id\": 12a}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-b-after-value",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "text_body": "{\"id\": 1 \"title\": \"x\"}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-b-after-root",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "text_body": "{\"id\": 1} x",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-b-literal",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "text_body": "{\"id\": tru}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-b-whitespace",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "text_body": "   ",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-b-bad-escape",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "text_body": "{\"title\": \"a\\qb\"}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-b-missing-colon",
+      "endpoint": "PUT /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Books/1",
+        "text_body": "{\"id\" 1}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-a-date-nosec",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "json_body": {
+          "id": 1,
+          "dueDate": "2026-01-02T03:04"
+        }
+      }
+    },
+    {
+      "id": "p-a-date-9frac",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "json_body": {
+          "id": 1,
+          "dueDate": "2026-01-02T03:04:05.123456789Z"
+        }
+      }
+    },
+    {
+      "id": "p-a-date-space",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "json_body": {
+          "id": 1,
+          "dueDate": "2026-01-02 03:04:05"
+        }
+      }
+    },
+    {
+      "id": "p-a-date-short",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "json_body": {
+          "id": 1,
+          "dueDate": "2026-1-2"
+        }
+      }
+    },
+    {
+      "id": "p-a-date-null",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "json_body": {
+          "id": 1,
+          "dueDate": null
+        }
+      }
+    },
+    {
+      "id": "p-a-date-neg-offset",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "json_body": {
+          "id": 1,
+          "dueDate": "2026-01-02T03:04:05-05:30"
+        }
+      }
+    },
+    {
+      "id": "p-a-completed-null",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "json_body": {
+          "id": 1,
+          "completed": null
+        }
+      }
+    },
+    {
+      "id": "p-a-nested-unknown",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "json_body": {
+          "id": 1,
+          "extra": {
+            "a": [
+              1,
+              {
+                "b": null
+              }
+            ]
+          },
+          "title": "fauxcall-probe"
+        }
+      }
+    },
+    {
+      "id": "p-a-unknown-bad",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "text_body": "{\"extra\": [1,], \"id\": 1}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-a-id-plus-string",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "json_body": {
+          "id": "+7"
+        }
+      }
+    },
+    {
+      "id": "p-a-id-space-string",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "json_body": {
+          "id": " 7"
+        }
+      }
+    },
+    {
+      "id": "p-a-id-neg-zero",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "text_body": "{\"id\": -0, \"title\": \"fauxcall-probe\"}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-a-id-exp",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "text_body": "{\"id\": 1e2}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-a-id-float0",
+      "endpoint": "PUT /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Activities/1",
+        "text_body": "{\"id\": 1.0}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-u-after-comma-bad",
+      "endpoint": "PUT /api/v1/Users/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Users/1",
+        "text_body": "{\"id\": 1, x}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-u-string-escapes",
+      "endpoint": "PUT /api/v1/Users/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Users/1",
+        "text_body": "{\"id\": 1, \"password\": \"\\u0041\\n\\u00e9\"}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-u-root-number",
+      "endpoint": "PUT /api/v1/Users/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Users/1",
+        "text_body": "5",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-u-root-string",
+      "endpoint": "PUT /api/v1/Users/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Users/1",
+        "text_body": "\"x\"",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-u-ctype-charset",
+      "endpoint": "PUT /api/v1/Users/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Users/1",
+        "text_body": "{\"id\": 2, \"password\": \"p\"}",
+        "content_type": "application/json; charset=utf-8"
+      }
+    },
+    {
+      "id": "p-u-ctype-v2",
+      "endpoint": "PUT /api/v1/Users/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Users/1",
+        "text_body": "{\"id\": 2, \"password\": \"p\"}",
+        "content_type": "application/json; v=2.0"
+      }
+    },
+    {
+      "id": "p-u-ctype-upper",
+      "endpoint": "PUT /api/v1/Users/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Users/1",
+        "text_body": "{\"id\": 2, \"password\": \"p\"}",
+        "content_type": "APPLICATION/JSON"
+      }
+    },
+    {
+      "id": "p-c-multiline-syntax",
+      "endpoint": "PUT /api/v1/CoverPhotos/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/CoverPhotos/1",
+        "text_body": "{\n  \"id\": 1,\n  \"url\": x\n}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-c-url-number",
+      "endpoint": "PUT /api/v1/CoverPhotos/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/CoverPhotos/1",
+        "json_body": {
+          "id": 1,
+          "url": 5
+        }
+      }
+    },
+    {
+      "id": "p-c-bom",
+      "endpoint": "PUT /api/v1/CoverPhotos/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/CoverPhotos/1",
+        "text_body": "\ufeff{\"id\": 3, \"url\": \"u\"}",
+        "content_type": "application/json"
+      }
+    }
+  ]
+}

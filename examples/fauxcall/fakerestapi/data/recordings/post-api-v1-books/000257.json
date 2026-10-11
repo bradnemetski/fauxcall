@@ -1,0 +1,93 @@
+{
+  "id": "000257",
+  "endpoint": "POST /api/v1/Books",
+  "purpose": "invalid",
+  "plan_call": "b-pagecount-null",
+  "started_at": "2026-10-11T12:45:23.635288Z",
+  "started_ns": 1791722723635288000,
+  "elapsed_ms": 102.811,
+  "ttfb_ms": 101.701,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Books",
+    "path": "/api/v1/Books",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "25"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 1,
+        "pageCount": null
+      },
+      "size": 25
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:45:23 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-d298acf104283e4392a3cabf03e77f53-2e41dc5458049f4a-00",
+        "errors": {
+          "$.pageCount": [
+            "The JSON value could not be converted to System.Int32. Path: $.pageCount | LineNumber: 0 | BytePositionInLine: 24."
+          ]
+        }
+      },
+      "size": 335
+    }
+  }
+}

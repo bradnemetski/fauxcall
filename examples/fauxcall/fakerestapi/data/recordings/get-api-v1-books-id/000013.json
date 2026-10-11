@@ -1,0 +1,76 @@
+{
+  "id": "000013",
+  "endpoint": "GET /api/v1/Books/{id}",
+  "purpose": "invalid",
+  "plan_call": "books-get-bad-1.5",
+  "started_at": "2026-10-11T12:32:05.498087Z",
+  "started_ns": 1791721925498087000,
+  "elapsed_ms": 100.975,
+  "ttfb_ms": 100.013,
+  "request": {
+    "method": "GET",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Books/1.5",
+    "path": "/api/v1/Books/1.5",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:32:05 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-07bcf24cef7aae40a864fa534ab8d1f1-2786be9702471f46-00",
+        "errors": {
+          "id": [
+            "The value '1.5' is not valid."
+          ]
+        }
+      },
+      "size": 241
+    }
+  }
+}

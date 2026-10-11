@@ -1,0 +1,225 @@
+{
+  "name": "authors-reads",
+  "created_at": "2026-10-11T12:00:00Z",
+  "calls": [
+    {
+      "id": "authors-list-1",
+      "endpoint": "GET /api/v1/Authors",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors"
+      }
+    },
+    {
+      "id": "authors-list-2",
+      "endpoint": "GET /api/v1/Authors",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors"
+      }
+    },
+    {
+      "id": "authors-list-q",
+      "endpoint": "GET /api/v1/Authors",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors",
+        "query": [
+          [
+            "id",
+            "1"
+          ],
+          [
+            "limit",
+            "2"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "authors-get-1",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/1"
+      }
+    },
+    {
+      "id": "authors-get-2",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/2"
+      }
+    },
+    {
+      "id": "authors-get-100",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/100"
+      }
+    },
+    {
+      "id": "authors-get-500",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/500"
+      }
+    },
+    {
+      "id": "authors-get-100000",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/100000"
+      }
+    },
+    {
+      "id": "authors-get-bad-0",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/0"
+      }
+    },
+    {
+      "id": "authors-get-bad--1",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/-1"
+      }
+    },
+    {
+      "id": "authors-get-bad-abc",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/abc"
+      }
+    },
+    {
+      "id": "authors-get-bad-99999999999",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/99999999999"
+      }
+    },
+    {
+      "id": "authors-get-bad-1.5",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/1.5"
+      }
+    },
+    {
+      "id": "authors-get-time",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "time_profile",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/1"
+      },
+      "repeat": 4,
+      "interval_ms": 15000
+    },
+    {
+      "id": "authors-bybook-1",
+      "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/authors/books/1"
+      }
+    },
+    {
+      "id": "authors-bybook-2",
+      "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/authors/books/2"
+      }
+    },
+    {
+      "id": "authors-bybook-3",
+      "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/authors/books/3"
+      }
+    },
+    {
+      "id": "authors-bybook-100",
+      "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/authors/books/100"
+      }
+    },
+    {
+      "id": "authors-bybook-200",
+      "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/authors/books/200"
+      }
+    },
+    {
+      "id": "authors-bybook-201",
+      "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/authors/books/201"
+      }
+    },
+    {
+      "id": "authors-bybook-0",
+      "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/authors/books/0"
+      }
+    },
+    {
+      "id": "authors-bybook--1",
+      "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/authors/books/-1"
+      }
+    },
+    {
+      "id": "authors-bybook-abc",
+      "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/authors/books/abc"
+      }
+    }
+  ]
+}

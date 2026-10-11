@@ -1,0 +1,66 @@
+{
+  "id": "000329",
+  "endpoint": "GET /",
+  "purpose": "edge",
+  "plan_call": "P6b",
+  "started_at": "2026-10-11T13:16:28.869989Z",
+  "started_ns": 1791724588869989000,
+  "elapsed_ms": 105.729,
+  "ttfb_ms": 104.724,
+  "request": {
+    "method": "GET",
+    "url": "https://fakerestapi.azurewebsites.net/index.html",
+    "path": "/index.html",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "text/html;charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 13:16:28 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/html;charset=utf-8",
+      "text": "<!-- HTML for static distribution bundle build -->\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Swagger UI</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"./swagger-ui.css\">\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-32x32.png\" sizes=\"32x32\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-16x16.png\" sizes=\"16x16\" />\n    <style>\n\n        html {\n            box-sizing: border-box;\n            overflow: -moz-scrollbars-vertical;\n            overflow-y: scroll;\n        }\n\n        *,\n        *:before,\n        *:after {\n            box-sizing: inherit;\n        }\n\n        body {\n            margin: 0;\n            background: #fafafa;\n        }\n    </style>\n    \n</head>\n\n<body>\n    <div id=\"swagger-ui\"></div>\n\n    <!-- Workaround for https://github.com/swagger-api/swagger-editor/issues/1371 -->\n    <script>\n        if (window.navigator.userAgent.indexOf(\"Edge\") > -1) {\n            console.log(\"Removing native Edge fetch in favor of swagger-ui's polyfill\")\n            window.fetch = undefined;\n        }\n    </script>\n\n    <script src=\"./swagger-ui-bundle.js\"></script>\n    <script src=\"./swagger-ui-standalone-preset.js\"></script>\n    <script>\n        window.onload = function () {\n            var configObject = JSON.parse('{\"urls\":[{\"url\":\"/swagger/v1/swagger.json\",\"name\":\"V1\"}],\"deepLinking\":false,\"displayOperationId\":false,\"defaultModelsExpandDepth\":1,\"defaultModelExpandDepth\":1,\"defaultModelRendering\":\"example\",\"displayRequestDuration\":false,\"docExpansion\":\"list\",\"showExtensions\":false,\"showCommonExtensions\":false,\"supportedSubmitMethods\":[\"get\",\"put\",\"post\",\"delete\",\"options\",\"head\",\"patch\",\"trace\"]}');\n            var oauthConfigObject = JSON.parse('{\"scopeSeparator\":\" \",\"useBasicAuthenticationWithAccessCodeGrant\":false,\"usePkceWithAuthorizationCodeGrant\":false}');\n\n            // Workaround for https://github.com/swagger-api/swagger-ui/issues/5945\n            configObject.urls.forEach(function (item) {\n                if (item.url.startsWith(\"http\") || item.url.startsWith(\"/\")) return;\n                item.url = window.location.href.replace(\"index.html\", item.url).split('#')[0];\n            });\n\n            // If validatorUrl is not explicitly provided, disable the feature by setting to null\n            if (!configObject.hasOwnProperty(\"validatorUrl\"))\n                configObject.validatorUrl = null\n\n            // If oauth2RedirectUrl isn't specified, use the built-in default\n            if (!configObject.hasOwnProperty(\"oauth2RedirectUrl\"))\n                configObject.oauth2RedirectUrl = window.location.href.replace(\"index.html\", \"oauth2-redirect.html\").split('#')[0];\n\n            // Apply mandatory parameters\n            configObject.dom_id = \"#swagger-ui\";\n            configObject.presets = [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset];\n            configObject.layout = \"StandaloneLayout\";\n\n            // Begin Swagger UI call region\n\n            const ui = SwaggerUIBundle(configObject);\n\n            ui.initOAuth(oauthConfigObject);\n\n            // End Swagger UI call region\n\n            window.ui = ui\n        }\n    </script>\n</body>\n</html>\n",
+      "size": 3173
+    }
+  }
+}

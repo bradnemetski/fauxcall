@@ -1,0 +1,90 @@
+{
+  "id": "000333",
+  "endpoint": "PUT /api/v1/Authors/{id}",
+  "purpose": "edge",
+  "plan_call": "P8b",
+  "started_at": "2026-10-11T13:16:30.878404Z",
+  "started_ns": 1791724590878404000,
+  "elapsed_ms": 104.088,
+  "ttfb_ms": 103.78,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Authors/1",
+    "path": "/api/v1/Authors/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "131"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json",
+      "text": "{\"x\":[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[1]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]}",
+      "size": 131
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 13:16:30 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-df491a6350a07e4bb28285b530f0c184-b45998af578beb4e-00",
+        "errors": {
+          "$.x": [
+            "The maximum configured depth of 32 has been exceeded. Cannot read next JSON array. Path: $.x | LineNumber: 0 | BytePositionInLine: 36."
+          ]
+        }
+      },
+      "size": 347
+    }
+  }
+}

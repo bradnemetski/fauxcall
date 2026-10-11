@@ -1,0 +1,83 @@
+{
+  "id": "000076",
+  "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+  "purpose": "variation",
+  "plan_call": "authors-bybook-2",
+  "started_at": "2026-10-11T12:36:58.280817Z",
+  "started_ns": 1791722218280817000,
+  "elapsed_ms": 108.003,
+  "ttfb_ms": 107.081,
+  "request": {
+    "method": "GET",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Authors/authors/books/2",
+    "path": "/api/v1/Authors/authors/books/2",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/json; charset=utf-8; v=1.0"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:36:58 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "api-supported-versions",
+        "1.0"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8; v=1.0",
+      "json": [
+        {
+          "id": 4,
+          "idBook": 2,
+          "firstName": "First Name 4",
+          "lastName": "Last Name 4"
+        },
+        {
+          "id": 5,
+          "idBook": 2,
+          "firstName": "First Name 5",
+          "lastName": "Last Name 5"
+        }
+      ],
+      "size": 145
+    }
+  }
+}

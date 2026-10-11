@@ -1,0 +1,90 @@
+{
+  "id": "000148",
+  "endpoint": "PUT /api/v1/Books/{id}",
+  "purpose": "invalid",
+  "plan_call": "books-put-badjson",
+  "started_at": "2026-10-11T12:41:54.240837Z",
+  "started_ns": 1791722514240837000,
+  "elapsed_ms": 99.891,
+  "ttfb_ms": 99.506,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Books/1",
+    "path": "/api/v1/Books/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "9"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json",
+      "text": "{not json",
+      "size": 9
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:41:54 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-bffe2ee539f38e429132268a359375ea-7fcbe977f1ff1e4b-00",
+        "errors": {
+          "$": [
+            "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+          ]
+        }
+      },
+      "size": 320
+    }
+  }
+}

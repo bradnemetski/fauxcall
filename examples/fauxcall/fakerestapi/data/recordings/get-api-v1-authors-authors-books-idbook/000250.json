@@ -1,0 +1,95 @@
+{
+  "id": "000250",
+  "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+  "purpose": "edge",
+  "plan_call": "authors-lower",
+  "started_at": "2026-10-11T12:45:20.119257Z",
+  "started_ns": 1791722720119257000,
+  "elapsed_ms": 105.112,
+  "ttfb_ms": 104.379,
+  "request": {
+    "method": "GET",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/authors/AUTHORS/Books/5",
+    "path": "/api/v1/authors/AUTHORS/Books/5",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/json; charset=utf-8; v=1.0"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:45:20 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "api-supported-versions",
+        "1.0"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8; v=1.0",
+      "json": [
+        {
+          "id": 14,
+          "idBook": 5,
+          "firstName": "First Name 14",
+          "lastName": "Last Name 14"
+        },
+        {
+          "id": 15,
+          "idBook": 5,
+          "firstName": "First Name 15",
+          "lastName": "Last Name 15"
+        },
+        {
+          "id": 16,
+          "idBook": 5,
+          "firstName": "First Name 16",
+          "lastName": "Last Name 16"
+        },
+        {
+          "id": 17,
+          "idBook": 5,
+          "firstName": "First Name 17",
+          "lastName": "Last Name 17"
+        }
+      ],
+      "size": 301
+    }
+  }
+}

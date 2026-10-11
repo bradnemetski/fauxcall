@@ -1,0 +1,155 @@
+{
+  "name": "activities-reads",
+  "created_at": "2026-10-11T12:00:00Z",
+  "calls": [
+    {
+      "id": "activities-list-1",
+      "endpoint": "GET /api/v1/Activities",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities"
+      }
+    },
+    {
+      "id": "activities-list-2",
+      "endpoint": "GET /api/v1/Activities",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities"
+      }
+    },
+    {
+      "id": "activities-list-q",
+      "endpoint": "GET /api/v1/Activities",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities",
+        "query": [
+          [
+            "id",
+            "1"
+          ],
+          [
+            "limit",
+            "2"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "activities-get-1",
+      "endpoint": "GET /api/v1/Activities/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities/1"
+      }
+    },
+    {
+      "id": "activities-get-2",
+      "endpoint": "GET /api/v1/Activities/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities/2"
+      }
+    },
+    {
+      "id": "activities-get-15",
+      "endpoint": "GET /api/v1/Activities/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities/15"
+      }
+    },
+    {
+      "id": "activities-get-30",
+      "endpoint": "GET /api/v1/Activities/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities/30"
+      }
+    },
+    {
+      "id": "activities-get-31",
+      "endpoint": "GET /api/v1/Activities/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities/31"
+      }
+    },
+    {
+      "id": "activities-get-bad-0",
+      "endpoint": "GET /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities/0"
+      }
+    },
+    {
+      "id": "activities-get-bad--1",
+      "endpoint": "GET /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities/-1"
+      }
+    },
+    {
+      "id": "activities-get-bad-abc",
+      "endpoint": "GET /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities/abc"
+      }
+    },
+    {
+      "id": "activities-get-bad-99999999999",
+      "endpoint": "GET /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities/99999999999"
+      }
+    },
+    {
+      "id": "activities-get-bad-1.5",
+      "endpoint": "GET /api/v1/Activities/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities/1.5"
+      }
+    },
+    {
+      "id": "activities-get-time",
+      "endpoint": "GET /api/v1/Activities/{id}",
+      "purpose": "time_profile",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities/1"
+      },
+      "repeat": 4,
+      "interval_ms": 15000
+    },
+    {
+      "id": "activities-list-time",
+      "endpoint": "GET /api/v1/Activities",
+      "purpose": "time_profile",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Activities"
+      },
+      "repeat": 3,
+      "interval_ms": 20000
+    }
+  ]
+}

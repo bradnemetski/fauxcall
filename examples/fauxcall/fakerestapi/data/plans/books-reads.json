@@ -1,0 +1,155 @@
+{
+  "name": "books-reads",
+  "created_at": "2026-10-11T12:00:00Z",
+  "calls": [
+    {
+      "id": "books-list-1",
+      "endpoint": "GET /api/v1/Books",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books"
+      }
+    },
+    {
+      "id": "books-list-2",
+      "endpoint": "GET /api/v1/Books",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books"
+      }
+    },
+    {
+      "id": "books-list-q",
+      "endpoint": "GET /api/v1/Books",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books",
+        "query": [
+          [
+            "id",
+            "1"
+          ],
+          [
+            "limit",
+            "2"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "books-get-1",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/1"
+      }
+    },
+    {
+      "id": "books-get-2",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/2"
+      }
+    },
+    {
+      "id": "books-get-100",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/100"
+      }
+    },
+    {
+      "id": "books-get-200",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/200"
+      }
+    },
+    {
+      "id": "books-get-201",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/201"
+      }
+    },
+    {
+      "id": "books-get-bad-0",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/0"
+      }
+    },
+    {
+      "id": "books-get-bad--1",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/-1"
+      }
+    },
+    {
+      "id": "books-get-bad-abc",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/abc"
+      }
+    },
+    {
+      "id": "books-get-bad-99999999999",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/99999999999"
+      }
+    },
+    {
+      "id": "books-get-bad-1.5",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/1.5"
+      }
+    },
+    {
+      "id": "books-get-time",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "time_profile",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/1"
+      },
+      "repeat": 4,
+      "interval_ms": 15000
+    },
+    {
+      "id": "books-list-time",
+      "endpoint": "GET /api/v1/Books",
+      "purpose": "time_profile",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books"
+      },
+      "repeat": 3,
+      "interval_ms": 20000
+    }
+  ]
+}

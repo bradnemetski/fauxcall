@@ -99,7 +99,8 @@ uv run pytest tests/e2e --target=parity       # real and fake side by side; fail
 ```
 
 [`examples/`](examples/) holds fakes FauxCall built on its own while it was being validated, each from
-a single prompt: Frankfurter, timeapi.io, Swagger Petstore and this repository's reference API.
+a single prompt: Frankfurter, timeapi.io, Swagger Petstore, FakeRESTApi and this repository's
+reference API.
 
 ## Using fakes in evaluations
 

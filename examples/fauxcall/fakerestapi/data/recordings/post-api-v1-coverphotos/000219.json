@@ -1,0 +1,93 @@
+{
+  "id": "000219",
+  "endpoint": "POST /api/v1/CoverPhotos",
+  "purpose": "invalid",
+  "plan_call": "coverphotos-post-unknown",
+  "started_at": "2026-10-11T12:42:31.908794Z",
+  "started_ns": 1791722551908794000,
+  "elapsed_ms": 150.958,
+  "ttfb_ms": 149.62,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/CoverPhotos",
+    "path": "/api/v1/CoverPhotos",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "79"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 9001,
+        "idBook": 4,
+        "url": "https://example.com/fauxcall-probe.jpg",
+        "bogus": 1
+      },
+      "size": 79
+    }
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/json; charset=utf-8; v=1.0"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:42:31 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "api-supported-versions",
+        "1.0"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8; v=1.0",
+      "json": {
+        "id": 9001,
+        "idBook": 4,
+        "url": "https://example.com/fauxcall-probe.jpg"
+      },
+      "size": 69
+    }
+  }
+}

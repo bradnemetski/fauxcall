@@ -1,0 +1,95 @@
+{
+  "id": "000254",
+  "endpoint": "POST /api/v1/Books",
+  "purpose": "edge",
+  "plan_call": "b-case-insensitive",
+  "started_at": "2026-10-11T12:45:22.128687Z",
+  "started_ns": 1791722722128687000,
+  "elapsed_ms": 107.795,
+  "ttfb_ms": 106.515,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Books",
+    "path": "/api/v1/Books",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "47"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "ID": 4,
+        "Title": "fauxcall-probe",
+        "PAGECOUNT": 3
+      },
+      "size": 47
+    }
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/json; charset=utf-8; v=1.0"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:45:22 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "api-supported-versions",
+        "1.0"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8; v=1.0",
+      "json": {
+        "id": 4,
+        "title": "fauxcall-probe",
+        "description": null,
+        "pageCount": 3,
+        "excerpt": null,
+        "publishDate": "0001-01-01T00:00:00"
+      },
+      "size": 117
+    }
+  }
+}

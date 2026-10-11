@@ -1,0 +1,84 @@
+{
+  "name": "routing-edges",
+  "created_at": "2026-10-11T12:00:00Z",
+  "calls": [
+    {
+      "id": "edge-lowercase",
+      "endpoint": "GET /api/v1/Books",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/books"
+      }
+    },
+    {
+      "id": "edge-trailing",
+      "endpoint": "GET /api/v1/Books",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/"
+      }
+    },
+    {
+      "id": "edge-item-lower",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/books/1"
+      }
+    },
+    {
+      "id": "edge-unknown",
+      "endpoint": "GET /api/v1/Nope",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Nope"
+      }
+    },
+    {
+      "id": "edge-unknown-ver",
+      "endpoint": "GET /api/v2/Books",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v2/Books"
+      }
+    },
+    {
+      "id": "edge-accept-text",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/1",
+        "headers": {
+          "Accept": "text/plain"
+        }
+      }
+    },
+    {
+      "id": "edge-accept-xml",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/1",
+        "headers": {
+          "Accept": "application/xml"
+        }
+      }
+    },
+    {
+      "id": "edge-root",
+      "endpoint": "GET /",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/"
+      }
+    }
+  ]
+}

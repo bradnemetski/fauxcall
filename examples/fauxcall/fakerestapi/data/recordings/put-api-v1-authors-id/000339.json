@@ -1,0 +1,90 @@
+{
+  "id": "000339",
+  "endpoint": "PUT /api/v1/Authors/{id}",
+  "purpose": "invalid",
+  "plan_call": "P14",
+  "started_at": "2026-10-11T13:16:33.892426Z",
+  "started_ns": 1791724593892426000,
+  "elapsed_ms": 100.693,
+  "ttfb_ms": 99.685,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Authors/1",
+    "path": "/api/v1/Authors/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "9"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json",
+      "text": "{\"id\": -}",
+      "size": 9
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 13:16:33 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-62e8d53ba70758449f5801c6fb433914-003fb02f3729a74e-00",
+        "errors": {
+          "$.id": [
+            "'}' is invalid within a number, immediately after a sign character ('+' or '-'). Expected a digit ('0'-'9'). Path: $.id | LineNumber: 0 | BytePositionInLine: 8."
+          ]
+        }
+      },
+      "size": 374
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "id": "000247",
+  "endpoint": "GET /api/v1/Books/{id}",
+  "purpose": "edge",
+  "plan_call": "head-book",
+  "started_at": "2026-10-11T12:45:18.612678Z",
+  "started_ns": 1791722718612678000,
+  "elapsed_ms": 112.037,
+  "ttfb_ms": 111.173,
+  "request": {
+    "method": "HEAD",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Books/1",
+    "path": "/api/v1/Books/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 405,
+    "reason": "Method Not Allowed",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:45:18 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "allow",
+        "DELETE, GET, PUT"
+      ]
+    ]
+  }
+}

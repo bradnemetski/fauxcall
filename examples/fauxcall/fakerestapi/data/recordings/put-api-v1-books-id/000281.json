@@ -1,0 +1,93 @@
+{
+  "id": "000281",
+  "endpoint": "PUT /api/v1/Books/{id}",
+  "purpose": "invalid",
+  "plan_call": "p-b-badid-badbody",
+  "started_at": "2026-10-11T12:50:22.178655Z",
+  "started_ns": 1791723022178655000,
+  "elapsed_ms": 101.483,
+  "ttfb_ms": 100.405,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Books/abc",
+    "path": "/api/v1/Books/abc",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "9"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json",
+      "text": "{not json",
+      "size": 9
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:50:22 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-922cc6e1fe2b6543bd8f926e4fd48d02-033adf1d5502b248-00",
+        "errors": {
+          "$": [
+            "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+          ],
+          "id": [
+            "The value 'abc' is not valid."
+          ]
+        }
+      },
+      "size": 359
+    }
+  }
+}

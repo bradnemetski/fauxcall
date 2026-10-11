@@ -1,0 +1,103 @@
+{
+  "id": "000199",
+  "endpoint": "POST /api/v1/Authors",
+  "purpose": "invalid",
+  "plan_call": "authors-post-unknown",
+  "started_at": "2026-10-11T12:42:21.574482Z",
+  "started_ns": 1791722541574482000,
+  "elapsed_ms": 107.642,
+  "ttfb_ms": 106.238,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Authors",
+    "path": "/api/v1/Authors",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "80"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 9001,
+        "idBook": 3,
+        "firstName": "holly",
+        "lastName": "Collins",
+        "bogus": 1
+      },
+      "size": 80
+    }
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/json; charset=utf-8; v=1.0"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:42:21 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "api-supported-versions",
+        "1.0"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8; v=1.0",
+      "json": {
+        "id": 9001,
+        "idBook": 3,
+        "firstName": "holly",
+        "lastName": "Collins"
+      },
+      "size": 70
+    }
+  },
+  "redacted": [
+    "request.pii:$.firstName",
+    "request.pii:$.lastName"
+  ],
+  "pseudonymized": [
+    "response:$.firstName",
+    "response:$.lastName"
+  ]
+}

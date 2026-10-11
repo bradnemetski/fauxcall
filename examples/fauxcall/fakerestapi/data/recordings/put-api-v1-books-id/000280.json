@@ -1,0 +1,101 @@
+{
+  "id": "000280",
+  "endpoint": "PUT /api/v1/Books/{id}",
+  "purpose": "edge",
+  "plan_call": "p-b-escaping",
+  "started_at": "2026-10-11T12:50:21.663619Z",
+  "started_ns": 1791723021663619000,
+  "elapsed_ms": 504.864,
+  "ttfb_ms": 503.386,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Books/1",
+    "path": "/api/v1/Books/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "107"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 1,
+        "title": "fauxcall-probe é€<>&'+`\"\\/",
+        "description": "line1\nline2\ttab\u0001",
+        "excerpt": "😀"
+      },
+      "size": 107
+    }
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/json; charset=utf-8; v=1.0"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:50:21 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "api-supported-versions",
+        "1.0"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8; v=1.0",
+      "json": {
+        "id": 1,
+        "title": "fauxcall-probe é€<>&'+`\"\\/",
+        "description": "line1\nline2\ttab\u0001",
+        "pageCount": 0,
+        "excerpt": "😀",
+        "publishDate": "0001-01-01T00:00:00"
+      },
+      "style": {
+        "escape_slash": true,
+        "upper_hex": true
+      },
+      "text": "{\"id\":1,\"title\":\"fauxcall-probe é€<>&'+`\\\"\\\\/\",\"description\":\"line1\\nline2\\ttab\\u0001\",\"pageCount\":0,\"excerpt\":\"\\uD83D\\uDE00\",\"publishDate\":\"0001-01-01T00:00:00\"}",
+      "size": 165
+    }
+  }
+}

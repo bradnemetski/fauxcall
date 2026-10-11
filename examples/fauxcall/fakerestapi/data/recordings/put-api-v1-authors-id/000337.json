@@ -1,0 +1,90 @@
+{
+  "id": "000337",
+  "endpoint": "PUT /api/v1/Authors/{id}",
+  "purpose": "invalid",
+  "plan_call": "P12",
+  "started_at": "2026-10-11T13:16:32.887285Z",
+  "started_ns": 1791724592887285000,
+  "elapsed_ms": 102.695,
+  "ttfb_ms": 101.784,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Authors/1",
+    "path": "/api/v1/Authors/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "22"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json",
+      "text": "{\"firstName\":\"\\ud800\"}",
+      "size": 22
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 13:16:32 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-374ebb6b118c3246b35cae4b7f6915f8-e19bebbaed84ed45-00",
+        "errors": {
+          "$.firstName": [
+            "The JSON value could not be converted to System.String. Path: $.firstName | LineNumber: 0 | BytePositionInLine: 21."
+          ]
+        }
+      },
+      "size": 336
+    }
+  }
+}

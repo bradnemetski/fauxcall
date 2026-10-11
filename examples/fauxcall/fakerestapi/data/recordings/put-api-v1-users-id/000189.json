@@ -1,0 +1,97 @@
+{
+  "id": "000189",
+  "endpoint": "PUT /api/v1/Users/{id}",
+  "purpose": "invalid",
+  "plan_call": "users-put-badid",
+  "started_at": "2026-10-11T12:42:15.566081Z",
+  "started_ns": 1791722535566081000,
+  "elapsed_ms": 111.701,
+  "ttfb_ms": 110.319,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Users/abc",
+    "path": "/api/v1/Users/abc",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "63"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 9001,
+        "userName": "user_d46dcb3c",
+        "password": "probe-pass"
+      },
+      "size": 63
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:42:15 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-08626bbefc51c4409585dc9be5734ac9-9c7d1739ea664b47-00",
+        "errors": {
+          "id": [
+            "The value 'abc' is not valid."
+          ]
+        }
+      },
+      "size": 241
+    }
+  },
+  "redacted": [
+    "request.pii:$.userName"
+  ]
+}

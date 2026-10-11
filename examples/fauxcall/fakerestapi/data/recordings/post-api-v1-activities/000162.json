@@ -1,0 +1,85 @@
+{
+  "id": "000162",
+  "endpoint": "POST /api/v1/Activities",
+  "purpose": "invalid",
+  "plan_call": "activities-post-textplain",
+  "started_at": "2026-10-11T12:42:01.690760Z",
+  "started_ns": 1791722521690760000,
+  "elapsed_ms": 107.117,
+  "ttfb_ms": 106.117,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Activities",
+    "path": "/api/v1/Activities",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "text/plain"
+      ],
+      [
+        "content-length",
+        "102"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/plain",
+      "text": "{\"id\": 9001, \"title\": \"fauxcall-probe activity\", \"dueDate\": \"2026-10-20T10:00:00Z\", \"completed\": true}",
+      "size": 102
+    }
+  },
+  "response": {
+    "status": 415,
+    "reason": "Unsupported Media Type",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:42:01 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.13",
+        "title": "Unsupported Media Type",
+        "status": 415,
+        "traceId": "00-7e8c4a39f929164e956c73a883bb17f5-67613de1ccc3bc44-00"
+      },
+      "size": 175
+    }
+  }
+}

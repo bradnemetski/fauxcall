@@ -1,0 +1,85 @@
+{
+  "id": "000182",
+  "endpoint": "POST /api/v1/Users",
+  "purpose": "invalid",
+  "plan_call": "users-post-textplain",
+  "started_at": "2026-10-11T12:42:12.049490Z",
+  "started_ns": 1791722532049490000,
+  "elapsed_ms": 102.842,
+  "ttfb_ms": 101.686,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Users",
+    "path": "/api/v1/Users",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "text/plain"
+      ],
+      [
+        "content-length",
+        "68"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/plain",
+      "text": "{\"id\": 9001, \"userName\": \"user_d46dcb3c\", \"password\": \"probe-pass\"}",
+      "size": 68
+    }
+  },
+  "response": {
+    "status": 415,
+    "reason": "Unsupported Media Type",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:42:11 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.13",
+        "title": "Unsupported Media Type",
+        "status": 415,
+        "traceId": "00-c4b7f2f2fd849f45b755bcbfc22462a6-a0b4bc9a85c5944e-00"
+      },
+      "size": 175
+    }
+  }
+}

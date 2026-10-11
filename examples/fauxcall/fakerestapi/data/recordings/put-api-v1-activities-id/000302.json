@@ -1,0 +1,90 @@
+{
+  "id": "000302",
+  "endpoint": "PUT /api/v1/Activities/{id}",
+  "purpose": "invalid",
+  "plan_call": "p-a-unknown-bad",
+  "started_at": "2026-10-11T12:50:32.738872Z",
+  "started_ns": 1791723032738872000,
+  "elapsed_ms": 106.669,
+  "ttfb_ms": 105.606,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Activities/1",
+    "path": "/api/v1/Activities/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "24"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json",
+      "text": "{\"extra\": [1,], \"id\": 1}",
+      "size": 24
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:50:32 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-19ff08821f2fd44f94573f1242e4ce67-2324627c88bc0441-00",
+        "errors": {
+          "$.extra": [
+            "The JSON array contains a trailing comma at the end which is not supported in this mode. Change the reader options. Path: $.extra | LineNumber: 0 | BytePositionInLine: 13."
+          ]
+        }
+      },
+      "size": 388
+    }
+  }
+}

@@ -1,0 +1,237 @@
+{
+  "name": "authors-writes",
+  "created_at": "2026-10-11T12:00:00Z",
+  "calls": [
+    {
+      "id": "authors-post-full",
+      "endpoint": "POST /api/v1/Authors",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Authors",
+        "json_body": {
+          "id": 9001,
+          "idBook": 3,
+          "firstName": "fauxcall-probe",
+          "lastName": "Probe"
+        }
+      }
+    },
+    {
+      "id": "authors-post-readback",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/9001"
+      }
+    },
+    {
+      "id": "authors-post-empty",
+      "endpoint": "POST /api/v1/Authors",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Authors",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "authors-post-wrongtype",
+      "endpoint": "POST /api/v1/Authors",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Authors",
+        "json_body": {
+          "id": "abc",
+          "idBook": 5
+        }
+      }
+    },
+    {
+      "id": "authors-post-unknown",
+      "endpoint": "POST /api/v1/Authors",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Authors",
+        "json_body": {
+          "id": 9001,
+          "idBook": 3,
+          "firstName": "fauxcall-probe",
+          "lastName": "Probe",
+          "bogus": 1
+        }
+      }
+    },
+    {
+      "id": "authors-post-badjson",
+      "endpoint": "POST /api/v1/Authors",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Authors",
+        "text_body": "{not json",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "authors-post-nobody",
+      "endpoint": "POST /api/v1/Authors",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Authors",
+        "text_body": "",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "authors-post-textplain",
+      "endpoint": "POST /api/v1/Authors",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Authors",
+        "text_body": "{\"id\": 9001, \"idBook\": 3, \"firstName\": \"fauxcall-probe\", \"lastName\": \"Probe\"}",
+        "content_type": "text/plain"
+      }
+    },
+    {
+      "id": "authors-put-1",
+      "endpoint": "PUT /api/v1/Authors/{id}",
+      "purpose": "variation",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Authors/1",
+        "json_body": {
+          "id": 1,
+          "idBook": 3,
+          "firstName": "fauxcall-probe",
+          "lastName": "Probe"
+        }
+      }
+    },
+    {
+      "id": "authors-put-readback",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/1"
+      }
+    },
+    {
+      "id": "authors-put-mismatch",
+      "endpoint": "PUT /api/v1/Authors/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Authors/2",
+        "json_body": {
+          "id": 7,
+          "idBook": 3,
+          "firstName": "fauxcall-probe",
+          "lastName": "Probe"
+        }
+      }
+    },
+    {
+      "id": "authors-put-missing",
+      "endpoint": "PUT /api/v1/Authors/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Authors/99999",
+        "json_body": {
+          "id": 99999,
+          "idBook": 3,
+          "firstName": "fauxcall-probe",
+          "lastName": "Probe"
+        }
+      }
+    },
+    {
+      "id": "authors-put-empty",
+      "endpoint": "PUT /api/v1/Authors/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Authors/3",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "authors-put-badjson",
+      "endpoint": "PUT /api/v1/Authors/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Authors/1",
+        "text_body": "{not json",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "authors-put-badid",
+      "endpoint": "PUT /api/v1/Authors/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Authors/abc",
+        "json_body": {
+          "id": 9001,
+          "idBook": 3,
+          "firstName": "fauxcall-probe",
+          "lastName": "Probe"
+        }
+      }
+    },
+    {
+      "id": "authors-del-1",
+      "endpoint": "DELETE /api/v1/Authors/{id}",
+      "purpose": "variation",
+      "request": {
+        "method": "DELETE",
+        "path": "/api/v1/Authors/1"
+      }
+    },
+    {
+      "id": "authors-del-readback",
+      "endpoint": "GET /api/v1/Authors/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/1"
+      }
+    },
+    {
+      "id": "authors-del-1-again",
+      "endpoint": "DELETE /api/v1/Authors/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "DELETE",
+        "path": "/api/v1/Authors/1"
+      }
+    },
+    {
+      "id": "authors-del-missing",
+      "endpoint": "DELETE /api/v1/Authors/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "DELETE",
+        "path": "/api/v1/Authors/99999"
+      }
+    },
+    {
+      "id": "authors-del-badid",
+      "endpoint": "DELETE /api/v1/Authors/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "DELETE",
+        "path": "/api/v1/Authors/abc"
+      }
+    }
+  ]
+}

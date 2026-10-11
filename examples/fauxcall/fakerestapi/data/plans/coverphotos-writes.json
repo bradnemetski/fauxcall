@@ -1,0 +1,231 @@
+{
+  "name": "coverphotos-writes",
+  "created_at": "2026-10-11T12:00:00Z",
+  "calls": [
+    {
+      "id": "coverphotos-post-full",
+      "endpoint": "POST /api/v1/CoverPhotos",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/CoverPhotos",
+        "json_body": {
+          "id": 9001,
+          "idBook": 4,
+          "url": "https://example.com/fauxcall-probe.jpg"
+        }
+      }
+    },
+    {
+      "id": "coverphotos-post-readback",
+      "endpoint": "GET /api/v1/CoverPhotos/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/CoverPhotos/9001"
+      }
+    },
+    {
+      "id": "coverphotos-post-empty",
+      "endpoint": "POST /api/v1/CoverPhotos",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/CoverPhotos",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "coverphotos-post-wrongtype",
+      "endpoint": "POST /api/v1/CoverPhotos",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/CoverPhotos",
+        "json_body": {
+          "id": "abc",
+          "idBook": 5
+        }
+      }
+    },
+    {
+      "id": "coverphotos-post-unknown",
+      "endpoint": "POST /api/v1/CoverPhotos",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/CoverPhotos",
+        "json_body": {
+          "id": 9001,
+          "idBook": 4,
+          "url": "https://example.com/fauxcall-probe.jpg",
+          "bogus": 1
+        }
+      }
+    },
+    {
+      "id": "coverphotos-post-badjson",
+      "endpoint": "POST /api/v1/CoverPhotos",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/CoverPhotos",
+        "text_body": "{not json",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "coverphotos-post-nobody",
+      "endpoint": "POST /api/v1/CoverPhotos",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/CoverPhotos",
+        "text_body": "",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "coverphotos-post-textplain",
+      "endpoint": "POST /api/v1/CoverPhotos",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/CoverPhotos",
+        "text_body": "{\"id\": 9001, \"idBook\": 4, \"url\": \"https://example.com/fauxcall-probe.jpg\"}",
+        "content_type": "text/plain"
+      }
+    },
+    {
+      "id": "coverphotos-put-1",
+      "endpoint": "PUT /api/v1/CoverPhotos/{id}",
+      "purpose": "variation",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/CoverPhotos/1",
+        "json_body": {
+          "id": 1,
+          "idBook": 4,
+          "url": "https://example.com/fauxcall-probe.jpg"
+        }
+      }
+    },
+    {
+      "id": "coverphotos-put-readback",
+      "endpoint": "GET /api/v1/CoverPhotos/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/CoverPhotos/1"
+      }
+    },
+    {
+      "id": "coverphotos-put-mismatch",
+      "endpoint": "PUT /api/v1/CoverPhotos/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/CoverPhotos/2",
+        "json_body": {
+          "id": 7,
+          "idBook": 4,
+          "url": "https://example.com/fauxcall-probe.jpg"
+        }
+      }
+    },
+    {
+      "id": "coverphotos-put-missing",
+      "endpoint": "PUT /api/v1/CoverPhotos/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/CoverPhotos/99999",
+        "json_body": {
+          "id": 99999,
+          "idBook": 4,
+          "url": "https://example.com/fauxcall-probe.jpg"
+        }
+      }
+    },
+    {
+      "id": "coverphotos-put-empty",
+      "endpoint": "PUT /api/v1/CoverPhotos/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/CoverPhotos/3",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "coverphotos-put-badjson",
+      "endpoint": "PUT /api/v1/CoverPhotos/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/CoverPhotos/1",
+        "text_body": "{not json",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "coverphotos-put-badid",
+      "endpoint": "PUT /api/v1/CoverPhotos/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/CoverPhotos/abc",
+        "json_body": {
+          "id": 9001,
+          "idBook": 4,
+          "url": "https://example.com/fauxcall-probe.jpg"
+        }
+      }
+    },
+    {
+      "id": "coverphotos-del-1",
+      "endpoint": "DELETE /api/v1/CoverPhotos/{id}",
+      "purpose": "variation",
+      "request": {
+        "method": "DELETE",
+        "path": "/api/v1/CoverPhotos/1"
+      }
+    },
+    {
+      "id": "coverphotos-del-readback",
+      "endpoint": "GET /api/v1/CoverPhotos/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/CoverPhotos/1"
+      }
+    },
+    {
+      "id": "coverphotos-del-1-again",
+      "endpoint": "DELETE /api/v1/CoverPhotos/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "DELETE",
+        "path": "/api/v1/CoverPhotos/1"
+      }
+    },
+    {
+      "id": "coverphotos-del-missing",
+      "endpoint": "DELETE /api/v1/CoverPhotos/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "DELETE",
+        "path": "/api/v1/CoverPhotos/99999"
+      }
+    },
+    {
+      "id": "coverphotos-del-badid",
+      "endpoint": "DELETE /api/v1/CoverPhotos/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "DELETE",
+        "path": "/api/v1/CoverPhotos/abc"
+      }
+    }
+  ]
+}

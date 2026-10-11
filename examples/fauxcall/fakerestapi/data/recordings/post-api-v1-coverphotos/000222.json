@@ -1,0 +1,85 @@
+{
+  "id": "000222",
+  "endpoint": "POST /api/v1/CoverPhotos",
+  "purpose": "invalid",
+  "plan_call": "coverphotos-post-textplain",
+  "started_at": "2026-10-11T12:42:33.415907Z",
+  "started_ns": 1791722553415907000,
+  "elapsed_ms": 103.268,
+  "ttfb_ms": 102.877,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/CoverPhotos",
+    "path": "/api/v1/CoverPhotos",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "text/plain"
+      ],
+      [
+        "content-length",
+        "74"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/plain",
+      "text": "{\"id\": 9001, \"idBook\": 4, \"url\": \"https://example.com/fauxcall-probe.jpg\"}",
+      "size": 74
+    }
+  },
+  "response": {
+    "status": 415,
+    "reason": "Unsupported Media Type",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:42:33 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.13",
+        "title": "Unsupported Media Type",
+        "status": 415,
+        "traceId": "00-4d085216d327334ba68d8e1dae54c4ef-96403b5c481fb247-00"
+      },
+      "size": 175
+    }
+  }
+}

@@ -1,0 +1,249 @@
+{
+  "name": "review-probes",
+  "created_at": "2026-10-11T16:00:00Z",
+  "calls": [
+    {
+      "id": "P1",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/1",
+        "headers": {
+          "Accept": "text/json"
+        }
+      }
+    },
+    {
+      "id": "P2",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/1",
+        "headers": {
+          "Accept": "application/json; v=2.0"
+        }
+      }
+    },
+    {
+      "id": "P3",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/1",
+        "headers": {
+          "Content-Type": "application/json; v=2.0"
+        }
+      }
+    },
+    {
+      "id": "P3b",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/1",
+        "headers": {
+          "Accept": "application/json; v=abc"
+        }
+      }
+    },
+    {
+      "id": "P3c",
+      "endpoint": "GET /api/v1/Users",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users",
+        "headers": {
+          "Accept": "application/json; v=1.0"
+        }
+      }
+    },
+    {
+      "id": "P5a",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books//1"
+      }
+    },
+    {
+      "id": "P5b",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/1%2F2"
+      }
+    },
+    {
+      "id": "P5c",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/%C2%A01"
+      }
+    },
+    {
+      "id": "P5d",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/0x+1"
+      }
+    },
+    {
+      "id": "P5e",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/0x000000010"
+      }
+    },
+    {
+      "id": "P6",
+      "endpoint": "GET /",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/swagger/v1/swagger.json"
+      }
+    },
+    {
+      "id": "P6b",
+      "endpoint": "GET /",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/index.html"
+      }
+    },
+    {
+      "id": "P6c",
+      "endpoint": "GET /",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/"
+      }
+    },
+    {
+      "id": "P4",
+      "endpoint": "DELETE /api/v1/Users/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "DELETE",
+        "path": "/api/v1/Users/99999",
+        "headers": {
+          "Content-Type": "application/json; v=2.0"
+        }
+      }
+    },
+    {
+      "id": "P8",
+      "endpoint": "PUT /api/v1/Authors/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Authors/1",
+        "text_body": "{\"x\":[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[1]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "P8b",
+      "endpoint": "PUT /api/v1/Authors/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Authors/1",
+        "text_body": "{\"x\":[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[1]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "P9",
+      "endpoint": "PUT /api/v1/CoverPhotos/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/CoverPhotos/1",
+        "text_body": "[]",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "P10",
+      "endpoint": "POST /api/v1/Activities",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Activities",
+        "text_body": "[]",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "P11",
+      "endpoint": "PUT /api/v1/Authors/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Authors/1",
+        "text_body": "{\"id\": tru, \"firstName\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "P12",
+      "endpoint": "PUT /api/v1/Authors/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Authors/1",
+        "text_body": "{\"firstName\":\"\\ud800\"}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "P13",
+      "endpoint": "PUT /api/v1/Authors/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Authors/1",
+        "text_body": "{\"firstName\":\"\\u007f\\u2028\\ue000\\u00ad\"}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "P14",
+      "endpoint": "PUT /api/v1/Authors/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Authors/1",
+        "text_body": "{\"id\": -}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "P15",
+      "endpoint": "PUT /api/v1/Users/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/Users/1",
+        "text_body": "{\"id\": 1}",
+        "content_type": "application/json; charset=utf-16"
+      }
+    }
+  ]
+}

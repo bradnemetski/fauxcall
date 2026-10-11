@@ -1,0 +1,89 @@
+{
+  "id": "000181",
+  "endpoint": "POST /api/v1/Users",
+  "purpose": "invalid",
+  "plan_call": "users-post-nobody",
+  "started_at": "2026-10-11T12:42:11.547396Z",
+  "started_ns": 1791722531547396000,
+  "elapsed_ms": 122.127,
+  "ttfb_ms": 121.169,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Users",
+    "path": "/api/v1/Users",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "content-length",
+        "0"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json",
+      "text": ""
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:42:11 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-684feccb2afbb24e90a4ba9d5957ad6e-76735e3bb17a1a48-00",
+        "errors": {
+          "": [
+            "A non-empty request body is required."
+          ]
+        }
+      },
+      "size": 247
+    }
+  }
+}

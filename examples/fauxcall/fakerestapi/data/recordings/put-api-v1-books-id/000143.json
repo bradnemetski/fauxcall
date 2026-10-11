@@ -1,0 +1,98 @@
+{
+  "id": "000143",
+  "endpoint": "PUT /api/v1/Books/{id}",
+  "purpose": "variation",
+  "plan_call": "books-put-1",
+  "started_at": "2026-10-11T12:41:51.729115Z",
+  "started_ns": 1791722511729115000,
+  "elapsed_ms": 104.033,
+  "ttfb_ms": 102.889,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Books/1",
+    "path": "/api/v1/Books/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "127"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 1,
+        "title": "fauxcall-probe book",
+        "description": "probe",
+        "pageCount": 123,
+        "excerpt": "x",
+        "publishDate": "2026-01-02T03:04:05Z"
+      },
+      "size": 127
+    }
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/json; charset=utf-8; v=1.0"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:41:51 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "api-supported-versions",
+        "1.0"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8; v=1.0",
+      "json": {
+        "id": 1,
+        "title": "fauxcall-probe book",
+        "description": "probe",
+        "pageCount": 123,
+        "excerpt": "x",
+        "publishDate": "2026-01-02T03:04:05Z"
+      },
+      "size": 127
+    }
+  }
+}

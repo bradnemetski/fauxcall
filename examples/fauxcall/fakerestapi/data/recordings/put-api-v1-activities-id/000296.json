@@ -1,0 +1,93 @@
+{
+  "id": "000296",
+  "endpoint": "PUT /api/v1/Activities/{id}",
+  "purpose": "invalid",
+  "plan_call": "p-a-date-space",
+  "started_at": "2026-10-11T12:50:29.724847Z",
+  "started_ns": 1791723029724847000,
+  "elapsed_ms": 105.312,
+  "ttfb_ms": 104.265,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Activities/1",
+    "path": "/api/v1/Activities/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "40"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 1,
+        "dueDate": "2026-01-02 03:04:05"
+      },
+      "size": 40
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:50:29 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-6591e415dd5ac64f8bc5ead27321c554-683bb60cf569c442-00",
+        "errors": {
+          "$.dueDate": [
+            "The JSON value could not be converted to System.DateTime. Path: $.dueDate | LineNumber: 0 | BytePositionInLine: 39."
+          ]
+        }
+      },
+      "size": 334
+    }
+  }
+}

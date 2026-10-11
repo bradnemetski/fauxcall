@@ -1,0 +1,95 @@
+{
+  "id": "000274",
+  "endpoint": "POST /api/v1/Users",
+  "purpose": "invalid",
+  "plan_call": "u-username-obj",
+  "started_at": "2026-10-11T12:45:32.171332Z",
+  "started_ns": 1791722732171332000,
+  "elapsed_ms": 106.492,
+  "ttfb_ms": 105.537,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Users",
+    "path": "/api/v1/Users",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "27"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 1,
+        "userName": {
+          "a": 1
+        }
+      },
+      "size": 27
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:45:32 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-f20a6bee6ce34346966ad4c7dc641821-f289a3bd07199b48-00",
+        "errors": {
+          "$.userName": [
+            "The JSON value could not be converted to System.String. Path: $.userName | LineNumber: 0 | BytePositionInLine: 20."
+          ]
+        }
+      },
+      "size": 334
+    }
+  }
+}

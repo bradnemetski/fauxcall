@@ -1,0 +1,93 @@
+{
+  "id": "000300",
+  "endpoint": "PUT /api/v1/Activities/{id}",
+  "purpose": "invalid",
+  "plan_call": "p-a-completed-null",
+  "started_at": "2026-10-11T12:50:31.734433Z",
+  "started_ns": 1791723031734433000,
+  "elapsed_ms": 103.274,
+  "ttfb_ms": 102.275,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Activities/1",
+    "path": "/api/v1/Activities/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "25"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 1,
+        "completed": null
+      },
+      "size": 25
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:50:31 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-de629f08031c074a81eaa3f01656ddec-2c682639da554242-00",
+        "errors": {
+          "$.completed": [
+            "The JSON value could not be converted to System.Boolean. Path: $.completed | LineNumber: 0 | BytePositionInLine: 24."
+          ]
+        }
+      },
+      "size": 337
+    }
+  }
+}

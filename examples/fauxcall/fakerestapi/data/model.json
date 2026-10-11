@@ -1,0 +1,5967 @@
+{
+  "name": "fakerestapi",
+  "title": "FakeRESTApi.Web V1",
+  "source": {
+    "kind": "swagger_ui",
+    "url": "https://fakerestapi.azurewebsites.net/index.html",
+    "spec_url": "https://fakerestapi.azurewebsites.net/swagger/v1/swagger.json",
+    "spec_file": "source/openapi.json",
+    "spec_version": "3.0.1",
+    "title": "FakeRESTApi.Web V1",
+    "api_version": "v1",
+    "fetched_at": "2026-10-11T12:30:47.879004Z"
+  },
+  "real": {
+    "base_url": "https://fakerestapi.azurewebsites.net"
+  },
+  "routing": {
+    "case_insensitive": true,
+    "trailing_slash": "ignore",
+    "unknown_route_template": "unknown_route",
+    "method_not_allowed_template": "method_not_allowed",
+    "spec_paths": [
+      "/swagger/v1/swagger.json"
+    ]
+  },
+  "endpoints": [
+    {
+      "id": "GET /api/v1/Activities",
+      "method": "GET",
+      "path": "/api/v1/Activities",
+      "spec_path": "/api/v1/Activities",
+      "tags": [
+        "Activities"
+      ],
+      "role": "list",
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "title": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "dueDate": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "completed": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "observed_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "examples": [
+                    1,
+                    2,
+                    3
+                  ]
+                },
+                "title": {
+                  "type": "string",
+                  "examples": [
+                    "Activity 1",
+                    "Activity 2",
+                    "Activity 3"
+                  ]
+                },
+                "dueDate": {
+                  "type": "string",
+                  "format": "date-time",
+                  "x-time-format": {
+                    "kind": "iso",
+                    "fraction_digits": 7,
+                    "fraction_mode": "trim",
+                    "tz_style": "+HH:MM"
+                  },
+                  "examples": [
+                    "2026-10-11T13:33:36.1830211+00:00",
+                    "2026-10-11T14:33:36.1830239+00:00",
+                    "2026-10-11T15:33:36.1830244+00:00"
+                  ]
+                },
+                "completed": {
+                  "type": "boolean",
+                  "examples": [
+                    false,
+                    true
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "dueDate",
+                "completed"
+              ]
+            }
+          },
+          "examples": [
+            "000021",
+            "000022",
+            "000023",
+            "000038",
+            "000039"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          101.998,
+          106.523,
+          106.604,
+          432.827,
+          469.011,
+          494.038
+        ],
+        "p50_ms": 269.7155,
+        "p90_ms": 481.52450000000005,
+        "p99_ms": 492.78665
+      },
+      "collection": "activities",
+      "shape": {
+        "kind": "list"
+      },
+      "pagination": {
+        "style": "none"
+      },
+      "fields": [
+        {
+          "kind": "relative",
+          "path": "dueDate",
+          "format": {
+            "kind": "iso",
+            "fraction_digits": 7,
+            "fraction_mode": "trim",
+            "tz_style": "+HH:MM"
+          },
+          "note": "dueDate is generated from the server clock on every request (now + id hours)"
+        },
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ],
+      "notes": [
+        "Query parameters are ignored (probed ?id=1&limit=2: full list)."
+      ],
+      "errors": []
+    },
+    {
+      "id": "POST /api/v1/Activities",
+      "method": "POST",
+      "path": "/api/v1/Activities",
+      "spec_path": "/api/v1/Activities",
+      "tags": [
+        "Activities"
+      ],
+      "role": "custom",
+      "request_body": {
+        "content_types": [
+          "application/json; v=1.0",
+          "text/json; v=1.0",
+          "application/*+json; v=1.0"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "title": {
+              "type": "string",
+              "nullable": true
+            },
+            "dueDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "completed": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "title": {
+                "type": "string",
+                "nullable": true
+              },
+              "dueDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "completed": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  9001,
+                  0
+                ]
+              },
+              "title": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "fauxcall-probe activity"
+                ]
+              },
+              "dueDate": {
+                "type": "string",
+                "examples": [
+                  "2026-10-20T10:00:00Z",
+                  "0001-01-01T00:00:00"
+                ]
+              },
+              "completed": {
+                "type": "boolean",
+                "examples": [
+                  true,
+                  false
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "dueDate",
+              "completed"
+            ]
+          },
+          "examples": [
+            "000155",
+            "000157",
+            "000159"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-982bbc28e1082f4c8ef919eb031b8e43-6cb6eb65932c7c46-00",
+                  "00-bef7d4290dc0ed48ab98fd0e7206d032-0365f955f7707e47-00",
+                  "00-f9086b77a89b3d4b9f81c7df2dcae6ac-28c889cc63190a42-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "$.id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The JSON value could not be converted to System.Int32. Path: $.id | LineNumber: 0 | BytePositionInLine: 11."
+                      ]
+                    }
+                  },
+                  "$": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+                      ]
+                    }
+                  },
+                  "": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "A non-empty request body is required."
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000158",
+            "000160",
+            "000161"
+          ]
+        },
+        {
+          "status": 415,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.13"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "Unsupported Media Type"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  415
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-7e8c4a39f929164e956c73a883bb17f5-67613de1ccc3bc44-00"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId"
+            ]
+          },
+          "examples": [
+            "000162"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          103.085,
+          106.013,
+          107.089,
+          107.117,
+          107.794,
+          109.173,
+          486.346
+        ],
+        "p50_ms": 107.117,
+        "p90_ms": 260.04220000000004,
+        "p99_ms": 463.71562
+      },
+      "handler": "write_echo",
+      "collection": "activities",
+      "write": {
+        "persist": false,
+        "echo": "request",
+        "id_strategy": "client",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_body",
+          "template": "validation"
+        },
+        {
+          "when": "unsupported_media_type",
+          "template": "unsupported_media_type"
+        }
+      ],
+      "notes": [
+        "Body bound by System.Text.Json (web defaults) into FakeRestAPI.Models.Activity and echoed; nothing is stored (read-back after write shows seed data / 404)."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/Activities/{id}",
+      "method": "GET",
+      "path": "/api/v1/Activities/{id}",
+      "spec_path": "/api/v1/Activities/{id}",
+      "tags": [
+        "Activities"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "title": {
+                "type": "string",
+                "nullable": true
+              },
+              "dueDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "completed": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  2,
+                  15
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "Activity 1",
+                  "Activity 2",
+                  "Activity 15"
+                ]
+              },
+              "dueDate": {
+                "type": "string",
+                "format": "date-time",
+                "x-time-format": {
+                  "kind": "iso",
+                  "fraction_digits": 7,
+                  "tz_style": "+HH:MM"
+                },
+                "examples": [
+                  "2026-10-11T13:33:37.3593828+00:00",
+                  "2026-10-11T14:33:37.8653583+00:00",
+                  "2026-10-12T03:33:38.3682053+00:00"
+                ]
+              },
+              "completed": {
+                "type": "boolean",
+                "examples": [
+                  false,
+                  true
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "dueDate",
+              "completed"
+            ]
+          },
+          "examples": [
+            "000024",
+            "000025",
+            "000026",
+            "000027",
+            "000034"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-68b99a2013aa2e4da695eb4ab8305618-c7ceabff6e559247-00",
+                  "00-10ab6a1f02a9e549b2f56419ebce6730-aceabfa015e1634c-00",
+                  "00-596acde86bbe9540a12b6ce50247867a-6f4e87f25922f845-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid.",
+                        "The value '99999999999' is not valid.",
+                        "The value '1.5' is not valid."
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000031",
+            "000032",
+            "000033"
+          ]
+        },
+        {
+          "status": 404,
+          "content_type": "application/problem+json; charset=utf-8; v=1.0",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.4"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "Not Found"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  404
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-3c9fc0de56892d40bbb67877fdc23bbb-17c78bc39a64be40-00",
+                  "00-aa6746721bec6646a830df1f4521db78-9c234f844f926947-00",
+                  "00-a768ce90cc1f1a4cb089d99b457de4b3-6a6934fb76e1a84f-00"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId"
+            ]
+          },
+          "examples": [
+            "000028",
+            "000029",
+            "000030",
+            "000156"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          99.525,
+          100.478,
+          102.727,
+          105.525,
+          105.707,
+          112.273,
+          117.327,
+          117.725,
+          120.011,
+          175.881,
+          201.44,
+          256.857,
+          287.613,
+          319.642,
+          451.852,
+          465.358,
+          473.147
+        ],
+        "p50_ms": 120.01100000000001,
+        "p90_ms": 457.25440000000003,
+        "p99_ms": 471.90076
+      },
+      "handler": "get_item",
+      "collection": "activities",
+      "key_param": "id",
+      "fields": [
+        {
+          "kind": "relative",
+          "path": "dueDate",
+          "format": {
+            "kind": "iso",
+            "fraction_digits": 7,
+            "fraction_mode": "trim",
+            "tz_style": "+HH:MM"
+          },
+          "note": "dueDate is generated from the server clock on every request (now + id hours)"
+        },
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ],
+      "errors": [
+        {
+          "when": "not_found",
+          "template": "not_found"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/Activities/{id}",
+      "method": "PUT",
+      "path": "/api/v1/Activities/{id}",
+      "spec_path": "/api/v1/Activities/{id}",
+      "tags": [
+        "Activities"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "request_body": {
+        "content_types": [
+          "application/json; v=1.0",
+          "text/json; v=1.0",
+          "application/*+json; v=1.0"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "title": {
+              "type": "string",
+              "nullable": true
+            },
+            "dueDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "completed": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "title": {
+                "type": "string",
+                "nullable": true
+              },
+              "dueDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "completed": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  7,
+                  99999
+                ]
+              },
+              "title": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "fauxcall-probe activity"
+                ]
+              },
+              "dueDate": {
+                "type": "string",
+                "examples": [
+                  "2026-10-20T10:00:00Z",
+                  "0001-01-01T00:00:00"
+                ]
+              },
+              "completed": {
+                "type": "boolean",
+                "examples": [
+                  true,
+                  false
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "dueDate",
+              "completed"
+            ]
+          },
+          "examples": [
+            "000163",
+            "000165",
+            "000166",
+            "000167"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-5528785e9118f64e9fb1c4749379d5b2-dc4ab2a211fe164f-00",
+                  "00-c2780c8b002ddf4b9fbf4d65c4e1a0ea-dc9aa5c0f1020343-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "$": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+                      ]
+                    }
+                  },
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid."
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000168",
+            "000169"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          102.695,
+          105.734,
+          106.366,
+          106.824,
+          106.896,
+          122.455
+        ],
+        "p50_ms": 106.595,
+        "p90_ms": 114.6755,
+        "p99_ms": 121.67705
+      },
+      "handler": "write_echo",
+      "collection": "activities",
+      "write": {
+        "persist": false,
+        "echo": "request",
+        "id_strategy": "client",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_body",
+          "template": "validation"
+        },
+        {
+          "when": "unsupported_media_type",
+          "template": "unsupported_media_type"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ],
+      "notes": [
+        "Body bound by System.Text.Json (web defaults) into FakeRestAPI.Models.Activity and echoed; nothing is stored (read-back after write shows seed data / 404).",
+        "The path id is only validated; the echoed id is the body's."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/Activities/{id}",
+      "method": "DELETE",
+      "path": "/api/v1/Activities/{id}",
+      "spec_path": "/api/v1/Activities/{id}",
+      "tags": [
+        "Activities"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "examples": [
+            "000170",
+            "000172",
+            "000173"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          },
+          "content_type": null
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-1b118306a379ac4bb3ca237ce4343d08-1c0543c05c565848-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid."
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000174"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          103.7,
+          106.645,
+          109.051,
+          111.388
+        ],
+        "p50_ms": 107.848,
+        "p90_ms": 110.68690000000001,
+        "p99_ms": 111.31789
+      },
+      "handler": "delete_noop",
+      "collection": "activities",
+      "write": {
+        "persist": false,
+        "echo": "empty",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ],
+      "notes": [
+        "Always 200 with an empty body for any valid int32 id (existing, missing, repeated); nothing is deleted."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/Authors",
+      "method": "GET",
+      "path": "/api/v1/Authors",
+      "spec_path": "/api/v1/Authors",
+      "tags": [
+        "Authors"
+      ],
+      "role": "custom",
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "idBook": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "firstName": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "lastName": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "observed_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "examples": [
+                    1,
+                    2,
+                    3
+                  ]
+                },
+                "idBook": {
+                  "type": "integer",
+                  "examples": [
+                    1,
+                    2,
+                    3
+                  ]
+                },
+                "firstName": {
+                  "type": "string",
+                  "examples": [
+                    "First Name 1",
+                    "First Name 2",
+                    "First Name 3"
+                  ]
+                },
+                "lastName": {
+                  "type": "string",
+                  "examples": [
+                    "Last Name 1",
+                    "Last Name 2",
+                    "Last Name 3"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "idBook",
+                "firstName",
+                "lastName"
+              ]
+            }
+          },
+          "examples": [
+            "000058",
+            "000059",
+            "000060"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          104.903,
+          115.553,
+          538.438
+        ],
+        "p50_ms": 115.553,
+        "p90_ms": 453.861,
+        "p99_ms": 529.9802999999999
+      },
+      "handler": "authors_list",
+      "shape": {
+        "kind": "list"
+      },
+      "notes": [
+        "Query parameters are ignored (probed ?id=1&limit=2: full list)."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "POST /api/v1/Authors",
+      "method": "POST",
+      "path": "/api/v1/Authors",
+      "spec_path": "/api/v1/Authors",
+      "tags": [
+        "Authors"
+      ],
+      "role": "custom",
+      "request_body": {
+        "content_types": [
+          "application/json; v=1.0",
+          "text/json; v=1.0",
+          "application/*+json; v=1.0"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "idBook": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "firstName": {
+              "type": "string",
+              "nullable": true
+            },
+            "lastName": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "idBook": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "firstName": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastName": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "additionalProperties": false
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  9001,
+                  0
+                ]
+              },
+              "idBook": {
+                "type": "integer",
+                "examples": [
+                  3,
+                  0
+                ]
+              },
+              "firstName": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "holly"
+                ]
+              },
+              "lastName": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "Collins"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "idBook",
+              "firstName",
+              "lastName"
+            ]
+          },
+          "examples": [
+            "000195",
+            "000197",
+            "000199"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-15f38ee4337d3941ae62057c2fa876de-69dfa2055badfb4b-00",
+                  "00-7461600e655ffd4f95ae2719fb1b5cb7-169a759c53059647-00",
+                  "00-2e28b7762ad9ef40a2a0b125d42d2586-3859f2bb360f5644-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "$.id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The JSON value could not be converted to System.Int32. Path: $.id | LineNumber: 0 | BytePositionInLine: 11."
+                      ]
+                    }
+                  },
+                  "$": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+                      ]
+                    }
+                  },
+                  "": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "A non-empty request body is required."
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000198",
+            "000200",
+            "000201"
+          ]
+        },
+        {
+          "status": 415,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.13"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "Unsupported Media Type"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  415
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-63b7fb10bb72674e802369cf56ce3aa7-39c11f6bc37df24b-00"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId"
+            ]
+          },
+          "examples": [
+            "000202"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          102.233,
+          103.063,
+          104.597,
+          105.181,
+          107.642,
+          108.819,
+          489.413
+        ],
+        "p50_ms": 105.181,
+        "p90_ms": 261.0566,
+        "p99_ms": 466.57736
+      },
+      "handler": "write_echo",
+      "collection": null,
+      "write": {
+        "persist": false,
+        "echo": "request",
+        "id_strategy": "client",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_body",
+          "template": "validation"
+        },
+        {
+          "when": "unsupported_media_type",
+          "template": "unsupported_media_type"
+        }
+      ],
+      "notes": [
+        "Body bound by System.Text.Json (web defaults) into FakeRestAPI.Models.Author and echoed; nothing is stored (read-back after write shows seed data / 404)."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/Authors/authors/books/{idBook}",
+      "method": "GET",
+      "path": "/api/v1/Authors/authors/books/{idBook}",
+      "spec_path": "/api/v1/Authors/authors/books/{idBook}",
+      "tags": [
+        "Authors"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "idBook",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "idBook": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "firstName": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "lastName": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "observed_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "examples": [
+                    1,
+                    2,
+                    4
+                  ]
+                },
+                "idBook": {
+                  "type": "integer",
+                  "examples": [
+                    1,
+                    2,
+                    3
+                  ]
+                },
+                "firstName": {
+                  "type": "string",
+                  "examples": [
+                    "First Name 1",
+                    "First Name 2",
+                    "First Name 4"
+                  ]
+                },
+                "lastName": {
+                  "type": "string",
+                  "examples": [
+                    "Last Name 1",
+                    "Last Name 2",
+                    "Last Name 4"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "idBook",
+                "firstName",
+                "lastName"
+              ]
+            }
+          },
+          "examples": [
+            "000075",
+            "000076",
+            "000077",
+            "000078",
+            "000079"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-46704af0fa2d574cad98d99bb8c3b49f-17e5786280cbec49-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "idBook": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid."
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "idBook"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000083"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          102.236,
+          104.882,
+          105.276,
+          105.894,
+          107.054,
+          107.175,
+          108.003,
+          108.073,
+          108.551
+        ],
+        "p50_ms": 107.054,
+        "p90_ms": 108.16860000000001,
+        "p99_ms": 108.51276000000001
+      },
+      "handler": "authors_by_book",
+      "errors": [
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "idBook"
+        }
+      ],
+      "notes": [
+        "Unknown/out-of-range books (0, -1, 201) give 200 []."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/Authors/{id}",
+      "method": "GET",
+      "path": "/api/v1/Authors/{id}",
+      "spec_path": "/api/v1/Authors/{id}",
+      "tags": [
+        "Authors"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "idBook": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "firstName": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastName": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "additionalProperties": false
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  2,
+                  100
+                ]
+              },
+              "idBook": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  34,
+                  173
+                ]
+              },
+              "firstName": {
+                "type": "string",
+                "examples": [
+                  "First Name 1",
+                  "First Name 2",
+                  "First Name 100"
+                ]
+              },
+              "lastName": {
+                "type": "string",
+                "examples": [
+                  "Last Name 1",
+                  "Last Name 2",
+                  "Last Name 100"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "idBook",
+              "firstName",
+              "lastName"
+            ]
+          },
+          "examples": [
+            "000061",
+            "000062",
+            "000063",
+            "000064",
+            "000071"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-639414d9b61e6347aa2ff61076e9331a-1e67652b245c1147-00",
+                  "00-cfaf68efe2540a4590051e7746d73428-46283411271d304b-00",
+                  "00-fa03137bfeedd044a0f7da4eced8807d-fde437ffd6d26046-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid.",
+                        "The value '99999999999' is not valid.",
+                        "The value '1.5' is not valid."
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000068",
+            "000069",
+            "000070"
+          ]
+        },
+        {
+          "status": 404,
+          "content_type": "application/problem+json; charset=utf-8; v=1.0",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.4"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "Not Found"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  404
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-705f3ac29afe184aac1ae0c492c68fbc-4e2f0bfe22eb2743-00",
+                  "00-71cf6f28ad360f4299cb275bc0e2d246-8291bb3a37a8d149-00",
+                  "00-757bb623c690fa40a8a7d456691e31ee-8e9bf79ebc1bea40-00"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId"
+            ]
+          },
+          "examples": [
+            "000065",
+            "000066",
+            "000067",
+            "000196"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          100.769,
+          103.579,
+          105.007,
+          105.276,
+          105.978,
+          106.223,
+          107.012,
+          107.606,
+          108.517,
+          108.523,
+          109.012,
+          110.273,
+          113.769,
+          130.742,
+          460.692,
+          467.082,
+          485.77
+        ],
+        "p50_ms": 108.517,
+        "p90_ms": 463.24800000000005,
+        "p99_ms": 482.77992
+      },
+      "handler": "authors_get",
+      "errors": [
+        {
+          "when": "not_found",
+          "template": "not_found"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/Authors/{id}",
+      "method": "PUT",
+      "path": "/api/v1/Authors/{id}",
+      "spec_path": "/api/v1/Authors/{id}",
+      "tags": [
+        "Authors"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "request_body": {
+        "content_types": [
+          "application/json; v=1.0",
+          "text/json; v=1.0",
+          "application/*+json; v=1.0"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "idBook": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "firstName": {
+              "type": "string",
+              "nullable": true
+            },
+            "lastName": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "idBook": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "firstName": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastName": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "additionalProperties": false
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  7,
+                  99999
+                ]
+              },
+              "idBook": {
+                "type": "integer",
+                "examples": [
+                  3,
+                  0
+                ]
+              },
+              "firstName": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "holly"
+                ]
+              },
+              "lastName": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "Collins"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "idBook",
+              "firstName",
+              "lastName"
+            ]
+          },
+          "examples": [
+            "000203",
+            "000205",
+            "000206",
+            "000207"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-a94f37e24d095d48a1115de668c4975d-9ca6fb8a8dae7740-00",
+                  "00-d098b9332c90a44c8869b064d07e3f8d-5e73e2953e0af84e-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "$": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+                      ]
+                    }
+                  },
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid."
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000208",
+            "000209"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          101.664,
+          103.841,
+          108.145,
+          108.794,
+          109.139,
+          112.052
+        ],
+        "p50_ms": 108.46950000000001,
+        "p90_ms": 110.59549999999999,
+        "p99_ms": 111.90635
+      },
+      "handler": "write_echo",
+      "collection": null,
+      "write": {
+        "persist": false,
+        "echo": "request",
+        "id_strategy": "client",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_body",
+          "template": "validation"
+        },
+        {
+          "when": "unsupported_media_type",
+          "template": "unsupported_media_type"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ],
+      "notes": [
+        "Body bound by System.Text.Json (web defaults) into FakeRestAPI.Models.Author and echoed; nothing is stored (read-back after write shows seed data / 404).",
+        "The path id is only validated; the echoed id is the body's."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/Authors/{id}",
+      "method": "DELETE",
+      "path": "/api/v1/Authors/{id}",
+      "spec_path": "/api/v1/Authors/{id}",
+      "tags": [
+        "Authors"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "examples": [
+            "000210",
+            "000212",
+            "000213"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          },
+          "content_type": null
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-94160f5e1ca50f4c8e863f7868ad8ea9-58ab6258d105cc4a-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid."
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000214"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          100.579,
+          102.969,
+          104.636,
+          107.832
+        ],
+        "p50_ms": 103.8025,
+        "p90_ms": 106.8732,
+        "p99_ms": 107.73611999999999
+      },
+      "handler": "delete_noop",
+      "collection": null,
+      "write": {
+        "persist": false,
+        "echo": "empty",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ],
+      "notes": [
+        "Always 200 with an empty body for any valid int32 id (existing, missing, repeated); nothing is deleted."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/Books",
+      "method": "GET",
+      "path": "/api/v1/Books",
+      "spec_path": "/api/v1/Books",
+      "tags": [
+        "Books"
+      ],
+      "role": "list",
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "title": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "pageCount": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "excerpt": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "publishDate": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "observed_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "examples": [
+                    1,
+                    2,
+                    3
+                  ]
+                },
+                "title": {
+                  "type": "string",
+                  "examples": [
+                    "Book 1",
+                    "Book 2",
+                    "Book 3"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "examples": [
+                    "Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\n"
+                  ]
+                },
+                "pageCount": {
+                  "type": "integer",
+                  "examples": [
+                    100,
+                    200,
+                    300
+                  ]
+                },
+                "excerpt": {
+                  "type": "string",
+                  "examples": [
+                    "Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\n"
+                  ]
+                },
+                "publishDate": {
+                  "type": "string",
+                  "format": "date-time",
+                  "x-time-format": {
+                    "kind": "iso",
+                    "fraction_digits": 7,
+                    "fraction_mode": "trim",
+                    "tz_style": "+HH:MM"
+                  },
+                  "examples": [
+                    "2026-10-10T12:31:59.7139106+00:00",
+                    "2026-10-09T12:31:59.7139192+00:00",
+                    "2026-10-08T12:31:59.7139258+00:00"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "description",
+                "pageCount",
+                "excerpt",
+                "publishDate"
+              ]
+            }
+          },
+          "examples": [
+            "000001",
+            "000002",
+            "000003",
+            "000018",
+            "000019"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          115.656,
+          198.255,
+          207.507,
+          599.582,
+          653.369,
+          687.126,
+          731.959,
+          753.319
+        ],
+        "p50_ms": 626.4755,
+        "p90_ms": 738.367,
+        "p99_ms": 751.8238
+      },
+      "collection": "books",
+      "shape": {
+        "kind": "list"
+      },
+      "pagination": {
+        "style": "none"
+      },
+      "fields": [
+        {
+          "kind": "relative",
+          "path": "publishDate",
+          "format": {
+            "kind": "iso",
+            "fraction_digits": 7,
+            "fraction_mode": "trim",
+            "tz_style": "+HH:MM"
+          },
+          "note": "publishDate is generated from the server clock on every request (now - id days)"
+        },
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ],
+      "notes": [
+        "Query parameters are ignored (probed ?id=1&limit=2: full list)."
+      ],
+      "errors": []
+    },
+    {
+      "id": "POST /api/v1/Books",
+      "method": "POST",
+      "path": "/api/v1/Books",
+      "spec_path": "/api/v1/Books",
+      "tags": [
+        "Books"
+      ],
+      "role": "custom",
+      "request_body": {
+        "content_types": [
+          "application/json; v=1.0",
+          "text/json; v=1.0",
+          "application/*+json; v=1.0"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "title": {
+              "type": "string",
+              "nullable": true
+            },
+            "description": {
+              "type": "string",
+              "nullable": true
+            },
+            "pageCount": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "excerpt": {
+              "type": "string",
+              "nullable": true
+            },
+            "publishDate": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  9001,
+                  0
+                ]
+              },
+              "title": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "fauxcall-probe book"
+                ]
+              },
+              "description": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "probe"
+                ]
+              },
+              "pageCount": {
+                "type": "integer",
+                "examples": [
+                  123,
+                  0
+                ]
+              },
+              "excerpt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "x"
+                ]
+              },
+              "publishDate": {
+                "type": "string",
+                "examples": [
+                  "2026-01-02T03:04:05Z",
+                  "0001-01-01T00:00:00"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "description",
+              "pageCount",
+              "excerpt",
+              "publishDate"
+            ]
+          },
+          "examples": [
+            "000135",
+            "000137",
+            "000139"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-cd32b50927c64c42a6090e6c02654b2e-17d5ed3fd0755b48-00",
+                  "00-4e8f4c4ba8ad524699b8b773610f439c-ff4568d066c27844-00",
+                  "00-aea4cc25e2e2dc44a4cd0cdea3bc002b-80857400598d144e-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "$.id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The JSON value could not be converted to System.Int32. Path: $.id | LineNumber: 0 | BytePositionInLine: 11."
+                      ]
+                    }
+                  },
+                  "$": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+                      ]
+                    }
+                  },
+                  "": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "A non-empty request body is required."
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000138",
+            "000140",
+            "000141"
+          ]
+        },
+        {
+          "status": 415,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.13"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "Unsupported Media Type"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  415
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-f8b6440f711a8c4d95eb031d4279318e-79e1b5a1d7e5fc4c-00"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId"
+            ]
+          },
+          "examples": [
+            "000142"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          105.422,
+          105.919,
+          107.891,
+          108.249,
+          108.385,
+          108.51,
+          459.401
+        ],
+        "p50_ms": 108.249,
+        "p90_ms": 248.8664,
+        "p99_ms": 438.34754
+      },
+      "handler": "write_echo",
+      "collection": "books",
+      "write": {
+        "persist": false,
+        "echo": "request",
+        "id_strategy": "client",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_body",
+          "template": "validation"
+        },
+        {
+          "when": "unsupported_media_type",
+          "template": "unsupported_media_type"
+        }
+      ],
+      "notes": [
+        "Body bound by System.Text.Json (web defaults) into FakeRestAPI.Models.Book and echoed; nothing is stored (read-back after write shows seed data / 404)."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/Books/{id}",
+      "method": "GET",
+      "path": "/api/v1/Books/{id}",
+      "spec_path": "/api/v1/Books/{id}",
+      "tags": [
+        "Books"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "title": {
+                "type": "string",
+                "nullable": true
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "pageCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "excerpt": {
+                "type": "string",
+                "nullable": true
+              },
+              "publishDate": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "additionalProperties": false
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  2,
+                  100
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "Book 1",
+                  "Book 2",
+                  "Book 100"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "examples": [
+                  "Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\n"
+                ]
+              },
+              "pageCount": {
+                "type": "integer",
+                "examples": [
+                  100,
+                  200,
+                  10000
+                ]
+              },
+              "excerpt": {
+                "type": "string",
+                "examples": [
+                  "Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\n"
+                ]
+              },
+              "publishDate": {
+                "type": "string",
+                "format": "date-time",
+                "x-time-format": {
+                  "kind": "iso",
+                  "fraction_digits": 7,
+                  "tz_style": "+HH:MM"
+                },
+                "examples": [
+                  "2026-10-10T12:32:01.0875972+00:00",
+                  "2026-10-09T12:32:01.5959196+00:00",
+                  "2026-07-03T12:32:02.0941123+00:00"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "description",
+              "pageCount",
+              "excerpt",
+              "publishDate"
+            ]
+          },
+          "examples": [
+            "000004",
+            "000005",
+            "000006",
+            "000007",
+            "000014"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-f87315feab115c4494d21180ef315eac-6345ad3b15179043-00",
+                  "00-055c125210f40640ac681eeb47ea0ead-0584074266c42b4b-00",
+                  "00-07bcf24cef7aae40a864fa534ab8d1f1-2786be9702471f46-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid.",
+                        "The value '99999999999' is not valid.",
+                        "The value '1.5' is not valid."
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000011",
+            "000012",
+            "000013"
+          ]
+        },
+        {
+          "status": 404,
+          "content_type": "application/problem+json; charset=utf-8; v=1.0",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.4"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "Not Found"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  404
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-365071dde843564db9735ac220c1d977-f56e227283dcba4a-00",
+                  "00-aa8ab6517a62cc49b13fae73a8a00666-8301d607e8682e47-00",
+                  "00-86a89ee3ded5254594eb525862a5628b-bf321ab8d59adc4f-00"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId"
+            ]
+          },
+          "examples": [
+            "000008",
+            "000009",
+            "000010",
+            "000136"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          97.569,
+          99.993,
+          100.851,
+          100.975,
+          101.271,
+          102.475,
+          102.507,
+          104.158,
+          104.357,
+          106.084,
+          106.141,
+          106.537,
+          107.06,
+          107.49,
+          107.641,
+          109.868,
+          116.194,
+          459.794,
+          488.105,
+          681.368
+        ],
+        "p50_ms": 106.1125,
+        "p90_ms": 462.62510000000003,
+        "p99_ms": 644.6480300000001
+      },
+      "handler": "get_item",
+      "collection": "books",
+      "key_param": "id",
+      "fields": [
+        {
+          "kind": "relative",
+          "path": "publishDate",
+          "format": {
+            "kind": "iso",
+            "fraction_digits": 7,
+            "fraction_mode": "trim",
+            "tz_style": "+HH:MM"
+          },
+          "note": "publishDate is generated from the server clock on every request (now - id days)"
+        },
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ],
+      "errors": [
+        {
+          "when": "not_found",
+          "template": "not_found"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/Books/{id}",
+      "method": "PUT",
+      "path": "/api/v1/Books/{id}",
+      "spec_path": "/api/v1/Books/{id}",
+      "tags": [
+        "Books"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "request_body": {
+        "content_types": [
+          "application/json; v=1.0",
+          "text/json; v=1.0",
+          "application/*+json; v=1.0"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "title": {
+              "type": "string",
+              "nullable": true
+            },
+            "description": {
+              "type": "string",
+              "nullable": true
+            },
+            "pageCount": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "excerpt": {
+              "type": "string",
+              "nullable": true
+            },
+            "publishDate": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  7,
+                  99999
+                ]
+              },
+              "title": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "fauxcall-probe book"
+                ]
+              },
+              "description": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "probe"
+                ]
+              },
+              "pageCount": {
+                "type": "integer",
+                "examples": [
+                  123,
+                  0
+                ]
+              },
+              "excerpt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "x"
+                ]
+              },
+              "publishDate": {
+                "type": "string",
+                "examples": [
+                  "2026-01-02T03:04:05Z",
+                  "0001-01-01T00:00:00"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "description",
+              "pageCount",
+              "excerpt",
+              "publishDate"
+            ]
+          },
+          "examples": [
+            "000143",
+            "000145",
+            "000146",
+            "000147"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-bffe2ee539f38e429132268a359375ea-7fcbe977f1ff1e4b-00",
+                  "00-91c506989ed3c5408d912664e15729a0-b2dcaf10c415154f-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "$": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+                      ]
+                    }
+                  },
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid."
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000148",
+            "000149"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          99.891,
+          101.601,
+          103.754,
+          104.033,
+          104.341,
+          107.319
+        ],
+        "p50_ms": 103.89349999999999,
+        "p90_ms": 105.83,
+        "p99_ms": 107.1701
+      },
+      "handler": "write_echo",
+      "collection": "books",
+      "write": {
+        "persist": false,
+        "echo": "request",
+        "id_strategy": "client",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_body",
+          "template": "validation"
+        },
+        {
+          "when": "unsupported_media_type",
+          "template": "unsupported_media_type"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ],
+      "notes": [
+        "Body bound by System.Text.Json (web defaults) into FakeRestAPI.Models.Book and echoed; nothing is stored (read-back after write shows seed data / 404).",
+        "The path id is only validated; the echoed id is the body's."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/Books/{id}",
+      "method": "DELETE",
+      "path": "/api/v1/Books/{id}",
+      "spec_path": "/api/v1/Books/{id}",
+      "tags": [
+        "Books"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "examples": [
+            "000150",
+            "000152",
+            "000153"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          },
+          "content_type": null
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-c524a30475e94447a291230537b90af3-c91a76960694f44f-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid."
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000154"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          98.183,
+          103.053,
+          104.179,
+          105.412
+        ],
+        "p50_ms": 103.61599999999999,
+        "p90_ms": 105.04209999999999,
+        "p99_ms": 105.37501
+      },
+      "handler": "delete_noop",
+      "collection": "books",
+      "write": {
+        "persist": false,
+        "echo": "empty",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ],
+      "notes": [
+        "Always 200 with an empty body for any valid int32 id (existing, missing, repeated); nothing is deleted."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/CoverPhotos",
+      "method": "GET",
+      "path": "/api/v1/CoverPhotos",
+      "spec_path": "/api/v1/CoverPhotos",
+      "tags": [
+        "CoverPhotos"
+      ],
+      "role": "list",
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "idBook": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "nullable": true
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "observed_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "examples": [
+                    1,
+                    2,
+                    3
+                  ]
+                },
+                "idBook": {
+                  "type": "integer",
+                  "examples": [
+                    1,
+                    2,
+                    3
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "examples": [
+                    "https://placeholdit.imgix.net/~text?txtsize=33&txt=Book 1&w=250&h=350",
+                    "https://placeholdit.imgix.net/~text?txtsize=33&txt=Book 2&w=250&h=350",
+                    "https://placeholdit.imgix.net/~text?txtsize=33&txt=Book 3&w=250&h=350"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "idBook",
+                "url"
+              ]
+            }
+          },
+          "examples": [
+            "000084",
+            "000085",
+            "000086"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          101.15,
+          110.139,
+          523.713
+        ],
+        "p50_ms": 110.139,
+        "p90_ms": 440.99819999999994,
+        "p99_ms": 515.44152
+      },
+      "collection": "coverphotos",
+      "shape": {
+        "kind": "list"
+      },
+      "pagination": {
+        "style": "none"
+      },
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ],
+      "notes": [
+        "Query parameters are ignored (probed ?id=1&limit=2: full list)."
+      ],
+      "errors": []
+    },
+    {
+      "id": "POST /api/v1/CoverPhotos",
+      "method": "POST",
+      "path": "/api/v1/CoverPhotos",
+      "spec_path": "/api/v1/CoverPhotos",
+      "tags": [
+        "CoverPhotos"
+      ],
+      "role": "custom",
+      "request_body": {
+        "content_types": [
+          "application/json; v=1.0",
+          "text/json; v=1.0",
+          "application/*+json; v=1.0"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "idBook": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "idBook": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "nullable": true
+              }
+            },
+            "additionalProperties": false
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  9001,
+                  0
+                ]
+              },
+              "idBook": {
+                "type": "integer",
+                "examples": [
+                  4,
+                  0
+                ]
+              },
+              "url": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri",
+                "examples": [
+                  "https://example.com/fauxcall-probe.jpg"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "idBook",
+              "url"
+            ]
+          },
+          "examples": [
+            "000215",
+            "000217",
+            "000219"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-467033bd575f4c468d391f92728f5a0c-0fb1917eae776f4f-00",
+                  "00-f54b05c39d371748a9af82d2a94f3c31-6897ebd08e2d764a-00",
+                  "00-87ada70ba795c142b768f4c57ce83235-fa1d31616d1f2f42-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "$.id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The JSON value could not be converted to System.Int32. Path: $.id | LineNumber: 0 | BytePositionInLine: 11."
+                      ]
+                    }
+                  },
+                  "$": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+                      ]
+                    }
+                  },
+                  "": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "A non-empty request body is required."
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000218",
+            "000220",
+            "000221"
+          ]
+        },
+        {
+          "status": 415,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.13"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "Unsupported Media Type"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  415
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-4d085216d327334ba68d8e1dae54c4ef-96403b5c481fb247-00"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId"
+            ]
+          },
+          "examples": [
+            "000222"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          103.268,
+          105.45,
+          105.677,
+          108.523,
+          109.036,
+          150.958,
+          482.442
+        ],
+        "p50_ms": 108.523,
+        "p90_ms": 283.5516,
+        "p99_ms": 462.55296000000004
+      },
+      "handler": "write_echo",
+      "collection": "coverphotos",
+      "write": {
+        "persist": false,
+        "echo": "request",
+        "id_strategy": "client",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_body",
+          "template": "validation"
+        },
+        {
+          "when": "unsupported_media_type",
+          "template": "unsupported_media_type"
+        }
+      ],
+      "notes": [
+        "Body bound by System.Text.Json (web defaults) into FakeRestAPI.Models.CoverPhoto and echoed; nothing is stored (read-back after write shows seed data / 404)."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/CoverPhotos/books/covers/{idBook}",
+      "method": "GET",
+      "path": "/api/v1/CoverPhotos/books/covers/{idBook}",
+      "spec_path": "/api/v1/CoverPhotos/books/covers/{idBook}",
+      "tags": [
+        "CoverPhotos"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "idBook",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "idBook": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "nullable": true
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "observed_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "examples": [
+                    1,
+                    2,
+                    3
+                  ]
+                },
+                "idBook": {
+                  "type": "integer",
+                  "examples": [
+                    1,
+                    2,
+                    3
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "examples": [
+                    "https://placeholdit.imgix.net/~text?txtsize=33&txt=Book 1&w=250&h=350",
+                    "https://placeholdit.imgix.net/~text?txtsize=33&txt=Book 2&w=250&h=350",
+                    "https://placeholdit.imgix.net/~text?txtsize=33&txt=Book 3&w=250&h=350"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "idBook",
+                "url"
+              ]
+            }
+          },
+          "examples": [
+            "000101",
+            "000102",
+            "000103",
+            "000104",
+            "000105"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-bf7bc9e3fe9a7c47828f92c763084fa0-11c054cb7a164b4d-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "idBook": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid."
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "idBook"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000109"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          97.806,
+          98.57,
+          100.007,
+          100.035,
+          101.939,
+          102.33,
+          104.732,
+          105.204,
+          109.142
+        ],
+        "p50_ms": 101.939,
+        "p90_ms": 105.9916,
+        "p99_ms": 108.82696
+      },
+      "handler": "covers_by_book",
+      "collection": "coverphotos",
+      "errors": [
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "idBook"
+        }
+      ],
+      "notes": [
+        "Unknown/out-of-range books (0, -1, 201) give 200 []."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/CoverPhotos/{id}",
+      "method": "GET",
+      "path": "/api/v1/CoverPhotos/{id}",
+      "spec_path": "/api/v1/CoverPhotos/{id}",
+      "tags": [
+        "CoverPhotos"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "idBook": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "nullable": true
+              }
+            },
+            "additionalProperties": false
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  2,
+                  100
+                ]
+              },
+              "idBook": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  2,
+                  100
+                ]
+              },
+              "url": {
+                "type": "string",
+                "examples": [
+                  "https://placeholdit.imgix.net/~text?txtsize=33&txt=Book 1&w=250&h=350",
+                  "https://placeholdit.imgix.net/~text?txtsize=33&txt=Book 2&w=250&h=350",
+                  "https://placeholdit.imgix.net/~text?txtsize=33&txt=Book 100&w=250&h=350"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "idBook",
+              "url"
+            ]
+          },
+          "examples": [
+            "000087",
+            "000088",
+            "000089",
+            "000090",
+            "000097"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-ec05c1fd1fb2b14b944c9688ab5091c7-bd8a5c7beb1b7142-00",
+                  "00-647aee0ea7e8374abe7226019f4bbf47-b7ca6150aebcc94c-00",
+                  "00-a2c35f43f45f994b977179de7de5ffe8-cf3b2eb9d6388e44-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid.",
+                        "The value '99999999999' is not valid.",
+                        "The value '1.5' is not valid."
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000094",
+            "000095",
+            "000096"
+          ]
+        },
+        {
+          "status": 404,
+          "content_type": "application/problem+json; charset=utf-8; v=1.0",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.4"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "Not Found"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  404
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-00e669a164cd0942a16a9f7cb15057e0-f5fe948997b3bb48-00",
+                  "00-e81262d88210ec46a2d0f60e8313d88a-220a645ab9198941-00",
+                  "00-726dbee1549daf49a7826ee3b8699628-79170db94023094f-00"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId"
+            ]
+          },
+          "examples": [
+            "000091",
+            "000092",
+            "000093",
+            "000216"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          98.936,
+          99.319,
+          100.047,
+          100.582,
+          101.67,
+          101.741,
+          101.892,
+          101.938,
+          101.942,
+          104.099,
+          104.653,
+          105.561,
+          110.905,
+          120.744,
+          464.265,
+          466.648,
+          482.445
+        ],
+        "p50_ms": 101.942,
+        "p90_ms": 465.2182,
+        "p99_ms": 479.91748
+      },
+      "handler": "get_item",
+      "collection": "coverphotos",
+      "key_param": "id",
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ],
+      "errors": [
+        {
+          "when": "not_found",
+          "template": "not_found"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/CoverPhotos/{id}",
+      "method": "PUT",
+      "path": "/api/v1/CoverPhotos/{id}",
+      "spec_path": "/api/v1/CoverPhotos/{id}",
+      "tags": [
+        "CoverPhotos"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "request_body": {
+        "content_types": [
+          "application/json; v=1.0",
+          "text/json; v=1.0",
+          "application/*+json; v=1.0"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "idBook": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "idBook": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "nullable": true
+              }
+            },
+            "additionalProperties": false
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  7,
+                  99999
+                ]
+              },
+              "idBook": {
+                "type": "integer",
+                "examples": [
+                  4,
+                  0
+                ]
+              },
+              "url": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri",
+                "examples": [
+                  "https://example.com/fauxcall-probe.jpg"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "idBook",
+              "url"
+            ]
+          },
+          "examples": [
+            "000223",
+            "000225",
+            "000226",
+            "000227"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-2935d07c9b6b35428de7d55616998031-369bc87accac6e4a-00",
+                  "00-51a9517d465f1947bb30f49c68d0f89c-b32927eb9241624c-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "$": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+                      ]
+                    }
+                  },
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid."
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000228",
+            "000229"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          101.116,
+          103.566,
+          105.152,
+          106.189,
+          106.35,
+          143.753
+        ],
+        "p50_ms": 105.67049999999999,
+        "p90_ms": 125.05149999999999,
+        "p99_ms": 141.88285
+      },
+      "handler": "write_echo",
+      "collection": "coverphotos",
+      "write": {
+        "persist": false,
+        "echo": "request",
+        "id_strategy": "client",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_body",
+          "template": "validation"
+        },
+        {
+          "when": "unsupported_media_type",
+          "template": "unsupported_media_type"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ],
+      "notes": [
+        "Body bound by System.Text.Json (web defaults) into FakeRestAPI.Models.CoverPhoto and echoed; nothing is stored (read-back after write shows seed data / 404).",
+        "The path id is only validated; the echoed id is the body's."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/CoverPhotos/{id}",
+      "method": "DELETE",
+      "path": "/api/v1/CoverPhotos/{id}",
+      "spec_path": "/api/v1/CoverPhotos/{id}",
+      "tags": [
+        "CoverPhotos"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "examples": [
+            "000230",
+            "000232",
+            "000233"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          },
+          "content_type": null
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-43b3359c714e5042a14c06d66783c137-514f812add23ce46-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid."
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000234"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          102.928,
+          103.479,
+          104.368,
+          108.548
+        ],
+        "p50_ms": 103.92349999999999,
+        "p90_ms": 107.29400000000001,
+        "p99_ms": 108.4226
+      },
+      "handler": "delete_noop",
+      "collection": "coverphotos",
+      "write": {
+        "persist": false,
+        "echo": "empty",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ],
+      "notes": [
+        "Always 200 with an empty body for any valid int32 id (existing, missing, repeated); nothing is deleted."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/Users",
+      "method": "GET",
+      "path": "/api/v1/Users",
+      "spec_path": "/api/v1/Users",
+      "tags": [
+        "Users"
+      ],
+      "role": "list",
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "documented_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "userName": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "password": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "observed_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "examples": [
+                    1,
+                    2,
+                    3
+                  ]
+                },
+                "userName": {
+                  "type": "string",
+                  "examples": [
+                    "User 1",
+                    "User 2",
+                    "User 3"
+                  ]
+                },
+                "password": {
+                  "type": "string",
+                  "examples": [
+                    "Password1",
+                    "Password2",
+                    "Password3"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "userName",
+                "password"
+              ]
+            }
+          },
+          "examples": [
+            "000118",
+            "000119",
+            "000120"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          101.258,
+          102.568,
+          502.116
+        ],
+        "p50_ms": 102.568,
+        "p90_ms": 422.2064,
+        "p99_ms": 494.12504
+      },
+      "collection": "users",
+      "shape": {
+        "kind": "list"
+      },
+      "pagination": {
+        "style": "none"
+      },
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ],
+      "notes": [
+        "Query parameters are ignored (probed ?id=1&limit=2: full list)."
+      ],
+      "errors": []
+    },
+    {
+      "id": "POST /api/v1/Users",
+      "method": "POST",
+      "path": "/api/v1/Users",
+      "spec_path": "/api/v1/Users",
+      "tags": [
+        "Users"
+      ],
+      "role": "custom",
+      "request_body": {
+        "content_types": [
+          "application/json; v=1.0",
+          "text/json; v=1.0",
+          "application/*+json; v=1.0"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "userName": {
+              "type": "string",
+              "nullable": true
+            },
+            "password": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  9001,
+                  0
+                ]
+              },
+              "userName": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "user_d46dcb3c"
+                ]
+              },
+              "password": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "probe-pass"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "userName",
+              "password"
+            ]
+          },
+          "examples": [
+            "000175",
+            "000177",
+            "000179"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-bb5382228cd6434e9841f5b8db475c16-e9447d6b90a1ad4c-00",
+                  "00-8f5ee0e887e0694b8df7329712baaeb7-5a9cd19a298beb42-00",
+                  "00-684feccb2afbb24e90a4ba9d5957ad6e-76735e3bb17a1a48-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "$.id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The JSON value could not be converted to System.Int32. Path: $.id | LineNumber: 0 | BytePositionInLine: 11."
+                      ]
+                    }
+                  },
+                  "$": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+                      ]
+                    }
+                  },
+                  "": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "A non-empty request body is required."
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000178",
+            "000180",
+            "000181"
+          ]
+        },
+        {
+          "status": 415,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.13"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "Unsupported Media Type"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  415
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-c4b7f2f2fd849f45b755bcbfc22462a6-a0b4bc9a85c5944e-00"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId"
+            ]
+          },
+          "examples": [
+            "000182"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          102.842,
+          112.903,
+          113.838,
+          119.195,
+          120.286,
+          122.127,
+          450.676
+        ],
+        "p50_ms": 119.195,
+        "p90_ms": 253.5466,
+        "p99_ms": 430.96306000000004
+      },
+      "handler": "write_echo",
+      "collection": "users",
+      "write": {
+        "persist": false,
+        "echo": "request",
+        "id_strategy": "client",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_body",
+          "template": "validation"
+        },
+        {
+          "when": "unsupported_media_type",
+          "template": "unsupported_media_type"
+        }
+      ],
+      "notes": [
+        "Body bound by System.Text.Json (web defaults) into FakeRestAPI.Models.User and echoed; nothing is stored (read-back after write shows seed data / 404)."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/Users/{id}",
+      "method": "GET",
+      "path": "/api/v1/Users/{id}",
+      "spec_path": "/api/v1/Users/{id}",
+      "tags": [
+        "Users"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  2,
+                  5
+                ]
+              },
+              "userName": {
+                "type": "string",
+                "examples": [
+                  "User 1",
+                  "User 2",
+                  "User 5"
+                ]
+              },
+              "password": {
+                "type": "string",
+                "examples": [
+                  "Password1",
+                  "Password2",
+                  "Password5"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "userName",
+              "password"
+            ]
+          },
+          "examples": [
+            "000121",
+            "000122",
+            "000123",
+            "000124",
+            "000131"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-565abec8d94cb04b97150a34fa3206b3-d830e75203f1004e-00",
+                  "00-34fb5ae841f7364f990ada689058c336-01497e5105d3b548-00",
+                  "00-330582c76db541439ed72e400ecc507e-c80aacff70350948-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid.",
+                        "The value '99999999999' is not valid.",
+                        "The value '1.5' is not valid."
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000128",
+            "000129",
+            "000130"
+          ]
+        },
+        {
+          "status": 404,
+          "content_type": "application/problem+json; charset=utf-8; v=1.0",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.4"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "Not Found"
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  404
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-9ff4dffd1717d946a69851daa8005655-0af65eeee3760c42-00",
+                  "00-ea4e2025af0b0e4ba44ac2544f05b5a8-765c354aaeff634f-00",
+                  "00-79f3a9de01ea7b4694d5bcf3b474f344-3c0425ab3219fe4c-00"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId"
+            ]
+          },
+          "examples": [
+            "000125",
+            "000126",
+            "000127",
+            "000176"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          101.704,
+          102.239,
+          102.347,
+          102.486,
+          102.63,
+          105.532,
+          105.543,
+          105.591,
+          105.631,
+          105.811,
+          106.267,
+          107.191,
+          110.716,
+          120.126,
+          464.513,
+          480.987,
+          486.496
+        ],
+        "p50_ms": 105.631,
+        "p90_ms": 471.10259999999994,
+        "p99_ms": 485.61456
+      },
+      "handler": "get_item",
+      "collection": "users",
+      "key_param": "id",
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ],
+      "errors": [
+        {
+          "when": "not_found",
+          "template": "not_found"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/Users/{id}",
+      "method": "PUT",
+      "path": "/api/v1/Users/{id}",
+      "spec_path": "/api/v1/Users/{id}",
+      "tags": [
+        "Users"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "request_body": {
+        "content_types": [
+          "application/json; v=1.0",
+          "text/json; v=1.0",
+          "application/*+json; v=1.0"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "userName": {
+              "type": "string",
+              "nullable": true
+            },
+            "password": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "content_type": "application/json; charset=utf-8; v=1.0",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  7,
+                  99999
+                ]
+              },
+              "userName": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "user_d46dcb3c"
+                ]
+              },
+              "password": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "examples": [
+                  "probe-pass"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "userName",
+              "password"
+            ]
+          },
+          "examples": [
+            "000183",
+            "000185",
+            "000186",
+            "000187"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-1631cb31d331834c9610d70307ea2a66-7ca744fac2909a41-00",
+                  "00-08626bbefc51c4409585dc9be5734ac9-9c7d1739ea664b47-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "$": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+                      ]
+                    }
+                  },
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid."
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000188",
+            "000189"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          107.679,
+          110.82,
+          111.701,
+          114.543,
+          115.369,
+          121.698
+        ],
+        "p50_ms": 113.12200000000001,
+        "p90_ms": 118.53349999999999,
+        "p99_ms": 121.38154999999999
+      },
+      "handler": "write_echo",
+      "collection": "users",
+      "write": {
+        "persist": false,
+        "echo": "request",
+        "id_strategy": "client",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_body",
+          "template": "validation"
+        },
+        {
+          "when": "unsupported_media_type",
+          "template": "unsupported_media_type"
+        },
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ],
+      "notes": [
+        "Body bound by System.Text.Json (web defaults) into FakeRestAPI.Models.User and echoed; nothing is stored (read-back after write shows seed data / 404).",
+        "The path id is only validated; the echoed id is the body's."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/Users/{id}",
+      "method": "DELETE",
+      "path": "/api/v1/Users/{id}",
+      "spec_path": "/api/v1/Users/{id}",
+      "tags": [
+        "Users"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "description": "int32, bound by ASP.NET Core's Int32Converter (sign, surrounding spaces, 0x/# hex accepted)"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Success",
+          "examples": [
+            "000190",
+            "000192",
+            "000193"
+          ],
+          "headers": {
+            "api-supported-versions": {
+              "value": "1.0"
+            }
+          },
+          "content_type": null
+        },
+        {
+          "status": 400,
+          "content_type": "application/problem+json; charset=utf-8",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "examples": [
+                  "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "One or more validation errors occurred."
+                ]
+              },
+              "status": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "traceId": {
+                "type": "string",
+                "examples": [
+                  "00-19710b205943374d96a3a55dae940965-32c6da6c68de934a-00"
+                ]
+              },
+              "errors": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "examples": [
+                        "The value 'abc' is not valid."
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "traceId",
+              "errors"
+            ]
+          },
+          "examples": [
+            "000194"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          102.404,
+          104.53,
+          105.602,
+          108.775
+        ],
+        "p50_ms": 105.066,
+        "p90_ms": 107.8231,
+        "p99_ms": 108.67981000000002
+      },
+      "handler": "delete_noop",
+      "collection": "users",
+      "write": {
+        "persist": false,
+        "echo": "empty",
+        "status": 200
+      },
+      "errors": [
+        {
+          "when": "invalid_param",
+          "template": "invalid_param",
+          "param": "id"
+        }
+      ],
+      "notes": [
+        "Always 200 with an empty body for any valid int32 id (existing, missing, repeated); nothing is deleted."
+      ],
+      "fields": [
+        {
+          "kind": "random",
+          "scope": "body",
+          "path": "traceId",
+          "generator": "traceparent",
+          "note": "W3C trace id of ASP.NET problem details: new on every error response"
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "name": "not_found",
+      "status": 404,
+      "content_type": "application/problem+json; charset=utf-8; v=1.0",
+      "headers": {
+        "api-supported-versions": "1.0"
+      },
+      "body_json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+        "title": "Not Found",
+        "status": 404,
+        "traceId": "{{traceparent}}"
+      },
+      "examples": [
+        "000008",
+        "000028",
+        "000048",
+        "000065",
+        "000091",
+        "000136"
+      ]
+    },
+    {
+      "name": "validation",
+      "status": 400,
+      "content_type": "application/problem+json; charset=utf-8",
+      "body_json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "{{traceparent}}",
+        "errors": "{{errors}}"
+      },
+      "examples": [
+        "000011",
+        "000138",
+        "000140",
+        "000141",
+        "000255",
+        "000264",
+        "000268",
+        "000269",
+        "000272"
+      ]
+    },
+    {
+      "name": "invalid_param",
+      "status": 400,
+      "content_type": "application/problem+json; charset=utf-8",
+      "body_json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "{{traceparent}}",
+        "errors": {
+          "{{param}}": [
+            "The value '{{value}}' is not valid."
+          ]
+        }
+      },
+      "examples": [
+        "000011",
+        "000083"
+      ]
+    },
+    {
+      "name": "unsupported_media_type",
+      "status": 415,
+      "content_type": "application/problem+json; charset=utf-8",
+      "body_json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.13",
+        "title": "Unsupported Media Type",
+        "status": 415,
+        "traceId": "{{traceparent}}"
+      },
+      "examples": [
+        "000142",
+        "000265"
+      ]
+    },
+    {
+      "name": "unknown_route",
+      "status": 404,
+      "examples": [
+        "000113",
+        "000114"
+      ]
+    },
+    {
+      "name": "method_not_allowed",
+      "status": 405,
+      "examples": [
+        "000247",
+        "000248"
+      ]
+    }
+  ],
+  "collections": [
+    {
+      "name": "activities",
+      "key": "id",
+      "key_type": "int",
+      "order": "key_asc",
+      "sources": [
+        "GET /api/v1/Activities"
+      ],
+      "extract": {
+        "GET /api/v1/Activities": "$[*]"
+      },
+      "description": "Fixed seed data of the real API (Activities); identical on every request. Built from one list response so per-item timestamps keep the real order."
+    },
+    {
+      "name": "books",
+      "key": "id",
+      "key_type": "int",
+      "order": "key_asc",
+      "sources": [
+        "GET /api/v1/Books"
+      ],
+      "extract": {
+        "GET /api/v1/Books": "$[*]"
+      },
+      "description": "Fixed seed data of the real API (Books); identical on every request. Built from one list response so per-item timestamps keep the real order."
+    },
+    {
+      "name": "coverphotos",
+      "key": "id",
+      "key_type": "int",
+      "order": "key_asc",
+      "sources": [
+        "GET /api/v1/CoverPhotos",
+        "GET /api/v1/CoverPhotos/{id}"
+      ],
+      "extract": {
+        "GET /api/v1/CoverPhotos": "$[*]",
+        "GET /api/v1/CoverPhotos/{id}": "$"
+      },
+      "description": "Fixed seed data of the real API (CoverPhotos); identical on every request."
+    },
+    {
+      "name": "users",
+      "key": "id",
+      "key_type": "int",
+      "order": "key_asc",
+      "sources": [
+        "GET /api/v1/Users",
+        "GET /api/v1/Users/{id}"
+      ],
+      "extract": {
+        "GET /api/v1/Users": "$[*]",
+        "GET /api/v1/Users/{id}": "$"
+      },
+      "description": "Fixed seed data of the real API (Users); identical on every request."
+    }
+  ],
+  "relations": [
+    {
+      "name": "coverphoto_book",
+      "from_collection": "coverphotos",
+      "from_field": "idBook",
+      "to_collection": "books",
+      "evidence": "200/200 cover photos: idBook == id, 1..200; /CoverPhotos/books/covers/{idBook} filters on it"
+    }
+  ],
+  "invariants": [
+    {
+      "name": "unique_activities_ids",
+      "kind": "unique",
+      "collection": "activities",
+      "field": "id",
+      "description": "ids are the primary key"
+    },
+    {
+      "name": "unique_books_ids",
+      "kind": "unique",
+      "collection": "books",
+      "field": "id",
+      "description": "ids are the primary key"
+    },
+    {
+      "name": "unique_coverphotos_ids",
+      "kind": "unique",
+      "collection": "coverphotos",
+      "field": "id",
+      "description": "ids are the primary key"
+    },
+    {
+      "name": "unique_users_ids",
+      "kind": "unique",
+      "collection": "users",
+      "field": "id",
+      "description": "ids are the primary key"
+    }
+  ],
+  "default_headers": {},
+  "notes": [
+    "FakeRESTApi is an ASP.NET Core demo: all data is generated in memory from fixed rules; writes are echoed, never stored.",
+    "Books: 200, title 'Book N', pageCount N*100, publishDate = now - N days. Activities: 30, dueDate = now + N hours, completed = N even. Users: 10 (User N / PasswordN). CoverPhotos: 200, idBook = id.",
+    "Authors are regenerated randomly on EVERY request: each of the 200 books gets 2-4 authors (observed totals 588-608), ids sequential, names 'First Name N'/'Last Name N'.",
+    "password fields are server-generated demo fixtures, recorded unredacted on purpose (privacy.json allow_names).",
+    "Pipeline quirks in app.py: unsupported v= API version (Content-Type or Accept, any method) -> 400 UnsupportedApiVersion; Accept text/json -> text/json responses; 405 Allow lists; GET / -> 301 index.html (Swagger UI page served as recorded).",
+    "System.Text.Json: MaxDepth 32, lone surrogates refused, invalid literals quoted to the end of the body, relaxed escaping by Unicode category (all recorded). charset=utf-16/32 bodies -> empty 500 (recorded for utf-16 only).",
+    "Write budget: 20 real calls per write endpoint (recording + one parity run); POST/PUT Books and PUT Activities are exhausted."
+  ],
+  "json_style": {
+    "upper_hex": true
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "id": "000313",
+  "endpoint": "PUT /api/v1/Users/{id}",
+  "purpose": "edge",
+  "plan_call": "p-u-ctype-v2",
+  "started_at": "2026-10-11T12:50:38.262401Z",
+  "started_ns": 1791723038262401000,
+  "elapsed_ms": 403.398,
+  "ttfb_ms": 402.238,
+  "request": {
+    "method": "PUT",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Users/1",
+    "path": "/api/v1/Users/1",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json; v=2.0"
+      ],
+      [
+        "content-length",
+        "26"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json; v=2.0",
+      "text": "{\"id\": 2, \"password\": \"p\"}",
+      "size": 26
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:50:38 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "api-supported-versions",
+        "1.0"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "error": {
+          "code": "UnsupportedApiVersion",
+          "message": "The HTTP resource that matches the request URI 'https://fakerestapi.azurewebsites.net/api/v1/Users/1' does not support the API version '2.0'.",
+          "innerError": null
+        }
+      },
+      "size": 214
+    }
+  }
+}

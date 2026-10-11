@@ -1,0 +1,979 @@
+{
+  "score": 1.0,
+  "threshold": 0.98,
+  "ok": true,
+  "unmatched_scenarios": [],
+  "endpoints": {
+    "GET /": {
+      "passed": 6.5,
+      "total": 6.5,
+      "score": 1.0
+    },
+    "GET /api/v1/Activities": {
+      "passed": 650.0,
+      "total": 650.0,
+      "score": 1.0
+    },
+    "GET /api/v1/Activities/{id}": {
+      "passed": 104.5,
+      "total": 104.5,
+      "score": 1.0
+    },
+    "GET /api/v1/Authors": {
+      "passed": 9.0,
+      "total": 9.0,
+      "score": 1.0
+    },
+    "GET /api/v1/Authors/authors/books/{idBook}": {
+      "passed": 132.0,
+      "total": 132.0,
+      "score": 1.0
+    },
+    "GET /api/v1/Authors/{id}": {
+      "passed": 74.5,
+      "total": 74.5,
+      "score": 1.0
+    },
+    "GET /api/v1/Books": {
+      "passed": 1680.0,
+      "total": 1680.0,
+      "score": 1.0
+    },
+    "GET /api/v1/Books//8": {
+      "passed": 9.0,
+      "total": 9.0,
+      "score": 1.0
+    },
+    "GET /api/v1/Books/1/extra": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "GET /api/v1/Books/{id}": {
+      "passed": 418.5,
+      "total": 418.5,
+      "score": 1.0
+    },
+    "GET /api/v1/CoverPhotos": {
+      "passed": 1260.0,
+      "total": 1260.0,
+      "score": 1.0
+    },
+    "GET /api/v1/CoverPhotos/books/covers/{idBook}": {
+      "passed": 135.5,
+      "total": 135.5,
+      "score": 1.0
+    },
+    "GET /api/v1/CoverPhotos/{id}": {
+      "passed": 77.5,
+      "total": 77.5,
+      "score": 1.0
+    },
+    "GET /api/v1/Nope": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "GET /api/v1/Users": {
+      "passed": 240.0,
+      "total": 240.0,
+      "score": 1.0
+    },
+    "GET /api/v1/Users/{id}": {
+      "passed": 232.0,
+      "total": 232.0,
+      "score": 1.0
+    },
+    "GET /api/v2/Books": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "GET /index.html": {
+      "passed": 7.0,
+      "total": 7.0,
+      "score": 1.0
+    },
+    "HEAD /api/v1/Authors/authors/books/1": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "HEAD /api/v1/Books/1": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "OPTIONS /api/v1/Activities": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "OPTIONS /api/v1/Users/1": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    }
+  },
+  "scenarios": {
+    "tests/e2e/test_scenarios.py::test_list_is_complete_and_ordered[Activities]": [
+      {
+        "call": "GET /api/v1/Activities",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_list_is_complete_and_ordered[Books]": [
+      {
+        "call": "GET /api/v1/Books",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_list_is_complete_and_ordered[CoverPhotos]": [
+      {
+        "call": "GET /api/v1/CoverPhotos",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_list_is_complete_and_ordered[Users]": [
+      {
+        "call": "GET /api/v1/Users",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_books_follow_their_rules": [
+      {
+        "call": "GET /api/v1/Books",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_activities_follow_their_rules": [
+      {
+        "call": "GET /api/v1/Activities",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_users_and_cover_photos_follow_their_rules": [
+      {
+        "call": "GET /api/v1/Users",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/CoverPhotos",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_query_parameters_are_ignored": [
+      {
+        "call": "GET /api/v1/Users",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Users",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_timestamps_move_with_the_clock": [
+      {
+        "call": "GET /api/v1/Activities/1",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Activities/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_item_matches_list[Activities-1]": [
+      {
+        "call": "GET /api/v1/Activities",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Activities/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_item_matches_list[Activities-2]": [
+      {
+        "call": "GET /api/v1/Activities",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Activities/2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_item_matches_list[Activities-30]": [
+      {
+        "call": "GET /api/v1/Activities",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Activities/30",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_item_matches_list[Books-1]": [
+      {
+        "call": "GET /api/v1/Books",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Books/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_item_matches_list[Books-57]": [
+      {
+        "call": "GET /api/v1/Books",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Books/57",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_item_matches_list[Books-200]": [
+      {
+        "call": "GET /api/v1/Books",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Books/200",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_item_matches_list[CoverPhotos-1]": [
+      {
+        "call": "GET /api/v1/CoverPhotos",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/CoverPhotos/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_item_matches_list[CoverPhotos-133]": [
+      {
+        "call": "GET /api/v1/CoverPhotos",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/CoverPhotos/133",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_item_matches_list[CoverPhotos-200]": [
+      {
+        "call": "GET /api/v1/CoverPhotos",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/CoverPhotos/200",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_item_matches_list[Users-1]": [
+      {
+        "call": "GET /api/v1/Users",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Users/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_item_matches_list[Users-10]": [
+      {
+        "call": "GET /api/v1/Users",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Users/10",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_item_is_404[Activities-31]": [
+      {
+        "call": "GET /api/v1/Activities/31",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_item_is_404[Activities-0]": [
+      {
+        "call": "GET /api/v1/Activities/0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_item_is_404[Books-201]": [
+      {
+        "call": "GET /api/v1/Books/201",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_item_is_404[Books--1]": [
+      {
+        "call": "GET /api/v1/Books/-1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_item_is_404[Books-2147483647]": [
+      {
+        "call": "GET /api/v1/Books/2147483647",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_item_is_404[Books--2147483648]": [
+      {
+        "call": "GET /api/v1/Books/-2147483648",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_item_is_404[CoverPhotos-201]": [
+      {
+        "call": "GET /api/v1/CoverPhotos/201",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_item_is_404[Users-11]": [
+      {
+        "call": "GET /api/v1/Users/11",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_item_is_404[Users--0]": [
+      {
+        "call": "GET /api/v1/Users/-0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_item_is_404[Authors-100000]": [
+      {
+        "call": "GET /api/v1/Authors/100000",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_item_is_404[Authors-0]": [
+      {
+        "call": "GET /api/v1/Authors/0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_id_is_400[Books-abc-abc]": [
+      {
+        "call": "GET /api/v1/Books/abc",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_id_is_400[Books-1.5-1.5]": [
+      {
+        "call": "GET /api/v1/Books/1.5",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_id_is_400[Books-1e2-1e2]": [
+      {
+        "call": "GET /api/v1/Books/1e2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_id_is_400[Books-2147483648-2147483648]": [
+      {
+        "call": "GET /api/v1/Books/2147483648",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_id_is_400[Activities--2147483649--2147483649]": [
+      {
+        "call": "GET /api/v1/Activities/-2147483649",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_id_is_400[Users-true-true]": [
+      {
+        "call": "GET /api/v1/Users/true",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_id_is_400[CoverPhotos-0xZZ-0xZZ]": [
+      {
+        "call": "GET /api/v1/CoverPhotos/0xZZ",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_id_is_400[CoverPhotos-0x123456789-0x123456789]": [
+      {
+        "call": "GET /api/v1/CoverPhotos/0x123456789",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_id_is_400[Authors-one-one]": [
+      {
+        "call": "GET /api/v1/Authors/one",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_id_is_400[Users-\\u20ac-%E2%82%AC]": [
+      {
+        "call": "GET /api/v1/Users/%E2%82%AC",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_empty_or_signed_hex_id_is_400[0x]": [
+      {
+        "call": "GET /api/v1/Users/0x",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_empty_or_signed_hex_id_is_400[%23]": [
+      {
+        "call": "GET /api/v1/Users/%23",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_empty_or_signed_hex_id_is_400[%26h]": [
+      {
+        "call": "GET /api/v1/Users/%26h",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_empty_or_signed_hex_id_is_400[0x-1]": [
+      {
+        "call": "GET /api/v1/Users/0x-1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_lenient_id_binding[+5-5]": [
+      {
+        "call": "GET /api/v1/Books/+5",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_lenient_id_binding[01-1]": [
+      {
+        "call": "GET /api/v1/Books/01",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_lenient_id_binding[%201-1]": [
+      {
+        "call": "GET /api/v1/Books/%201",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_lenient_id_binding[7%20-7]": [
+      {
+        "call": "GET /api/v1/Books/7%20",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_lenient_id_binding[0x10-16]": [
+      {
+        "call": "GET /api/v1/Books/0x10",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_lenient_id_binding[0XA-10]": [
+      {
+        "call": "GET /api/v1/Books/0XA",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_lenient_id_binding[-0-None]": [
+      {
+        "call": "GET /api/v1/Books/-0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_authors_cover_every_book": [
+      {
+        "call": "GET /api/v1/Authors",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_first_authors_always_belong_to_book_1[1]": [
+      {
+        "call": "GET /api/v1/Authors/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_first_authors_always_belong_to_book_1[2]": [
+      {
+        "call": "GET /api/v1/Authors/2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_author_in_the_middle": [
+      {
+        "call": "GET /api/v1/Authors/300",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_authors_of_a_book[1]": [
+      {
+        "call": "GET /api/v1/Authors/authors/books/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_authors_of_a_book[2]": [
+      {
+        "call": "GET /api/v1/Authors/authors/books/2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_authors_of_a_book[3]": [
+      {
+        "call": "GET /api/v1/Authors/authors/books/3",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_authors_of_a_book[100]": [
+      {
+        "call": "GET /api/v1/Authors/authors/books/100",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_authors_of_a_book[200]": [
+      {
+        "call": "GET /api/v1/Authors/authors/books/200",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_authors_of_unknown_book_is_empty[0]": [
+      {
+        "call": "GET /api/v1/Authors/authors/books/0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_authors_of_unknown_book_is_empty[-1]": [
+      {
+        "call": "GET /api/v1/Authors/authors/books/-1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_authors_of_unknown_book_is_empty[201]": [
+      {
+        "call": "GET /api/v1/Authors/authors/books/201",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_authors_of_unknown_book_is_empty[2147483647]": [
+      {
+        "call": "GET /api/v1/Authors/authors/books/2147483647",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_authors_of_malformed_book_is_400": [
+      {
+        "call": "GET /api/v1/Authors/authors/books/abc",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Authors/authors/books/2147483648",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_covers_of_a_book[1]": [
+      {
+        "call": "GET /api/v1/CoverPhotos/books/covers/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_covers_of_a_book[42]": [
+      {
+        "call": "GET /api/v1/CoverPhotos/books/covers/42",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_covers_of_a_book[200]": [
+      {
+        "call": "GET /api/v1/CoverPhotos/books/covers/200",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_covers_of_a_book[0x10]": [
+      {
+        "call": "GET /api/v1/CoverPhotos/books/covers/0x10",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_covers_of_a_book[+9]": [
+      {
+        "call": "GET /api/v1/CoverPhotos/books/covers/+9",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_covers_of_unknown_book_is_empty[0]": [
+      {
+        "call": "GET /api/v1/CoverPhotos/books/covers/0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_covers_of_unknown_book_is_empty[-1]": [
+      {
+        "call": "GET /api/v1/CoverPhotos/books/covers/-1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_covers_of_unknown_book_is_empty[201]": [
+      {
+        "call": "GET /api/v1/CoverPhotos/books/covers/201",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_covers_of_malformed_book_is_400": [
+      {
+        "call": "GET /api/v1/CoverPhotos/books/covers/1.0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_every_cover_points_to_a_book": [
+      {
+        "call": "GET /api/v1/Books",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/CoverPhotos",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Books/1",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Books/2",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Books/3",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_book_with_its_authors_and_cover": [
+      {
+        "call": "GET /api/v1/Books/12",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Authors/authors/books/12",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/CoverPhotos/books/covers/12",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routes_ignore_case_and_trailing_slash[/api/v1/books]": [
+      {
+        "call": "GET /api/v1/books",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routes_ignore_case_and_trailing_slash[/API/V1/BOOKS/3]": [
+      {
+        "call": "GET /API/V1/BOOKS/3",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routes_ignore_case_and_trailing_slash[/api/v1/Books/]": [
+      {
+        "call": "GET /api/v1/Books/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routes_ignore_case_and_trailing_slash[/api/v1/users/2/]": [
+      {
+        "call": "GET /api/v1/users/2/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routes_ignore_case_and_trailing_slash[/api/v1/authors/AUTHORS/Books/5]": [
+      {
+        "call": "GET /api/v1/authors/AUTHORS/Books/5",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_routes_ignore_case_and_trailing_slash[/api/v1/coverphotos/BOOKS/covers/9]": [
+      {
+        "call": "GET /api/v1/coverphotos/BOOKS/covers/9",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_route_is_empty_404[/api/v1/Nope]": [
+      {
+        "call": "GET /api/v1/Nope",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_route_is_empty_404[/api/v2/Books]": [
+      {
+        "call": "GET /api/v2/Books",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_route_is_empty_404[/api/v1/Books/1/extra]": [
+      {
+        "call": "GET /api/v1/Books/1/extra",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_other_methods_are_405[HEAD-/api/v1/Books/1-DELETE, GET, PUT]": [
+      {
+        "call": "HEAD /api/v1/Books/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_other_methods_are_405[OPTIONS-/api/v1/Users/1-DELETE, GET, PUT]": [
+      {
+        "call": "OPTIONS /api/v1/Users/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_other_methods_are_405[OPTIONS-/api/v1/Activities-GET, POST]": [
+      {
+        "call": "OPTIONS /api/v1/Activities",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_other_methods_are_405[HEAD-/api/v1/Authors/authors/books/1-GET]": [
+      {
+        "call": "HEAD /api/v1/Authors/authors/books/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_api_version_in_query_or_header_is_ignored": [
+      {
+        "call": "GET /api/v1/Users/1",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Users/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_accept_header_does_not_change_the_answer": [
+      {
+        "call": "GET /api/v1/Users/3",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_accept_text_json_gets_text_json": [
+      {
+        "call": "GET /api/v1/Users/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unsupported_api_version_on_reads[Accept]": [
+      {
+        "call": "GET /api/v1/Books/2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unsupported_api_version_on_reads[Content-Type]": [
+      {
+        "call": "GET /api/v1/Books/2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_supported_or_unreadable_versions_pass[1.0]": [
+      {
+        "call": "GET /api/v1/Users/4",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_supported_or_unreadable_versions_pass[1]": [
+      {
+        "call": "GET /api/v1/Users/4",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_supported_or_unreadable_versions_pass[abc]": [
+      {
+        "call": "GET /api/v1/Users/4",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_more_lenient_id_binding[%C2%A03-3]": [
+      {
+        "call": "GET /api/v1/Books/%C2%A03",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_more_lenient_id_binding[0x+1-1]": [
+      {
+        "call": "GET /api/v1/Books/0x+1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_more_lenient_id_binding[0x000000010-16]": [
+      {
+        "call": "GET /api/v1/Books/0x000000010",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_more_lenient_id_binding[&H1f-31]": [
+      {
+        "call": "GET /api/v1/Books/&H1f",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_empty_segments_collapse": [
+      {
+        "call": "GET /api/v1/Books//8",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v1/Books/1%2F2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_root_redirects_to_swagger_ui": [
+      {
+        "call": "GET /",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /index.html",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_writes.py::test_created_user_is_echoed_but_not_stored": [],
+    "tests/e2e/test_writes.py::test_user_body_errors": [],
+    "tests/e2e/test_writes.py::test_non_json_bodies_are_415": [],
+    "tests/e2e/test_writes.py::test_unsupported_api_version_in_media_type": [],
+    "tests/e2e/test_writes.py::test_author_binding_rules": [],
+    "tests/e2e/test_writes.py::test_cover_photo_bodies": [],
+    "tests/e2e/test_writes.py::test_activity_dates": [],
+    "tests/e2e/test_writes.py::test_replacing_echoes_the_body_id": [],
+    "tests/e2e/test_writes.py::test_replaced_user_is_not_stored": [],
+    "tests/e2e/test_writes.py::test_replace_cover_photo_errors": [],
+    "tests/e2e/test_writes.py::test_deleting_changes_nothing": []
+  }
+}

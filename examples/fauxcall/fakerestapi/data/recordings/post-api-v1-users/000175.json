@@ -1,0 +1,98 @@
+{
+  "id": "000175",
+  "endpoint": "POST /api/v1/Users",
+  "purpose": "variation",
+  "plan_call": "users-post-full",
+  "started_at": "2026-10-11T12:42:08.531988Z",
+  "started_ns": 1791722528531988000,
+  "elapsed_ms": 450.676,
+  "ttfb_ms": 449.519,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Users",
+    "path": "/api/v1/Users",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "63"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 9001,
+        "userName": "user_d46dcb3c",
+        "password": "probe-pass"
+      },
+      "size": 63
+    }
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/json; charset=utf-8; v=1.0"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:42:08 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "api-supported-versions",
+        "1.0"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8; v=1.0",
+      "json": {
+        "id": 9001,
+        "userName": "user_d46dcb3c",
+        "password": "probe-pass"
+      },
+      "size": 63
+    }
+  },
+  "redacted": [
+    "request.pii:$.userName"
+  ],
+  "pseudonymized": [
+    "response:$.userName"
+  ]
+}

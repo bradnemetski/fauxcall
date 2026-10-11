@@ -1,0 +1,505 @@
+{
+  "name": "probes-2",
+  "created_at": "2026-10-11T13:00:00Z",
+  "calls": [
+    {
+      "id": "id-+5",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/+5"
+      }
+    },
+    {
+      "id": "id-01",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/01"
+      }
+    },
+    {
+      "id": "id-2147483647",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/2147483647"
+      }
+    },
+    {
+      "id": "id-2147483648",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/2147483648"
+      }
+    },
+    {
+      "id": "id--2147483648",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/-2147483648"
+      }
+    },
+    {
+      "id": "id--2147483649",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/-2147483649"
+      }
+    },
+    {
+      "id": "id-%201",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/%201"
+      }
+    },
+    {
+      "id": "id-1%20",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/1%20"
+      }
+    },
+    {
+      "id": "id-0x10",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/0x10"
+      }
+    },
+    {
+      "id": "id-1e2",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/1e2"
+      }
+    },
+    {
+      "id": "id-%E2%82%AC",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/%E2%82%AC"
+      }
+    },
+    {
+      "id": "id--0",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Books/-0"
+      }
+    },
+    {
+      "id": "head-book",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "HEAD",
+        "path": "/api/v1/Books/1"
+      }
+    },
+    {
+      "id": "options-book",
+      "endpoint": "GET /api/v1/Books/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "OPTIONS",
+        "path": "/api/v1/Books/1"
+      }
+    },
+    {
+      "id": "authors-bybook-big",
+      "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Authors/authors/books/2147483648"
+      }
+    },
+    {
+      "id": "authors-lower",
+      "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/authors/AUTHORS/Books/5"
+      }
+    },
+    {
+      "id": "api-version-q",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/1?api-version=2.0"
+      }
+    },
+    {
+      "id": "api-version-h",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/1",
+        "headers": {
+          "api-version": "2.0"
+        }
+      }
+    },
+    {
+      "id": "b-num-as-string",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "json_body": {
+          "id": "5",
+          "pageCount": "12"
+        }
+      }
+    },
+    {
+      "id": "b-case-insensitive",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "json_body": {
+          "ID": 4,
+          "Title": "fauxcall-probe",
+          "PAGECOUNT": 3
+        }
+      }
+    },
+    {
+      "id": "b-title-number",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "json_body": {
+          "id": 1,
+          "title": 5
+        }
+      }
+    },
+    {
+      "id": "b-pagecount-float",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "json_body": {
+          "id": 1,
+          "pageCount": 1.5
+        }
+      }
+    },
+    {
+      "id": "b-pagecount-null",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "json_body": {
+          "id": 1,
+          "pageCount": null
+        }
+      }
+    },
+    {
+      "id": "b-date-bad",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "json_body": {
+          "id": 1,
+          "publishDate": "notadate"
+        }
+      }
+    },
+    {
+      "id": "b-date-dateonly",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "json_body": {
+          "id": 1,
+          "publishDate": "2026-01-02"
+        }
+      }
+    },
+    {
+      "id": "b-date-offset",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "json_body": {
+          "id": 1,
+          "publishDate": "2026-01-02T03:04:05.1234567+02:00"
+        }
+      }
+    },
+    {
+      "id": "b-date-naive",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "json_body": {
+          "id": 1,
+          "publishDate": "2026-01-02T03:04:05.5"
+        }
+      }
+    },
+    {
+      "id": "b-array",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "json_body": []
+      }
+    },
+    {
+      "id": "b-null",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "text_body": "null",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "b-multiline",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "text_body": "{\n  \"id\": 1,\n  \"title\": \"x\",\n  \"pageCount\": \"abc\"\n}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "b-no-ctype",
+      "endpoint": "POST /api/v1/Books",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Books",
+        "text_body": "{\"id\": 1}",
+        "content_type": ""
+      }
+    },
+    {
+      "id": "a-completed-string",
+      "endpoint": "POST /api/v1/Activities",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Activities",
+        "json_body": {
+          "id": 1,
+          "completed": "true"
+        }
+      }
+    },
+    {
+      "id": "a-completed-int",
+      "endpoint": "POST /api/v1/Activities",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Activities",
+        "json_body": {
+          "id": 1,
+          "completed": 1
+        }
+      }
+    },
+    {
+      "id": "a-trailing-comma",
+      "endpoint": "POST /api/v1/Activities",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Activities",
+        "text_body": "{\"id\": 1,}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "a-truncated",
+      "endpoint": "POST /api/v1/Activities",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Activities",
+        "text_body": "{\"id\": 1",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "a-textjson",
+      "endpoint": "POST /api/v1/Activities",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Activities",
+        "text_body": "{\"id\": 3, \"title\": \"fauxcall-probe\"}",
+        "content_type": "text/json"
+      }
+    },
+    {
+      "id": "a-mergepatch",
+      "endpoint": "POST /api/v1/Activities",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Activities",
+        "text_body": "{\"id\": 3}",
+        "content_type": "application/merge-patch+json"
+      }
+    },
+    {
+      "id": "a-garbage",
+      "endpoint": "POST /api/v1/Activities",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Activities",
+        "text_body": "hello",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "a-dup-keys",
+      "endpoint": "POST /api/v1/Activities",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Activities",
+        "text_body": "{\"id\": 1, \"id\": 2}",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "u-username-obj",
+      "endpoint": "POST /api/v1/Users",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Users",
+        "json_body": {
+          "id": 1,
+          "userName": {
+            "a": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "u-unicode",
+      "endpoint": "POST /api/v1/Users",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Users",
+        "json_body": {
+          "id": 1,
+          "userName": "fauxcall-probe-\u00e9\u20ac<>&'",
+          "password": "p"
+        }
+      }
+    },
+    {
+      "id": "au-idbook-big",
+      "endpoint": "POST /api/v1/Authors",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Authors",
+        "json_body": {
+          "id": 1,
+          "idBook": 2147483648
+        }
+      }
+    },
+    {
+      "id": "au-idbook-negative",
+      "endpoint": "POST /api/v1/Authors",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/Authors",
+        "json_body": {
+          "id": -5,
+          "idBook": -1
+        }
+      }
+    },
+    {
+      "id": "c-url-notaurl",
+      "endpoint": "POST /api/v1/CoverPhotos",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/CoverPhotos",
+        "json_body": {
+          "id": 1,
+          "idBook": 1,
+          "url": "not a url"
+        }
+      }
+    },
+    {
+      "id": "c-id-bool",
+      "endpoint": "POST /api/v1/CoverPhotos",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/CoverPhotos",
+        "json_body": {
+          "id": true
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "name": "users-reads",
+  "created_at": "2026-10-11T12:00:00Z",
+  "calls": [
+    {
+      "id": "users-list-1",
+      "endpoint": "GET /api/v1/Users",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users"
+      }
+    },
+    {
+      "id": "users-list-2",
+      "endpoint": "GET /api/v1/Users",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users"
+      }
+    },
+    {
+      "id": "users-list-q",
+      "endpoint": "GET /api/v1/Users",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users",
+        "query": [
+          [
+            "id",
+            "1"
+          ],
+          [
+            "limit",
+            "2"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "users-get-1",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/1"
+      }
+    },
+    {
+      "id": "users-get-2",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/2"
+      }
+    },
+    {
+      "id": "users-get-5",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/5"
+      }
+    },
+    {
+      "id": "users-get-10",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/10"
+      }
+    },
+    {
+      "id": "users-get-11",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/11"
+      }
+    },
+    {
+      "id": "users-get-bad-0",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/0"
+      }
+    },
+    {
+      "id": "users-get-bad--1",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/-1"
+      }
+    },
+    {
+      "id": "users-get-bad-abc",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/abc"
+      }
+    },
+    {
+      "id": "users-get-bad-99999999999",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/99999999999"
+      }
+    },
+    {
+      "id": "users-get-bad-1.5",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/1.5"
+      }
+    },
+    {
+      "id": "users-get-time",
+      "endpoint": "GET /api/v1/Users/{id}",
+      "purpose": "time_profile",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/Users/1"
+      },
+      "repeat": 4,
+      "interval_ms": 15000
+    }
+  ]
+}

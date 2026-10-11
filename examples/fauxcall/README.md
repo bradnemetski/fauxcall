@@ -6,6 +6,7 @@ workspace.
 
 | fake | imitates | port |
 |---|---|---|
+| [`fakerestapi`](fakerestapi/README.md) | FakeRESTApi.Web V1 | 8705 |
 | [`frankfurter`](frankfurter/README.md) | Frankfurter API | 8701 |
 | [`petstore`](petstore/README.md) | Swagger Petstore - OpenAPI 3.0 | 8704 |
 | [`refapi`](refapi/README.md) | FauxCall Reference Market API | 8702 |
@@ -15,7 +16,7 @@ workspace.
 
 ```bash
 uvx fauxcall up            # start every fake, print base URLs (and MCP config)
-uvx fauxcall up frankfurter   # just one
+uvx fauxcall up fakerestapi   # just one
 docker compose up          # or in containers
 ```
 

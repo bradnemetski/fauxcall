@@ -1,0 +1,76 @@
+{
+  "id": "000083",
+  "endpoint": "GET /api/v1/Authors/authors/books/{idBook}",
+  "purpose": "invalid",
+  "plan_call": "authors-bybook-abc",
+  "started_at": "2026-10-11T12:37:01.799260Z",
+  "started_ns": 1791722221799260000,
+  "elapsed_ms": 104.882,
+  "ttfb_ms": 103.525,
+  "request": {
+    "method": "GET",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Authors/authors/books/abc",
+    "path": "/api/v1/Authors/authors/books/abc",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:37:01 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-46704af0fa2d574cad98d99bb8c3b49f-17e5786280cbec49-00",
+        "errors": {
+          "idBook": [
+            "The value 'abc' is not valid."
+          ]
+        }
+      },
+      "size": 245
+    }
+  }
+}

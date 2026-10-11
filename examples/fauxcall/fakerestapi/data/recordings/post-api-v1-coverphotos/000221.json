@@ -1,0 +1,89 @@
+{
+  "id": "000221",
+  "endpoint": "POST /api/v1/CoverPhotos",
+  "purpose": "invalid",
+  "plan_call": "coverphotos-post-nobody",
+  "started_at": "2026-10-11T12:42:32.913352Z",
+  "started_ns": 1791722552913352000,
+  "elapsed_ms": 105.45,
+  "ttfb_ms": 104.986,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/CoverPhotos",
+    "path": "/api/v1/CoverPhotos",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "content-length",
+        "0"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json",
+      "text": ""
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:42:32 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "traceId": "00-87ada70ba795c142b768f4c57ce83235-fa1d31616d1f2f42-00",
+        "errors": {
+          "": [
+            "A non-empty request body is required."
+          ]
+        }
+      },
+      "size": 247
+    }
+  }
+}

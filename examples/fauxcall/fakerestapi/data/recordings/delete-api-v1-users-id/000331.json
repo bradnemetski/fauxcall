@@ -1,0 +1,80 @@
+{
+  "id": "000331",
+  "endpoint": "DELETE /api/v1/Users/{id}",
+  "purpose": "edge",
+  "plan_call": "P4",
+  "started_at": "2026-10-11T13:16:29.874655Z",
+  "started_ns": 1791724589874655000,
+  "elapsed_ms": 102.749,
+  "ttfb_ms": 101.64,
+  "request": {
+    "method": "DELETE",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Users/99999",
+    "path": "/api/v1/Users/99999",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "application/json; v=2.0"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 13:16:29 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "api-supported-versions",
+        "1.0"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json; charset=utf-8",
+      "json": {
+        "error": {
+          "code": "UnsupportedApiVersion",
+          "message": "The HTTP resource that matches the request URI 'https://fakerestapi.azurewebsites.net/api/v1/Users/99999' does not support the API version '2.0'.",
+          "innerError": null
+        }
+      },
+      "size": 218
+    }
+  }
+}

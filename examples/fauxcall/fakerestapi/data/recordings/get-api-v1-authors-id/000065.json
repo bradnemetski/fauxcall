@@ -1,0 +1,74 @@
+{
+  "id": "000065",
+  "endpoint": "GET /api/v1/Authors/{id}",
+  "plan_call": "authors-get-100000",
+  "started_at": "2026-10-11T12:36:08.206309Z",
+  "started_ns": 1791722168206309000,
+  "elapsed_ms": 105.978,
+  "ttfb_ms": 104.921,
+  "request": {
+    "method": "GET",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Authors/100000",
+    "path": "/api/v1/Authors/100000",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8; v=1.0"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:36:08 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ],
+      [
+        "api-supported-versions",
+        "1.0"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8; v=1.0",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+        "title": "Not Found",
+        "status": 404,
+        "traceId": "00-705f3ac29afe184aac1ae0c492c68fbc-4e2f0bfe22eb2743-00"
+      },
+      "size": 161
+    }
+  }
+}

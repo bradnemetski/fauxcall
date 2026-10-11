@@ -1,0 +1,85 @@
+{
+  "id": "000142",
+  "endpoint": "POST /api/v1/Books",
+  "purpose": "invalid",
+  "plan_call": "books-post-textplain",
+  "started_at": "2026-10-11T12:41:51.226478Z",
+  "started_ns": 1791722511226478000,
+  "elapsed_ms": 105.919,
+  "ttfb_ms": 104.642,
+  "request": {
+    "method": "POST",
+    "url": "https://fakerestapi.azurewebsites.net/api/v1/Books",
+    "path": "/api/v1/Books",
+    "headers": [
+      [
+        "host",
+        "fakerestapi.azurewebsites.net"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "text/plain"
+      ],
+      [
+        "content-length",
+        "141"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/plain",
+      "text": "{\"id\": 9001, \"title\": \"fauxcall-probe book\", \"description\": \"probe\", \"pageCount\": 123, \"excerpt\": \"x\", \"publishDate\": \"2026-01-02T03:04:05Z\"}",
+      "size": 141
+    }
+  },
+  "response": {
+    "status": 415,
+    "reason": "Unsupported Media Type",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "content-type",
+        "application/problem+json; charset=utf-8"
+      ],
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:41:51 GMT"
+      ],
+      [
+        "server",
+        "Kestrel"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/problem+json; charset=utf-8",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc7231#section-6.5.13",
+        "title": "Unsupported Media Type",
+        "status": 415,
+        "traceId": "00-f8b6440f711a8c4d95eb031d4279318e-79e1b5a1d7e5fc4c-00"
+      },
+      "size": 175
+    }
+  }
+}
