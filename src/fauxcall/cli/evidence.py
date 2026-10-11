@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import fnmatch
 import json
+import statistics
 from collections import Counter, defaultdict
 from pathlib import Path  # noqa: TC003 - Typer resolves the annotations at runtime
 from typing import TYPE_CHECKING, Annotated, Final
@@ -39,6 +40,7 @@ from fauxcall.storage import read_model, write_model
 if TYPE_CHECKING:
     from fauxcall.model.api import ApiModel
     from fauxcall.model.endpoints import EndpointModel
+    from fauxcall.model.mcp import McpToolModel
     from fauxcall.model.recording import Exchange
     from fauxcall.paths import FakeLayout
     from fauxcall.types import JsonValue
@@ -496,13 +498,46 @@ def analyze_endpoint(
     found = model.find_endpoint(endpoint)
     if found is not None:
         _schema_report(found, by_status)
-    profile = LatencyProfile.from_samples([e.elapsed_ms for e in exchanges if not e.stream])
+    timed = [e for e in exchanges if not e.stream]
+    profile = LatencyProfile.from_samples(
+        [e.elapsed_ms for e in timed if not _failed(e)],
+        errors=[e.elapsed_ms for e in timed if _failed(e)],
+    )
+    errors = profile.error_samples_ms
     echo(
         f"\nLatency: p50 {profile.p50_ms:.0f} ms, p90 {profile.p90_ms:.0f} ms, "
         f"p99 {profile.p99_ms:.0f} ms"
+        + (f"; errors ({len(errors)}): median {statistics.median(errors):.0f} ms" if errors else "")
     )
     if apply and found is not None:
         _apply(fake, model, found.id, by_status, profile)
+    elif apply and (tool := _tool_of(model, endpoint)) is not None:
+        tool.latency = profile  # an MCP tool: its timing is what --apply can store
+        problems = save_model(fake, model)
+        echo(
+            "\nmodel updated" + ("" if not problems else " (problems: " + "; ".join(problems) + ")")
+        )
+
+
+def _failed(exchange: Exchange) -> bool:
+    """An error answer: an HTTP error status, a JSON-RPC error or a tool result with isError."""
+    response = exchange.response
+    if response is None:
+        return False
+    if response.status >= 400:  # noqa: PLR2004 - HTTP errors
+        return True
+    message = response.body.json_value
+    result = message.get("result") if isinstance(message, dict) else None
+    return isinstance(message, dict) and (
+        "error" in message or (isinstance(result, dict) and result.get("isError") is True)
+    )
+
+
+def _tool_of(model: ApiModel, endpoint: str) -> McpToolModel | None:
+    prefix = "MCP tools/call:"
+    if model.mcp is None or not endpoint.startswith(prefix):
+        return None
+    return model.mcp.tool(endpoint.removeprefix(prefix))
 
 
 def _apply(

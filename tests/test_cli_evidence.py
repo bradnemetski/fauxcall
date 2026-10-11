@@ -747,6 +747,7 @@ def test_analyze_endpoint_reports_and_applies(
     assert "## Fields (successful responses)" in report
     assert "## Documented vs observed (200)" in report
     assert "Latency: p50" in report
+    assert "; errors (1): median" in report  # the 404 is timed apart from the answers
     model = read_model(fake.model_path, ApiModel)
     assert model.endpoint("GET /v1/items/{id}").latency is None
     applied = invoke("analyze", "endpoint", "shop", "GET /v1/items/{id}", "--apply").output
@@ -754,6 +755,7 @@ def test_analyze_endpoint_reports_and_applies(
     model = read_model(fake.model_path, ApiModel)
     updated = model.endpoint("GET /v1/items/{id}")
     assert updated.latency is not None
+    assert (len(updated.latency.samples_ms), len(updated.latency.error_samples_ms)) == (2, 1)
     assert [v.status for v in updated.responses] == [200, 404]
     assert isinstance(updated.responses[0].observed_schema, dict)
     assert updated.responses[0].content_type == "application/json"
@@ -900,6 +902,45 @@ def test_analyze_style(ws: Workspace, monkeypatch: pytest.MonkeyPatch) -> None:
     assert style["key_separator"] == ":"
     model = read_model(fake.model_path, ApiModel)
     assert model.json_style.key_separator == ":"
+
+
+def test_analyze_a_tool_times_answers_and_errors_apart(ws: Workspace) -> None:
+    model = shop_model()
+    model.mcp = McpModel(tools=[McpToolModel(definition={"name": "ask"})])
+    fake = make_fake(ws, model)
+    store = RecordingStore(fake.recordings)
+    answer: JsonValue = {"content": [{"type": "text", "text": "an answer"}]}
+    replies: list[tuple[float, JsonValue]] = [
+        (15000.0, {"jsonrpc": "2.0", "id": 1, "result": answer}),
+        (12000.0, {"jsonrpc": "2.0", "id": 1, "result": answer}),
+        (250.0, {"jsonrpc": "2.0", "id": 1, "result": {"content": [], "isError": True}}),
+        (200.0, {"jsonrpc": "2.0", "id": 1, "error": {"code": -32602, "message": "bad"}}),
+    ]
+    for elapsed, message in replies:
+        store.save(
+            Exchange(
+                id=store.next_id(),
+                endpoint="MCP tools/call:ask",
+                started_at=datetime.now(UTC),
+                started_ns=0,
+                elapsed_ms=elapsed,
+                request=CapturedRequest(method=HttpMethod.POST, url=f"{BASE}/mcp", path="/mcp"),
+                response=CapturedResponse(status=200, body=Body(kind="json", json_value=message)),
+            )
+        )
+    output = invoke("analyze", "endpoint", "shop", "MCP tools/call:ask", "--apply").output
+    assert "Latency: p50 13500 ms" in output
+    assert "; errors (2): median 225 ms" in output
+    assert "model updated" in output
+    stored = read_model(fake.model_path, ApiModel)
+    assert stored.mcp is not None
+    tool = stored.mcp.tool("ask")
+    assert tool is not None
+    assert tool.latency is not None
+    assert (tool.latency.samples_ms, tool.latency.error_samples_ms) == (
+        [12000.0, 15000.0],
+        [200.0, 250.0],
+    )
 
 
 def test_analyze_endpoint_with_streams_and_text_bodies(ws: Workspace) -> None:

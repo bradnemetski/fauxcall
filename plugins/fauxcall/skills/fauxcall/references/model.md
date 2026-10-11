@@ -65,7 +65,8 @@ FastAPI's validation is bypassed; the engine validates parameters the way the **
 ## Responses, shapes and pagination
 
 `fauxcall analyze endpoint … --apply` fills `responses[]` (status, exact `content_type`,
-`observed_schema`, examples), `latency` and the API's `json_style`. You add:
+`observed_schema`, examples), `latency` (answers' and errors' times apart: `samples_ms`,
+`error_samples_ms`) and the API's `json_style`. You add:
 
 - `success_status` (e.g. 201 for creates).
 - `shape`: `record` (default), `list` (bare array), `envelope` (a recorded body as `template` whose

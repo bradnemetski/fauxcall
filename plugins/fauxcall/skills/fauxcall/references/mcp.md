@@ -70,7 +70,9 @@ errors (`isError: true`).
   `min_confidence`, `fallback` (`lexical` | `first` | `none`).
 - `invalid_args` — how the real server reports schema violations (`tool_error` result,
   `jsonrpc_error`, or `accept`), and `invalid_template` (a recorded error message, re-addressed).
-- `latency` — from `fauxcall analyze endpoint <name> "MCP tools/call:<tool>" --apply`.
+- `latency` — from `fauxcall analyze endpoint <name> "MCP tools/call:<tool>" --apply`, which times
+  answers and errors (JSON-RPC errors, `isError` results) apart: a tool that refuses bad arguments
+  in 250 ms and answers in 15 s keeps both.
 
 Errors for unknown tools/methods/missing sessions come from `model.mcp.errors` (recorded by the probes).
 

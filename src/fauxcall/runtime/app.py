@@ -303,7 +303,7 @@ class FakeRuntime:
             log.exception("fake_error", endpoint=endpoint_id)
             body: JsonValue = {"error": "fauxcall_error", "message": str(error)}
             response = ctx.respond(body, status=500, content_type="application/json")
-        await self._apply_latency(ctx, endpoint, started)
+        await self._apply_latency(ctx, endpoint, started, error=response.status_code >= 400)  # noqa: PLR2004
         self._record(ctx, response, started)
         if request.method.upper() not in {"GET", "HEAD", "OPTIONS"}:
             self.persist()
@@ -483,15 +483,19 @@ class FakeRuntime:
         return None
 
     async def _apply_latency(
-        self, ctx: RequestContext, endpoint: EndpointModel | None, started: float
+        self,
+        ctx: RequestContext,
+        endpoint: EndpointModel | None,
+        started: float,
+        *,
+        error: bool = False,
     ) -> None:
         if not self.settings.latency_enabled or endpoint is None or endpoint.latency is None:
             return
-        samples = endpoint.latency.samples_ms
-        if not samples:
+        target_ms = endpoint.latency.pick_ms(ctx.rng, error=error)
+        if target_ms is None:
             return
-        target = ctx.rng.choice(samples) / 1000
-        remaining = target - (time.perf_counter() - started)
+        remaining = target_ms / 1000 - (time.perf_counter() - started)
         if remaining > 0:
             await self._sleep(remaining)
 

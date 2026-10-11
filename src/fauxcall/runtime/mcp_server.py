@@ -44,6 +44,12 @@ TOOLS_CALL: Final = "tools/call"
 KEEP_ALIVE_SECONDS: Final = 15.0
 
 
+def _is_error_answer(answer: JsonObject) -> bool:
+    """A JSON-RPC error, or a tool result that reports one (``isError``)."""
+    result = answer.get("result")
+    return "error" in answer or (isinstance(result, dict) and result.get("isError") is True)
+
+
 class _InvalidCursorError(ValueError):
     """A ``cursor`` this server never issued."""
 
@@ -215,19 +221,51 @@ class McpFake:
             return self._error(
                 request_id, "unknown_tool", protocol.INVALID_PARAMS, f"Unknown tool: {name}"
             )
+        started = time.perf_counter()
         definition = tool.definition if isinstance(tool.definition, dict) else {}
         schema = definition.get("inputSchema")
         if isinstance(schema, dict) and tool.invalid_args != "accept":
             try:
                 jsonschema.validate(jsonfmt.plain(arguments), schema)
             except jsonschema.ValidationError as exc:
-                return self._invalid_args(request_id, tool, exc.message)
-        if (
-            tool.latency is not None
-            and tool.latency.samples_ms
-            and self.runtime.settings.latency_enabled
-        ):
-            await self.runtime.pause(ctx.rng.choice(tool.latency.samples_ms) / 1000)
+                refused = self._invalid_args(request_id, tool, exc.message)
+                await self._tool_latency(ctx, tool, refused, started, refused_arguments=True)
+                return refused
+        answer = await self._tool_answer(ctx, request_id, tool, arguments)
+        await self._tool_latency(ctx, tool, answer, started)
+        return answer
+
+    async def _tool_latency(
+        self,
+        ctx: RequestContext,
+        tool: McpToolModel,
+        answer: JsonObject,
+        started: float,
+        *,
+        refused_arguments: bool = False,
+    ) -> None:
+        """Take the tool's recorded time for this outcome, counting the time already spent.
+
+        Errors take the error times when they were recorded; a call refused for its arguments
+        is answered at once unless they were (how fast the server refuses was never measured).
+        """
+        latency = tool.latency
+        if latency is None or not self.runtime.settings.latency_enabled:
+            return
+        if refused_arguments and not latency.error_samples_ms:
+            return
+        target_ms = latency.pick_ms(ctx.rng, error=_is_error_answer(answer))
+        if target_ms is None:
+            return
+        remaining = target_ms / 1000 - (time.perf_counter() - started)
+        if remaining > 0:
+            await self.runtime.pause(remaining)
+
+    async def _tool_answer(
+        self, ctx: RequestContext, request_id: JsonValue, tool: McpToolModel, arguments: JsonObject
+    ) -> JsonObject:
+        """The tool's answer: its handler's, the closest recording's, or the unrecorded one."""
+        name = tool.name
         handler = self.tool_handlers.get(name)
         if handler is not None or tool.behavior == "computed":
             if handler is None:

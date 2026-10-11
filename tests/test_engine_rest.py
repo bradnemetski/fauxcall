@@ -331,6 +331,20 @@ async def test_latency_emulation_sleeps_toward_the_recorded_profile(tmp_path: Pa
     assert 0.2 < fake.sleeps[-1] <= 0.25
 
 
+async def test_errors_take_their_own_recorded_time(tmp_path: Path) -> None:
+    model = market_model()
+    model.endpoint("GET /v1/exchanges/{code}").latency = LatencyProfile.from_samples(
+        [900.0], errors=[50.0]
+    )
+    fake = harness(tmp_path, model=model, latency=True)
+    async with fake.client() as client:
+        assert (await client.get("/v1/exchanges/XNYS")).status_code == 200
+        answered = fake.sleeps[-1]
+        assert (await client.get("/v1/exchanges/NOPE")).status_code == 404
+    assert 0.85 < answered <= 0.9
+    assert 0 < fake.sleeps[-1] <= 0.05  # an unknown exchange is refused fast, as recorded
+
+
 async def test_persisted_state_survives_restart(tmp_path: Path) -> None:
     fake = harness(tmp_path, persist_state=True)
     async with fake.client() as client:

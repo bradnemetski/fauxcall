@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 from datetime import UTC, date, datetime, time
 from typing import TYPE_CHECKING
 
@@ -320,6 +321,20 @@ def test_latency_profile_from_samples() -> None:
     profile = LatencyProfile.from_samples([float(n) for n in range(1, 501)])
     assert len(profile.samples_ms) == 200
     assert profile.p50_ms < profile.p90_ms < profile.p99_ms
+
+
+def test_latency_of_answers_and_errors() -> None:
+    rng = random.Random(7)
+    split = LatencyProfile.from_samples([15000.0, 12000.0], errors=[250.0, -1.0])
+    assert (split.samples_ms, split.error_samples_ms) == ([12000.0, 15000.0], [250.0])
+    assert split.p50_ms == 13500.0  # percentiles describe answers
+    assert split.pick_ms(rng, error=True) == 250.0
+    assert split.pick_ms(rng) in {12000.0, 15000.0}
+    answers_only = LatencyProfile.from_samples([900.0])
+    assert answers_only.pick_ms(rng, error=True) == 900.0  # errors take answers' times
+    errors_only = LatencyProfile.from_samples([], errors=[300.0])
+    assert (errors_only.pick_ms(rng), errors_only.p50_ms) == (300.0, 0.0)
+    assert LatencyProfile().pick_ms(rng) is None
 
 
 def test_exchange_and_body_helpers() -> None:

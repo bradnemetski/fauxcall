@@ -205,10 +205,53 @@ async def test_latency_faults_and_journal(tmp_path: Path) -> None:
         injected = await _rpc(http, "tools/list")
         assert injected["error"]["message"] == "fauxcall injected error"
         assert (await _rpc(http, "ping"))["result"] == {}
-    assert sleeps == pytest.approx([0.04, 0.025])
+    assert 0 < sleeps[0] <= 0.04  # the recorded 40 ms in all, counting the time already spent
+    assert sleeps[1:] == pytest.approx([0.025])
     entries = runtime.journal.query(path_prefix="/mcp")
     assert [e.mcp_method for e in entries] == ["tools/call", "tools/list", "ping"]
     assert [e.fault for e in entries] == [None, "error", "delay"]
+
+
+def _sleeps(runtime: Any) -> list[float]:
+    sleeps: list[float] = []
+
+    async def record_sleep(seconds: float) -> None:
+        sleeps.append(seconds)
+
+    runtime._sleep = record_sleep
+    return sleeps
+
+
+async def test_tool_errors_take_their_own_recorded_time(tmp_path: Path) -> None:
+    split = LatencyProfile.from_samples([900.0], errors=[30.0])
+    tools = [McpToolModel(definition=STRUCTURE, behavior="replay", latency=split)]
+    app, runtime = _json_app(tmp_path, tools=tools, settings={"latency": True})
+    sleeps = _sleeps(runtime)
+    react: JsonValue = {"name": "read_wiki_structure", "arguments": {"repoName": "facebook/react"}}
+    async with asgi_client(app) as http:
+        assert "result" in await _rpc(http, "tools/call", react)
+        await _rpc(http, "tools/call", {"name": "read_wiki_structure", "arguments": {}})  # refused
+    assert 0.85 < sleeps[0] <= 0.9  # an answer takes an answer's time
+    assert 0 < sleeps[1] <= 0.03  # a refusal is fast, as recorded
+
+
+async def test_refusals_are_instant_without_recorded_error_times(tmp_path: Path) -> None:
+    tools = [
+        McpToolModel(
+            definition=STRUCTURE, behavior="error", latency=LatencyProfile.from_samples([0.0])
+        ),
+        McpToolModel(definition=ASK, behavior="error", latency=LatencyProfile()),
+    ]
+    app, runtime = _json_app(tmp_path, tools=tools, settings={"latency": True})
+    sleeps = _sleeps(runtime)
+    ask: JsonValue = {"name": "ask_question", "arguments": {"repoName": "a/b", "question": "?"}}
+    async with asgi_client(app) as http:
+        await _rpc(http, "tools/call", {"name": "read_wiki_structure", "arguments": {}})  # refused
+        await _rpc(
+            http, "tools/call", {"name": "read_wiki_structure", "arguments": {"repoName": "x/y"}}
+        )
+        await _rpc(http, "tools/call", ask)  # nothing was measured for it
+    assert sleeps == []
 
 
 async def test_journal_can_be_disabled(tmp_path: Path) -> None:
