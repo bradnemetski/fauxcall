@@ -15,6 +15,7 @@ from fauxcall.model.auth import AuthModel, AuthScheme
 from fauxcall.model.mcp import McpModel, McpToolModel
 from fauxcall.runtime import FakeRuntime, create_app, register_tool
 from fauxcall.testing.client import (
+    HARNESS_IDENTITY,
     MCP_METHOD,
     PLACEHOLDER_KEY,
     PLACEHOLDER_PASSWORD,
@@ -28,6 +29,7 @@ from fauxcall.testing.client import (
     RealPace,
     _observe,
     _stream_events,
+    harness_identity,
     mcp_call_path,
     placeholder_credentials,
     with_query,
@@ -381,6 +383,30 @@ def test_the_first_authorization_scheme_wins() -> None:
     }
     bearer = AuthModel(schemes=[AuthScheme(kind="bearer", prefix="JWT ")])
     assert placeholder_credentials(bearer).headers == {"Authorization": f"JWT {PLACEHOLDER_TOKEN}"}
+
+
+def test_the_harness_identity_holds_the_placeholders() -> None:
+    hex32 = AuthScheme(kind="api_key", location="header", name="X-Key", format_regex="[0-9a-f]{32}")
+    prefixed = AuthScheme(kind="api_key", location="query", name="k", prefix="k-")
+    other = [AuthScheme(kind="none"), AuthScheme(kind="bearer"), AuthScheme(kind="basic")]
+    auth = AuthModel(schemes=[hex32, prefixed, *other])
+    identity = harness_identity(auth)
+    assert identity.name == HARNESS_IDENTITY
+    assert identity.api_key is not None  # the first API key scheme's placeholder, without prefix
+    assert identity.api_key.get_secret_value() == placeholder_credentials(auth).headers["X-Key"]
+    assert identity.bearer_token is not None
+    assert identity.bearer_token.get_secret_value() == PLACEHOLDER_TOKEN
+    assert identity.password is not None
+    assert (identity.username, identity.password.get_secret_value()) == (
+        PLACEHOLDER_USER,
+        PLACEHOLDER_PASSWORD,
+    )
+    oauth = harness_identity(AuthModel(schemes=[AuthScheme(kind="oauth2")]))
+    assert oauth.bearer_token is not None
+    assert oauth.bearer_token.get_secret_value() == PLACEHOLDER_TOKEN
+    keyless = harness_identity(None)
+    assert (keyless.api_key, keyless.bearer_token, keyless.username) == (None, None, None)
+    assert PLACEHOLDER_KEY not in str(identity)  # secrets stay masked in reprs
 
 
 def test_placeholders_follow_the_credential_format() -> None:

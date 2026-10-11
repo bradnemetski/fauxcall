@@ -103,7 +103,9 @@ api_key = "test-key-mallory"
 ```
 
 Users can also be replaced at runtime: `PUT /__fauxcall/auth/users`. OAuth tokens issued by a fake's
-built-in authorization server are only accepted until they expire or are revoked.
+built-in authorization server are only accepted until they expire or are revoked. A fake's own tests
+build it with `settings_for_tests`, which adds the test harness's made-up credentials to an
+allowlist for the tests only; the fake you serve admits exactly the users configured here.
 
 ### Faults
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any, cast
 
+import httpx2
 import pytest
 from fastapi import FastAPI, Request
 from starlette.responses import JSONResponse, PlainTextResponse, Response
@@ -16,7 +17,8 @@ from fauxcall.model.recording import Body, CapturedRequest, CapturedResponse, Ex
 from fauxcall.privacy.pseudonym import Pseudonymizer
 from fauxcall.recording.store import RecordingStore
 from fauxcall.runtime import FakeRuntime, create_app, register_tool
-from fauxcall.storage import write_model
+from fauxcall.runtime.dynamic import dynamic_router
+from fauxcall.storage import read_model, write_model
 from fauxcall.testing.client import PLACEHOLDER_KEY, PLACEHOLDER_TOKEN
 from fauxcall.testing.support import (
     REPLAY_PURPOSES,
@@ -26,6 +28,7 @@ from fauxcall.testing.support import (
     fake_under_test,
     recorded_cases,
     replay_against,
+    settings_for_tests,
 )
 from fauxcall.types import HttpMethod
 
@@ -222,6 +225,62 @@ def test_fake_under_test_reads_the_fakes_settings(
     assert isinstance(fake.app_factory(), FastAPI)
     assert built[0].fast
     assert built[0].log_level == "WARNING"
+
+
+def _allowlist_fake(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, users: str) -> None:
+    monkeypatch.chdir(tmp_path)
+    pet = EndpointModel(id="GET /pets/{id}", method=HttpMethod.GET, path="/pets/{id}")
+    key = AuthScheme(kind="api_key", location="header", name="X-Api-Key")
+    auth = AuthModel(schemes=[key], required_for=["*"])
+    model = rest_model().model_copy(update={"endpoints": [pet], "auth": auth})
+    write_model(tmp_path / "data" / "model.json", model)
+    (tmp_path / "fauxcall.toml").write_text(f'[auth]\nmode = "allowlist"\nusers = [{users}]\n')
+    monkeypatch.setenv("FAUXCALL_DATA_DIR", str(tmp_path / "data"))
+
+
+def test_tests_let_the_harness_into_an_allowlist_fake(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _allowlist_fake(tmp_path, monkeypatch, '{ name = "demo", api_key = "demo-key" }')
+    served = FakeSettings()
+    assert [user.name for user in served.auth.users] == ["demo"]  # exactly the real API's users
+    tested = settings_for_tests(FakeSettings, seed=7)
+    assert (tested.fast, tested.log_level, tested.seed) == (True, "WARNING", 7)
+    assert [user.name for user in tested.auth.users] == ["demo", "fauxcall-test"]
+    harness = tested.auth.users[1]
+    assert harness.api_key is not None
+    assert harness.api_key.get_secret_value() == PLACEHOLDER_KEY
+
+
+def test_tests_do_not_add_the_harness_twice_or_outside_an_allowlist(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _allowlist_fake(tmp_path, monkeypatch, '{ name = "fauxcall-test", api_key = "mine" }')
+    assert [user.name for user in settings_for_tests(FakeSettings).auth.users] == ["fauxcall-test"]
+    (tmp_path / "fauxcall.toml").write_text('[auth]\nmode = "any"\n')
+    assert settings_for_tests(FakeSettings).auth.users == []
+
+
+async def test_the_harness_gets_in_and_a_served_fake_keeps_it_out(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _allowlist_fake(tmp_path, monkeypatch, '{ name = "demo", api_key = "demo-key" }')
+
+    def build_app(settings: FakeSettings) -> FastAPI:
+        model = read_model(settings.data_dir / "model.json", ApiModel)
+        return create_app(settings, routers=[dynamic_router(model)], configure_logs=False)
+
+    fake = fake_under_test(FakeSettings, build_app)
+    served = build_app(FakeSettings(fast=True))
+    statuses = []
+    for app in (fake.app_factory(), served):
+        async with httpx2.AsyncClient(
+            transport=httpx2.ASGITransport(app=app), base_url="http://fake.test"
+        ) as client:
+            response = await client.get("/pets/1", headers={"X-Api-Key": PLACEHOLDER_KEY})
+        statuses.append(response.status_code)
+    assert statuses[0] != 401  # the tests' fake lets the harness in
+    assert statuses[1] == 401  # the served fake admits only the real API's users
 
 
 def test_fake_under_test_without_a_key_and_with_a_real_url_override(

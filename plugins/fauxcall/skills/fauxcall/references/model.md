@@ -184,7 +184,10 @@ Which users the fake accepts is runtime configuration, not model: `auth.mode` (`
 test auth failures. When the real API has credentials with special powers that your scenarios use
 (a read-only key, a revoked key), add them as users there, with the same values, so both sides
 agree: e.g. `[[auth.users]]` `name = "readonly"`, `api_key = "readonly-key"`, `scopes = ["read"]`,
-or `status = "denied"` for a revoked key. Users without `scopes` are unrestricted.
+or `status = "denied"` for a revoked key. Users without `scopes` are unrestricted. With `allowlist`
+(only the real API's documented keys get in), never list the test harness's placeholder credentials:
+the tests add them for themselves (`settings_for_tests`), so the served fake admits exactly what the
+real API admits.
 
 ## Runtime judgments (Jev)
 

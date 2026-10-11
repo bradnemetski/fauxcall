@@ -10,7 +10,12 @@ from typing import TYPE_CHECKING
 
 import pytest
 from fauxcall.runtime.app import runtime_of_app
-from fauxcall.testing.support import RecordedCase, recorded_cases, replay_against
+from fauxcall.testing.support import (
+    RecordedCase,
+    recorded_cases,
+    replay_against,
+    settings_for_tests,
+)
 
 from {{ package }}.app import build_app
 from {{ package }}.settings import Settings
@@ -24,7 +29,7 @@ CASES = recorded_cases(Settings().data_dir)
 @pytest.fixture(scope="module")
 def app() -> FastAPI:
     """Built once (a large world takes a moment to load); every replay starts from a reset."""
-    return build_app(Settings(fast=True, log_level="WARNING"))
+    return build_app(settings_for_tests(Settings))
 
 
 @pytest.mark.parametrize("case", CASES, ids=[case.id for case in CASES])

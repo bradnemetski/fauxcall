@@ -7,6 +7,7 @@ import uvicorn
 {% if mcp %}
 from fauxcall.runtime.app import runtime_of_app
 {% endif %}
+from fauxcall.testing.support import settings_for_tests
 
 from {{ package }} import __main__ as entrypoint
 from {{ package }}.app import build_app
@@ -24,7 +25,7 @@ if TYPE_CHECKING:
 
 
 def _client() -> httpx2.AsyncClient:
-    app = build_app(Settings(fast=True, log_level="WARNING"))
+    app = build_app(settings_for_tests(Settings))
     return httpx2.AsyncClient(transport=httpx2.ASGITransport(app=app), base_url="http://fake.test")
 
 
@@ -55,7 +56,7 @@ def test_custom_tool_handlers_are_registered(monkeypatch: pytest.MonkeyPatch) ->
         return {"content": [], "isError": False, "echo": arguments}
 
     monkeypatch.setitem(TOOL_HANDLERS, "__probe__", tool)
-    fake = runtime_of_app(build_app(Settings(fast=True, log_level="WARNING"))).mcp
+    fake = runtime_of_app(build_app(settings_for_tests(Settings))).mcp
     assert fake is not None
     assert fake.tool_handlers["__probe__"] is tool
 {% endif %}

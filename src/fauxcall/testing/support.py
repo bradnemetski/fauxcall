@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING, Any, Final
 
 import httpx2
 
@@ -14,7 +14,12 @@ from fauxcall.recording.store import RecordingStore
 from fauxcall.runtime.app import runtime_of_app
 from fauxcall.storage import read_model
 from fauxcall.testing.asgi import streaming_client
-from fauxcall.testing.client import placeholder_credentials, with_query
+from fauxcall.testing.client import (
+    HARNESS_IDENTITY,
+    harness_identity,
+    placeholder_credentials,
+    with_query,
+)
 from fauxcall.testing.compare import shape_differences
 from fauxcall.testing.plugin import FakeUnderTest
 
@@ -60,6 +65,22 @@ _MAX_SHAPE_PROBLEMS: Final = 5
 _UNAUTHORIZED: Final = 401
 
 
+def settings_for_tests[S: FakeSettings](settings_cls: type[S], **overrides: object) -> S:
+    """Settings to build the fake with in tests: fast mode, quiet logs, and the harness let in.
+
+    A fake in auth mode ``allowlist`` admits only its configured users; the harness's placeholder
+    credentials (:func:`~fauxcall.testing.client.harness_identity`) are added here, for tests
+    only, so the fake served to agents admits exactly the real API's credentials.
+    """
+    values: dict[str, Any] = {"fast": True, "log_level": "WARNING", **overrides}
+    settings = settings_cls(**values)  # the constructor reads .env and fauxcall.toml too
+    users = settings.auth.users
+    if settings.auth.mode == "allowlist" and all(u.name != HARNESS_IDENTITY for u in users):
+        model = read_model(settings.data_dir / "model.json", ApiModel)
+        users.append(harness_identity(model.auth))
+    return settings
+
+
 def fake_under_test[S: FakeSettings](
     settings_cls: type[S], build_app: Callable[[S], FastAPI]
 ) -> FakeUnderTest:
@@ -77,7 +98,7 @@ def fake_under_test[S: FakeSettings](
         translate = Pseudonymizer(settings.pseudonym_key.get_secret_value()).translate
 
     def factory() -> FastAPI:
-        return build_app(settings_cls(fast=True, log_level="WARNING"))
+        return build_app(settings_for_tests(settings_cls))
 
     return FakeUnderTest(
         app_factory=factory,

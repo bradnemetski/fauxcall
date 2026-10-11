@@ -21,6 +21,7 @@ from fauxcall.testing.compare import Observation
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping
 
+    from fauxcall.config import IdentityConfig
     from fauxcall.mcpwire.client import McpWireClient
     from fauxcall.model.api import ApiModel
     from fauxcall.model.auth import AuthModel, AuthScheme
@@ -37,6 +38,8 @@ PLACEHOLDER_KEY: Final = "fauxcall-test-key"
 PLACEHOLDER_TOKEN: Final = "fauxcall-test-token"  # noqa: S105 - made up, not a secret
 PLACEHOLDER_USER: Final = "fauxcall"
 PLACEHOLDER_PASSWORD: Final = "fauxcall"  # noqa: S105 - made up, not a secret
+HARNESS_IDENTITY: Final = "fauxcall-test"
+"""Name of the identity the placeholder credentials belong to (see :func:`harness_identity`)."""
 _FALLBACK_SECRETS: Final = (
     "fauxcalltestkey",
     "0123456789abcdef0123456789abcdef",
@@ -105,6 +108,26 @@ def placeholder_credentials(auth: AuthModel | None) -> Credentials:
             credentials.headers["Authorization"] = f"Basic {encoded}"
             authorization = True
     return credentials
+
+
+def harness_identity(auth: AuthModel | None) -> IdentityConfig:
+    """The user :func:`placeholder_credentials` sign in as, for a fake that admits only its users.
+
+    Tests add it to an allowlist fake's users (never its configuration), so a served fake admits
+    exactly the real API's credentials.
+    """
+    from fauxcall.config import IdentityConfig  # noqa: PLC0415 - settings stay out of imports
+
+    values: dict[str, object] = {"name": HARNESS_IDENTITY}
+    for scheme in auth.schemes if auth is not None else ():
+        if scheme.kind == "api_key":
+            values.setdefault("api_key", _secret(scheme, PLACEHOLDER_KEY))
+        elif scheme.kind in {"bearer", "oauth2"}:
+            values.setdefault("bearer_token", _secret(scheme, PLACEHOLDER_TOKEN))
+        elif scheme.kind == "basic":
+            values.setdefault("username", PLACEHOLDER_USER)
+            values.setdefault("password", _secret(scheme, PLACEHOLDER_PASSWORD))
+    return IdentityConfig.model_validate(values)
 
 
 def with_query(path: str, query: Mapping[str, str]) -> str:
