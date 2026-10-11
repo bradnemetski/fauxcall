@@ -15,9 +15,11 @@ The session knew only what the skill told it. The answers file held the decision
 up front: credentials, whether a Jev key exists, and which writes to the real service are allowed
 (see [the headless reference](../plugins/fauxcall/skills/fauxcall/references/headless.md)).
 
-- **Isolation:** each run used a frozen snapshot of the tools (a git worktree at a commit that
-  passed every gate), in its own project folder, with a clean environment (no inherited
-  virtualenv). Fixes made during a run reached it only as later, gate-passing commits.
+- **Isolation:** each run used a frozen copy of the tools: a plain export of a commit that passed
+  every gate, without git history and without the reference API's source and answer key, so there
+  was nothing to read the "real" answers from. Each run had its own project folder and a clean
+  environment (no inherited virtualenv). Fixes made during a run reached it only as later,
+  gate-passing exports, swapped in file by file.
 - **Permissions:** runs used Claude Code's `auto` permission mode, with no human to approve
   prompts.
 - **Fix the tools, never the fake:** whenever a run struggled, the fix went into the skills or the
@@ -37,9 +39,66 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
 
 ## Results
 
-Results are added here as runs complete.
+| Target | Parity | Scenarios | Endpoints | Recordings | Offline tests | Sessions | Reported cost |
+|---|---|---|---|---|---|---|---|
+| Reference API | **100%** | 188, real writes included | 21 | 877 | 818, 99% coverage | 3 | over $23 |
+| Frankfurter | **100%** | 142 | 9 | 219 | 427, 99% coverage | 2 | $14.06 |
+| timeapi.io | **100%** | 192 | 28 | 576 | 1,366, 98% coverage | 1 | $19.72 |
+
+Petstore, FakeRESTApi and DeepWiki are added here as their runs complete. *Parity* is the weighted
+share of checks (status, shape, content type, values, lengths, headers) on which the fake answered
+like the real service, over end-to-end scenarios run against both. *Reported cost* is what Claude
+Code reported for the sessions. The finished fakes are in [`examples/`](../examples/).
+
+**Reference API.** The hardest target: trading sessions per exchange, async uploads, cursor
+pagination, a fixed-window rate limit, an SSE stream and a WebSocket feed. The first session was cut
+off by a usage limit and resumed. The build missed the WebSocket feed, which only the API's
+description mentions; the independent review caught it, the session recorded 36 conversations and
+added it, and the skill now reads the docs' prose for such endpoints. All recordings and parity runs
+happened on a Sunday, so open-market quotes follow the documentation and are untested live.
+
+**Frankfurter.** Daily ECB rates published at 16:00 Central European time, with TARGET holidays.
+The fake computes "latest" and date ranges on its own clock. Its main limit: rates stop moving after
+the last recorded fixing (dates keep advancing; the rates repeat).
+
+**timeapi.io.** The Swagger page documents two API versions; the write endpoints exist only in the
+older one, so the fake covers both. It pins the time-zone database to the release the real server
+uses, reproduces negative daylight-saving time (Ireland, Morocco) and calendar-aware translations,
+and answers IP lookups only for the 55 recorded addresses (others fall back to a nearby recorded one
+or UTC). One run with every write endpoint scored 99.96%; its one failure (Korean AM/PM wording) was
+fixed, and the final read-only run scored 100%.
+
+## Integrity
+
+After the runs, every session transcript was searched for reads of the reference API's source, its
+answer key (`GROUND_TRUTH.md`) or the FauxCall repository. None read them. One reviewer went looking
+for the answer key, which the reference API's docs mentioned by name; there was nothing to find,
+and the docs no longer mention it. Before exports were introduced, the first reference API session
+read FauxCall's own code (not the reference API) while investigating a CLI bug.
 
 ## What the runs changed
 
-Every problem a run hit became a fix in the tools or skills. They are listed in the git history
-with the message "found by the … validation run", and summarized here.
+Every problem a run hit became a fix in the tools or skills, never in the fake. The main ones:
+
+- **Parity comparison.** Ids created during a scenario are compared through their counterparts on
+  the other side; polling is compared by its final answer; streams by their structure; real calls
+  are paced to the recorded rate limit (`0747190`, `0290142`, `c70072d`).
+- **Real calls go only through FauxCall.** Sessions had called real APIs with curl and scripts,
+  which skips pacing, budgets, redaction and approvals. The skill now forbids it (the reviewer works
+  offline and proposes probes), and the recorder gained what those calls were used for: timed and
+  binary WebSocket frames (`b4495df`, `b7c3e28`).
+- **Missed endpoints.** Endpoints only the docs' prose mentions are imported with `fauxcall spec
+  import` (`b4495df`); routing probes of paths the API lacks pass `plan check` (`ea5e5ba`).
+- **Model and data.** Map-shaped responses (a date per key) are inferred as one value schema, which
+  shrank Frankfurter's model from 60 MB to 136 KB (`52436e4`); policy kinds, endpoint roles and
+  parameter descriptions survive saving (`1740991`, `80cb62d`).
+- **Runtime.** Authorization by scope after rate limiting (`4853215`); advancing the fake's clock
+  lifts rate limits (`b338c44`); a served fake admits exactly the real API's users while its tests
+  let themselves in (`5e559fd`).
+- **Command line.** The workspace is found from anywhere in a project (`be550b4`); `verify` works
+  from the project root and never reprints an old report (`29cc733`); scaffold writes CI where the
+  project is (`97747ee`), keeps the known limitations in a fake's README (`8982487`) and gives fakes
+  brought together their own ports (`450871b`).
+- **Docs for agents.** Where auth probes go, how to probe an approved rate limit, how to record when
+  the user prepared `.env` first, and a readable `fauxcall model schema --brief` (`ebcaa3d`,
+  `a450dd1`, `818a252`, `05dcd98`).
