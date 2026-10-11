@@ -75,8 +75,10 @@ kept improving from what these runs revealed. So:
 - **Ports were reassigned.** Each fake was built in its own workspace and got port 8701. When they
   were brought together here, `fauxcall scaffold` moved four of them to 8702–8705 (in their
   `fauxcall.toml`). FakeRESTApi's README was regenerated with its new port; the older READMEs (from
-  before scaffold kept a README's notes) had their port numbers updated to match. That is the only
-  change made to the generated files.
+  before scaffold kept a README's notes) had their port numbers updated to match.
+- **One test was fixed by hand.** A timeapi.io scenario cut timestamps at a fixed length, which
+  failed whenever the API dropped a trailing zero (about one run in ten). That and the port numbers
+  are the only changes made to the generated files; the skill now warns against it.
 
 ## About the data
 
