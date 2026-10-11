@@ -1,0 +1,86 @@
+{
+  "id": "000308",
+  "endpoint": "GET /api/v3/pet/{petId}",
+  "purpose": "invalid",
+  "plan_call": "x-pet400",
+  "started_at": "2026-10-11T11:47:10.135099Z",
+  "started_ns": 1791719230135099000,
+  "elapsed_ms": 33.799,
+  "ttfb_ms": 32.567,
+  "request": {
+    "method": "GET",
+    "url": "https://petstore3.swagger.io/api/v3/pet/abc",
+    "path": "/api/v3/pet/abc",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "accept",
+        "application/xml"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:47:10 GMT"
+      ],
+      [
+        "content-type",
+        "application/xml"
+      ],
+      [
+        "content-length",
+        "122"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/xml",
+      "text": "<ApiError><code>400</code><message>Input error: couldn't convert `abc` to type `class java.lang.Long`</message></ApiError>",
+      "size": 122
+    }
+  }
+}

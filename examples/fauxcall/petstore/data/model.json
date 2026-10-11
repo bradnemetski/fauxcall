@@ -1,0 +1,4148 @@
+{
+  "name": "petstore",
+  "title": "Swagger Petstore - OpenAPI 3.0",
+  "source": {
+    "kind": "swagger_ui",
+    "url": "https://petstore3.swagger.io",
+    "spec_url": "https://petstore3.swagger.io/api/v3/openapi.json",
+    "spec_file": "source/openapi.json",
+    "spec_version": "3.0.4",
+    "title": "Swagger Petstore - OpenAPI 3.0",
+    "api_version": "1.0.27",
+    "fetched_at": "2026-10-11T11:32:25.602941Z"
+  },
+  "real": {
+    "base_url": "https://petstore3.swagger.io",
+    "base_path": "/api/v3"
+  },
+  "routing": {
+    "case_insensitive": false,
+    "trailing_slash": "ignore",
+    "unknown_route_template": "unknown_route",
+    "method_not_allowed_template": "method_not_allowed",
+    "spec_paths": [
+      "/api/v3/openapi.json"
+    ]
+  },
+  "auth": null,
+  "endpoints": [
+    {
+      "id": "PUT /api/v3/pet",
+      "method": "PUT",
+      "path": "/api/v3/pet",
+      "spec_path": "/pet",
+      "operation_id": "updatePet",
+      "summary": "Update an existing pet.",
+      "tags": [
+        "pet"
+      ],
+      "role": "custom",
+      "request_body": {
+        "content_types": [
+          "application/json",
+          "application/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "schema": {
+          "required": [
+            "name",
+            "photoUrls"
+          ],
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 10
+            },
+            "name": {
+              "type": "string",
+              "example": "doggie"
+            },
+            "category": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Dogs"
+                }
+              },
+              "xml": {
+                "name": "category"
+              }
+            },
+            "photoUrls": {
+              "type": "array",
+              "xml": {
+                "wrapped": true
+              },
+              "items": {
+                "type": "string",
+                "xml": {
+                  "name": "photoUrl"
+                }
+              }
+            },
+            "tags": {
+              "type": "array",
+              "xml": {
+                "wrapped": true
+              },
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "xml": {
+                  "name": "tag"
+                }
+              }
+            },
+            "status": {
+              "type": "string",
+              "description": "pet status in the store",
+              "enum": [
+                "available",
+                "pending",
+                "sold"
+              ]
+            }
+          },
+          "xml": {
+            "name": "pet"
+          }
+        },
+        "required": true,
+        "validate_schema": false
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "required": [
+              "name",
+              "photoUrls"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 10
+              },
+              "name": {
+                "type": "string",
+                "example": "doggie"
+              },
+              "category": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Dogs"
+                  }
+                },
+                "xml": {
+                  "name": "category"
+                }
+              },
+              "photoUrls": {
+                "type": "array",
+                "xml": {
+                  "wrapped": true
+                },
+                "items": {
+                  "type": "string",
+                  "xml": {
+                    "name": "photoUrl"
+                  }
+                }
+              },
+              "tags": {
+                "type": "array",
+                "xml": {
+                  "wrapped": true
+                },
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "tag"
+                  }
+                }
+              },
+              "status": {
+                "type": "string",
+                "description": "pet status in the store",
+                "enum": [
+                  "available",
+                  "pending",
+                  "sold"
+                ]
+              }
+            },
+            "xml": {
+              "name": "pet"
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  9837410001,
+                  9837410002
+                ]
+              },
+              "name": {
+                "type": "string",
+                "examples": [
+                  "fauxcall-probe-1-put",
+                  "fauxcall-probe-2-put",
+                  "fauxcall-probe-2"
+                ]
+              },
+              "photoUrls": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "examples": [
+                    "p"
+                  ]
+                }
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "examples": [
+                        1
+                      ]
+                    },
+                    "name": {
+                      "type": "string",
+                      "examples": [
+                        "t"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                }
+              },
+              "status": {
+                "type": "string",
+                "examples": [
+                  "available",
+                  "bogus"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "photoUrls",
+              "tags"
+            ]
+          },
+          "examples": [
+            "000155",
+            "000157",
+            "000161",
+            "000163"
+          ]
+        },
+        {
+          "status": 400,
+          "description": "Invalid ID supplied",
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: unable to convert input to io.swagger.petstore.model.Pet"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000164",
+            "000165"
+          ]
+        },
+        {
+          "status": 404,
+          "description": "Pet not found",
+          "content_type": "application/xml",
+          "examples": [
+            "000159"
+          ]
+        },
+        {
+          "status": 422,
+          "description": "Validation exception"
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          25.614,
+          31.175,
+          31.445,
+          32.1,
+          33.561,
+          34.167,
+          36.366
+        ],
+        "p50_ms": 32.1,
+        "p90_ms": 35.0466,
+        "p99_ms": 36.23406
+      },
+      "notes": [
+        "Replaces the whole pet (000157); 404 'Pet not found' when absent (000159); no field validation (000161,000163). Missing id -> 500 by source (Long unboxing NPE), not recorded."
+      ],
+      "handler": "fauxcall_petstore.handlers:updatePet",
+      "collection": "pets"
+    },
+    {
+      "id": "POST /api/v3/pet",
+      "method": "POST",
+      "path": "/api/v3/pet",
+      "spec_path": "/pet",
+      "operation_id": "addPet",
+      "summary": "Add a new pet to the store.",
+      "tags": [
+        "pet"
+      ],
+      "role": "custom",
+      "request_body": {
+        "content_types": [
+          "application/json",
+          "application/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "schema": {
+          "required": [
+            "name",
+            "photoUrls"
+          ],
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 10
+            },
+            "name": {
+              "type": "string",
+              "example": "doggie"
+            },
+            "category": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Dogs"
+                }
+              },
+              "xml": {
+                "name": "category"
+              }
+            },
+            "photoUrls": {
+              "type": "array",
+              "xml": {
+                "wrapped": true
+              },
+              "items": {
+                "type": "string",
+                "xml": {
+                  "name": "photoUrl"
+                }
+              }
+            },
+            "tags": {
+              "type": "array",
+              "xml": {
+                "wrapped": true
+              },
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "xml": {
+                  "name": "tag"
+                }
+              }
+            },
+            "status": {
+              "type": "string",
+              "description": "pet status in the store",
+              "enum": [
+                "available",
+                "pending",
+                "sold"
+              ]
+            }
+          },
+          "xml": {
+            "name": "pet"
+          }
+        },
+        "required": true,
+        "validate_schema": false
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "required": [
+              "name",
+              "photoUrls"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 10
+              },
+              "name": {
+                "type": "string",
+                "example": "doggie"
+              },
+              "category": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Dogs"
+                  }
+                },
+                "xml": {
+                  "name": "category"
+                }
+              },
+              "photoUrls": {
+                "type": "array",
+                "xml": {
+                  "wrapped": true
+                },
+                "items": {
+                  "type": "string",
+                  "xml": {
+                    "name": "photoUrl"
+                  }
+                }
+              },
+              "tags": {
+                "type": "array",
+                "xml": {
+                  "wrapped": true
+                },
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "tag"
+                  }
+                }
+              },
+              "status": {
+                "type": "string",
+                "description": "pet status in the store",
+                "enum": [
+                  "available",
+                  "pending",
+                  "sold"
+                ]
+              }
+            },
+            "xml": {
+              "name": "pet"
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  9837410001,
+                  9837410002,
+                  9837410003
+                ]
+              },
+              "name": {
+                "type": "string",
+                "examples": [
+                  "fauxcall-probe-1",
+                  "fauxcall-probe-2",
+                  "fauxcall-probe-4"
+                ]
+              },
+              "photoUrls": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "examples": [
+                    "https://example.com/fauxcall.png",
+                    "x",
+                    "a"
+                  ]
+                }
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "examples": [
+                        98374
+                      ]
+                    },
+                    "name": {
+                      "type": "string",
+                      "examples": [
+                        "fauxcall-tag"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                }
+              },
+              "category": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "examples": [
+                      1
+                    ]
+                  },
+                  "name": {
+                    "type": "string",
+                    "examples": [
+                      "Dogs"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "examples": [
+                  "pending",
+                  "bogus",
+                  "sold"
+                ]
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "examples": [
+            "000130",
+            "000132",
+            "000135",
+            "000137",
+            "000140"
+          ]
+        },
+        {
+          "status": 400,
+          "description": "Invalid input",
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: unable to convert input to io.swagger.petstore.model.Pet"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000139",
+            "000144"
+          ]
+        },
+        {
+          "status": 415,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  415
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "HTTP 415 Unsupported Media Type"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000149"
+          ]
+        },
+        {
+          "status": 422,
+          "description": "Validation exception"
+        },
+        {
+          "status": 500,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  500
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "There was an error processing your request. It has been logged (ID: f715fe09194b36a4)"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000152"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          25.751,
+          28.605,
+          30.058,
+          30.134,
+          30.936,
+          31.903,
+          32.101,
+          32.205,
+          33.663,
+          34.284,
+          38.322,
+          43.546,
+          178.569
+        ],
+        "p50_ms": 32.101,
+        "p90_ms": 42.5012,
+        "p99_ms": 162.36623999999998
+      },
+      "notes": [
+        "No validation of required fields or status enum (000135,000137,000142); unknown fields dropped (000140); existing id is replaced and moved to the end (000150). Missing id -> 500 (000152). JSON/XML bodies default photoUrls/tags to [] ; form bodies do not (000145). text/plain -> 415."
+      ],
+      "handler": "fauxcall_petstore.handlers:addPet",
+      "collection": "pets"
+    },
+    {
+      "id": "GET /api/v3/pet/findByStatus",
+      "method": "GET",
+      "path": "/api/v3/pet/findByStatus",
+      "spec_path": "/pet/findByStatus",
+      "operation_id": "findPetsByStatus",
+      "summary": "Finds Pets by status.",
+      "tags": [
+        "pet"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "status",
+          "location": "query",
+          "description": "Status values that need to be considered for filter",
+          "required": false,
+          "schema": {
+            "type": "string"
+          },
+          "explode": true,
+          "default": "available",
+          "on_invalid": "coerce"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "type": "array",
+            "items": {
+              "required": [
+                "name",
+                "photoUrls"
+              ],
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 10
+                },
+                "name": {
+                  "type": "string",
+                  "example": "doggie"
+                },
+                "category": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Dogs"
+                    }
+                  },
+                  "xml": {
+                    "name": "category"
+                  }
+                },
+                "photoUrls": {
+                  "type": "array",
+                  "xml": {
+                    "wrapped": true
+                  },
+                  "items": {
+                    "type": "string",
+                    "xml": {
+                      "name": "photoUrl"
+                    }
+                  }
+                },
+                "tags": {
+                  "type": "array",
+                  "xml": {
+                    "wrapped": true
+                  },
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "xml": {
+                      "name": "tag"
+                    }
+                  }
+                },
+                "status": {
+                  "type": "string",
+                  "description": "pet status in the store",
+                  "enum": [
+                    "available",
+                    "pending",
+                    "sold"
+                  ]
+                }
+              },
+              "xml": {
+                "name": "pet"
+              }
+            }
+          },
+          "observed_schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "examples": [
+                    1791717175310,
+                    1791717177227,
+                    1
+                  ]
+                },
+                "category": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "examples": [
+                        1
+                      ]
+                    },
+                    "name": {
+                      "type": "string",
+                      "examples": [
+                        "Dogs"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "name": {
+                  "type": "string",
+                  "examples": [
+                    "Playwright API Test Pet",
+                    "Updated Pet",
+                    "Pet1"
+                  ]
+                },
+                "photoUrls": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "examples": [
+                      "https://example.com/pet.png",
+                      "test1",
+                      "test2"
+                    ]
+                  }
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "examples": [
+                          1,
+                          98374
+                        ]
+                      },
+                      "name": {
+                        "type": "string",
+                        "examples": [
+                          "automation",
+                          "fauxcall-tag"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  }
+                },
+                "status": {
+                  "type": "string",
+                  "examples": [
+                    "available",
+                    "sold",
+                    "pending"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "photoUrls",
+                "tags",
+                "status"
+              ]
+            }
+          },
+          "examples": [
+            "000001",
+            "000002",
+            "000003",
+            "000004",
+            "000010"
+          ]
+        },
+        {
+          "status": 400,
+          "description": "Invalid status value",
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: query parameter `status value `pending,sold` is not in the allowable values `[available, pending, sold]`",
+                  "Input error: query parameter `status value `Available` is not in the allowable values `[available, pending, sold]`",
+                  "Input error: query parameter `status value `bogus` is not in the allowable values `[available, pending, sold]`"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000005",
+            "000006",
+            "000007",
+            "000008",
+            "000009"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          27.134,
+          27.476,
+          29.567,
+          31.666,
+          32.315,
+          32.804,
+          35.048,
+          35.456,
+          35.52,
+          39.155,
+          118.989,
+          127.451,
+          130.144,
+          135.153,
+          457.499
+        ],
+        "p50_ms": 35.456,
+        "p90_ms": 133.14939999999999,
+        "p99_ms": 412.37056000000007
+      },
+      "notes": [
+        "Only the first status value counts (000004); enum checked case-sensitively; comma lists rejected (000005).",
+        "Accept: application/xml -> <ArrayList><item>..</item></ArrayList> (000302)."
+      ],
+      "handler": "fauxcall_petstore.handlers:findPetsByStatus",
+      "collection": "pets"
+    },
+    {
+      "id": "GET /api/v3/pet/findByTags",
+      "method": "GET",
+      "path": "/api/v3/pet/findByTags",
+      "spec_path": "/pet/findByTags",
+      "operation_id": "findPetsByTags",
+      "summary": "Finds Pets by tags.",
+      "tags": [
+        "pet"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "tags",
+          "location": "query",
+          "description": "Tags to filter by",
+          "required": false,
+          "schema": {
+            "type": "string"
+          },
+          "explode": true,
+          "on_invalid": "coerce"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "type": "array",
+            "items": {
+              "required": [
+                "name",
+                "photoUrls"
+              ],
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 10
+                },
+                "name": {
+                  "type": "string",
+                  "example": "doggie"
+                },
+                "category": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Dogs"
+                    }
+                  },
+                  "xml": {
+                    "name": "category"
+                  }
+                },
+                "photoUrls": {
+                  "type": "array",
+                  "xml": {
+                    "wrapped": true
+                  },
+                  "items": {
+                    "type": "string",
+                    "xml": {
+                      "name": "photoUrl"
+                    }
+                  }
+                },
+                "tags": {
+                  "type": "array",
+                  "xml": {
+                    "wrapped": true
+                  },
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "xml": {
+                      "name": "tag"
+                    }
+                  }
+                },
+                "status": {
+                  "type": "string",
+                  "description": "pet status in the store",
+                  "enum": [
+                    "available",
+                    "pending",
+                    "sold"
+                  ]
+                }
+              },
+              "xml": {
+                "name": "pet"
+              }
+            }
+          }
+        },
+        {
+          "status": 400,
+          "description": "Invalid tag value",
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: missing required query parameter `tags`"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000021",
+            "000022"
+          ]
+        },
+        {
+          "status": 500,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  500
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "There was an error processing your request. It has been logged (ID: 739c3d5f3c425662)",
+                  "There was an error processing your request. It has been logged (ID: 3c12f324f73da714)",
+                  "There was an error processing your request. It has been logged (ID: af7a14881d3b481d)"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000014",
+            "000015",
+            "000016",
+            "000017",
+            "000018"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          29.651,
+          29.902,
+          31.221,
+          31.268,
+          32.321,
+          36.533,
+          37.246,
+          38.628,
+          38.799
+        ],
+        "p50_ms": 32.321,
+        "p90_ms": 38.6622,
+        "p99_ms": 38.78532
+      },
+      "notes": [
+        "Always 500 in the real sandbox (000014-000020): some hidden pet has a null tag entry, and PetData.findPetByTags NPEs (swagger-petstore source). Missing tags -> 400 JSON (000021); empty -> 400 text 'No tags provided. Try again?' (000022)."
+      ],
+      "handler": "fauxcall_petstore.handlers:findPetsByTags",
+      "collection": "pets"
+    },
+    {
+      "id": "GET /api/v3/pet/{petId}",
+      "method": "GET",
+      "path": "/api/v3/pet/{petId}",
+      "spec_path": "/pet/{petId}",
+      "operation_id": "getPetById",
+      "summary": "Find pet by ID.",
+      "tags": [
+        "pet"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "petId",
+          "location": "path",
+          "description": "ID of pet to return",
+          "required": false,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "required": [
+              "name",
+              "photoUrls"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 10
+              },
+              "name": {
+                "type": "string",
+                "example": "doggie"
+              },
+              "category": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Dogs"
+                  }
+                },
+                "xml": {
+                  "name": "category"
+                }
+              },
+              "photoUrls": {
+                "type": "array",
+                "xml": {
+                  "wrapped": true
+                },
+                "items": {
+                  "type": "string",
+                  "xml": {
+                    "name": "photoUrl"
+                  }
+                }
+              },
+              "tags": {
+                "type": "array",
+                "xml": {
+                  "wrapped": true
+                },
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "tag"
+                  }
+                }
+              },
+              "status": {
+                "type": "string",
+                "description": "pet status in the store",
+                "enum": [
+                  "available",
+                  "pending",
+                  "sold"
+                ]
+              }
+            },
+            "xml": {
+              "name": "pet"
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  6,
+                  9
+                ]
+              },
+              "name": {
+                "type": "string",
+                "examples": [
+                  "Pet1",
+                  "Þ¹Û³",
+                  "friendly"
+                ]
+              },
+              "photoUrls": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "examples": [
+                    "test1",
+                    "test2",
+                    "url1"
+                  ]
+                }
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "examples": [
+                        1,
+                        2,
+                        98374
+                      ]
+                    },
+                    "name": {
+                      "type": "string",
+                      "examples": [
+                        "tag3",
+                        "tag4",
+                        "automation"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                }
+              },
+              "status": {
+                "type": "string",
+                "examples": [
+                  "available",
+                  "㻽",
+                  "pending"
+                ]
+              },
+              "category": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "examples": [
+                      1
+                    ]
+                  },
+                  "name": {
+                    "type": "string",
+                    "examples": [
+                      "Dogs"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ]
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "examples": [
+            "000023",
+            "000028",
+            "000031",
+            "000032",
+            "000033"
+          ]
+        },
+        {
+          "status": 400,
+          "description": "Invalid ID supplied",
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: couldn't convert `abc` to type `class java.lang.Long`",
+                  "Input error: couldn't convert `99999999999999999999` to type `class java.lang.Long`",
+                  "Input error: couldn't convert `1.5` to type `class java.lang.Long`"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000045",
+            "000048",
+            "000049",
+            "000050",
+            "000153"
+          ]
+        },
+        {
+          "status": 404,
+          "description": "Pet not found",
+          "content_type": "application/xml",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  404
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "HTTP 404 Not Found"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000024",
+            "000025",
+            "000026",
+            "000027",
+            "000029"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          26.954,
+          26.98,
+          27.314,
+          27.399,
+          27.515,
+          27.687,
+          29.028,
+          29.24,
+          29.286,
+          29.656,
+          29.984,
+          30.014,
+          30.191,
+          30.353,
+          30.519,
+          30.925,
+          30.991,
+          31.073,
+          31.124,
+          31.295,
+          31.351,
+          31.479,
+          31.545,
+          31.704,
+          31.716,
+          31.962,
+          32.064,
+          32.445,
+          32.473,
+          32.48,
+          32.614,
+          32.64,
+          32.73,
+          32.746,
+          32.982,
+          33.088,
+          33.183,
+          33.273,
+          33.282,
+          33.403,
+          33.48,
+          33.674,
+          34.105,
+          34.231,
+          34.304,
+          34.305,
+          34.347,
+          34.582,
+          34.65,
+          34.712,
+          35.295,
+          35.405,
+          36.569,
+          36.596,
+          36.898,
+          36.999,
+          37.612,
+          37.74,
+          38.233,
+          38.884,
+          41.512,
+          41.631,
+          43.077,
+          137.96,
+          141.28,
+          172.735
+        ],
+        "p50_ms": 32.738,
+        "p90_ms": 38.5585,
+        "p99_ms": 152.28925
+      },
+      "notes": [
+        "404 is text 'Pet not found' labeled application/xml (000024). Non-long ids -> 400 'couldn't convert' (000045,000048-000050)."
+      ],
+      "handler": "fauxcall_petstore.handlers:getPetById",
+      "collection": "pets"
+    },
+    {
+      "id": "POST /api/v3/pet/{petId}",
+      "method": "POST",
+      "path": "/api/v3/pet/{petId}",
+      "spec_path": "/pet/{petId}",
+      "operation_id": "updatePetWithForm",
+      "summary": "Updates a pet in the store with form data.",
+      "tags": [
+        "pet"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "petId",
+          "location": "path",
+          "description": "ID of pet that needs to be updated",
+          "required": false,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "name",
+          "location": "query",
+          "description": "Name of pet that needs to be updated",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "required": false
+        },
+        {
+          "name": "status",
+          "location": "query",
+          "description": "Status of pet that needs to be updated",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "required": false
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "required": [
+              "name",
+              "photoUrls"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 10
+              },
+              "name": {
+                "type": "string",
+                "example": "doggie"
+              },
+              "category": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Dogs"
+                  }
+                },
+                "xml": {
+                  "name": "category"
+                }
+              },
+              "photoUrls": {
+                "type": "array",
+                "xml": {
+                  "wrapped": true
+                },
+                "items": {
+                  "type": "string",
+                  "xml": {
+                    "name": "photoUrl"
+                  }
+                }
+              },
+              "tags": {
+                "type": "array",
+                "xml": {
+                  "wrapped": true
+                },
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "tag"
+                  }
+                }
+              },
+              "status": {
+                "type": "string",
+                "description": "pet status in the store",
+                "enum": [
+                  "available",
+                  "pending",
+                  "sold"
+                ]
+              }
+            },
+            "xml": {
+              "name": "pet"
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  9837410002
+                ]
+              },
+              "name": {
+                "type": "string",
+                "examples": [
+                  "fauxcall-probe-2-form",
+                  "fauxcall-probe-2-name"
+                ]
+              },
+              "photoUrls": {
+                "type": "array"
+              },
+              "tags": {
+                "type": "array"
+              },
+              "status": {
+                "type": "string",
+                "examples": [
+                  "sold"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "photoUrls",
+              "tags"
+            ]
+          },
+          "examples": [
+            "000166",
+            "000168"
+          ]
+        },
+        {
+          "status": 400,
+          "description": "Invalid input",
+          "content_type": "application/xml",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: couldn't convert `abc` to type `class java.lang.Long`"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000170",
+            "000172",
+            "000174",
+            "000177",
+            "000178"
+          ]
+        },
+        {
+          "status": 404,
+          "content_type": "application/xml",
+          "examples": [
+            "000176"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          30.317,
+          30.651,
+          30.74,
+          31.787,
+          31.817,
+          32.008,
+          33.183,
+          36.81
+        ],
+        "p50_ms": 31.802,
+        "p90_ms": 34.271100000000004,
+        "p99_ms": 36.556110000000004
+      },
+      "notes": [
+        "Reads name/status from the query string only (000178); name required -> 400 'No Name provided. Try again?' (000170); status replaced, removed when absent (000168)."
+      ],
+      "handler": "fauxcall_petstore.handlers:updatePetWithForm",
+      "collection": "pets"
+    },
+    {
+      "id": "DELETE /api/v3/pet/{petId}",
+      "method": "DELETE",
+      "path": "/api/v3/pet/{petId}",
+      "spec_path": "/pet/{petId}",
+      "operation_id": "deletePet",
+      "summary": "Deletes a pet.",
+      "tags": [
+        "pet"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "api_key",
+          "location": "header",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "required": false
+        },
+        {
+          "name": "petId",
+          "location": "path",
+          "description": "Pet id to delete",
+          "required": false,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "Pet deleted",
+          "content_type": "application/json",
+          "examples": [
+            "000188",
+            "000190",
+            "000191",
+            "000193",
+            "000194"
+          ]
+        },
+        {
+          "status": 400,
+          "description": "Invalid pet value",
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: couldn't convert `abc` to type `class java.lang.Long`"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000200"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          27.926,
+          29.47,
+          29.504,
+          29.66,
+          29.684,
+          32.01,
+          32.382,
+          33.209,
+          35.217,
+          37.544,
+          139.185
+        ],
+        "p50_ms": 32.01,
+        "p90_ms": 37.544,
+        "p99_ms": 129.0209
+      },
+      "notes": [
+        "Always 200 'Pet deleted', even for unknown ids (000190,000199)."
+      ],
+      "handler": "fauxcall_petstore.handlers:deletePet",
+      "collection": "pets"
+    },
+    {
+      "id": "POST /api/v3/pet/{petId}/uploadImage",
+      "method": "POST",
+      "path": "/api/v3/pet/{petId}/uploadImage",
+      "spec_path": "/pet/{petId}/uploadImage",
+      "operation_id": "uploadFile",
+      "summary": "Uploads an image.",
+      "tags": [
+        "pet"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "petId",
+          "location": "path",
+          "description": "ID of pet to update",
+          "required": false,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        },
+        {
+          "name": "additionalMetadata",
+          "location": "query",
+          "description": "Additional Metadata",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "required": false
+        }
+      ],
+      "request_body": {
+        "content_types": [
+          "application/octet-stream"
+        ],
+        "schema": {
+          "type": "string",
+          "format": "binary"
+        },
+        "validate_schema": false
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "xml": {
+              "name": "##default"
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  9837410002
+                ]
+              },
+              "name": {
+                "type": "string",
+                "examples": [
+                  "fauxcall-probe-2-name"
+                ]
+              },
+              "photoUrls": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "examples": [
+                    "/tmp/inflector18227869401691340836.tmp",
+                    "/tmp/inflector9003761322854486195.tmp"
+                  ]
+                }
+              },
+              "tags": {
+                "type": "array"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "photoUrls",
+              "tags"
+            ]
+          },
+          "examples": [
+            "000180",
+            "000182"
+          ]
+        },
+        {
+          "status": 400,
+          "description": "No file uploaded",
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: couldn't convert `abc` to type `class java.lang.Long`"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000184",
+            "000186"
+          ]
+        },
+        {
+          "status": 404,
+          "description": "Pet not found",
+          "content_type": "application/json",
+          "examples": [
+            "000185"
+          ]
+        },
+        {
+          "status": 415,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  415
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "HTTP 415 Unsupported Media Type"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000187"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          29.182,
+          29.628,
+          29.756,
+          33.316,
+          33.995,
+          34.619
+        ],
+        "p50_ms": 31.536000000000005,
+        "p90_ms": 34.306999999999995,
+        "p99_ms": 34.587799999999994
+      },
+      "notes": [
+        "Appends a server temp path /tmp/inflector<digits>.tmp to photoUrls (000180,000182); empty body -> 400 'No file uploaded'; errors here are labeled application/json."
+      ],
+      "handler": "fauxcall_petstore.handlers:uploadFile",
+      "collection": "pets"
+    },
+    {
+      "id": "GET /api/v3/store/inventory",
+      "method": "GET",
+      "path": "/api/v3/store/inventory",
+      "spec_path": "/store/inventory",
+      "operation_id": "getInventory",
+      "summary": "Returns pet inventories by status.",
+      "tags": [
+        "store"
+      ],
+      "role": "custom",
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "approved": {
+                "type": "integer",
+                "examples": [
+                  7
+                ]
+              },
+              "placed": {
+                "type": "integer",
+                "examples": [
+                  -19,
+                  -16
+                ]
+              }
+            },
+            "required": [
+              "approved",
+              "placed"
+            ]
+          },
+          "examples": [
+            "000063",
+            "000064",
+            "000065",
+            "000066",
+            "000067"
+          ]
+        },
+        {
+          "status": 404,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  404
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "HTTP 404 Not Found"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000126"
+          ]
+        },
+        {
+          "status": 500,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  500
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "There was an error processing your request. It has been logged (ID: abe56edce8e3c8bb)",
+                  "There was an error processing your request. It has been logged (ID: 926ef32f3ef17a96)",
+                  "There was an error processing your request. It has been logged (ID: fb76c4cded1c4695)"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000213",
+            "000216",
+            "000219",
+            "000228",
+            "000231"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          27.103,
+          27.837,
+          28.159,
+          28.819,
+          29.494,
+          29.729,
+          30.108,
+          30.622,
+          31.38,
+          32.882,
+          35.006,
+          35.052,
+          35.571,
+          36.369,
+          131.836,
+          134.912,
+          138.301,
+          157.498,
+          177.125
+        ],
+        "p50_ms": 32.882,
+        "p90_ms": 142.14039999999997,
+        "p99_ms": 173.59214
+      },
+      "notes": [
+        "Sum of order quantity grouped by order status, computed from the world (000207,000210); 500 while any order lacks a status (000213-000235). Includes a baseline for orders that exist in the sandbox but cannot be enumerated (no list endpoint)."
+      ],
+      "handler": "fauxcall_petstore.handlers:getInventory",
+      "collection": "orders"
+    },
+    {
+      "id": "POST /api/v3/store/order",
+      "method": "POST",
+      "path": "/api/v3/store/order",
+      "spec_path": "/store/order",
+      "operation_id": "placeOrder",
+      "summary": "Place an order for a pet.",
+      "tags": [
+        "store"
+      ],
+      "role": "custom",
+      "request_body": {
+        "content_types": [
+          "application/json",
+          "application/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 10
+            },
+            "petId": {
+              "type": "integer",
+              "format": "int64",
+              "example": 198772
+            },
+            "quantity": {
+              "type": "integer",
+              "format": "int32",
+              "example": 7
+            },
+            "shipDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "status": {
+              "type": "string",
+              "description": "Order Status",
+              "example": "approved",
+              "enum": [
+                "placed",
+                "approved",
+                "delivered"
+              ]
+            },
+            "complete": {
+              "type": "boolean"
+            }
+          },
+          "xml": {
+            "name": "order"
+          }
+        },
+        "validate_schema": false
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 10
+              },
+              "petId": {
+                "type": "integer",
+                "format": "int64",
+                "example": 198772
+              },
+              "quantity": {
+                "type": "integer",
+                "format": "int32",
+                "example": 7
+              },
+              "shipDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "status": {
+                "type": "string",
+                "description": "Order Status",
+                "example": "approved",
+                "enum": [
+                  "placed",
+                  "approved",
+                  "delivered"
+                ]
+              },
+              "complete": {
+                "type": "boolean"
+              }
+            },
+            "xml": {
+              "name": "order"
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  9837420001,
+                  9837420002,
+                  9837420003
+                ]
+              },
+              "petId": {
+                "type": "integer",
+                "examples": [
+                  198772
+                ]
+              },
+              "quantity": {
+                "type": "integer",
+                "examples": [
+                  3,
+                  1,
+                  2
+                ]
+              },
+              "shipDate": {
+                "type": "string",
+                "format": "date-time",
+                "x-time-format": {
+                  "kind": "iso",
+                  "fraction_digits": 3,
+                  "tz_style": "+HH:MM"
+                },
+                "examples": [
+                  "2026-10-12T10:00:00.000+00:00",
+                  "2026-10-12T10:30:45.000+00:00",
+                  "2026-10-12T00:00:00.000+00:00"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "examples": [
+                  "placed",
+                  "approved",
+                  "delivered"
+                ]
+              },
+              "complete": {
+                "type": "boolean",
+                "examples": [
+                  false,
+                  true
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "petId",
+              "quantity",
+              "complete"
+            ]
+          },
+          "examples": [
+            "000208",
+            "000211",
+            "000214",
+            "000217",
+            "000220"
+          ]
+        },
+        {
+          "status": 400,
+          "description": "Invalid input",
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: unable to convert input to io.swagger.petstore.model.Order"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000222",
+            "000223",
+            "000224"
+          ]
+        },
+        {
+          "status": 415,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  415
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "HTTP 415 Unsupported Media Type"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000225"
+          ]
+        },
+        {
+          "status": 422,
+          "description": "Validation exception"
+        },
+        {
+          "status": 500,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  500
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "There was an error processing your request. It has been logged (ID: da6bc642017977cd)"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000229"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          26.422,
+          27.982,
+          28.343,
+          29.838,
+          30.437,
+          30.91,
+          32.5,
+          32.609,
+          32.621,
+          34.468,
+          36.004,
+          43.477
+        ],
+        "p50_ms": 31.705,
+        "p90_ms": 35.8504,
+        "p99_ms": 42.65496999999999
+      },
+      "notes": [
+        "shipDate normalized to UTC yyyy-MM-ddTHH:mm:ss.SSS+00:00 (000208,000214,000217); complete defaults false; unknown statuses accepted (000220); form body -> 500 (000229); existing id replaced (000226). Missing id -> id 0 (inferred from sandbox order 0; not probed to avoid overwriting it).",
+        "A null body -> 500 (000425). shipDate digit strings are epoch ms (000434); a space separator -> 400 (000435)."
+      ],
+      "handler": "fauxcall_petstore.handlers:placeOrder",
+      "collection": "orders"
+    },
+    {
+      "id": "GET /api/v3/store/order/{orderId}",
+      "method": "GET",
+      "path": "/api/v3/store/order/{orderId}",
+      "spec_path": "/store/order/{orderId}",
+      "operation_id": "getOrderById",
+      "summary": "Find purchase order by ID.",
+      "tags": [
+        "store"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "orderId",
+          "location": "path",
+          "description": "ID of order that needs to be fetched",
+          "required": false,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 10
+              },
+              "petId": {
+                "type": "integer",
+                "format": "int64",
+                "example": 198772
+              },
+              "quantity": {
+                "type": "integer",
+                "format": "int32",
+                "example": 7
+              },
+              "shipDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "status": {
+                "type": "string",
+                "description": "Order Status",
+                "example": "approved",
+                "enum": [
+                  "placed",
+                  "approved",
+                  "delivered"
+                ]
+              },
+              "complete": {
+                "type": "boolean"
+              }
+            },
+            "xml": {
+              "name": "order"
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  10,
+                  0,
+                  9837420001
+                ]
+              },
+              "petId": {
+                "type": "integer",
+                "examples": [
+                  198772,
+                  1234567890
+                ]
+              },
+              "quantity": {
+                "type": "integer",
+                "examples": [
+                  7,
+                  1,
+                  3
+                ]
+              },
+              "shipDate": {
+                "type": "string",
+                "format": "date-time",
+                "x-time-format": {
+                  "kind": "iso",
+                  "fraction_digits": 3,
+                  "tz_style": "+HH:MM"
+                },
+                "examples": [
+                  "2015-07-20T22:49:04.000+00:00",
+                  "2026-10-12T10:00:00.000+00:00",
+                  "2026-10-12T10:30:45.000+00:00"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "examples": [
+                  "approved",
+                  "placed",
+                  "delivered"
+                ]
+              },
+              "complete": {
+                "type": "boolean",
+                "examples": [
+                  true,
+                  false
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "petId",
+              "quantity",
+              "complete"
+            ]
+          },
+          "examples": [
+            "000079",
+            "000087",
+            "000209",
+            "000212",
+            "000215"
+          ]
+        },
+        {
+          "status": 400,
+          "description": "Invalid ID supplied",
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: couldn't convert `abc` to type `class java.lang.Long`",
+                  "Input error: couldn't convert `99999999999999999999` to type `class java.lang.Long`",
+                  "Input error: couldn't convert `1.5` to type `class java.lang.Long`"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000085",
+            "000088",
+            "000089"
+          ]
+        },
+        {
+          "status": 404,
+          "description": "Order not found",
+          "content_type": "application/xml",
+          "examples": [
+            "000070",
+            "000071",
+            "000072",
+            "000073",
+            "000074"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          28.577,
+          28.858,
+          29.356,
+          29.443,
+          29.49,
+          29.691,
+          29.864,
+          30.057,
+          30.088,
+          30.177,
+          30.257,
+          30.605,
+          30.746,
+          31.078,
+          31.292,
+          31.65,
+          31.829,
+          31.906,
+          31.989,
+          32.42,
+          32.574,
+          32.634,
+          32.871,
+          32.925,
+          33.049,
+          33.067,
+          33.848,
+          33.937,
+          34.042,
+          34.125,
+          34.168,
+          34.448,
+          34.756,
+          37.73,
+          37.919,
+          125.591,
+          152.052,
+          201.804
+        ],
+        "p50_ms": 32.204499999999996,
+        "p90_ms": 37.7867,
+        "p99_ms": 183.39576
+      },
+      "notes": [
+        "404 text 'Order not found' (application/xml). XML puts Order fields in alphabetical order with shipDate as epoch ms (000309)."
+      ],
+      "handler": "fauxcall_petstore.handlers:getOrderById",
+      "collection": "orders"
+    },
+    {
+      "id": "DELETE /api/v3/store/order/{orderId}",
+      "method": "DELETE",
+      "path": "/api/v3/store/order/{orderId}",
+      "spec_path": "/store/order/{orderId}",
+      "operation_id": "deleteOrder",
+      "summary": "Delete purchase order by identifier.",
+      "tags": [
+        "store"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "orderId",
+          "location": "path",
+          "description": "ID of the order that needs to be deleted",
+          "required": false,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "order deleted",
+          "examples": [
+            "000233",
+            "000236",
+            "000237",
+            "000238",
+            "000239"
+          ]
+        },
+        {
+          "status": 400,
+          "description": "Invalid ID supplied",
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: couldn't convert `abc` to type `class java.lang.Long`"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000241"
+          ]
+        },
+        {
+          "status": 404,
+          "description": "Order not found"
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          26.198,
+          26.685,
+          27.208,
+          30.626,
+          30.887,
+          31.727,
+          34.797
+        ],
+        "p50_ms": 30.625999999999998,
+        "p90_ms": 32.955,
+        "p99_ms": 34.6128
+      },
+      "notes": [
+        "Always 200 with an empty body and no content type (000233,000236)."
+      ],
+      "handler": "fauxcall_petstore.handlers:deleteOrder",
+      "collection": "orders"
+    },
+    {
+      "id": "POST /api/v3/user",
+      "method": "POST",
+      "path": "/api/v3/user",
+      "spec_path": "/user",
+      "operation_id": "createUser",
+      "summary": "Create user.",
+      "tags": [
+        "user"
+      ],
+      "role": "custom",
+      "request_body": {
+        "content_types": [
+          "application/json",
+          "application/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 10
+            },
+            "username": {
+              "type": "string",
+              "example": "theUser"
+            },
+            "firstName": {
+              "type": "string",
+              "example": "John"
+            },
+            "lastName": {
+              "type": "string",
+              "example": "James"
+            },
+            "email": {
+              "type": "string",
+              "example": "john@email.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "12345"
+            },
+            "phone": {
+              "type": "string",
+              "example": "12345"
+            },
+            "userStatus": {
+              "type": "integer",
+              "description": "User Status",
+              "format": "int32",
+              "example": 1
+            }
+          },
+          "xml": {
+            "name": "user"
+          }
+        },
+        "validate_schema": false
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 10
+              },
+              "username": {
+                "type": "string",
+                "example": "theUser"
+              },
+              "firstName": {
+                "type": "string",
+                "example": "John"
+              },
+              "lastName": {
+                "type": "string",
+                "example": "James"
+              },
+              "email": {
+                "type": "string",
+                "example": "john@email.com"
+              },
+              "password": {
+                "type": "string",
+                "example": "12345"
+              },
+              "phone": {
+                "type": "string",
+                "example": "12345"
+              },
+              "userStatus": {
+                "type": "integer",
+                "description": "User Status",
+                "format": "int32",
+                "example": 1
+              }
+            },
+            "xml": {
+              "name": "user"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: unable to convert input to io.swagger.petstore.model.User"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000253",
+            "000256"
+          ]
+        },
+        {
+          "status": 415,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  415
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "HTTP 415 Unsupported Media Type"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000257"
+          ]
+        },
+        {
+          "status": 500,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  500
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "There was an error processing your request. It has been logged (ID: ba1c3eca0315c7ab)",
+                  "There was an error processing your request. It has been logged (ID: 00891bcf0bdd0059)",
+                  "There was an error processing your request. It has been logged (ID: 967d61de75be43ad)"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000247",
+            "000249",
+            "000251",
+            "000254",
+            "000258"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          26.448,
+          27.747,
+          27.975,
+          29.514,
+          30.427,
+          31.06,
+          31.571,
+          174.262
+        ],
+        "p50_ms": 29.9705,
+        "p90_ms": 74.3783,
+        "p99_ms": 164.27363000000003
+      },
+      "notes": [
+        "The sandbox user store is poisoned (a null-username user after user?10): every create 500s (000247-000258). Invalid JSON -> 400 (000253,000256)."
+      ],
+      "handler": "fauxcall_petstore.handlers:createUser",
+      "collection": "users"
+    },
+    {
+      "id": "POST /api/v3/user/createWithList",
+      "method": "POST",
+      "path": "/api/v3/user/createWithList",
+      "spec_path": "/user/createWithList",
+      "operation_id": "createUsersWithListInput",
+      "summary": "Creates list of users with given input array.",
+      "tags": [
+        "user"
+      ],
+      "role": "custom",
+      "request_body": {
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 10
+              },
+              "username": {
+                "type": "string",
+                "example": "theUser"
+              },
+              "firstName": {
+                "type": "string",
+                "example": "John"
+              },
+              "lastName": {
+                "type": "string",
+                "example": "James"
+              },
+              "email": {
+                "type": "string",
+                "example": "john@email.com"
+              },
+              "password": {
+                "type": "string",
+                "example": "12345"
+              },
+              "phone": {
+                "type": "string",
+                "example": "12345"
+              },
+              "userStatus": {
+                "type": "integer",
+                "description": "User Status",
+                "format": "int32",
+                "example": 1
+              }
+            },
+            "xml": {
+              "name": "user"
+            }
+          }
+        },
+        "validate_schema": false
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "Successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 10
+              },
+              "username": {
+                "type": "string",
+                "example": "theUser"
+              },
+              "firstName": {
+                "type": "string",
+                "example": "John"
+              },
+              "lastName": {
+                "type": "string",
+                "example": "James"
+              },
+              "email": {
+                "type": "string",
+                "example": "john@email.com"
+              },
+              "password": {
+                "type": "string",
+                "example": "12345"
+              },
+              "phone": {
+                "type": "string",
+                "example": "12345"
+              },
+              "userStatus": {
+                "type": "integer",
+                "description": "User Status",
+                "format": "int32",
+                "example": 1
+              }
+            },
+            "xml": {
+              "name": "user"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "content_type": "application/xml",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: unable to convert input to io.swagger.petstore.model.User[]"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000264",
+            "000265",
+            "000266"
+          ]
+        },
+        {
+          "status": 500,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  500
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "There was an error processing your request. It has been logged (ID: 2d3c95efbd12d838)"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000261"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          26.822,
+          28.587,
+          28.807,
+          35.847
+        ],
+        "p50_ms": 28.697,
+        "p90_ms": 33.735,
+        "p99_ms": 35.635799999999996
+      },
+      "notes": [
+        "Poisoned store -> 500 (000261); [] -> 400 'No User provided. Try again?' (000264); non-array -> 400 User[] convert (000265).",
+        "XML bodies -> 415: the operation consumes JSON only (000415)."
+      ],
+      "handler": "fauxcall_petstore.handlers:createUsersWithListInput",
+      "collection": "users"
+    },
+    {
+      "id": "GET /api/v3/user/login",
+      "method": "GET",
+      "path": "/api/v3/user/login",
+      "spec_path": "/user/login",
+      "operation_id": "loginUser",
+      "summary": "Logs user into the system.",
+      "tags": [
+        "user"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "username",
+          "location": "query",
+          "description": "The user name for login",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "required": false
+        },
+        {
+          "name": "password",
+          "location": "query",
+          "description": "The password for login in clear text",
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce",
+          "required": false
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "type": "string"
+          },
+          "examples": [
+            "000109",
+            "000110",
+            "000111",
+            "000112",
+            "000113"
+          ]
+        },
+        {
+          "status": 400,
+          "description": "Invalid username/password supplied"
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          25.982,
+          27.429,
+          27.565,
+          27.711,
+          27.726,
+          29.861,
+          30.093,
+          30.295,
+          34.635,
+          34.752,
+          108.291,
+          121.089,
+          129.808
+        ],
+        "p50_ms": 30.093000000000004,
+        "p90_ms": 118.52939999999998,
+        "p99_ms": 128.76172
+      },
+      "notes": [
+        "200 response documents headers: X-Rate-Limit, X-Expires-After",
+        "Always 200: 'Logged in user session: <random long>' with X-Rate-Limit: 5000 and X-Expires-After (Java Date.toString, now+1h) (000109-000120). Credentials are not checked."
+      ],
+      "handler": "fauxcall_petstore.handlers:loginUser",
+      "collection": null
+    },
+    {
+      "id": "GET /api/v3/user/logout",
+      "method": "GET",
+      "path": "/api/v3/user/logout",
+      "spec_path": "/user/logout",
+      "operation_id": "logoutUser",
+      "summary": "Logs out current logged in user session.",
+      "tags": [
+        "user"
+      ],
+      "role": "custom",
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation",
+          "content_type": "application/json",
+          "examples": [
+            "000121",
+            "000122",
+            "000123"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          27.376,
+          28.351,
+          29.114
+        ],
+        "p50_ms": 28.351,
+        "p90_ms": 28.961399999999998,
+        "p99_ms": 29.09874
+      },
+      "notes": [
+        "Always 200 'User logged out'."
+      ],
+      "handler": "fauxcall_petstore.handlers:logoutUser",
+      "collection": null
+    },
+    {
+      "id": "GET /api/v3/user/{username}",
+      "method": "GET",
+      "path": "/api/v3/user/{username}",
+      "spec_path": "/user/{username}",
+      "operation_id": "getUserByName",
+      "summary": "Get user by user name.",
+      "tags": [
+        "user"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "username",
+          "location": "path",
+          "description": "The name that needs to be fetched. Use user1 for testing",
+          "required": false,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation",
+          "content_type": "application/json",
+          "documented_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 10
+              },
+              "username": {
+                "type": "string",
+                "example": "theUser"
+              },
+              "firstName": {
+                "type": "string",
+                "example": "John"
+              },
+              "lastName": {
+                "type": "string",
+                "example": "James"
+              },
+              "email": {
+                "type": "string",
+                "example": "john@email.com"
+              },
+              "password": {
+                "type": "string",
+                "example": "12345"
+              },
+              "phone": {
+                "type": "string",
+                "example": "12345"
+              },
+              "userStatus": {
+                "type": "integer",
+                "description": "User Status",
+                "format": "int32",
+                "example": 1
+              }
+            },
+            "xml": {
+              "name": "user"
+            }
+          },
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "username": {
+                "type": "string",
+                "examples": [
+                  "user_6cc6fda0",
+                  "user_d2110f1a",
+                  "user_5cc60026"
+                ]
+              },
+              "firstName": {
+                "type": "string",
+                "examples": [
+                  "first name 1",
+                  "first name 2",
+                  "first name 3"
+                ]
+              },
+              "lastName": {
+                "type": "string",
+                "examples": [
+                  "last name 1",
+                  "last name 2",
+                  "last name 3"
+                ]
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "examples": [
+                  "user.6137b9eb49@example.com",
+                  "user.45a00162fb@example.com",
+                  "user.3be5d33d52@example.com"
+                ]
+              },
+              "password": {
+                "type": "string",
+                "examples": [
+                  "[REDACTED]"
+                ]
+              },
+              "phone": {
+                "type": "string",
+                "examples": [
+                  "608-516-1741"
+                ]
+              },
+              "userStatus": {
+                "type": "integer",
+                "examples": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "username",
+              "firstName",
+              "lastName",
+              "email",
+              "password",
+              "phone",
+              "userStatus"
+            ]
+          },
+          "examples": [
+            "000095",
+            "000096",
+            "000097",
+            "000098",
+            "000099"
+          ]
+        },
+        {
+          "status": 400,
+          "description": "Invalid username supplied"
+        },
+        {
+          "status": 404,
+          "description": "User not found"
+        },
+        {
+          "status": 500,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  500
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "There was an error processing your request. It has been logged (ID: 10024d27265524e4)",
+                  "There was an error processing your request. It has been logged (ID: 486ef66184a30ece)",
+                  "There was an error processing your request. It has been logged (ID: 532b3400cfcb5de6)"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000100",
+            "000101",
+            "000102",
+            "000103",
+            "000104"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          25.215,
+          25.594,
+          25.636,
+          26.383,
+          26.695,
+          26.968,
+          28.153,
+          28.303,
+          28.421,
+          29.056,
+          29.305,
+          29.447,
+          29.567,
+          29.771,
+          29.808,
+          29.864,
+          30.234,
+          30.362,
+          30.434,
+          30.558,
+          31.224,
+          31.254,
+          31.3,
+          31.524,
+          31.846,
+          31.951,
+          31.969,
+          32.371,
+          32.801,
+          32.927,
+          33.165,
+          33.715,
+          34.084,
+          34.241,
+          34.631,
+          35.001,
+          35.188,
+          35.468,
+          35.56,
+          37.077,
+          39.577,
+          165.429
+        ],
+        "p50_ms": 31.239,
+        "p90_ms": 35.440000000000005,
+        "p99_ms": 113.82968
+      },
+      "notes": [
+        "Seeded users found (000095..000099, 000316..000321); any other name scans into the poisoned record -> 500 (000100-000107). Seeded passwords are the literal XXXXXXXXXXX (000108)."
+      ],
+      "handler": "fauxcall_petstore.handlers:getUserByName",
+      "collection": "users"
+    },
+    {
+      "id": "PUT /api/v3/user/{username}",
+      "method": "PUT",
+      "path": "/api/v3/user/{username}",
+      "spec_path": "/user/{username}",
+      "operation_id": "updateUser",
+      "summary": "Update user resource.",
+      "tags": [
+        "user"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "username",
+          "location": "path",
+          "description": "name that need to be deleted",
+          "required": false,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        }
+      ],
+      "request_body": {
+        "content_types": [
+          "application/json",
+          "application/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 10
+            },
+            "username": {
+              "type": "string",
+              "example": "theUser"
+            },
+            "firstName": {
+              "type": "string",
+              "example": "John"
+            },
+            "lastName": {
+              "type": "string",
+              "example": "James"
+            },
+            "email": {
+              "type": "string",
+              "example": "john@email.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "12345"
+            },
+            "phone": {
+              "type": "string",
+              "example": "12345"
+            },
+            "userStatus": {
+              "type": "integer",
+              "description": "User Status",
+              "format": "int32",
+              "example": 1
+            }
+          },
+          "xml": {
+            "name": "user"
+          }
+        },
+        "validate_schema": false
+      },
+      "responses": [
+        {
+          "status": 200,
+          "description": "successful operation"
+        },
+        {
+          "status": 400,
+          "description": "bad request",
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  400
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "Input error: unable to convert input to io.swagger.petstore.model.User"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000276"
+          ]
+        },
+        {
+          "status": 404,
+          "description": "user not found"
+        },
+        {
+          "status": 500,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  500
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "There was an error processing your request. It has been logged (ID: c4dfd87f9d48fbb6)",
+                  "There was an error processing your request. It has been logged (ID: 21acd652970f10ec)",
+                  "There was an error processing your request. It has been logged (ID: 240884daa283db14)"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000267",
+            "000269",
+            "000271",
+            "000274"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          27.42,
+          28.334,
+          32.07,
+          33.171,
+          34.073
+        ],
+        "p50_ms": 32.07,
+        "p90_ms": 33.7122,
+        "p99_ms": 34.03692
+      },
+      "notes": [
+        "Poisoned store -> 500 (000267-000275); malformed -> 400 (000276)."
+      ],
+      "handler": "fauxcall_petstore.handlers:updateUser",
+      "collection": "users"
+    },
+    {
+      "id": "DELETE /api/v3/user/{username}",
+      "method": "DELETE",
+      "path": "/api/v3/user/{username}",
+      "spec_path": "/user/{username}",
+      "operation_id": "deleteUser",
+      "summary": "Delete user resource.",
+      "tags": [
+        "user"
+      ],
+      "role": "custom",
+      "params": [
+        {
+          "name": "username",
+          "location": "path",
+          "description": "The name that needs to be deleted",
+          "required": false,
+          "schema": {
+            "type": "string"
+          },
+          "on_invalid": "coerce"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "description": "User deleted"
+        },
+        {
+          "status": 400,
+          "description": "Invalid username supplied"
+        },
+        {
+          "status": 404,
+          "description": "User not found"
+        },
+        {
+          "status": 500,
+          "content_type": "application/json",
+          "observed_schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "examples": [
+                  500
+                ]
+              },
+              "message": {
+                "type": "string",
+                "examples": [
+                  "There was an error processing your request. It has been logged (ID: 67b587591a3a27ff)",
+                  "There was an error processing your request. It has been logged (ID: a52e076571facc17)",
+                  "There was an error processing your request. It has been logged (ID: 20ccf954bfd6583f)"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "examples": [
+            "000277",
+            "000279",
+            "000280",
+            "000281",
+            "000282"
+          ]
+        }
+      ],
+      "latency": {
+        "samples_ms": [
+          25.996,
+          26.595,
+          27.63,
+          28.199,
+          30.357,
+          30.592,
+          32.127,
+          35.584,
+          36.812
+        ],
+        "p50_ms": 30.357,
+        "p90_ms": 35.8296,
+        "p99_ms": 36.71376
+      },
+      "notes": [
+        "Poisoned store -> 500 (000277-000286)."
+      ],
+      "handler": "fauxcall_petstore.handlers:deleteUser",
+      "collection": "users"
+    }
+  ],
+  "errors": [
+    {
+      "name": "unknown_route",
+      "status": 404,
+      "content_type": "application/json",
+      "body_json": {
+        "code": 404,
+        "message": "HTTP 404 Not Found"
+      },
+      "examples": [
+        "000059",
+        "000060",
+        "000056",
+        "000126"
+      ],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
+        "Access-Control-Allow-Headers": "Content-Type, api_key, Authorization",
+        "Access-Control-Expose-Headers": "Content-Disposition",
+        "Server": "Jetty(9.4.53.v20231009)"
+      }
+    },
+    {
+      "name": "method_not_allowed",
+      "status": 405,
+      "content_type": "application/json",
+      "body_json": {
+        "code": 405,
+        "message": "HTTP 405 Method Not Allowed"
+      },
+      "examples": [
+        "000061",
+        "000062",
+        "000124"
+      ],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
+        "Access-Control-Allow-Headers": "Content-Type, api_key, Authorization",
+        "Access-Control-Expose-Headers": "Content-Disposition",
+        "Server": "Jetty(9.4.53.v20231009)"
+      }
+    },
+    {
+      "name": "unsupported_media_type",
+      "status": 415,
+      "content_type": "application/json",
+      "body_json": {
+        "code": 415,
+        "message": "HTTP 415 Unsupported Media Type"
+      },
+      "examples": [
+        "000149",
+        "000187",
+        "000225",
+        "000257"
+      ],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
+        "Access-Control-Allow-Headers": "Content-Type, api_key, Authorization",
+        "Access-Control-Expose-Headers": "Content-Disposition",
+        "Server": "Jetty(9.4.53.v20231009)"
+      }
+    },
+    {
+      "name": "server_error",
+      "status": 500,
+      "content_type": "application/json",
+      "body_json": {
+        "code": 500,
+        "message": "There was an error processing your request. It has been logged (ID: {{hex:16}})"
+      },
+      "examples": [
+        "000014",
+        "000100",
+        "000152",
+        "000213"
+      ],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
+        "Access-Control-Allow-Headers": "Content-Type, api_key, Authorization",
+        "Access-Control-Expose-Headers": "Content-Disposition",
+        "Server": "Jetty(9.4.53.v20231009)"
+      }
+    },
+    {
+      "name": "invalid_id",
+      "status": 400,
+      "content_type": "application/json",
+      "body_json": {
+        "code": 400,
+        "message": "Input error: couldn't convert `{{value}}` to type `class java.lang.Long`"
+      },
+      "examples": [
+        "000045",
+        "000048",
+        "000049",
+        "000050",
+        "000058"
+      ],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
+        "Access-Control-Allow-Headers": "Content-Type, api_key, Authorization",
+        "Access-Control-Expose-Headers": "Content-Disposition",
+        "Server": "Jetty(9.4.53.v20231009)"
+      }
+    },
+    {
+      "name": "pet_not_found",
+      "status": 404,
+      "content_type": "application/xml",
+      "body_text": "Pet not found",
+      "examples": [
+        "000024",
+        "000159",
+        "000176"
+      ],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
+        "Access-Control-Allow-Headers": "Content-Type, api_key, Authorization",
+        "Access-Control-Expose-Headers": "Content-Disposition",
+        "Server": "Jetty(9.4.53.v20231009)"
+      }
+    },
+    {
+      "name": "order_not_found",
+      "status": 404,
+      "content_type": "application/xml",
+      "body_text": "Order not found",
+      "examples": [
+        "000070",
+        "000234"
+      ],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
+        "Access-Control-Allow-Headers": "Content-Type, api_key, Authorization",
+        "Access-Control-Expose-Headers": "Content-Disposition",
+        "Server": "Jetty(9.4.53.v20231009)"
+      }
+    }
+  ],
+  "collections": [
+    {
+      "name": "pets",
+      "key": "id",
+      "key_type": "int",
+      "sources": [
+        "GET /api/v3/pet/findByStatus",
+        "GET /api/v3/pet/{petId}"
+      ],
+      "extract": {
+        "GET /api/v3/pet/findByStatus": "$[*]",
+        "GET /api/v3/pet/{petId}": "$"
+      },
+      "description": "Pets in server list order (the Java ArrayList: updates delete and re-append)."
+    },
+    {
+      "name": "orders",
+      "key": "id",
+      "key_type": "int",
+      "sources": [
+        "GET /api/v3/store/order/{orderId}"
+      ],
+      "extract": {
+        "GET /api/v3/store/order/{orderId}": "$"
+      },
+      "description": "Purchase orders (no list endpoint; only ids found by probing)."
+    },
+    {
+      "name": "users",
+      "key": "username",
+      "key_type": "str",
+      "sources": [
+        "GET /api/v3/user/{username}"
+      ],
+      "extract": {
+        "GET /api/v3/user/{username}": "$"
+      },
+      "order": "recorded",
+      "description": "Seeded users user1..user10 and user?10 in server order (public fixtures from UserData.java; not pseudonymized, see data/privacy.json)."
+    }
+  ],
+  "notes": [
+    "Shared public sandbox: data changes under other users. The world is the state recorded on 2026-10-11.",
+    "No authentication is enforced (000129: bogus bearer -> 200; every call succeeded without credentials).",
+    "Every endpoint negotiates Accept: application/xml (Jackson XML) vs JSON (default for */*, text/plain, mixed lists: 000313-000315).",
+    "Handlers mirror swagger-petstore's Java data layer (UserData/PetData/OrderData, read from github.com/swagger-api/swagger-petstore) where recordings cannot show internals.",
+    "Parameter checks are in the handlers so error bodies follow Accept negotiation; params are declared non-required with on_invalid=coerce on purpose.",
+    "Two sandbox faults are modeled as state: USERS_POISONED and TAGS_POISONED in handlers.py (both true, as recorded); FAUXCALL_PETSTORE_HEALTHY=1 switches to the source's healthy behavior (documented from swagger-petstore source, never recorded).",
+    "Seeded users (user1..user10, user?10) are public fixtures from UserData.java and are recorded un-pseudonymized (data/privacy.json excludes user fields); passwords stay redacted and render as the server's literal XXXXXXXXXXX (000395).",
+    "Server behavior recorded after review: HEAD = GET without body (000429); OPTIONS = generated WADL + Allow (000430; Allow order inferred from that one sample); framework 404/405 as ApiError XML for Accept: application/xml (000426, 000428); YAML via Accept: application/yaml (000431); plain-text errors negotiate JSON when Accept names application/json (000420-000424).",
+    "INFERRED (source/docs, not recorded): null or empty JSON/XML bodies -> 500 for pet and user (recorded for order: 000425); missing Content-Type -> 415; uploadImage on a form-created pet (null photoUrls) -> 500; Jackson scalar coercions ('2' -> 2, 2.7 -> 2, numbers -> strings); XML request parsing (wrapped lists detected by element names); form POST/PUT /pet reads only id, name, status (photoUrls/tags/category form fields unverified); YAML spelling of errors and plain strings (left as JSON); inventory XML for status keys that are not XML names.",
+    "Real-write budget (25 per endpoint) is nearly spent for POST /pet (23) and DELETE /pet (24): further real write parity runs need a new approval."
+  ],
+  "relations": [
+    {
+      "name": "order_pet",
+      "from_collection": "orders",
+      "from_field": "petId",
+      "to_collection": "pets",
+      "required": false,
+      "evidence": "Order.petId names a pet, but the real API never checks it: orders 10 (petId 198772) and 0 (petId 99) point at pets that do not exist (000079, 000350, 000322-000341); POST /store/order accepts any petId (000208)."
+    }
+  ],
+  "invariants": [
+    {
+      "name": "unique_pet_ids",
+      "kind": "unique",
+      "collection": "pets",
+      "field": "id",
+      "description": "Pet ids are unique (addPet replaces an existing id)."
+    },
+    {
+      "name": "unique_order_ids",
+      "kind": "unique",
+      "collection": "orders",
+      "field": "id",
+      "description": "Order ids are unique (addOrder replaces an existing id)."
+    }
+  ],
+  "default_headers": {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
+    "Access-Control-Allow-Headers": "Content-Type, api_key, Authorization",
+    "Access-Control-Expose-Headers": "Content-Disposition",
+    "Server": "Jetty(9.4.53.v20231009)"
+  }
+}

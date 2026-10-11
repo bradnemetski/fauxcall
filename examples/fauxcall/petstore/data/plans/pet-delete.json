@@ -1,0 +1,183 @@
+{
+ "name": "pet-delete",
+ "created_at": "2026-10-11T12:10:00Z",
+ "calls": [
+  {
+   "id": "del-1",
+   "endpoint": "DELETE /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/pet/9837410001"
+   }
+  },
+  {
+   "id": "rb-del-1",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410001"
+   }
+  },
+  {
+   "id": "del-1-again",
+   "endpoint": "DELETE /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/pet/9837410001"
+   }
+  },
+  {
+   "id": "del-2-key",
+   "endpoint": "DELETE /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/pet/9837410002",
+    "headers": {
+     "api_key": "special-key"
+    }
+   }
+  },
+  {
+   "id": "rb-del-2",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "del-3-xml",
+   "endpoint": "DELETE /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/pet/9837410003",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "del-4",
+   "endpoint": "DELETE /api/v3/pet/{petId}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/pet/9837410004"
+   }
+  },
+  {
+   "id": "del-6",
+   "endpoint": "DELETE /api/v3/pet/{petId}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/pet/9837410006"
+   }
+  },
+  {
+   "id": "del-7",
+   "endpoint": "DELETE /api/v3/pet/{petId}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/pet/9837410007"
+   }
+  },
+  {
+   "id": "del-8",
+   "endpoint": "DELETE /api/v3/pet/{petId}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/pet/9837410008"
+   }
+  },
+  {
+   "id": "del-9",
+   "endpoint": "DELETE /api/v3/pet/{petId}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/pet/9837410009"
+   }
+  },
+  {
+   "id": "del-never",
+   "endpoint": "DELETE /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/pet/9837410010"
+   }
+  },
+  {
+   "id": "del-abc",
+   "endpoint": "DELETE /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/pet/abc"
+   }
+  },
+  {
+   "id": "rb-gone-3",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410003"
+   }
+  },
+  {
+   "id": "rb-gone-4",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410004"
+   }
+  },
+  {
+   "id": "rb-gone-6",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410006"
+   }
+  },
+  {
+   "id": "rb-gone-7",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410007"
+   }
+  },
+  {
+   "id": "rb-gone-8",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410008"
+   }
+  },
+  {
+   "id": "rb-gone-9",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410009"
+   }
+  }
+ ]
+}

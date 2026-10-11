@@ -1,0 +1,95 @@
+{
+  "id": "000005",
+  "endpoint": "GET /api/v3/pet/findByStatus",
+  "purpose": "variation",
+  "plan_call": "fbs-multi-comma",
+  "started_at": "2026-10-11T11:33:43.360016Z",
+  "started_ns": 1791718423360016000,
+  "elapsed_ms": 39.155,
+  "ttfb_ms": 38.106,
+  "request": {
+    "method": "GET",
+    "url": "https://petstore3.swagger.io/api/v3/pet/findByStatus?status=pending%2Csold",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+      [
+        "status",
+        "pending,sold"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:33:43 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "142"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "code": 400,
+        "message": "Input error: query parameter `status value `pending,sold` is not in the allowable values `[available, pending, sold]`"
+      },
+      "size": 142
+    }
+  }
+}

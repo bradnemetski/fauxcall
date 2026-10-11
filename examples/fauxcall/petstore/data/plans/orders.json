@@ -1,0 +1,436 @@
+{
+ "name": "orders",
+ "created_at": "2026-10-11T12:20:00Z",
+ "calls": [
+  {
+   "id": "inv-before",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   }
+  },
+  {
+   "id": "ord-full",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "json_body": {
+     "id": 9837420001,
+     "petId": 198772,
+     "quantity": 3,
+     "shipDate": "2026-10-12T10:00:00.000Z",
+     "status": "placed",
+     "complete": false
+    }
+   }
+  },
+  {
+   "id": "rb-full",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420001"
+   }
+  },
+  {
+   "id": "inv-after-full",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   }
+  },
+  {
+   "id": "ord-min",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "json_body": {
+     "id": 9837420002,
+     "petId": 198772,
+     "quantity": 1
+    }
+   }
+  },
+  {
+   "id": "rb-min",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420002"
+   }
+  },
+  {
+   "id": "inv-after-min",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   }
+  },
+  {
+   "id": "ord-approved",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "json_body": {
+     "id": 9837420003,
+     "petId": 198772,
+     "quantity": 2,
+     "status": "approved",
+     "complete": true,
+     "shipDate": "2026-10-12T12:30:45+02:00"
+    }
+   }
+  },
+  {
+   "id": "rb-approved",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420003"
+   }
+  },
+  {
+   "id": "inv-after-approved",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   }
+  },
+  {
+   "id": "ord-delivered",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "json_body": {
+     "id": 9837420004,
+     "petId": 198772,
+     "quantity": 4,
+     "status": "delivered",
+     "shipDate": "2026-10-12"
+    }
+   }
+  },
+  {
+   "id": "rb-delivered",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420004"
+   }
+  },
+  {
+   "id": "inv-after-delivered",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   }
+  },
+  {
+   "id": "ord-bad-status",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "json_body": {
+     "id": 9837420005,
+     "petId": 198772,
+     "quantity": 1,
+     "status": "bogus"
+    }
+   }
+  },
+  {
+   "id": "rb-bad-status",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420005"
+   }
+  },
+  {
+   "id": "ord-bad-qty",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "json_body": {
+     "id": 9837420005,
+     "petId": 198772,
+     "quantity": "abc"
+    }
+   }
+  },
+  {
+   "id": "ord-bad-date",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "json_body": {
+     "id": 9837420005,
+     "petId": 198772,
+     "quantity": 1,
+     "shipDate": "tomorrow"
+    }
+   }
+  },
+  {
+   "id": "ord-malformed",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "text_body": "{\"id\": ",
+    "content_type": "application/json"
+   }
+  },
+  {
+   "id": "ord-textplain",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "text_body": "x",
+    "content_type": "text/plain"
+   }
+  },
+  {
+   "id": "ord-dup",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "json_body": {
+     "id": 9837420001,
+     "petId": 198772,
+     "quantity": 5,
+     "status": "placed"
+    }
+   }
+  },
+  {
+   "id": "rb-dup",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420001"
+   }
+  },
+  {
+   "id": "inv-after-dup",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   }
+  },
+  {
+   "id": "ord-form",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "form": {
+     "id": "9837420005",
+     "petId": "198772",
+     "quantity": "6",
+     "status": "placed"
+    }
+   }
+  },
+  {
+   "id": "rb-form",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420005"
+   }
+  },
+  {
+   "id": "inv-after-form",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   }
+  },
+  {
+   "id": "ord-unknown-field",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "json_body": {
+     "id": 9837420002,
+     "petId": 198772,
+     "quantity": 1,
+     "note": "x"
+    }
+   }
+  },
+  {
+   "id": "del-ord-1",
+   "endpoint": "DELETE /api/v3/store/order/{orderId}",
+   "purpose": "variation",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/store/order/9837420001"
+   }
+  },
+  {
+   "id": "rb-del",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420001"
+   }
+  },
+  {
+   "id": "inv-after-del",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   }
+  },
+  {
+   "id": "del-ord-1-again",
+   "endpoint": "DELETE /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/store/order/9837420001"
+   }
+  },
+  {
+   "id": "del-ord-xml",
+   "endpoint": "DELETE /api/v3/store/order/{orderId}",
+   "purpose": "variation",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/store/order/9837420002",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "del-ord-3",
+   "endpoint": "DELETE /api/v3/store/order/{orderId}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/store/order/9837420003"
+   }
+  },
+  {
+   "id": "del-ord-4",
+   "endpoint": "DELETE /api/v3/store/order/{orderId}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/store/order/9837420004"
+   }
+  },
+  {
+   "id": "del-ord-5",
+   "endpoint": "DELETE /api/v3/store/order/{orderId}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/store/order/9837420005"
+   }
+  },
+  {
+   "id": "del-ord-abc",
+   "endpoint": "DELETE /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/store/order/abc"
+   }
+  },
+  {
+   "id": "rb-gone-2",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420002"
+   }
+  },
+  {
+   "id": "rb-gone-3",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420003"
+   }
+  },
+  {
+   "id": "rb-gone-4",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420004"
+   }
+  },
+  {
+   "id": "rb-gone-5",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420005"
+   }
+  },
+  {
+   "id": "inv-end",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   }
+  }
+ ]
+}

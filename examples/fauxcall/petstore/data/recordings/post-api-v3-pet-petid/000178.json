@@ -1,0 +1,100 @@
+{
+  "id": "000178",
+  "endpoint": "POST /api/v3/pet/{petId}",
+  "purpose": "variation",
+  "plan_call": "upd-formbody",
+  "started_at": "2026-10-11T11:41:08.327961Z",
+  "started_ns": 1791718868327961000,
+  "elapsed_ms": 30.317,
+  "ttfb_ms": 29.99,
+  "request": {
+    "method": "POST",
+    "url": "https://petstore3.swagger.io/api/v3/pet/9837410002",
+    "path": "/api/v3/pet/9837410002",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-length",
+        "30"
+      ],
+      [
+        "content-type",
+        "application/x-www-form-urlencoded"
+      ]
+    ],
+    "body": {
+      "kind": "form",
+      "content_type": "application/x-www-form-urlencoded",
+      "text": "name=fauxcall-probe-2-formbody",
+      "size": 30
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:41:08 GMT"
+      ],
+      [
+        "content-type",
+        "application/xml"
+      ],
+      [
+        "content-length",
+        "28"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/xml",
+      "text": "No Name provided. Try again?",
+      "size": 28
+    }
+  }
+}

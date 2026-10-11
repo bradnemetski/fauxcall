@@ -1,0 +1,847 @@
+{
+  "score": 0.99712,
+  "threshold": 0.98,
+  "ok": true,
+  "unmatched_scenarios": [],
+  "endpoints": {
+    "GET /api/v3/Pet/1": {
+      "passed": 11.0,
+      "total": 11.0,
+      "score": 1.0
+    },
+    "GET /api/v3/Store/inventory": {
+      "passed": 11.0,
+      "total": 11.0,
+      "score": 1.0
+    },
+    "GET /api/v3/does-not-exist": {
+      "passed": 18.0,
+      "total": 18.0,
+      "score": 1.0
+    },
+    "GET /api/v3/openapi.json": {
+      "passed": 9.0,
+      "total": 9.0,
+      "score": 1.0
+    },
+    "GET /api/v3/openapi.yaml": {
+      "passed": 7.0,
+      "total": 7.0,
+      "score": 1.0
+    },
+    "GET /api/v3/pet": {
+      "passed": 11.0,
+      "total": 11.0,
+      "score": 1.0
+    },
+    "GET /api/v3/pet/findByStatus": {
+      "passed": 106.0,
+      "total": 107.0,
+      "score": 0.99065
+    },
+    "GET /api/v3/pet/findByTags": {
+      "passed": 74.0,
+      "total": 74.0,
+      "score": 1.0
+    },
+    "GET /api/v3/pet/{petId}": {
+      "passed": 340.0,
+      "total": 340.0,
+      "score": 1.0
+    },
+    "GET /api/v3/store/inventory": {
+      "passed": 34.0,
+      "total": 34.0,
+      "score": 1.0
+    },
+    "GET /api/v3/store/order": {
+      "passed": 18.0,
+      "total": 18.0,
+      "score": 1.0
+    },
+    "GET /api/v3/store/order/{orderId}": {
+      "passed": 144.0,
+      "total": 144.0,
+      "score": 1.0
+    },
+    "GET /api/v3/user": {
+      "passed": 11.0,
+      "total": 11.0,
+      "score": 1.0
+    },
+    "GET /api/v3/user/login": {
+      "passed": 6.0,
+      "total": 7.0,
+      "score": 0.85714
+    },
+    "GET /api/v3/user/logout": {
+      "passed": 7.0,
+      "total": 7.0,
+      "score": 1.0
+    },
+    "GET /api/v3/user/{username}": {
+      "passed": 208.5,
+      "total": 208.5,
+      "score": 1.0
+    },
+    "GET /api/v4/pet/1": {
+      "passed": 11.0,
+      "total": 11.0,
+      "score": 1.0
+    },
+    "HEAD /api/v3/pet/9": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "OPTIONS /api/v3/pet/9": {
+      "passed": 6.0,
+      "total": 7.0,
+      "score": 0.85714
+    }
+  },
+  "scenarios": {
+    "tests/e2e/test_scenarios.py::test_find_by_status[available]": [
+      {
+        "call": "GET /api/v3/pet/findByStatus",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_status[pending]": [
+      {
+        "call": "GET /api/v3/pet/findByStatus",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_status[sold]": [
+      {
+        "call": "GET /api/v3/pet/findByStatus",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_status_takes_the_first_value": [
+      {
+        "call": "GET /api/v3/pet/findByStatus",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_status_rejects_values[Available]": [
+      {
+        "call": "GET /api/v3/pet/findByStatus",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_status_rejects_values[bogus]": [
+      {
+        "call": "GET /api/v3/pet/findByStatus",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_status_rejects_values[]": [
+      {
+        "call": "GET /api/v3/pet/findByStatus",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_status_rejects_values[pending,sold]": [
+      {
+        "call": "GET /api/v3/pet/findByStatus",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_status_requires_status": [
+      {
+        "call": "GET /api/v3/pet/findByStatus",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_status_as_xml": [
+      {
+        "call": "GET /api/v3/pet/findByStatus",
+        "score": 0.85714,
+        "failures": [
+          {
+            "check": "text body",
+            "weight": 1.0,
+            "detail": "text differs"
+          }
+        ]
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_listing_and_detail_agree": [
+      {
+        "call": "GET /api/v3/pet/findByStatus",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/pet/1791717175310",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/pet/1791717177227",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/pet/719890218",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_tags_is_broken_in_the_sandbox[tags0]": [
+      {
+        "call": "GET /api/v3/pet/findByTags",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_tags_is_broken_in_the_sandbox[tags1]": [
+      {
+        "call": "GET /api/v3/pet/findByTags",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_tags_is_broken_in_the_sandbox[tags2]": [
+      {
+        "call": "GET /api/v3/pet/findByTags",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_tags_is_broken_in_the_sandbox[tags3]": [
+      {
+        "call": "GET /api/v3/pet/findByTags",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_tags_errors": [
+      {
+        "call": "GET /api/v3/pet/findByTags",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/pet/findByTags",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/pet/findByTags",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_get_pet[1]": [
+      {
+        "call": "GET /api/v3/pet/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_get_pet[6]": [
+      {
+        "call": "GET /api/v3/pet/6",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_get_pet[9]": [
+      {
+        "call": "GET /api/v3/pet/9",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_get_pet[10]": [
+      {
+        "call": "GET /api/v3/pet/10",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_get_pet_as_xml[1]": [
+      {
+        "call": "GET /api/v3/pet/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_get_pet_as_xml[6]": [
+      {
+        "call": "GET /api/v3/pet/6",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_get_pet_as_xml[9]": [
+      {
+        "call": "GET /api/v3/pet/9",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_everything_but_exact_xml_gets_json[application/json]": [
+      {
+        "call": "GET /api/v3/pet/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_everything_but_exact_xml_gets_json[*/*]": [
+      {
+        "call": "GET /api/v3/pet/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_everything_but_exact_xml_gets_json[text/plain]": [
+      {
+        "call": "GET /api/v3/pet/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_everything_but_exact_xml_gets_json[application/xml, application/json]": [
+      {
+        "call": "GET /api/v3/pet/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_missing_pet[2]": [
+      {
+        "call": "GET /api/v3/pet/2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_missing_pet[3]": [
+      {
+        "call": "GET /api/v3/pet/3",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_missing_pet[0]": [
+      {
+        "call": "GET /api/v3/pet/0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_missing_pet[-1]": [
+      {
+        "call": "GET /api/v3/pet/-1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_missing_pet[99999]": [
+      {
+        "call": "GET /api/v3/pet/99999",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_missing_pet[9837410010]": [
+      {
+        "call": "GET /api/v3/pet/9837410010",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_pet_id[abc]": [
+      {
+        "call": "GET /api/v3/pet/abc",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_pet_id[1.5]": [
+      {
+        "call": "GET /api/v3/pet/1.5",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_pet_id[99999999999999999999]": [
+      {
+        "call": "GET /api/v3/pet/99999999999999999999",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_pet_id[%20]": [
+      {
+        "call": "GET /api/v3/pet/%20",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_pet_id[findbystatus]": [
+      {
+        "call": "GET /api/v3/pet/findbystatus",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_pet_id_as_xml": [
+      {
+        "call": "GET /api/v3/pet/abc",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_routes[/api/v3/Pet/1]": [
+      {
+        "call": "GET /api/v3/Pet/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_routes[/api/v3/does-not-exist]": [
+      {
+        "call": "GET /api/v3/does-not-exist",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_routes[/api/v4/pet/1]": [
+      {
+        "call": "GET /api/v4/pet/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_routes[/api/v3/Store/inventory]": [
+      {
+        "call": "GET /api/v3/Store/inventory",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_trailing_slash_is_ignored[/api/v3/pet/1/]": [
+      {
+        "call": "GET /api/v3/pet/1/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_trailing_slash_is_ignored[/api/v3/store/inventory/]": [
+      {
+        "call": "GET /api/v3/store/inventory/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_method_not_allowed[/api/v3/pet]": [
+      {
+        "call": "GET /api/v3/pet",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_method_not_allowed[/api/v3/store/order]": [
+      {
+        "call": "GET /api/v3/store/order",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_method_not_allowed[/api/v3/user]": [
+      {
+        "call": "GET /api/v3/user",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_no_authentication_is_enforced": [
+      {
+        "call": "GET /api/v3/pet/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_inventory": [
+      {
+        "call": "GET /api/v3/store/inventory",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_get_order[10]": [
+      {
+        "call": "GET /api/v3/store/order/10",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_get_order[0]": [
+      {
+        "call": "GET /api/v3/store/order/0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_get_order_as_xml": [
+      {
+        "call": "GET /api/v3/store/order/10",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_missing_order[1]": [
+      {
+        "call": "GET /api/v3/store/order/1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_missing_order[5]": [
+      {
+        "call": "GET /api/v3/store/order/5",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_missing_order[-1]": [
+      {
+        "call": "GET /api/v3/store/order/-1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_missing_order[11]": [
+      {
+        "call": "GET /api/v3/store/order/11",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_missing_order[9837420001]": [
+      {
+        "call": "GET /api/v3/store/order/9837420001",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_order_id[abc]": [
+      {
+        "call": "GET /api/v3/store/order/abc",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_order_id[1.5]": [
+      {
+        "call": "GET /api/v3/store/order/1.5",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_malformed_order_id[99999999999999999999]": [
+      {
+        "call": "GET /api/v3/store/order/99999999999999999999",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_inventory_counts_the_orders_it_can_see": [
+      {
+        "call": "GET /api/v3/store/inventory",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/store/order/10",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_seeded_user[1]": [
+      {
+        "call": "GET /api/v3/user/user1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_seeded_user[2]": [
+      {
+        "call": "GET /api/v3/user/user2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_seeded_user[3]": [
+      {
+        "call": "GET /api/v3/user/user3",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_seeded_user[4]": [
+      {
+        "call": "GET /api/v3/user/user4",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_seeded_user[5]": [
+      {
+        "call": "GET /api/v3/user/user5",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_seeded_user[6]": [
+      {
+        "call": "GET /api/v3/user/user6",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_seeded_user[7]": [
+      {
+        "call": "GET /api/v3/user/user7",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_seeded_user[8]": [
+      {
+        "call": "GET /api/v3/user/user8",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_seeded_user[9]": [
+      {
+        "call": "GET /api/v3/user/user9",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_seeded_user[10]": [
+      {
+        "call": "GET /api/v3/user/user10",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_seeded_user_as_xml": [
+      {
+        "call": "GET /api/v3/user/user2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_user_hits_the_broken_record[theUser]": [
+      {
+        "call": "GET /api/v3/user/theUser",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_user_hits_the_broken_record[nobody-here]": [
+      {
+        "call": "GET /api/v3/user/nobody-here",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_unknown_user_hits_the_broken_record[fauxcall-probe-1]": [
+      {
+        "call": "GET /api/v3/user/fauxcall-probe-1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_login_always_succeeds": [
+      {
+        "call": "GET /api/v3/user/login",
+        "score": 0.85714,
+        "failures": [
+          {
+            "check": "text body",
+            "weight": 1.0,
+            "detail": "text differs"
+          }
+        ]
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_logout": [
+      {
+        "call": "GET /api/v3/user/logout",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_not_found_text_follows_accept[application/json-application/json]": [
+      {
+        "call": "GET /api/v3/pet/9837410004",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/store/order/9837420004",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_not_found_text_follows_accept[application/xml, application/json-application/json]": [
+      {
+        "call": "GET /api/v3/pet/9837410004",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/store/order/9837420004",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_not_found_text_follows_accept[*/*-application/xml]": [
+      {
+        "call": "GET /api/v3/pet/9837410004",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/store/order/9837420004",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_not_found_text_follows_accept[application/xml-application/xml]": [
+      {
+        "call": "GET /api/v3/pet/9837410004",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/store/order/9837420004",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_find_by_tags_empty_as_json": [
+      {
+        "call": "GET /api/v3/pet/findByTags",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_framework_errors_as_xml[/api/v3/does-not-exist]": [
+      {
+        "call": "GET /api/v3/does-not-exist",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_framework_errors_as_xml[/api/v3/store/order]": [
+      {
+        "call": "GET /api/v3/store/order",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_head": [
+      {
+        "call": "HEAD /api/v3/pet/9",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_options_describes_the_resource": [
+      {
+        "call": "OPTIONS /api/v3/pet/9",
+        "score": 0.85714,
+        "failures": [
+          {
+            "check": "text body",
+            "weight": 1.0,
+            "detail": "text differs"
+          }
+        ]
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_yaml": [
+      {
+        "call": "GET /api/v3/pet/9",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_scenarios.py::test_openapi_documents": [
+      {
+        "call": "GET /api/v3/openapi.json",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/openapi.yaml",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_writes.py::test_pet_lifecycle": [
+      {
+        "call": "GET /api/v3/pet/9837410001",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_writes.py::test_pet_write_quirks": [
+      {
+        "call": "GET /api/v3/pet/9837410002",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/pet/9837410003",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_writes.py::test_pet_writes_on_missing_pets": [
+      {
+        "call": "GET /api/v3/pet/9837410004",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_writes.py::test_order_lifecycle_and_inventory": [
+      {
+        "call": "GET /api/v3/store/order/9837420001",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/store/order/9837420002",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "GET /api/v3/store/inventory",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_writes.py::test_order_errors": [],
+    "tests/e2e/test_writes.py::test_user_writes_fail": [],
+    "tests/e2e/test_writes.py::test_user_write_validation": []
+  }
+}

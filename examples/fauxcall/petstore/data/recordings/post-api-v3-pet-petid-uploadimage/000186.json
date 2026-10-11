@@ -1,0 +1,103 @@
+{
+  "id": "000186",
+  "endpoint": "POST /api/v3/pet/{petId}/uploadImage",
+  "purpose": "invalid",
+  "plan_call": "up-abc",
+  "started_at": "2026-10-11T11:41:12.346787Z",
+  "started_ns": 1791718872346787000,
+  "elapsed_ms": 34.619,
+  "ttfb_ms": 34.365,
+  "request": {
+    "method": "POST",
+    "url": "https://petstore3.swagger.io/api/v3/pet/abc/uploadImage",
+    "path": "/api/v3/pet/abc/uploadImage",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/octet-stream"
+      ],
+      [
+        "content-length",
+        "1"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/octet-stream",
+      "text": "X",
+      "size": 1
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:41:12 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "91"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "code": 400,
+        "message": "Input error: couldn't convert `abc` to type `class java.lang.Long`"
+      },
+      "size": 91
+    }
+  }
+}

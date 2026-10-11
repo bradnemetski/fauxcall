@@ -1,0 +1,650 @@
+{
+ "name": "store-user-reads",
+ "created_at": "2026-10-11T11:50:00Z",
+ "calls": [
+  {
+   "id": "inv-1",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   }
+  },
+  {
+   "id": "inv-key",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory",
+    "headers": {
+     "api_key": "special-key"
+    }
+   }
+  },
+  {
+   "id": "inv-xml",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "inv-time",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "time_profile",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   },
+   "repeat": 4,
+   "interval_ms": 10000
+  },
+  {
+   "id": "order-1",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/1"
+   }
+  },
+  {
+   "id": "order-2",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/2"
+   }
+  },
+  {
+   "id": "order-3",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/3"
+   }
+  },
+  {
+   "id": "order-4",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/4"
+   }
+  },
+  {
+   "id": "order-5",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/5"
+   }
+  },
+  {
+   "id": "order-6",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/6"
+   }
+  },
+  {
+   "id": "order-7",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/7"
+   }
+  },
+  {
+   "id": "order-8",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/8"
+   }
+  },
+  {
+   "id": "order-9",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9"
+   }
+  },
+  {
+   "id": "order-10",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/10"
+   }
+  },
+  {
+   "id": "order-free-1",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420001"
+   },
+   "note": "confirm future probe id unused"
+  },
+  {
+   "id": "order-free-2",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420002"
+   },
+   "note": "confirm future probe id unused"
+  },
+  {
+   "id": "order-free-3",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420003"
+   },
+   "note": "confirm future probe id unused"
+  },
+  {
+   "id": "order-free-4",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420004"
+   },
+   "note": "confirm future probe id unused"
+  },
+  {
+   "id": "order-free-5",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420005"
+   },
+   "note": "confirm future probe id unused"
+  },
+  {
+   "id": "order-abc",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/abc"
+   }
+  },
+  {
+   "id": "order-neg",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/-1"
+   }
+  },
+  {
+   "id": "order-zero",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/0"
+   }
+  },
+  {
+   "id": "order-huge",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/99999999999999999999"
+   }
+  },
+  {
+   "id": "order-float",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/1.5"
+   }
+  },
+  {
+   "id": "order-xml",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/1",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "order-time",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "time_profile",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/1"
+   },
+   "repeat": 4,
+   "interval_ms": 10000
+  },
+  {
+   "id": "user-user1",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user1"
+   }
+  },
+  {
+   "id": "user-user2",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user2"
+   }
+  },
+  {
+   "id": "user-user3",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user3"
+   }
+  },
+  {
+   "id": "user-user5",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user5"
+   }
+  },
+  {
+   "id": "user-user10",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user10"
+   }
+  },
+  {
+   "id": "user-theUser",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/theUser"
+   }
+  },
+  {
+   "id": "user-User1",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/User1"
+   }
+  },
+  {
+   "id": "user-free-1",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-1"
+   },
+   "note": "confirm future probe username unused"
+  },
+  {
+   "id": "user-free-2",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-2"
+   },
+   "note": "confirm future probe username unused"
+  },
+  {
+   "id": "user-free-3",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-3"
+   },
+   "note": "confirm future probe username unused"
+  },
+  {
+   "id": "user-free-4",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-4"
+   },
+   "note": "confirm future probe username unused"
+  },
+  {
+   "id": "user-free-5",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-5"
+   },
+   "note": "confirm future probe username unused"
+  },
+  {
+   "id": "user-weird",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/%20"
+   }
+  },
+  {
+   "id": "user-xml",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user1",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "login-ok",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "user1"
+     ],
+     [
+      "password",
+      "XXXXXXXXXXX"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "login-other",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "theUser"
+     ],
+     [
+      "password",
+      "12345"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "login-wrong",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "user1"
+     ],
+     [
+      "password",
+      "wrong"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "login-unknown",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "fauxcall-probe-1"
+     ],
+     [
+      "password",
+      "x"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "login-nopw",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "user1"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "login-none",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login"
+   }
+  },
+  {
+   "id": "login-empty",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      ""
+     ],
+     [
+      "password",
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "id": "login-xml",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "user1"
+     ],
+     [
+      "password",
+      "x"
+     ]
+    ],
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "login-time",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "time_profile",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "user1"
+     ],
+     [
+      "password",
+      "x"
+     ]
+    ]
+   },
+   "repeat": 4,
+   "interval_ms": 10000
+  },
+  {
+   "id": "logout",
+   "endpoint": "GET /api/v3/user/logout",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/logout"
+   }
+  },
+  {
+   "id": "logout-xml",
+   "endpoint": "GET /api/v3/user/logout",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/logout",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "logout-q",
+   "endpoint": "GET /api/v3/user/logout",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/logout",
+    "query": [
+     [
+      "username",
+      "user1"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "edge-user-405",
+   "endpoint": "GET /api/v3/user",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user"
+   }
+  },
+  {
+   "id": "edge-store-slash",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory/"
+   }
+  },
+  {
+   "id": "edge-store-case",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/Store/inventory"
+   }
+  },
+  {
+   "id": "edge-openapi",
+   "endpoint": "GET /api/v3/openapi.json",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/openapi.json"
+   }
+  },
+  {
+   "id": "auth-badkey",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "auth",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/1",
+    "headers": {
+     "api_key": "invalid-key"
+    }
+   }
+  },
+  {
+   "id": "auth-badbearer",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "auth",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/1",
+    "headers": {
+     "Authorization": "Bearer invalid"
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,97 @@
+{
+  "id": "000385",
+  "endpoint": "GET /api/v3/user/{username}",
+  "plan_call": "seed-user6",
+  "started_at": "2026-10-11T12:14:29.368751Z",
+  "started_ns": 1791720869368751000,
+  "elapsed_ms": 38.966,
+  "ttfb_ms": 37.724,
+  "request": {
+    "method": "GET",
+    "url": "https://petstore3.swagger.io/api/v3/user/user6",
+    "path": "/api/v3/user/user6",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:14:29 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "168"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 6,
+        "username": "user6",
+        "firstName": "first name 6",
+        "lastName": "last name 6",
+        "email": "email6@test.com",
+        "password": "[REDACTED]",
+        "phone": "123-456-7890",
+        "userStatus": 3
+      },
+      "size": 168
+    }
+  },
+  "redacted": [
+    "response:$.password"
+  ]
+}

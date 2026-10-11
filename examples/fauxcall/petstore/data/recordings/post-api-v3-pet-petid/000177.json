@@ -1,0 +1,99 @@
+{
+  "id": "000177",
+  "endpoint": "POST /api/v3/pet/{petId}",
+  "purpose": "invalid",
+  "plan_call": "upd-abc",
+  "started_at": "2026-10-11T11:41:07.826024Z",
+  "started_ns": 1791718867826024000,
+  "elapsed_ms": 33.183,
+  "ttfb_ms": 32.089,
+  "request": {
+    "method": "POST",
+    "url": "https://petstore3.swagger.io/api/v3/pet/abc?name=x",
+    "path": "/api/v3/pet/abc",
+    "query": [
+      [
+        "name",
+        "x"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "content-length",
+        "0"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:41:07 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "91"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "code": 400,
+        "message": "Input error: couldn't convert `abc` to type `class java.lang.Long`"
+      },
+      "size": 91
+    }
+  }
+}

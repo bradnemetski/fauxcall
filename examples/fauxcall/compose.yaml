@@ -12,6 +12,18 @@ services:
     environment:
       FAUXCALL_HOST: "0.0.0.0"
       FAUXCALL_PORT: "8701"
+  petstore:
+    build:
+      context: .
+      dockerfile: petstore/Dockerfile
+    ports:
+      - "8704:8704"
+    env_file:
+      - path: petstore/.env
+        required: false
+    environment:
+      FAUXCALL_HOST: "0.0.0.0"
+      FAUXCALL_PORT: "8704"
   refapi:
     build:
       context: .

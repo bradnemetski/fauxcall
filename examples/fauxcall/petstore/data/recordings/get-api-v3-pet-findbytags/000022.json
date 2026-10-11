@@ -1,0 +1,92 @@
+{
+  "id": "000022",
+  "endpoint": "GET /api/v3/pet/findByTags",
+  "purpose": "invalid",
+  "plan_call": "fbt-empty",
+  "started_at": "2026-10-11T11:34:20.702251Z",
+  "started_ns": 1791718460702251000,
+  "elapsed_ms": 37.246,
+  "ttfb_ms": 35.869,
+  "request": {
+    "method": "GET",
+    "url": "https://petstore3.swagger.io/api/v3/pet/findByTags?tags=",
+    "path": "/api/v3/pet/findByTags",
+    "query": [
+      [
+        "tags",
+        ""
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:34:20 GMT"
+      ],
+      [
+        "content-type",
+        "application/xml"
+      ],
+      [
+        "content-length",
+        "28"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/xml",
+      "text": "No tags provided. Try again?",
+      "size": 28
+    }
+  }
+}

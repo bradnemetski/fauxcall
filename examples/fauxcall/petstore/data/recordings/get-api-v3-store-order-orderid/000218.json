@@ -1,0 +1,93 @@
+{
+  "id": "000218",
+  "endpoint": "GET /api/v3/store/order/{orderId}",
+  "purpose": "write_readback",
+  "plan_call": "rb-delivered",
+  "started_at": "2026-10-11T11:42:24.971317Z",
+  "started_ns": 1791718944971317000,
+  "elapsed_ms": 33.937,
+  "ttfb_ms": 32.976,
+  "request": {
+    "method": "GET",
+    "url": "https://petstore3.swagger.io/api/v3/store/order/9837420004",
+    "path": "/api/v3/store/order/9837420004",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:42:25 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "126"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 9837420004,
+        "petId": 198772,
+        "quantity": 4,
+        "shipDate": "2026-10-12T00:00:00.000+00:00",
+        "status": "delivered",
+        "complete": false
+      },
+      "size": 126
+    }
+  }
+}

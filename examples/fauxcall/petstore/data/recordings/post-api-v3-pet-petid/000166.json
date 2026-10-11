@@ -1,0 +1,106 @@
+{
+  "id": "000166",
+  "endpoint": "POST /api/v3/pet/{petId}",
+  "purpose": "variation",
+  "plan_call": "upd-both",
+  "started_at": "2026-10-11T11:41:02.300764Z",
+  "started_ns": 1791718862300764000,
+  "elapsed_ms": 31.817,
+  "ttfb_ms": 31.39,
+  "request": {
+    "method": "POST",
+    "url": "https://petstore3.swagger.io/api/v3/pet/9837410002?name=fauxcall-probe-2-form&status=sold",
+    "path": "/api/v3/pet/9837410002",
+    "query": [
+      [
+        "name",
+        "fauxcall-probe-2-form"
+      ],
+      [
+        "status",
+        "sold"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "content-length",
+        "0"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:41:02 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "89"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 9837410002,
+        "name": "fauxcall-probe-2-form",
+        "photoUrls": [],
+        "tags": [],
+        "status": "sold"
+      },
+      "size": 89
+    }
+  }
+}

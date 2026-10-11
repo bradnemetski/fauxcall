@@ -1,0 +1,97 @@
+{
+  "id": "000389",
+  "endpoint": "GET /api/v3/user/{username}",
+  "plan_call": "seed-user10",
+  "started_at": "2026-10-11T12:14:31.375364Z",
+  "started_ns": 1791720871375364000,
+  "elapsed_ms": 40.202,
+  "ttfb_ms": 39.958,
+  "request": {
+    "method": "GET",
+    "url": "https://petstore3.swagger.io/api/v3/user/user10",
+    "path": "/api/v3/user/user10",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:14:31 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "173"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 10,
+        "username": "user10",
+        "firstName": "first name 10",
+        "lastName": "last name 10",
+        "email": "email10@test.com",
+        "password": "[REDACTED]",
+        "phone": "123-456-7890",
+        "userStatus": 1
+      },
+      "size": 173
+    }
+  },
+  "redacted": [
+    "response:$.password"
+  ]
+}

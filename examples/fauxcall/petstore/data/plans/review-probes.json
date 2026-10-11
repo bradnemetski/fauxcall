@@ -1,0 +1,756 @@
+{
+ "name": "review-probes",
+ "created_at": "2026-10-11T16:10:00Z",
+ "calls": [
+  {
+   "id": "seed-user1",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user1"
+   }
+  },
+  {
+   "id": "seed-user2",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user2"
+   }
+  },
+  {
+   "id": "seed-user3",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user3"
+   }
+  },
+  {
+   "id": "seed-user4",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user4"
+   }
+  },
+  {
+   "id": "seed-user5",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user5"
+   }
+  },
+  {
+   "id": "seed-user6",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user6"
+   }
+  },
+  {
+   "id": "seed-user7",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user7"
+   }
+  },
+  {
+   "id": "seed-user8",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user8"
+   }
+  },
+  {
+   "id": "seed-user9",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user9"
+   }
+  },
+  {
+   "id": "seed-user10",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user10"
+   }
+  },
+  {
+   "id": "seed-user%3F10",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user%3F10"
+   }
+  },
+  {
+   "id": "user-nf-theUser",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/theUser"
+   }
+  },
+  {
+   "id": "user-nf-User1",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/User1"
+   }
+  },
+  {
+   "id": "user-nf-fauxcall-probe-1",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-1"
+   }
+  },
+  {
+   "id": "user-nf-%20",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/%20"
+   }
+  },
+  {
+   "id": "user-xml",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user1",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "user-nf-xml",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-1",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "login-ok",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "user1"
+     ],
+     [
+      "password",
+      "XXXXXXXXXXX"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "login-other",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "theUser"
+     ],
+     [
+      "password",
+      "12345"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "login-wrong",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "user1"
+     ],
+     [
+      "password",
+      "wrong"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "login-nopw",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "user1"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "login-none",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login"
+   }
+  },
+  {
+   "id": "login-xml",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "user1"
+     ],
+     [
+      "password",
+      "x"
+     ]
+    ],
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "login-time",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "time_profile",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "user1"
+     ],
+     [
+      "password",
+      "x"
+     ]
+    ]
+   },
+   "repeat": 3,
+   "interval_ms": 10000
+  },
+  {
+   "id": "logout-q",
+   "endpoint": "GET /api/v3/user/logout",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/logout",
+    "query": [
+     [
+      "username",
+      "user1"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "edge-openapi",
+   "endpoint": "GET /api/v3/openapi.json",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/openapi.json"
+   }
+  },
+  {
+   "id": "edge-openapi-yaml",
+   "endpoint": "GET /api/v3/openapi.yaml",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/openapi.yaml"
+   }
+  },
+  {
+   "id": "cu-full",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "json_body": {
+     "id": 9837430001,
+     "username": "fauxcall-probe-1",
+     "firstName": "Probe1",
+     "lastName": "Fauxcall",
+     "email": "fauxcall-probe-1@example.com",
+     "password": "fauxcall-pw",
+     "phone": "555-0100",
+     "userStatus": 1
+    }
+   }
+  },
+  {
+   "id": "cu-min",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "json_body": {
+     "username": "fauxcall-probe-2"
+    }
+   }
+  },
+  {
+   "id": "cu-badtype",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "json_body": {
+     "id": 9837430003,
+     "username": "fauxcall-probe-3",
+     "firstName": "Probe3",
+     "lastName": "Fauxcall",
+     "email": "fauxcall-probe-3@example.com",
+     "password": "fauxcall-pw",
+     "phone": "555-0100",
+     "userStatus": "x"
+    }
+   }
+  },
+  {
+   "id": "cu-form",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "form": {
+     "username": "fauxcall-probe-7",
+     "firstName": "Form",
+     "userStatus": "2"
+    }
+   }
+  },
+  {
+   "id": "cu-xml-accept",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "headers": {
+     "Accept": "application/xml"
+    },
+    "json_body": {
+     "id": 9837430001,
+     "username": "fauxcall-probe-1",
+     "firstName": "Probe1",
+     "lastName": "Fauxcall",
+     "email": "fauxcall-probe-1@example.com",
+     "password": "fauxcall-pw",
+     "phone": "555-0100",
+     "userStatus": 1
+    }
+   }
+  },
+  {
+   "id": "cl-two",
+   "endpoint": "POST /api/v3/user/createWithList",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user/createWithList",
+    "json_body": [
+     {
+      "id": 9837430004,
+      "username": "fauxcall-probe-4",
+      "firstName": "Probe4",
+      "lastName": "Fauxcall",
+      "email": "fauxcall-probe-4@example.com",
+      "password": "fauxcall-pw",
+      "phone": "555-0100",
+      "userStatus": 1
+     },
+     {
+      "id": 9837430005,
+      "username": "fauxcall-probe-5",
+      "firstName": "Probe5",
+      "lastName": "Fauxcall",
+      "email": "fauxcall-probe-5@example.com",
+      "password": "fauxcall-pw",
+      "phone": "555-0100",
+      "userStatus": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "cl-xml-body",
+   "endpoint": "POST /api/v3/user/createWithList",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user/createWithList",
+    "text_body": "<User><item><username>fauxcall-probe-4</username></item></User>",
+    "content_type": "application/xml"
+   }
+  },
+  {
+   "id": "pu-ok",
+   "endpoint": "PUT /api/v3/user/{username}",
+   "purpose": "variation",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/user/fauxcall-probe-1",
+    "json_body": {
+     "id": 9837430001,
+     "username": "fauxcall-probe-1",
+     "firstName": "Updated",
+     "lastName": "Fauxcall",
+     "email": "fauxcall-probe-1@example.com",
+     "password": "fauxcall-pw",
+     "phone": "555-0100",
+     "userStatus": 1
+    }
+   }
+  },
+  {
+   "id": "pu-malformed",
+   "endpoint": "PUT /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/user/fauxcall-probe-1",
+    "text_body": "{x",
+    "content_type": "application/json"
+   }
+  },
+  {
+   "id": "du-1",
+   "endpoint": "DELETE /api/v3/user/{username}",
+   "purpose": "variation",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/user/fauxcall-probe-1"
+   }
+  },
+  {
+   "id": "du-xml",
+   "endpoint": "DELETE /api/v3/user/{username}",
+   "purpose": "variation",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/user/fauxcall-probe-2",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "nf-pet-acceptjson",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410004",
+    "headers": {
+     "Accept": "application/json"
+    }
+   }
+  },
+  {
+   "id": "nf-pet-mixed",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410004",
+    "headers": {
+     "Accept": "application/xml, application/json"
+    }
+   }
+  },
+  {
+   "id": "nf-order-acceptjson",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420004",
+    "headers": {
+     "Accept": "application/json"
+    }
+   }
+  },
+  {
+   "id": "tags-empty-json",
+   "endpoint": "GET /api/v3/pet/findByTags",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByTags",
+    "query": [
+     [
+      "tags",
+      ""
+     ]
+    ],
+    "headers": {
+     "Accept": "application/json"
+    }
+   }
+  },
+  {
+   "id": "noname-json",
+   "endpoint": "POST /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410004",
+    "query": [
+     [
+      "status",
+      "pending"
+     ]
+    ],
+    "headers": {
+     "Accept": "application/json"
+    }
+   }
+  },
+  {
+   "id": "noorder-null",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "text_body": "null",
+    "content_type": "application/json"
+   }
+  },
+  {
+   "id": "route404-xml",
+   "endpoint": "GET /api/v3/does-not-exist",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/does-not-exist",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "upload415-xml",
+   "endpoint": "POST /api/v3/pet/{petId}/uploadImage",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410004/uploadImage",
+    "headers": {
+     "Accept": "application/xml"
+    },
+    "text_body": "x",
+    "content_type": "text/plain"
+   }
+  },
+  {
+   "id": "method405-xml",
+   "endpoint": "GET /api/v3/store/order",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "head-pet",
+   "endpoint": "HEAD /api/v3/pet/{petId}",
+   "purpose": "edge",
+   "request": {
+    "method": "HEAD",
+    "path": "/api/v3/pet/1"
+   }
+  },
+  {
+   "id": "options-pet",
+   "endpoint": "OPTIONS /api/v3/pet/{petId}",
+   "purpose": "edge",
+   "request": {
+    "method": "OPTIONS",
+    "path": "/api/v3/pet/1"
+   }
+  },
+  {
+   "id": "yaml-pet",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9",
+    "headers": {
+     "Accept": "application/yaml"
+    }
+   }
+  },
+  {
+   "id": "guard-o1",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420001"
+   }
+  },
+  {
+   "id": "guard-o2",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420002"
+   }
+  },
+  {
+   "id": "ship-digits",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "json_body": {
+     "id": 9837420001,
+     "petId": 1,
+     "quantity": 0,
+     "shipDate": "1437432544000",
+     "status": "placed"
+    }
+   }
+  },
+  {
+   "id": "ship-space",
+   "endpoint": "POST /api/v3/store/order",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/store/order",
+    "json_body": {
+     "id": 9837420002,
+     "petId": 1,
+     "quantity": 0,
+     "shipDate": "2026-10-12 10:00:00",
+     "status": "placed"
+    }
+   }
+  },
+  {
+   "id": "rb-ship-1",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420001"
+   }
+  },
+  {
+   "id": "rb-ship-2",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420002"
+   }
+  },
+  {
+   "id": "del-ship-1",
+   "endpoint": "DELETE /api/v3/store/order/{orderId}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/store/order/9837420001"
+   }
+  },
+  {
+   "id": "del-ship-2",
+   "endpoint": "DELETE /api/v3/store/order/{orderId}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/store/order/9837420002"
+   }
+  },
+  {
+   "id": "gone-1",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420001"
+   }
+  },
+  {
+   "id": "gone-2",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/9837420002"
+   }
+  }
+ ]
+}

@@ -1,0 +1,516 @@
+{
+ "name": "extra-reads",
+ "created_at": "2026-10-11T13:00:00Z",
+ "calls": [
+  {
+   "id": "x-fbs",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "available"
+     ]
+    ],
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "x-fbs-empty",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "pending"
+     ]
+    ],
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "x-pet6",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/6",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "x-pet9",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "x-pet-big",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/1791717175310",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "x-pet404",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410010",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "x-pet400",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/abc",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "x-order10",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/10",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "x-order0",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/0",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "x-user500",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-1",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "x-tags",
+   "endpoint": "GET /api/v3/pet/findByTags",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByTags",
+    "query": [
+     [
+      "tags",
+      "tag1"
+     ]
+    ],
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "json-accept",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/1",
+    "headers": {
+     "Accept": "application/json"
+    }
+   }
+  },
+  {
+   "id": "both-accept",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/1",
+    "headers": {
+     "Accept": "application/xml, application/json"
+    }
+   }
+  },
+  {
+   "id": "text-accept",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/1",
+    "headers": {
+     "Accept": "text/plain"
+    }
+   }
+  },
+  {
+   "id": "user-q10",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user%3F10"
+   }
+  },
+  {
+   "id": "user-11",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user4"
+   }
+  },
+  {
+   "id": "user-6",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user6"
+   }
+  },
+  {
+   "id": "user-s-user7",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user7"
+   }
+  },
+  {
+   "id": "user-s-user8",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user8"
+   }
+  },
+  {
+   "id": "user-s-user9",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/user9"
+   }
+  },
+  {
+   "id": "pet-11",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/11"
+   }
+  },
+  {
+   "id": "pet-12",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/12"
+   }
+  },
+  {
+   "id": "pet-13",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/13"
+   }
+  },
+  {
+   "id": "pet-14",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/14"
+   }
+  },
+  {
+   "id": "pet-15",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/15"
+   }
+  },
+  {
+   "id": "pet-16",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/16"
+   }
+  },
+  {
+   "id": "pet-17",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/17"
+   }
+  },
+  {
+   "id": "pet-18",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/18"
+   }
+  },
+  {
+   "id": "pet-19",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/19"
+   }
+  },
+  {
+   "id": "pet-20",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/20"
+   }
+  },
+  {
+   "id": "pet-21",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/21"
+   }
+  },
+  {
+   "id": "pet-22",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/22"
+   }
+  },
+  {
+   "id": "pet-23",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/23"
+   }
+  },
+  {
+   "id": "pet-24",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/24"
+   }
+  },
+  {
+   "id": "pet-25",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/25"
+   }
+  },
+  {
+   "id": "pet-26",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/26"
+   }
+  },
+  {
+   "id": "pet-27",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/27"
+   }
+  },
+  {
+   "id": "pet-28",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/28"
+   }
+  },
+  {
+   "id": "pet-29",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/29"
+   }
+  },
+  {
+   "id": "pet-30",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/30"
+   }
+  },
+  {
+   "id": "order-11",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/11"
+   }
+  },
+  {
+   "id": "order-12",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/12"
+   }
+  },
+  {
+   "id": "order-100",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/100"
+   }
+  },
+  {
+   "id": "order-1000",
+   "endpoint": "GET /api/v3/store/order/{orderId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order/1000"
+   }
+  },
+  {
+   "id": "fbs-av-2",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "available"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbs-sold-2",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "sold"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbs-pend-2",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "pending"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "inv-2",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   }
+  }
+ ]
+}

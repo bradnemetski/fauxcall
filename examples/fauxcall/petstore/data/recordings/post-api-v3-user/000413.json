@@ -1,0 +1,112 @@
+{
+  "id": "000413",
+  "endpoint": "POST /api/v3/user",
+  "purpose": "variation",
+  "plan_call": "cu-xml-accept",
+  "started_at": "2026-10-11T12:15:02.590907Z",
+  "started_ns": 1791720902590907000,
+  "elapsed_ms": 33.449,
+  "ttfb_ms": 33.313,
+  "request": {
+    "method": "POST",
+    "url": "https://petstore3.swagger.io/api/v3/user",
+    "path": "/api/v3/user",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "accept",
+        "application/xml"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "188"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 9837430001,
+        "username": "fauxcall-probe-1",
+        "firstName": "Probe1",
+        "lastName": "Fauxcall",
+        "email": "fauxcall-probe-1@example.com",
+        "password": "[REDACTED]",
+        "phone": "555-0100",
+        "userStatus": 1
+      },
+      "size": 188
+    }
+  },
+  "response": {
+    "status": 500,
+    "reason": "Internal Server Error",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:15:02 GMT"
+      ],
+      [
+        "content-type",
+        "application/xml"
+      ],
+      [
+        "content-length",
+        "141"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/xml",
+      "text": "<ApiError><code>500</code><message>There was an error processing your request. It has been logged (ID: e3ea40f13194a0fb)</message></ApiError>",
+      "size": 141
+    }
+  },
+  "redacted": [
+    "request:$.password"
+  ]
+}

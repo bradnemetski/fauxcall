@@ -1,0 +1,712 @@
+{
+ "name": "pet-writes",
+ "created_at": "2026-10-11T12:00:00Z",
+ "calls": [
+  {
+   "id": "add-min",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": 9837410001,
+     "name": "fauxcall-probe-1",
+     "photoUrls": []
+    }
+   }
+  },
+  {
+   "id": "rb-add-min",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410001"
+   }
+  },
+  {
+   "id": "add-full",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": 9837410002,
+     "category": {
+      "id": 1,
+      "name": "Dogs"
+     },
+     "name": "fauxcall-probe-2",
+     "photoUrls": [
+      "https://example.com/fauxcall.png"
+     ],
+     "tags": [
+      {
+       "id": 98374,
+       "name": "fauxcall-tag"
+      }
+     ],
+     "status": "pending"
+    }
+   }
+  },
+  {
+   "id": "rb-add-full",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "fbs-after-add",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "pending"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "add-noname",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": 9837410003,
+     "photoUrls": []
+    }
+   }
+  },
+  {
+   "id": "rb-add-noname",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410003"
+   }
+  },
+  {
+   "id": "add-nophotos",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": 9837410004,
+     "name": "fauxcall-probe-4"
+    }
+   }
+  },
+  {
+   "id": "rb-add-nophotos",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410004"
+   }
+  },
+  {
+   "id": "add-badtype-id",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": "abc",
+     "name": "fauxcall-probe-x",
+     "photoUrls": []
+    }
+   }
+  },
+  {
+   "id": "add-unknown-field",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": 9837410006,
+     "name": "fauxcall-probe-6",
+     "photoUrls": [],
+     "color": "brown"
+    }
+   }
+  },
+  {
+   "id": "rb-add-unknown-field",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410006"
+   }
+  },
+  {
+   "id": "add-bad-status",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": 9837410007,
+     "name": "fauxcall-probe-7",
+     "photoUrls": [],
+     "status": "bogus"
+    }
+   }
+  },
+  {
+   "id": "rb-add-bad-status",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410007"
+   }
+  },
+  {
+   "id": "add-malformed",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "text_body": "{\"id\": 9837410008, \"name\": ",
+    "content_type": "application/json"
+   }
+  },
+  {
+   "id": "add-form",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "form": {
+     "id": "9837410008",
+     "name": "fauxcall-probe-8",
+     "status": "sold"
+    }
+   }
+  },
+  {
+   "id": "rb-add-form",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410008"
+   }
+  },
+  {
+   "id": "add-xml",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "text_body": "<Pet><id>9837410009</id><name>fauxcall-probe-9</name><photoUrls><photoUrl>x</photoUrl></photoUrls><status>available</status></Pet>",
+    "content_type": "application/xml"
+   }
+  },
+  {
+   "id": "rb-add-xml",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410009"
+   }
+  },
+  {
+   "id": "add-textplain",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "text_body": "hello",
+    "content_type": "text/plain"
+   }
+  },
+  {
+   "id": "add-dup",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": 9837410001,
+     "name": "fauxcall-probe-1-dup",
+     "photoUrls": [
+      "a"
+     ],
+     "status": "sold"
+    }
+   }
+  },
+  {
+   "id": "rb-add-dup",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410001"
+   }
+  },
+  {
+   "id": "add-noid",
+   "endpoint": "POST /api/v3/pet",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "name": "fauxcall-probe-noid",
+     "photoUrls": []
+    }
+   },
+   "capture": {
+    "noid": "$.id"
+   },
+   "note": "see how the server assigns ids; cleaned up after inspection"
+  },
+  {
+   "id": "rb-noid",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/{{noid}}"
+   }
+  },
+  {
+   "id": "inv-after-pets",
+   "endpoint": "GET /api/v3/store/inventory",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/inventory"
+   }
+  },
+  {
+   "id": "put-ok",
+   "endpoint": "PUT /api/v3/pet",
+   "purpose": "variation",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": 9837410001,
+     "name": "fauxcall-probe-1-put",
+     "photoUrls": [
+      "p"
+     ],
+     "status": "available",
+     "tags": [
+      {
+       "id": 1,
+       "name": "t"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "rb-put-ok",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410001"
+   }
+  },
+  {
+   "id": "put-partial",
+   "endpoint": "PUT /api/v3/pet",
+   "purpose": "variation",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": 9837410002,
+     "name": "fauxcall-probe-2-put",
+     "photoUrls": []
+    }
+   }
+  },
+  {
+   "id": "rb-put-partial",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "put-missing",
+   "endpoint": "PUT /api/v3/pet",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": 9837410010,
+     "name": "fauxcall-probe-10",
+     "photoUrls": []
+    }
+   }
+  },
+  {
+   "id": "rb-put-missing",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410010"
+   }
+  },
+  {
+   "id": "put-noname",
+   "endpoint": "PUT /api/v3/pet",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": 9837410002,
+     "photoUrls": []
+    }
+   }
+  },
+  {
+   "id": "rb-put-noname",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "put-badstatus",
+   "endpoint": "PUT /api/v3/pet",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": 9837410002,
+     "name": "fauxcall-probe-2",
+     "photoUrls": [],
+     "status": "bogus"
+    }
+   }
+  },
+  {
+   "id": "put-badid",
+   "endpoint": "PUT /api/v3/pet",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/pet",
+    "json_body": {
+     "id": "abc",
+     "name": "x",
+     "photoUrls": []
+    }
+   }
+  },
+  {
+   "id": "put-malformed",
+   "endpoint": "PUT /api/v3/pet",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/pet",
+    "text_body": "{oops",
+    "content_type": "application/json"
+   }
+  },
+  {
+   "id": "upd-both",
+   "endpoint": "POST /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410002",
+    "query": [
+     [
+      "name",
+      "fauxcall-probe-2-form"
+     ],
+     [
+      "status",
+      "sold"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rb-upd-both",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "upd-name",
+   "endpoint": "POST /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410002",
+    "query": [
+     [
+      "name",
+      "fauxcall-probe-2-name"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rb-upd-name",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "upd-status",
+   "endpoint": "POST /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410002",
+    "query": [
+     [
+      "status",
+      "pending"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rb-upd-status",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "upd-none",
+   "endpoint": "POST /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "rb-upd-none",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "upd-badstatus",
+   "endpoint": "POST /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410002",
+    "query": [
+     [
+      "status",
+      "bogus"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rb-upd-badstatus",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "upd-missing",
+   "endpoint": "POST /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410010",
+    "query": [
+     [
+      "name",
+      "x"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "upd-abc",
+   "endpoint": "POST /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/abc",
+    "query": [
+     [
+      "name",
+      "x"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "upd-formbody",
+   "endpoint": "POST /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410002",
+    "form": {
+     "name": "fauxcall-probe-2-formbody"
+    }
+   }
+  },
+  {
+   "id": "rb-upd-formbody",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "up-ok",
+   "endpoint": "POST /api/v3/pet/{petId}/uploadImage",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410002/uploadImage",
+    "query": [
+     [
+      "additionalMetadata",
+      "fauxcall"
+     ]
+    ],
+    "text_body": "FAKEPNGBYTES",
+    "content_type": "application/octet-stream"
+   }
+  },
+  {
+   "id": "rb-up-ok",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "up-nometa",
+   "endpoint": "POST /api/v3/pet/{petId}/uploadImage",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410002/uploadImage",
+    "text_body": "MOREBYTES",
+    "content_type": "application/octet-stream"
+   }
+  },
+  {
+   "id": "rb-up-nometa",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   }
+  },
+  {
+   "id": "up-nobody",
+   "endpoint": "POST /api/v3/pet/{petId}/uploadImage",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410002/uploadImage",
+    "text_body": "",
+    "content_type": "application/octet-stream"
+   }
+  },
+  {
+   "id": "up-missing",
+   "endpoint": "POST /api/v3/pet/{petId}/uploadImage",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410010/uploadImage",
+    "text_body": "X",
+    "content_type": "application/octet-stream"
+   }
+  },
+  {
+   "id": "up-abc",
+   "endpoint": "POST /api/v3/pet/{petId}/uploadImage",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/abc/uploadImage",
+    "text_body": "X",
+    "content_type": "application/octet-stream"
+   }
+  },
+  {
+   "id": "up-json",
+   "endpoint": "POST /api/v3/pet/{petId}/uploadImage",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/pet/9837410002/uploadImage",
+    "json_body": {
+     "a": 1
+    }
+   }
+  }
+ ]
+}

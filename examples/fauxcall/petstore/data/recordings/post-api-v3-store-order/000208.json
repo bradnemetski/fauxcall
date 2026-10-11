@@ -1,0 +1,114 @@
+{
+  "id": "000208",
+  "endpoint": "POST /api/v3/store/order",
+  "purpose": "variation",
+  "plan_call": "ord-full",
+  "started_at": "2026-10-11T11:42:19.948082Z",
+  "started_ns": 1791718939948082000,
+  "elapsed_ms": 34.468,
+  "ttfb_ms": 33.488,
+  "request": {
+    "method": "POST",
+    "url": "https://petstore3.swagger.io/api/v3/store/order",
+    "path": "/api/v3/store/order",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "118"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 9837420001,
+        "petId": 198772,
+        "quantity": 3,
+        "shipDate": "2026-10-12T10:00:00.000Z",
+        "status": "placed",
+        "complete": false
+      },
+      "size": 118
+    }
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:42:20 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "123"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 9837420001,
+        "petId": 198772,
+        "quantity": 3,
+        "shipDate": "2026-10-12T10:00:00.000+00:00",
+        "status": "placed",
+        "complete": false
+      },
+      "size": 123
+    }
+  }
+}

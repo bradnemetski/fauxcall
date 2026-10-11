@@ -1,0 +1,646 @@
+{
+ "name": "pet-reads",
+ "created_at": "2026-10-11T11:40:00Z",
+ "calls": [
+  {
+   "id": "fbs-available",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "available"
+     ]
+    ]
+   },
+   "capture": {
+    "first_av": "$[0].id"
+   }
+  },
+  {
+   "id": "fbs-pending",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "pending"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbs-sold",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "sold"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbs-multi-repeat",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "available"
+     ],
+     [
+      "status",
+      "sold"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbs-multi-comma",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "pending,sold"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbs-case",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "Available"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbs-bogus",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "bogus"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbs-missing",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus"
+   }
+  },
+  {
+   "id": "fbs-empty",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbs-time",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "time_profile",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByStatus",
+    "query": [
+     [
+      "status",
+      "pending"
+     ]
+    ]
+   },
+   "repeat": 4,
+   "interval_ms": 10000
+  },
+  {
+   "id": "fbt-tag1",
+   "endpoint": "GET /api/v3/pet/findByTags",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByTags",
+    "query": [
+     [
+      "tags",
+      "tag1"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbt-tag2",
+   "endpoint": "GET /api/v3/pet/findByTags",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByTags",
+    "query": [
+     [
+      "tags",
+      "tag2"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbt-tag3",
+   "endpoint": "GET /api/v3/pet/findByTags",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByTags",
+    "query": [
+     [
+      "tags",
+      "tag3"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbt-repeat",
+   "endpoint": "GET /api/v3/pet/findByTags",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByTags",
+    "query": [
+     [
+      "tags",
+      "tag1"
+     ],
+     [
+      "tags",
+      "tag2"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbt-comma",
+   "endpoint": "GET /api/v3/pet/findByTags",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByTags",
+    "query": [
+     [
+      "tags",
+      "tag1,tag3"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbt-none",
+   "endpoint": "GET /api/v3/pet/findByTags",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByTags",
+    "query": [
+     [
+      "tags",
+      "fauxcall-nomatch"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbt-case",
+   "endpoint": "GET /api/v3/pet/findByTags",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByTags",
+    "query": [
+     [
+      "tags",
+      "TAG1"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fbt-missing",
+   "endpoint": "GET /api/v3/pet/findByTags",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByTags"
+   }
+  },
+  {
+   "id": "fbt-empty",
+   "endpoint": "GET /api/v3/pet/findByTags",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findByTags",
+    "query": [
+     [
+      "tags",
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "id": "pet-1",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/1"
+   }
+  },
+  {
+   "id": "pet-2",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/2"
+   }
+  },
+  {
+   "id": "pet-3",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/3"
+   }
+  },
+  {
+   "id": "pet-4",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/4"
+   }
+  },
+  {
+   "id": "pet-5",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/5"
+   }
+  },
+  {
+   "id": "pet-6",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/6"
+   }
+  },
+  {
+   "id": "pet-7",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/7"
+   }
+  },
+  {
+   "id": "pet-8",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/8"
+   }
+  },
+  {
+   "id": "pet-9",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9"
+   }
+  },
+  {
+   "id": "pet-10",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/10"
+   }
+  },
+  {
+   "id": "pet-first-av",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "sample",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/{{first_av}}"
+   }
+  },
+  {
+   "id": "pet-probe-free-1",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410001"
+   },
+   "note": "confirm our future probe id is unused"
+  },
+  {
+   "id": "pet-probe-free-2",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410002"
+   },
+   "note": "confirm our future probe id is unused"
+  },
+  {
+   "id": "pet-probe-free-3",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410003"
+   },
+   "note": "confirm our future probe id is unused"
+  },
+  {
+   "id": "pet-probe-free-4",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410004"
+   },
+   "note": "confirm our future probe id is unused"
+  },
+  {
+   "id": "pet-probe-free-5",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410005"
+   },
+   "note": "confirm our future probe id is unused"
+  },
+  {
+   "id": "pet-probe-free-6",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410006"
+   },
+   "note": "confirm our future probe id is unused"
+  },
+  {
+   "id": "pet-probe-free-7",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410007"
+   },
+   "note": "confirm our future probe id is unused"
+  },
+  {
+   "id": "pet-probe-free-8",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410008"
+   },
+   "note": "confirm our future probe id is unused"
+  },
+  {
+   "id": "pet-probe-free-9",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410009"
+   },
+   "note": "confirm our future probe id is unused"
+  },
+  {
+   "id": "pet-probe-free-10",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/9837410010"
+   },
+   "note": "confirm our future probe id is unused"
+  },
+  {
+   "id": "pet-nf-small",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/99999"
+   }
+  },
+  {
+   "id": "pet-abc",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/abc"
+   }
+  },
+  {
+   "id": "pet-neg",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/-1"
+   }
+  },
+  {
+   "id": "pet-zero",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/0"
+   }
+  },
+  {
+   "id": "pet-huge",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/99999999999999999999"
+   }
+  },
+  {
+   "id": "pet-float",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/1.5"
+   }
+  },
+  {
+   "id": "pet-space",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "invalid",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/%20"
+   }
+  },
+  {
+   "id": "pet-accept-xml",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "variation",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/1",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "pet-time",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "time_profile",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/1"
+   },
+   "repeat": 4,
+   "interval_ms": 10000
+  },
+  {
+   "id": "edge-case",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/Pet/1"
+   }
+  },
+  {
+   "id": "edge-slash",
+   "endpoint": "GET /api/v3/pet/{petId}",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/1/"
+   }
+  },
+  {
+   "id": "edge-fbs-lower",
+   "endpoint": "GET /api/v3/pet/findByStatus",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet/findbystatus",
+    "query": [
+     [
+      "status",
+      "available"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "edge-unknown",
+   "endpoint": "GET /api/v3/does-not-exist",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/does-not-exist"
+   }
+  },
+  {
+   "id": "edge-unknown-root",
+   "endpoint": "GET /api/v4/pet/1",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v4/pet/1"
+   }
+  },
+  {
+   "id": "edge-method",
+   "endpoint": "GET /api/v3/store/order",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/store/order"
+   }
+  },
+  {
+   "id": "edge-method-pet",
+   "endpoint": "GET /api/v3/pet",
+   "purpose": "edge",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/pet"
+   }
+  }
+ ]
+}

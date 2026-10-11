@@ -1,0 +1,109 @@
+{
+  "id": "000435",
+  "endpoint": "POST /api/v3/store/order",
+  "purpose": "variation",
+  "plan_call": "ship-space",
+  "started_at": "2026-10-11T12:15:13.630485Z",
+  "started_ns": 1791720913630485000,
+  "elapsed_ms": 32.687,
+  "ttfb_ms": 32.55,
+  "request": {
+    "method": "POST",
+    "url": "https://petstore3.swagger.io/api/v3/store/order",
+    "path": "/api/v3/store/order",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "91"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 9837420002,
+        "petId": 1,
+        "quantity": 0,
+        "shipDate": "2026-10-12 10:00:00",
+        "status": "placed"
+      },
+      "size": 91
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:15:13 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "96"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "code": 400,
+        "message": "Input error: unable to convert input to io.swagger.petstore.model.Order"
+      },
+      "size": 96
+    }
+  }
+}

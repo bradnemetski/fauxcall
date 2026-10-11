@@ -1,0 +1,108 @@
+{
+  "id": "000147",
+  "endpoint": "POST /api/v3/pet",
+  "purpose": "variation",
+  "plan_call": "add-xml",
+  "started_at": "2026-10-11T11:40:52.760980Z",
+  "started_ns": 1791718852760980000,
+  "elapsed_ms": 33.663,
+  "ttfb_ms": 33.219,
+  "request": {
+    "method": "POST",
+    "url": "https://petstore3.swagger.io/api/v3/pet",
+    "path": "/api/v3/pet",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/xml"
+      ],
+      [
+        "content-length",
+        "130"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/xml",
+      "text": "<Pet><id>9837410009</id><name>fauxcall-probe-9</name><photoUrls><photoUrl>x</photoUrl></photoUrls><status>available</status></Pet>",
+      "size": 130
+    }
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:40:52 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "92"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 9837410009,
+        "name": "fauxcall-probe-9",
+        "photoUrls": [
+          "x"
+        ],
+        "tags": [],
+        "status": "available"
+      },
+      "size": 92
+    }
+  }
+}

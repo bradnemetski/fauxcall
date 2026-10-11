@@ -1,0 +1,128 @@
+{
+  "id": "000414",
+  "endpoint": "POST /api/v3/user/createWithList",
+  "purpose": "variation",
+  "plan_call": "cl-two",
+  "started_at": "2026-10-11T12:15:03.092853Z",
+  "started_ns": 1791720903092853000,
+  "elapsed_ms": 27.41,
+  "ttfb_ms": 27.251,
+  "request": {
+    "method": "POST",
+    "url": "https://petstore3.swagger.io/api/v3/user/createWithList",
+    "path": "/api/v3/user/createWithList",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "379"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": [
+        {
+          "id": 9837430004,
+          "username": "fauxcall-probe-4",
+          "firstName": "Probe4",
+          "lastName": "Fauxcall",
+          "email": "fauxcall-probe-4@example.com",
+          "password": "[REDACTED]",
+          "phone": "555-0100",
+          "userStatus": 1
+        },
+        {
+          "id": 9837430005,
+          "username": "fauxcall-probe-5",
+          "firstName": "Probe5",
+          "lastName": "Fauxcall",
+          "email": "fauxcall-probe-5@example.com",
+          "password": "[REDACTED]",
+          "phone": "555-0100",
+          "userStatus": 1
+        }
+      ],
+      "size": 379
+    }
+  },
+  "response": {
+    "status": 500,
+    "reason": "Internal Server Error",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:15:03 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "110"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "code": 500,
+        "message": "There was an error processing your request. It has been logged (ID: a94d51461076486f)"
+      },
+      "size": 110
+    }
+  },
+  "redacted": [
+    "request:$[0].password",
+    "request:$[1].password"
+  ]
+}

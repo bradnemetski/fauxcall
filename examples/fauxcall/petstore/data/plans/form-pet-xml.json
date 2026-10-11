@@ -1,0 +1,13 @@
+{"name":"form-pet-xml","created_at":"2026-10-11T15:00:00Z","calls":[
+ {"id":"guard-p3","endpoint":"GET /api/v3/pet/{petId}","purpose":"invalid","request":{"method":"GET","path":"/api/v3/pet/9837410003"}},
+ {"id":"guard-o2","endpoint":"GET /api/v3/store/order/{orderId}","purpose":"invalid","request":{"method":"GET","path":"/api/v3/store/order/9837420002"}},
+ {"id":"form-pet","endpoint":"POST /api/v3/pet","purpose":"variation","request":{"method":"POST","path":"/api/v3/pet","form":{"id":"9837410003","name":"fauxcall-probe-3","status":"pending"}}},
+ {"id":"form-pet-xml","endpoint":"GET /api/v3/pet/{petId}","purpose":"write_readback","request":{"method":"GET","path":"/api/v3/pet/9837410003","headers":{"Accept":"application/xml"}}},
+ {"id":"form-pet-del","endpoint":"DELETE /api/v3/pet/{petId}","purpose":"cleanup","request":{"method":"DELETE","path":"/api/v3/pet/9837410003"}},
+ {"id":"bare-order","endpoint":"POST /api/v3/store/order","purpose":"variation","request":{"method":"POST","path":"/api/v3/store/order","json_body":{"id":9837420002}}},
+ {"id":"bare-order-xml","endpoint":"GET /api/v3/store/order/{orderId}","purpose":"write_readback","request":{"method":"GET","path":"/api/v3/store/order/9837420002","headers":{"Accept":"application/xml"}}},
+ {"id":"bare-order-del","endpoint":"DELETE /api/v3/store/order/{orderId}","purpose":"cleanup","request":{"method":"DELETE","path":"/api/v3/store/order/9837420002"}},
+ {"id":"bare-order-gone","endpoint":"GET /api/v3/store/order/{orderId}","purpose":"write_readback","request":{"method":"GET","path":"/api/v3/store/order/9837420002"}},
+ {"id":"pet-gone","endpoint":"GET /api/v3/pet/{petId}","purpose":"write_readback","request":{"method":"GET","path":"/api/v3/pet/9837410003"}},
+ {"id":"inv-after","endpoint":"GET /api/v3/store/inventory","purpose":"write_readback","request":{"method":"GET","path":"/api/v3/store/inventory"}}
+]}

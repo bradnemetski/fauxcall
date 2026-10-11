@@ -1,0 +1,100 @@
+{
+  "id": "000427",
+  "endpoint": "POST /api/v3/pet/{petId}/uploadImage",
+  "purpose": "invalid",
+  "plan_call": "upload415-xml",
+  "started_at": "2026-10-11T12:15:09.614612Z",
+  "started_ns": 1791720909614612000,
+  "elapsed_ms": 34.936,
+  "ttfb_ms": 34.775,
+  "request": {
+    "method": "POST",
+    "url": "https://petstore3.swagger.io/api/v3/pet/9837410004/uploadImage",
+    "path": "/api/v3/pet/9837410004/uploadImage",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "accept",
+        "application/xml"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "text/plain"
+      ],
+      [
+        "content-length",
+        "1"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/plain",
+      "text": "x",
+      "size": 1
+    }
+  },
+  "response": {
+    "status": 415,
+    "reason": "Unsupported Media Type",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 12:15:09 GMT"
+      ],
+      [
+        "content-type",
+        "application/xml"
+      ],
+      [
+        "content-length",
+        "87"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/xml",
+      "text": "<ApiError><code>415</code><message>HTTP 415 Unsupported Media Type</message></ApiError>",
+      "size": 87
+    }
+  }
+}

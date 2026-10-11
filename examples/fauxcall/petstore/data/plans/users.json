@@ -1,0 +1,566 @@
+{
+ "name": "users",
+ "created_at": "2026-10-11T12:30:00Z",
+ "calls": [
+  {
+   "id": "cu-full",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "json_body": {
+     "id": 9837430001,
+     "username": "fauxcall-probe-1",
+     "firstName": "Probe1",
+     "lastName": "Fauxcall",
+     "email": "fauxcall-probe-1@example.com",
+     "password": "fauxcall-pw",
+     "phone": "555-0100",
+     "userStatus": 1
+    }
+   }
+  },
+  {
+   "id": "rb-cu-full",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-1"
+   }
+  },
+  {
+   "id": "cu-min",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "json_body": {
+     "username": "fauxcall-probe-2"
+    }
+   }
+  },
+  {
+   "id": "rb-cu-min",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-2"
+   }
+  },
+  {
+   "id": "cu-dup",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "json_body": {
+     "id": 9837430011,
+     "username": "fauxcall-probe-1",
+     "firstName": "Dup",
+     "lastName": "Fauxcall",
+     "email": "fauxcall-probe-1@example.com",
+     "password": "fauxcall-pw",
+     "phone": "555-0100",
+     "userStatus": 1
+    }
+   }
+  },
+  {
+   "id": "rb-cu-dup",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-1"
+   }
+  },
+  {
+   "id": "cu-badtype",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "json_body": {
+     "id": 9837430003,
+     "username": "fauxcall-probe-3",
+     "firstName": "Probe3",
+     "lastName": "Fauxcall",
+     "email": "fauxcall-probe-3@example.com",
+     "password": "fauxcall-pw",
+     "phone": "555-0100",
+     "userStatus": "x"
+    }
+   }
+  },
+  {
+   "id": "cu-unknown",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "json_body": {
+     "id": 9837430003,
+     "username": "fauxcall-probe-3",
+     "firstName": "Probe3",
+     "lastName": "Fauxcall",
+     "email": "fauxcall-probe-3@example.com",
+     "password": "fauxcall-pw",
+     "phone": "555-0100",
+     "userStatus": 1,
+     "nickname": "x"
+    }
+   }
+  },
+  {
+   "id": "rb-cu-unknown",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-3"
+   }
+  },
+  {
+   "id": "cu-malformed",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "text_body": "{\"username\": ",
+    "content_type": "application/json"
+   }
+  },
+  {
+   "id": "cu-textplain",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "text_body": "x",
+    "content_type": "text/plain"
+   }
+  },
+  {
+   "id": "cu-form",
+   "endpoint": "POST /api/v3/user",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user",
+    "form": {
+     "username": "fauxcall-probe-7",
+     "firstName": "Form",
+     "userStatus": "2"
+    }
+   }
+  },
+  {
+   "id": "rb-cu-form",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-7"
+   }
+  },
+  {
+   "id": "login-probe",
+   "endpoint": "GET /api/v3/user/login",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/login",
+    "query": [
+     [
+      "username",
+      "fauxcall-probe-1"
+     ],
+     [
+      "password",
+      "fauxcall-pw"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "cl-two",
+   "endpoint": "POST /api/v3/user/createWithList",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user/createWithList",
+    "json_body": [
+     {
+      "id": 9837430004,
+      "username": "fauxcall-probe-4",
+      "firstName": "Probe4",
+      "lastName": "Fauxcall",
+      "email": "fauxcall-probe-4@example.com",
+      "password": "fauxcall-pw",
+      "phone": "555-0100",
+      "userStatus": 1
+     },
+     {
+      "id": 9837430005,
+      "username": "fauxcall-probe-5",
+      "firstName": "Probe5",
+      "lastName": "Fauxcall",
+      "email": "fauxcall-probe-5@example.com",
+      "password": "fauxcall-pw",
+      "phone": "555-0100",
+      "userStatus": 0
+     }
+    ]
+   }
+  },
+  {
+   "id": "rb-cl-4",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-4"
+   }
+  },
+  {
+   "id": "rb-cl-5",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-5"
+   }
+  },
+  {
+   "id": "cl-empty",
+   "endpoint": "POST /api/v3/user/createWithList",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user/createWithList",
+    "json_body": []
+   }
+  },
+  {
+   "id": "cl-object",
+   "endpoint": "POST /api/v3/user/createWithList",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user/createWithList",
+    "json_body": {
+     "id": 9837430008,
+     "username": "fauxcall-probe-8",
+     "firstName": "Probe8",
+     "lastName": "Fauxcall",
+     "email": "fauxcall-probe-8@example.com",
+     "password": "fauxcall-pw",
+     "phone": "555-0100",
+     "userStatus": 1
+    }
+   }
+  },
+  {
+   "id": "cl-malformed",
+   "endpoint": "POST /api/v3/user/createWithList",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/api/v3/user/createWithList",
+    "text_body": "[{",
+    "content_type": "application/json"
+   }
+  },
+  {
+   "id": "pu-ok",
+   "endpoint": "PUT /api/v3/user/{username}",
+   "purpose": "variation",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/user/fauxcall-probe-1",
+    "json_body": {
+     "id": 9837430001,
+     "username": "fauxcall-probe-1",
+     "firstName": "Updated",
+     "lastName": "Fauxcall",
+     "email": "fauxcall-probe-1@example.com",
+     "password": "fauxcall-pw",
+     "phone": "555-0199",
+     "userStatus": 1
+    }
+   }
+  },
+  {
+   "id": "rb-pu-ok",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-1"
+   }
+  },
+  {
+   "id": "pu-partial",
+   "endpoint": "PUT /api/v3/user/{username}",
+   "purpose": "variation",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/user/fauxcall-probe-2",
+    "json_body": {
+     "username": "fauxcall-probe-2",
+     "firstName": "OnlyFirst"
+    }
+   }
+  },
+  {
+   "id": "rb-pu-partial",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-2"
+   }
+  },
+  {
+   "id": "pu-rename",
+   "endpoint": "PUT /api/v3/user/{username}",
+   "purpose": "variation",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/user/fauxcall-probe-3",
+    "json_body": {
+     "id": 9837430006,
+     "username": "fauxcall-probe-6",
+     "firstName": "Probe6",
+     "lastName": "Fauxcall",
+     "email": "fauxcall-probe-6@example.com",
+     "password": "fauxcall-pw",
+     "phone": "555-0100",
+     "userStatus": 1
+    }
+   }
+  },
+  {
+   "id": "rb-pu-rename-old",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-3"
+   }
+  },
+  {
+   "id": "rb-pu-rename-new",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-6"
+   }
+  },
+  {
+   "id": "pu-missing",
+   "endpoint": "PUT /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/user/fauxcall-probe-9",
+    "json_body": {
+     "id": 9837430009,
+     "username": "fauxcall-probe-9",
+     "firstName": "Probe9",
+     "lastName": "Fauxcall",
+     "email": "fauxcall-probe-9@example.com",
+     "password": "fauxcall-pw",
+     "phone": "555-0100",
+     "userStatus": 1
+    }
+   }
+  },
+  {
+   "id": "rb-pu-missing",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-9"
+   }
+  },
+  {
+   "id": "pu-malformed",
+   "endpoint": "PUT /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "PUT",
+    "path": "/api/v3/user/fauxcall-probe-1",
+    "text_body": "{x",
+    "content_type": "application/json"
+   }
+  },
+  {
+   "id": "du-1",
+   "endpoint": "DELETE /api/v3/user/{username}",
+   "purpose": "variation",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/user/fauxcall-probe-1"
+   }
+  },
+  {
+   "id": "rb-du-1",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-1"
+   }
+  },
+  {
+   "id": "du-1-again",
+   "endpoint": "DELETE /api/v3/user/{username}",
+   "purpose": "invalid",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/user/fauxcall-probe-1"
+   }
+  },
+  {
+   "id": "du-xml",
+   "endpoint": "DELETE /api/v3/user/{username}",
+   "purpose": "variation",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/user/fauxcall-probe-2",
+    "headers": {
+     "Accept": "application/xml"
+    }
+   }
+  },
+  {
+   "id": "du-3",
+   "endpoint": "DELETE /api/v3/user/{username}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/user/fauxcall-probe-3"
+   }
+  },
+  {
+   "id": "du-4",
+   "endpoint": "DELETE /api/v3/user/{username}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/user/fauxcall-probe-4"
+   }
+  },
+  {
+   "id": "du-5",
+   "endpoint": "DELETE /api/v3/user/{username}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/user/fauxcall-probe-5"
+   }
+  },
+  {
+   "id": "du-6",
+   "endpoint": "DELETE /api/v3/user/{username}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/user/fauxcall-probe-6"
+   }
+  },
+  {
+   "id": "du-7",
+   "endpoint": "DELETE /api/v3/user/{username}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/user/fauxcall-probe-7"
+   }
+  },
+  {
+   "id": "du-9",
+   "endpoint": "DELETE /api/v3/user/{username}",
+   "purpose": "cleanup",
+   "request": {
+    "method": "DELETE",
+    "path": "/api/v3/user/fauxcall-probe-9"
+   }
+  },
+  {
+   "id": "rb-gone-2",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-2"
+   }
+  },
+  {
+   "id": "rb-gone-3",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-3"
+   }
+  },
+  {
+   "id": "rb-gone-4",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-4"
+   }
+  },
+  {
+   "id": "rb-gone-5",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-5"
+   }
+  },
+  {
+   "id": "rb-gone-6",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-6"
+   }
+  },
+  {
+   "id": "rb-gone-7",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-7"
+   }
+  },
+  {
+   "id": "rb-gone-9",
+   "endpoint": "GET /api/v3/user/{username}",
+   "purpose": "write_readback",
+   "request": {
+    "method": "GET",
+    "path": "/api/v3/user/fauxcall-probe-9"
+   }
+  }
+ ]
+}

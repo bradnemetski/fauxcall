@@ -7,6 +7,7 @@ workspace.
 | fake | imitates | port |
 |---|---|---|
 | [`frankfurter`](frankfurter/README.md) | Frankfurter API | 8701 |
+| [`petstore`](petstore/README.md) | Swagger Petstore - OpenAPI 3.0 | 8704 |
 | [`refapi`](refapi/README.md) | FauxCall Reference Market API | 8702 |
 | [`timeapi`](timeapi/README.md) | Time API Docs | 8703 |
 

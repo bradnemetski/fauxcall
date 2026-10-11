@@ -1,0 +1,103 @@
+{
+  "id": "000266",
+  "endpoint": "POST /api/v3/user/createWithList",
+  "purpose": "invalid",
+  "plan_call": "cl-malformed",
+  "started_at": "2026-10-11T11:43:23.710615Z",
+  "started_ns": 1791719003710615000,
+  "elapsed_ms": 35.847,
+  "ttfb_ms": 35.439,
+  "request": {
+    "method": "POST",
+    "url": "https://petstore3.swagger.io/api/v3/user/createWithList",
+    "path": "/api/v3/user/createWithList",
+    "headers": [
+      [
+        "host",
+        "petstore3.swagger.io"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "2"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json",
+      "text": "[{",
+      "size": 2
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Sun, 11 Oct 2026 11:43:23 GMT"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "97"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-allow-methods",
+        "GET, POST, DELETE, PUT"
+      ],
+      [
+        "access-control-allow-headers",
+        "Content-Type, api_key, Authorization"
+      ],
+      [
+        "access-control-expose-headers",
+        "Content-Disposition"
+      ],
+      [
+        "server",
+        "Jetty(9.4.53.v20231009)"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "code": 400,
+        "message": "Input error: unable to convert input to io.swagger.petstore.model.User[]"
+      },
+      "size": 97
+    }
+  }
+}
