@@ -17,6 +17,7 @@ from __future__ import annotations
 import builtins
 import json
 import keyword
+import os
 import re
 import tomllib
 import unicodedata
@@ -302,6 +303,21 @@ def fauxcall_requirement(source: str | None) -> tuple[str, str | None]:
     if major == "0":
         return f"fauxcall>={__version__},<0.{int(minor) + 1}", None
     return f"fauxcall>={__version__},<{int(major) + 1}", None
+
+
+def checkout_reference(local_path: str | None, workspace_root: Path) -> str | None:
+    """How the workspace refers to a local fauxcall checkout.
+
+    Relative when the workspace lives inside the checkout (example fakes in the repository stay
+    usable wherever it is cloned), absolute otherwise.
+    """
+    if local_path is None:
+        return None
+    checkout = Path(local_path).resolve()
+    root = workspace_root.resolve()
+    if root.is_relative_to(checkout):
+        return Path(os.path.relpath(checkout, root)).as_posix()
+    return local_path
 
 
 def with_extra(requirement: str, extra: str) -> str:
@@ -717,7 +733,7 @@ def _write_workspace(
             result.kept.append(pyproject)
     else:
         text = env.get_template("workspace/pyproject.toml.j2").render(
-            members=[layout.name], fauxcall_path=local_path
+            members=[layout.name], fauxcall_path=checkout_reference(local_path, workspace.root)
         )
         _write(pyproject, text, "owned", result)
     _write(

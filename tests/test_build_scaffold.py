@@ -1283,3 +1283,12 @@ def test_generated_fakes_pass_their_own_gates(fakes: Fakes) -> None:
             outputs.append(done.stdout)
         assert "Required test coverage of 95.0% reached" in outputs[-1]
         assert " failed" not in outputs[-1]
+
+
+def test_a_checkout_is_referenced_relatively_from_inside(tmp_path: Path) -> None:
+    checkout = tmp_path / "fauxcall-repo"
+    inside = checkout / "examples" / "fakes"
+    assert scaffold_module.checkout_reference(str(checkout), inside) == "../.."
+    elsewhere = tmp_path / "project" / "fakes"
+    assert scaffold_module.checkout_reference(str(checkout), elsewhere) == str(checkout)
+    assert scaffold_module.checkout_reference(None, inside) is None
