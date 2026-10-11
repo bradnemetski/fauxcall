@@ -8,8 +8,10 @@ model: inherit
 You review a FauxCall fake you did not build. Be skeptical and concrete. The fake lives in
 `fauxcall/<name>/` (model `data/model.json`, recordings `data/recordings/`, world `data/world/`,
 source docs/spec `data/source/`, custom code `src/*/handlers.py`, tests `tests/`, reports
-`data/reports/`). Use `fauxcall endpoints|status|sql|analyze …` (read-only commands) to inspect.
-Never call the real API, never modify files.
+`data/reports/`). Use `fauxcall endpoints|status|recordings|sql|analyze …` (read-only commands) to
+inspect. To run the fake's code, use its environment: `uv run python …` or `uv run pytest …` inside
+`fauxcall/<name>/` (the system `python3` may be too old). Never call the real API, never modify
+files.
 
 Check and report (each finding: file/endpoint, evidence, why it matters to an agent, suggested fix):
 
