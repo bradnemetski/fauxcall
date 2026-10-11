@@ -31,13 +31,15 @@ from fauxcall.jsonfmt import infer_style
 from fauxcall.model.errors import ErrorTemplate
 from fauxcall.model.plan import Approval, Approvals, PlannedCall, PlannedRequest, RecordingPlan
 from fauxcall.model.realism import LatencyProfile
-from fauxcall.recording.mcp import McpRecorder
+from fauxcall.recording.mcp import McpRecorder, needs_approval
 from fauxcall.recording.privacy_filter import PrivacyConfig, RecordingPrivacy
 from fauxcall.recording.recorder import RealTarget, Recorder
 from fauxcall.recording.store import RecordingStore
 from fauxcall.storage import read_model, write_model
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from fauxcall.model.api import ApiModel
     from fauxcall.model.endpoints import EndpointModel
     from fauxcall.model.mcp import McpToolModel
@@ -122,10 +124,11 @@ def plan_review(name: str) -> None:
     """Every mutating call across all plans — what the user approves once, up front."""
     fake = layout(name)
     approvals = _approvals(fake)
+    writes = _writes(load_model(fake))
     per_endpoint: Counter[str] = Counter()
     rows: list[str] = []
     for path, plan in _plans(fake):
-        for call in plan.mutating_calls():
+        for call in filter(writes, plan.calls):
             per_endpoint[call.endpoint] += call.repeat
             covered = "yes" if approvals.find(call) else "no"
             cleanup = ", ".join(call.cleanup) or "-"
@@ -195,9 +198,10 @@ def plan_approve(
             for target in targets
         ]
     if planned:
+        writes = _writes(load_model(fake))
         counts: Counter[str] = Counter()
         for _, plan in _plans(fake):
-            for call in plan.mutating_calls():
+            for call in filter(writes, plan.calls):
                 counts[call.endpoint] += call.repeat
         for endpoint_id, count in counts.items():
             budget = max(1, int(count * margin))
@@ -245,16 +249,23 @@ def plan_check(name: str, plan: Path) -> None:
     unknown = [
         c.endpoint for c in parsed.calls if c.endpoint in undocumented and c.purpose != "edge"
     ]
+    writes = _writes(model)
     for call in parsed.calls:
         state = (
             "read-only"
-            if not call.is_mutating
+            if not writes(call)
             else ("approved" if approvals.find(call) else "NEEDS APPROVAL")
         )
         probe = " (routing probe: not in the model)" if call.endpoint in undocumented else ""
         echo(f"- {call.id}: {call.endpoint} x{call.repeat} — {state}{probe}")
     if unknown:
         raise fail(f"unknown endpoints: {', '.join(sorted(set(unknown)))}")
+
+
+def _writes(model: ApiModel) -> Callable[[PlannedCall], bool]:
+    """Which planned calls need approval: the rule ``fauxcall record`` applies."""
+    tools = {tool.name: tool.definition for tool in model.mcp.tools} if model.mcp else {}
+    return lambda call: needs_approval(call, tools)
 
 
 def _privacy(fake: FakeLayout, secrets: list[str], key: str | None) -> RecordingPrivacy:

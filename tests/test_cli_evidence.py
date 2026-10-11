@@ -411,6 +411,47 @@ def test_plan_approve_per_endpoint_budgets(ws: Workspace) -> None:
     assert "approved MCP tools/call:ask (max unlimited)" in tools
 
 
+def test_mcp_plans_need_approval_exactly_where_recording_does(ws: Workspace) -> None:
+    read_only: JsonValue = {"name": "read_docs", "annotations": {"readOnlyHint": True}}
+    model = ApiModel(
+        name="tools",
+        title="Tools",
+        kind="mcp",
+        source=SourceInfo(
+            kind="mcp", url=f"{BASE}/mcp", fetched_at=datetime(2026, 1, 5, tzinfo=UTC)
+        ),
+        real=RealTarget(base_url=BASE),
+        mcp=McpModel(
+            tools=[McpToolModel(definition={"name": "ask"}), McpToolModel(definition=read_only)]
+        ),
+    )
+    fake = make_fake(ws, model)
+    mcp = {"request": {"method": "POST", "path": "/mcp"}}
+    plan = write_plan(
+        fake,
+        "mcp",
+        [
+            {"id": "hello", "endpoint": "MCP initialize", **mcp},
+            {"id": "list", "endpoint": "MCP tools/list", **mcp},
+            {"id": "read", "endpoint": "MCP tools/call:read_docs", **mcp},
+            {"id": "ask", "endpoint": "MCP tools/call:ask", **mcp},
+            {"id": "forced", "endpoint": "MCP resources/read:x", "mutating": True, **mcp},
+        ],
+    )
+    checked = invoke("plan", "check", "tools", str(plan)).output
+    assert "- hello: MCP initialize x1 — read-only" in checked  # the handshake never writes
+    assert "- list: MCP tools/list x1 — read-only" in checked
+    assert "- read: MCP tools/call:read_docs x1 — read-only" in checked
+    assert "- ask: MCP tools/call:ask x1 — NEEDS APPROVAL" in checked  # not marked read-only
+    assert "- forced: MCP resources/read:x x1 — NEEDS APPROVAL" in checked
+    review = invoke("plan", "review", "tools").output
+    assert "`MCP tools/call:ask`" in review
+    assert "MCP initialize" not in review
+    invoke("plan", "approve", "tools", "--planned", "--reason", "reads public docs")
+    approved = read_model(fake.approvals_path, Approvals).approvals
+    assert sorted(a.endpoint for a in approved) == ["MCP resources/read:x", "MCP tools/call:ask"]
+
+
 def test_plan_check(ws: Workspace, tmp_path: Path) -> None:
     fake = make_fake(ws)
     plan = write_plan(

@@ -84,6 +84,22 @@ def tool_is_mutating(definition: JsonValue) -> bool:
     return annotations.get("readOnlyHint") is not True
 
 
+def needs_approval(call: PlannedCall, tools: Mapping[str, JsonValue]) -> bool:
+    """Whether a planned call is a write, which needs the user's up-front approval.
+
+    An explicit ``mutating`` wins. MCP: only ``tools/call`` of a tool that may modify state (no
+    ``readOnlyHint: true`` in its definition in ``tools``); the protocol's own methods
+    (``initialize``, listings, reads) never write. HTTP: anything but GET/HEAD/OPTIONS.
+    """
+    if call.mutating is not None:
+        return call.mutating
+    if call.endpoint.startswith("MCP tools/call:"):
+        return tool_is_mutating(tools.get(call.endpoint.split(":", 1)[1]))
+    if call.endpoint.startswith("MCP "):
+        return False
+    return call.is_mutating
+
+
 def _is_event_stream(content_type: str | None) -> bool:
     return bool(content_type) and "text/event-stream" in str(content_type).lower()
 
@@ -418,14 +434,12 @@ class McpRecorder:
             for position, call in enumerate(plan.calls):
                 outcome = CallOutcome(call=call.id, endpoint=call.endpoint)
                 report.outcomes.append(outcome)
-                needs_approval = self._needs_approval(call, definitions)
-                if needs_approval and self._current_approvals().find(call) is None:
+                writes = needs_approval(call, definitions)
+                if writes and self._current_approvals().find(call) is None:
                     outcome.skipped = "needs approval (tool may modify state)"
                     continue
                 try:
-                    await self._run_call(
-                        client, call, variables, outcome, needs_approval=needs_approval
-                    )
+                    await self._run_call(client, call, variables, outcome, needs_approval=writes)
                 except _BudgetExhaustedError:
                     outcome.skipped = "budget exhausted"
                     report.budget_exhausted = True
@@ -492,14 +506,6 @@ class McpRecorder:
                 captured = jsonpath.get_one(rpc.response, path)
                 if captured is not None:
                     variables[name] = captured
-
-    @staticmethod
-    def _needs_approval(call: PlannedCall, tools: Mapping[str, JsonValue]) -> bool:
-        if call.mutating is not None:
-            return call.mutating
-        if call.endpoint.startswith("MCP tools/call:"):
-            return tool_is_mutating(tools.get(call.endpoint.split(":", 1)[1]))
-        return False
 
 
 def _method_of(endpoint: str) -> str:
