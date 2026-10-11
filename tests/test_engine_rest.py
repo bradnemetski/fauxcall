@@ -93,6 +93,12 @@ async def test_rate_limit_headers_429_and_fast_mode(tmp_path: Path) -> None:
         assert response.headers["X-RateLimit-Remaining"] == "0"
         assert int(response.headers["retry-after"]) >= 1
         assert response.json()["error"]["code"] == "rate_limited"
+        frozen = await client.post("/__fauxcall/clock", json={"op": "freeze"})
+        assert frozen.status_code == 200
+        assert (await client.get("/v1/exchanges")).status_code == 429  # setting the clock: no
+        advanced = await client.post("/__fauxcall/clock", json={"op": "advance", "seconds": 60})
+        assert advanced.status_code == 200
+        assert (await client.get("/v1/exchanges")).status_code == 200  # time passed: lifted
     fast = harness(tmp_path / "fast", fast=True)
     async with fast.client() as client:
         assert all([(await client.get("/v1/exchanges")).status_code == 200 for _ in range(8)])

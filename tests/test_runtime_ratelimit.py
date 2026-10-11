@@ -30,6 +30,20 @@ def model(
     return RateLimitModel(name=name, limit=limit, window_seconds=window, algorithm=algorithm)
 
 
+@pytest.mark.parametrize("algorithm", ["fixed_window", "sliding_window", "token_bucket"])
+def test_skipping_time_lifts_a_block(algorithm: Algorithm) -> None:
+    clock = Clock()
+    limiter = RateLimiter(clock)
+    limit = model(2, 10, algorithm)
+    assert [limiter.hit(limit, "key").allowed for _ in range(3)] == [True, True, False]
+    limiter.skip(-100 * NS)  # time never runs backwards
+    assert not limiter.hit(limit, "key").allowed
+    limiter.skip(10 * NS)
+    assert limiter.hit(limit, "key").allowed
+    limiter.reset()  # forgetting the windows keeps the skipped time: no window ever runs backwards
+    assert [limiter.hit(limit, "key").allowed for _ in range(3)] == [True, True, False]
+
+
 def test_fixed_window_matches_the_documented_arithmetic() -> None:
     # The reference API's example: first request at t = 1000.3 s, 30 requests per 10 s.
     clock = Clock()

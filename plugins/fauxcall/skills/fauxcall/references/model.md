@@ -174,6 +174,8 @@ Rate limits: `key` `credential` (per API key/token), `session`, `ip` or `global`
 `endpoints` globs; `headers` templates with `{{limit}}`, `{{remaining}}`, `{{reset_epoch}}`,
 `{{reset_seconds}}`, `{{window_seconds}}`; `headers_on_success` (also on 2xx); `retry_after`
 (add `Retry-After` to the 429). Read limits from docs and headers; don't hammer the API to find them.
+Windows run in real time, so a frozen clock never locks an agent out; `advance` on the fake's clock
+moves them forward too (time passed), which is how a test lifts a 429 without waiting.
 
 Which users the fake accepts is runtime configuration, not model: `auth.mode` (`any`, `allowlist`,
 `off`) and `auth.users` in the fake's `fauxcall.toml` (or `FAUXCALL_AUTH__*`), so evaluations can

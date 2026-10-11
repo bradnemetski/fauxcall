@@ -13,7 +13,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from pydantic import AwareDatetime, BaseModel, Field
 
 from fauxcall import __version__
-from fauxcall.clock import datetime_to_ns
+from fauxcall.clock import datetime_to_ns, seconds_to_ns
 from fauxcall.config import FaultRule, IdentityConfig  # noqa: TC001 - FastAPI reads annotations
 from fauxcall.runtime.journal import JournalEntry
 from fauxcall.storage import model_to_json
@@ -112,7 +112,10 @@ def admin_router() -> APIRouter:  # noqa: C901, PLR0915 - a flat list of small e
                 case "freeze":
                     clock.freeze(at_ns)
                 case "advance":
-                    clock.advance(_need(operation.seconds, "seconds"))
+                    seconds = _need(operation.seconds, "seconds")
+                    clock.advance(seconds)
+                    # Time passing: rate-limit windows (shared by every session) move on too.
+                    runtime.rate_limiter.skip(seconds_to_ns(seconds))
                 case "offset":
                     clock.set_offset(_need(operation.seconds, "seconds"))
                 case "travel":

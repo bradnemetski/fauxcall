@@ -105,7 +105,7 @@ Every fake has an admin API under `/__fauxcall`:
 | Call | What it does |
 |---|---|
 | `POST /__fauxcall/reset` | Back to the recorded state, for all sessions or one |
-| `POST /__fauxcall/clock` | Freeze, travel to an instant, run faster, or return to real time |
+| `POST /__fauxcall/clock` | Freeze, travel to an instant, run faster, or return to real time; `advance` also lifts rate limits |
 | `GET /__fauxcall/journal` | Every call the agent made, with requests and responses |
 | `PUT /__fauxcall/faults` | Inject errors, timeouts, delays, disconnects or 429s |
 | `PUT /__fauxcall/auth/users` | Allowed, denied and expired users (also for MCP OAuth) |

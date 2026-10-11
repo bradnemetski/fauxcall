@@ -1,8 +1,10 @@
 """Rate-limit emulation matching the real API's limits, headers and 429 responses.
 
 Windows are measured in *real* elapsed time (so a frozen evaluation clock can't lock an agent out
-forever), while reset timestamps in headers are rendered on the fake's clock. All arithmetic is in
-integer nanoseconds, so a client that waits exactly ``Retry-After`` seconds is let through.
+forever) plus every :meth:`RateLimiter.skip` (an ``advance`` of a fake clock: time passing, so a
+test can lift a 429 without waiting), while reset timestamps in headers are rendered on the fake's
+clock. All arithmetic is in integer nanoseconds, so a client that waits exactly ``Retry-After``
+seconds is let through.
 
 Algorithms:
 
@@ -82,12 +84,20 @@ class RateLimiter:
     """Counts requests per limit and key."""
 
     def __init__(self, monotonic_ns: Callable[[], int] = time.monotonic_ns) -> None:
-        self._now = monotonic_ns
+        self._monotonic = monotonic_ns
+        self._skipped_ns = 0
         self._windows: defaultdict[tuple[str, str], _Window] = defaultdict(_Window)
+
+    def _now(self) -> int:
+        return self._monotonic() + self._skipped_ns
 
     def reset(self) -> None:
         """Forget every window."""
         self._windows.clear()
+
+    def skip(self, ns: int) -> None:
+        """Let ``ns`` nanoseconds pass at once for every window (backwards moves are ignored)."""
+        self._skipped_ns += max(0, ns)
 
     def hit(self, limit: RateLimitModel, key: str) -> LimitStatus:
         """Count one request; returns whether it is allowed and the remaining budget."""

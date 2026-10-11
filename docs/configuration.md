@@ -181,7 +181,7 @@ from the session header unless a `session` is given.
 | `GET /health` | Status, version, sessions, the clock, whether Jev is active |
 | `POST /reset` | Back to the recorded state: `{}` for everything, `{"session": "run-1"}` for one, `"journal": true` to clear the journal too |
 | `GET /sessions` | Sessions with their own state |
-| `GET /clock` · `POST /clock` | Read or change the clock: `{"op": "freeze"}`, `{"op": "advance", "seconds": 60}`, `{"op": "travel", "at": "…"}`, `{"op": "offset", "seconds": -3600}`, `{"op": "scale", "rate": 60}`, `{"op": "real"}` |
+| `GET /clock` · `POST /clock` | Read or change the clock: `{"op": "freeze"}`, `{"op": "advance", "seconds": 60}`, `{"op": "travel", "at": "…"}`, `{"op": "offset", "seconds": -3600}`, `{"op": "scale", "rate": 60}`, `{"op": "real"}`. Rate-limit windows run in real time; only `advance` moves them too (time passing lifts a 429) |
 | `GET /journal` · `DELETE /journal` | Calls made, oldest first; filter with `session`, `endpoint`, `method`, `path_prefix`, `since`, `limit` |
 | `GET /faults` · `PUT /faults` · `DELETE /faults` | Fault rules |
 | `PUT /auth/users` | Replace the known users |
