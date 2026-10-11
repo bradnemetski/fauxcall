@@ -49,6 +49,7 @@ class ParamModel(Model):
 
     name: str
     location: ParamLocation
+    description: str | None = None
     required: bool = False
     param_schema: RawJson = Field(default=None, alias="schema", description="JSON schema (spec).")
     style: str | None = None

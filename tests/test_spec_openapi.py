@@ -1208,3 +1208,9 @@ def test_summarize_rendering_details() -> None:
         "- Base URL: https://x.example.com",
         "- Auth: none documented",
     ]
+
+
+def test_parameter_descriptions_are_kept() -> None:
+    endpoints = {e.id: e for e in endpoints_from_spec(load("petstore3-openapi.json"))}
+    pet_id = endpoints["GET /api/v3/pet/{petId}"].params[0]
+    assert (pet_id.name, pet_id.description) == ("petId", "ID of pet to return")

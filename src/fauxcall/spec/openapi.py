@@ -556,6 +556,7 @@ class _EndpointBuilder:
         return ParamModel(
             name=name,
             location=location,
+            description=_text(param.get("description")),
             required=location == "path" or param.get("required") is True,
             param_schema=schema,
             style=style,
