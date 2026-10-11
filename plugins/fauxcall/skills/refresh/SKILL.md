@@ -20,7 +20,7 @@ rules (approvals, secrets, evidence) and its reference guides.
 3. Re-record what drifted: re-run the affected plans in `data/plans/` (read-only ones freely; writes
    only within the existing approval — `fauxcall plan review <name>` shows coverage; ask the user once
    for anything new). Also re-run the spec discovery if the API publishes one:
-   `fauxcall endpoints <name>` vs the current spec (new endpoints → `/fauxcall:extend`).
+   `fauxcall endpoints <name>` vs the current spec (new endpoints → the `extend` skill, `/fauxcall:extend` in Claude Code).
 4. `fauxcall analyze endpoint <name> "<E>" --apply` for each drifted endpoint; update policies, error
    templates, relations; `fauxcall world build <name>`; `fauxcall model check <name>`.
 5. `fauxcall scaffold <name>` (regenerates routes/README only), update handlers and tests.
