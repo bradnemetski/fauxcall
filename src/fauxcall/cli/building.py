@@ -54,7 +54,9 @@ def world_build(name: str) -> None:
 
 def _report_problems(fake: FakeLayout) -> None:
     model = load_model(fake)
-    problems = check_world(model, World(model, fake.data).session())
+    problems = check_world(
+        model, World(model, fake.data).session(), import_paths=[fake.root / "src"]
+    )
     if problems:
         echo("\nConsistency problems (record the missing entities, or fix relations):")
         echo("\n".join(f"- {problem}" for problem in problems[:100]))

@@ -80,6 +80,10 @@ data genuinely contains dangling references (say so in `evidence`).
 ]
 ```
 
+A custom check is `def inventory_invariant(world: SessionWorld) -> list[str]` (one message per
+problem). Keep it in the fake's `handlers.py`: `fauxcall world check` finds the fake's package even
+before the fake is installed (after `fauxcall scaffold`).
+
 Aggregates (counts per status, totals, balances) are **computed from the world** in a custom handler,
 never replayed — otherwise they drift the moment an agent creates a record. Example: Petstore's
 `GET /store/inventory` = counts of pets by `status`.

@@ -8,7 +8,9 @@ human-readable problems; it never raises for a broken world or a broken check.
 
 from __future__ import annotations
 
+import contextlib
 import importlib
+import sys
 from typing import TYPE_CHECKING
 
 from fauxcall.errors import WorldError
@@ -18,7 +20,8 @@ from fauxcall.world.io import copy_json
 from fauxcall.world.keys import InvalidKeyError, normalize_key, parse_path
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Sequence
+    from collections.abc import Callable, Iterator, Sequence
+    from pathlib import Path
 
     from fauxcall.jsonpath import Segment
     from fauxcall.model.api import ApiModel
@@ -27,7 +30,9 @@ if TYPE_CHECKING:
     from fauxcall.world.store import SessionWorld
 
 
-def check_world(model: ApiModel, world: SessionWorld) -> list[str]:
+def check_world(
+    model: ApiModel, world: SessionWorld, *, import_paths: Sequence[Path] = ()
+) -> list[str]:
     """Every relation and invariant violation in ``world``, as human-readable problems.
 
     * Each required :class:`~fauxcall.model.world.RelationModel`: every non-null value at
@@ -36,7 +41,9 @@ def check_world(model: ApiModel, world: SessionWorld) -> list[str]:
     * :class:`~fauxcall.model.world.InvariantModel` ``unique`` (non-null values unique across the
       collection), ``not_null`` (present and non-null in every record; for ``[*]`` paths every
       element) and ``custom`` (``fn(world) -> list[str]`` imported from ``package.module:function``
-      or ``package.module.function``; import and call errors become problems).
+      or ``package.module.function``; import and call errors become problems). ``import_paths``
+      are searched first, e.g. the fake's ``src`` folder, so a fake's own handlers module can
+      hold its checks even when the CLI runs outside the fake's environment).
 
     Problems are ordered: relations, then invariants (model order), then records (list order).
     """
@@ -50,7 +57,7 @@ def check_world(model: ApiModel, world: SessionWorld) -> list[str]:
             problems.append(f"relation {relation.name!r}: {exc}")
     for invariant in model.invariants:
         try:
-            problems += _invariant_problems(world, invariant)
+            problems += _invariant_problems(world, invariant, import_paths)
         except WorldError as exc:
             problems.append(f"invariant {invariant.name!r}: {exc}")
     return problems
@@ -152,11 +159,13 @@ def _target_matcher(
 # ---------------------------------------------------------------------------------------------
 
 
-def _invariant_problems(world: SessionWorld, invariant: InvariantModel) -> list[str]:
+def _invariant_problems(
+    world: SessionWorld, invariant: InvariantModel, import_paths: Sequence[Path] = ()
+) -> list[str]:
     collection = world.collection(invariant.collection)
     prefix = f"invariant {invariant.name!r}"
     if invariant.kind == "custom":
-        return _custom_problems(world, invariant, prefix)
+        return _custom_problems(world, invariant, prefix, import_paths)
     if invariant.field is None:
         return [f"{prefix}: a {invariant.kind!r} invariant needs a field"]
     segments = parse_path(invariant.field)
@@ -201,12 +210,18 @@ def _not_null_problems(
     return problems
 
 
-def _custom_problems(world: SessionWorld, invariant: InvariantModel, prefix: str) -> list[str]:
+def _custom_problems(
+    world: SessionWorld,
+    invariant: InvariantModel,
+    prefix: str,
+    import_paths: Sequence[Path] = (),
+) -> list[str]:
     function = invariant.function
     if not function:
         return [f"{prefix}: a 'custom' invariant needs a function"]
     try:
-        check = _import_function(function)
+        with _searching(import_paths):
+            check = _import_function(function)
     except Exception as exc:  # noqa: BLE001 - a broken check is reported, never raised
         return [f"{prefix}: cannot import {function!r}: {type(exc).__name__}: {exc}"]
     try:
@@ -216,6 +231,19 @@ def _custom_problems(world: SessionWorld, invariant: InvariantModel, prefix: str
     if not isinstance(found, list) or not all(isinstance(problem, str) for problem in found):
         return [f"{prefix}: {function!r} must return a list of strings, not {found!r}"]
     return [f"{prefix}: {problem}" for problem in found]
+
+
+@contextlib.contextmanager
+def _searching(paths: Sequence[Path]) -> Iterator[None]:
+    """Put ``paths`` first on the import path meanwhile (modules imported stay imported)."""
+    added = [str(path) for path in paths if str(path) not in sys.path]
+    sys.path[:0] = added
+    try:
+        yield
+    finally:
+        for entry in added:
+            with contextlib.suppress(ValueError):
+                sys.path.remove(entry)
 
 
 def _import_function(path: str) -> Callable[[SessionWorld], object]:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
@@ -19,6 +20,8 @@ from fauxcall.model import (
 from fauxcall.world import World, check_world, records_from_values, resolve_relation_targets
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     from fauxcall.types import JsonValue
     from fauxcall.world import SessionWorld
 
@@ -407,3 +410,19 @@ def test_resolve_relation_targets_rejects_unknown_collections() -> None:
     model = _model([unknown])
     with pytest.raises(WorldError, match="unknown collection 'owners'"):
         resolve_relation_targets(model, _session(model))
+
+
+def test_custom_invariants_can_live_in_the_fakes_own_package(tmp_path: Path) -> None:
+    package = tmp_path / "src" / "fauxcall_import_paths_demo"
+    package.mkdir(parents=True)
+    (package / "__init__.py").write_text("")
+    (package / "handlers.py").write_text(
+        "def check(world):\n    return [f'{len(world.list(\"tickers\"))} tickers checked']\n"
+    )
+    model = _model(invariants=[_custom("fauxcall_import_paths_demo.handlers:check")])
+    session = _session(model)
+    unreachable = check_world(model, session)
+    assert "No module named 'fauxcall_import_paths_demo'" in unreachable[0]
+    found = check_world(model, session, import_paths=[tmp_path / "src"])
+    assert found == ["invariant 'custom_check': 3 tickers checked"]
+    assert str(tmp_path / "src") not in sys.path  # the search path is restored
