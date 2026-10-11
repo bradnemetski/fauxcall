@@ -1218,9 +1218,9 @@ async def test_websocket_frames_go_out_on_schedule_while_receiving(tmp_path: Pat
     app, _ = api()
     frames = [
         {"text": "hi"},
-        {"at_ms": 40, "base64": base64.b64encode(b"\x00\x01").decode()},
-        {"at_ms": 80, "json": {"a": 1}},
-        {"at_ms": 120, "text": "bye"},
+        {"at_ms": 300, "base64": base64.b64encode(b"\x00\x01").decode()},
+        {"at_ms": 600, "json": {"a": 1}},
+        {"at_ms": 900, "text": "bye"},
         {"at_ms": 1200, "text": "too late"},  # the server has closed by then
     ]
     call = get(
@@ -1243,7 +1243,7 @@ async def test_websocket_frames_go_out_on_schedule_while_receiving(tmp_path: Pat
         ("ws_close", None, None),
     ]
     sent_at = [e.t_ms for e in exchange.stream if e.kind == "ws_send"]
-    assert sent_at[1:] >= [40, 80, 120]  # never early
+    assert sent_at[1:] >= [300, 600, 900]  # never early
     assert sent_at == sorted(sent_at)
     sidecar = tmp_path / "recordings" / "get-ws-multi" / "000001.ws2-sent.bin"
     assert sidecar.read_bytes() == b"\x00\x01"
@@ -1252,9 +1252,9 @@ async def test_websocket_frames_go_out_on_schedule_while_receiving(tmp_path: Pat
 
 async def test_websocket_frames_all_sent_leave_no_note(tmp_path: Path) -> None:
     app, _ = api()
-    frames = [{"at_ms": 10, "text": "a"}, {"at_ms": 30, "text": "b"}]
+    frames = [{"at_ms": 10, "text": "a"}, {"at_ms": 400, "text": "b"}]  # room for the reply
     call = get(
-        "multi", "/ws/multi", stream={"kind": "websocket", "frames": frames, "duration_s": 0.3}
+        "multi", "/ws/multi", stream={"kind": "websocket", "frames": frames, "duration_s": 1}
     )
     async with httpx2.AsyncClient(transport=ASGIWebSocketTransport(app)) as http:
         await asyncio.wait_for(recorder(tmp_path, http, FakeClock()).run(plan(call)), timeout=10)

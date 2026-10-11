@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from datetime import UTC, datetime, timedelta
 
 import pytest
@@ -203,3 +204,10 @@ def test_entries_dump_with_defaults() -> None:
     assert dumped["status"] is None
     assert dumped["streamed"] is False
     assert dumped["at"] == "2026-10-10T14:30:01Z"
+
+
+def test_brackets_inside_strings_do_not_count_as_nesting() -> None:
+    raw = json.dumps({"text": "[" * 1000 + '\\"]' + "{" * 1000}).encode()
+    parsed, text = body_for_journal(raw, "application/json")
+    assert isinstance(parsed, dict)
+    assert text is None

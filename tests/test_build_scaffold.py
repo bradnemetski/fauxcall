@@ -1334,8 +1334,9 @@ def subprocess_env(workspace: Workspace) -> dict[str, str]:
         for key, value in os.environ.items()
         if key not in LEAKY and not key.startswith(("FAUXCALL_", "COV_CORE", "COVERAGE_"))
     }
+    if not os.environ.get("CI"):  # a CI runner starts with an empty cache
+        env["UV_OFFLINE"] = "1"
     env.update(
-        UV_OFFLINE="1",
         UV_PYTHON=f"{sys.version_info.major}.{sys.version_info.minor}",
         MYPY_CACHE_DIR=str(workspace.root / ".mypy_cache"),
     )

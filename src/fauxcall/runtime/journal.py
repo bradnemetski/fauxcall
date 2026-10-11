@@ -69,12 +69,39 @@ def body_for_journal(raw: bytes, content_type: str | None) -> tuple[RawJson, str
         text = decoder.decode(raw[:BODY_LIMIT], final=not truncated)
     except UnicodeDecodeError:
         return None, f"<{len(raw)} bytes of binary data>"
-    if not truncated and content_type and "json" in content_type.lower():
+    if not truncated and content_type and "json" in content_type.lower() and not _too_deep(text):
         try:
             return jsonfmt.loads(text), None
         except (ValueError, RecursionError):
             pass
     return None, text + ("…" if truncated else "")
+
+
+MAX_JSON_DEPTH = 256
+"""Deeper JSON is journaled as text: nesting that deep only strains whatever walks it later."""
+
+
+def _too_deep(text: str) -> bool:
+    """Whether brackets nest past :data:`MAX_JSON_DEPTH` (outside strings); no parsing needed."""
+    depth = 0
+    in_string = escaped = False
+    for char in text:
+        if in_string:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                in_string = False
+        elif char == '"':
+            in_string = True
+        elif char in "[{":
+            depth += 1
+            if depth > MAX_JSON_DEPTH:
+                return True
+        elif char in "]}":
+            depth -= 1
+    return False
 
 
 class Journal:
