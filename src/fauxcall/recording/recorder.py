@@ -44,7 +44,7 @@ from fauxcall.runtime.templating import from_mapping, render, render_text
 from fauxcall.storage import model_to_json, write_model
 
 if TYPE_CHECKING:
-    from collections.abc import Awaitable, Callable, Mapping, Sequence
+    from collections.abc import AsyncIterator, Awaitable, Callable, Mapping, Sequence
     from pathlib import Path
 
     from httpx2.websockets import AsyncWebSocketSession
@@ -58,6 +58,7 @@ if TYPE_CHECKING:
         PollSpec,
         RecordingPlan,
         StreamSpec,
+        WsFrame,
     )
     from fauxcall.recording.store import RecordingStore
     from fauxcall.runtime.templating import Resolver
@@ -1000,11 +1001,7 @@ class Recorder:
         received: _Received,
         draft: _Draft,
     ) -> None:
-        from httpx2.websockets import (  # noqa: PLC0415
-            HTTPXWSException,
-            WebSocketDisconnect,
-            WebSocketInvalidTypeReceived,
-        )
+        from httpx2.websockets import HTTPXWSException  # noqa: PLC0415
 
         events = received.events
         deadline = started + spec.duration_s
@@ -1017,29 +1014,97 @@ class Recorder:
                 text = message if isinstance(message, str) else jsonfmt.dumps(message)
                 events.append(StreamEvent(t_ms=stamp(), kind="ws_send", data=text))
                 await session.send_text(text)
-            while len(events) < spec.max_events:
-                remaining = deadline - time.perf_counter()
-                if remaining <= 0:
-                    break
-                try:
-                    text = await session.receive_text(timeout=remaining)
-                except TimeoutError:
-                    break
-                except WebSocketDisconnect as closed:
-                    reason = closed.reason or None
-                    events.append(
-                        StreamEvent(t_ms=stamp(), kind="ws_close", code=closed.code, data=reason)
-                    )
-                    break
-                except WebSocketInvalidTypeReceived as other:  # a binary message
-                    data = getattr(other.event, "data", b"")
-                    name = self.store.sidecar_name(draft.exchange_id, f"ws{len(events)}")
-                    draft.sidecars[name] = data if isinstance(data, bytes) else bytes(data)
-                    events.append(StreamEvent(t_ms=stamp(), kind="ws_recv", binary_file=name))
-                    continue
-                events.append(StreamEvent(t_ms=stamp(), kind="ws_recv", data=text))
+            async with self._frames_sent(session, spec.frames, started, received, draft):
+                await self._receive(session, spec, deadline, stamp, received, draft)
         except HTTPXWSException as exc:
             received.note = f"websocket error: {type(exc).__name__}: {exc}"[:300]
+
+    @contextlib.asynccontextmanager
+    async def _frames_sent(
+        self,
+        session: AsyncWebSocketSession,
+        frames: Sequence[WsFrame],
+        started: float,
+        received: _Received,
+        draft: _Draft,
+    ) -> AsyncIterator[None]:
+        """Send ``frames`` on their schedule while the body receives; unsent ones are noted."""
+        from httpx2.websockets import HTTPXWSException  # noqa: PLC0415
+
+        if not frames:
+            yield
+            return
+        sent = 0
+
+        async def send_all() -> None:
+            nonlocal sent
+            for frame in frames:
+                wait = started + frame.at_ms / 1000 - time.perf_counter()
+                if wait > 0:
+                    await asyncio.sleep(wait)  # real time: the conversation runs on it
+                t_ms = round((time.perf_counter() - started) * 1000, 3)
+                payload = frame.payload()
+                if isinstance(payload, bytes):
+                    await session.send_bytes(payload)
+                    name = self.store.sidecar_name(
+                        draft.exchange_id, f"ws{len(received.events)}-sent"
+                    )
+                    draft.sidecars[name] = payload
+                    event = StreamEvent(t_ms=t_ms, kind="ws_send", binary_file=name)
+                else:
+                    await session.send_text(payload)
+                    event = StreamEvent(t_ms=t_ms, kind="ws_send", data=payload)
+                received.events.append(event)
+                sent += 1
+
+        sender = asyncio.create_task(send_all())
+        try:
+            yield
+        finally:
+            sender.cancel()
+            with contextlib.suppress(asyncio.CancelledError, HTTPXWSException):
+                await sender
+            received.events.sort(key=lambda event: event.t_ms)  # sends and receives interleave
+            if sent < len(frames):
+                unsent = f"{len(frames) - sent} of {len(frames)} frames not sent (connection ended)"
+                received.note = f"{received.note}; {unsent}" if received.note else unsent
+
+    async def _receive(
+        self,
+        session: AsyncWebSocketSession,
+        spec: StreamSpec,
+        deadline: float,
+        stamp: Callable[[], float],
+        received: _Received,
+        draft: _Draft,
+    ) -> None:
+        from httpx2.websockets import (  # noqa: PLC0415
+            WebSocketDisconnect,
+            WebSocketInvalidTypeReceived,
+        )
+
+        events = received.events
+        while len(events) < spec.max_events:
+            remaining = deadline - time.perf_counter()
+            if remaining <= 0:
+                break
+            try:
+                text = await session.receive_text(timeout=remaining)
+            except TimeoutError:
+                break
+            except WebSocketDisconnect as closed:
+                reason = closed.reason or None
+                events.append(
+                    StreamEvent(t_ms=stamp(), kind="ws_close", code=closed.code, data=reason)
+                )
+                break
+            except WebSocketInvalidTypeReceived as other:  # a binary message
+                data = getattr(other.event, "data", b"")
+                name = self.store.sidecar_name(draft.exchange_id, f"ws{len(events)}")
+                draft.sidecars[name] = data if isinstance(data, bytes) else bytes(data)
+                events.append(StreamEvent(t_ms=stamp(), kind="ws_recv", binary_file=name))
+                continue
+            events.append(StreamEvent(t_ms=stamp(), kind="ws_recv", data=text))
 
 
 def host_of(url: str) -> str:

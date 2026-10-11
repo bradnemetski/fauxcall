@@ -8,6 +8,8 @@ calls") or an exact-call approval pinned by fingerprint.
 
 from __future__ import annotations
 
+import base64
+import binascii
 import fnmatch
 import hashlib
 from typing import Literal
@@ -66,6 +68,35 @@ class PollSpec(Model):
     timeout_s: float = Field(default=120.0, gt=0)
 
 
+class WsFrame(Model):
+    """A WebSocket message sent at a moment of the conversation: text, JSON or binary."""
+
+    at_ms: int = Field(default=0, ge=0, description="When to send it: ms after connecting.")
+    text: str | None = Field(default=None, description="A text frame, sent as is.")
+    json_value: RawJson = Field(
+        default=None, alias="json", description="A text frame holding this JSON."
+    )
+    base64: str | None = Field(default=None, description="A binary frame (base64-encoded).")
+
+    @model_validator(mode="after")
+    def _one_payload(self) -> WsFrame:
+        given = [p for p in (self.text, self.json_value, self.base64) if p is not None]
+        if len(given) != 1:
+            raise ValueError("a frame needs exactly one of text, json or base64")
+        if self.base64 is not None:
+            try:
+                base64.b64decode(self.base64, validate=True)
+            except binascii.Error as exc:
+                raise ValueError(f"base64 is not valid base64: {exc}") from exc
+        return self
+
+    def payload(self) -> str | bytes:
+        """What goes on the wire: ``bytes`` for a binary frame, ``str`` for a text one."""
+        if self.base64 is not None:
+            return base64.b64decode(self.base64)
+        return self.text if self.text is not None else jsonfmt.dumps(self.json_value)
+
+
 class StreamSpec(Model):
     """Record a streaming response (SSE / WebSocket / chunked)."""
 
@@ -73,8 +104,29 @@ class StreamSpec(Model):
     duration_s: float = Field(default=10.0, gt=0)
     max_events: int = Field(default=200, ge=1)
     send: list[RawJson] = Field(
-        default_factory=list, description="WebSocket messages to send after connecting."
+        default_factory=list,
+        description="WebSocket messages sent right after connecting (text as is, else JSON).",
     )
+    frames: list[WsFrame] = Field(
+        default_factory=list,
+        description=(
+            "WebSocket messages sent while the server's are received, each `at_ms` after "
+            "connecting (after `send`, in order): timed probes and binary frames."
+        ),
+    )
+
+    @model_validator(mode="after")
+    def _frames_fit(self) -> StreamSpec:
+        if not self.frames:
+            return self
+        if self.kind != "websocket":
+            raise ValueError("frames are WebSocket messages: use them with kind 'websocket'")
+        moments = [frame.at_ms for frame in self.frames]
+        if moments != sorted(moments):
+            raise ValueError("frames must be listed in at_ms order")
+        if moments[-1] >= self.duration_s * 1000:
+            raise ValueError("every frame must be sent within duration_s")
+        return self
 
 
 class PlannedCall(Model):
@@ -105,7 +157,10 @@ class PlannedCall(Model):
 
     def fingerprint(self) -> str:
         """Stable hash of what the call does (notes and tags excluded)."""
-        payload = self.model_dump(mode="json", exclude={"note", "tags"})
+        payload = self.model_dump(mode="json", by_alias=True, exclude={"note", "tags"})
+        stream = payload.get("stream")
+        if isinstance(stream, dict) and not stream.get("frames"):
+            del stream["frames"]  # added later: absent when unused, so older approvals still match
         return hashlib.sha256(jsonfmt.canonical_dumps(payload).encode()).hexdigest()[:16]
 
 

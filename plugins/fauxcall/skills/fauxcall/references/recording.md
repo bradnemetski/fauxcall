@@ -122,6 +122,21 @@ prints each job's timeline and suggested duration models / outcome probabilities
 
 WebSockets: `"stream": {"kind": "websocket", "duration_s": 3, "send": [{"action": "subscribe", "symbols": ["AAPL"]}]}`
 (credentials go in the URL query or headers exactly as the API expects; use `"auth": "default"`).
+`send` messages go out right after connecting. For timed or binary probes use `frames`, sent while
+the server's messages are received, each `at_ms` after connecting (in order, within `duration_s`):
+
+```json
+"stream": {"kind": "websocket", "duration_s": 4, "frames": [
+  {"json": {"action": "subscribe", "symbols": ["AAPL"]}},
+  {"at_ms": 400, "json": {"action": "ping"}},
+  {"at_ms": 1500, "base64": "AAE="},
+  {"at_ms": 3000, "text": "after the stream ended"}]}
+```
+
+Each frame is `text` (as is), `json` or `base64` (a binary frame); frames the server's close cut off
+are noted on the exchange. Probe a feed's errors like any endpoint's: malformed JSON, binary frames,
+unknown actions, messages mid-stream and after it ends. A conversation whose messages change state
+(orders, writes) is mutating: set `"mutating": true` on the call so the approval rules apply.
 
 ## Probes: errors, auth, routing
 

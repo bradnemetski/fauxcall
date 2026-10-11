@@ -159,6 +159,42 @@ async def test_echo_mode(tmp_path: Path) -> None:
     async with _client(fake) as client, client.websocket("/v1/ws/feed") as ws:
         await ws.send_text("hello")
         assert await ws.receive_text() == "hello"
+        await ws.send_bytes(b"\x00raw")
+        assert await ws.receive_bytes() == b"\x00raw"  # binary comes back as binary
+
+
+async def test_binary_client_frames_match_the_recorded_bytes(tmp_path: Path) -> None:
+    fake = _fake(tmp_path, None)
+    store = RecordingStore(tmp_path / "data" / "recordings")
+    store.save(
+        Exchange(
+            id=store.next_id(),
+            endpoint=FEED,
+            started_at=RECORDED_AT,
+            started_ns=datetime_to_ns(RECORDED_AT),
+            request=CapturedRequest(method=HttpMethod.GET, url="x", path="/v1/ws/feed"),
+            response=CapturedResponse(status=101),
+            stream=[
+                StreamEvent(t_ms=0, kind="ws_send", binary_file="sent.bin"),
+                _recv(5, '{"type":"error","message":"Binary messages are not supported."}'),
+                _send(10, '{"action":"ping"}'),
+                _recv(12, '{"type":"pong"}'),
+            ],
+        ),
+        sidecars={"sent.bin": b"\x01\x02"},
+    )
+    received: list[str] = []
+    async with _client(fake) as client, client.websocket("/v1/ws/feed") as ws:
+        await ws.send_bytes(b"\x09")  # bytes nobody recorded: ignored, like an unknown command
+        await ws.send_text("\u0001\u0002")  # the same bytes as text: a different message
+        await ws.send_bytes(b"\x01\x02")
+        received.append(await ws.receive_text())
+        await ws.send_text('{"action":"ping"}')
+        received.append(await ws.receive_text())
+    assert received == [
+        '{"type":"error","message":"Binary messages are not supported."}',
+        '{"type":"pong"}',
+    ]
 
 
 async def test_no_recordings_closes_with_1011(tmp_path: Path) -> None:

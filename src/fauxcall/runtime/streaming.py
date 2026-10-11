@@ -131,10 +131,11 @@ async def replay_websocket(
 
     Server messages recorded before the client said anything (greetings, connection acks) are sent
     on connect. After that, the server messages that followed a client message in the recording
-    are sent when the client sends a matching message (``respond_to="match"``). ``"none"`` replays
-    the server side unconditionally on its own timeline (repeatedly with ``loop``); ``"echo"``
-    echoes client messages. Recorded spacing is kept, scaled by ``speed``; binary frames are sent
-    as bytes and a recorded close keeps its code and reason.
+    are sent when the client sends a matching message (``respond_to="match"``: equal JSON or text,
+    or identical bytes for a binary frame). ``"none"`` replays the server side unconditionally on
+    its own timeline (repeatedly with ``loop``); ``"echo"`` echoes client messages (binary as
+    binary). Recorded spacing is kept, scaled by ``speed``; binary frames are sent as bytes and a
+    recorded close keeps its code and reason.
     """
     await websocket.accept()
     if not exchanges:
@@ -144,7 +145,11 @@ async def replay_websocket(
     try:
         if respond_to == "echo":
             while True:
-                await websocket.send_text(await websocket.receive_text())
+                message = await _next_message(websocket)
+                if isinstance(message, bytes):
+                    await websocket.send_bytes(message)
+                else:
+                    await websocket.send_text(message)
         if respond_to == "none":
             first = exchanges[0]
             pushed = [event for event in first.stream if event.kind in _SERVER_KINDS]
@@ -158,6 +163,15 @@ async def replay_websocket(
         await _conversation(websocket, player, exchanges)
     except WebSocketDisconnect:
         log.debug("websocket_client_disconnected", endpoint=ctx.endpoint_id)
+
+
+async def _next_message(websocket: WebSocket) -> str | bytes:
+    """The client's next message: ``bytes`` for a binary frame (raises when the client leaves)."""
+    message = await websocket.receive()
+    if message["type"] == "websocket.disconnect":
+        raise WebSocketDisconnect(message.get("code", 1000), message.get("reason"))
+    data = message.get("bytes")
+    return data if data is not None else message.get("text") or ""
 
 
 class _Player:
@@ -189,12 +203,16 @@ class _Player:
                 await self.websocket.close(code=event.code or 1000, reason=event.data or None)
                 return True
             if event.binary_file is not None:
-                content = self.ctx.runtime.recordings.sidecar(exchange, event.binary_file)
+                content = self.sidecar(exchange, event.binary_file)
                 if content is not None:  # a lost sidecar is logged; nothing to send
                     await self.websocket.send_bytes(content)
                 continue
             await self.websocket.send_text(_render_data(self.ctx, event.data) or "")
         return False
+
+    def sidecar(self, exchange: Exchange, name: str) -> bytes | None:
+        """A binary frame of ``exchange``, as recorded."""
+        return self.ctx.runtime.recordings.sidecar(exchange, name)
 
 
 def _loop_pause(events: Sequence[StreamEvent], speed: float) -> float:
@@ -211,12 +229,11 @@ async def _conversation(
     if await player.play(first, _server_side(first.stream), 0.0):
         return
     while True:
-        sent = await websocket.receive_text()
-        found = _find_reply(exchanges, sent)
+        sent = await _next_message(websocket)
+        found = _find_reply(exchanges, sent, player.sidecar)
         if found is None:
-            log.info(
-                "websocket_unmatched_message", endpoint=player.ctx.endpoint_id, message=sent[:200]
-            )
+            shown = sent[:200] if isinstance(sent, str) else f"<{len(sent)} bytes>"
+            log.info("websocket_unmatched_message", endpoint=player.ctx.endpoint_id, message=shown)
             continue
         exchange, sent_at, reply = found
         if await player.play(exchange, reply, sent_at):
@@ -230,16 +247,27 @@ def _server_side(events: Iterable[StreamEvent]) -> list[StreamEvent]:
 
 
 def _find_reply(
-    exchanges: Sequence[Exchange], sent: str
+    exchanges: Sequence[Exchange],
+    sent: str | bytes,
+    sidecar: Callable[[Exchange, str], bytes | None],
 ) -> tuple[Exchange, float, list[StreamEvent]] | None:
     """The recorded client message equal to ``sent``: when it was sent and the server's answer.
 
+    Text matches as equal JSON (else equal text); a binary frame matches identical recorded bytes.
     The reply is every server message (and a close) up to the client's next message.
     """
     for exchange in exchanges:
         script = exchange.stream
         for index, event in enumerate(script):
-            if event.kind == "ws_send" and _same_message(sent, event.data):
+            if event.kind != "ws_send":
+                continue
+            if isinstance(sent, bytes):
+                matched = (
+                    event.binary_file is not None and sidecar(exchange, event.binary_file) == sent
+                )
+            else:
+                matched = _same_message(sent, event.data)
+            if matched:
                 return exchange, event.t_ms, _server_side(script[index + 1 :])
     return None
 

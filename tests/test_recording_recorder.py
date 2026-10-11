@@ -262,6 +262,21 @@ class Api:
             await websocket.send_bytes(b"\x00\x01binary")
             await websocket.close(code=4001, reason="bye")
 
+        @app.websocket("/ws/multi")
+        async def multi(websocket: WebSocket) -> None:
+            await websocket.accept()
+            while True:
+                message = await websocket.receive()
+                if message["type"] == "websocket.disconnect":
+                    return
+                if message.get("bytes") is not None:
+                    await websocket.send_text(f"bytes:{len(message['bytes'])}")
+                elif message.get("text") == "bye":
+                    await websocket.close(code=1000)
+                    return
+                else:
+                    await websocket.send_text(f"text:{message.get('text')}")
+
         @app.websocket("/ws/quiet")
         async def quiet(websocket: WebSocket) -> None:
             await websocket.accept()
@@ -1140,6 +1155,60 @@ async def test_websocket_capture(tmp_path: Path) -> None:
     assert (tmp_path / "recordings" / "get-ws" / "000001.ws3.bin").read_bytes() == b"\x00\x01binary"
     assert exchange.response is not None
     assert exchange.response.status == 101
+
+
+async def test_websocket_frames_go_out_on_schedule_while_receiving(tmp_path: Path) -> None:
+    app, _ = api()
+    frames = [
+        {"text": "hi"},
+        {"at_ms": 40, "base64": base64.b64encode(b"\x00\x01").decode()},
+        {"at_ms": 80, "json": {"a": 1}},
+        {"at_ms": 120, "text": "bye"},
+        {"at_ms": 1200, "text": "too late"},  # the server has closed by then
+    ]
+    call = get(
+        "multi", "/ws/multi", stream={"kind": "websocket", "frames": frames, "duration_s": 2}
+    )
+    async with httpx2.AsyncClient(transport=ASGIWebSocketTransport(app)) as http:
+        report = await asyncio.wait_for(
+            recorder(tmp_path, http, FakeClock()).run(plan(call)), timeout=10
+        )
+    assert report.outcomes[0].statuses == [101]
+    exchange = stored(tmp_path)["000001"]
+    assert [(e.kind, e.data, e.binary_file) for e in exchange.stream] == [
+        ("ws_send", "hi", None),
+        ("ws_recv", "text:hi", None),
+        ("ws_send", None, "000001.ws2-sent.bin"),
+        ("ws_recv", "bytes:2", None),
+        ("ws_send", '{"a":1}', None),
+        ("ws_recv", 'text:{"a":1}', None),
+        ("ws_send", "bye", None),
+        ("ws_close", None, None),
+    ]
+    sent_at = [e.t_ms for e in exchange.stream if e.kind == "ws_send"]
+    assert sent_at[1:] >= [40, 80, 120]  # never early
+    assert sent_at == sorted(sent_at)
+    sidecar = tmp_path / "recordings" / "get-ws-multi" / "000001.ws2-sent.bin"
+    assert sidecar.read_bytes() == b"\x00\x01"
+    assert exchange.note == "1 of 5 frames not sent (connection ended)"
+
+
+async def test_websocket_frames_all_sent_leave_no_note(tmp_path: Path) -> None:
+    app, _ = api()
+    frames = [{"at_ms": 10, "text": "a"}, {"at_ms": 30, "text": "b"}]
+    call = get(
+        "multi", "/ws/multi", stream={"kind": "websocket", "frames": frames, "duration_s": 0.3}
+    )
+    async with httpx2.AsyncClient(transport=ASGIWebSocketTransport(app)) as http:
+        await asyncio.wait_for(recorder(tmp_path, http, FakeClock()).run(plan(call)), timeout=10)
+    exchange = stored(tmp_path)["000001"]
+    assert [(e.kind, e.data) for e in exchange.stream] == [
+        ("ws_send", "a"),
+        ("ws_recv", "text:a"),
+        ("ws_send", "b"),
+        ("ws_recv", "text:b"),
+    ]
+    assert exchange.note is None
 
 
 async def test_websocket_silence_limits_and_refusals(tmp_path: Path) -> None:

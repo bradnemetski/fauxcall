@@ -44,7 +44,7 @@ from fauxcall.model import (
     SessionWindow,
     SourceInfo,
 )
-from fauxcall.model.plan import PlannedFile
+from fauxcall.model.plan import PlannedFile, StreamSpec, WsFrame
 from fauxcall.model.progress import GateAnswers, PhaseState
 from fauxcall.storage import read_model, write_model
 from fauxcall.timefmt import TimeFormat
@@ -348,6 +348,55 @@ def test_exchange_and_body_helpers() -> None:
         response=response,
     )
     assert Exchange.model_validate(exchange.model_dump(by_alias=True)) == exchange
+
+
+def test_websocket_frames() -> None:
+    spec = StreamSpec.model_validate(
+        {
+            "kind": "websocket",
+            "duration_s": 1,
+            "frames": [
+                {"text": "ping"},
+                {"at_ms": 250, "json": {"action": "subscribe"}},
+                {"at_ms": 500, "base64": "AAE="},
+            ],
+        }
+    )
+    assert [frame.payload() for frame in spec.frames] == [
+        "ping",
+        '{"action":"subscribe"}',
+        b"\x00\x01",
+    ]
+    problems: list[tuple[dict[str, object], str]] = [
+        ({"kind": "websocket", "frames": [{"text": "a", "base64": "AAE="}]}, "exactly one of"),
+        ({"kind": "websocket", "frames": [{"at_ms": 5}]}, "exactly one of"),
+        ({"kind": "websocket", "frames": [{"base64": "not base64!"}]}, "not valid base64"),
+        (
+            {"kind": "websocket", "frames": [{"at_ms": 9, "text": "a"}, {"at_ms": 1, "text": "b"}]},
+            "at_ms order",
+        ),
+        (
+            {"kind": "websocket", "duration_s": 1, "frames": [{"at_ms": 1000, "text": "late"}]},
+            "within duration_s",
+        ),
+        ({"kind": "sse", "frames": [{"text": "a"}]}, "kind 'websocket'"),
+    ]
+    for problem, message in problems:
+        with pytest.raises(ValidationError, match=message):
+            StreamSpec.model_validate(problem)
+
+
+def test_frames_leave_older_fingerprints_alone() -> None:
+    stream = StreamSpec(kind="sse", send=["hi"])
+    call = PlannedCall(
+        id="b",
+        endpoint="POST /ws",
+        request=PlannedRequest(method=HttpMethod.POST, path="/ws"),
+        stream=stream,
+    )
+    assert call.fingerprint() == "fb67115c9eaaba81"  # computed before frames existed
+    timed = StreamSpec(kind="websocket", send=["hi"], frames=[WsFrame(text="x")])
+    assert call.model_copy(update={"stream": timed}).fingerprint() != call.fingerprint()
 
 
 def test_plans_fingerprints_and_approvals() -> None:

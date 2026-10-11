@@ -113,10 +113,12 @@ go through the endpoint's body-scope `fields` policies, so timestamps inside eve
 `exchanges` restricts replay to specific recording ids. For WebSockets, `respond_to`:
 
 - `match` (default): send what the server sent on connect (greetings, acks), then answer each client
-  message with the server messages recorded after the same message (JSON compared by value);
-  unrecorded messages get no answer. A recorded close is replayed with its code.
+  message with the server messages recorded after the same message (JSON compared by value, a
+  binary frame by its bytes); unrecorded messages get no answer — when the real feed answers
+  anything (errors for unknown actions, malformed JSON, binary frames), replay can't generalize it:
+  write a handler. A recorded close is replayed with its code.
 - `none`: push the server side on its own timeline, ignoring the client (`loop` repeats it).
-- `echo`: echo client messages.
+- `echo`: echo client messages (binary as binary).
 
 `auth_failure_close_code`: when the real server accepts the socket and then closes it on bad
 credentials (record it!), its close code; leave `null` when it refuses the handshake.
