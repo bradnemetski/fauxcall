@@ -347,6 +347,52 @@ async def test_scenarios_can_still_send_missing_credentials(api):
 """
 
 
+ECHO_ENDPOINTS = (
+    'endpoints=[EndpointModel(id="POST /echo", method=HttpMethod.POST, path="/echo", role="echo")],'
+)
+NOTES_ENDPOINTS = """endpoints=[
+        EndpointModel(
+            id="POST /notes", method=HttpMethod.POST, path="/notes", role="create",
+            collection="notes",
+        ),
+        EndpointModel(
+            id="GET /notes", method=HttpMethod.GET, path="/notes", role="list",
+            collection="notes",
+        ),
+    ],
+    collections=[CollectionModel(name="notes")],"""
+ENDPOINTS_IMPORT = "from fauxcall.model.endpoints import EndpointModel"
+COLLECTION_IMPORT = "from fauxcall.model.world import CollectionModel"
+STATE_CONFTEST = (
+    AUTH_CONFTEST.replace(ECHO_ENDPOINTS, NOTES_ENDPOINTS)
+    .replace(ENDPOINTS_IMPORT, f"{ENDPOINTS_IMPORT}\n{COLLECTION_IMPORT}")
+    .replace("def secure_app():", "BUILDS = []\n\n\ndef secure_app():\n    BUILDS.append(1)")
+)
+
+STATE_SCENARIOS = """
+async def test_a_writes(api):
+    assert (await api.post("/notes", json={"text": "hi"})).status_code == 200
+    assert len((await api.get("/notes")).json()) == 1
+
+
+async def test_b_starts_from_the_recorded_state(api):
+    assert (await api.get("/notes")).json() == []
+
+
+def test_c_the_app_was_built_once():
+    import conftest
+
+    assert len(conftest.BUILDS) == 1
+"""
+
+
+def test_scenarios_share_one_app_but_never_its_state(pytester: pytest.Pytester) -> None:
+    pytester.makeini(INI)
+    pytester.makeconftest(STATE_CONFTEST)
+    pytester.makepyfile(test_state=STATE_SCENARIOS)
+    run(pytester).assert_outcomes(passed=3)
+
+
 @pytest.fixture
 def secured(pytester: pytest.Pytester) -> pytest.Pytester:
     pytester.makeini(INI)

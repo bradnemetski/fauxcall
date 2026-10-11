@@ -19,6 +19,7 @@ Writes to the real API are refused unless ``--allow-real-writes`` is given.
 
 from __future__ import annotations
 
+import contextlib
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -29,6 +30,7 @@ import pytest
 import pytest_asyncio
 
 from fauxcall.mcpwire.client import McpWireClient
+from fauxcall.runtime.app import runtime_of_app
 from fauxcall.testing.client import (
     ApiClient,
     ExchangeLog,
@@ -178,9 +180,28 @@ def _fake_client(
     url = config.getoption("--fake-url")
     if url:
         return httpx2.AsyncClient(base_url=url, **options), credentials.query
-    transport = httpx2.ASGITransport(app=fake.app_factory())
+    transport = httpx2.ASGITransport(app=_fake_app(config, fake))
     client = httpx2.AsyncClient(transport=transport, base_url=FAKE_BASE_URL, **options)
     return client, credentials.query
+
+
+_APPS_KEY: Final = pytest.StashKey[dict[int, "FastAPI"]]()
+
+
+def _fake_app(config: pytest.Config, fake: FakeUnderTest) -> FastAPI:
+    """The fake's app, built once per session and reset to the recorded state for each scenario.
+
+    A reset is as good as a fresh app (world overlays, clocks, journal, counters, jobs, uploads)
+    and much faster than loading a large world again.
+    """
+    apps = config.stash.setdefault(_APPS_KEY, {})
+    app = apps.get(id(fake))
+    if app is None:
+        app = apps[id(fake)] = fake.app_factory()
+        return app
+    with contextlib.suppress(AttributeError):  # an app that isn't a FauxCall fake
+        runtime_of_app(app).reset(journal=True)
+    return app
 
 
 def _side(
