@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, SerializerFunctionWrapHandler, model_serializer
 
 from fauxcall.model.common import Model, RawJson
 from fauxcall.model.realism import LatencyProfile
@@ -52,6 +52,17 @@ class McpToolModel(Model):
     )
     latency: LatencyProfile | None = None
     semantic: SemanticModel | None = None
+
+    @model_serializer(mode="wrap")
+    def _keep_behavior(self, handler: SerializerFunctionWrapHandler) -> dict[str, object]:
+        """Always write ``behavior`` (after the definition), even when it is the default."""
+        data: dict[str, object] = handler(self)
+        if "behavior" in data:
+            return data
+        items = list(data.items())
+        position = 1 if items and items[0][0] == "definition" else 0
+        items.insert(position, ("behavior", self.behavior))
+        return dict(items)
 
     @property
     def name(self) -> str:

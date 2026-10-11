@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from pydantic import Field, model_validator
+from pydantic import Field, SerializerFunctionWrapHandler, model_serializer, model_validator
 
 from fauxcall.model.common import Model, RawJson
 from fauxcall.model.errors import ErrorCase, ErrorCondition
@@ -212,6 +212,9 @@ class StreamModel(Model):
     )
 
 
+_BEFORE_ROLE = frozenset({"id", "method", "path", "spec_path", "operation_id", "summary", "tags"})
+
+
 class EndpointModel(Model):
     """One REST endpoint."""
 
@@ -277,3 +280,20 @@ class EndpointModel(Model):
         cases = [case for case in self.errors if case.when == condition]
         specific = next((case for case in cases if param and case.param == param), None)
         return specific or next((case for case in cases if case.param is None), None)
+
+    @model_serializer(mode="wrap")
+    def _keep_role(self, handler: SerializerFunctionWrapHandler) -> dict[str, object]:
+        """Always write ``role``, after the endpoint's identity.
+
+        It decides everything about an endpoint, so ``model.json`` shows it even when it is the
+        default (``replay``) that dumps without defaults would leave out.
+        """
+        data: dict[str, object] = handler(self)
+        if "role" in data:
+            return data
+        items = list(data.items())
+        position = 1 + max(
+            (index for index, (key, _) in enumerate(items) if key in _BEFORE_ROLE), default=-1
+        )
+        items.insert(position, ("role", self.role))
+        return dict(items)

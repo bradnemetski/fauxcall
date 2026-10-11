@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING, get_args
 
 from pydantic import TypeAdapter
 
-from _engine import market_model
-from fauxcall.model import ApiModel
+from _engine import j, market_model
+from fauxcall.model import ApiModel, McpToolModel
 from fauxcall.model.fields import FieldPolicy
 from fauxcall.storage import model_to_json, read_model, write_model
 
@@ -48,5 +48,21 @@ def test_every_policy_kind_survives_a_lean_dump() -> None:
 def test_a_rich_model_round_trips_through_disk(tmp_path: Path) -> None:
     model = market_model()
     assert any(endpoint.fields for endpoint in model.endpoints)
+    write_model(tmp_path / "model.json", model)
+    assert read_model(tmp_path / "model.json", ApiModel) == model
+
+
+def test_roles_and_behaviors_are_always_written(tmp_path: Path) -> None:
+    model = market_model()
+    endpoint = model.endpoint("GET /v1/time")
+    assert endpoint.role == "replay"  # the default
+    dumped = model_to_json(endpoint)
+    assert isinstance(dumped, dict)
+    keys = list(dumped)
+    assert keys.index("role") == keys.index("path") + 1 + sum(
+        key in dumped for key in ("spec_path", "operation_id", "summary", "tags")
+    )
+    tool = McpToolModel(definition={"name": "ask"})
+    assert list(j(model_to_json(tool))) == ["definition", "behavior"]
     write_model(tmp_path / "model.json", model)
     assert read_model(tmp_path / "model.json", ApiModel) == model
