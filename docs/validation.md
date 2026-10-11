@@ -44,8 +44,9 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
 | Reference API | **100%** | 188, real writes included | 21 | 877 | 818, 99% coverage | 3 | over $23 |
 | Frankfurter | **100%** | 142 | 9 | 219 | 427, 99% coverage | 2 | $14.06 |
 | timeapi.io | **100%** | 192 | 28 | 576 | 1,366, 98% coverage | 1 | $19.72 |
+| Swagger Petstore | **99.71%** | 96 (98.48% over 80 with real writes) | 19 | 370 | 361, 99% coverage | 1 | $15.21 |
 
-Petstore, FakeRESTApi and DeepWiki are added here as their runs complete. *Parity* is the weighted
+FakeRESTApi and DeepWiki are added here as their runs complete. *Parity* is the weighted
 share of checks (status, shape, content type, values, lengths, headers) on which the fake answered
 like the real service, over end-to-end scenarios run against both. *Reported cost* is what Claude
 Code reported for the sessions. The finished fakes are in [`examples/`](../examples/).
@@ -67,6 +68,16 @@ uses, reproduces negative daylight-saving time (Ireland, Morocco) and calendar-a
 and answers IP lookups only for the 55 recorded addresses (others fall back to a nearby recorded one
 or UTC). One run with every write endpoint scored 99.96%; its one failure (Korean AM/PM wording) was
 fixed, and the final read-only run scored 100%.
+
+**Swagger Petstore.** A shared public sandbox that other people write to while you record. The fake
+reproduces the sandbox as it really behaves, faults included: only the seeded demo users answer
+(any other user, and every user write, gets a 500), tag search always fails, and the inventory counts
+orders rather than pets. An unrecorded "healthy" mode, documented from the server's open-source
+code, is available as a switch. The run created, changed and deleted only its own probe records
+(using ids it first checked were free) and confirmed they were all gone at the end. Its remaining
+differences: the sandbox's listing changed during the run, login returns a random session id, and
+OPTIONS names the host it was called on. The run with real writes came before the review's fixes and
+wasn't repeated, because the write budget was nearly spent.
 
 ## Integrity
 
@@ -99,6 +110,10 @@ Every problem a run hit became a fix in the tools or skills, never in the fake. 
   from the project root and never reprints an old report (`29cc733`); scaffold writes CI where the
   project is (`97747ee`), keeps the known limitations in a fake's README (`8982487`) and gives fakes
   brought together their own ports (`450871b`).
+- **Privacy and images.** `public_values` keeps a sandbox's public demo users as they are while
+  everyone else's data in the same fields is still pseudonymized; Petstore had to switch
+  pseudonymization off for every user field instead (`63bc5a2`). Every Docker image used to receive
+  every fake's `.env`; a generated `.dockerignore` now keeps credentials out (`db6570c`).
 - **Docs for agents.** Where auth probes go, how to probe an approved rate limit, how to record when
   the user prepared `.env` first, and a readable `fauxcall model schema --brief` (`ebcaa3d`,
   `a450dd1`, `818a252`, `05dcd98`).
