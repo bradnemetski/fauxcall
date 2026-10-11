@@ -392,11 +392,12 @@ def redact_url(
 class _JsonRedactor:
     """Walks a JSON value, building a redacted copy and recording the concrete paths it changed."""
 
-    __slots__ = ("_names", "_scrub", "paths")
+    __slots__ = ("_names", "_public", "_scrub", "paths")
 
-    def __init__(self, names: _Names, scrub: _Scrubber) -> None:
+    def __init__(self, names: _Names, scrub: _Scrubber, public: frozenset[str]) -> None:
         self._names = names
         self._scrub = scrub
+        self._public = public
         self.paths: list[str] = []
 
     def walk(self, node: JsonValue, trail: tuple[Segment, ...], *, secret: bool) -> JsonValue:
@@ -416,7 +417,7 @@ class _JsonRedactor:
             ]
         if not isinstance(node, str):
             return node  # numbers, booleans and null are never credentials
-        if secret and node and node != REDACTED:
+        if secret and node and node != REDACTED and node not in self._public:
             new = REDACTED
         else:
             new = self._scrub(_redact_embedded(node, self._names))
@@ -431,6 +432,7 @@ def redact_json(
     extra_keys: Iterable[str] = (),
     secret_values: Iterable[str] = (),
     allow_keys: Iterable[str] = (),
+    public_values: Iterable[str] = (),
 ) -> tuple[JsonValue, list[str]]:
     """Redact credentials from a JSON value (a request/response body, an MCP message …).
 
@@ -445,10 +447,14 @@ def redact_json(
         extra_keys: More key names to treat as secret (case-insensitive).
         secret_values: The real credentials, scrubbed wherever they appear in strings.
         allow_keys: Key names never treated as secret by name (case-insensitive).
+        public_values: Exact values kept under secret keys (a public demo's generated passwords);
+            a real credential (``secret_values``) is redacted even when listed here.
 
     Returns:
         The redacted copy and the concrete JSON paths (``$.data[0].token``) that changed.
     """
-    redactor = _JsonRedactor(_Names(extra_keys, allow_keys), _Scrubber(secret_values))
+    secrets = list(secret_values)
+    public = frozenset(public_values) - set(secrets)
+    redactor = _JsonRedactor(_Names(extra_keys, allow_keys), _Scrubber(secrets), public)
     redacted = redactor.walk(value, (), secret=False)
     return redacted, redactor.paths

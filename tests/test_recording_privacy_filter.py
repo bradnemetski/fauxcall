@@ -208,6 +208,22 @@ def test_public_values_are_kept_everywhere() -> None:
     assert notes == ["request.path:username"]
 
 
+def test_public_values_of_secret_fields_are_kept() -> None:
+    filter_ = privacy(public_values=["Password1", TOKEN])
+    value, redacted, _ = filter_.json({"password": "Password1", "token": TOKEN})
+    assert value == {"password": "Password1", "token": "[REDACTED]"}  # a real secret never stays
+    assert redacted == ["$.token"]
+    *_, body, notes = filter_.request(
+        url="https://api.test/users",
+        path="/users",
+        path_params={},
+        query=[],
+        headers=[],
+        json_body={"password": "Password1"},
+    )
+    assert (body, notes) == ({"password": "Password1"}, [])
+
+
 def test_response_headers_and_text_use_known_values() -> None:
     filter_ = privacy()
     value, _, _ = filter_.json({"author": {"email": EMAIL, "username": "jroe"}})

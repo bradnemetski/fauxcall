@@ -65,8 +65,9 @@ class PrivacyConfig(Model):
     public_values: list[str] = Field(
         default_factory=list,
         description=(
-            "Exact values that look personal but are public (a sandbox's documented demo users): "
-            "kept wherever they appear, while other values of the same fields are pseudonymized."
+            "Exact values that look personal or secret but are public (a sandbox's documented demo "
+            "users, a demo's generated passwords): kept wherever they appear, while other values "
+            "of the same fields are pseudonymized or redacted. Real credentials never are."
         ),
     )
 
@@ -172,6 +173,7 @@ class RecordingPrivacy:
                 extra_keys=self.config.extra_secret_names,
                 secret_values=self.secrets,
                 allow_keys=self.config.allow_names,
+                public_values=self.config.public_values,
             )
             notes += [f"request:{p}" for p in redacted]
             safe_body, pseudonymized = self._pseudonymize(safe_body)
@@ -253,6 +255,7 @@ class RecordingPrivacy:
             extra_keys=self.config.extra_secret_names,
             secret_values=self.secrets,
             allow_keys=self.config.allow_names,
+            public_values=self.config.public_values,
         )
         pseudonymized_value, pseudonymized = self._pseudonymize(redacted_value)
         return pseudonymized_value, redacted, pseudonymized

@@ -174,7 +174,10 @@ personal field are public (a sandbox's documented demo users, examples from the 
 those values in `public_values`: they stay as they are everywhere (bodies, paths, parity
 comparisons), while everyone else's data in the same fields is still pseudonymized. Never `exclude` a
 personal field because some of its values are public: on a shared sandbox, other people's real data
-arrives in the same fields.
+arrives in the same fields. The same goes for secret-looking fields of a public demo (passwords it
+generates for demo users): list those values rather than allowing the name (`allow_names`), so a real
+password in the same field is still redacted. `allow_names` is for names that only look secret
+(`token_count`); credentials from `.env` are always redacted, listed or not.
 
 Categories: email, phone, person_name, first_name, last_name, username, address, street, city,
 postal_code, ip, credit_card, ssn, date_of_birth, free_text. If a recording leaked something, fix

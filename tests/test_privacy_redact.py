@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import copy
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
@@ -515,3 +515,21 @@ def test_redact_json_is_idempotent() -> None:
     twice, paths = redact_json(once)
     assert twice == once
     assert paths == []
+
+
+def test_public_values_stay_under_secret_keys() -> None:
+    body: JsonValue = {
+        "users": [
+            {"userName": "User 1", "password": "Password1"},  # a public demo's generated password
+            {"userName": "someone", "password": "hunter2"},
+        ],
+        "token": "s3cret-real",
+    }
+    redacted, paths = redact_json(
+        body, secret_values=["s3cret-real"], public_values=["Password1", "s3cret-real"]
+    )
+    users: Any = redacted
+    assert users["users"][0]["password"] == "Password1"
+    assert users["users"][1]["password"] == REDACTED  # anyone else's is still redacted
+    assert users["token"] == REDACTED  # a real credential, even when listed as public
+    assert paths == ["$.users[1].password", "$.token"]
