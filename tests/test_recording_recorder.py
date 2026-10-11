@@ -27,7 +27,7 @@ from fauxcall.recording.recorder import (
     host_of,
     scrub_exchange,
 )
-from fauxcall.storage import read_model
+from fauxcall.storage import read_model, write_model
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator, Callable, Mapping, Sequence
@@ -537,7 +537,7 @@ async def test_mutating_calls_need_an_approval(tmp_path: Path) -> None:
     assert report.outcomes[0].exchanges == []
     assert [entry["method"] for entry in seen] == ["GET"]  # the POST never reached the API
     assert report.outcomes[1].statuses == [200]
-    assert read_model(tmp_path / "approvals.json", Approvals) == Approvals()
+    assert not (tmp_path / "approvals.json").exists()  # nothing spent, nothing written
 
 
 async def test_endpoint_approval_budget_is_spent_and_saved(tmp_path: Path) -> None:
@@ -558,6 +558,63 @@ async def test_endpoint_approval_budget_is_spent_and_saved(tmp_path: Path) -> No
         later = await recorder(tmp_path, http, FakeClock(), approvals=saved).run(plan(_create()))
     assert later.outcomes[0].skipped is not None
     assert len(seen) == 2
+
+
+async def test_a_spend_is_saved_before_the_call_goes_out(tmp_path: Path) -> None:
+    saved_when_sent: list[dict[str, int]] = []
+
+    def create(request: httpx2.Request) -> httpx2.Response:
+        # What a run killed right now would leave behind: the call is already counted.
+        saved_when_sent.append(read_model(tmp_path / "approvals.json", Approvals).used)
+        return httpx2.Response(201, json={"id": 1})
+
+    approvals = Approvals(approvals=[approval("POST /pets", max_calls=5)])
+    async with httpx2.AsyncClient(transport=httpx2.MockTransport(create)) as http:
+        await recorder(tmp_path, http, FakeClock(), approvals=approvals).run(
+            plan(_create(repeat=2))
+        )
+    assert saved_when_sent == [{"endpoint:POST /pets:": 1}, {"endpoint:POST /pets:": 2}]
+
+
+async def test_approvals_given_during_a_run_count_and_survive_it(tmp_path: Path) -> None:
+    path = tmp_path / "approvals.json"
+
+    def create(request: httpx2.Request) -> httpx2.Response:
+        # The user approves more while the run goes on (`fauxcall plan approve` in another shell).
+        current = read_model(path, Approvals)
+        current.approvals[0].max_calls = 3
+        write_model(path, current)
+        return httpx2.Response(201, json={"id": 1})
+
+    approvals = Approvals(approvals=[approval("POST /pets", max_calls=1)])
+    async with httpx2.AsyncClient(transport=httpx2.MockTransport(create)) as http:
+        report = await recorder(tmp_path, http, FakeClock(), approvals=approvals).run(
+            plan(_create(repeat=3))
+        )
+    assert len(report.outcomes[0].exchanges) == 3  # the budget raised mid-run was used
+    final = read_model(path, Approvals)
+    assert (final.approvals[0].max_calls, final.used) == (3, {"endpoint:POST /pets:": 3})
+
+
+async def test_a_budget_spent_elsewhere_while_pacing_stops_the_call(tmp_path: Path) -> None:
+    path = tmp_path / "approvals.json"
+
+    class SpendingClock(FakeClock):
+        async def sleep(self, seconds: float) -> None:
+            await super().sleep(seconds)
+            if path.exists():  # another run spends the rest of the budget meanwhile
+                current = read_model(path, Approvals)
+                current.used = {"endpoint:POST /pets:": 2}
+                write_model(path, current)
+
+    app, seen = api()
+    approvals = Approvals(approvals=[approval("POST /pets", max_calls=2)])
+    async with asgi(app) as http:
+        report = await recorder(tmp_path, http, SpendingClock(), approvals=approvals).run(
+            plan(_create(repeat=2))
+        )
+    assert report.outcomes[0].skipped == "approval budget used up after 1 call(s)"
+    assert len(seen) == 1  # the second call was never sent
 
 
 async def test_exact_call_approval_and_explicit_mutating_flag(tmp_path: Path) -> None:

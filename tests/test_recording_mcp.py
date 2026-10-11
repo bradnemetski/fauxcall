@@ -14,7 +14,7 @@ from fauxcall.model import Approval, Approvals, McpTransportModel, RecordingPlan
 from fauxcall.recording import McpRecorder, RecordingStore, tool_is_mutating
 from fauxcall.recording.mcp import PROBE_METHOD, PROBE_TOOL, _method_of, _params_for
 from fauxcall.recording.privacy_filter import PrivacyConfig, RecordingPrivacy
-from fauxcall.storage import read_model
+from fauxcall.storage import read_model, write_model
 from fauxcall.testing.asgi import streaming_client
 from test_mcpwire_transport import (
     DELETE_ITEM,
@@ -537,3 +537,57 @@ async def test_introspect_odd_servers(tmp_path: Path) -> None:
     missing = recorded["MCP tools/list:missing-session"].response
     assert missing is not None
     assert (missing.status, missing.body.kind) == (400, "text")
+
+
+def _delete_budget(max_calls: int) -> Approvals:
+    approval = Approval(
+        scope="endpoint",
+        endpoint="MCP tools/call:delete_item",
+        max_calls=max_calls,
+        approved_at=datetime(2026, 10, 10, tzinfo=UTC),
+    )
+    return Approvals(approvals=[approval])
+
+
+async def test_a_budget_spent_elsewhere_while_pacing_stops_the_tool_call(tmp_path: Path) -> None:
+    path = tmp_path / "approvals.json"
+
+    class SpendingClock(FakeClock):
+        async def sleep(self, seconds: float) -> None:
+            await super().sleep(seconds)
+            if path.exists():  # another run spends the rest of the budget meanwhile
+                current = read_model(path, Approvals)
+                current.used = {"endpoint:MCP tools/call:delete_item:": 2}
+                write_model(path, current)
+
+    app = fake_app(tmp_path, fake_model())
+    async with streaming_client(app) as http:
+        rec = recorder(
+            tmp_path,
+            http,
+            "http://fake.test/mcp",
+            SpendingClock(),
+            approvals=_delete_budget(2),
+            approvals_path=path,
+        )
+        report = await rec.run(
+            plan(tool_call("delete_item", {"item_id": 1}, repeat=2)),
+            {"delete_item": DELETE_ITEM},
+        )
+    assert report.outcomes[0].skipped == "approval budget used up after 1 call(s)"
+    assert len(report.outcomes[0].exchanges) == 1
+
+
+async def test_tool_budgets_without_an_approvals_file(tmp_path: Path) -> None:
+    app = fake_app(tmp_path, fake_model())
+    approvals = _delete_budget(1)
+    async with streaming_client(app) as http:
+        rec = recorder(tmp_path, http, "http://fake.test/mcp", approvals=approvals)
+        report = await rec.run(
+            plan(tool_call("delete_item", {"item_id": 1}, repeat=2)),
+            {"delete_item": DELETE_ITEM},
+        )
+    assert report.outcomes[0].skipped == "approval budget used up after 1 call(s)"
+    assert rec.approvals is not None
+    assert rec.approvals.used == {"endpoint:MCP tools/call:delete_item:": 1}
+    assert not (tmp_path / "approvals.json").exists()

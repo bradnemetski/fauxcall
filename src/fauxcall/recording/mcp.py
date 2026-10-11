@@ -27,6 +27,7 @@ from fauxcall.logs import get_logger
 from fauxcall.mcpwire import protocol
 from fauxcall.mcpwire.client import McpWireClient, RpcCall, Transport
 from fauxcall.model.mcp import McpModel, McpToolModel, McpTransportModel
+from fauxcall.model.plan import Approvals
 from fauxcall.model.recording import Body, CapturedRequest, CapturedResponse, Exchange, StreamEvent
 from fauxcall.recording.recorder import (
     CallOutcome,
@@ -39,7 +40,7 @@ from fauxcall.recording.recorder import (
 )
 from fauxcall.runtime.mcp_server import method_endpoint, tool_endpoint
 from fauxcall.runtime.templating import from_mapping, render
-from fauxcall.storage import write_model
+from fauxcall.storage import read_model, write_model
 from fauxcall.types import HttpMethod
 
 if TYPE_CHECKING:
@@ -47,7 +48,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from fauxcall.model.common import Purpose
-    from fauxcall.model.plan import Approvals, PlannedCall, RecordingPlan
+    from fauxcall.model.plan import PlannedCall, RecordingPlan
     from fauxcall.recording.store import RecordingStore
     from fauxcall.types import JsonObject, JsonValue
 
@@ -418,7 +419,7 @@ class McpRecorder:
                 outcome = CallOutcome(call=call.id, endpoint=call.endpoint)
                 report.outcomes.append(outcome)
                 needs_approval = self._needs_approval(call, definitions)
-                if needs_approval and (self.approvals is None or self.approvals.find(call) is None):
+                if needs_approval and self._current_approvals().find(call) is None:
                     outcome.skipped = "needs approval (tool may modify state)"
                     continue
                 try:
@@ -441,9 +442,25 @@ class McpRecorder:
         finally:
             await self._close(client)
             report.calls_made = self.calls_made
-            if self.approvals is not None and self.approvals_path is not None:
-                write_model(self.approvals_path, self.approvals)
         return report
+
+    def _current_approvals(self) -> Approvals:
+        """The approvals in force: the file when there is one (it may have changed meanwhile)."""
+        if self.approvals_path is not None and self.approvals_path.exists():
+            self.approvals = read_model(self.approvals_path, Approvals)
+        return self.approvals if self.approvals is not None else Approvals()
+
+    def _spend(self, call: PlannedCall) -> bool:
+        """Spend one call of the approval covering ``call`` and save it at once."""
+        approvals = self._current_approvals()
+        approval = approvals.find(call)
+        if approval is None:
+            return False
+        approvals.consume(approval)
+        self.approvals = approvals
+        if self.approvals_path is not None:
+            write_model(self.approvals_path, approvals)
+        return True
 
     async def _run_call(
         self,
@@ -458,15 +475,13 @@ class McpRecorder:
         for index in range(call.repeat):
             if index and call.interval_ms:
                 await self._sleep(call.interval_ms / 1000)
-            approval = None
-            if needs_approval:
-                approval = self.approvals.find(call) if self.approvals is not None else None
-                if approval is None:
-                    outcome.skipped = f"approval budget used up after {index} call(s)"
-                    return
+            if needs_approval and self._current_approvals().find(call) is None:
+                outcome.skipped = f"approval budget used up after {index} call(s)"
+                return
             await self._pace()  # raises before an approval is spent when the budget is gone
-            if approval is not None and self.approvals is not None:
-                self.approvals.consume(approval)
+            if needs_approval and not self._spend(call):
+                outcome.skipped = f"approval budget used up after {index} call(s)"
+                return
             params = render(call.request.json_body, from_mapping(variables))
             rpc = await client.call(method, _params_for(call.endpoint, params))
             outcome.exchanges.append(

@@ -31,6 +31,7 @@ from fauxcall import jsonfmt, jsonpath
 from fauxcall.jsonfmt import infer_style
 from fauxcall.logs import get_logger
 from fauxcall.mcpwire.protocol import SseDecoder
+from fauxcall.model.plan import Approvals
 from fauxcall.model.recording import (
     Body,
     CapturedRequest,
@@ -41,7 +42,7 @@ from fauxcall.model.recording import (
 )
 from fauxcall.privacy import MIN_SECRET_LENGTH, scrub_text
 from fauxcall.runtime.templating import from_mapping, render, render_text
-from fauxcall.storage import model_to_json, write_model
+from fauxcall.storage import model_to_json, read_model, write_model
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator, Awaitable, Callable, Mapping, Sequence
@@ -51,7 +52,6 @@ if TYPE_CHECKING:
 
     from fauxcall.model.common import Purpose
     from fauxcall.model.plan import (
-        Approvals,
         PlannedCall,
         PlannedFile,
         PlannedRequest,
@@ -565,8 +565,9 @@ class Recorder:
     async def run(self, plan: RecordingPlan) -> RunReport:
         """Execute every call of ``plan`` in order.
 
-        Approval usage is written to ``approvals_path`` even when the run fails half-way, so a
-        budget can never be spent twice.
+        Approval usage is saved to ``approvals_path`` as each mutating call is spent (before it
+        is sent), so a run that fails or is killed half-way never under-counts a budget, and
+        approvals given or spent elsewhere in the meantime count.
         """
         report = RunReport(plan=plan.name)
         variables: dict[str, JsonValue] = {}
@@ -574,7 +575,7 @@ class Recorder:
             for position, call in enumerate(plan.calls):
                 outcome = CallOutcome(call=call.id, endpoint=call.endpoint)
                 report.outcomes.append(outcome)
-                if call.is_mutating and self.approvals.find(call) is None:
+                if call.is_mutating and self._current_approvals().find(call) is None:
                     outcome.skipped = "needs approval (mutating call not covered by approvals.json)"
                     continue
                 try:
@@ -594,9 +595,24 @@ class Recorder:
                     log.warning("recording_call_failed", call=call.id, error=outcome.error)
         finally:
             report.calls_made = self.calls_made
-            if self.approvals_path is not None:
-                write_model(self.approvals_path, self.approvals)
         return report
+
+    def _current_approvals(self) -> Approvals:
+        """The approvals in force: the file when there is one (it may have changed meanwhile)."""
+        if self.approvals_path is not None and self.approvals_path.exists():
+            self.approvals = read_model(self.approvals_path, Approvals)
+        return self.approvals
+
+    def _spend(self, call: PlannedCall) -> bool:
+        """Spend one call of the approval covering ``call`` and save it at once."""
+        approvals = self._current_approvals()
+        approval = approvals.find(call)
+        if approval is None:
+            return False
+        approvals.consume(approval)
+        if self.approvals_path is not None:
+            write_model(self.approvals_path, approvals)
+        return True
 
     async def _execute(
         self, call: PlannedCall, variables: dict[str, JsonValue], outcome: CallOutcome
@@ -604,15 +620,13 @@ class Recorder:
         for index in range(call.repeat):
             if index and call.interval_ms:
                 await self._sleep(call.interval_ms / 1000)
-            approval = None
-            if call.is_mutating:
-                approval = self.approvals.find(call)
-                if approval is None:
-                    outcome.skipped = f"approval budget used up after {index} call(s)"
-                    return
+            if call.is_mutating and self._current_approvals().find(call) is None:
+                outcome.skipped = f"approval budget used up after {index} call(s)"
+                return
             await self._pace()  # raises before an approval is spent when the budget is gone
-            if approval is not None:
-                self.approvals.consume(approval)
+            if call.is_mutating and not self._spend(call):
+                outcome.skipped = f"approval budget used up after {index} call(s)"
+                return
             raw = await self._once(call, variables, outcome)
             for name, path in call.capture.items():
                 captured = jsonpath.get_one(raw, path)
