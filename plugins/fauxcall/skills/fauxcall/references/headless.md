@@ -34,6 +34,12 @@ Jev). `fauxcall init` keeps that file and only adds the base URL and pseudonym k
 | `mutations.max_calls_per_endpoint` | budget per endpoint |
 | `scope` | `all` or a list of endpoint ids/globs |
 
-Apply it with the normal commands: `fauxcall plan approve <name> --endpoint "<id>" --max-calls N
---reason "<reason>"` per endpoint (or `--planned` when every planned write is covered), then
-`fauxcall progress gate …`.
+Apply it with the normal commands, then `fauxcall progress gate …`:
+
+```bash
+fauxcall plan approve <name> --endpoint "<id or glob>" --per-endpoint --max-calls N --reason "<reason>"
+```
+
+`--per-endpoint` gives every matching mutating endpoint its own budget of N, as
+`max_calls_per_endpoint` means; without it a glob shares one budget. `--planned` instead approves
+exactly the writes in your current plans.

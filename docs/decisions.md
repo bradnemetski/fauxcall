@@ -8,7 +8,7 @@ These were settled with the project owner before implementation (2026-10-10). Th
 | Topic | Decision |
 |---|---|
 | Name | **FauxCall** everywhere: PyPI package / CLI `fauxcall`, Claude Code plugin + marketplace `fauxcall`, GitHub `bradnemetski/fauxcall`. |
-| Packaging | A Claude Code **plugin** whose marketplace is this repository itself (`.claude-plugin/marketplace.json`). Install: `claude plugin install fauxcall --marketplace bradnemetski/fauxcall`. |
+| Packaging | A Claude Code **plugin** whose marketplace is this repository itself (`.claude-plugin/marketplace.json`). Install: `claude plugin marketplace add bradnemetski/fauxcall`, then `claude plugin install fauxcall@fauxcall`. |
 | Engine | The reusable engine is a **PyPI package** (`fauxcall`); the skills drive its CLI through `uvx`, so users only need `uv`. Generated fakes depend on the versioned package. |
 | Skills | `/fauxcall <url>` (build a fake), plus `/fauxcall:refresh`, `/fauxcall:verify`, `/fauxcall:extend`, `/fauxcall:serve`. |
 | Output location | Fakes are generated into `./fauxcall/<api>/` in the user's project — one uv workspace holding all fakes. Overridable. |
@@ -68,3 +68,16 @@ These were settled with the project owner before implementation (2026-10-10). Th
 The tools/skills are validated by generating fakes with **headless Claude Code sessions** (`claude -p --plugin-dir`) that only know
 what the skill tells them, against: a local reference API (exercises every feature), Frankfurter, timeapi.io, Swagger Petstore v3,
 FakeRESTApi, and the DeepWiki MCP server. Gaps are fixed **in the skill/tooling, never by hand-editing a generated fake**.
+
+## Made during implementation
+
+| Topic | Decision |
+|---|---|
+| MCP wire protocol | FauxCall speaks JSON-RPC over Streamable HTTP and SSE itself instead of wrapping the MCP SDK's server, so session ids, content types, error objects and version negotiation can match the real server byte for byte. The official SDK client is used in tests to prove compatibility. |
+| WebSocket replay | Defaults to `match`: send the recorded greeting on connect, then answer each client message with what the server sent after the same message (JSON compared by value). Binary frames and close codes/reasons are replayed as recorded. |
+| Matching inputs | Repeated query parameters and array elements become lists, so nothing is lost when comparing a request with recordings. Path parameters keep their spec names (`pet-id`). |
+| Saved models | `write_model` leaves out defaults for lean diffs, but always keeps the `kind` of field policies (the discriminator). |
+| Workspace discovery | CLI commands work from anywhere in a project: the workspace is searched upward, never past the project root, and only folders that hold fakes are accepted. |
+| Test suites | Network tests (`-m network`) and whole-generated-project tests (`-m slow`) are deselected by default and run as separate CI jobs; in CI a skipped generated-project gate is a failure. |
+| Validation runs | Headless sessions run from a frozen git worktree of the tools in a clean environment (no inherited virtualenv), so fixes made meanwhile never leak into a run. |
+

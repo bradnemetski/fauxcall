@@ -383,6 +383,33 @@ def test_plan_review_and_approve(ws: Workspace) -> None:
     assert "nothing to approve" in invoke("plan", "approve", "shop", code=1).output
 
 
+def test_plan_approve_per_endpoint_budgets(ws: Workspace) -> None:
+    fake = make_fake(ws)
+    approved = invoke(
+        "plan", "approve", "shop", "--endpoint", "*", "--per-endpoint", "--max-calls", "5"
+    ).output
+    assert "approved POST /v1/items (max 5)" in approved
+    assert "approved POST /v1/jobs (max 5)" in approved
+    assert "GET " not in approved  # reads never need approval
+    approvals = read_model(fake.approvals_path, Approvals)
+    assert {a.endpoint for a in approvals.approvals} == {"POST /v1/items", "POST /v1/jobs"}
+    missing = invoke("plan", "approve", "shop", "--endpoint", "PATCH *", "--per-endpoint", code=1)
+    assert "no mutating endpoint matches" in missing.output
+    model = ApiModel(
+        name="tools",
+        title="Tools",
+        kind="mcp",
+        source=SourceInfo(
+            kind="mcp", url=f"{BASE}/mcp", fetched_at=datetime(2026, 1, 5, tzinfo=UTC)
+        ),
+        real=RealTarget(base_url=BASE),
+        mcp=McpModel(tools=[McpToolModel(definition={"name": "ask"})]),
+    )
+    make_fake(ws, model)
+    tools = invoke("plan", "approve", "tools", "--endpoint", "MCP *", "--per-endpoint").output
+    assert "approved MCP tools/call:ask (max unlimited)" in tools
+
+
 def test_plan_check(ws: Workspace, tmp_path: Path) -> None:
     fake = make_fake(ws)
     plan = write_plan(

@@ -147,7 +147,20 @@ def plan_review(name: str) -> None:
 def plan_approve(
     name: str,
     endpoint: Annotated[str | None, typer.Option(help="Endpoint id or glob to approve.")] = None,
-    max_calls: Annotated[int | None, typer.Option(help="Budget for --endpoint.")] = None,
+    max_calls: Annotated[
+        int | None,
+        typer.Option(
+            help="Budget for --endpoint. A glob shares it across every endpoint it matches, "
+            "unless --per-endpoint."
+        ),
+    ] = None,
+    per_endpoint: Annotated[
+        bool,
+        typer.Option(
+            "--per-endpoint",
+            help="With a glob: one approval, with its own budget, per matching mutating endpoint.",
+        ),
+    ] = False,
     planned: Annotated[
         bool,
         typer.Option("--planned", help="Approve every mutating endpoint in the current plans."),
@@ -164,15 +177,21 @@ def plan_approve(
     approvals = _approvals(fake)
     added: list[Approval] = []
     if endpoint:
-        added.append(
+        targets = _mutating_matches(load_model(fake), endpoint) if per_endpoint else [endpoint]
+        if not targets:
+            raise fail(
+                f"no mutating endpoint matches {endpoint!r} (see: fauxcall endpoints {name})"
+            )
+        added += [
             Approval(
                 scope="endpoint",
-                endpoint=endpoint,
+                endpoint=target,
                 max_calls=max_calls,
                 reason=reason,
                 approved_at=now(),
             )
-        )
+            for target in targets
+        ]
     if planned:
         counts: Counter[str] = Counter()
         for _, plan in _plans(fake):
@@ -194,6 +213,14 @@ def plan_approve(
     approvals.approvals.extend(added)
     write_model(fake.approvals_path, approvals)
     echo("\n".join(f"approved {a.endpoint} (max {a.max_calls or 'unlimited'})" for a in added))
+
+
+def _mutating_matches(model: ApiModel, pattern: str) -> list[str]:
+    """Endpoints a glob matches that can need an approval: writes and MCP tool calls."""
+    ids = [e.id for e in model.endpoints if not e.method.is_safe]
+    if model.mcp is not None:
+        ids += [f"MCP tools/call:{tool.name}" for tool in model.mcp.tools]
+    return [endpoint_id for endpoint_id in ids if fnmatch.fnmatchcase(endpoint_id, pattern)]
 
 
 @plan_app.command("check")
