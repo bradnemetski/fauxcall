@@ -328,20 +328,59 @@ def test_verify_runs_the_fake_suite_with_coverage(
     assert commands[1][0][-2:] == [str(fake.tests / "e2e"), "--allow-real-writes"]
 
 
-def test_verify_parity_prints_the_report(
-    ws: Workspace, commands: list[tuple[list[str], dict[str, object]]]
+def test_verify_from_the_project_root_with_a_relative_workspace(
+    ws: Workspace,
+    commands: list[tuple[list[str], dict[str, object]]],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake = make_fake(ws, rest_model())
+    (fake.root / "pyproject.toml").write_text("[project]\nname = 'x'\n")
+    monkeypatch.setenv("FAUXCALL_WORKSPACE", "fakes")  # relative paths, run from another folder
+    invoke("verify", "shop", "--e2e-only")
+    [(command, options)] = commands
+    assert command[3] == str(fake.root.resolve())
+    assert command[-1] == str(fake.tests.resolve() / "e2e")
+    assert options["cwd"] == fake.root.resolve()
+
+
+def test_verify_parity_prints_only_the_report_it_wrote(
+    ws: Workspace,
+    commands: list[tuple[list[str], dict[str, object]]],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     fake = make_fake(ws, rest_model())
     (fake.root / "pyproject.toml").write_text("[project]\nname = 'x'\n")
     result = invoke("verify", "shop", "--target", "parity", code=3)
-    assert "Parity report" not in result.output
-    (fake.reports).mkdir(parents=True)
-    (fake.reports / "parity.md").write_text("# Parity report — PASS\n")
+    assert "This run wrote no parity report" in result.output
+    fake.reports.mkdir(parents=True)
+    (fake.reports / "parity.md").write_text("# Parity report — PASS (an old run)\n")
     result = invoke("verify", "shop", "--target", "parity", code=3)
-    assert "# Parity report — PASS" in result.output
+    assert "an old run" not in result.output  # a stale pass is never shown as this run's
+    assert "This run wrote no parity report" in result.output
     assert commands[-1][0][-3:] == ["--target", "parity", str(fake.tests / "e2e")]
-    invoke("verify", "shop", "--target", "real")
+
+    def run(command: list[str], **options: object) -> subprocess.CompletedProcess[bytes]:
+        commands.append((command, options))
+        (fake.reports / "parity.md").write_text("# Parity report — FAIL\n")
+        return subprocess.CompletedProcess(command, 1)
+
+    monkeypatch.setattr(subprocess, "run", run)
+    assert "# Parity report — FAIL" in invoke("verify", "shop", "--target", "parity", code=1).output
+    invoke("verify", "shop", "--target", "real", code=1)
     assert commands[-1][0][-1] == str(fake.tests / "e2e")
+
+
+def test_verify_fails_clearly_when_no_tests_ran(
+    ws: Workspace, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fake = make_fake(ws, rest_model())
+    (fake.root / "pyproject.toml").write_text("[project]\nname = 'x'\n")
+
+    def run(command: list[str], **options: object) -> subprocess.CompletedProcess[bytes]:
+        return subprocess.CompletedProcess(command, 5)
+
+    monkeypatch.setattr(subprocess, "run", run)
+    assert "no tests ran" in invoke("verify", "shop", "--target", "parity", code=1).output
 
 
 def test_verify_errors(ws: Workspace, commands: list[tuple[list[str], dict[str, object]]]) -> None:

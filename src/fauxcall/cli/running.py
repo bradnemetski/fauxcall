@@ -187,6 +187,9 @@ def ps() -> None:
         echo(f"{name}: {state} (pid {pid}) http://127.0.0.1:{port}")
 
 
+_NO_TESTS = 5  # pytest's exit code when it collected nothing
+
+
 @clean_errors
 def verify(
     name: str,
@@ -198,17 +201,29 @@ def verify(
     if target not in TARGETS:
         raise fail(f"unknown target {target!r}; one of: {', '.join(TARGETS)}")
     fake = layout(name)
-    if not (fake.root / "pyproject.toml").exists():
+    root = fake.root.resolve()  # the run happens inside the fake: relative paths would break
+    if not (root / "pyproject.toml").exists():
         raise fail("scaffold the fake first (`fauxcall scaffold`)")
-    command = ["uv", "run", "--project", str(fake.root), "pytest", "--target", target]
+    command = ["uv", "run", "--project", str(root), "pytest", "--target", target]
     if e2e_only or target != "fake":
-        command.append(str(fake.tests / "e2e"))
+        command.append(str(fake.tests.resolve() / "e2e"))
     else:
         command += ["--cov", "--cov-report=term-missing"]
     if allow_real_writes:
         command.append("--allow-real-writes")
-    completed = subprocess.run(command, cwd=fake.root, check=False)  # noqa: S603 - fixed argv
-    report = fake.reports / "parity.md"
-    if target == "parity" and report.exists():
-        echo(report.read_text())
+    report = fake.reports.resolve() / "parity.md"
+    before = _version_of(report)
+    completed = subprocess.run(command, cwd=root, check=False)  # noqa: S603 - fixed argv
+    if completed.returncode == _NO_TESTS:
+        raise fail("no tests ran: is the fake scaffolded, and are its tests in place?")
+    if target == "parity":
+        if (after := _version_of(report)) is not None and after != before:
+            echo(report.read_text())
+        else:
+            echo("This run wrote no parity report (an earlier one is not reprinted).")
     raise typer.Exit(completed.returncode)
+
+
+def _version_of(path: Path) -> tuple[int, bytes] | None:
+    """Enough to tell a rewritten file from the one before (mtimes alone can be coarse)."""
+    return (path.stat().st_mtime_ns, path.read_bytes()) if path.exists() else None
