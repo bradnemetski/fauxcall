@@ -46,5 +46,6 @@ ZoneSpec = str
 
 * an IANA zone name: ``"UTC"``, ``"America/New_York"``;
 * ``"param:<name>"``: the value of a request parameter (e.g. ``"param:timeZone"``);
-* ``"field:<path>"``: a field of the same record (e.g. ``"field:timezone"``).
+* ``"field:<path>"``: a field of the same record (e.g. ``"field:timezone"``);
+* ``"calendar"``: (calendar policies only) the calendar's own zone.
 """

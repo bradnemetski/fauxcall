@@ -35,11 +35,17 @@ class ClockSettings(_Section):
 
     mode: Literal["real", "frozen", "offset", "scaled"] = "real"
     at: AwareDatetime | None = Field(
-        default=None, description="Instant for 'frozen', start instant for 'scaled'."
+        default=None,
+        description="Instant for 'frozen', start instant for 'scaled' and 'offset' (time travel).",
     )
-    offset_seconds: float = Field(default=0.0, description="Shift applied in 'offset' mode.")
+    offset_seconds: float = Field(
+        default=0.0, allow_inf_nan=False, description="Shift applied in 'offset' mode."
+    )
     rate: float = Field(
-        default=1.0, gt=0, description="Simulated seconds per real second in 'scaled' mode."
+        default=1.0,
+        gt=0,
+        allow_inf_nan=False,
+        description="Simulated seconds per real second in 'scaled' mode.",
     )
 
 
@@ -208,7 +214,7 @@ class CliSettings(_FauxcallSettings):
     )
 
     workspace: Path = Field(default=Path("fauxcall"), description="Where fakes are generated.")
-    log_level: LogLevel = "INFO"
+    log_level: LogLevel = "WARNING"
     log_format: LogFormat = "auto"
     user_agent: str = f"fauxcall/{__version__} (+https://github.com/bradnemetski/fauxcall)"
     record_rps: float = Field(default=2.0, gt=0, description="Max requests/second to real APIs.")

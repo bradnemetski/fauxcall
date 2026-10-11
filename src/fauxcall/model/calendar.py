@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date, time
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import Field, field_validator, model_validator
 
@@ -41,6 +42,23 @@ class CalendarModel(Model):
     holidays: list[date] = Field(default_factory=list)
     early_closes: dict[date, time] = Field(default_factory=dict)
     note: str | None = None
+
+    @field_validator("zone")
+    @classmethod
+    def _known_zone(cls, value: str) -> str:
+        try:
+            ZoneInfo(value)
+        except (ZoneInfoNotFoundError, ValueError, OSError) as exc:
+            raise ValueError(f"unknown time zone {value!r}") from exc
+        return value
+
+    @model_validator(mode="after")
+    def _local_times(self) -> CalendarModel:
+        times = [w.open for w in self.sessions] + [w.close for w in self.sessions]
+        times += list(self.publications) + list(self.early_closes.values())
+        if any(t.tzinfo is not None for t in times):
+            raise ValueError("calendar times are local to 'zone'; remove UTC offsets")
+        return self
 
     @field_validator("weekdays")
     @classmethod

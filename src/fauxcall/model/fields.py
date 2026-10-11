@@ -51,7 +51,9 @@ class NowPolicy(_Policy):
     kind: Literal["now"] = "now"
     format: TimeFormat
     zone: ZoneSpec = "UTC"
-    lag_ms: int = Field(default=0, description="Subtract this much (e.g. a feed's typical delay).")
+    lag_ms: int = Field(
+        default=0, ge=0, description="Subtract this much (e.g. a feed's typical delay)."
+    )
 
 
 class RelativePolicy(_Policy):
@@ -79,7 +81,7 @@ class CalendarPolicy(_Policy):
     event: CalendarEvent = "last_tick"
     format: TimeFormat
     zone: ZoneSpec = "UTC"
-    lag_ms: int = 0
+    lag_ms: int = Field(default=0, ge=0)
 
 
 class PeriodicPolicy(_Policy):

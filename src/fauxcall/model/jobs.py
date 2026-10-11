@@ -12,7 +12,8 @@ from typing import Literal
 
 from pydantic import Field, model_validator
 
-from fauxcall.model.common import Model
+from fauxcall.model.common import Model, ZoneSpec
+from fauxcall.timefmt import TimeFormat
 
 
 class DurationModel(Model):
@@ -78,6 +79,11 @@ class JobModel(Model):
     timestamps: dict[str, Literal["created", "started", "updated", "completed"]] = Field(
         default_factory=dict, description="Record field -> lifecycle event it reports."
     )
+    time_format: TimeFormat = Field(
+        default_factory=lambda: TimeFormat(kind="iso", fraction_digits=3),
+        description="How the timestamp fields are spelled.",
+    )
+    time_zone: ZoneSpec = "UTC"
     measured_from: list[str] = Field(
         default_factory=list, description="Exchange ids the timings were measured from."
     )

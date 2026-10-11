@@ -95,8 +95,28 @@ class ResponseVariant(Model):
     examples: list[str] = Field(default_factory=list, description="Exchange ids.")
 
 
+PageField = Literal[
+    "total",
+    "count",
+    "page",
+    "per_page",
+    "offset",
+    "limit",
+    "total_pages",
+    "has_more",
+    "next",
+    "prev",
+]
+
+
 class PaginationModel(Model):
-    """How a list endpoint pages through results."""
+    """How a list endpoint pages through results.
+
+    Cursors are reproduced in the real API's own spelling: ``cursor_template`` is rendered with
+    ``{{offset}}`` or ``{{key}}`` (the last item's key) and then encoded with ``cursor_encoding``.
+    Example (base64url of ``{"after": "AAPL"}``): ``cursor_format="key"``,
+    ``cursor_template={"after": "{{key}}"}``, ``cursor_encoding="base64url"``.
+    """
 
     style: Literal["offset", "page", "cursor", "link_header", "none"] = "none"
     limit_param: str | None = None
@@ -105,11 +125,22 @@ class PaginationModel(Model):
     cursor_param: str | None = None
     default_limit: int | None = Field(default=None, ge=1)
     max_limit: int | None = Field(default=None, ge=1)
+    clamp_limit: bool = Field(
+        default=True, description="Limits above max are clamped (else invalid_param)."
+    )
     first_page: int = 1
     total_path: str | None = Field(default=None, description="Body path of the total count.")
     next_path: str | None = Field(default=None, description="Body path of the next cursor/URL.")
     has_more_path: str | None = None
-    cursor_format: Literal["opaque", "base64_json", "offset", "key"] = "opaque"
+    page_fields: dict[str, PageField] = Field(
+        default_factory=dict, description="Other body paths computed per page (path -> field)."
+    )
+    next_as_url: bool = Field(
+        default=False, description="next_path holds a full URL rather than a bare cursor."
+    )
+    cursor_format: Literal["opaque", "offset", "key"] = "offset"
+    cursor_template: RawJson = None
+    cursor_encoding: Literal["plain", "base64", "base64url", "base64url_nopad"] = "plain"
 
 
 class SortModel(Model):
@@ -165,6 +196,10 @@ class StreamModel(Model):
     loop: bool = False
     respond_to: Literal["none", "match", "echo"] = Field(
         default="none", description="WebSocket: how client messages are answered."
+    )
+    auth_failure_close_code: int | None = Field(
+        default=None,
+        description="WebSocket: accept then close with this code on auth failure (else reject).",
     )
 
 
