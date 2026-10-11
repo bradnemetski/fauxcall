@@ -137,7 +137,10 @@ the model doesn't have under that path's own id (`"endpoint": "GET /v1/does-not-
 check` accepts unknown endpoints for purpose `edge` only.
 
 Do **not** probe rate limits by hammering the API unless the user explicitly approved it; read the
-limits from the documentation and from rate-limit headers instead.
+limits from the documentation and from rate-limit headers instead. With approval, raise the
+recorder's pace for that one run (it sends at most 2 requests a second by default):
+`FAUXCALL_RECORD_RPS=50 fauxcall record <name> data/plans/rate-limit.json` (a plan with enough
+`repeat` to cross the limit).
 
 ## Privacy
 
