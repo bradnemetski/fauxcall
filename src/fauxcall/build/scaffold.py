@@ -1,8 +1,9 @@
 """Generate a fake's Python package (and the shared workspace files) from its model.
 
-Files fall into two groups: *generated* (``routes.py``, READMEs, compose, CI) are rewritten on
-every run; *owned* files (``handlers.py``, settings, tests, ``pyproject.toml`` …) are created once
-and never overwritten, so custom code and hand-written tests are safe.
+Files fall into three groups: *generated* (``routes.py``, compose, CI) are rewritten on every run;
+*owned* files (``handlers.py``, settings, tests, ``pyproject.toml`` …) are created once and never
+overwritten, so custom code and hand-written tests are safe; a fake's README is regenerated *around
+its notes* (known limitations and usage notes between ``fauxcall:notes`` markers carry over).
 
 Generated Python must pass the fake's own gates unchanged: ``ruff check`` with ``select = ["ALL"]``,
 ``ruff format --check`` and ``mypy --strict``. Everything taken from the API description (titles,
@@ -87,7 +88,12 @@ _TYPOGRAPHY: Final = str.maketrans(
 )
 """Typographic characters spelled in ASCII (docstrings must not hold ambiguous characters)."""
 
-Mode = Literal["generated", "owned"]
+Mode = Literal["generated", "owned", "notes"]
+
+_NOTES: Final = re.compile(
+    r"(<!-- fauxcall:notes\b[^\n]*-->\n)(.*?)(<!-- /fauxcall:notes -->)", re.DOTALL
+)
+"""The author's region of a generated README (start marker, content, end marker)."""
 
 
 # -- Python source helpers ------------------------------------------------------------------------
@@ -480,6 +486,12 @@ def _write(target: Path, text: str, mode: Mode, result: ScaffoldResult) -> None:
     if mode == "owned" and target.exists():
         result.kept.append(target)
         return
+    if mode == "notes" and target.exists():
+        current = _NOTES.search(target.read_text(encoding="utf-8"))
+        if current is None:  # from before notes regions: whatever was added there is the author's
+            result.kept.append(target)
+            return
+        text = _NOTES.sub(lambda fresh: fresh[1] + current[2] + fresh[3], text, count=1)
     atomic_write_text(target, text)
     result.written.append(target)
 
@@ -674,7 +686,7 @@ def scaffold(
     }
     fake_files: list[tuple[str, Path, Mode]] = [
         ("fake/pyproject.toml.j2", layout.root / "pyproject.toml", "owned"),
-        ("fake/README.md.j2", layout.root / "README.md", "generated"),
+        ("fake/README.md.j2", layout.root / "README.md", "notes"),
         ("fake/fauxcall.toml.j2", layout.root / "fauxcall.toml", "owned"),
         ("fake/env.example.j2", layout.root / ".env.example", "generated"),
         ("fake/Dockerfile.j2", layout.root / "Dockerfile", "owned"),

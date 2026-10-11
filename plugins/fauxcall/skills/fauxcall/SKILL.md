@@ -163,6 +163,8 @@ remaining failure is understood and explained. Checkpoint `e2e_tests`, `parity`.
   a new session) check the model, recordings and parity report against the docs. It works offline
   (never ask it to call the real API): when it needs evidence it proposes probes as plan entries,
   and you record them with `fauxcall record` (approval rules apply). Fix what it finds.
+- Write the known limitations (what differs from the real API, and why) into the fake's `README.md`
+  between its `fauxcall:notes` markers: the only part of the README `fauxcall scaffold` keeps.
 - `fauxcall report <name>` → `data/reports/summary.md`.
 - Tell the user: what was faked, the parity score, known gaps and why, and how to use it
   (`fauxcall up`, base URL / MCP config, the `/__fauxcall` admin API). Checkpoint `review`, `report`.

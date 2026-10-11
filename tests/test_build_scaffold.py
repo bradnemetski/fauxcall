@@ -1018,6 +1018,38 @@ def test_rescaffold_keeps_owned_files_and_rewrites_generated_ones(tmp_path: Path
     assert workspace.root / "pyproject.toml" in result.kept
 
 
+def test_readme_notes_survive_a_rescaffold(tmp_path: Path) -> None:
+    workspace = Workspace(tmp_path / "fakes")
+    layout, _ = scaffold_tricky(workspace, tmp_path)
+    readme = layout.root / "README.md"
+    fresh = readme.read_text()
+    assert "## Known limitations and notes" in fresh
+    placeholder = "None yet: list what the fake does differently from the real API and why.\n"
+    assert placeholder in fresh
+    notes = "- **Rates stop after the last recording.** Travel the clock back for trends.\n"
+    readme.write_text(fresh.replace(placeholder, notes) + "\nText outside the notes.\n")
+    model = tricky_model()
+    model.endpoints = model.endpoints[:1]
+    result = scaffold(layout, workspace, model, project_root=tmp_path)
+    text = readme.read_text()
+    assert notes in text  # the author's notes carry over
+    assert placeholder not in text
+    assert "Text outside the notes." not in text  # everything else is regenerated
+    assert "Endpoints: 1." in text
+    assert readme in result.written
+
+
+def test_a_readme_from_before_notes_regions_is_kept(tmp_path: Path) -> None:
+    workspace = Workspace(tmp_path / "fakes")
+    layout, _ = scaffold_tricky(workspace, tmp_path)
+    readme = layout.root / "README.md"
+    older = "# Tricky\n\n## Known limitations\n\n- written by the agent that built it\n"
+    readme.write_text(older)
+    result = scaffold(layout, workspace, tricky_model(), project_root=tmp_path)
+    assert readme.read_text() == older  # no markers: can't tell generated text from the author's
+    assert readme in result.kept
+
+
 def test_ports_members_and_listings_across_fakes(tmp_path: Path) -> None:
     workspace = Workspace(tmp_path / "fakes")
     first = write_fake(workspace, named("first", "First | API"))
