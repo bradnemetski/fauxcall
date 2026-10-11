@@ -498,7 +498,8 @@ def analyze_endpoint(
     found = model.find_endpoint(endpoint)
     if found is not None:
         _schema_report(found, by_status)
-    timed = [e for e in exchanges if not e.stream]
+    # A stream's elapsed time is its length, not a latency; MCP answers sent as SSE are no stream.
+    timed = [e for e in exchanges if not e.stream or e.endpoint.startswith("MCP ")]
     profile = LatencyProfile.from_samples(
         [e.elapsed_ms for e in timed if not _failed(e)],
         errors=[e.elapsed_ms for e in timed if _failed(e)],

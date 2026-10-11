@@ -13,6 +13,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from typer.testing import CliRunner
 
+from fauxcall import jsonfmt
 from fauxcall.cli import common
 from fauxcall.cli.evidence import _example
 from fauxcall.cli.main import app
@@ -926,6 +927,8 @@ def test_analyze_a_tool_times_answers_and_errors_apart(ws: Workspace) -> None:
                 elapsed_ms=elapsed,
                 request=CapturedRequest(method=HttpMethod.POST, url=f"{BASE}/mcp", path="/mcp"),
                 response=CapturedResponse(status=200, body=Body(kind="json", json_value=message)),
+                # The answer came as an SSE event (Streamable HTTP): framing, not a stream.
+                stream=[StreamEvent(t_ms=elapsed, kind="sse", data=jsonfmt.dumps(message))],
             )
         )
     output = invoke("analyze", "endpoint", "shop", "MCP tools/call:ask", "--apply").output
