@@ -56,11 +56,17 @@ fauxcall status                      # existing fakes and their next action
 ```
 
 If a fake for this input exists, run `fauxcall status <name>` and continue at its next action
-(skip to that phase). Otherwise create it:
+(skip to that phase). Otherwise create it, always with `--name`:
 
 ```bash
-fauxcall init "<input>" [--name <kebab-name>] [--base-url https://api.example.com] [--mcp]
+fauxcall init "<input>" --name <kebab-name> [--base-url https://api.example.com] [--mcp]
 ```
+
+If the service needs credentials just to connect (an MCP server behind a key or token, like
+`mcp.stripe.com`), ask for them **before** init: the user puts them in `fauxcall/<name>/.env` as
+`FAUXCALL_REAL__HEADERS='{"Authorization": "Bearer …"}'`, and `init --name <name>` reads them from
+there. The same file serves recording and tests later, so it is the only place a key goes. Never
+read, print, source or move that file yourself: if init fails on auth, ask the user to check it.
 
 Read the summary. Free-form docs: follow [workflow § docs](references/workflow.md#free-form-documentation).
 MCP servers: also read [mcp](references/mcp.md).

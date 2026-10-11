@@ -17,7 +17,8 @@ errors. FauxCall speaks MCP at the wire level and reproduces all of it.
 
 ```bash
 fauxcall init https://mcp.example.com/mcp            # detected as MCP automatically
-fauxcall init https://mcp.example.com/mcp --mcp --auth-env MY_TOKEN   # forced, with a bearer token
+fauxcall init https://mcp.example.com/mcp --name demo   # uses the headers in fauxcall/demo/.env
+fauxcall init https://mcp.example.com/mcp --mcp --auth-env MY_TOKEN   # or a token from the shell
 fauxcall mcp introspect <name>                       # re-run later (e.g. after adding credentials)
 ```
 

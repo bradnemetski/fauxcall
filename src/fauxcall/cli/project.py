@@ -57,6 +57,20 @@ def _one_of(kind: str, value: str, allowed: tuple[str, ...]) -> str:
 # -- init / status --------------------------------------------------------------------------------
 
 
+def _prepared_headers(name: str | None) -> dict[str, str]:
+    """Credentials the user already put in the fake's ``.env``, for connecting during init.
+
+    Recording and testing read the same file, so the user writes the key once, before the build.
+    """
+    if not name:
+        return {}
+    fake = workspace().fake(name)
+    if not fake.env_file.exists():
+        return {}
+    real = fake_settings(fake).real
+    return {key: value.get_secret_value() for key, value in real.headers.items()}
+
+
 @clean_errors
 def init(
     target: Annotated[
@@ -71,11 +85,14 @@ def init(
     ] = False,
     auth_env: Annotated[
         str | None,
-        typer.Option(help="MCP only: env var holding a bearer token (discovery + introspection)."),
+        typer.Option(
+            help="MCP only: env var holding a bearer token. Usually not needed: with --name, the "
+            "headers in the fake's prepared .env (FAUXCALL_REAL__HEADERS) are used."
+        ),
     ] = None,
 ) -> None:
     """Identify the input, snapshot it and create the fake's model and checkpoints."""
-    headers: dict[str, str] = {}
+    headers = _prepared_headers(name)
     if auth_env:
         token = os.environ.get(auth_env)
         if not token:

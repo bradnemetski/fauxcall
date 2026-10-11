@@ -303,6 +303,21 @@ def test_init_discovers_an_auth_protected_mcp_server_with_the_token(
     assert token not in files_text(ws.fake("demo").root / "data")
 
 
+def test_init_uses_the_credentials_the_user_prepared_in_env(
+    ws: Workspace, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    token = "tok-prepared-0123456789"
+    server = mcp_app(tmp_path, mcp_model(tools=["ask"], auth=True))
+    serve_with(monkeypatch, httpx2.ASGITransport(app=server))
+    env = ws.fake("demo").env_file
+    env.parent.mkdir(parents=True)
+    env.write_text(f"FAUXCALL_REAL__HEADERS='{{\"Authorization\": \"Bearer {token}\"}}'\n")
+    result = invoke("init", MCP_URL, "--name", "demo")  # no --auth-env: the .env is enough
+    assert "MCP server **Demo MCP**" in result.output
+    assert token in env.read_text()  # the user's file is kept
+    assert token not in files_text(ws.fake("demo").root / "data")
+
+
 def test_init_without_the_token_cannot_discover_an_auth_protected_mcp_server(
     ws: Workspace, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
