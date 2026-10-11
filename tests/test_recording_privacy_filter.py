@@ -167,6 +167,47 @@ def test_request_pseudonyms_are_consistent_everywhere() -> None:
     assert query2[0][1].endswith("@example.com")
 
 
+def test_public_values_are_kept_everywhere() -> None:
+    filter_ = privacy(
+        public_values=["user1", "john@email.com"], path_params={"username": "username"}
+    )
+    value, _, pseudonymized = filter_.json(
+        [
+            {"username": "user1", "email": "john@email.com"},  # a sandbox's documented demo user
+            {"username": "jroe", "email": EMAIL},  # anybody else in the same fields
+        ]
+    )
+    users = j(value)
+    assert users[0] == {"username": "user1", "email": "john@email.com"}
+    assert users[1]["username"] == Pseudonymizer(KEY).pseudonym("jroe", "username")
+    assert users[1]["email"].endswith("@example.com")
+    assert pseudonymized == ["$[1].username", "$[1].email"]
+    url, path, params, _, _, _, notes = filter_.request(
+        url="https://api.test/user/user1?q=user1",
+        path="/user/user1",
+        path_params={"username": "user1"},
+        query=[("q", "user1")],
+        headers=[],
+        json_body=None,
+    )
+    assert (url, path, params) == (
+        "https://api.test/user/user1?q=user1",
+        "/user/user1",
+        {"username": "user1"},
+    )
+    assert notes == []  # nothing was pseudonymized
+    _, path, _, _, _, _, notes = filter_.request(
+        url="https://api.test/user/jroe",
+        path="/user/jroe",
+        path_params={"username": "jroe"},
+        query=[],
+        headers=[],
+        json_body=None,
+    )
+    assert path == f"/user/{Pseudonymizer(KEY).pseudonym('jroe', 'username')}"
+    assert notes == ["request.path:username"]
+
+
 def test_response_headers_and_text_use_known_values() -> None:
     filter_ = privacy()
     value, _, _ = filter_.json({"author": {"email": EMAIL, "username": "jroe"}})

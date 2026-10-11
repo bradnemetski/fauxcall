@@ -516,3 +516,16 @@ def test_trie_regex_prefers_the_longest_value() -> None:
         "b",
         "(x)",
     ]
+
+
+def test_public_values_are_never_replaced() -> None:
+    pseudonymizer = Pseudonymizer("public-values-key", public=["user1", "john@email.com"])
+    assert pseudonymizer.pseudonym("user1", "username") == "user1"
+    assert pseudonymizer.translate("john@email.com", "email") == "john@email.com"
+    fake = pseudonymizer.pseudonym("user2", "username")
+    assert fake != "user2"
+    text = "/user/user1 and /user/user2 wrote to john@email.com"
+    assert (
+        pseudonymizer.pseudonymize_text(text)
+        == f"/user/user1 and /user/{fake} wrote to john@email.com"
+    )

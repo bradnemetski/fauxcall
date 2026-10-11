@@ -8,7 +8,8 @@ Configured per fake in ``data/privacy.json`` (committed — it holds rules, not 
       "path_params": {"username": "username"},   // PII inside URLs
       "query_params": {"email": "email"},
       "extra_secret_names": ["X-Session"],       // custom credential headers/fields
-      "allow_names": ["token_count"]             // secret-looking names that aren't secrets
+      "allow_names": ["token_count"],            // secret-looking names that aren't secrets
+      "public_values": ["user1"]                 // personal-looking values that are public
     }
 
 The pseudonym key (``FAUXCALL_PSEUDONYM_KEY``) lives in the fake's gitignored ``.env``. With
@@ -61,6 +62,13 @@ class PrivacyConfig(Model):
     query_params: dict[str, PiiCategory] = Field(default_factory=dict)
     extra_secret_names: list[str] = Field(default_factory=list)
     allow_names: list[str] = Field(default_factory=list)
+    public_values: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Exact values that look personal but are public (a sandbox's documented demo users): "
+            "kept wherever they appear, while other values of the same fields are pseudonymized."
+        ),
+    )
 
 
 def _replace_segments(path: str, real: str, fake: str) -> str:
@@ -129,7 +137,9 @@ class RecordingPrivacy:
                 "(run `fauxcall env key <name>`)"
             )
         self.pseudonymizer = (
-            Pseudonymizer(pseudonym_key) if config.enabled and pseudonym_key else None
+            Pseudonymizer(pseudonym_key, public=config.public_values)
+            if config.enabled and pseudonym_key
+            else None
         )
 
     def _names(self) -> dict[str, list[str]]:
@@ -180,12 +190,15 @@ class RecordingPrivacy:
         pseudonymizer = self.pseudonymizer
         for name, category in self.config.path_params.items():
             real = safe_params.get(name)
-            if real:
-                fake = str(pseudonymizer.pseudonym(real, category))
-                safe_params[name] = fake
-                safe_path = _replace_segments(safe_path, real, fake)
-                safe_url = _replace_url_segments(safe_url, real, fake)
-                notes.append(f"request.path:{name}")
+            if not real:
+                continue
+            fake = str(pseudonymizer.pseudonym(real, category))
+            if fake == real:  # a public value: it stays
+                continue
+            safe_params[name] = fake
+            safe_path = _replace_segments(safe_path, real, fake)
+            safe_url = _replace_url_segments(safe_url, real, fake)
+            notes.append(f"request.path:{name}")
         pseudo_query: list[tuple[str, str]] = []
         for key, value in safe_query:
             query_category = self.config.query_params.get(key)

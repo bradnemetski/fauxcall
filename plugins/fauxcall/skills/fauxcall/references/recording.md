@@ -165,8 +165,16 @@ fake value everywhere) before anything is written. Tune detection in `data/priva
 ```json
 {"include": {"$.owner.login": "username"}, "exclude": ["$.name"],
  "path_params": {"username": "username"}, "query_params": {"email": "email"},
- "extra_secret_names": ["X-Session-Token"], "allow_names": ["token_count"]}
+ "extra_secret_names": ["X-Session-Token"], "allow_names": ["token_count"],
+ "public_values": ["user1", "john@email.com"]}
 ```
+
+`exclude` is for fields that only *look* personal (a product's `name`). When some values of a truly
+personal field are public (a sandbox's documented demo users, examples from the docs), list exactly
+those values in `public_values`: they stay as they are everywhere (bodies, paths, parity
+comparisons), while everyone else's data in the same fields is still pseudonymized. Never `exclude` a
+personal field because some of its values are public: on a shared sandbox, other people's real data
+arrives in the same fields.
 
 Categories: email, phone, person_name, first_name, last_name, username, address, street, city,
 postal_code, ip, credit_card, ssn, date_of_birth, free_text. If a recording leaked something, fix

@@ -376,19 +376,21 @@ class Pseudonymizer:
       unparseable values get new digits instead.
     * ``free_text``: ``text-<12 hex>``.
 
-    Non-string values are returned unchanged, except numeric (epoch) dates of birth. Empty strings
-    and :data:`~fauxcall.privacy.REDACTED` are never replaced.
+    Non-string values are returned unchanged, except numeric (epoch) dates of birth. Empty strings,
+    :data:`~fauxcall.privacy.REDACTED` and ``public`` values (personal-looking data that is public,
+    such as a sandbox's documented demo users) are never replaced.
 
     Every real string replaced so far is remembered (:attr:`mapping`) so that
     :meth:`pseudonymize_text` can also replace it inside URLs, query strings and text bodies.
     Instances are not thread-safe.
     """
 
-    def __init__(self, key: str | bytes) -> None:
+    def __init__(self, key: str | bytes, *, public: Iterable[str] = ()) -> None:
         raw = key.encode() if isinstance(key, str) else bytes(key)
         if not raw:
             raise ValueError("the pseudonym key must not be empty")
         self._key = raw
+        self._public = frozenset(public)
         self._mapping: dict[str, str] = {}
         self._index: _TextIndex | None = None
         self._generators: dict[PiiCategory, Callable[[str], str]] = {
@@ -434,6 +436,8 @@ class Pseudonymizer:
         if checked == "date_of_birth" and _is_number(value):
             return self._numeric_date_of_birth(value)
         if not isinstance(value, str) or not value.strip() or value == REDACTED:
+            return value
+        if value in self._public:
             return value
         result = self._generators[checked](value)
         self._remember(value, result)

@@ -283,6 +283,20 @@ async def test_the_harness_gets_in_and_a_served_fake_keeps_it_out(
     assert statuses[1] == 401  # the served fake admits only the real API's users
 
 
+def test_parity_keeps_the_public_values_of_privacy_json(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    write_model(tmp_path / "data" / "model.json", rest_model())
+    (tmp_path / "data" / "privacy.json").write_text('{"public_values": ["user1"]}')
+    monkeypatch.setenv("FAUXCALL_DATA_DIR", str(tmp_path / "data"))
+    monkeypatch.setenv("FAUXCALL_PSEUDONYM_KEY", KEY)
+    fake = fake_under_test(FakeSettings, lambda _settings: FastAPI())
+    assert fake.translate is not None
+    assert fake.translate("user1", "username") == "user1"  # recorded as is, compared as is
+    assert fake.translate("user2", "username") == Pseudonymizer(KEY).pseudonym("user2", "username")
+
+
 def test_fake_under_test_without_a_key_and_with_a_real_url_override(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
