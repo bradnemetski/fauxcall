@@ -197,6 +197,13 @@ uvx fauxcall verify petstore --target parity
 uvx fauxcall --help                 # everything else
 ```
 
+## Questions
+
+**Why does it install `httpx2` and `httpcore2` instead of `httpx` and `httpcore`?** They aren't
+lookalike copies. They're maintained by Pydantic ([github.com/pydantic/httpx2](https://github.com/pydantic/httpx2)),
+by the author of `httpx`. FauxCall needs `httpx2` for WebSockets and for testing fakes in-process;
+`httpcore2` is the lower-level library `httpx2` is built on.
+
 ## Learn more
 
 - [Examples](examples/): fakes FauxCall built by itself, ready to run

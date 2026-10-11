@@ -16,6 +16,7 @@ These were settled with the project owner before implementation (2026-10-10). Th
 | License | Apache-2.0. |
 | Python | `>=3.12` (CI on 3.12, 3.13, 3.14; macOS + Linux). 3.14 offered nothing this project needs. |
 | Docs | Human-first README (complete but not overwhelming) + `docs/*.md`. |
+| Dependencies | HTTP goes through **`httpx2`** (and `httpcore2`, which it requires), not `httpx`/`httpcore`. They look like typosquats but aren't: both are maintained by Pydantic at [github.com/pydantic/httpx2](https://github.com/pydantic/httpx2) and written by httpx's author. FauxCall needs `httpx2` for its WebSocket client (`httpx2[ws]`, used to record and test WebSocket APIs) and its in-process ASGI transports. |
 
 ## Inputs
 

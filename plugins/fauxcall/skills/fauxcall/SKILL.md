@@ -2,7 +2,7 @@
 name: fauxcall
 description: Build a high-fidelity fake of a real HTTP API or remote MCP server for repeatable agent testing. Records the real service endpoint by endpoint, models time behavior and cross-endpoint consistency, generates a FastAPI fake with unit and end-to-end tests, and proves at least 98% parity with the real thing. Use when the user runs /fauxcall with an OpenAPI or Swagger URL or file, a Swagger UI or Redoc page, an API documentation page, or an MCP server URL, or asks to fake, mock, stub or emulate an API or MCP server for agent evaluations.
 license: Apache-2.0
-compatibility: Needs uv (https://docs.astral.sh/uv), Python 3.12+, a shell and network access to the real service. The Claude Code plugin puts a `fauxcall` command on PATH; elsewhere install it with `uv tool install fauxcall` (or `uv tool install git+https://github.com/bradnemetski/fauxcall`).
+compatibility: Needs uv (https://docs.astral.sh/uv), Python 3.12+, a shell and network access to the real service. The Claude Code plugin puts a `fauxcall` command on PATH; elsewhere install it with `uv tool install fauxcall` (or `uv tool install git+https://github.com/bradnemetski/fauxcall`). Its dependencies httpx2 and httpcore2 are genuine (Pydantic's, github.com/pydantic/httpx2), needed for WebSockets, not typosquats of httpx.
 metadata:
   author: Brad Nemetski
   homepage: https://github.com/bradnemetski/fauxcall

@@ -25,6 +25,9 @@ dependencies = [
     "beautifulsoup4>=4.12",
     "faker>=30.0",
     "fastapi>=0.120",
+    # Not a typosquat of httpx: httpx2 (and httpcore2, which it pulls in) is maintained by Pydantic,
+    # github.com/pydantic/httpx2, by httpx's author. FauxCall needs it for WebSockets (the [ws]
+    # extra) and in-process test transports. See docs/decisions.md, "Dependencies".
     "httpx2[ws]>=2.10",
     "jinja2>=3.1.6",
     "jsonschema>=4.23",
