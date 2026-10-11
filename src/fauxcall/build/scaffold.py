@@ -509,12 +509,14 @@ def _configured_port(fake: FakeLayout) -> int | None:
     return port if isinstance(port, int) and not isinstance(port, bool) else None
 
 
-def separate_ports(workspace: Workspace) -> list[str]:
+def separate_ports(workspace: Workspace, current: str | None = None) -> list[str]:
     """Give fakes that share a configured port their own; returns what moved, for the summary.
 
     Ports are workspace state (``fauxcall up`` and compose bind them all at once). Fakes built in
-    different workspaces and put together can clash: the first by name keeps the port, the others
-    move to the lowest free one, changing only the ``port`` line of their ``fauxcall.toml``.
+    different workspaces and put together can clash: the fake being scaffolded (``current``)
+    yields to the others, which may already be in use; among the others the first by name keeps
+    the port. A fake that moves gets the lowest free port, changing only the ``port`` line of its
+    ``fauxcall.toml``.
     """
     configured = {
         fake.name: (fake, port)
@@ -524,7 +526,7 @@ def separate_ports(workspace: Workspace) -> list[str]:
     in_use = {port for _, port in configured.values()}
     kept: set[int] = set()
     moved: list[str] = []
-    for name in sorted(configured):
+    for name in sorted(configured, key=lambda name: (name == current, name)):
         fake, port = configured[name]
         if port not in kept:
             kept.add(port)
@@ -710,7 +712,7 @@ def scaffold(
 ) -> ScaffoldResult:
     """Create/refresh the fake's package and the workspace files."""
     env = _environment()
-    result = ScaffoldResult(notes=separate_ports(workspace))
+    result = ScaffoldResult(notes=separate_ports(workspace, layout.name))
     requirement, local_path = fauxcall_requirement(source)
     port = assign_port(workspace, layout)
     routes = routes_for(model) if model.kind == "rest" else []

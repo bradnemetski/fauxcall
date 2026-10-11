@@ -1085,15 +1085,27 @@ def test_fakes_brought_together_get_their_own_ports(tmp_path: Path) -> None:
     )
 
 
+def test_the_fake_being_scaffolded_yields_its_port(tmp_path: Path) -> None:
+    workspace = Workspace(tmp_path / "fakes")
+    newcomer = write_fake(workspace, named("alpha"))  # sorts first, but arrives last
+    settled = write_fake(workspace, named("beta"))
+    (newcomer.root / "fauxcall.toml").write_text("port = 8701\n")
+    (settled.root / "fauxcall.toml").write_text("port = 8701\n")
+    result = scaffold(newcomer, workspace, named("alpha"))
+    assert (settled.root / "fauxcall.toml").read_text() == "port = 8701\n"
+    assert (newcomer.root / "fauxcall.toml").read_text() == "port = 8702\n"
+    assert "alpha: port 8701 was another fake's; it now uses 8702 (fauxcall.toml)" in result.notes
+
+
 def test_a_port_clash_without_a_port_line_is_reported(tmp_path: Path) -> None:
     workspace = Workspace(tmp_path / "fakes")
     first = write_fake(workspace, named("first"))
     second = write_fake(workspace, named("second"))
-    (first.root / "fauxcall.toml").write_text("port = 8701\n")
-    (second.root / "fauxcall.toml").write_text("port = 0x21FD\n")  # 8701, spelled oddly
+    (first.root / "fauxcall.toml").write_text("port = 0x21FD\n")  # 8701, spelled oddly
+    (second.root / "fauxcall.toml").write_text("port = 8701\n")
     result = scaffold(first, workspace, named("first"))
-    assert "second: port 8701 is another fake's too: change `port` in fauxcall.toml" in result.notes
-    assert (second.root / "fauxcall.toml").read_text() == "port = 0x21FD\n"
+    assert "first: port 8701 is another fake's too: change `port` in fauxcall.toml" in result.notes
+    assert (first.root / "fauxcall.toml").read_text() == "port = 0x21FD\n"
 
 
 def test_ports_members_and_listings_across_fakes(tmp_path: Path) -> None:
