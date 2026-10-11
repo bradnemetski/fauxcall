@@ -207,3 +207,46 @@ async def test_binary_or_empty_server_messages_are_sent_as_empty_text(tmp_path: 
 
 async def _idle(ws: AsyncWebSocketSession) -> None:
     del ws
+
+
+async def test_binary_frames_and_close_reasons_replay_as_recorded(tmp_path: Path) -> None:
+    fake = _fake(tmp_path, None, respond_to="none")
+    store = RecordingStore(tmp_path / "data" / "recordings")
+    store.save(
+        Exchange(
+            id=store.next_id(),
+            endpoint=FEED,
+            started_at=RECORDED_AT,
+            started_ns=datetime_to_ns(RECORDED_AT),
+            request=CapturedRequest(method=HttpMethod.GET, url="x", path="/v1/ws/feed"),
+            response=CapturedResponse(status=101),
+            stream=[
+                StreamEvent(t_ms=0, kind="ws_recv", binary_file="frame-1.bin"),
+                StreamEvent(t_ms=1, kind="ws_recv", binary_file="lost.bin"),  # sidecar missing
+                StreamEvent(t_ms=2, kind="ws_close", code=4002, data="bye now"),
+            ],
+        ),
+        sidecars={"frame-1.bin": b"\x00\x01binary"},
+    )
+    received: list[bytes] = []
+
+    async def script(ws: AsyncWebSocketSession) -> None:
+        received.append(await ws.receive_bytes())
+
+    disconnect: list[WebSocketDisconnect] = []
+    try:
+        async with _client(fake) as client, client.websocket("/v1/ws/feed") as ws:
+            await script(ws)
+            await ws.receive_text()
+    except (WebSocketDisconnect, ExceptionGroup) as error:
+        disconnect.extend(_disconnects(error))
+    assert received == [b"\x00\x01binary"]
+    assert [(d.code, d.reason) for d in disconnect] == [(4002, "bye now")]
+
+
+def _disconnects(error: BaseException) -> list[WebSocketDisconnect]:
+    if isinstance(error, WebSocketDisconnect):
+        return [error]
+    if isinstance(error, BaseExceptionGroup):
+        return [d for inner in error.exceptions for d in _disconnects(inner)]
+    return []

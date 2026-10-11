@@ -133,51 +133,68 @@ async def replay_websocket(
     on connect. After that, the server messages that followed a client message in the recording
     are sent when the client sends a matching message (``respond_to="match"``). ``"none"`` replays
     the server side unconditionally on its own timeline (repeatedly with ``loop``); ``"echo"``
-    echoes client messages. Recorded spacing is kept, scaled by ``speed``.
+    echoes client messages. Recorded spacing is kept, scaled by ``speed``; binary frames are sent
+    as bytes and a recorded close keeps its code and reason.
     """
     await websocket.accept()
     if not exchanges:
         await websocket.close(code=1011)
         return
-    script = list(exchanges[0].stream)
+    player = _Player(websocket, ctx, speed, sleep)
     try:
         if respond_to == "echo":
             while True:
                 await websocket.send_text(await websocket.receive_text())
         if respond_to == "none":
-            pushed = [event for event in script if event.kind in _SERVER_KINDS]
-            closed = await _play(websocket, ctx, pushed, 0.0, speed, sleep)
+            first = exchanges[0]
+            pushed = [event for event in first.stream if event.kind in _SERVER_KINDS]
+            closed = await player.play(first, pushed, 0.0)
             while loop and pushed and not closed:
                 await sleep(_loop_pause(pushed, speed))  # type: ignore[misc]
-                closed = await _play(websocket, ctx, pushed, 0.0, speed, sleep)
+                closed = await player.play(first, pushed, 0.0)
             if not closed:
                 await websocket.close(code=1000)
             return
-        await _conversation(websocket, ctx, exchanges, speed, sleep)
+        await _conversation(websocket, player, exchanges)
     except WebSocketDisconnect:
         log.debug("websocket_client_disconnected", endpoint=ctx.endpoint_id)
 
 
-async def _play(
-    websocket: WebSocket,
-    ctx: RequestContext,
-    events: Sequence[StreamEvent],
-    start_ms: float,
-    speed: float,
-    sleep: Callable[[float], object],
-) -> bool:
-    """Send recorded server messages with their spacing from ``start_ms``; True once closed."""
-    previous = start_ms
-    for event in events:
-        delay = max(0.0, (event.t_ms - previous) / 1000.0 / speed)
-        previous = max(previous, event.t_ms)
-        if delay:
-            await sleep(delay)  # type: ignore[misc]
-        if event.kind == "ws_close":
-            await websocket.close(code=event.code or 1000)
-            return True
-        await websocket.send_text(_render_data(ctx, event.data) or "")
-    return False
+class _Player:
+    """Sends recorded server messages of one connection with their recorded spacing."""
+
+    def __init__(
+        self,
+        websocket: WebSocket,
+        ctx: RequestContext,
+        speed: float,
+        sleep: Callable[[float], object],
+    ) -> None:
+        self.websocket = websocket
+        self.ctx = ctx
+        self.speed = speed
+        self.sleep = sleep
+
+    async def play(
+        self, exchange: Exchange, events: Sequence[StreamEvent], start_ms: float
+    ) -> bool:
+        """Send ``events`` (spaced from ``start_ms``); True once the recording closed the socket."""
+        previous = start_ms
+        for event in events:
+            delay = max(0.0, (event.t_ms - previous) / 1000.0 / self.speed)
+            previous = max(previous, event.t_ms)
+            if delay:
+                await self.sleep(delay)  # type: ignore[misc]
+            if event.kind == "ws_close":
+                await self.websocket.close(code=event.code or 1000, reason=event.data or None)
+                return True
+            if event.binary_file is not None:
+                content = self.ctx.runtime.recordings.sidecar(exchange, event.binary_file)
+                if content is not None:  # a lost sidecar is logged; nothing to send
+                    await self.websocket.send_bytes(content)
+                continue
+            await self.websocket.send_text(_render_data(self.ctx, event.data) or "")
+        return False
 
 
 def _loop_pause(events: Sequence[StreamEvent], speed: float) -> float:
@@ -188,23 +205,21 @@ def _loop_pause(events: Sequence[StreamEvent], speed: float) -> float:
 
 
 async def _conversation(
-    websocket: WebSocket,
-    ctx: RequestContext,
-    exchanges: Sequence[Exchange],
-    speed: float,
-    sleep: Callable[[float], object],
+    websocket: WebSocket, player: _Player, exchanges: Sequence[Exchange]
 ) -> None:
-    scripts = [list(exchange.stream) for exchange in exchanges]
-    if await _play(websocket, ctx, _leading(scripts[0]), 0.0, speed, sleep):
+    first = exchanges[0]
+    if await player.play(first, _server_side(first.stream), 0.0):
         return
     while True:
         sent = await websocket.receive_text()
-        found = _find_reply(scripts, sent)
+        found = _find_reply(exchanges, sent)
         if found is None:
-            log.info("websocket_unmatched_message", endpoint=ctx.endpoint_id, message=sent[:200])
+            log.info(
+                "websocket_unmatched_message", endpoint=player.ctx.endpoint_id, message=sent[:200]
+            )
             continue
-        sent_at, reply = found
-        if await _play(websocket, ctx, reply, sent_at, speed, sleep):
+        exchange, sent_at, reply = found
+        if await player.play(exchange, reply, sent_at):
             return
 
 
@@ -214,22 +229,18 @@ def _server_side(events: Iterable[StreamEvent]) -> list[StreamEvent]:
     return [event for event in before_send if event.kind in _SERVER_KINDS]
 
 
-def _leading(script: Sequence[StreamEvent]) -> list[StreamEvent]:
-    """Server messages recorded before the client's first message."""
-    return _server_side(script)
-
-
 def _find_reply(
-    scripts: Sequence[list[StreamEvent]], sent: str
-) -> tuple[float, list[StreamEvent]] | None:
+    exchanges: Sequence[Exchange], sent: str
+) -> tuple[Exchange, float, list[StreamEvent]] | None:
     """The recorded client message equal to ``sent``: when it was sent and the server's answer.
 
     The reply is every server message (and a close) up to the client's next message.
     """
-    for script in scripts:
+    for exchange in exchanges:
+        script = exchange.stream
         for index, event in enumerate(script):
             if event.kind == "ws_send" and _same_message(sent, event.data):
-                return event.t_ms, _server_side(script[index + 1 :])
+                return exchange, event.t_ms, _server_side(script[index + 1 :])
     return None
 
 

@@ -264,3 +264,14 @@ async def test_unmatched_calls_can_answer_with_empty_content(tmp_path: Path) -> 
     async with asgi_client(app) as http:
         reply = await _rpc(http, "tools/call", {"name": "search", "arguments": {"q": "nothing"}})
     assert reply["result"] == {"content": []}
+
+
+@pytest.mark.parametrize(("status", "allow"), [(405, "POST, DELETE"), (404, None)])
+async def test_refused_get_answers_with_the_recorded_status(
+    tmp_path: Path, status: int, allow: str | None
+) -> None:
+    app, _ = mcp_app(tmp_path, mcp_model(transport=McpTransportModel(get_status=status)))
+    async with asgi_client(app) as http:
+        refused = await http.get("/mcp", headers={"accept": "text/event-stream"})
+    assert refused.status_code == status
+    assert refused.headers.get("allow") == allow

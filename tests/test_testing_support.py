@@ -76,7 +76,7 @@ ADD: JsonObject = {
 }
 
 
-def mcp_model(path: str = "/mcp") -> ApiModel:
+def mcp_model(path: str = "/mcp", *, legacy: bool = False) -> ApiModel:
     return ApiModel(
         name="tools",
         title="Tools",
@@ -84,7 +84,9 @@ def mcp_model(path: str = "/mcp") -> ApiModel:
         source=SourceInfo(kind="mcp", url=f"https://mcp.example.com{path}", fetched_at=FETCHED),
         real=RealTarget(base_url="https://mcp.example.com"),
         mcp=McpModel(
-            transport=McpTransportModel(path=path),
+            transport=McpTransportModel(kind="sse", path="/sse", messages_path="/messages/")
+            if legacy
+            else McpTransportModel(path=path),
             initialize_result={
                 "protocolVersion": "2025-06-18",
                 "capabilities": {"tools": {}},
@@ -95,9 +97,10 @@ def mcp_model(path: str = "/mcp") -> ApiModel:
     )
 
 
-def mcp_fake(data_dir: Path) -> FastAPI:
+def mcp_fake(data_dir: Path, *, legacy: bool = False) -> FastAPI:
     settings = FakeSettings(name="tools", data_dir=data_dir, fast=True, log_level="WARNING")
-    app = create_app(settings, runtime=FakeRuntime(settings, mcp_model()), configure_logs=False)
+    runtime = FakeRuntime(settings, mcp_model(legacy=legacy))
+    app = create_app(settings, runtime=runtime, configure_logs=False)
 
     async def add(_ctx: RequestContext, arguments: JsonObject) -> JsonValue:
         total = cast("float", arguments["a"]) + cast("float", arguments.get("b", 0))
@@ -446,6 +449,13 @@ async def test_mcp_replay_reports_status_and_tolerates_odd_recordings(tmp_path: 
     )
     outcome = await replay_against(mcp_fake(tmp_path), case(odd, mcp=True))
     assert outcome.ok  # nothing structured to compare
+
+
+async def test_mcp_replay_over_the_legacy_sse_transport(tmp_path: Path) -> None:
+    recorded = rpc("8", request=CALL, response=RESULT, status=202)  # the answer comes on the stream
+    recorded.request.path = "/messages/?session_id=0123456789abcdef0123456789abcdef"
+    outcome = await replay_against(mcp_fake(tmp_path, legacy=True), case(recorded, mcp=True))
+    assert outcome.ok, outcome.explain()
 
 
 async def test_mcp_replay_when_the_fake_does_not_speak_mcp() -> None:

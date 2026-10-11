@@ -24,7 +24,12 @@ class McpTransportModel(Model):
     issues_session: bool = True
     requires_session: bool = True
     missing_session_status: int = 400
-    get_stream: Literal["sse", "405"] = "405"
+    get_stream: Literal["sse", "status"] = Field(
+        default="status",
+        description="GET on the endpoint: 'sse' opens a server-to-client stream; 'status' answers "
+        "with get_status (most servers: 405).",
+    )
+    get_status: int = Field(default=405, ge=400, le=599, description="Status of a refused GET.")
     delete_status: int = 200
     protocol_versions: dict[str, str] = Field(
         default_factory=dict, description="Protocol version requested -> version answered."

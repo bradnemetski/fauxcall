@@ -36,7 +36,7 @@ The results land in the model's `mcp` section.
 | `path` | the endpoint path (`/mcp`, `/sse`) |
 | `response_mode` | answers as `json` or `sse` |
 | `issues_session`, `session_header`, `requires_session`, `missing_session_status` | session handling |
-| `get_stream` | `405` or `sse` |
+| `get_stream`, `get_status` | `sse` (GET opens a stream) or `status` (GET answered with `get_status`, usually 405) |
 | `delete_status` | DELETE response |
 | `protocol_versions`, `default_protocol_version` | negotiation (requested → answered) |
 

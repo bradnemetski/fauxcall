@@ -15,6 +15,7 @@ from fauxcall.recording import McpRecorder, RecordingStore, tool_is_mutating
 from fauxcall.recording.mcp import PROBE_METHOD, PROBE_TOOL, _method_of, _params_for
 from fauxcall.recording.privacy_filter import PrivacyConfig, RecordingPrivacy
 from fauxcall.storage import read_model
+from fauxcall.testing.asgi import streaming_client
 from test_mcpwire_transport import (
     DELETE_ITEM,
     ECHO,
@@ -22,7 +23,6 @@ from test_mcpwire_transport import (
     fake_app,
     fake_model,
     sdk_client,
-    streaming_client,
 )
 
 if TYPE_CHECKING:
@@ -149,7 +149,8 @@ def _check_round_trip(original: McpModel, again: McpModel) -> None:
 async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
     transport = McpTransportModel(
         response_mode=mode,  # type: ignore[arg-type]
-        get_stream="sse" if mode == "sse" else "405",
+        get_stream="sse" if mode == "sse" else "status",
+        get_status=404,
         delete_status=204,
         sse_event_ids=mode == "sse",
         missing_session_status=401,
@@ -172,6 +173,8 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
     assert learned.requires_session
     assert learned.missing_session_status == 401
     assert learned.get_stream == transport.get_stream
+    if mode == "json":
+        assert learned.get_status == 404  # whatever the server answered, not always 405
     assert learned.delete_status == 204
     assert learned.sse_event_ids is (mode == "sse")
     assert learned.default_protocol_version == "2025-06-18"
@@ -357,7 +360,7 @@ async def test_version_probes_skip_refusals_and_stop_at_the_budget(tmp_path: Pat
             "2025-11-25": "2025-11-25",
         }
         assert found.model.transport.issues_session is False
-        assert found.model.transport.get_stream == "405"
+        assert found.model.transport.get_stream == "status"
         assert "missing_session" not in found.model.errors
         # 5 calls of introspection, then one per probed version: the refused 2024-11-05, then
         # 2025-03-26, and the budget is gone

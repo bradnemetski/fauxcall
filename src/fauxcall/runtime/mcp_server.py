@@ -292,8 +292,10 @@ class McpFake:
         session_header = self.transport.session_header
         session = request.headers.get(session_header)
         if request.method == "GET":
-            if self.transport.get_stream == "405":
-                return Response(status_code=405, headers={"allow": "POST, DELETE"})
+            if self.transport.get_stream == "status":
+                status = self.transport.get_status
+                allow = {"allow": "POST, DELETE"} if status == 405 else {}  # noqa: PLR2004
+                return Response(status_code=status, headers=allow)
             return StreamingResponse(
                 _idle_stream(self.runtime.pause), media_type=self.transport.content_type_sse
             )

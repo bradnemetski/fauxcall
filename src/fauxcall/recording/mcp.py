@@ -57,6 +57,7 @@ PROBE_TOOL: Final = "__fauxcall_probe_unknown_tool__"
 PROBE_METHOD: Final = "fauxcall/probe-unknown-method"
 MISSING_SESSION_PROBE_ID: Final = 9_000_001
 _HTTP_OK: Final = 200
+_HTTP_NOT_ALLOWED: Final = 405
 _HTTP_ERROR: Final = 400
 _TARGET_PARAM: Final = {
     "tools/call": "name",
@@ -336,9 +337,11 @@ class McpRecorder:
         with contextlib.suppress(httpx2.HTTPError):
             await self._pace()
             status, stream_type = await client.get_stream_status()
-            transport.get_stream = (
-                "sse" if status == _HTTP_OK and _is_event_stream(stream_type) else "405"
-            )
+            if status == _HTTP_OK and _is_event_stream(stream_type):
+                transport.get_stream = "sse"
+            else:
+                transport.get_stream = "status"
+                transport.get_status = status if status >= _HTTP_ERROR else _HTTP_NOT_ALLOWED
         missing_session: JsonValue = None
         if client.session_id:
             await self._pace()

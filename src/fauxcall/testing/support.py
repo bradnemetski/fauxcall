@@ -11,7 +11,9 @@ from fauxcall import jsonfmt
 from fauxcall.errors import RecordingError
 from fauxcall.model.api import ApiModel
 from fauxcall.recording.store import RecordingStore
+from fauxcall.runtime.app import runtime_of_app
 from fauxcall.storage import read_model
+from fauxcall.testing.asgi import streaming_client
 from fauxcall.testing.client import placeholder_credentials, with_query
 from fauxcall.testing.compare import shape_differences
 from fauxcall.testing.plugin import FakeUnderTest
@@ -24,6 +26,7 @@ if TYPE_CHECKING:
 
     from fauxcall.config import FakeSettings
     from fauxcall.model.auth import AuthModel
+    from fauxcall.model.mcp import McpTransportModel
     from fauxcall.model.recording import Exchange
     from fauxcall.testing.compare import Translate
     from fauxcall.types import JsonValue
@@ -215,10 +218,11 @@ async def replay_against(app: FastAPI, case: RecordedCase) -> ReplayOutcome:
     exchange = case.exchange
     expected = exchange.response
     assert expected is not None  # noqa: S101 - filtered by recorded_cases
+    if case.mcp:
+        async with streaming_client(app) as client:  # MCP streams never end: no buffering
+            return await _replay_mcp(client, case, _mcp_transport(app))
     transport = httpx2.ASGITransport(app=app)
     async with httpx2.AsyncClient(transport=transport, base_url="http://fake.test") as client:
-        if case.mcp:
-            return await _replay_mcp(client, case)
         headers, query = _replay_parts(case)
         response = await client.request(
             exchange.request.method.value,
@@ -242,7 +246,18 @@ async def replay_against(app: FastAPI, case: RecordedCase) -> ReplayOutcome:
     return outcome
 
 
-async def _replay_mcp(client: httpx2.AsyncClient, case: RecordedCase) -> ReplayOutcome:
+def _mcp_transport(app: FastAPI) -> McpTransportModel | None:
+    """The MCP transport of a FauxCall fake (``None`` for other apps)."""
+    try:
+        mcp = runtime_of_app(app).model.mcp
+    except AttributeError:  # not a FauxCall app
+        return None
+    return mcp.transport if mcp is not None else None
+
+
+async def _replay_mcp(
+    client: httpx2.AsyncClient, case: RecordedCase, transport: McpTransportModel | None
+) -> ReplayOutcome:
     from fauxcall.mcpwire.client import McpWireClient  # noqa: PLC0415
 
     exchange = case.exchange
@@ -253,8 +268,13 @@ async def _replay_mcp(client: httpx2.AsyncClient, case: RecordedCase) -> ReplayO
     method = str(sent.get("method")) if isinstance(sent, dict) else ""
     params = sent.get("params") if isinstance(sent, dict) else None
     credentials = _credentials(case)  # recorded MCP headers carry stale sessions: not replayed
-    url = with_query(str(client.base_url).rstrip("/") + exchange.request.path, credentials.query)
-    wire = McpWireClient(url, client, headers=credentials.headers)
+    legacy = transport is not None and transport.kind == "sse"
+    # The legacy transport is entered through its stream; recordings hold the messages URL.
+    path = transport.path if legacy and transport is not None else exchange.request.path
+    url = with_query(str(client.base_url).rstrip("/") + path, credentials.query)
+    wire = McpWireClient(
+        url, client, headers=credentials.headers, transport="sse" if legacy else "streamable_http"
+    )
     try:
         await wire.initialize()
         call = await wire.call(method, params)

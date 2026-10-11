@@ -1,9 +1,5 @@
-"""In-process MCP servers for the wire-level tests, and tests of the transport that serves them.
-
-``httpx2.ASGITransport`` buffers a whole response before returning it, which never finishes for
-an endless SSE stream (an MCP ``GET`` stream, the legacy HTTP+SSE transport).
-:class:`StreamingASGITransport` streams bodies chunk by chunk instead and, like a real server,
-tells the app when the client hangs up.
+"""In-process MCP servers for the wire-level tests, and tests of the streaming transport
+(:mod:`fauxcall.testing.asgi`) that serves them.
 
 The servers: FauxCall's own fake (:class:`~fauxcall.runtime.mcp_server.McpFake`) and the official
 MCP SDK (``mcp`` v2 ``MCPServer``) over Streamable HTTP.
@@ -12,7 +8,6 @@ MCP SDK (``mcp`` v2 ``MCPServer``) over Streamable HTTP.
 from __future__ import annotations
 
 import asyncio
-import contextlib
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
@@ -30,6 +25,7 @@ from fauxcall.config import FakeSettings
 from fauxcall.model import ApiModel, McpModel, McpToolModel, McpTransportModel, RealTarget
 from fauxcall.model.api import SourceInfo
 from fauxcall.runtime import FakeRuntime, create_app, register_tool
+from fauxcall.testing.asgi import StreamingASGITransport, streaming_client
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator, Awaitable, Callable, MutableMapping
@@ -48,106 +44,6 @@ if TYPE_CHECKING:
     ]
 
 RECORDED = datetime(2026, 10, 9, 12, 0, tzinfo=UTC)
-
-
-class _Body(httpx2.AsyncByteStream):
-    def __init__(
-        self,
-        messages: asyncio.Queue[Message],
-        disconnected: asyncio.Event,
-        task: asyncio.Task[None],
-        close_timeout: float,
-    ) -> None:
-        self._messages = messages
-        self._disconnected = disconnected
-        self._task = task
-        self._close_timeout = close_timeout
-
-    async def __aiter__(self) -> AsyncIterator[bytes]:
-        while True:
-            message = await self._messages.get()
-            if message["type"] == "http.response.body":
-                if message.get("body"):
-                    yield bytes(message["body"])
-                if not message.get("more_body", False):
-                    return
-            elif message["type"] == "app.error":
-                raise message["error"]
-            elif message["type"] == "app.done":
-                return
-
-    async def aclose(self) -> None:
-        self._disconnected.set()
-        if self._task.done():
-            return
-        try:
-            await asyncio.wait_for(asyncio.shield(self._task), self._close_timeout)
-        except TimeoutError:
-            self._task.cancel()
-            with contextlib.suppress(asyncio.CancelledError):
-                await self._task
-
-
-class StreamingASGITransport(httpx2.AsyncBaseTransport):
-    """Serve an ASGI app in-process with streamed response bodies (see the module docstring)."""
-
-    def __init__(self, app: Any, *, close_timeout: float = 5.0) -> None:
-        self.app: App = app
-        self.close_timeout = close_timeout
-
-    async def handle_async_request(self, request: httpx2.Request) -> httpx2.Response:
-        body = await request.aread()
-        scope: Message = {
-            "type": "http",
-            "asgi": {"version": "3.0"},
-            "http_version": "1.1",
-            "method": request.method,
-            "headers": [(key.lower(), value) for key, value in request.headers.raw],
-            "scheme": request.url.scheme,
-            "path": request.url.path,
-            "raw_path": request.url.raw_path.split(b"?")[0],
-            "query_string": request.url.query,
-            "server": (request.url.host, request.url.port),
-            "client": ("127.0.0.1", 123),
-            "root_path": "",
-        }
-        messages: asyncio.Queue[Message] = asyncio.Queue()
-        disconnected = asyncio.Event()
-        delivered = False
-
-        async def receive() -> Message:
-            nonlocal delivered
-            if not delivered:
-                delivered = True
-                return {"type": "http.request", "body": body, "more_body": False}
-            await disconnected.wait()
-            return {"type": "http.disconnect"}
-
-        async def send(message: Message) -> None:
-            await messages.put(message)
-
-        async def run() -> None:
-            try:
-                await self.app(scope, receive, send)
-            except Exception as error:  # noqa: BLE001 - handed to the client like a server would
-                await messages.put({"type": "app.error", "error": error})
-            finally:
-                await messages.put({"type": "app.done"})
-
-        task = asyncio.create_task(run())
-        start = await messages.get()
-        if start["type"] != "http.response.start":
-            await task
-            if start["type"] == "app.error":
-                raise start["error"]
-            raise RuntimeError("the app returned without starting a response")
-        stream = _Body(messages, disconnected, task, self.close_timeout)
-        return httpx2.Response(start["status"], headers=start.get("headers", []), stream=stream)
-
-
-def streaming_client(app: Any, base_url: str = "http://fake.test") -> httpx2.AsyncClient:
-    """An in-process client for ``app`` that streams responses."""
-    return httpx2.AsyncClient(transport=StreamingASGITransport(app), base_url=base_url)
 
 
 # -- FauxCall's fake MCP server --------------------------------------------------------------------

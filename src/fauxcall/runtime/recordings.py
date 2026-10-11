@@ -67,10 +67,14 @@ class RecordingIndex:
 
     def binary(self, exchange: Exchange, body: Body) -> bytes | None:
         """The bytes of a binary body stored in a sidecar file (``None`` if it is missing)."""
+        return None if body.file is None else self.sidecar(exchange, body.file)
+
+    def sidecar(self, exchange: Exchange, name: str) -> bytes | None:
+        """A sidecar file of an exchange (binary bodies, binary stream frames); ``None`` if gone."""
         self._load()
-        if body.file is None or exchange.id not in self._paths:
+        if exchange.id not in self._paths:
             return None
-        sidecar = self._paths[exchange.id].parent / body.file
+        sidecar = self._paths[exchange.id].parent / name
         try:
             return sidecar.read_bytes()
         except OSError:

@@ -12,7 +12,8 @@ from fauxcall.errors import RecordingError
 from fauxcall.mcpwire import protocol
 from fauxcall.mcpwire.client import McpWireClient, RpcCall
 from fauxcall.model import McpTransportModel
-from test_mcpwire_transport import fake_app, fake_model, sdk_client, streaming_client
+from fauxcall.testing.asgi import streaming_client
+from test_mcpwire_transport import fake_app, fake_model, sdk_client
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator, Callable
