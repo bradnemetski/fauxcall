@@ -21,6 +21,10 @@ and the skill reads them instead of asking. If a needed answer is missing, take 
 }
 ```
 
+Credentials (`"credentials": "provided"`) must be in `fauxcall/<name>/.env` **before** the run, written
+by the user, e.g. `FAUXCALL_REAL__HEADERS='{"X-API-Key": "..."}'` (and `TYPESAFE_API_KEY=...` for
+Jev). `fauxcall init` keeps that file and only adds the base URL and pseudonym key it needs.
+
 | field | values |
 |---|---|
 | `credentials` | `none_needed`, `provided` (already in `.env`), `missing` (stop after the gate with a clear message) |

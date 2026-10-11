@@ -99,10 +99,25 @@ def ensure_env(layout: FakeLayout, base_url: str) -> bool:
     """Create the fake's ``.env``: real base URL and a fresh pseudonym key (never overwrites).
 
     The file is created with ``0600`` permissions: it holds the pseudonym key and, later, the
-    credentials for the real API.
+    credentials for the real API. A ``.env`` prepared in advance (credentials for a headless run)
+    is kept as it is; only the base URL and pseudonym key are added when it lacks them. Returns
+    whether anything was written.
     """
     if layout.env_file.exists():
-        return False
+        existing = dotenv_values(layout.env_file)
+        missing = {
+            "FAUXCALL_REAL__BASE_URL": base_url,
+            "FAUXCALL_PSEUDONYM_KEY": Pseudonymizer.generate_key(),
+        }
+        lines = [f"{name}={value}\n" for name, value in missing.items() if not existing.get(name)]
+        if not lines:
+            return False
+        text = layout.env_file.read_text(encoding="utf-8")
+        separator = "" if not text or text.endswith("\n") else "\n"
+        with layout.env_file.open("a", encoding="utf-8", newline="\n") as handle:
+            handle.write(separator + "".join(lines))
+        layout.env_file.chmod(0o600)
+        return True
     text = (
         "# Secrets for this fake. Gitignored: never commit it.\n"
         f"FAUXCALL_REAL__BASE_URL={base_url}\n"

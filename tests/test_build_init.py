@@ -471,6 +471,20 @@ def test_ensure_env_creates_a_private_file_once(ws: Workspace) -> None:
     assert env_value(layout, "MISSING") is None
 
 
+def test_ensure_env_completes_a_prepared_file(ws: Workspace) -> None:
+    layout = ws.fake("demo")
+    layout.env_file.parent.mkdir(parents=True)
+    layout.env_file.write_text('FAUXCALL_REAL__HEADERS=\'{"X-API-Key": "k"}\'')  # no newline
+    assert ensure_env(layout, "https://api.example.com") is True
+    assert env_value(layout, "FAUXCALL_REAL__HEADERS") == '{"X-API-Key": "k"}'  # kept
+    assert env_value(layout, "FAUXCALL_REAL__BASE_URL") == "https://api.example.com"
+    key = env_value(layout, "FAUXCALL_PSEUDONYM_KEY")
+    assert key
+    assert stat.S_IMODE(layout.env_file.stat().st_mode) == 0o600
+    assert ensure_env(layout, "https://other.example.com") is False  # complete: untouched
+    assert env_value(layout, "FAUXCALL_PSEUDONYM_KEY") == key
+
+
 def test_create_private_never_overwrites(tmp_path: Path) -> None:
     path = tmp_path / "nested" / "secret"
     assert init_module._create_private(path, "one") is True
