@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import base64
+import hashlib
 import re
 import time
 from dataclasses import dataclass, field
@@ -14,6 +15,7 @@ import httpx2
 import pytest
 
 from fauxcall import jsonfmt
+from fauxcall.mcpwire.protocol import parse_sse_events
 from fauxcall.testing.compare import Observation
 
 if TYPE_CHECKING:
@@ -132,6 +134,9 @@ class LoggedCall:
     path: str
     observation: Observation
     options: CompareOptions
+    request: str = ""
+    """A digest of what was asked (method, URL, parameters, body): equal digests in a row are
+    polls. Only a digest is kept, so credentials in the request never reach the log."""
 
 
 @dataclass(slots=True)
@@ -152,7 +157,16 @@ def _observe(response: httpx2.Response, at_ns: int) -> Observation:
                 body = jsonfmt.loads(response.content)
             except ValueError:
                 text = response.text
-        elif "event-stream" in content_type or content_type.startswith("text/"):
+        elif "event-stream" in content_type:
+            return Observation(
+                status=response.status_code,
+                headers=headers,
+                body=_stream_events(response.text),
+                text=None,
+                at_ns=at_ns,
+                stream=True,
+            )
+        elif content_type.startswith("text/"):
             text = response.text
         else:
             text = f"<{len(response.content)} bytes>"
@@ -161,12 +175,32 @@ def _observe(response: httpx2.Response, at_ns: int) -> Observation:
     )
 
 
+def _stream_events(text: str) -> JsonValue:
+    """An SSE body as ``[{event name: data (JSON or text)}]``: the names are compared as shape."""
+    events: list[JsonValue] = []
+    for event in parse_sse_events(text):
+        try:
+            data: JsonValue = jsonfmt.loads(event.data)
+        except ValueError:
+            data = event.data
+        events.append({event.event: data})
+    return events
+
+
+def _fingerprint(method: str, url: str, kwargs: Mapping[str, object]) -> str:
+    """A digest of everything that makes two requests the same request (to spot polling)."""
+    parts = [method, url]
+    parts += [f"{key}={kwargs[key]!r}" for key in _REQUEST_PARTS if kwargs.get(key) is not None]
+    return hashlib.sha256("\n".join(parts).encode()).hexdigest()
+
+
 def _midpoint(started_ns: int) -> int:
     """When the server most likely produced its answer: halfway through the round trip."""
     return (started_ns + time.time_ns()) // 2
 
 
 _TOO_MANY_REQUESTS: Final = 429
+_REQUEST_PARTS: Final = ("params", "json", "content", "data", "files")
 
 
 @dataclass(slots=True)
@@ -277,7 +311,14 @@ class ApiClient:
                     None, {}, None, None, started_ns, error=type(exc).__name__
                 )
                 self.log.calls.append(
-                    LoggedCall(label or f"{upper} {path}", upper, path, observation, options)
+                    LoggedCall(
+                        label or f"{upper} {path}",
+                        upper,
+                        path,
+                        observation,
+                        options,
+                        _fingerprint(upper, url, kwargs),
+                    )
                 )
                 raise
             wait = self.pace.backoff(response) if self.pace is not None else None
@@ -287,7 +328,14 @@ class ApiClient:
             await asyncio.sleep(wait)
         observation = _observe(response, _midpoint(started_ns))
         self.log.calls.append(
-            LoggedCall(label or f"{upper} {path}", upper, path, observation, options)
+            LoggedCall(
+                label or f"{upper} {path}",
+                upper,
+                path,
+                observation,
+                options,
+                _fingerprint(upper, url, kwargs),
+            )
         )
         return response
 

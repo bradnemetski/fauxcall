@@ -604,3 +604,19 @@ def test_writes_learn_generated_ids_and_compare_them_by_type() -> None:
     assert later.failures() == []
     unlearned = compare("PUT /x", obs({"id": 1}), obs({"id": 2}), aliases={}, created=False)
     assert [c.name for c in unlearned.failures()] == ["value $.id"]
+
+
+def test_streams_are_compared_by_structure_not_values() -> None:
+    real = Observation(
+        200, {}, [{"trade": {"price": "1.0", "time": "a"}}, {"heartbeat": ""}], None, 0, stream=True
+    )
+    fake = Observation(
+        200, {}, [{"trade": {"price": "9.9", "time": "b"}}, {"heartbeat": ""}], None, 0, stream=True
+    )
+    assert compare("GET /stream", real, fake).failures() == []
+    renamed = Observation(
+        200, {}, [{"quote": {"price": "1.0", "time": "a"}}, {"heartbeat": ""}], None, 0, stream=True
+    )
+    assert [c.name for c in compare("GET /stream", real, renamed).failures()] == ["shape"]
+    shorter = Observation(200, {}, [{"trade": {"price": "1.0", "time": "a"}}], None, 0, stream=True)
+    assert [c.name for c in compare("GET /stream", real, shorter).failures()] == ["length"]

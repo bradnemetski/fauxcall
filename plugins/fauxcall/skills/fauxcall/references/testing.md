@@ -35,6 +35,9 @@ async def test_list_then_get_every_item(api: ApiClient) -> None:
   compared by type, and later calls of the scenario are compared through them: the fake's
   `No watchlist with id 1001.` matches the real `… id 1009.` when the scenario created both. No
   `values=False` is needed for that.
+- Polling is fine: identical reads in a row (waiting for a job) count once, with their last answer,
+  however many times each side polled. Streams (SSE) are compared by event names, data shapes and
+  counts, not by their live values.
 - `compare=CompareOptions(values=False)` for calls whose values legitimately differ (a shared sandbox's
   live listing); `lengths=False` when list lengths differ by design; `policies=[…]` for extra per-call
   field policies.

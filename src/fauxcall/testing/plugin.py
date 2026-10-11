@@ -43,13 +43,13 @@ from fauxcall.testing.compare import W_STATUS, Comparison, compare
 from fauxcall.testing.report import ParityReport, endpoint_for, endpoint_matcher
 
 if TYPE_CHECKING:
-    from collections.abc import AsyncIterator, Callable
+    from collections.abc import AsyncIterator, Callable, Sequence
 
     from fastapi import FastAPI
 
     from fauxcall.model.api import ApiModel
     from fauxcall.model.endpoints import EndpointModel
-    from fauxcall.testing.client import Target
+    from fauxcall.testing.client import LoggedCall, Target
     from fauxcall.testing.compare import Translate
 
 DEFAULT_THRESHOLD: Final = 0.98
@@ -317,6 +317,22 @@ def record_roots(endpoint: EndpointModel) -> list[str] | None:
     return None
 
 
+def settled(calls: Sequence[LoggedCall]) -> list[LoggedCall]:
+    """The calls to compare: repeated identical reads in a row count once, with their last answer.
+
+    That is a scenario polling a job until it finishes: how often each side polled depends on
+    timing, not on fidelity.
+    """
+    kept: list[LoggedCall] = []
+    for call in calls:
+        polling = call.method.upper() in _SAFE_METHODS and bool(call.request)
+        if kept and polling and kept[-1].request == call.request:
+            kept[-1] = call
+        else:
+            kept.append(call)
+    return kept
+
+
 def compare_logs(
     scenario: str, real: ExchangeLog, fake: ExchangeLog, fake_spec: FakeUnderTest
 ) -> list[Comparison]:
@@ -325,9 +341,10 @@ def compare_logs(
     matchers = endpoint_matcher(model)
     comparisons: list[Comparison] = []
     aliases: dict[str, str] = {}  # fake id -> real id, learned from the scenario's writes
-    for index, real_call in enumerate(real.calls):
+    real_calls, fake_calls = settled(real.calls), settled(fake.calls)
+    for index, real_call in enumerate(real_calls):
         label = f"{real_call.method} {real_call.path}"
-        if index >= len(fake.calls):
+        if index >= len(fake_calls):
             missing = Comparison(label)
             missing.add(
                 "call made",
@@ -343,7 +360,7 @@ def compare_logs(
             compare(
                 label,
                 real_call.observation,
-                fake.calls[index].observation,
+                fake_calls[index].observation,
                 policies=[*(endpoint.fields if endpoint else []), *options.policies],
                 translate=fake_spec.translate,
                 compare_lengths=options.lengths,

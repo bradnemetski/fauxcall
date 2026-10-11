@@ -27,6 +27,7 @@ from fauxcall.testing.client import (
     McpClient,
     RealPace,
     _observe,
+    _stream_events,
     mcp_call_path,
     placeholder_credentials,
     with_query,
@@ -155,7 +156,7 @@ def api_client(target: str = "fake", *, allow_writes: bool = False, **extra: Any
         ("/json", {"id": 1, "price": 1.5}, None),
         ("/badjson", None, "{oops"),
         ("/text", None, "hello"),
-        ("/sse", None, "data: 1\n\n"),
+        ("/sse", [{"message": 1}], None),
         ("/bin", None, "<3 bytes>"),
         ("/empty", None, None),
     ],
@@ -169,6 +170,7 @@ async def test_observations_keep_json_text_or_size(
     assert observation.body == body
     assert observation.text == text
     assert observation.at_ns == 42
+    assert observation.stream is (path == "/sse")
     assert observation.status == response.status_code
     assert all(key == key.lower() for key in observation.headers)
 
@@ -527,3 +529,8 @@ async def test_real_calls_are_spaced_and_throttles_waited_out(
     async with stubborn:
         persistent = ApiClient("real", stubborn, allow_writes=False, pace=RealPace(retries=2))
         assert (await persistent.get("/items")).status_code == 429  # reported after the retries
+
+
+def test_stream_events_keep_names_and_parse_json_data() -> None:
+    text = 'event: tick\ndata: hello\n\nevent: trade\ndata: {"p": 1}\n\ndata: 2\n\n'
+    assert _stream_events(text) == [{"tick": "hello"}, {"trade": {"p": 1}}, {"message": 2}]

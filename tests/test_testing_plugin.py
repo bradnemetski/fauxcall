@@ -17,6 +17,7 @@ from fauxcall.testing.plugin import (
     compare_logs,
     parity_session,
     record_roots,
+    settled,
 )
 from fauxcall.types import HttpMethod
 
@@ -746,3 +747,42 @@ def test_ids_are_learned_only_from_successful_writes() -> None:
     first, second = compare_logs("s", real, fake, spec)
     assert [c.name for c in first.failures()] == ["value $.id"]
     assert [c.name for c in second.failures()] == ["value $.id"]
+
+
+def _polled(method: str, path: str, body: object, status: int = 200) -> LoggedCall:
+    call = _logged(method, path, body, status)
+    call.request = f"{method} {path}"  # what the client records: identical requests, same digest
+    return call
+
+
+def test_polls_count_once_with_their_last_answer() -> None:
+    spec = FakeUnderTest(app_factory=_no_app)
+    real = ExchangeLog(
+        [
+            _polled("POST", "/jobs", {"id": "r1", "status": "queued"}, 202),
+            _polled("GET", "/jobs/r1", {"id": "r1", "status": "running"}),
+            _polled("GET", "/jobs/r1", {"id": "r1", "status": "done"}),
+            _polled("GET", "/jobs/r1/result", {"rows": 3}),
+        ]
+    )
+    fake = ExchangeLog(
+        [
+            _polled("POST", "/jobs", {"id": "f1", "status": "queued"}, 202),
+            _polled("GET", "/jobs/f1", {"id": "f1", "status": "queued"}),
+            _polled("GET", "/jobs/f1", {"id": "f1", "status": "running"}),
+            _polled("GET", "/jobs/f1", {"id": "f1", "status": "done"}),
+            _polled("GET", "/jobs/f1/result", {"rows": 3}),
+        ]
+    )
+    comparisons = compare_logs("s", real, fake, spec)
+    assert [c.label for c in comparisons] == [
+        "POST /jobs",
+        "GET /jobs/r1",
+        "GET /jobs/r1/result",
+    ]
+    assert [c.failures() for c in comparisons] == [[], [], []]
+    writes = [
+        _polled("POST", "/jobs", {"id": "a"}, 202),
+        _polled("POST", "/jobs", {"id": "b"}, 202),
+    ]
+    assert len(settled(writes)) == 2  # repeated writes are separate calls, never polls

@@ -84,6 +84,9 @@ class Observation:
     text: str | None
     at_ns: int
     error: str | None = None
+    stream: bool = False
+    """A stream (Server-Sent Events, as ``[{event name: data}]``): event names, data shapes and
+    counts are compared, not values, which are live on both sides."""
 
 
 @dataclass(slots=True)
@@ -384,6 +387,7 @@ def translate_ids(fake: Observation, aliases: Mapping[str, str]) -> Observation:
         text=text,
         at_ns=fake.at_ns,
         error=fake.error,
+        stream=fake.stream,
     )
 
 
@@ -440,7 +444,7 @@ def compare(  # noqa: PLR0913 - every option is a keyword
     learning = created and real.status in _SUCCESS and fake.status in _SUCCESS
     if learning and aliases is not None:
         aliases.update(_generated_ids(real.body, fake.body, index))
-    if max_value_checks > 0:
+    if max_value_checks > 0 and not (real.stream or fake.stream):
         _check_values(result, real, fake, index, translate, max_value_checks, learning=learning)
     return result
 
