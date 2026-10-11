@@ -248,14 +248,27 @@ class _Scalar:
 
 
 class _Object:
-    """Object samples at one position: per-key child nodes and how often each key was present."""
+    """Object samples at one position: per-key child nodes and how often each key was present.
 
-    __slots__ = ("count", "present", "properties")
+    A position whose objects are maps (keys are data, see :func:`_map_keys`) keeps one node for
+    every value instead (``map_kind`` says what the keys are); once a map, always a map.
+    """
+
+    __slots__ = ("count", "map_kind", "map_values", "present", "properties")
 
     def __init__(self) -> None:
         self.count = 0
         self.properties: dict[str, _Node] = {}
         self.present: dict[str, int] = {}
+        self.map_kind: str | None = None
+        self.map_values: _Node | None = None
+
+    def values(self, kind: str) -> _Node:
+        """The node every map value goes to (the position becomes a map)."""
+        self.map_kind = self.map_kind or kind
+        if self.map_values is None:
+            self.map_values = _Node()
+        return self.map_values
 
     def child(self, key: str) -> _Node:
         node = self.properties.get(key)
@@ -339,6 +352,11 @@ class _Inference:
             elif isinstance(item, dict):
                 part = node.object()
                 part.count += 1
+                kind = part.map_kind or _map_keys(list(item))
+                if kind is not None:
+                    values = part.values(kind)
+                    stack.extend((values, child) for child in reversed(list(item.values())))
+                    continue
                 pending: list[tuple[_Node, JsonValue]] = []
                 for key, child in item.items():
                     pending.append((part.child(key), child))
@@ -423,6 +441,9 @@ class _Absorber:
     @staticmethod
     def _object(part: _Object, schema: Mapping[str, JsonValue]) -> list[tuple[_Node, object]]:
         part.count += 1
+        kind = schema.get("x-map-keys")
+        if isinstance(kind, str):
+            return [(part.values(kind), schema.get("additionalProperties"))]
         raw_required = schema.get("required")
         required = (
             [r for r in raw_required if isinstance(r, str)]
@@ -530,9 +551,38 @@ def _fill(
     return children
 
 
+_MAP_MIN_KEYS: Final = 24
+_MAP_ANY_KEYS: Final = 200
+_MAP_KEYS: Final = (
+    ("date", re.compile(r"\d{4}-\d{2}-\d{2}")),
+    ("number", re.compile(r"-?\d+")),
+    ("uuid", re.compile(r"[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}")),
+    ("code", re.compile(r"[A-Z0-9]{2,6}(?:[._-][A-Z0-9]{1,4})?")),
+)
+
+
+def _map_keys(keys: list[str]) -> str | None:
+    """What kind of data an object's keys are, when they are data rather than field names.
+
+    Objects keyed by dates, numbers, uuids or short codes (currencies, tickers) with at least
+    :data:`_MAP_MIN_KEYS` keys, or with :data:`_MAP_ANY_KEYS` keys of any kind, are maps.
+    """
+    if len(keys) < _MAP_MIN_KEYS:
+        return None
+    for kind, pattern in _MAP_KEYS:
+        if all(pattern.fullmatch(key) for key in keys):
+            return kind
+    return "any" if len(keys) >= _MAP_ANY_KEYS else None
+
+
 def _object_keywords(
     target: dict[str, JsonValue], part: _Object
 ) -> list[tuple[_Node, dict[str, JsonValue]]]:
+    if part.map_kind is not None and part.map_values is not None:  # one schema for every value
+        values: dict[str, JsonValue] = {}
+        target["additionalProperties"] = values
+        target["x-map-keys"] = part.map_kind
+        return [(part.map_values, values)]
     if not part.properties:
         return []
     properties: dict[str, JsonValue] = {}

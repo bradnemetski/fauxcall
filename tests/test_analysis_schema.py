@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import json
 from datetime import date
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from hypothesis import given, settings
@@ -1116,3 +1117,51 @@ def test_malformed_observed_schemas_are_skipped() -> None:
             note="observed null, but the documented schema is not nullable",
         )
     ]
+
+
+def j(value: object) -> Any:
+    """View a schema loosely (tests index into it)."""
+    return value
+
+
+def test_maps_keyed_by_data_get_one_value_schema() -> None:
+    currencies = [f"C{index:02d}" for index in range(25)]  # 25 currency-like codes
+    dates = [f"2026-01-{day:02d}" for day in range(1, 31)]
+    series: Any = {
+        "base": "EUR",
+        "rates": {
+            day: {code: 1.0 + index / 100 for index, code in enumerate(currencies)} for day in dates
+        },
+    }
+    schema = infer_schema([series])
+    rates = j(schema)["properties"]["rates"]
+    assert rates["x-map-keys"] == "date"
+    assert "properties" not in rates
+    assert rates["additionalProperties"]["x-map-keys"] == "code"
+    assert rates["additionalProperties"]["additionalProperties"]["type"] == "number"
+    assert len(json.dumps(schema)) < 2000  # instead of 750 listed properties
+
+
+def test_small_objects_and_field_names_stay_properties() -> None:
+    few_dates: Any = {f"2026-01-{day:02d}": day for day in range(1, 11)}  # below the threshold
+    assert "properties" in j(infer_schema([few_dates]))
+    fields: Any = {f"field_{index}": index for index in range(40)}  # field names, not data
+    assert "properties" in j(infer_schema([fields]))
+    many: Any = {f"key-{index}": index for index in range(250)}  # hundreds of keys: a map anyway
+    assert j(infer_schema([many]))["x-map-keys"] == "any"
+    ids: Any = {str(index): {"n": index} for index in range(30)}
+    rendered = j(infer_schema([ids]))
+    assert rendered["x-map-keys"] == "number"
+    assert rendered["additionalProperties"]["properties"]["n"]["type"] == "integer"
+
+
+def test_merging_keeps_maps() -> None:
+    first: Any = {f"2026-01-{day:02d}": {"close": 1.5} for day in range(1, 31)}
+    second: Any = {f"2026-02-{day:02d}": {"close": 2, "volume": 10} for day in range(1, 29)}
+    merged = j(merge_schemas(infer_schema([first]), infer_schema([second])))
+    assert merged["x-map-keys"] == "date"
+    value = merged["additionalProperties"]
+    assert set(value["properties"]) == {"close", "volume"}
+    assert merged == j(infer_schema([first, second])) | {
+        "additionalProperties": merged["additionalProperties"]
+    }
