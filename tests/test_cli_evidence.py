@@ -384,6 +384,27 @@ def test_plan_review_and_approve(ws: Workspace) -> None:
     assert "nothing to approve" in invoke("plan", "approve", "shop", code=1).output
 
 
+def test_approving_again_adds_to_the_budget(ws: Workspace) -> None:
+    fake = make_fake(ws)
+    first = invoke("plan", "approve", "shop", "--endpoint", "POST /v1/items", "--max-calls", "5")
+    assert first.output.strip() == "approved POST /v1/items (max 5)"
+    approvals = read_model(fake.approvals_path, Approvals)
+    approvals.used = {"endpoint:POST /v1/items:": 7}  # spent past the budget (a lost count)
+    write_model(fake.approvals_path, approvals)
+    more = invoke("plan", "approve", "shop", "--endpoint", "POST /v1/items", "--max-calls", "3")
+    assert (
+        more.output.strip() == "approved POST /v1/items: 3 more calls (10 in all; 7 already spent)"
+    )
+    approvals = read_model(fake.approvals_path, Approvals)
+    approvals.used = {"endpoint:POST /v1/items:": 8}
+    write_model(fake.approvals_path, approvals)
+    again = invoke("plan", "approve", "shop", "--endpoint", "POST /v1/items", "--max-calls", "4")
+    assert "4 more calls (14 in all; 8 already spent)" in again.output  # on top of the 10 allowed
+    invoke("plan", "approve", "shop", "--endpoint", "POST /v1/jobs")
+    unlimited = invoke("plan", "approve", "shop", "--endpoint", "POST /v1/jobs", "--max-calls", "2")
+    assert unlimited.output.strip() == "approved POST /v1/jobs: already unlimited"
+
+
 def test_plan_approve_per_endpoint_budgets(ws: Workspace) -> None:
     fake = make_fake(ws)
     approved = invoke(

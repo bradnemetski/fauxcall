@@ -216,9 +216,34 @@ def plan_approve(
             )
     if not added:
         raise fail("nothing to approve: pass --endpoint or --planned")
+    lines = [_on_top(approvals, approval) for approval in added]
     approvals.approvals.extend(added)
     write_model(fake.approvals_path, approvals)
-    echo("\n".join(f"approved {a.endpoint} (max {a.max_calls or 'unlimited'})" for a in added))
+    echo("\n".join(lines))
+
+
+def _on_top(approvals: Approvals, approval: Approval) -> str:
+    """Make a new budget add to what earlier approvals of the endpoint allowed; describe it.
+
+    Spent calls are counted per endpoint (all approvals of it share the count), so approving 30
+    more after 33 were spent must allow 63 in all, not 30.
+    """
+    if approval.max_calls is None:
+        return f"approved {approval.endpoint} (max unlimited)"
+    key = Approvals.budget_key(approval)
+    spent = approvals.used.get(key, 0)
+    earlier = [a.max_calls for a in approvals.approvals if Approvals.budget_key(a) == key]
+    if None in earlier:
+        return f"approved {approval.endpoint}: already unlimited"
+    allowed = max([spent, *(cap for cap in earlier if cap is not None)])
+    if not allowed:
+        return f"approved {approval.endpoint} (max {approval.max_calls})"
+    more = approval.max_calls
+    approval.max_calls = allowed + more
+    return (
+        f"approved {approval.endpoint}: {more} more calls "
+        f"({approval.max_calls} in all; {spent} already spent)"
+    )
 
 
 def _mutating_matches(model: ApiModel, pattern: str) -> list[str]:
