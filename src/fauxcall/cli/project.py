@@ -388,7 +388,10 @@ def spec_import(
         Path | None, typer.Argument(help="Defaults to data/source/openapi.json.")
     ] = None,
 ) -> None:
-    """Add endpoints from an OpenAPI document you wrote (free-form docs), keeping existing ones."""
+    """Add endpoints from an OpenAPI document you wrote, keeping existing ones.
+
+    For free-form docs, or for endpoints only the docs' prose mentions (e.g. a WebSocket feed).
+    """
     fake = layout(name)
     model = load_model(fake)
     source = file or fake.source_dir / "openapi.json"
@@ -419,7 +422,7 @@ def spec_import(
     for endpoint in added:
         progress.endpoint(endpoint.id)
     save_progress(fake, progress)
-    echo(f"added {len(added)} endpoints")
+    echo(f"added {len(added)} endpoint{'' if len(added) == 1 else 's'}")
 
 
 # -- env / docs / mcp -----------------------------------------------------------------------------

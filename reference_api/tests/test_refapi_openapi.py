@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from typing import Any
 
 import pytest
@@ -49,7 +50,10 @@ def operations(document: dict[str, Any]) -> list[tuple[str, str, dict[str, Any]]
 def test_info_and_paths(document: dict[str, Any]) -> None:
     assert document["info"]["title"] == "FauxCall Reference Market API"
     assert document["info"]["version"] == "1.0.0"
-    assert "GROUND_TRUTH.md" in document["info"]["description"]
+    # Like a real API's docs: they describe the WebSocket feed, never the unpublished answer key
+    # (validation runs must learn from docs and recordings only).
+    assert "GROUND_TRUTH" not in json.dumps(document)
+    assert '{"action": "subscribe", "symbols": ["AAPL"]}' in document["info"]["description"]
     assert {path: set(item) for path, item in document["paths"].items()} == ENDPOINTS
 
 

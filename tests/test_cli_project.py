@@ -553,6 +553,38 @@ def test_spec_import_from_another_file(ws: Workspace, tmp_path: Path) -> None:
     assert model.find_endpoint("GET /v1/widgets") is not None
 
 
+def test_spec_import_of_a_websocket_only_the_prose_mentions(ws: Workspace) -> None:
+    write_fake(ws, "shop", rest_model())
+    fake = ws.fake("shop")
+    feed = {
+        "openapi": "3.1.0",
+        "info": {"title": "Quote feed (from the API description)", "version": "1"},
+        "paths": {
+            "/v1/ws/quotes": {
+                "get": {
+                    "summary": "WebSocket quote feed",
+                    "description": 'Send {"action": "subscribe", "symbols": [...]}.',
+                    "parameters": [
+                        {"name": "api_key", "in": "query", "schema": {"type": "string"}}
+                    ],
+                    "responses": {"101": {"description": "Switching Protocols"}},
+                }
+            }
+        },
+    }
+    written = fake.source_dir / "ws-quotes.openapi.json"
+    written.parent.mkdir(parents=True, exist_ok=True)
+    written.write_text(json.dumps(feed))
+    before = len(read_model(fake.model_path, ApiModel).endpoints)
+    output = invoke("spec", "import", "shop", str(written)).output
+    assert output.strip() == "added 1 endpoint"
+    model = read_model(fake.model_path, ApiModel)
+    assert len(model.endpoints) == before + 1
+    endpoint = model.find_endpoint("GET /v1/ws/quotes")
+    assert endpoint is not None
+    assert [(p.name, p.location) for p in endpoint.params] == [("api_key", "query")]
+
+
 def test_spec_import_errors(ws: Workspace, tmp_path: Path) -> None:
     write_fake(ws, "shop", rest_model())
     assert "error:" in invoke("spec", "import", "shop", code=1).output

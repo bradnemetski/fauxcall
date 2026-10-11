@@ -14,9 +14,8 @@ from fauxcall_reference_api.ratelimit import (
 )
 
 DESCRIPTION: Final = """\
-A deliberately rich, **deterministic** market-data API used as ground truth to validate FauxCall
-(record a real API, generate a fake, compare them). Every behavior is specified in
-`GROUND_TRUTH.md`.
+A deliberately rich, **deterministic** market-data API used to validate FauxCall (record a real
+API, generate a fake, compare them).
 
 * **Auth**: every `/v1` request needs `X-API-Key` (`demo-key`: full access, `readonly-key`:
   GET only, `revoked-key`: always 403). Missing/unknown key: 401.
@@ -26,7 +25,9 @@ A deliberately rich, **deterministic** market-data API used as ground truth to v
 * **Errors**: `{"error": {"code", "message", "request_id"}}`, plus `param` for parameter errors.
   Validation errors are 400 (never 422).
 * **Streaming**: `GET /v1/stream/trades` is Server-Sent Events. `WS /v1/ws/quotes?api_key=...`
-  is a WebSocket quote feed (not representable in OpenAPI; see `GROUND_TRUTH.md`).
+  is a WebSocket quote feed (not representable in OpenAPI): send JSON text messages
+  `{"action": "subscribe", "symbols": ["AAPL"]}` or `{"action": "ping"}`; the server answers with
+  `subscribed`, `quote`, `pong`, `error` and `done` messages.
 * **MCP**: an MCP server (Streamable HTTP, no auth) is served at `/mcp`.
 """
 

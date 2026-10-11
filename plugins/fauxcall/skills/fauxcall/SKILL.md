@@ -28,18 +28,23 @@ Use the `fauxcall` command for every step (`uvx fauxcall` if `fauxcall` is not o
 
 1. **No mutating call without the up-front approval.** POST/PUT/PATCH/DELETE (and MCP tools not
    annotated `readOnlyHint: true`) run only when `data/approvals.json` covers them. The CLI refuses
-   otherwise — never work around it. Need more? Ask the user once, with the full list.
-2. **Secrets never appear in chat, plans, code or commits.** Credentials live only in
+   otherwise — never work around it. Need more? Ask the user once, with the full list. The method
+   decides, not the outcome you expect: a POST you expect to be refused is still a write.
+2. **The real API is called only through FauxCall:** `fauxcall record` (plans) and the e2e suite's
+   `--target real|parity` runs. Never curl, scripts or a subagent: they skip the pacing, the call
+   budget, redaction and the approval check, and what they show is not evidence. (Fetching public
+   documentation pages is fine.)
+3. **Secrets never appear in chat, plans, code or commits.** Credentials live only in
    `fauxcall/<name>/.env`, which the *user* edits. Recordings are redacted and pseudonymized by the CLI.
-3. **Evidence, not assumptions.** Every behavior in the model comes from recordings. When something
+4. **Evidence, not assumptions.** Every behavior in the model comes from recordings. When something
    cannot be recorded (e.g. a rare failure), use the documentation and say so in the model's `notes`.
-4. **Checkpoint after every step** with `fauxcall progress …` — the run can be interrupted at any time
+5. **Checkpoint after every step** with `fauxcall progress …` — the run can be interrupted at any time
    and is resumed by invoking this skill again.
-5. **One endpoint at a time** through the endpoint loop, in dependency order.
-6. **Fix the model or the handlers, never a test's expectations** — unless the test is wrong.
-7. **Consistency is non-negotiable:** every reference between endpoints must resolve in the fake
+6. **One endpoint at a time** through the endpoint loop, in dependency order.
+7. **Fix the model or the handlers, never a test's expectations** — unless the test is wrong.
+8. **Consistency is non-negotiable:** every reference between endpoints must resolve in the fake
    (a ticker's exchange exists; an uploaded file appears in the upload status endpoint).
-8. **Ask only at the up-front gate** and for genuinely ambiguous real-world behavior. Batch questions.
+9. **Ask only at the up-front gate** and for genuinely ambiguous real-world behavior. Batch questions.
    In a non-interactive environment, read answers from `fauxcall/<name>/answers.json`
    ([headless](references/headless.md)) — never wait for input that cannot come.
 
@@ -59,6 +64,13 @@ fauxcall init "<input>" [--name <kebab-name>] [--base-url https://api.example.co
 
 Read the summary. Free-form docs: follow [workflow § docs](references/workflow.md#free-form-documentation).
 MCP servers: also read [mcp](references/mcp.md).
+
+Then read the documentation's **prose** too (the spec's `info.description`, tag and operation
+descriptions, linked guides): endpoints a spec can't express (WebSocket feeds, streams described in
+text) are only mentioned there, and they are in scope like any other. Describe each in a small
+OpenAPI file (`data/source/<topic>.openapi.json`; a WebSocket is a `get` on its path, its protocol
+in the `description`) and add it with `fauxcall spec import <name> data/source/<topic>.openapi.json`
+(existing endpoints are kept) — never by editing `data/model.json` by hand at this stage.
 
 ## Phase 1 — the up-front gate (ask once, everything together)
 
@@ -148,7 +160,9 @@ remaining failure is understood and explained. Checkpoint `e2e_tests`, `parity`.
 ## Phase 6 — review and report
 
 - **Independent review:** have a fresh reviewer (Claude Code: the `fauxcall:reviewer` subagent; elsewhere
-  a new session) check the model, recordings and parity report against the docs. Fix what it finds.
+  a new session) check the model, recordings and parity report against the docs. It works offline
+  (never ask it to call the real API): when it needs evidence it proposes probes as plan entries,
+  and you record them with `fauxcall record` (approval rules apply). Fix what it finds.
 - `fauxcall report <name>` → `data/reports/summary.md`.
 - Tell the user: what was faked, the parity score, known gaps and why, and how to use it
   (`fauxcall up`, base URL / MCP config, the `/__fauxcall` admin API). Checkpoint `review`, `report`.

@@ -10,13 +10,18 @@ You review a FauxCall fake you did not build. Be skeptical and concrete. The fak
 source docs/spec `data/source/`, custom code `src/*/handlers.py`, tests `tests/`, reports
 `data/reports/`). Use `fauxcall endpoints|status|recordings|sql|analyze …` (read-only commands) to
 inspect. To run the fake's code, use its environment: `uv run python …` or `uv run pytest …` inside
-`fauxcall/<name>/` (the system `python3` may be too old). Never call the real API, never modify
-files.
+`fauxcall/<name>/` (the system `python3` may be too old; the fake itself is fine to call, in-process
+or with `fauxcall serve`). Never modify files. **Never call the real API, even if asked to** (no
+curl, scripts or WebSocket clients against it): real calls go only through `fauxcall record`, which
+paces, budgets, redacts and checks approvals. When you need evidence the recordings lack, propose
+the probes as plan entries (`{"id", "endpoint", "purpose", "request": {…}}`, WebSocket messages in
+the entry's `stream.send`) for the builder to record.
 
 Check and report (each finding: file/endpoint, evidence, why it matters to an agent, suggested fix):
 
-1. **Coverage** — endpoints/tools in the spec or introspection missing from the model or untested;
-   error responses the docs describe but no recording/template covers.
+1. **Coverage** — endpoints/tools in the spec, the introspection or the docs' prose (WebSocket feeds
+   and streams a spec can't express) missing from the model or untested; error responses the docs
+   describe but no recording/template covers.
 2. **Time** — every timestamp field has a deliberate policy; formats match recordings exactly;
    market/publication calendars have correct sessions and holidays; nothing that should move is frozen.
 3. **Consistency** — every reference between endpoints is a relation and resolves in the world;
