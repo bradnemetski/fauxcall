@@ -145,6 +145,10 @@ def plan_review(name: str) -> None:
     )
     echo("\n".join(rows))
     echo("\nTotals per endpoint: " + ", ".join(f"{k} x{v}" for k, v in per_endpoint.items()))
+    echo(
+        f"Default budget: {cli_settings().approval_budget} real calls per endpoint, recording and "
+        "parity together (approval_budget, FAUXCALL_APPROVAL_BUDGET). Ask the user for theirs."
+    )
 
 
 @plan_app.command("approve")
@@ -155,10 +159,14 @@ def plan_approve(
     max_calls: Annotated[
         int | None,
         typer.Option(
-            help="Budget for --endpoint. A glob shares it across every endpoint it matches, "
-            "unless --per-endpoint."
+            min=1,
+            help="Real calls each approval allows (default: the approval_budget setting, 100). "
+            "A glob shares them across every endpoint it matches, unless --per-endpoint.",
         ),
     ] = None,
+    unlimited: Annotated[
+        bool, typer.Option("--unlimited", help="No cap at all (only when the user asked for it).")
+    ] = False,
     per_endpoint: Annotated[
         bool,
         typer.Option(
@@ -168,11 +176,11 @@ def plan_approve(
     ] = False,
     planned: Annotated[
         bool,
-        typer.Option("--planned", help="Approve every mutating endpoint in the current plans."),
+        typer.Option(
+            "--planned",
+            help="Approve every mutating endpoint in the current plans, each its own budget.",
+        ),
     ] = False,
-    margin: Annotated[
-        float, typer.Option(help="Budget multiplier for --planned (retries, refinements).")
-    ] = 2.0,
     reason: Annotated[
         str | None, typer.Option(help="What the user approved, in their words.")
     ] = None,
@@ -180,6 +188,9 @@ def plan_approve(
     """Record the user's up-front approval (run only after the user said yes)."""
     fake = layout(name)
     approvals = _approvals(fake)
+    if unlimited and max_calls is not None:
+        raise fail("pass --max-calls or --unlimited, not both")
+    budget = None if unlimited else (max_calls or cli_settings().approval_budget)
     added: list[Approval] = []
     if endpoint:
         targets = _mutating_matches(load_model(fake), endpoint) if per_endpoint else [endpoint]
@@ -191,7 +202,7 @@ def plan_approve(
             Approval(
                 scope="endpoint",
                 endpoint=target,
-                max_calls=max_calls,
+                max_calls=budget,
                 reason=reason,
                 approved_at=now(),
             )
@@ -199,21 +210,19 @@ def plan_approve(
         ]
     if planned:
         writes = _writes(load_model(fake))
-        counts: Counter[str] = Counter()
-        for _, plan in _plans(fake):
-            for call in filter(writes, plan.calls):
-                counts[call.endpoint] += call.repeat
-        for endpoint_id, count in counts.items():
-            budget = max(1, int(count * margin))
-            added.append(
-                Approval(
-                    scope="endpoint",
-                    endpoint=endpoint_id,
-                    max_calls=budget,
-                    reason=reason,
-                    approved_at=now(),
-                )
+        planned_ids = dict.fromkeys(
+            call.endpoint for _, plan in _plans(fake) for call in filter(writes, plan.calls)
+        )
+        added += [
+            Approval(
+                scope="endpoint",
+                endpoint=target,
+                max_calls=budget,
+                reason=reason,
+                approved_at=now(),
             )
+            for target in planned_ids
+        ]
     if not added:
         raise fail("nothing to approve: pass --endpoint or --planned")
     lines = [_on_top(approvals, approval) for approval in added]

@@ -86,8 +86,10 @@ Prepare first, then ask in a single message (AskUserQuestion if available):
 3. **Mutating calls.** Write the recording plans for **every** endpoint now
    ([recording](references/recording.md)) so the approval covers the whole build. Then
    `fauxcall plan review <name>` and show the table: which endpoints, how many calls, what is created
-   and how it is cleaned up. On approval:
-   `fauxcall plan approve <name> --planned --reason "<the user's words>"`.
+   and how it is cleaned up. Ask for the approval **and its budget** every time: how many real calls
+   each endpoint may make (recording and parity runs together), offering the default the review
+   prints (100 unless the user set `FAUXCALL_APPROVAL_BUDGET`). On approval:
+   `fauxcall plan approve <name> --planned --max-calls <their number> --reason "<the user's words>"`.
 4. **Scope.** For very large APIs, confirm whether to fake everything or a subset.
 
 Then: `fauxcall progress gate <name> --credentials <none_needed|provided|missing> --jev|--no-jev --mutations <approved|declined|none_planned>`.

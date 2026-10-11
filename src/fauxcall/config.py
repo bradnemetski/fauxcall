@@ -219,6 +219,14 @@ class CliSettings(_FauxcallSettings):
     user_agent: str = f"fauxcall/{__version__} (+https://github.com/bradnemetski/fauxcall)"
     record_rps: float = Field(default=2.0, gt=0, description="Max requests/second to real APIs.")
     record_max_calls: int = Field(default=2000, ge=1, description="Budget per recording run.")
+    approval_budget: int = Field(
+        default=100,
+        ge=1,
+        description=(
+            "Real calls that may change state, per endpoint, that an approval allows when it "
+            "names no number (fauxcall plan approve). The skill asks for it at the start of a run."
+        ),
+    )
     request_timeout_seconds: float = Field(default=30.0, gt=0)
     source: str | None = Field(
         default=None,

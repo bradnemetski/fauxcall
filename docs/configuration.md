@@ -167,6 +167,7 @@ Credentials are redacted from logs, even inside nested values.
 | `workspace` | `fauxcall` | Where fakes are generated |
 | `record_rps` | `2` | Most requests per second sent to a real API while recording |
 | `record_max_calls` | `2000` | Most requests per recording run |
+| `approval_budget` | `100` | Real calls that may change data, per endpoint, that your approval allows when it names no number. `/fauxcall` asks you at the start of every build and shows this default; set `FAUXCALL_APPROVAL_BUDGET` (or `approval_budget` in `fauxcall.toml`) to change it. Recording and parity runs spend the same budget |
 | `request_timeout_seconds` | `30` | Timeout for requests to real services |
 | `user_agent` | `fauxcall/<version> (+https://github.com/bradnemetski/fauxcall)` | Sent to real services |
 | `source` | this version | Where generated fakes get FauxCall from: a version specifier, or a local checkout path for development |

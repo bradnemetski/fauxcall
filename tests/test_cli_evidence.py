@@ -372,16 +372,31 @@ def test_plan_review_and_approve(ws: Workspace) -> None:
     review = invoke("plan", "review", "shop").output
     assert "| writes.json | create | `POST /v1/items` | 2 | undo | no | make two |" in review
     assert "Totals per endpoint: POST /v1/items x2, POST /v1/jobs x1" in review
-    approved = invoke("plan", "approve", "shop", "--planned", "--margin", "1.5").output
-    assert "approved POST /v1/items (max 3)" in approved
-    assert "approved POST /v1/jobs (max 1)" in approved
+    assert "Default budget: 100 real calls per endpoint" in review
+    approved = invoke("plan", "approve", "shop", "--planned").output
+    assert "approved POST /v1/items (max 100)" in approved  # the default budget, per endpoint
+    assert "approved POST /v1/jobs (max 100)" in approved
     assert "| yes |" in invoke("plan", "review", "shop").output
     invoke("plan", "approve", "shop", "--endpoint", "DELETE /v1/*", "--reason", "cleanup")
     approvals = read_model(fake.approvals_path, Approvals)
     assert [a.endpoint for a in approvals.approvals][-1] == "DELETE /v1/*"
-    assert approvals.approvals[-1].max_calls is None
-    assert "(max unlimited)" in invoke("plan", "approve", "shop", "--endpoint", "PUT /x").output
+    assert approvals.approvals[-1].max_calls == 100  # a glob shares one default budget
+    unlimited = invoke("plan", "approve", "shop", "--endpoint", "PUT /x", "--unlimited").output
+    assert "(max unlimited)" in unlimited
+    both = invoke(
+        "plan", "approve", "shop", "--endpoint", "PUT /y", "--unlimited", "--max-calls", "2", code=1
+    )
+    assert "not both" in both.output
     assert "nothing to approve" in invoke("plan", "approve", "shop", code=1).output
+
+
+def test_the_default_budget_is_a_setting(ws: Workspace, monkeypatch: pytest.MonkeyPatch) -> None:
+    make_fake(ws)
+    monkeypatch.setenv("FAUXCALL_APPROVAL_BUDGET", "7")
+    approved = invoke("plan", "approve", "shop", "--endpoint", "POST /v1/items").output
+    assert approved.strip() == "approved POST /v1/items (max 7)"
+    explicit = invoke("plan", "approve", "shop", "--endpoint", "POST /v1/jobs", "--max-calls", "3")
+    assert explicit.output.strip() == "approved POST /v1/jobs (max 3)"
 
 
 def test_approving_again_adds_to_the_budget(ws: Workspace) -> None:
@@ -400,7 +415,7 @@ def test_approving_again_adds_to_the_budget(ws: Workspace) -> None:
     write_model(fake.approvals_path, approvals)
     again = invoke("plan", "approve", "shop", "--endpoint", "POST /v1/items", "--max-calls", "4")
     assert "4 more calls (14 in all; 8 already spent)" in again.output  # on top of the 10 allowed
-    invoke("plan", "approve", "shop", "--endpoint", "POST /v1/jobs")
+    invoke("plan", "approve", "shop", "--endpoint", "POST /v1/jobs", "--unlimited")
     unlimited = invoke("plan", "approve", "shop", "--endpoint", "POST /v1/jobs", "--max-calls", "2")
     assert unlimited.output.strip() == "approved POST /v1/jobs: already unlimited"
 
@@ -429,7 +444,7 @@ def test_plan_approve_per_endpoint_budgets(ws: Workspace) -> None:
     )
     make_fake(ws, model)
     tools = invoke("plan", "approve", "tools", "--endpoint", "MCP *", "--per-endpoint").output
-    assert "approved MCP tools/call:ask (max unlimited)" in tools
+    assert "approved MCP tools/call:ask (max 100)" in tools
 
 
 def test_mcp_plans_need_approval_exactly_where_recording_does(ws: Workspace) -> None:

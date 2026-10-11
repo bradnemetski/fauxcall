@@ -137,7 +137,8 @@ The skills follow the open [Agent Skills](https://agentskills.io) format, so oth
 - **Personal data is pseudonymized** at recording time, consistently across endpoints, so
   relations between records survive.
 - **Nothing that changes data runs without your approval.** Mutating calls are listed for you to
-  approve once, before recording starts.
+  approve once, before recording starts, with a cap on real calls per endpoint: you choose it at the
+  start of every build (100 unless you say otherwise, or set `FAUXCALL_APPROVAL_BUDGET`).
 - **Rate limits are respected.** Recording is paced and capped.
 
 ## Jev (optional)

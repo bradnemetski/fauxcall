@@ -17,7 +17,8 @@ The first release.
   skills.
 - Inputs: OpenAPI 3.x and Swagger 2.0 documents, Swagger UI and Redoc pages, free-form API
   documentation pages, and remote MCP servers over Streamable HTTP or the SSE transport.
-- Recording: paced and capped real calls, one up-front approval for mutating calls, credential
+- Recording: paced and capped real calls, one up-front approval for mutating calls (100 real calls
+  per endpoint unless the user picks another number, `FAUXCALL_APPROVAL_BUDGET`), credential
   redaction and consistent pseudonymization of personal data (a sandbox's public demo values can be
   kept exactly).
 - Analysis: schema and field-profile inference, time-format detection, clock-following fields,

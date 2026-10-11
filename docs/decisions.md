@@ -29,7 +29,7 @@ These were settled with the project owner before implementation (2026-10-10). Th
 |---|---|
 | Process | Sequential, one endpoint at a time, **checkpointed** so re-invoking resumes exactly where it stopped. Subagents only for independent review passes. |
 | Check-ins | Key gates only: up-front plan (endpoints, credentials, Jev key, **one consolidated approval of all mutating calls**), genuinely ambiguous real-world behavior, final report. |
-| Mutating calls | Approved **once, up front** as a single plan (with cleanup steps); autonomous afterwards. The CLI refuses unapproved mutating calls. |
+| Mutating calls | Approved **once, up front** as a single plan (with cleanup steps); autonomous afterwards. The CLI refuses unapproved mutating calls. The approval caps real calls per endpoint (recording and parity together): the user picks the number at the start of every build, **100** by default (`FAUXCALL_APPROVAL_BUDGET`). |
 | Secrets | Credentials live in a gitignored `.env` (pydantic-settings). Auth headers, tokens, cookies, keys are redacted from recordings. |
 | PII | **Pseudonymized** deterministically (keyed HMAC, key in `.env`), format-preserving, consistent across endpoints so references survive. Names/addresses come from Faker, so Faker stays pinned in the lock file wherever recordings are made and parity tests run. |
 | Storage | **JSON/JSONL only** — no SQLite. Recordings, model and world are diffable text committed to git; fakes load the world into memory. Ad-hoc SQL over recordings is available through a throwaway in-memory SQLite (`fauxcall sql`). |
