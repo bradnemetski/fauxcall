@@ -24,7 +24,8 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
   prompts.
 - **Fix the tools, never the fake:** whenever a run struggled, the fix went into the skills or the
   tooling. Generated fakes were never edited by hand.
-- **Jev:** no Jev key was configured, so every run used the deterministic fallbacks.
+- **Jev:** the user added a Jev key for DeepWiki, the one target whose fake must judge free text;
+  every other run used the deterministic fallbacks.
 
 ## Targets
 
@@ -46,8 +47,7 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
 | timeapi.io | **100%** | 192 | 28 | 576 | 1,366, 98% coverage | 1 | $19.72 |
 | Swagger Petstore | **99.71%** | 96 (98.48% over 80 with real writes) | 19 | 370 | 361, 99% coverage | 1 | $15.21 |
 | FakeRESTApi | **100%** | 115 | 27 | 323 | 671, 99% coverage | 1 | $13.02 |
-
-DeepWiki is added here when its run completes. *Parity* is the weighted
+| DeepWiki (MCP) | **100%** | 20 | 3 tools | 70 | 175, 98% coverage | 3 | over $8 | *Parity* is the weighted
 share of checks (status, shape, content type, values, lengths, headers) on which the fake answered
 like the real service, over end-to-end scenarios run against both. *Reported cost* is what Claude
 Code reported for the sessions. The finished fakes are in [`examples/`](../examples/).
@@ -87,6 +87,18 @@ exact error messages with byte positions, a maximum depth of 32) and parses ids 
 (`+5`, `0x10`). Its run with writes scored 99.98%; the one difference (how a malformed `true` is
 quoted in an error message) was fixed and re-checked.
 
+**DeepWiki.** A public MCP server answering questions about GitHub repositories' documentation
+through three tools. The fake serves the recorded wikis of five repositories (others answer
+"Repository not found") and answers questions it never saw from them: a recorded answer when Jev
+judges that one fits, otherwise excerpts from the best-matching wiki page with the real links. It
+answers refusals in about 250 ms and questions in 10 to 17 s, as the real server does. Its parity
+scenarios compare wiki structure and contents by value and generated answers by shape, checked by
+behavior (about the repository asked about, with links that resolve). The parity run came before
+the review's fixes and couldn't be repeated: the approved budget was spent. **The build made 33 real
+`ask_wiki_question` calls against an approval of 30**: a session stopped mid-recording (to restart it
+with the user's Jev key) hadn't saved the count of 6 calls, so the next one spent the full budget on
+top of them. They were read-only calls to a public service; the bug is fixed (`af370c3`).
+
 ## Integrity
 
 After the runs, every session transcript was searched for reads of the reference API's source, its
@@ -120,7 +132,12 @@ Every problem a run hit became a fix in the tools or skills, never in the fake. 
   brought together their own ports (`450871b`).
 - **Write budgets.** Parity runs with real writes didn't spend the user's approved budget at all;
   FakeRESTApi counted its writes by hand. They now spend it exactly as recording does, and stop when
-  it runs out (`3f11da1`).
+  it runs out (`3f11da1`). Recorders save each spend before the call goes out, so a stopped run
+  can't lose its count again (`af370c3`), and `plan check` applies the recorder's rule to MCP calls
+  (`c9be916`).
+- **Timing.** Errors keep their own recorded times (DeepWiki refuses in 250 ms and answers in 15 s),
+  and `analyze endpoint --apply` now times MCP tools, including answers sent as SSE (`7468b1b`,
+  `6c049e0`). A modeled default protocol version wins over the recorded handshake's (`944bc73`).
 - **Privacy and images.** `public_values` keeps a sandbox's public demo users as they are while
   everyone else's data in the same fields is still pseudonymized; Petstore had to switch
   pseudonymization off for every user field instead (`63bc5a2`). The same option keeps a demo's
