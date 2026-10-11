@@ -454,11 +454,13 @@ class ScaffoldResult:
 
     written: list[Path] = field(default_factory=list)
     kept: list[Path] = field(default_factory=list)
+    notes: list[str] = field(default_factory=list)
 
     def summary(self, root: Path) -> str:
         """Readable list of changes (paths relative to ``root`` when they are inside it)."""
         lines = [f"- wrote `{_display(p, root)}`" for p in self.written]
         lines += [f"- kept `{_display(p, root)}` (yours)" for p in self.kept]
+        lines += [f"- {note}" for note in self.notes]
         return "\n".join(lines)
 
 
@@ -505,6 +507,56 @@ def _configured_port(fake: FakeLayout) -> int | None:
     except (tomllib.TOMLDecodeError, UnicodeDecodeError):
         return None
     return port if isinstance(port, int) and not isinstance(port, bool) else None
+
+
+def separate_ports(workspace: Workspace) -> list[str]:
+    """Give fakes that share a configured port their own; returns what moved, for the summary.
+
+    Ports are workspace state (``fauxcall up`` and compose bind them all at once). Fakes built in
+    different workspaces and put together can clash: the first by name keeps the port, the others
+    move to the lowest free one, changing only the ``port`` line of their ``fauxcall.toml``.
+    """
+    configured = {
+        fake.name: (fake, port)
+        for fake in workspace.fakes()
+        if (port := _configured_port(fake)) is not None
+    }
+    in_use = {port for _, port in configured.values()}
+    kept: set[int] = set()
+    moved: list[str] = []
+    for name in sorted(configured):
+        fake, port = configured[name]
+        if port not in kept:
+            kept.add(port)
+            continue
+        free = FIRST_PORT
+        while free in in_use:
+            free += 1
+        if _set_port(fake.root / "fauxcall.toml", free):
+            in_use.add(free)
+            kept.add(free)
+            moved.append(
+                f"{name}: port {port} was another fake's; it now uses {free} (fauxcall.toml)"
+            )
+        else:
+            moved.append(
+                f"{name}: port {port} is another fake's too: change `port` in fauxcall.toml"
+            )
+    return moved
+
+
+def _set_port(config: Path, port: int) -> bool:
+    """Rewrite the top-level ``port = …`` line (before any table); False when there is none."""
+    text = config.read_text(encoding="utf-8")
+    table = re.search(r"^\[", text, re.MULTILINE)
+    head, rest = (text[: table.start()], text[table.start() :]) if table else (text, "")
+    updated, count = re.subn(
+        r"^port\s*=\s*\d+[ \t]*$", f"port = {port}", head, count=1, flags=re.MULTILINE
+    )
+    if count != 1:
+        return False
+    atomic_write_text(config, updated + rest)
+    return True
 
 
 def assign_port(workspace: Workspace, layout: FakeLayout) -> int:
@@ -658,7 +710,7 @@ def scaffold(
 ) -> ScaffoldResult:
     """Create/refresh the fake's package and the workspace files."""
     env = _environment()
-    result = ScaffoldResult()
+    result = ScaffoldResult(notes=separate_ports(workspace))
     requirement, local_path = fauxcall_requirement(source)
     port = assign_port(workspace, layout)
     routes = routes_for(model) if model.kind == "rest" else []

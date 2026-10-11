@@ -94,6 +94,7 @@ class Processes:
     alive: set[int] = field(default_factory=set)
     killed: list[tuple[int, int]] = field(default_factory=list)
     listening: bool = True
+    occupied: set[int] = field(default_factory=set)  # ports something else listens on
     next_pid: int = 4242
 
 
@@ -124,7 +125,12 @@ def processes(monkeypatch: pytest.MonkeyPatch) -> Processes:
     monkeypatch.setattr(os, "kill", kill)
     monkeypatch.setattr(os, "getpgid", lambda pid: pid)
     monkeypatch.setattr(os, "killpg", killpg)
-    monkeypatch.setattr(running, "_listening", lambda _port: state.listening)
+
+    def listening(port: int) -> bool:
+        started = {int(command[command.index("--port") + 1]) for command in state.started}
+        return port in state.occupied or (state.listening and port in started)
+
+    monkeypatch.setattr(running, "_listening", listening)
     monkeypatch.setattr(time, "sleep", lambda _seconds: None)
     return state
 
@@ -217,12 +223,37 @@ def test_up_waits_until_the_fake_listens(
     ws: Workspace, processes: Processes, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     make_fake(ws, rest_model(), port=8701)
-    answers = iter([False, False, True, True])
+    answers = iter([False, False, False, True, True])  # first: is the port free before starting?
     naps: list[float] = []
     monkeypatch.setattr(running, "_listening", lambda _port: next(answers))
     monkeypatch.setattr(time, "sleep", naps.append)
     assert invoke("up", "shop").output.strip() == "shop: up on http://127.0.0.1:8701"
     assert naps == [0.2, 0.2]
+
+
+def test_up_moves_off_a_port_something_else_holds(ws: Workspace, processes: Processes) -> None:
+    make_fake(ws, rest_model(), port=8701)
+    processes.occupied = {8701}
+    output = invoke("up", "shop").output
+    assert "shop: port 8701 is in use; starting on 8702" in output
+    assert "shop: up on http://127.0.0.1:8702" in output
+    assert processes.started[0][-2:] == ["--port", "8702"]
+    assert run_file(ws)["shop"]["port"] == 8702
+
+
+def test_up_never_starts_two_fakes_on_one_port(ws: Workspace, processes: Processes) -> None:
+    make_fake(ws, mcp_model(), port=8701)
+    make_fake(ws, rest_model(), port=8701)  # e.g. copied in from another workspace
+    output = invoke("up").output
+    assert "demo: up on http://127.0.0.1:8701" in output
+    assert "shop: port 8701 is in use; starting on 8702" in output
+
+
+def test_up_gives_up_searching_for_a_free_port(ws: Workspace, processes: Processes) -> None:
+    make_fake(ws, rest_model(), port=8701)
+    processes.occupied = set(range(8701, 8701 + 100))
+    invoke("up", "shop", "--wait", "0")
+    assert processes.started[0][-2:] == ["--port", "8701"]  # starting reports the failure
 
 
 def test_up_needs_fakes(ws: Workspace, processes: Processes) -> None:

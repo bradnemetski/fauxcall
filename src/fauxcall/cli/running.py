@@ -107,6 +107,15 @@ def _listening(port: int) -> bool:
         return probe.connect_ex(("127.0.0.1", port)) == 0
 
 
+def _free_port(preferred: int, busy: set[int]) -> int:
+    """``preferred``, or the next port no started fake holds and nothing listens on.
+
+    Gives up after ``_PORT_SEARCH`` ports and returns ``preferred`` (the start then says why).
+    """
+    candidates = range(preferred, preferred + _PORT_SEARCH)
+    return next((p for p in candidates if p not in busy and not _listening(p)), preferred)
+
+
 def _start(fake: FakeLayout, port: int, *, fast: bool, wait: float) -> RunEntry:
     command = [sys.executable, "-m", "fauxcall", "serve", fake.name, "--port", str(port)]
     if fast:
@@ -140,11 +149,15 @@ def up(
     running = _read_run()
     mcp_servers: dict[str, object] = {}
     for fake in fakes:
-        port = _port(fake)
         entry = running.get(fake.name)
         if entry and _alive(entry["pid"]):
             echo(f"{fake.name}: already running on http://127.0.0.1:{entry['port']}")
         else:
+            busy = {e["port"] for e in running.values() if _alive(e["pid"])}
+            configured = _port(fake)
+            port = _free_port(configured, busy)
+            if port != configured:
+                echo(f"{fake.name}: port {configured} is in use; starting on {port}")
             running[fake.name] = _start(fake, port, fast=fast, wait=wait)
         model = load_model(fake)
         if model.mcp is not None:
@@ -188,6 +201,7 @@ def ps() -> None:
 
 
 _NO_TESTS = 5  # pytest's exit code when it collected nothing
+_PORT_SEARCH = 100
 
 
 @clean_errors

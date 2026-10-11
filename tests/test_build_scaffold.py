@@ -1050,6 +1050,43 @@ def test_a_readme_from_before_notes_regions_is_kept(tmp_path: Path) -> None:
     assert readme in result.kept
 
 
+def test_fakes_brought_together_get_their_own_ports(tmp_path: Path) -> None:
+    workspace = Workspace(tmp_path / "fakes")
+    fakes = {name: write_fake(workspace, named(name)) for name in ("alpha", "beta", "gamma")}
+    for name, port in (("alpha", 8701), ("beta", 8701), ("gamma", 8702)):
+        config = (
+            f'# copied from elsewhere\nname = "{name}"\nport = {port}\n\n[auth]\nmode = "any"\n'
+        )
+        (fakes[name].root / "fauxcall.toml").write_text(config)
+    result = scaffold(fakes["gamma"], workspace, named("gamma"), project_root=tmp_path)
+    ports = {
+        name: tomllib.loads((fake.root / "fauxcall.toml").read_text())["port"]
+        for name, fake in fakes.items()
+    }
+    assert ports == {"alpha": 8701, "beta": 8703, "gamma": 8702}  # first by name keeps 8701
+    beta = (fakes["beta"].root / "fauxcall.toml").read_text()
+    assert beta.startswith("# copied from elsewhere\n")  # only the port line changed
+    assert '[auth]\nmode = "any"\n' in beta
+    assert "beta: port 8701 was another fake's; it now uses 8703 (fauxcall.toml)" in result.summary(
+        tmp_path
+    )
+    scaffold(fakes["beta"], workspace, named("beta"), project_root=tmp_path)
+    assert (
+        "| [`beta`](beta/README.md) | Demo | 8703 |" in (workspace.root / "README.md").read_text()
+    )
+
+
+def test_a_port_clash_without_a_port_line_is_reported(tmp_path: Path) -> None:
+    workspace = Workspace(tmp_path / "fakes")
+    first = write_fake(workspace, named("first"))
+    second = write_fake(workspace, named("second"))
+    (first.root / "fauxcall.toml").write_text("port = 8701\n")
+    (second.root / "fauxcall.toml").write_text("port = 0x21FD\n")  # 8701, spelled oddly
+    result = scaffold(first, workspace, named("first"))
+    assert "second: port 8701 is another fake's too: change `port` in fauxcall.toml" in result.notes
+    assert (second.root / "fauxcall.toml").read_text() == "port = 0x21FD\n"
+
+
 def test_ports_members_and_listings_across_fakes(tmp_path: Path) -> None:
     workspace = Workspace(tmp_path / "fakes")
     first = write_fake(workspace, named("first", "First | API"))
