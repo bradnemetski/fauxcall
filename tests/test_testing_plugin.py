@@ -9,6 +9,8 @@ import pytest
 from fauxcall.model.api import ApiModel, RealTarget, SourceInfo
 from fauxcall.model.endpoints import EndpointModel, ResponseShape
 from fauxcall.model.fields import IgnorePolicy
+from fauxcall.model.plan import Approval, Approvals
+from fauxcall.storage import write_model
 from fauxcall.testing.client import CompareOptions, ExchangeLog, LoggedCall
 from fauxcall.testing.compare import W_SOFT_VALUE, Observation
 from fauxcall.testing.plugin import (
@@ -112,6 +114,7 @@ def fauxcall_fake() -> FakeUnderTest:
         real_headers={"x-key": "k1"},
         real_query={"token": "t1"},
         reports_dir=None if os.environ.get("REPORTS") == "default" else HERE / "reports",
+        approvals_path=HERE / "approvals.json",
         real_transport=httpx2.ASGITransport(app=pets_app("brown")) if mode == "transport" else None,
     )
 """
@@ -253,6 +256,7 @@ def fauxcall_fake() -> FakeUnderTest:
         model=None if os.environ.get("NO_MODEL") else MODEL,
         real_headers={"Authorization": "Bearer real-token"} if AUTH else {},
         reports_dir=HERE / "reports",
+        approvals_path=HERE / "approvals.json",
         real_transport=httpx2.ASGITransport(app=tools_app(0)),
     )
 """
@@ -430,6 +434,18 @@ def run(pytester: pytest.Pytester, *args: str) -> pytest.RunResult:
     )
 
 
+def approve(pytester: pytest.Pytester, endpoint: str, max_calls: int | None = None) -> None:
+    """The user's up-front approval of real writes, as `fauxcall plan approve` writes it."""
+    approval = Approval(
+        scope="endpoint", endpoint=endpoint, max_calls=max_calls, approved_at=datetime.now(UTC)
+    )
+    write_model(pytester.path / "approvals.json", Approvals(approvals=[approval]))
+
+
+def spent(pytester: pytest.Pytester) -> Any:
+    return json.loads((pytester.path / "approvals.json").read_text())["used"]
+
+
 def report_json(pytester: pytest.Pytester, directory: str = "reports") -> Any:
     return json.loads((pytester.path / directory / "parity.json").read_text())
 
@@ -448,8 +464,18 @@ def test_real_target_uses_credentials_and_refuses_writes(rest: pytest.Pytester) 
     result = run(rest, "--target=real", "test_scenarios.py", "test_credentials.py", "-rs")
     result.assert_outcomes(passed=7, skipped=1)
     result.stdout.fnmatch_lines(["*writes to the real API need --allow-real-writes*"])
+    unapproved = run(rest, "--target=real", "--allow-real-writes", "test_scenarios.py", "-rs")
+    unapproved.assert_outcomes(passed=5, skipped=1)
+    unapproved.stdout.fnmatch_lines(
+        ["*real write refused: no up-front approval covers POST /pets*"]
+    )
+    approve(rest, "POST /pets", max_calls=1)
     allowed = run(rest, "--target=real", "--allow-real-writes", "test_scenarios.py")
     allowed.assert_outcomes(passed=6)
+    assert spent(rest) == {"endpoint:POST /pets:": 1}  # the same budget recording spends
+    exhausted = run(rest, "--target=real", "--allow-real-writes", "test_scenarios.py", "-rs")
+    exhausted.assert_outcomes(passed=5, skipped=1)
+    exhausted.stdout.fnmatch_lines(["*no approval with budget left covers POST /pets*"])
 
 
 def test_real_and_fake_base_urls(rest: pytest.Pytester, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -582,7 +608,10 @@ def test_mcp_scenarios_on_the_fake(tools: pytest.Pytester) -> None:
 
 def test_mcp_writes_need_permission_on_the_real_side(tools: pytest.Pytester) -> None:
     run(tools, "--target=real").assert_outcomes(passed=3, skipped=1)
+    run(tools, "--target=real", "--allow-real-writes").assert_outcomes(passed=3, skipped=1)
+    approve(tools, "MCP tools/call:*")
     run(tools, "--target=real", "--allow-real-writes").assert_outcomes(passed=4)
+    assert spent(tools) == {"endpoint:MCP tools/call:*:": 1}  # reset; add is read-only
 
 
 def test_mcp_tools_count_as_writes_without_a_model(
@@ -593,6 +622,7 @@ def test_mcp_tools_count_as_writes_without_a_model(
 
 
 def test_mcp_parity_per_tool(tools: pytest.Pytester, monkeypatch: pytest.MonkeyPatch) -> None:
+    approve(tools, "MCP tools/call:*")
     result = run(tools, "--target=parity", "--allow-real-writes")
     result.assert_outcomes(passed=8)
     data = report_json(tools)

@@ -13,7 +13,9 @@ from fauxcall.mcpwire.client import McpWireClient
 from fauxcall.model.api import ApiModel, RealTarget, SourceInfo
 from fauxcall.model.auth import AuthModel, AuthScheme
 from fauxcall.model.mcp import McpModel, McpToolModel
+from fauxcall.model.plan import Approval, Approvals
 from fauxcall.runtime import FakeRuntime, create_app, register_tool
+from fauxcall.storage import read_model, write_model
 from fauxcall.testing.client import (
     HARNESS_IDENTITY,
     MCP_METHOD,
@@ -27,6 +29,7 @@ from fauxcall.testing.client import (
     ExchangeLog,
     McpClient,
     RealPace,
+    WriteBudget,
     _observe,
     _stream_events,
     harness_identity,
@@ -102,7 +105,11 @@ def mcp_fake(data_dir: Path) -> FastAPI:
 
 
 def mcp_client(
-    data_dir: Path, *, target: str = "fake", allow_writes: bool = False
+    data_dir: Path,
+    *,
+    target: str = "fake",
+    allow_writes: bool = False,
+    budget: WriteBudget | None = None,
 ) -> tuple[McpClient, httpx2.AsyncClient]:
     http = httpx2.AsyncClient(
         transport=httpx2.ASGITransport(app=mcp_fake(data_dir)), base_url="http://fake.test"
@@ -112,6 +119,9 @@ def mcp_client(
         McpWireClient("http://fake.test/mcp", http),
         allow_writes=allow_writes,
         mutating=lambda name: name != "add",
+        budget=budget
+        if budget is None
+        else WriteBudget(budget.path, lambda _method, call: f"MCP {call}"),
     )
     return client, http
 
@@ -229,6 +239,47 @@ async def test_real_writes_need_permission() -> None:
     allowed = api_client("real", allow_writes=True)
     async with allowed.http:
         assert (await allowed.delete("/items/1")).status_code == 204
+
+
+def _approve(path: Path, endpoint: str, max_calls: int | None) -> None:
+    approval = Approval(
+        scope="endpoint", endpoint=endpoint, max_calls=max_calls, approved_at=datetime.now(UTC)
+    )
+    write_model(path, Approvals(approvals=[approval]))
+
+
+def test_real_writes_spend_the_up_front_approval(tmp_path: Path) -> None:
+    approvals = tmp_path / "approvals.json"
+    assert WriteBudget(None).spend("POST", "/items") == (
+        "no up-front approval covers POST /items (no data/approvals.json)"
+    )
+    assert "no up-front approval" in str(WriteBudget(approvals).spend("POST", "/items"))
+    _approve(approvals, "POST /items*", max_calls=2)
+    budget = WriteBudget(approvals)
+    assert budget.spend("POST", "/items?dry=1") is None  # the query never matters
+    assert budget.spend("POST", "/items") is None
+    assert read_model(approvals, Approvals).used == {"endpoint:POST /items*:": 2}
+    refused = budget.spend("POST", "/items")
+    assert refused is not None
+    assert refused.endswith("only the user can approve more")
+    assert "DELETE /items/1" in str(budget.spend("DELETE", "/items/1"))  # not covered at all
+    named = WriteBudget(approvals, lambda method, _path: f"{method} /items{{id}}")
+    assert "POST /items{id}" in str(named.spend("POST", "/items1"))
+
+
+async def test_clients_skip_real_writes_their_budget_refuses(tmp_path: Path) -> None:
+    budget = WriteBudget(tmp_path / "approvals.json")
+    client = api_client("real", allow_writes=True, budget=budget)
+    async with client.http:
+        with pytest.raises(pytest.skip.Exception, match="real write refused: no up-front"):
+            await client.post("/items")
+        assert (await client.get("/json")).status_code == 200  # reads spend nothing
+    mcp, http = mcp_client(tmp_path, target="real", allow_writes=True, budget=budget)
+    async with http:
+        with pytest.raises(pytest.skip.Exception, match="covers MCP tools/call:reset"):
+            await mcp.call_tool("reset")
+        assert await mcp.call_tool("add", {"a": 1, "b": 1}) is not None  # read-only tool
+        await mcp.close()
 
 
 def test_personal_values_as_each_side_knows_them() -> None:

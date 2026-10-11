@@ -16,10 +16,14 @@ import pytest
 
 from fauxcall import jsonfmt
 from fauxcall.mcpwire.protocol import parse_sse_events
+from fauxcall.model.plan import Approvals, PlannedCall, PlannedRequest
+from fauxcall.storage import read_model, write_model
 from fauxcall.testing.compare import Observation
+from fauxcall.types import HttpMethod
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping
+    from pathlib import Path
 
     from fauxcall.config import IdentityConfig
     from fauxcall.mcpwire.client import McpWireClient
@@ -128,6 +132,41 @@ def harness_identity(auth: AuthModel | None) -> IdentityConfig:
             values.setdefault("username", PLACEHOLDER_USER)
             values.setdefault("password", _secret(scheme, PLACEHOLDER_PASSWORD))
     return IdentityConfig.model_validate(values)
+
+
+@dataclass(slots=True)
+class WriteBudget:
+    """The up-front approval, spent by the real side's writes exactly as ``fauxcall record`` does.
+
+    Every write a real or parity run sends must be covered by an endpoint approval in
+    ``data/approvals.json`` with budget left; one call is spent before the request goes out.
+    Without an approvals file nothing may be written.
+    """
+
+    path: Path | None
+    endpoint_of: Callable[[str, str], str] = field(default=lambda method, path: f"{method} {path}")
+    """``(METHOD, path)`` -> the endpoint id approvals name."""
+
+    def spend(self, method: str, path: str) -> str | None:
+        """Spend one call of the approval covering this write; else say why it may not be sent."""
+        endpoint = self.endpoint_of(method, path)
+        if self.path is None or not self.path.exists():
+            return f"no up-front approval covers {endpoint} (no data/approvals.json)"
+        approvals = read_model(self.path, Approvals)
+        call = PlannedCall(
+            id="real-run",
+            endpoint=endpoint,
+            request=PlannedRequest(method=HttpMethod(method), path=path.split("?", 1)[0]),
+        )
+        approval = approvals.find(call)
+        if approval is None:
+            return (
+                f"no approval with budget left covers {endpoint} (data/approvals.json); "
+                "only the user can approve more"
+            )
+        approvals.consume(approval)
+        write_model(self.path, approvals)
+        return None
 
 
 def with_query(path: str, query: Mapping[str, str]) -> str:
@@ -279,10 +318,13 @@ class ApiClient:
         query: Mapping[str, str] | None = None,
         log: ExchangeLog | None = None,
         pace: RealPace | None = None,
+        budget: WriteBudget | None = None,
     ) -> None:
         self.target: Target = target
         self.http = http
         self.allow_writes = allow_writes
+        self.budget = budget
+        """What the real side's writes spend (``None``: no approval check, as in unit tests)."""
         self.translate = translate
         self.query = dict(query or {})
         """Parameters (credentials) added to every request that does not set them itself."""
@@ -316,10 +358,14 @@ class ApiClient:
         allows them (``--allow-real-writes``).
         """
         upper = method.upper()
-        if self.is_real and upper not in _SAFE and not self.allow_writes:
-            pytest.skip(
-                "writes to the real API need --allow-real-writes (and an up-front approval)"
-            )
+        if self.is_real and upper not in _SAFE:
+            if not self.allow_writes:
+                pytest.skip(
+                    "writes to the real API need --allow-real-writes (and an up-front approval)"
+                )
+            refused = self.budget.spend(upper, path) if self.budget is not None else None
+            if refused is not None:
+                pytest.skip(f"real write refused: {refused}")
         options = compare or CompareOptions()
         url = self._with_credentials(path, kwargs)
         attempt = 0
@@ -422,10 +468,13 @@ class McpClient:
         mutating: Callable[[str], bool],
         log: ExchangeLog | None = None,
         pace: RealPace | None = None,
+        budget: WriteBudget | None = None,
     ) -> None:
         self.target: Target = target
         self.wire = wire
         self.allow_writes = allow_writes
+        self.budget = budget
+        """What the real side's tool calls that may modify state spend (``None``: no check)."""
         self.mutating = mutating
         self.log = log if log is not None else ExchangeLog()
         self.pace = pace
@@ -486,8 +535,12 @@ class McpClient:
         compare: CompareOptions | None = None,
     ) -> JsonValue:
         """``tools/call``; tools that may modify state skip real runs without permission."""
-        if self.target == "real" and self.mutating(name) and not self.allow_writes:
-            pytest.skip(f"tool {name!r} may modify state: needs --allow-real-writes")
+        if self.target == "real" and self.mutating(name):
+            if not self.allow_writes:
+                pytest.skip(f"tool {name!r} may modify state: needs --allow-real-writes")
+            refused = self.budget.spend("POST", f"tools/call:{name}") if self.budget else None
+            if refused is not None:
+                pytest.skip(f"real write refused: {refused}")
         params: JsonValue = {"name": name, "arguments": dict(arguments or {})}
         return await self.request(
             "tools/call", params, label=label or f"tools/call:{name}", compare=compare

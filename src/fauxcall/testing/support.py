@@ -111,6 +111,7 @@ def fake_under_test[S: FakeSettings](
         real_headers={k: v.get_secret_value() for k, v in settings.real.headers.items()},
         real_query={k: v.get_secret_value() for k, v in settings.real.query.items()},
         reports_dir=settings.data_dir / "reports",
+        approvals_path=settings.data_dir / "approvals.json",
         translate=translate,
         mcp_path=model.mcp.transport.path if model.mcp else "/mcp",
     )

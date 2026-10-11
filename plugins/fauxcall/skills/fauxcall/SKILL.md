@@ -27,7 +27,8 @@ Use the `fauxcall` command for every step (`uvx fauxcall` if `fauxcall` is not o
 ## Ground rules — always
 
 1. **No mutating call without the up-front approval.** POST/PUT/PATCH/DELETE (and MCP tools not
-   annotated `readOnlyHint: true`) run only when `data/approvals.json` covers them. The CLI refuses
+   annotated `readOnlyHint: true`) run only when `data/approvals.json` covers them, in recordings and
+   in parity runs alike, each spending the same budgets. The CLI and the test harness refuse
    otherwise — never work around it. Need more? Ask the user once, with the full list. The method
    decides, not the outcome you expect: a POST you expect to be refused is still a write.
 2. **The real API is called only through FauxCall:** `fauxcall record` (plans) and the e2e suite's

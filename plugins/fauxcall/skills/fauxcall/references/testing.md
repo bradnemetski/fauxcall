@@ -43,8 +43,11 @@ async def test_list_then_get_every_item(api: ApiClient) -> None:
   field policies.
 - Personal data in inputs: `api.pii("johndoe", "username")` gives the real value on the real API and
   its pseudonym on the fake.
-- Writes against the real API need `--allow-real-writes` (and the user's approval); always clean up in
-  the scenario (`try/finally`) or in a fixture.
+- Writes against the real API need `--allow-real-writes` and spend the user's up-front approval
+  (`data/approvals.json`) exactly as recording does: each write uses one call of the budget covering
+  its endpoint, and a write no approval covers (or whose budget is used up) skips the scenario.
+  Budget your writes across recording *and* parity runs; always clean up in the scenario
+  (`try/finally`) or in a fixture.
 - MCP: the `mcp` fixture (`await mcp.call_tool("ask_question", {...})`, `await mcp.list_tools()`).
 
 ## What to cover

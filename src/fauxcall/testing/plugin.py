@@ -36,6 +36,7 @@ from fauxcall.testing.client import (
     ExchangeLog,
     McpClient,
     RealPace,
+    WriteBudget,
     placeholder_credentials,
     with_query,
 )
@@ -72,6 +73,8 @@ class FakeUnderTest:
     real_headers: dict[str, str] = field(default_factory=dict)
     real_query: dict[str, str] = field(default_factory=dict)
     reports_dir: Path | None = None
+    approvals_path: Path | None = None
+    """``data/approvals.json``: what the real side's writes may spend (none: nothing is written)."""
     translate: Translate | None = None
     mcp_path: str = "/mcp"
     real_transport: httpx2.AsyncBaseTransport | None = None
@@ -246,6 +249,7 @@ async def api(
     """The REST scenario client for the current target."""
     target = _as_target(fauxcall_target)
     http, query = _side(fauxcall_fake, target, request.config)
+    matchers = endpoint_matcher(fauxcall_fake.model)
     client = ApiClient(
         target,
         http,
@@ -254,6 +258,12 @@ async def api(
         query=query,
         log=fauxcall_log,
         pace=real_pace(request.config, fauxcall_fake) if target == "real" else None,
+        budget=WriteBudget(
+            fauxcall_fake.approvals_path,
+            lambda method, path: endpoint_for(f"{method} {path}", matchers),
+        )
+        if target == "real"
+        else None,
     )
     async with http:
         yield client
@@ -287,6 +297,9 @@ async def mcp(
             mutating=mutating,
             log=fauxcall_log,
             pace=real_pace(request.config, fauxcall_fake) if target == "real" else None,
+            budget=WriteBudget(fauxcall_fake.approvals_path, lambda _method, call: f"MCP {call}")
+            if target == "real"
+            else None,
         )
         try:
             yield client
