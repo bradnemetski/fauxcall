@@ -57,11 +57,15 @@ async def test_list_then_get_every_item(api: ApiClient) -> None:
 
 Aim for dozens of scenarios, per endpoint and across endpoints:
 
-1. Happy paths with realistic variations of every parameter.
+1. Happy paths with realistic variations of every parameter, **new** ones too: a request copied
+   from a recording mostly checks the recording against itself (the fake answers it from that
+   recording), so the report counts those calls apart. Vary ids, dates, queries and arguments.
 2. Every error the real API produces (missing/invalid parameters, unknown ids, invalid bodies,
    wrong methods, unknown routes, auth missing/invalid/denied).
 3. Cross-endpoint consistency: list → detail; every reference resolves; aggregates match the data;
-   writes visible (or not) in reads exactly as on the real API.
+   writes visible (or not) in reads exactly as on the real API. For every write that can be undone,
+   a full cycle: create → read it back → update or delete → read again (with
+   `--allow-real-writes` and the parity budget), so the fake's state is compared, not just answers.
 4. Time: "now" fields close to the response time; market fields during/outside sessions (assert
    relative to the clock, not to fixed values); relative fields keep their distance.
 5. Pagination: walk all pages; totals; cursors; limit bounds.
@@ -69,6 +73,9 @@ Aim for dozens of scenarios, per endpoint and across endpoints:
    real API).
 7. Streams/WebSockets: event types, ordering, framing.
 8. Rate limits (only on the fake unless approved) and fault-injection behavior via `/__fauxcall`.
+9. MCP: the listings (`tools/list`, and `resources/list`, `prompts/list` when the server has them)
+   and every tool, plus a refused credential: one scenario per way to fail (no credential, a bad
+   one) whenever the service takes credentials.
 
 ## Running parity
 
@@ -84,6 +91,12 @@ limit (record `rate_limits` before running parity), and a `429` is waited out an
 compare real answers rather than throttling; test rate limiting itself on the fake.
 
 ## Reading the report
+
+Next to the overall score, the report gives the **independent** score: compliance without the calls
+that repeat a recorded request or compare shape only. If many calls are left out, the overall score
+says little: write scenarios with new inputs until the independent score also clears the bar. The
+report also lists what no scenario covered and whether any checks a refused credential; cover those
+too. Tell the user both scores.
 
 For every failed check: decide whether the fake or the test is wrong.
 

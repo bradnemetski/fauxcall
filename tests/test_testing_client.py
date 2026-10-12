@@ -9,7 +9,7 @@ import httpx2
 import pytest
 
 from fauxcall.config import FakeSettings
-from fauxcall.mcpwire.client import McpWireClient
+from fauxcall.mcpwire.client import McpWireClient, RpcCall
 from fauxcall.model.api import ApiModel, RealTarget, SourceInfo
 from fauxcall.model.auth import AuthModel, AuthScheme
 from fauxcall.model.mcp import McpModel, McpToolModel
@@ -38,6 +38,7 @@ from fauxcall.testing.client import (
     with_query,
 )
 from fauxcall.testing.compare import Observation
+from fauxcall.testing.replays import mcp_key
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -386,6 +387,35 @@ class _BrokenWire:
 
     async def close(self) -> None:
         self.closed += 1
+
+
+class _RefusingWire(_BrokenWire):
+    """Answers every call with an HTTP 403 and no JSON-RPC message."""
+
+    async def call(self, method: str, params: JsonValue = None) -> RpcCall:  # type: ignore[override]
+        return RpcCall(
+            method=method,
+            sent=params,
+            status=403,
+            request_headers=[],
+            response_headers=[],
+            content_type=None,
+            body="",
+            messages=[],
+            response=None,
+            started_ns=0,
+            elapsed_ms=1.0,
+        )
+
+
+async def test_mcp_refusals_over_http_keep_their_status() -> None:
+    client = McpClient(
+        "fake", cast("McpWireClient", _RefusingWire()), allow_writes=False, mutating=lambda _: False
+    )
+    assert await client.call_tool("add", {"a": 1}) is None
+    (call,) = client.log.calls
+    assert call.observation.status == 403  # what parity compares, and counts as a refusal
+    assert call.replay_key == mcp_key("tools/call", {"name": "add", "arguments": {"a": 1}})
 
 
 async def test_tools_that_vary_are_compared_by_shape(tmp_path: Path) -> None:

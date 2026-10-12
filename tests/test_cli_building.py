@@ -298,6 +298,22 @@ def test_report_with_parity_results(ws: Workspace) -> None:
     assert "- collections: none; relations: 0" in text
     assert "- field policies: none" in text
     assert "- none in the model" in text
+    write_json(
+        fake.reports / "parity.json",
+        {
+            "score": 0.995,
+            "threshold": 0.98,
+            "ok": True,
+            "independent_score": 0.9,
+            "calls": {"compared": 10, "independent": 4},
+            "not_covered": ["GET /b"],
+            "refusal_checked": False,
+        },
+    )
+    honest = invoke("report", "shop").output
+    assert "Independent of recordings: **90.00%** over 4 of 10 calls." in honest
+    assert "Not covered by any scenario: GET /b." in honest
+    assert "No scenario checks a refused credential." in honest
     write_json(fake.reports / "parity.json", {"score": 0.5, "threshold": 0.98, "ok": False})
     assert "— FAIL." in invoke("report", "shop").output
     (fake.reports / "parity.json").write_text("{broken")

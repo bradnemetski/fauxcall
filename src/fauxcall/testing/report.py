@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from fauxcall.types import JsonValue
 
 _PARAM: Final = re.compile(r"\{[^{}/]+\}")
+_REFUSED: Final = frozenset({401, 403})
 _ESCAPED_PARAM: Final = re.compile(r"\\\{[^/]+?\\\}")
 
 
@@ -98,6 +99,52 @@ class ParityReport:
         """Overall compliance."""
         return 1.0 if self.total == 0 else self.passed / self.total
 
+    def _independent(self) -> list[Comparison]:
+        return [
+            c for cs in self.scenarios.values() for c in cs if not c.replayed and not c.shape_only
+        ]
+
+    @property
+    def independent_score(self) -> float:
+        """Compliance without the calls that repeat recorded requests or compare shape only.
+
+        How the fake does on requests it has never seen, values included.
+        """
+        kept = self._independent()
+        total = sum(c.total for c in kept)
+        return 1.0 if total == 0 else sum(c.passed for c in kept) / total
+
+    def call_counts(self) -> dict[str, int]:
+        """Calls compared, and how many repeat a recording or compare shape only."""
+        calls = [c for cs in self.scenarios.values() for c in cs]
+        return {
+            "compared": len(calls),
+            "replayed": sum(c.replayed for c in calls),
+            "shape_only": sum(c.shape_only and not c.replayed for c in calls),
+            "independent": len(self._independent()),
+        }
+
+    def not_covered(self, model: ApiModel | None) -> list[str]:
+        """Endpoints, tools and MCP listings no scenario compared."""
+        if model is None:
+            return []
+        expected = [e.id for e in model.endpoints if e.role != "websocket"]
+        if model.mcp is not None:
+            expected.append("MCP tools/list")
+            if model.mcp.resources:
+                expected.append("MCP resources/list")
+            if model.mcp.prompts:
+                expected.append("MCP prompts/list")
+            expected += [f"MCP tools/call:{tool.name}" for tool in model.mcp.tools]
+        covered = set(self.by_endpoint(model))
+        return [endpoint for endpoint in expected if endpoint not in covered]
+
+    def refusal_checked(self, model: ApiModel | None) -> bool | None:
+        """Whether a scenario compared a refused credential (``None``: the API takes none)."""
+        if model is None or model.auth is None or not model.auth.schemes:
+            return None
+        return any(c.real_status in _REFUSED for cs in self.scenarios.values() for c in cs)
+
     @property
     def ok(self) -> bool:
         """Whether the gate passes (every scenario ran on both sides, score at the threshold)."""
@@ -118,6 +165,10 @@ class ParityReport:
         """Machine-readable report."""
         return {
             "score": round(self.score, 5),
+            "independent_score": round(self.independent_score, 5),
+            "calls": dict(self.call_counts()),
+            "not_covered": [str(endpoint) for endpoint in self.not_covered(model)],
+            "refusal_checked": self.refusal_checked(model),
             "threshold": self.threshold,
             "ok": self.ok,
             "unmatched_scenarios": list(self.unmatched),
@@ -156,6 +207,7 @@ class ParityReport:
                 f"{_percent(self.threshold)}) across {len(self.scenarios)} scenarios."
             ),
             "",
+            *self._honesty(model),
             "| endpoint | compliance | weight |",
             "|---|---|---|",
         ]
@@ -186,6 +238,31 @@ class ParityReport:
             lines += ["", "## Scenarios that ran on only one side", ""]
             lines += [f"- {name}" for name in self.unmatched]
         return "\n".join(lines) + "\n"
+
+    def _honesty(self, model: ApiModel | None) -> list[str]:
+        """What the score rests on: independent calls, coverage, refused credentials."""
+        counts = self.call_counts()
+        lines = []
+        if counts["compared"] and counts["independent"] < counts["compared"]:
+            summary = (
+                f"Independent compliance **{_percent(self.independent_score)}** over "
+                f"{counts['independent']} of {counts['compared']} calls. The others repeat "
+                f"recorded requests ({counts['replayed']}), which the fake answers from those "
+                f"recordings, or compare shape only ({counts['shape_only']})."
+            )
+            lines += [summary, ""]
+        missing = self.not_covered(model)
+        if missing:
+            lines += [
+                "Not covered by any scenario: " + ", ".join(f"`{_cell(m)}`" for m in missing) + ".",
+                "",
+            ]
+        if self.refusal_checked(model) is False:
+            lines += [
+                "No scenario checks a refused credential (a 401 or 403): add one per way to fail.",
+                "",
+            ]
+        return lines
 
     def write(self, directory: Path, model: ApiModel | None) -> tuple[Path, Path]:
         """Write ``parity.json`` and ``parity.md``."""

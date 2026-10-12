@@ -8,6 +8,14 @@ All notable changes to FauxCall are listed here. The format follows
 
 ### Added
 
+- **The parity report says what its score rests on.** Next to the overall compliance it gives the
+  *independent* score, without the calls that only repeat a recorded request (which the fake
+  answers from that recording) or compare shape only, with how many calls each covers. It lists
+  endpoints, tools and MCP listings no scenario compared, and says when no scenario checks a
+  refused credential. `fauxcall report` and the terminal summary show the same; the skills report
+  both scores and close the gaps. The gate is unchanged (overall score, 98%).
+- MCP calls refused at the HTTP level (a `401`, a `403`) keep that status in parity comparisons.
+
 - `fauxcall analyze access` shows which endpoints and tools the credentials were refused for (the
   fake will refuse them too); the skill checks this before planning the build.
 - `fauxcall plan template` works for MCP tools (arguments from the input schema), resources and

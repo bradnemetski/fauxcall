@@ -19,6 +19,7 @@ from fauxcall.mcpwire.protocol import parse_sse_events
 from fauxcall.model.plan import Approvals, PlannedCall, PlannedRequest
 from fauxcall.storage import read_model, write_model
 from fauxcall.testing.compare import Observation
+from fauxcall.testing.replays import http_key, mcp_key, request_body
 from fauxcall.types import HttpMethod
 
 if TYPE_CHECKING:
@@ -36,6 +37,7 @@ if TYPE_CHECKING:
 
 Target = Literal["real", "fake"]
 _SAFE: Final = frozenset({"GET", "HEAD", "OPTIONS"})
+_HTTP_ERROR: Final = 400
 MCP_METHOD: Final = "MCP"
 """``LoggedCall.method`` of MCP calls; their ``path`` is the endpoint detail (``tools/call:x``)."""
 PLACEHOLDER_KEY: Final = "fauxcall-test-key"
@@ -200,6 +202,9 @@ class LoggedCall:
     request: str = ""
     """A digest of what was asked (method, URL, parameters, body): equal digests in a row are
     polls. Only a digest is kept, so credentials in the request never reach the log."""
+    replay_key: str = ""
+    """What was asked, keyed like recordings (credentials left out): matching a recording's key
+    means the call only repeats a recorded request (see :mod:`fauxcall.testing.replays`)."""
 
 
 @dataclass(slots=True)
@@ -368,6 +373,13 @@ class ApiClient:
             if refused is not None:
                 pytest.skip(f"real write refused: {refused}")
         options = compare or CompareOptions()
+        params = kwargs.get("params")
+        query = (
+            httpx2.QueryParams(cast("httpx2.QueryParams", params)).multi_items()
+            if params is not None
+            else []
+        )
+        key = http_key(upper, path, query, request_body(kwargs), credential_names=self.query)
         url = self._with_credentials(path, kwargs)
         attempt = 0
         while True:
@@ -388,6 +400,7 @@ class ApiClient:
                         observation,
                         options,
                         _fingerprint(upper, url, kwargs),
+                        key,
                     )
                 )
                 raise
@@ -405,6 +418,7 @@ class ApiClient:
                 observation,
                 options,
                 _fingerprint(upper, url, kwargs),
+                key,
             )
         )
         return response
@@ -500,10 +514,12 @@ class McpClient:
     ) -> JsonValue:
         """Call a JSON-RPC method and return its ``result`` (or ``error``).
 
-        The logged observation has status 200 for a result and 500 for an error (or no answer).
+        The logged observation has status 200 for a result and 500 for an error (or no answer),
+        or the HTTP status when the server refused the request itself (a ``401``, a ``403`` …).
         """
         await self._ensure()
         path = mcp_call_path(method, params)
+        key = mcp_key(method, params)
         options = compare or CompareOptions()
         if self.pace is not None:
             await self.pace.wait_turn()
@@ -512,18 +528,23 @@ class McpClient:
             call = await self.wire.call(method, params)
         except httpx2.HTTPError as exc:
             observation = Observation(None, {}, None, None, started_ns, error=type(exc).__name__)
-            self.log.calls.append(LoggedCall(label or path, MCP_METHOD, path, observation, options))
+            self.log.calls.append(
+                LoggedCall(label or path, MCP_METHOD, path, observation, options, replay_key=key)
+            )
             raise
         message = call.response if isinstance(call.response, dict) else {}
         payload = message.get("result", message.get("error"))
+        refused = call.status >= _HTTP_ERROR
         observation = Observation(
-            status=200 if "result" in message else 500,
+            status=call.status if refused else 200 if "result" in message else 500,
             headers={"content-type": "application/json"},
             body=payload,
             text=None,
             at_ns=_midpoint(started_ns),
         )
-        self.log.calls.append(LoggedCall(label or path, MCP_METHOD, path, observation, options))
+        self.log.calls.append(
+            LoggedCall(label or path, MCP_METHOD, path, observation, options, replay_key=key)
+        )
         return payload
 
     async def list_tools(self) -> JsonValue:

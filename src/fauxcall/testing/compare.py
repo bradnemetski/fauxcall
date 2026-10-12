@@ -95,6 +95,11 @@ class Comparison:
 
     label: str
     checks: list[Check] = field(default_factory=list)
+    replayed: bool = False
+    """The call repeated a recorded request: the fake mostly answered from that recording."""
+    shape_only: bool = False
+    """Values weren't compared (the scenario said so, or the tool varies)."""
+    real_status: int | None = None
 
     @property
     def total(self) -> float:

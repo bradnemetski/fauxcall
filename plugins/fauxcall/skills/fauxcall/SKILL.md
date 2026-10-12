@@ -194,7 +194,11 @@ fauxcall verify <name> --target parity [--allow-real-writes]
 ```
 
 Read `data/reports/parity.md`. Iterate (fix model/handlers, re-run) until compliance ≥ 98 % and every
-remaining failure is understood and explained. Checkpoint `e2e_tests`, `parity`.
+remaining failure is understood and explained. Then look at what the score rests on
+([testing § reading the report](references/testing.md#reading-the-report)): the **independent**
+score (without calls that only repeat recordings or compare shape), what no scenario covers, and
+whether a refused credential is checked. Close those gaps with new scenarios. Checkpoint
+`e2e_tests`, `parity`.
 
 ## Phase 6 — review and report
 
@@ -208,5 +212,6 @@ remaining failure is understood and explained. Checkpoint `e2e_tests`, `parity`.
 - Write the known limitations (what differs from the real API, and why) into the fake's `README.md`
   between its `fauxcall:notes` markers: the only part of the README `fauxcall scaffold` keeps.
 - `fauxcall report <name>` → `data/reports/summary.md`.
-- Tell the user: what was faked, the parity score, known gaps and why, and how to use it
+- Tell the user: what was faked, the parity score and the independent score, known gaps and why,
+  and how to use it
   (`fauxcall up`, base URL / MCP config, the `/__fauxcall` admin API). Checkpoint `review`, `report`.

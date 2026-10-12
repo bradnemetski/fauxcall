@@ -118,6 +118,7 @@ def fake_under_test[S: FakeSettings](
         approvals_path=settings.data_dir / "approvals.json",
         translate=translate,
         mcp_path=model.mcp.transport.path if model.mcp else "/mcp",
+        recordings_dir=settings.data_dir / "recordings",
     )
 
 

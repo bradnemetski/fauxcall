@@ -41,6 +41,7 @@ from fauxcall.testing.client import (
     with_query,
 )
 from fauxcall.testing.compare import W_STATUS, Comparison, compare
+from fauxcall.testing.replays import recorded_keys
 from fauxcall.testing.report import ParityReport, endpoint_for, endpoint_matcher
 
 if TYPE_CHECKING:
@@ -79,6 +80,8 @@ class FakeUnderTest:
     mcp_path: str = "/mcp"
     real_transport: httpx2.AsyncBaseTransport | None = None
     """Reach the real side through this transport (an in-process app …) rather than the network."""
+    recordings_dir: Path | None = None
+    """``data/recordings``: scenario calls that repeat one of these count apart in the report."""
 
 
 @dataclass(slots=True)
@@ -97,6 +100,17 @@ class ParitySession:
     runs: dict[str, ScenarioRuns] = field(default_factory=dict)
     report: ParityReport | None = None
     paths: tuple[Path, Path] | None = None
+    recorded: dict[Path, frozenset[str]] = field(default_factory=dict)
+    """Recorded request keys per recordings folder, read once per session."""
+
+    def recorded_keys(self, spec: FakeUnderTest) -> frozenset[str]:
+        """The keys of the fake's recorded requests (none when it names no recordings)."""
+        if spec.recordings_dir is None:
+            return frozenset()
+        if spec.recordings_dir not in self.recorded:
+            names = _credential_names(spec)
+            self.recorded[spec.recordings_dir] = recorded_keys(spec.recordings_dir, names)
+        return self.recorded[spec.recordings_dir]
 
 
 _SESSION: Final = pytest.StashKey[ParitySession]()
@@ -355,9 +369,16 @@ def settled(calls: Sequence[LoggedCall]) -> list[LoggedCall]:
 
 
 def compare_logs(
-    scenario: str, real: ExchangeLog, fake: ExchangeLog, fake_spec: FakeUnderTest
+    scenario: str,
+    real: ExchangeLog,
+    fake: ExchangeLog,
+    fake_spec: FakeUnderTest,
+    recorded: frozenset[str] = frozenset(),
 ) -> list[Comparison]:
-    """Compare two runs of the same scenario call by call."""
+    """Compare two runs of the same scenario call by call.
+
+    ``recorded``: the keys of the recorded requests; calls repeating one are marked ``replayed``.
+    """
     model = fake_spec.model
     matchers = endpoint_matcher(model)
     comparisons: list[Comparison] = []
@@ -377,21 +398,30 @@ def compare_logs(
             continue
         endpoint = model.find_endpoint(endpoint_for(label, matchers)) if model else None
         options = real_call.options
-        comparisons.append(
-            compare(
-                label,
-                real_call.observation,
-                fake_calls[index].observation,
-                policies=[*(endpoint.fields if endpoint else []), *options.policies],
-                translate=fake_spec.translate,
-                compare_lengths=options.lengths,
-                max_value_checks=200 if options.values else 0,
-                record_roots=record_roots(endpoint) if endpoint else None,
-                aliases=aliases,
-                created=real_call.method.upper() not in _SAFE_METHODS,
-            )
+        comparison = compare(
+            label,
+            real_call.observation,
+            fake_calls[index].observation,
+            policies=[*(endpoint.fields if endpoint else []), *options.policies],
+            translate=fake_spec.translate,
+            compare_lengths=options.lengths,
+            max_value_checks=200 if options.values else 0,
+            record_roots=record_roots(endpoint) if endpoint else None,
+            aliases=aliases,
+            created=real_call.method.upper() not in _SAFE_METHODS,
         )
+        comparison.replayed = bool(real_call.replay_key) and real_call.replay_key in recorded
+        comparison.shape_only = not options.values
+        comparison.real_status = real_call.observation.status
+        comparisons.append(comparison)
     return comparisons
+
+
+def _credential_names(spec: FakeUnderTest) -> tuple[str, ...]:
+    """Query parameters that carry credentials: left out of request keys."""
+    schemes = spec.model.auth.schemes if spec.model and spec.model.auth else []
+    names = [s.name for s in schemes if s.kind == "api_key" and s.location == "query" and s.name]
+    return tuple(sorted({*names, *spec.real_query}))
 
 
 def _report(state: ParitySession, config: pytest.Config) -> ParityReport:
@@ -411,7 +441,10 @@ def pytest_runtest_teardown(item: pytest.Item) -> None:
     runs = state.runs.get(scenario)
     if runs is None or runs.real is None or runs.fake is None:
         return
-    _report(state, config).add(scenario, compare_logs(scenario, runs.real, runs.fake, runs.spec))
+    comparisons = compare_logs(
+        scenario, runs.real, runs.fake, runs.spec, state.recorded_keys(runs.spec)
+    )
+    _report(state, config).add(scenario, comparisons)
 
 
 def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
@@ -452,4 +485,16 @@ def pytest_terminal_summary(
             f"{len(report.unmatched)} scenarios ran on one side only: "
             + ", ".join(report.unmatched)
         )
+    counts = report.call_counts()
+    if counts["independent"] < counts["compared"]:
+        terminalreporter.write_line(
+            f"independent of recordings: {report.independent_score:.2%} over "
+            f"{counts['independent']} of {counts['compared']} calls"
+        )
+    spec = next(iter(state.runs.values())).spec
+    missing = report.not_covered(spec.model)
+    if missing:
+        terminalreporter.write_line(f"not covered by any scenario: {', '.join(missing)}")
+    if report.refusal_checked(spec.model) is False:
+        terminalreporter.write_line("no scenario checks a refused credential (401/403)")
     terminalreporter.write_line(f"report: {state.paths[1]}")

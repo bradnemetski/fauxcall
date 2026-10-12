@@ -10,6 +10,8 @@ from fauxcall.model.api import ApiModel, RealTarget, SourceInfo
 from fauxcall.model.endpoints import EndpointModel, ResponseShape
 from fauxcall.model.fields import IgnorePolicy
 from fauxcall.model.plan import Approval, Approvals
+from fauxcall.model.recording import Body, CapturedRequest, CapturedResponse, Exchange
+from fauxcall.recording.store import RecordingStore
 from fauxcall.storage import write_model
 from fauxcall.testing.client import CompareOptions, ExchangeLog, LoggedCall
 from fauxcall.testing.compare import W_SOFT_VALUE, Observation
@@ -27,6 +29,7 @@ if TYPE_CHECKING:
     from fastapi import FastAPI
 
     from fauxcall.model.endpoints import EndpointRole
+    from fauxcall.types import JsonValue
 
 pytest_plugins = ["pytester"]
 
@@ -258,6 +261,7 @@ def fauxcall_fake() -> FakeUnderTest:
         reports_dir=HERE / "reports",
         approvals_path=HERE / "approvals.json",
         real_transport=httpx2.ASGITransport(app=tools_app(0)),
+        recordings_dir=HERE / "recordings",
     )
 """
 
@@ -630,6 +634,48 @@ async def test_unknown(mcp):
 """
     )
     run(tools, "--target=real", "test_unknown.py").assert_outcomes(passed=1)  # no approval asked
+
+
+def test_parity_counts_calls_that_repeat_recordings_apart(tools: pytest.Pytester) -> None:
+    store = RecordingStore(tools.path / "recordings")
+    sent: JsonValue = {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {"name": "add", "arguments": {"a": 2}},  # what test_add sends
+    }
+    store.save(
+        Exchange(
+            id=store.next_id(),
+            endpoint="MCP tools/call:add",
+            started_at=datetime.now(UTC),
+            started_ns=0,
+            request=CapturedRequest(
+                method=HttpMethod.POST,
+                url="https://tools.test/mcp",
+                path="/mcp",
+                body=Body(kind="json", json_value=sent),
+            ),
+            response=CapturedResponse(status=200),
+        )
+    )
+    approve(tools, "MCP tools/call:*")
+    result = run(tools, "--target=parity", "--allow-real-writes")
+    data = report_json(tools)
+    assert data["calls"] == {"compared": 5, "replayed": 1, "shape_only": 0, "independent": 4}
+    assert data["not_covered"] == []
+    assert data["refusal_checked"] is None  # these tools take no credentials
+    result.stdout.fnmatch_lines(["*independent of recordings: 100.00% over 4 of 5 calls*"])
+
+
+def test_parity_says_when_no_scenario_checks_a_refused_credential(
+    tools: pytest.Pytester, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("AUTH", "1")
+    approve(tools, "MCP tools/call:*")
+    result = run(tools, "--target=parity", "--allow-real-writes")
+    assert report_json(tools)["refusal_checked"] is False
+    result.stdout.fnmatch_lines(["*no scenario checks a refused credential (401/403)*"])
 
 
 def test_mcp_parity_per_tool(tools: pytest.Pytester, monkeypatch: pytest.MonkeyPatch) -> None:

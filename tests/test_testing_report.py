@@ -7,7 +7,9 @@ from typing import TYPE_CHECKING, Any
 import pytest
 
 from fauxcall.model.api import ApiModel, RealTarget, RoutingModel, SourceInfo
-from fauxcall.model.endpoints import EndpointModel
+from fauxcall.model.auth import AuthModel, AuthScheme
+from fauxcall.model.endpoints import EndpointModel, StreamModel
+from fauxcall.model.mcp import McpModel, McpToolModel
 from fauxcall.testing.compare import Comparison
 from fauxcall.testing.report import (
     ParityReport,
@@ -227,3 +229,104 @@ def test_write(tmp_path: Path) -> None:
     assert md_path == tmp_path / "reports" / "parity.md"
     assert json.loads(json_path.read_text())["ok"] is False
     assert md_path.read_text().startswith("# Parity report — FAIL")
+
+
+def marked(
+    label: str,
+    *results: tuple[float, bool],
+    replayed: bool = False,
+    shape_only: bool = False,
+    status: int | None = 200,
+) -> Comparison:
+    made = comparison(label, *results)
+    made.replayed, made.shape_only, made.real_status = replayed, shape_only, status
+    return made
+
+
+def test_the_independent_score_leaves_out_replays_and_shape_only_calls() -> None:
+    report = ParityReport(threshold=0.98)
+    report.add(
+        "s",
+        [
+            marked("GET /api/v3/pet/1", (5, True), replayed=True),
+            marked("GET /api/v3/pet/2", (4, True), (1, False)),
+            marked("GET /api/v3/pet/findByStatus", (5, True), shape_only=True),
+            marked("GET /api/v3/pet/3", (5, True), replayed=True, shape_only=True),
+        ],
+    )
+    assert report.independent_score == 0.8  # only pet/2 counts
+    assert report.call_counts() == {
+        "compared": 4,
+        "replayed": 2,
+        "shape_only": 1,  # a replayed call counts as replayed only
+        "independent": 1,
+    }
+    markdown = report.to_markdown(PETSTORE)
+    assert (
+        "Independent compliance **80%** over 1 of 4 calls. The others repeat recorded requests "
+        "(2), which the fake answers from those recordings, or compare shape only (1)."
+    ) in markdown
+    data = report.to_json(PETSTORE)
+    assert isinstance(data, dict)
+    assert (data["independent_score"], data["calls"]) == (0.8, report.call_counts())
+    nothing = ParityReport(threshold=0.98)
+    nothing.add("s", [marked("GET /x", (1, True), replayed=True)])
+    assert nothing.independent_score == 1.0
+    assert "Independent compliance" not in ParityReport(threshold=0.98).to_markdown(None)
+
+
+def test_coverage_gaps_and_refused_credentials() -> None:
+    report = ParityReport(threshold=0.98)
+    report.add("s", [marked("GET /api/v3/pet/1", (1, True))])
+    assert report.not_covered(PETSTORE) == [
+        "GET /api/v3/pet/findByStatus",
+        "DELETE /api/v3/pet/{petId}",
+        "GET /api/v3/user/{user-name}",
+    ]
+    assert report.not_covered(None) == []
+    assert report.refusal_checked(PETSTORE) is None  # it takes no credentials
+    locked = PETSTORE.model_copy(update={"auth": AuthModel(schemes=[AuthScheme(kind="bearer")])})
+    assert report.refusal_checked(locked) is False
+    markdown = report.to_markdown(locked)
+    assert "Not covered by any scenario: `GET /api/v3/pet/findByStatus`," in markdown
+    assert "No scenario checks a refused credential (a 401 or 403)" in markdown
+    report.add("refused", [marked("GET /api/v3/pet/1", (1, True), status=401)])
+    assert report.refusal_checked(locked) is True
+    data = report.to_json(locked)
+    assert isinstance(data, dict)
+    assert data["refusal_checked"] is True
+    assert data["not_covered"] == report.not_covered(locked)
+
+
+def test_mcp_coverage_expects_listings_and_every_tool() -> None:
+    model = PETSTORE.model_copy(
+        update={
+            "endpoints": [],
+            "kind": "mcp",
+            "mcp": McpModel(
+                tools=[
+                    McpToolModel(definition={"name": "a"}),
+                    McpToolModel(definition={"name": "b"}),
+                ],
+                resources=[{"uri": "x://1"}],
+                prompts=[{"name": "p"}],
+            ),
+        }
+    )
+    report = ParityReport(threshold=0.98)
+    report.add("s", [marked("MCP tools/call:a", (1, True)), marked("MCP tools/list", (1, True))])
+    assert report.not_covered(model) == [
+        "MCP resources/list",
+        "MCP prompts/list",
+        "MCP tools/call:b",
+    ]
+    websocket = api_model(
+        EndpointModel(
+            id="GET /ws",
+            method=HttpMethod.GET,
+            path="/ws",
+            role="websocket",
+            stream=StreamModel(kind="websocket"),
+        )
+    )
+    assert report.not_covered(websocket) == []  # streams are compared elsewhere

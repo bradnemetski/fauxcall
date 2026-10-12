@@ -22,6 +22,7 @@ The argument is the fake's name, optionally followed by `--offline` (skip the re
 4. Read `data/reports/parity.md`. For each failed check, determine the cause (see the main skill's
    testing guide, "Reading the report") and classify it: fake bug, stale data (upstream drift), test
    bug, or expected difference (explain why).
-5. `fauxcall report <name>`. Tell the user: lint/type/coverage status, parity score vs the 98 % gate,
+5. `fauxcall report <name>`. Tell the user: lint/type/coverage status, parity score vs the 98 % gate
+   and the independent score (calls that don't just repeat recordings), what no scenario covers,
    and the classified failures with suggested fixes (fixes themselves: `/fauxcall:refresh` for drift,
    or edit model/handlers).

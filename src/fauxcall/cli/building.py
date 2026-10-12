@@ -187,6 +187,16 @@ def report(name: str) -> None:
         lines.append(
             f"Compliance **{data['score']:.2%}** (threshold {data['threshold']:.0%}) — {verdict}."
         )
+        calls = data.get("calls") or {}
+        if calls.get("independent", 0) < calls.get("compared", 0):
+            lines.append(
+                f"Independent of recordings: **{data['independent_score']:.2%}** over "
+                f"{calls['independent']} of {calls['compared']} calls."
+            )
+        if data.get("not_covered"):
+            lines.append("Not covered by any scenario: " + ", ".join(data["not_covered"]) + ".")
+        if data.get("refusal_checked") is False:
+            lines.append("No scenario checks a refused credential.")
     else:
         lines.append("No parity run yet (`uv run pytest tests/e2e --target=parity`).")
     problems = model.problems()
