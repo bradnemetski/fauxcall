@@ -335,6 +335,7 @@ async def test_mcp_server_by_discovery(ws: Workspace, tmp_path: Path) -> None:
     assert "MCP server **DeepWiki**" in result.summary
     assert "`ask_question` — Ask a question about a GitHub repository." in result.summary
     assert result.notes == ["3 tools, 0 resources, 0 prompts"]
+    assert "3 tools, 0 resources" not in result.summary  # notes are printed once, after it
     assert stat.S_IMODE(layout.env_file.stat().st_mode) == 0o600
 
 

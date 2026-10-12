@@ -489,7 +489,6 @@ async def _init_mcp(
         f"MCP server **{title}** at {endpoint} ({transport.kind}, answers with "
         f"{transport.response_mode}, protocol "
         f"{transport.default_protocol_version or FALLBACK_PROTOCOL_VERSION}).\n\n"
-        f"### Tools\n\n{tools or '(none)'}\n\n"
-        + "\n".join(f"- {note}" for note in introspection.notes)
+        f"### Tools\n\n{tools or '(none)'}"
     )
     return InitResult(layout=layout, model=model, summary=summary, notes=introspection.notes)
