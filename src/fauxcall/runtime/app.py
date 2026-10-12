@@ -38,7 +38,12 @@ from fauxcall.logs import (
 from fauxcall.model.api import ApiModel
 from fauxcall.runtime.admin import admin_router
 from fauxcall.runtime.auth import Authenticator
-from fauxcall.runtime.context import EarlyResponse, RequestContext, request_rng
+from fauxcall.runtime.context import (
+    DEFAULT_SESSION,
+    EarlyResponse,
+    RequestContext,
+    request_rng,
+)
 from fauxcall.runtime.faults import FaultInjector
 from fauxcall.runtime.handlers import ROLE_HANDLERS
 from fauxcall.runtime.jev import JevGateway
@@ -269,7 +274,7 @@ class FakeRuntime:
 
     def session_of(self, connection: HTTPConnection) -> str:
         """The evaluation session a request belongs to."""
-        return connection.headers.get(self.settings.session_header) or "default"
+        return connection.headers.get(self.settings.session_header) or DEFAULT_SESSION
 
     def new_context(
         self, connection: HTTPConnection, endpoint: EndpointModel | None

@@ -656,3 +656,34 @@ async def test_mcp_replays_authenticate_with_placeholders(tmp_path: Path) -> Non
     assert with_auth.ok, with_auth.explain()
     without = await replay_against(app, RecordedCase("c", recorded, mcp=True))
     assert without.problems[0].startswith("MCP initialize failed: HTTP 401")
+
+
+async def test_replays_run_on_the_clock_of_the_recording(tmp_path: Path) -> None:
+    settings = FakeSettings(data_dir=tmp_path, log_level="WARNING", fast=True)
+    runtime = FakeRuntime(settings, rest_model())
+    app = create_app(settings, runtime=runtime, configure_logs=False)
+    seen: list[int] = []
+
+    @app.get("/pets/{pet_id}")
+    async def get_pet(request: Request, pet_id: int) -> Response:
+        seen.append(runtime.new_context(request, None).now_ns)
+        return JSONResponse({"id": pet_id, "name": "Rex"})
+
+    recorded = exchange(
+        "000001",
+        "GET /pets/{id}",
+        response_body=Body(kind="json", json_value={"id": 1, "name": "Rex"}),
+    )
+    assert (await replay_against(app, case(recorded))).ok
+    assert seen == [recorded.started_ns]  # "now" was when the request was recorded
+    assert runtime.clocks.sessions() == []  # and only for the replay
+    assert runtime.clocks.default.now_ns() > recorded.started_ns
+
+
+async def test_replays_against_other_apps_leave_time_alone() -> None:
+    recorded = exchange(
+        "000001",
+        "GET /pets/{id}",
+        response_body=Body(kind="json", json_value={"id": 1, "name": "Rex"}),
+    )
+    assert (await replay_against(rest_fake(), case(recorded))).ok

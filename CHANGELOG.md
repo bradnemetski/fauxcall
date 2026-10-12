@@ -35,6 +35,12 @@ All notable changes to FauxCall are listed here. The format follows
   foreground, and `fauxcall status` flags a review that never finished.
 - `FAUXCALL_LOG_LEVEL` accepts any case (`info`).
 
+### Fixed
+
+- Recorded requests are replayed on the clock of the moment they were recorded, so a replay can't
+  start failing when the date moves on (Frankfurter's replays of then-future dates broke on
+  2026-10-12). Existing fakes get this without regenerating.
+
 ## [0.1.2]
 
 ### Fixed

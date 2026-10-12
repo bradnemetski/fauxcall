@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Final
 
@@ -12,6 +13,7 @@ from fauxcall.errors import RecordingError
 from fauxcall.model.api import ApiModel
 from fauxcall.recording.store import RecordingStore
 from fauxcall.runtime.app import runtime_of_app
+from fauxcall.runtime.context import DEFAULT_SESSION
 from fauxcall.storage import read_model
 from fauxcall.testing.asgi import streaming_client
 from fauxcall.testing.client import (
@@ -24,7 +26,7 @@ from fauxcall.testing.compare import shape_differences
 from fauxcall.testing.plugin import FakeUnderTest
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Iterator
     from pathlib import Path
 
     from fastapi import FastAPI
@@ -241,8 +243,37 @@ def _content(exchange: Exchange) -> bytes | None:
     return None
 
 
+@contextlib.contextmanager
+def at_recording_time(app: FastAPI, exchange: Exchange) -> Iterator[None]:
+    """Run the fake on the clock of the moment ``exchange`` was recorded.
+
+    A recorded answer is only right for its moment: asked on the 11th for the 12th's rates, the
+    real API said 404, and on the 12th the fake rightly has them. Replaying at the recorded instant
+    keeps "today", "latest" and "not yet" meaning what they meant then. Only the default session's
+    clock is frozen, and only for the replay.
+    """
+    try:
+        clocks = runtime_of_app(app).clocks
+    except AttributeError:  # not a FauxCall app
+        yield
+        return
+    clocks.override(DEFAULT_SESSION).freeze(exchange.started_ns)
+    try:
+        yield
+    finally:
+        clocks.reset(DEFAULT_SESSION)
+
+
 async def replay_against(app: FastAPI, case: RecordedCase) -> ReplayOutcome:
-    """Send a recorded request to the fake and compare status and body shape."""
+    """Send a recorded request to the fake, at the time it was recorded, and compare the answer.
+
+    Status and body shape must match (see :func:`at_recording_time`).
+    """
+    with at_recording_time(app, case.exchange):
+        return await _replay(app, case)
+
+
+async def _replay(app: FastAPI, case: RecordedCase) -> ReplayOutcome:
     exchange = case.exchange
     expected = exchange.response
     assert expected is not None  # noqa: S101 - filtered by recorded_cases

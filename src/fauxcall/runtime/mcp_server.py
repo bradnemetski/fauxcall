@@ -28,7 +28,7 @@ from fauxcall.clock import ns_to_datetime
 from fauxcall.logs import bind_context, clear_context, get_logger
 from fauxcall.mcpwire import protocol
 from fauxcall.model.mcp import FALLBACK_PROTOCOL_VERSION, PROBE_PROMPT, PROBE_RESOURCE, PROBE_TOOL
-from fauxcall.runtime.context import EarlyResponse
+from fauxcall.runtime.context import DEFAULT_SESSION, EarlyResponse
 from fauxcall.runtime.inputs import json_inputs
 from fauxcall.runtime.journal import JournalEntry
 from fauxcall.runtime.matching import Candidate, match
@@ -426,7 +426,7 @@ class McpFake:
         if is_init and self.transport.issues_session:
             session = secrets.token_hex(16)
             self._sessions[session] = (
-                request.headers.get(self.runtime.settings.session_header) or "default"
+                request.headers.get(self.runtime.settings.session_header) or DEFAULT_SESSION
             )
             headers[session_header] = session
         elif (
@@ -529,7 +529,7 @@ class McpFake:
         queue: asyncio.Queue[str] = asyncio.Queue()
         self._sse_queues[session] = queue
         self._sessions[session] = (
-            request.headers.get(self.runtime.settings.session_header) or "default"
+            request.headers.get(self.runtime.settings.session_header) or DEFAULT_SESSION
         )
         messages_path = self.transport.messages_path or "/messages/"
 

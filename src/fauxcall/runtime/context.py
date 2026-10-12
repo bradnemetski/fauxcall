@@ -43,6 +43,9 @@ if TYPE_CHECKING:
     from fauxcall.types import JsonValue
     from fauxcall.world import SessionWorld
 
+DEFAULT_SESSION: Final = "default"
+"""The session of requests that don't name one (``X-Fauxcall-Session``)."""
+
 DEFAULT_STATUS: Final[dict[str, int]] = {
     "not_found": 404,
     "invalid_param": 400,
