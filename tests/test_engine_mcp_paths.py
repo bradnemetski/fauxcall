@@ -111,6 +111,51 @@ async def test_resources_and_prompts_replay_recordings(tmp_path: Path) -> None:
         assert prompt["error"] == {"code": protocol.INVALID_PARAMS, "message": "Not found"}
 
 
+async def test_prompts_and_completions_answer_with_the_matching_recording(tmp_path: Path) -> None:
+    def prompt(city: str) -> Any:
+        params: JsonValue = {"name": "weather", "arguments": {"city": city}}
+        reply: JsonValue = {
+            "jsonrpc": "2.0",
+            "id": 7,
+            "result": {"messages": [{"role": "user", "content": {"type": "text", "text": city}}]},
+        }
+        return rpc_exchange(
+            "", method_endpoint("prompts/get", "weather"), "prompts/get", params, reply
+        )
+
+    def completion(value: str, values: list[JsonValue]) -> Any:
+        params: JsonValue = {
+            "ref": {"type": "ref/prompt", "name": "weather"},
+            "argument": {"name": "city", "value": value},
+        }
+        reply: JsonValue = {"jsonrpc": "2.0", "id": 7, "result": {"completion": {"values": values}}}
+        return rpc_exchange(
+            "", method_endpoint("completion/complete"), "completion/complete", params, reply
+        )
+
+    recordings = [
+        prompt("Paris"),
+        prompt("Tokyo"),
+        completion("Pa", ["Paris"]),
+        completion("To", ["Tokyo", "Toronto"]),
+    ]
+    app, _ = _json_app(tmp_path, extra=recordings)
+    async with asgi_client(app) as http:
+        tokyo = await _rpc(http, "prompts/get", {"name": "weather", "arguments": {"city": "Tokyo"}})
+        assert tokyo["result"]["messages"][0]["content"]["text"] == "Tokyo"
+        paris = await _rpc(http, "prompts/get", {"name": "weather", "arguments": {"city": "Paris"}})
+        assert paris["result"]["messages"][0]["content"]["text"] == "Paris"
+        to = await _rpc(
+            http,
+            "completion/complete",
+            {
+                "ref": {"type": "ref/prompt", "name": "weather"},
+                "argument": {"name": "city", "value": "To"},
+            },
+        )
+        assert to["result"]["completion"]["values"] == ["Tokyo", "Toronto"]
+
+
 @pytest.mark.parametrize(
     ("requested", "initialize_result", "default", "expected"),
     [

@@ -517,6 +517,49 @@ def test_analyze_access(ws: Workspace) -> None:
     assert "The fake will refuse the same." in output
 
 
+def test_the_answers_file_is_the_approval_in_headless_runs(
+    ws: Workspace, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fake = make_fake(ws)
+    answers = fake.root / "answers.json"
+    answers.write_text(json.dumps({"name": "shop", "mutations": {"approve": False}}))
+    assert "No mutating calls planned." in invoke("plan", "review", "shop").output
+    assert not fake.approvals_path.exists()
+    answers.write_text(
+        json.dumps(
+            {
+                "name": "shop",
+                "credentials": "none_needed",
+                "mutations": {
+                    "approve": True,
+                    "endpoints": ["POST /v1/*", "DELETE /nowhere"],
+                    "max_calls_per_endpoint": 7,
+                    "reason": "a sandbox",
+                },
+            }
+        )
+    )
+    review = invoke("plan", "review", "shop").output
+    assert "applied the write approval in answers.json: POST /v1/items, POST /v1/jobs" in review
+    approvals = read_model(fake.approvals_path, Approvals).approvals
+    assert [(a.endpoint, a.max_calls, a.approved_by, a.reason) for a in approvals] == [
+        ("POST /v1/items", 7, "answers.json", "a sandbox"),
+        ("POST /v1/jobs", 7, "answers.json", "a sandbox"),
+    ]
+    assert "applied" not in invoke("plan", "review", "shop").output  # once only
+    monkeypatch.setenv("FAUXCALL_APPROVAL_BUDGET", "3")
+    answers.write_text(
+        json.dumps({"mutations": {"approve": True, "endpoints": ["PUT *", "DELETE *"]}})
+    )
+    plan = write_plan(fake, "w", [get("read", "/v1/items", "GET /v1/items")])
+    assert (
+        "applied the write approval in answers.json"
+        not in invoke("plan", "check", "shop", str(plan)).output
+    )  # the model has no PUT or DELETE
+    answers.write_text("{broken")
+    assert "is not a valid answers file" in invoke("plan", "review", "shop", code=1).output
+
+
 def test_a_changed_write_needs_approving_again(ws: Workspace) -> None:
     fake = make_fake(ws)
 
@@ -1035,6 +1078,24 @@ def test_recordings_lists_filters_and_shows(ws: Workspace, monkeypatch: pytest.M
     shown = invoke("recordings", "shop", "--show", first_id.lstrip("0")).output
     assert json.loads(shown)["id"] == first_id
     assert "no recording" in invoke("recordings", "shop", "--show", "999999", code=1).output
+
+
+def test_recordings_delete(ws: Workspace, monkeypatch: pytest.MonkeyPatch) -> None:
+    fake = record_shop(ws, monkeypatch)
+    before = [e.id for e in exchanges(fake)]
+    assert "say what to delete" in invoke("recordings-delete", "shop", code=1).output
+    one = invoke("recordings-delete", "shop", "--id", before[0].lstrip("0")).output
+    assert one.strip() == f"deleted 1 recordings: {before[0]}"
+    polls = invoke(
+        "recordings-delete", "shop", "--endpoint", "GET /v1/jobs/*", "--purpose", "job_poll"
+    ).output
+    assert polls.startswith("deleted 3 recordings")
+    left = exchanges(fake)
+    assert len(left) == len(before) - 4
+    assert all(e.purpose != "job_poll" for e in left)
+    assert invoke("recordings-delete", "shop", "--id", "999999").output.strip() == (
+        "deleted 0 recordings"
+    )
 
 
 def test_recordings_of_mcp_calls_and_as_jsonl(ws: Workspace) -> None:

@@ -1,0 +1,112 @@
+{
+  "id": "000340",
+  "endpoint": "MCP tasks/get",
+  "purpose": "invalid",
+  "plan_call": "get-no-id",
+  "started_at": "2026-10-12T03:41:42.796491Z",
+  "started_ns": 1791776502796491000,
+  "elapsed_ms": 8.342,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 34,
+        "method": "tasks/get",
+        "params": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "339"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:41:42 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 34,
+        "error": {
+          "code": -32603,
+          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"params\",\n      \"taskId\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.082,
+      "kind": "sse",
+      "event": "message",
+      "id": "18a9d14e-49ec-4aad-a7ae-fff652d37e4f",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":34,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"expected\\\": \\\"string\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"taskId\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n  }\\n]\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

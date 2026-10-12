@@ -1,0 +1,124 @@
+{
+  "id": "000225",
+  "endpoint": "MCP tools/call:gzip-file-as-resource",
+  "purpose": "edge",
+  "plan_call": "gz-empty",
+  "started_at": "2026-10-12T03:38:09.543623Z",
+  "started_ns": 1791776289543623000,
+  "elapsed_ms": 5.737,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 25,
+        "method": "tools/call",
+        "params": {
+          "name": "gzip-file-as-resource",
+          "arguments": {
+            "name": "empty.gz",
+            "data": "data:,"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:38:09 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "name": "empty.gz",
+              "uri": "demo://resource/session/empty.gz",
+              "mimeType": "application/gzip",
+              "type": "resource_link"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 25
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.52,
+      "kind": "sse",
+      "event": "message",
+      "id": "4c035a2a-6b14-483f-9d06-1da45fbccc84",
+      "data": "{\"result\":{\"content\":[{\"name\":\"empty.gz\",\"uri\":\"demo://resource/session/empty.gz\",\"mimeType\":\"application/gzip\",\"type\":\"resource_link\"}]},\"jsonrpc\":\"2.0\",\"id\":25}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

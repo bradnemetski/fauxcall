@@ -5,9 +5,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 {% if mcp %}
-from fauxcall.runtime import create_app, register_tool
+from fauxcall.runtime import create_app, register_method, register_tool
 
-from {{ package }}.handlers import TOOL_HANDLERS
+from {{ package }}.handlers import METHOD_HANDLERS, TOOL_HANDLERS
 from {{ package }}.routes import router
 from {{ package }}.settings import Settings
 {% else %}
@@ -27,6 +27,8 @@ def build_app(settings: Settings | None = None) -> FastAPI:
     app = create_app(settings or Settings(), routers=[router])
     for name, handler in TOOL_HANDLERS.items():
         register_tool(app, name, handler)
+    for method, method_handler in METHOD_HANDLERS.items():
+        register_method(app, method, method_handler)
     return app
 {% else %}
     return create_app(settings or Settings(), routers=[router])

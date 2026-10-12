@@ -1,0 +1,119 @@
+{
+  "id": "000150",
+  "endpoint": "MCP tools/call:get-roots-list",
+  "plan_call": "roots-2",
+  "started_at": "2026-10-12T03:35:43.123791Z",
+  "started_ns": 1791776143123791000,
+  "elapsed_ms": 7.321,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 76,
+        "method": "tools/call",
+        "params": {
+          "name": "get-roots-list",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "200"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:35:43 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "MCP error -32602: Tool get-roots-list not found"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 76
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 7.072,
+      "kind": "sse",
+      "event": "message",
+      "id": "02d2860e-8d2a-4b36-b20e-fa11ebb5c148",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Tool get-roots-list not found\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":76}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

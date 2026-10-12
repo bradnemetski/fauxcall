@@ -103,6 +103,12 @@ class RequestContext:
     body_bytes: bytes = b""
     json_body: JsonValue = None
     json_error: bool = False
+    mcp_session: str | None = None
+    """MCP: the call's ``Mcp-Session-Id`` (one per connected client), when the server issues one."""
+    notifications: list[JsonValue] = field(default_factory=list)
+    """MCP: notifications sent while answering (``notify``), when nothing streams them."""
+    on_notify: Callable[[JsonValue], None] | None = None
+    """MCP: where ``notify`` sends a notification as it happens (an SSE response stream)."""
 
     # -- shortcuts ---------------------------------------------------------------------------
 
@@ -124,6 +130,51 @@ class RequestContext:
         It lives in memory only.
         """
         return self.runtime.handler_state(self.session)
+
+    async def pause(self, seconds: float) -> None:
+        """Take as long as the real service would (a long job's steps …); skipped in fast mode.
+
+        It is noted in ``runtime.pauses`` either way, so tests can check the timing in fast mode.
+        """
+        if self.runtime.settings.fast:
+            self.runtime.pauses.append(seconds)
+            return
+        await self.runtime.pause(seconds)
+
+    def notify(self, method: str, params: JsonValue = None) -> None:
+        """MCP: send the client a notification while answering (``notifications/message`` …).
+
+        With an SSE response it reaches the client at once, before the answer, like a real
+        server's; otherwise it is sent with the answer, or dropped by a JSON-only transport.
+        """
+        message: dict[str, JsonValue] = {"jsonrpc": "2.0", "method": method}
+        if params is not None:
+            message["params"] = params
+        if self.on_notify is not None:
+            self.on_notify(message)
+        else:
+            self.notifications.append(message)
+
+    def progress(
+        self, progress: float, total: float | None = None, message: str | None = None
+    ) -> None:
+        """MCP: a progress notification for this call, if the client asked for them.
+
+        The client asks by sending a ``progressToken`` in the request's ``_meta``; without one
+        nothing is sent, as on a real server.
+        """
+        request = self.json_body if isinstance(self.json_body, dict) else {}
+        params = request.get("params")
+        meta = params.get("_meta") if isinstance(params, dict) else None
+        token = meta.get("progressToken") if isinstance(meta, dict) else None
+        if token is None:
+            return
+        update: dict[str, JsonValue] = {"progressToken": token, "progress": progress}
+        if total is not None:
+            update["total"] = total
+        if message is not None:
+            update["message"] = message
+        self.notify("notifications/progress", update)
 
     @property
     def endpoint_id(self) -> str:

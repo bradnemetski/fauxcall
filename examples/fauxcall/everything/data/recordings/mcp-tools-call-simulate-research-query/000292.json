@@ -1,0 +1,120 @@
+{
+  "id": "000292",
+  "endpoint": "MCP tools/call:simulate-research-query",
+  "purpose": "invalid",
+  "plan_call": "rq-missing",
+  "started_at": "2026-10-12T03:39:10.079179Z",
+  "started_ns": 1791776350079179000,
+  "elapsed_ms": 5.416,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 92,
+        "method": "tools/call",
+        "params": {
+          "name": "simulate-research-query",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "252"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:39:10 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "MCP error -32601: Tool simulate-research-query requires task augmentation (taskSupport: 'required')"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 92
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.199,
+      "kind": "sse",
+      "event": "message",
+      "id": "d46177ca-762c-4a89-a92a-b66632b21ad4",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32601: Tool simulate-research-query requires task augmentation (taskSupport: 'required')\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":92}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "id": "000403",
+  "endpoint": "MCP tools/call:echo",
+  "purpose": "invalid",
+  "plan_call": "call-args-array",
+  "started_at": "2026-10-12T03:49:16.871705Z",
+  "started_ns": 1791776956871705000,
+  "elapsed_ms": 8.732,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 59,
+        "method": "tools/call",
+        "params": {
+          "name": "echo",
+          "arguments": [
+            "hi"
+          ]
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "338"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:49:16 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 59,
+        "error": {
+          "code": -32603,
+          "message": "[\n  {\n    \"expected\": \"record\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"params\",\n      \"arguments\"\n    ],\n    \"message\": \"Invalid input: expected record, received array\"\n  }\n]"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.461,
+      "kind": "sse",
+      "event": "message",
+      "id": "be24efeb-d9a4-4b7a-99ef-5d4a651f509b",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":59,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"expected\\\": \\\"record\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"arguments\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected record, received array\\\"\\n  }\\n]\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

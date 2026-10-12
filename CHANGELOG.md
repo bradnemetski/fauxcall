@@ -10,6 +10,27 @@ All notable changes to FauxCall are listed here. The format follows
 
 ### Added
 
+- An MCP example: `examples/fauxcall/everything`, a fake of the MCP project's Everything reference
+  server built by a headless run (99.91% parity, independent 99.91%).
+
+- **MCP fakes can answer every method with code.** `METHOD_HANDLERS` (`register_method`) handles
+  dynamic resources, prompts, completions, subscriptions, `logging/setLevel` or any other method,
+  falling back to the recordings when a handler returns `None`. Without one, the fake answers
+  subscriptions, `logging/setLevel` and completions the way the protocol says, and an unknown
+  method with the real "method not found".
+- MCP handlers can send notifications: `ctx.progress(…)` (when the call carried a
+  `progressToken`) and `ctx.notify(…)`. Over SSE they reach the client as they happen, before the
+  answer. `ctx.pause(seconds)` takes real time (skipped in fast mode) and every pause is noted in
+  `runtime.pauses` for tests; `ctx.mcp_session` is the client's `Mcp-Session-Id`.
+- Tools a server lists only to clients that support sampling, elicitation or roots are found by
+  introspection (`requires`), and the fake lists them only to such clients.
+- `fauxcall model tool <name> <tools…>` sets a tool's `--behavior`, `--invalid-args` and
+  `--varies`/`--steady`; `fauxcall recordings-delete` removes recordings by id or endpoint.
+- **Headless runs apply `answers.json` themselves.** `record`, `plan review`/`check` and parity
+  runs turn the answers file's write approval into approvals, so the agent never approves anything.
+- Home folders hide their account name (`/Users/<name>`, `C:\Users\<name>`) wherever they
+  appear, and MCP's `progressToken` is no longer redacted as a secret.
+
 - **The parity report says what its score rests on.** Next to the overall compliance it gives the
   *independent* score, without the calls that only repeat a recorded request (which the fake
   answers from that recording) or compare shape only, with how many calls each covers. It lists
@@ -78,6 +99,16 @@ All notable changes to FauxCall are listed here. The format follows
   fakes' containers: a running fake never needs them.
 
 ### Fixed
+
+- MCP prompts, resource reads and completions answer with the recording that matches their
+  params; before, the first recording answered every call.
+- Parity compares the real side's answers as they would have been recorded (same pseudonyms as
+  the fake, credentials redacted), so no real personal data reaches the parity report.
+- A crashing MCP handler answers `-32603` instead of a bare HTTP 500, and tool arguments that
+  aren't an object are no longer turned into `{}`.
+- `model check` counts an MCP fake's tools, resources and prompts; `analyze endpoint` profiles an
+  MCP tool's result, not the JSON-RPC envelope; the parity report groups resource reads by
+  template; `status` shows a phase's latest note; `init` prints its notes once.
 
 - Recorded requests are replayed on the clock of the moment they were recorded, so a replay can't
   start failing when the date moves on (Frankfurter's replays of then-future dates broke on

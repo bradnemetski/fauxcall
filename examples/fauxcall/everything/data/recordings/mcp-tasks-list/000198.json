@@ -1,0 +1,111 @@
+{
+  "id": "000198",
+  "endpoint": "MCP tasks/list",
+  "plan_call": "tasks-list-empty",
+  "started_at": "2026-10-12T03:37:13.163494Z",
+  "started_ns": 1791776233163494000,
+  "elapsed_ms": 5.13,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 46,
+        "method": "tasks/list",
+        "params": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "122"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:37:13 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "tasks": [],
+          "_meta": {}
+        },
+        "jsonrpc": "2.0",
+        "id": 46
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.908,
+      "kind": "sse",
+      "event": "message",
+      "id": "ff48f6a5-cc62-46fb-b91d-13a088844238",
+      "data": "{\"result\":{\"tasks\":[],\"_meta\":{}},\"jsonrpc\":\"2.0\",\"id\":46}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

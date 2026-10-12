@@ -10,7 +10,14 @@ from fauxcall import jsonfmt
 from fauxcall.errors import HttpStatusError, RecordingError
 from fauxcall.mcpwire import protocol
 from fauxcall.mcpwire.client import McpWireClient
-from fauxcall.model import Approval, Approvals, McpTransportModel, PlannedCall, RecordingPlan
+from fauxcall.model import (
+    Approval,
+    Approvals,
+    McpToolModel,
+    McpTransportModel,
+    PlannedCall,
+    RecordingPlan,
+)
 from fauxcall.model.mcp import PROBE_PROMPT, PROBE_RESOURCE, PROBE_TOOL
 from fauxcall.recording import McpRecorder, RecordingStore, tool_is_mutating
 from fauxcall.recording.mcp import (
@@ -259,14 +266,17 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         f"MCP {PROBE_METHOD}",
         f"MCP tools/call:{PROBE_TOOL}",
         f"MCP prompts/get:{PROBE_PROMPT}",
+        *["MCP tools/list:with-sampling"] * 2,  # two pages each
+        *["MCP tools/list:with-elicitation"] * 2,
+        *["MCP tools/list:with-roots"] * 2,
         "MCP initialize:version-2024-11-05",
         "MCP initialize:version-2025-03-26",
         "MCP initialize:version-2025-06-18",
         "MCP initialize:version-2025-11-25",
     ]
-    assert len(found.exchanges) == 12
+    assert len(found.exchanges) == 18
     # every request was paced: 2 rps -> 0.5 s apart (cleanup DELETEs included)
-    assert clock.sleeps == [0.5] * 17
+    assert clock.sleeps == [0.5] * 29  # each capability probe: initialize, 2 pages, DELETE
     # A fake built from what was learned behaves the same on the wire.
     rebuilt = fake_model(transport=model.transport, page_size=model.tools_page_size)
     rebuilt.mcp = model.model_copy(update={"tools": rebuilt.mcp.tools if rebuilt.mcp else []})
@@ -329,6 +339,59 @@ async def test_introspect_keeps_the_listings_other_members(tmp_path: Path) -> No
             probe_versions=False
         )
     assert found.model.listing_extras == {"tools/list": extras}
+
+
+async def test_tools_only_some_clients_see(tmp_path: Path) -> None:
+    sample: JsonValue = {"name": "ask_the_model", "inputSchema": {"type": "object"}}
+    model = fake_model()
+    assert model.mcp is not None
+    model.mcp.tools.append(McpToolModel(definition=sample, requires=["sampling"]))
+    either: JsonValue = {"name": "ask_either", "inputSchema": {"type": "object"}}
+    model.mcp.tools.append(McpToolModel(definition=either, requires=["sampling", "roots"]))
+    async with streaming_client(fake_app(tmp_path / "a", model)) as http:
+        found = await recorder(tmp_path, http, "http://fake.test/mcp", rps=0).introspect(
+            probe_versions=False
+        )
+        learned = found.model.tool("ask_the_model")
+        assert learned is not None
+        assert learned.requires == ["sampling"]
+        both = found.model.tool("ask_either")
+        assert both is not None
+        assert both.requires == ["roots", "sampling"]  # listed to clients with either
+        assert [t.name for t in found.model.tools if not t.requires] == [
+            "echo",
+            "delete_item",
+            "whoami",
+        ]
+        plain = McpWireClient("http://fake.test/mcp", http)
+        await plain.initialize()
+        listed = j((await plain.call("tools/list")).result)["tools"]
+        assert "ask_the_model" not in [t["name"] for t in listed]
+        hidden = await plain.call("tools/call", {"name": "ask_the_model", "arguments": {}})
+        assert hidden.error is not None or j(hidden.result)["isError"] is True
+        capable = McpWireClient("http://fake.test/mcp", http)
+        await capable.initialize(capabilities={"sampling": {}})
+        listed = j((await capable.call("tools/list")).result)["tools"]
+        assert "ask_the_model" in [t["name"] for t in listed]
+        await plain.close()
+        await capable.close()
+
+
+async def test_a_capability_probe_that_fails_is_skipped(tmp_path: Path) -> None:
+    server = Scripted()
+
+    def answer(request: httpx2.Request) -> httpx2.Response:
+        if b'"sampling"' in request.content:
+            return httpx2.Response(500, text="boom")
+        return server(request)
+
+    async with httpx2.AsyncClient(transport=httpx2.MockTransport(answer)) as http:
+        found = await recorder(tmp_path, http, "http://mock/mcp", rps=0).introspect(
+            probe_versions=False
+        )
+    assert [t.name for t in found.model.tools] == ["echo"]
+    assert "MCP tools/list:with-elicitation" in endpoints(tmp_path)  # the others still ran
+    assert "MCP tools/list:with-sampling" not in endpoints(tmp_path)
 
 
 async def test_introspect_falls_back_to_the_legacy_transport(tmp_path: Path) -> None:
@@ -526,12 +589,15 @@ async def test_version_probes_skip_refusals_and_stop_at_the_budget(tmp_path: Pat
         assert found.model.transport.issues_session is False
         assert found.model.transport.get_stream == "status"
         assert "missing_session" not in found.model.errors
-        # 5 calls of introspection, then one per probed version: the refused 2024-11-05, then
-        # 2025-03-26, and the budget is gone
-        tight = recorder(tmp_path / "b", http, "http://mock/mcp", rps=0, max_calls=7)
+        # 11 calls of introspection (5, and 2 per client capability probed), then one per
+        # probed version: the refused 2024-11-05, then 2025-03-26, and the budget is gone
+        tight = recorder(tmp_path / "b", http, "http://mock/mcp", rps=0, max_calls=13)
         limited = await tight.introspect()
         assert limited.model.transport.protocol_versions == {"2025-03-26": "2025-03-26"}
-        assert tight.calls_made == 7
+        assert tight.calls_made == 13
+        # A budget spent while probing capabilities leaves fewer probes, not a failed init
+        tighter = recorder(tmp_path / "c", http, "http://mock/mcp", rps=0, max_calls=6)
+        assert (await tighter.introspect()).model.transport.protocol_versions == {}
 
 
 async def test_introspection_budget_runs_out(tmp_path: Path) -> None:

@@ -1,0 +1,121 @@
+{
+  "id": "000185",
+  "endpoint": "MCP completion/complete",
+  "purpose": "invalid",
+  "plan_call": "cc-unknown-prompt",
+  "started_at": "2026-10-12T03:37:06.634922Z",
+  "started_ns": 1791776226634922000,
+  "elapsed_ms": 8.396,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 33,
+        "method": "completion/complete",
+        "params": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "nope"
+          },
+          "argument": {
+            "name": "x",
+            "value": ""
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "165"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:37:06 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 33,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Prompt nope not found"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.076,
+      "kind": "sse",
+      "event": "message",
+      "id": "3c67084b-79f1-4128-8da8-72f63f5f4909",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":33,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Prompt nope not found\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

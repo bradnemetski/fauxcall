@@ -1,0 +1,116 @@
+{
+  "id": "000413",
+  "endpoint": "MCP completion/complete",
+  "purpose": "invalid",
+  "plan_call": "cc-p3",
+  "started_at": "2026-10-12T04:35:34.380222Z",
+  "started_ns": 1791779734380222000,
+  "elapsed_ms": 5.77,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "completion/complete",
+        "params": {
+          "ref": {
+            "type": "ref/bogus"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "1539"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 04:35:34 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "error": {
+          "code": -32603,
+          "message": "[\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"ref/prompt\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"ref/prompt\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"ref/resource\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"ref/resource\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"uri\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"params\",\n      \"ref\"\n    ],\n    \"message\": \"Invalid input\"\n  },\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"params\",\n      \"argument\"\n    ],\n    \"message\": \"Invalid input: expected object, received undefined\"\n  }\n]"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.562,
+      "kind": "sse",
+      "event": "message",
+      "id": "4389a147-ec5a-4294-9427-eeb79d82886d",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":4,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"code\\\": \\\"invalid_union\\\",\\n    \\\"errors\\\": [\\n      [\\n        {\\n          \\\"code\\\": \\\"invalid_value\\\",\\n          \\\"values\\\": [\\n            \\\"ref/prompt\\\"\\n          ],\\n          \\\"path\\\": [\\n            \\\"type\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected \\\\\\\"ref/prompt\\\\\\\"\\\"\\n        },\\n        {\\n          \\\"expected\\\": \\\"string\\\",\\n          \\\"code\\\": \\\"invalid_type\\\",\\n          \\\"path\\\": [\\n            \\\"name\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n        }\\n      ],\\n      [\\n        {\\n          \\\"code\\\": \\\"invalid_value\\\",\\n          \\\"values\\\": [\\n            \\\"ref/resource\\\"\\n          ],\\n          \\\"path\\\": [\\n            \\\"type\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected \\\\\\\"ref/resource\\\\\\\"\\\"\\n        },\\n        {\\n          \\\"expected\\\": \\\"string\\\",\\n          \\\"code\\\": \\\"invalid_type\\\",\\n          \\\"path\\\": [\\n            \\\"uri\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n        }\\n      ]\\n    ],\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"ref\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input\\\"\\n  },\\n  {\\n    \\\"expected\\\": \\\"object\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"argument\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected object, received undefined\\\"\\n  }\\n]\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

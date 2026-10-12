@@ -65,7 +65,7 @@ _PUBLIC_SUFFIX_RE: Final = re.compile(
     r"(?:^|_)(?:types?|endpoint|supported|servers|policy|methods?|expires_(?:in|at)|scopes?)$"
 )
 _PAGINATION_RE: Final = re.compile(
-    r"(?:page|next|prev|previous|continuation|sync|resume|cursor)_?token$"
+    r"(?:page|next|prev|previous|continuation|sync|resume|cursor|progress)_?token$"
 )
 _PUBLIC_HEADER_RE: Final = re.compile(r"rate_?limit|^access_control_")
 _AUTH_HEADERS: Final = frozenset({"authorization", "proxy-authorization"})

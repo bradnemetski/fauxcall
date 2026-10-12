@@ -1,0 +1,123 @@
+{
+  "id": "000374",
+  "endpoint": "MCP tools/call:get-annotated-message",
+  "purpose": "invalid",
+  "plan_call": "annot-both-bad",
+  "started_at": "2026-10-12T03:49:02.306688Z",
+  "started_ns": 1791776942306688000,
+  "elapsed_ms": 5.763,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 30,
+        "method": "tools/call",
+        "params": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": 5,
+            "includeImage": "no"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:49:02 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "MCP error -32602: Input validation error: Invalid arguments for tool get-annotated-message: Invalid option: expected one of \"error\"|\"success\"|\"debug\" at messageType\nInvalid input: expected boolean, received string at includeImage"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 30
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.522,
+      "kind": "sse",
+      "event": "message",
+      "id": "b520541e-ea2a-40cb-890e-024609bc3f63",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Input validation error: Invalid arguments for tool get-annotated-message: Invalid option: expected one of \\\"error\\\"|\\\"success\\\"|\\\"debug\\\" at messageType\\nInvalid input: expected boolean, received string at includeImage\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":30}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

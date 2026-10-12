@@ -1,0 +1,120 @@
+{
+  "id": "000369",
+  "endpoint": "MCP tools/call:get-sum",
+  "purpose": "invalid",
+  "plan_call": "sum-empty",
+  "started_at": "2026-10-12T03:48:59.795086Z",
+  "started_ns": 1791776939795086000,
+  "elapsed_ms": 11.662,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 25,
+        "method": "tools/call",
+        "params": {
+          "name": "get-sum",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:48:59 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "MCP error -32602: Input validation error: Invalid arguments for tool get-sum: Invalid input: expected number, received undefined at a\nInvalid input: expected number, received undefined at b"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 25
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 11.376,
+      "kind": "sse",
+      "event": "message",
+      "id": "01893618-fba9-4f7e-a3e2-92f8545b8b1d",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Input validation error: Invalid arguments for tool get-sum: Invalid input: expected number, received undefined at a\\nInvalid input: expected number, received undefined at b\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":25}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

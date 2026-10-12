@@ -1,0 +1,118 @@
+{
+  "id": "000250",
+  "endpoint": "MCP tools/call:toggle-subscriber-updates",
+  "plan_call": "subupd-off",
+  "started_at": "2026-10-12T03:38:34.165809Z",
+  "started_ns": 1791776314165809000,
+  "elapsed_ms": 7.589,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 50,
+        "method": "tools/call",
+        "params": {
+          "name": "toggle-subscriber-updates",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:38:34 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Stopped simulated resource updates for session aca531d8-b0b3-407f-85e1-5caa9ad1afa6"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 50
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 7.325,
+      "kind": "sse",
+      "event": "message",
+      "id": "e399306f-b145-477e-b17b-10b388e7f424",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Stopped simulated resource updates for session aca531d8-b0b3-407f-85e1-5caa9ad1afa6\"}]},\"jsonrpc\":\"2.0\",\"id\":50}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1283,7 +1283,7 @@ def test_mcp_fake(tmp_path: Path) -> None:
     workspace = Workspace(tmp_path / "fakes")
     layout, _ = build_mcp_fake(workspace, tmp_path / "server")
     app = (layout.src / "app.py").read_text()
-    assert "from fauxcall.runtime import create_app, register_tool" in app
+    assert "from fauxcall.runtime import create_app, register_method, register_tool" in app
     assert "for name, handler in TOOL_HANDLERS.items():" in app
     assert (layout.src / "routes.py").read_text().endswith("router = APIRouter()\n")
     assert (

@@ -8,6 +8,7 @@ resolution-markers = [
 
 [manifest]
 members = [
+    "fauxcall-everything",
     "fauxcall-fakerestapi",
     "fauxcall-frankfurter",
     "fauxcall-petstore",
@@ -433,6 +434,33 @@ dev = [
     { name = "ruff", specifier = ">=0.15" },
     { name = "types-jsonschema", specifier = ">=4.23" },
     { name = "types-pyyaml", specifier = ">=6.0" },
+]
+
+[[package]]
+name = "fauxcall-everything"
+version = "0.1.0"
+source = { editable = "everything" }
+dependencies = [
+    { name = "fauxcall" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "fauxcall", extra = ["testing"] },
+    { name = "mypy" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "fauxcall", editable = "../../" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "fauxcall", extras = ["testing"], editable = "../../" },
+    { name = "mypy", specifier = ">=2.0" },
+    { name = "pytest-cov", specifier = ">=7.0" },
+    { name = "ruff", specifier = ">=0.15" },
 ]
 
 [[package]]

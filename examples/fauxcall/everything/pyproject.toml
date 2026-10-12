@@ -1,0 +1,81 @@
+[project]
+name = "fauxcall-everything"
+version = "0.1.0"
+description = "FauxCall fake of Everything Reference Server"
+requires-python = ">=3.12"
+dependencies = ["fauxcall"]
+
+[project.scripts]
+fauxcall-everything = "fauxcall_everything.__main__:main"
+
+[dependency-groups]
+dev = [
+    "fauxcall[testing]",
+    "mypy>=2.0",
+    "pytest-cov>=7.0",
+    "ruff>=0.15",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.0,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "COM812",  # trailing-comma rules conflict with the formatter
+    "ISC001",  # implicit string concatenation conflicts with the formatter
+    "CPY001",  # no per-file copyright headers
+    "D105",    # magic methods are self-describing
+    "D107",    # __init__ args are documented on the class
+    "EM101",   # exception messages as literals are fine
+    "EM102",
+    "TRY003",  # long exception messages are fine
+    "S311",    # deterministic simulation intentionally uses non-crypto PRNGs
+    "TD002",   # TODOs don't need an author ...
+    "TD003",   # ... or an issue link
+    "FIX002",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "PLR2004", "D", "SLF001", "ARG001", "INP001", "ANN401", "FBT001"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = [
+    "pydantic.BaseModel",
+    "pydantic_settings.BaseSettings",
+    "fauxcall.config.FakeSettings",
+]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+plugins = ["pydantic.mypy"]
+files = ["src", "tests"]
+# Test folders are module roots, as pytest sees them: tests/unit/conftest.py no longer clashes
+# with tests/conftest.py, and e2e helpers import by name (`from market import …`).
+mypy_path = ["src", "tests/unit", "tests/e2e"]
+explicit_package_bases = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-ra", "--strict-markers", "-p", "fauxcall.testing.plugin"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.coverage.run]
+branch = true
+source = ["fauxcall_everything"]
+
+[tool.coverage.report]
+fail_under = 95
+show_missing = true
+exclude_also = ["if TYPE_CHECKING:", "if __name__ == .__main__.:"]

@@ -1,0 +1,27 @@
+{
+  "name": "access",
+  "created_at": "2026-10-11T23:40:00Z",
+  "note": "One cheap call of each read-only tool to learn the answers' shape.",
+  "calls": [
+    {"id": "acc-echo", "endpoint": "MCP tools/call:echo", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "echo", "arguments": {"message": "Hello from FauxCall"}}}},
+    {"id": "acc-annot", "endpoint": "MCP tools/call:get-annotated-message", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-annotated-message", "arguments": {"messageType": "success"}}}},
+    {"id": "acc-env", "endpoint": "MCP tools/call:get-env", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-env", "arguments": {}}}},
+    {"id": "acc-links", "endpoint": "MCP tools/call:get-resource-links", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-resource-links", "arguments": {}}}},
+    {"id": "acc-ref", "endpoint": "MCP tools/call:get-resource-reference", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-resource-reference", "arguments": {}}}},
+    {"id": "acc-struct", "endpoint": "MCP tools/call:get-structured-content", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-structured-content", "arguments": {"location": "Chicago"}}}},
+    {"id": "acc-sum", "endpoint": "MCP tools/call:get-sum", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 2, "b": 3}}}},
+    {"id": "acc-img", "endpoint": "MCP tools/call:get-tiny-image", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-tiny-image", "arguments": {}}}},
+    {"id": "acc-long", "endpoint": "MCP tools/call:trigger-long-running-operation", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "trigger-long-running-operation", "arguments": {"duration": 2, "steps": 2}, "_meta": {"progressToken": "acc-long-1"}}}},
+    {"id": "acc-roots", "endpoint": "MCP tools/call:get-roots-list", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-roots-list", "arguments": {}}}}
+  ]
+}

@@ -125,8 +125,8 @@ async def test_latest_converts_base(client: httpx2.AsyncClient) -> None:
 Use `Settings(fast=True)` and drive time through the admin API (`POST /__fauxcall/clock`) instead of
 sleeping.
 
-To test emulated latency, record the pauses (replace the runtime's `pause`) and assert only an upper
-bound: the fake waits for the recorded time *minus the time already spent* answering, so a pause can
+To test emulated latency, read the pauses the runtime took (`runtime_of_app(app).pauses`, the
+latest ones in order) and assert only an upper bound: the fake waits for the recorded time *minus the time already spent* answering, so a pause can
 be anything up to the sampled latency, or skipped when the answer already took that long.
 `assert all(p <= max(recorded) for p in pauses)` is stable; a lower bound above zero or an exact
 number of pauses fails whenever the machine is slow.

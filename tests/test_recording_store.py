@@ -127,3 +127,13 @@ def test_unreadable_files_do_not_decide_ownership(tmp_path: Path) -> None:
     assert RecordingStore(tmp_path).directory("GET /a-b") == (
         tmp_path / unique_endpoint_slug("GET /a-b")
     )
+
+
+def test_delete_removes_the_exchange_and_its_sidecars(tmp_path: Path) -> None:
+    store = RecordingStore(tmp_path)
+    kept = store.save(make("GET /a", "000001"), {"000001.body.bin": b"keep"})
+    gone = make("GET /a", "000002")
+    path = store.save(gone, {"000002.body.bin": b"x", "000002.part1.bin": b"y"})
+    store.delete(path, gone)
+    left = sorted(p.name for p in path.parent.iterdir())
+    assert left == ["000001.body.bin", kept.name]

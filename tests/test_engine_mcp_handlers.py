@@ -4,19 +4,24 @@ the extra members of listing results."""
 
 from __future__ import annotations
 
+import asyncio
+import json
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
+import pytest
 from starlette.responses import Response
 
 from _engine import j
-from _mcp import STRUCTURE, asgi_client, mcp_app, mcp_model
+from _mcp import STRUCTURE, asgi_client, mcp_app, mcp_model, rpc_exchange
 from fauxcall.build.scaffold import agent_headers, mcp_server_config
 from fauxcall.mcpwire import protocol
 from fauxcall.mcpwire.client import McpWireClient
 from fauxcall.model import AuthModel, AuthScheme, McpToolModel, McpTransportModel
 from fauxcall.model.mcp import PROBE_PROMPT, PROBE_RESOURCE, PROBE_TOOL
 from fauxcall.model.realism import LatencyProfile
-from fauxcall.runtime import EarlyResponse, RpcError, register_tool
+from fauxcall.runtime import EarlyResponse, RpcError, register_method, register_tool
+from fauxcall.runtime.mcp_server import method_endpoint
 from fauxcall.testing.asgi import streaming_client
 
 if TYPE_CHECKING:
@@ -217,3 +222,289 @@ def test_agent_headers_and_mcp_config_for_each_scheme() -> None:
         "url": "http://127.0.0.1:8701/mcp",
         "headers": {"Authorization": "Basic YW55OnRva2Vu", "X-Key": "any-token"},
     }
+
+
+SSE_MODE = McpTransportModel(response_mode="sse", issues_session=False, requires_session=False)
+
+
+async def test_methods_can_be_answered_by_code_or_left_to_the_recordings(tmp_path: Path) -> None:
+    static = "file:///readme"
+    recorded = rpc_exchange(
+        "",
+        method_endpoint("resources/read", static),
+        "resources/read",
+        {"uri": static},
+        {"jsonrpc": "2.0", "id": 7, "result": {"contents": [{"uri": static, "text": "hi"}]}},
+    )
+    app, _ = mcp_app(tmp_path, mcp_model(transport=JSON_MODE, tools=[]), recorded, latency=False)
+
+    async def read(ctx: RequestContext, params: JsonObject) -> JsonValue:
+        uri = str(params.get("uri"))
+        if uri.startswith("demo://dynamic/"):
+            return {"contents": [{"uri": uri, "text": f"item {uri.rsplit('/', 1)[-1]}"}]}
+        if uri == "demo://broken":
+            raise RpcError(-32603, f"Unknown resource: {uri}")
+        if uri == "demo://bug":
+            raise KeyError("oops")
+        return None  # the recordings answer the rest
+
+    register_method(app, "resources/read", read)
+    async with asgi_client(app) as http:
+
+        async def call(params: JsonObject) -> Any:
+            return j(
+                (await http.post("/mcp", json=protocol.request(1, "resources/read", params))).json()
+            )
+
+        dynamic = await call({"uri": "demo://dynamic/42"})
+        assert dynamic["result"]["contents"][0]["text"] == "item 42"
+        assert (await call({"uri": static}))["result"]["contents"][0]["text"] == "hi"
+        assert (await call({"uri": "demo://broken"}))["error"]["message"] == (
+            "Unknown resource: demo://broken"
+        )
+        crashed = await http.post(
+            "/mcp", json=protocol.request(1, "resources/read", {"uri": "demo://bug"})
+        )
+        assert crashed.status_code == 200  # never a bare HTTP 500
+        assert j(crashed.json())["error"] == {"code": -32603, "message": "'oops'"}
+        missing = await call({"uri": "demo://nothing"})
+        assert missing["error"]["code"] == protocol.INVALID_PARAMS
+
+
+async def test_crashing_tools_answer_with_an_internal_error(tmp_path: Path) -> None:
+    app, _ = _app(tmp_path)
+
+    async def crash(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        raise ZeroDivisionError
+
+    register_tool(app, "create_price", crash)
+    async with asgi_client(app) as http:
+        reply = await _call(http, "create_price", {"amount": 1})
+    assert reply.status_code == 200
+    assert reply.json()["error"] == {"code": -32603, "message": "Internal error"}
+
+
+async def test_protocol_defaults_for_methods_nothing_recorded(tmp_path: Path) -> None:
+    capabilities: JsonValue = {
+        "tools": {},
+        "resources": {"subscribe": True},
+        "completions": {},
+        "logging": {},
+    }
+    model = mcp_model(transport=JSON_MODE, tools=[])
+    assert model.mcp is not None
+    model.mcp.initialize_result = {"protocolVersion": "2025-06-18", "capabilities": capabilities}
+    app, _ = mcp_app(tmp_path, model)
+    async with asgi_client(app) as http:
+
+        async def call(method: str, params: JsonObject) -> Any:
+            return j((await http.post("/mcp", json=protocol.request(1, method, params))).json())
+
+        assert (await call("resources/subscribe", {"uri": "x://1"}))["result"] == {}
+        assert (await call("resources/unsubscribe", {"uri": "x://1"}))["result"] == {}
+        assert (await call("logging/setLevel", {"level": "debug"}))["result"] == {}
+        completion = await call(
+            "completion/complete", {"ref": {"type": "ref/prompt", "name": "p"}, "argument": {}}
+        )
+        assert completion["result"] == {"completion": {"values": [], "hasMore": False}}
+        assert (await call("tasks/list", {}))["error"]["code"] == protocol.METHOD_NOT_FOUND
+    plain = mcp_model(transport=JSON_MODE, tools=[])  # no subscribe, no completions
+    app, _ = mcp_app(tmp_path / "plain", plain)
+    async with asgi_client(app) as http:
+        for method in ("resources/subscribe", "completion/complete"):
+            reply = j((await http.post("/mcp", json=protocol.request(1, method, {}))).json())
+            assert reply["error"]["code"] == protocol.METHOD_NOT_FOUND
+
+
+async def test_notifications_stream_before_the_answer(tmp_path: Path) -> None:
+    long_task: JsonObject = {"name": "long", "inputSchema": {"type": "object"}}
+    tools = [McpToolModel(definition=long_task, behavior="computed")]
+    app, _ = mcp_app(tmp_path, mcp_model(transport=SSE_MODE, tools=tools))
+
+    async def long(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        for step in range(1, 3):
+            ctx.progress(step, 2, f"step {step}")
+            await asyncio.sleep(0.05)
+        ctx.notify("notifications/message", {"level": "info", "data": "done"})
+        return {"content": [{"type": "text", "text": "finished"}]}
+
+    async def quick(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        ctx.progress(1)  # no progress token: nothing is sent
+        return {"content": []}
+
+    register_tool(app, "long", long)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize()
+        params: JsonObject = {"name": "long", "arguments": {}, "_meta": {"progressToken": "t-1"}}
+        call = await wire.call("tools/call", params)
+        events = [json.loads(data) for _, _, data, _ in call.sse_events]
+        assert [e.get("method") for e in events] == [
+            "notifications/progress",
+            "notifications/progress",
+            "notifications/message",
+            None,  # the answer comes last
+        ]
+        assert events[0]["params"] == {
+            "progressToken": "t-1",
+            "progress": 1,
+            "total": 2,
+            "message": "step 1",
+        }
+        times = [t for t, _, _, _ in call.sse_events]
+        assert times[1] - times[0] >= 30  # streamed as they happened, not all at the end
+        assert j(call.result)["content"][0]["text"] == "finished"
+        register_tool(app, "long", quick)
+        plain = await wire.call("tools/call", {"name": "long", "arguments": {}})
+        assert [json.loads(d).get("method") for _, _, d, _ in plain.sse_events] == [None]
+
+
+async def test_arguments_that_arent_an_object_are_not_made_one(tmp_path: Path) -> None:
+    recorded = rpc_exchange(
+        "",
+        "MCP tools/call:read_wiki_structure",
+        "tools/call",
+        {"name": "read_wiki_structure", "arguments": None},
+        {"jsonrpc": "2.0", "id": 7, "error": {"code": -32603, "message": "Expected object"}},
+    )
+    app, _ = mcp_app(tmp_path, mcp_model(transport=JSON_MODE), recorded)
+    async with asgi_client(app) as http:
+
+        async def call(arguments: JsonValue) -> Any:
+            params: JsonValue = {"name": "read_wiki_structure", "arguments": arguments}
+            return j(
+                (await http.post("/mcp", json=protocol.request(1, "tools/call", params))).json()
+            )
+
+        assert (await call(None))["error"] == {"code": -32603, "message": "Expected object"}
+        assert (await call(["a"]))["error"] == {
+            "code": protocol.INVALID_PARAMS,
+            "message": "Invalid params: arguments must be an object",
+        }
+        no_arguments = protocol.request(1, "tools/call", {"name": "read_wiki_structure"})
+        reply = j((await http.post("/mcp", json=no_arguments)).json())
+        assert reply["result"]["isError"] is True  # no arguments are {}: refused by the schema
+
+
+@pytest.mark.parametrize("fast", [True, False])
+async def test_handlers_take_real_time_except_in_fast_mode(tmp_path: Path, fast: bool) -> None:
+    app, runtime = _app(tmp_path)
+    slept: list[float] = []
+
+    async def sleep(seconds: float) -> None:
+        slept.append(seconds)
+
+    runtime._sleep = sleep  # stands in for the clock here; fakes' tests read runtime.pauses
+    runtime.settings.fast = fast
+
+    async def slow(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        await ctx.pause(0.25)
+        await ctx.pause(0.5)
+        return {"content": []}
+
+    register_tool(app, "create_price", slow)
+    async with asgi_client(app) as http:
+        await _call(http, "create_price", {"amount": 1})
+    assert list(runtime.pauses) == [0.25, 0.5]  # noted either way, for tests to check
+    assert slept == ([] if fast else [0.25, 0.5])
+
+
+async def test_streaming_edge_cases(tmp_path: Path) -> None:
+    tools = [
+        McpToolModel(
+            definition={"name": name, "inputSchema": {"type": "object"}}, behavior="computed"
+        )
+        for name in ("burst", "late_refusal", "quiet_json")
+    ]
+    app, _ = mcp_app(tmp_path, mcp_model(transport=SSE_MODE, tools=tools))
+
+    async def burst(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        for n in range(3):  # all before the answer, without waiting
+            ctx.notify("notifications/message", {"level": "info", "data": n})
+        return {"content": []}
+
+    async def late_refusal(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        ctx.notify("notifications/message", {"level": "info", "data": "started"})
+        await asyncio.sleep(0.01)
+        ctx.notify("notifications/message", {"level": "info", "data": "still going"})
+        ctx.notify("notifications/message", {"level": "info", "data": "and more"})
+        await asyncio.sleep(0.01)
+        raise EarlyResponse(Response(status_code=403))
+
+    register_tool(app, "burst", burst)
+    register_tool(app, "late_refusal", late_refusal)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize()
+        fast = await wire.call("tools/call", {"name": "burst", "arguments": {}})
+        data = [json.loads(d) for _, _, d, _ in fast.sse_events]
+        assert [m.get("params", {}).get("data") for m in data] == [0, 1, 2, None]
+        late = await wire.call("tools/call", {"name": "late_refusal", "arguments": {}})
+        assert late.status == 200  # the stream had started: too late for an HTTP 403
+        assert j(late.error) == {"code": -32603, "message": "refused"}
+    json_app, _ = mcp_app(tmp_path / "json", mcp_model(transport=JSON_MODE, tools=tools))
+    register_tool(json_app, "quiet_json", burst)
+    async with asgi_client(json_app) as http:
+        reply = await http.post(
+            "/mcp", json=protocol.request(1, "tools/call", {"name": "quiet_json", "arguments": {}})
+        )
+    assert reply.json()["result"] == {"content": []}  # plain JSON can't carry notifications
+
+
+async def test_the_legacy_sse_transport_streams_notifications_too(tmp_path: Path) -> None:
+    transport = McpTransportModel(kind="sse", path="/sse", messages_path="/messages/")
+    tools = [McpToolModel(definition=CREATE, behavior="computed")]
+    app, _ = mcp_app(tmp_path, mcp_model(transport=transport, tools=tools))
+
+    async def chatty(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        ctx.notify("notifications/message", {"level": "info", "data": "hello"})
+        return {"content": []}
+
+    register_tool(app, "create_price", chatty)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/sse", http, transport="sse")
+        await wire.initialize()
+        call = await wire.call("tools/call", {"name": "create_price", "arguments": {}})
+        await wire.close()
+    assert [json.loads(d).get("method") for _, _, d, _ in call.sse_events][:1] == [
+        "notifications/message"
+    ]
+
+
+def test_register_method_needs_an_mcp_fake(tmp_path: Path) -> None:
+    from fauxcall.config import FakeSettings  # noqa: PLC0415
+    from fauxcall.runtime import FakeRuntime, create_app  # noqa: PLC0415
+
+    model = mcp_model()
+    model = model.model_copy(update={"kind": "rest", "mcp": None})
+    settings = FakeSettings(data_dir=tmp_path, log_level="WARNING")
+    app = create_app(settings, runtime=FakeRuntime(settings, model), configure_logs=False)
+
+    async def handler(ctx: RequestContext, params: JsonObject) -> JsonValue:
+        return None
+
+    with pytest.raises(ValueError, match="no MCP server"):
+        register_method(app, "resources/read", handler)
+
+
+def test_wire_helpers() -> None:
+    from fauxcall.model.recording import Body, CapturedRequest, Exchange  # noqa: PLC0415
+    from fauxcall.runtime.mcp_server import _declared, _sent_arguments  # noqa: PLC0415
+    from fauxcall.types import HttpMethod  # noqa: PLC0415
+
+    init: JsonValue = {"method": "initialize", "params": {"capabilities": {"sampling": {}}}}
+    assert _declared([{"method": "ping"}, init, "odd"]) == {"sampling"}
+    assert _declared([{"method": "initialize", "params": {"capabilities": []}}]) == frozenset()
+    sent = Exchange(
+        id="1",
+        endpoint="MCP tools/call:x",
+        started_at=datetime.now(UTC),
+        started_ns=0,
+        request=CapturedRequest(
+            method=HttpMethod.POST,
+            url="http://x/mcp",
+            path="/mcp",
+            body=Body(kind="json", json_value={"method": "tools/call", "params": {"name": "x"}}),
+        ),
+    )
+    assert _sent_arguments(sent) is None  # no arguments were sent

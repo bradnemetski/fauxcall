@@ -217,13 +217,19 @@ class McpWireClient:
 
     # -- the protocol ------------------------------------------------------------------------------
 
-    async def initialize(self, *, protocol_version: str | None = None) -> RpcCall:
-        """Open a session (``initialize`` + ``notifications/initialized``)."""
+    async def initialize(
+        self, *, protocol_version: str | None = None, capabilities: JsonObject | None = None
+    ) -> RpcCall:
+        """Open a session (``initialize`` + ``notifications/initialized``).
+
+        ``capabilities`` are the client's (none by default): some servers list more tools to
+        clients that support sampling, elicitation or roots.
+        """
         if self.transport == "sse" and self._sse_task is None:
             await self._open_sse()
         params: JsonObject = {
             "protocolVersion": protocol_version or self.protocol_version,
-            "capabilities": {},
+            "capabilities": capabilities or {},
             "clientInfo": {"name": "fauxcall", "version": __version__},
         }
         call = await self.post(protocol.request(next(self._ids), "initialize", params))

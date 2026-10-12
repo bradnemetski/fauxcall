@@ -1,0 +1,114 @@
+{
+  "id": "000422",
+  "endpoint": "MCP resources/read",
+  "purpose": "edge",
+  "plan_call": "rr-http",
+  "started_at": "2026-10-12T04:35:39.514717Z",
+  "started_ns": 1791779739514717000,
+  "elapsed_ms": 7.892,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 8,
+        "method": "resources/read",
+        "params": {
+          "uri": "http://Example.com"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "181"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 04:35:39 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 8,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Resource http://example.com/ not found"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 7.631,
+      "kind": "sse",
+      "event": "message",
+      "id": "50170a1d-4636-478c-beee-cf5c038e2c14",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":8,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Resource http://example.com/ not found\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

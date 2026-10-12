@@ -35,6 +35,7 @@ if TYPE_CHECKING:
     from fauxcall.model.auth import AuthModel
     from fauxcall.model.mcp import McpTransportModel
     from fauxcall.model.recording import Exchange
+    from fauxcall.recording.privacy_filter import RecordingPrivacy
     from fauxcall.testing.compare import Translate
     from fauxcall.types import JsonValue
 
@@ -94,16 +95,28 @@ def fake_under_test[S: FakeSettings](
     settings = settings_cls()
     model = read_model(settings.data_dir / "model.json", ApiModel)
     translate: Translate | None = None
+    privacy: RecordingPrivacy | None = None
+    real_headers = {k: v.get_secret_value() for k, v in settings.real.headers.items()}
+    real_query = {k: v.get_secret_value() for k, v in settings.real.query.items()}
     if settings.pseudonym_key is not None:
         from fauxcall.privacy.pseudonym import Pseudonymizer  # noqa: PLC0415
-        from fauxcall.recording.privacy_filter import PrivacyConfig  # noqa: PLC0415
+        from fauxcall.recording.privacy_filter import (  # noqa: PLC0415
+            PrivacyConfig,
+            RecordingPrivacy,
+        )
+        from fauxcall.recording.recorder import credential_values  # noqa: PLC0415
 
-        privacy = settings.data_dir / "privacy.json"
-        config = read_model(privacy, PrivacyConfig) if privacy.exists() else PrivacyConfig()
+        path = settings.data_dir / "privacy.json"
+        config = read_model(path, PrivacyConfig) if path.exists() else PrivacyConfig()
         key = settings.pseudonym_key.get_secret_value()
         translate = Pseudonymizer(
             key, public=config.public_values, identifiers=config.identifier_patterns
         ).translate
+        privacy = RecordingPrivacy(
+            config,
+            secret_values=credential_values(real_headers, real_query),
+            pseudonym_key=key,
+        )
 
     def factory() -> FastAPI:
         return build_app(settings_for_tests(settings_cls))
@@ -112,13 +125,14 @@ def fake_under_test[S: FakeSettings](
         app_factory=factory,
         model=model,
         real_base_url=settings.real.base_url or model.real.base_url,
-        real_headers={k: v.get_secret_value() for k, v in settings.real.headers.items()},
-        real_query={k: v.get_secret_value() for k, v in settings.real.query.items()},
+        real_headers=real_headers,
+        real_query=real_query,
         reports_dir=settings.data_dir / "reports",
         approvals_path=settings.data_dir / "approvals.json",
         translate=translate,
         mcp_path=model.mcp.transport.path if model.mcp else "/mcp",
         recordings_dir=settings.data_dir / "recordings",
+        privacy=privacy,
     )
 
 

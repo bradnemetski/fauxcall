@@ -33,7 +33,14 @@ from fauxcall.cli.common import (
 )
 from fauxcall.jsonfmt import infer_style
 from fauxcall.model.errors import ErrorTemplate
-from fauxcall.model.plan import Approval, Approvals, PlannedCall, PlannedRequest, RecordingPlan
+from fauxcall.model.plan import (
+    Approval,
+    Approvals,
+    HeadlessAnswers,
+    PlannedCall,
+    PlannedRequest,
+    RecordingPlan,
+)
 from fauxcall.model.realism import LatencyProfile
 from fauxcall.recording.mcp import McpRecorder, answer_of, needs_approval
 from fauxcall.recording.privacy_filter import PrivacyConfig, RecordingPrivacy
@@ -63,6 +70,58 @@ def _plans(fake: FakeLayout) -> list[tuple[Path, RecordingPlan]]:
     if not fake.plans.is_dir():
         return []
     return [(path, read_model(path, RecordingPlan)) for path in sorted(fake.plans.glob("*.json"))]
+
+
+ANSWERS: Final = "answers.json"
+"""A headless run's answers, written by the user before the run (``references/headless.md``)."""
+
+
+def apply_answers(fake: FakeLayout) -> list[str]:
+    """Apply the write approval in the fake's ``answers.json``; returns the endpoints added.
+
+    In a headless run the answers file *is* the user's approval, so the CLI applies it itself
+    (every command that can write calls this) and the agent never approves anything. Each
+    matching mutating endpoint gets its own budget (``max_calls_per_endpoint``), for recording
+    and parity alike. Endpoints it already approved are left alone.
+    """
+    path = fake.root / ANSWERS
+    if not path.is_file():
+        return []
+    try:
+        answers = read_model(path, HeadlessAnswers)
+    except ValueError as error:
+        raise fail(f"{path} is not a valid answers file: {error}") from error
+    mutations = answers.mutations
+    if mutations is None or not mutations.approve:
+        return []
+    approvals = _approvals(fake)
+    applied = {a.endpoint for a in approvals.approvals if a.approved_by == ANSWERS}
+    model = load_model(fake)
+    budget = mutations.max_calls_per_endpoint or cli_settings().approval_budget
+    targets = [t for glob in mutations.endpoints for t in _mutating_matches(model, glob)]
+    added = [
+        Approval(
+            scope="endpoint",
+            endpoint=target,
+            max_calls=budget,
+            reason=mutations.reason,
+            approved_by=ANSWERS,
+            approved_at=now(),
+        )
+        for target in dict.fromkeys(targets)
+        if target not in applied
+    ]
+    if added:
+        approvals.approvals.extend(added)
+        write_model(fake.approvals_path, approvals)
+    return [approval.endpoint for approval in added]
+
+
+def _applied(fake: FakeLayout) -> None:
+    """Apply ``answers.json`` and say so when it approved something new."""
+    added = apply_answers(fake)
+    if added:
+        echo(f"applied the write approval in {ANSWERS}: {', '.join(added)}")
 
 
 def _approvals(fake: FakeLayout) -> Approvals:
@@ -194,6 +253,7 @@ def plan_template(
 def plan_review(name: str) -> None:
     """Every write across all plans: exactly what the user approves, once, up front."""
     fake = layout(name)
+    _applied(fake)
     approvals = _approvals(fake)
     model = load_model(fake)
     writes = _writes(model)
@@ -452,6 +512,7 @@ def _mutating_matches(model: ApiModel, pattern: str) -> list[str]:
 def plan_check(name: str, plan: Path) -> None:
     """Validate a plan file and show which calls need approval."""
     fake = layout(name)
+    _applied(fake)
     try:
         parsed = read_model(plan, RecordingPlan)
     except ValueError as error:
@@ -503,6 +564,7 @@ def record(
     settings = fake_settings(fake)
     cli = cli_settings()
     parsed = read_model(plan, RecordingPlan)
+    _applied(fake)
     headers = {k: v.get_secret_value() for k, v in settings.real.headers.items()}
     query = {k: v.get_secret_value() for k, v in settings.real.query.items()}
     key = settings.pseudonym_key.get_secret_value() if settings.pseudonym_key else None
@@ -693,6 +755,33 @@ def _matches(
 
 
 @clean_errors
+def recordings_delete(
+    name: str,
+    ids: Annotated[
+        list[str] | None, typer.Option("--id", help="An exchange id (repeatable).")
+    ] = None,
+    endpoint: Annotated[
+        str | None, typer.Option(help="Every exchange of this endpoint id or glob.")
+    ] = None,
+    purpose: Annotated[str | None, typer.Option(help="… with this purpose only.")] = None,
+) -> None:
+    """Delete recordings (a leak to re-record after fixing privacy.json, a bad probe …)."""
+    if not ids and endpoint is None:
+        raise fail("say what to delete: --id, or --endpoint (with --purpose)")
+    store = RecordingStore(layout(name).recordings)
+    wanted = {i.lstrip("0") for i in ids or []}
+    deleted = []
+    for path, exchange in list(store.iter_exchanges()):
+        chosen = exchange.id.lstrip("0") in wanted or (
+            endpoint is not None and _matches(exchange, endpoint, purpose, None, None)
+        )
+        if chosen:
+            store.delete(path, exchange)
+            deleted.append(exchange.id)
+    echo(f"deleted {len(deleted)} recordings" + (f": {', '.join(deleted)}" if deleted else ""))
+
+
+@clean_errors
 def recordings(
     name: str,
     endpoint: Annotated[
@@ -775,6 +864,9 @@ def _field_report(success: list[Exchange]) -> None:
     from fauxcall.analysis.timing import evidence_table, time_fields  # noqa: PLC0415
 
     bodies = _bodies(success)
+    if success and success[0].endpoint.startswith("MCP "):
+        # JSON-RPC answers: the result is what matters, not the envelope (jsonrpc, id)
+        bodies = [b["result"] for b in bodies if isinstance(b, dict) and "result" in b]
     if not bodies:
         return
     echo("\n## Fields (successful responses)\n")

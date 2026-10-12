@@ -37,6 +37,7 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
 | [Swagger Petstore v3](https://petstore3.swagger.io) | Swagger UI page | A shared sandbox with real writes, uploads, and auth |
 | [FakeRESTApi](https://fakerestapi.azurewebsites.net) | Swagger UI page | Writes that are echoed but never persisted |
 | [DeepWiki](https://mcp.deepwiki.com/mcp) | MCP server | A public MCP server: tools answered from the closest recording |
+| [Everything](https://github.com/modelcontextprotocol/servers/tree/main/src/everything) (2026.8.31, run locally) | MCP server | The MCP project's reference server, which exercises the whole protocol: resources and templates, prompts, completions, subscriptions, logging, progress, tasks, tools offered only to some clients |
 
 ## Results
 
@@ -47,7 +48,8 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
 | timeapi.io | **100%** | 192 | 28 | 576 | 1,366, 98% coverage | 1 | $19.72 |
 | Swagger Petstore | **99.71%** | 96 (98.48% over 80 with real writes) | 19 | 370 | 361, 99% coverage | 1 | $15.21 |
 | FakeRESTApi | **100%** | 115 | 27 | 323 | 671, 99% coverage | 1 | $13.02 |
-| DeepWiki (MCP) | **100%** | 20 | 3 tools | 70 | 175, 98% coverage | 3 | over $8 | *Parity* is the weighted
+| DeepWiki (MCP) | **100%** | 20 | 3 tools | 70 | 175, 98% coverage | 3 | over $8 |
+| Everything (MCP) | **99.91%** | 170 (independent: 99.91% over 157 of 213 calls) | 16 tools, 7 resources, 2 templates, 4 prompts | 458 | 493, 99% coverage | 2 | $33.10 | *Parity* is the weighted
 share of checks (status, shape, content type, values, lengths, headers) on which the fake answered
 like the real service, over end-to-end scenarios run against both. *Reported cost* is what Claude
 Code reported for the sessions. The finished fakes are in [`examples/`](../examples/), except
@@ -151,6 +153,14 @@ Every problem a run hit became a fix in the tools or skills, never in the fake. 
   pseudonymization off for every user field instead (`63bc5a2`). The same option keeps a demo's
   generated passwords without switching off password redaction (`c586f90`). Every Docker image used to receive
   every fake's `.env`; a generated `.dockerignore` now keeps credentials out (`db6570c`).
+- **MCP beyond tools.** The Everything server's first build reached 95.59%: every failure was a
+  gap in FauxCall's MCP runtime. Prompts and completions answered with the first recording
+  whatever was asked; resources, prompts and completions couldn't be computed; notifications,
+  subscriptions and tools offered only to some clients weren't supported; a crashing handler gave
+  a bare HTTP 500. The runtime gained handlers for any method, streamed progress and log
+  notifications, capability-gated tools and `-32603` for crashes, and the second build reached
+  99.91%. Headless approvals were refused by the agent's own permission checks, so the CLI now
+  applies `answers.json` itself; parity reports now pseudonymize the real side's answers.
 - **Docs for agents.** Where auth probes go, how to probe an approved rate limit, how to record when
   the user prepared `.env` first, and a readable `fauxcall model schema --brief` (`ebcaa3d`,
   `a450dd1`, `818a252`, `05dcd98`).

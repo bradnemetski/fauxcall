@@ -68,6 +68,12 @@ if TYPE_CHECKING:
 log = get_logger(__name__)
 
 PROBE_METHOD: Final = "fauxcall/probe-unknown-method"
+CLIENT_CAPABILITIES: Final[dict[str, JsonObject]] = {
+    "sampling": {},
+    "elicitation": {},
+    "roots": {"listChanged": True},
+}
+"""Client capabilities introspection declares one at a time, to find the tools they unlock."""
 MISSING_SESSION_PROBE_ID: Final = 9_000_001
 AUTH_PROBE_ID: Final = 9_000_002
 _HTTP_OK: Final = 200
@@ -390,6 +396,8 @@ class McpRecorder:
             )
             if missing_session is not None:
                 model.errors["missing_session"] = missing_session
+            if model.transport.kind == "streamable_http":  # optional: last, budget allowing
+                await self._capability_tools(model, exchanges)
         finally:
             status = await self._close(client)
         if status is not None:
@@ -521,6 +529,40 @@ class McpRecorder:
                 model.resource_templates = items
             else:
                 model.prompts = items
+
+    async def _capability_tools(self, model: McpModel, exchanges: list[str]) -> None:
+        """Tools the server lists only to clients declaring a capability (sampling …).
+
+        One session per capability, its tools compared with the plain listing; the extra ones are
+        added with ``requires`` set, so the fake shows them to the same clients only.
+        """
+        known = {tool.name for tool in model.tools}
+        for capability, declared in CLIENT_CAPABILITIES.items():
+            client = self._client()
+            try:
+                await self._pace()
+                await client.initialize(capabilities={capability: declared})
+                tools, calls = await client.list_all("tools/list", "tools", before_page=self._pace)
+            except _BudgetExhaustedError:
+                return  # the recording budget is spent: fewer probes, not a failed init
+            except (RecordingError, httpx2.HTTPError, TimeoutError) as error:
+                log.info("mcp_capability_probe_failed", capability=capability, error=str(error))
+                continue
+            finally:
+                await self._close(client)
+            exchanges += [
+                self.save(c, method_endpoint("tools/list", f"with-{capability}")) for c in calls
+            ]
+            for definition in tools:
+                name = definition.get("name") if isinstance(definition, dict) else None
+                if name in known:
+                    existing = model.tool(str(name))
+                    if existing is not None and existing.requires:
+                        existing.requires = sorted({*existing.requires, capability})
+                    continue
+                if isinstance(name, str):
+                    known.add(name)
+                    model.tools.append(McpToolModel(definition=definition, requires=[capability]))
 
     async def _probe_transport(
         self, client: McpWireClient, init: RpcCall, exchanges: list[str]

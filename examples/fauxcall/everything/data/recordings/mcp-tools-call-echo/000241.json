@@ -1,0 +1,121 @@
+{
+  "id": "000241",
+  "endpoint": "MCP tools/call:echo",
+  "purpose": "variation",
+  "plan_call": "echo-while-logging",
+  "started_at": "2026-10-12T03:38:22.601538Z",
+  "started_ns": 1791776302601538000,
+  "elapsed_ms": 11.257,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 41,
+        "method": "tools/call",
+        "params": {
+          "name": "echo",
+          "arguments": {
+            "message": "while logging"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:38:22 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Echo: while logging"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 41
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 10.997,
+      "kind": "sse",
+      "event": "message",
+      "id": "e62b9502-bbb1-490d-9a8b-63fcef65d5ac",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Echo: while logging\"}]},\"jsonrpc\":\"2.0\",\"id\":41}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -68,6 +68,13 @@ class McpToolModel(Model):
     )
     latency: LatencyProfile | None = None
     semantic: SemanticModel | None = None
+    requires: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Client capabilities the server lists this tool only to (sampling, elicitation, "
+            "roots): a client sees it when it declared any of them."
+        ),
+    )
     varies: bool = Field(
         default=False,
         description=(

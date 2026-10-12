@@ -143,7 +143,8 @@ Order: independent collections' reads → dependent reads → writes → async j
    arguments that break its schema and whether it answers the same arguments differently, which
    marks it `varies`). Add `analyze errors`, `analyze writes`, `analyze jobs`, `fauxcall sql` as
    needed.
-5. **Model** — edit `data/model.json` for E ([model](references/model.md), [time](references/time.md)):
+5. **Model** — edit `data/model.json` for E ([model](references/model.md), [time](references/time.md);
+   MCP tools: `fauxcall model tool`, see [mcp](references/mcp.md#what-the-runtime-serves)):
    role, collection + key, parameter behavior (`on_invalid` from your probes), error cases → templates,
    pagination, write semantics, field policies, Jev semantics if needed. Then `fauxcall model check <name>`.
 6. **Checkpoint** — `fauxcall progress endpoint <name> "<E>" recorded done` (likewise `analyzed`,

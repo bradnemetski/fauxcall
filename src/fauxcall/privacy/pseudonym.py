@@ -60,9 +60,15 @@ MIN_TEXT_LENGTH: Final = 2
 _DIGITS: Final = frozenset("0123456789")
 _ID_PREFIX: Final = re.compile(r"^[A-Za-z]+_")
 
-DEFAULT_IDENTIFIERS: Final = (r"\bacct_[A-Za-z0-9]{16}\b",)
-"""Account and tenant ids found in any text, whatever field (or prose) holds them: Stripe's
-``acct_…``. A fake's ``data/privacy.json`` adds its service's own (``identifiers``)."""
+DEFAULT_IDENTIFIERS: Final = (
+    r"\bacct_[A-Za-z0-9]{16}\b",
+    r"(?<![\w.-])/Users/(?P<id>[A-Za-z0-9._-]+)",
+    r"\b[A-Za-z]:\\{1,2}Users\\{1,2}(?P<id>[A-Za-z0-9._ -]+?)(?=\\|$)",
+)
+"""Account ids found in any text, whatever field (or prose) holds them: Stripe's ``acct_…``, and
+the account name in a macOS or Windows home folder (``/Users/<name>``, ``C:\\Users\\<name>``).
+``/home/<name>`` is left out: API routes start that way too. A fake's ``data/privacy.json`` adds
+its service's own patterns (``identifiers``)."""
 _SSN_DIGITS: Final = 9
 _NS_PER_DAY: Final = 86_400 * NS_PER_SECOND
 _COMPACT_DATE: Final = TimeFormat(kind="strftime", pattern="%Y%m%d")

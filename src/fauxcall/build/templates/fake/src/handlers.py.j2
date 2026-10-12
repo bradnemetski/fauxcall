@@ -11,7 +11,11 @@ endpoint id here to replace the generic behavior with code (role ``computed``/``
     HANDLERS["GET /v1/latest"] = latest_rates
 
 MCP tools whose behavior is ``computed`` work the same way through ``TOOL_HANDLERS`` (tool name ->
-``async (ctx, arguments) -> result``).
+``async (ctx, arguments) -> result``), and any other MCP method through ``METHOD_HANDLERS``
+(``"resources/read"``, ``"prompts/get"``, ``"completion/complete"`` ... -> ``async (ctx, params) ->
+result``; return ``None`` to let the recordings answer). Raise ``RpcError`` for a JSON-RPC error,
+``EarlyResponse`` for an HTTP-level reply; ``ctx.state`` keeps per-session state, ``ctx.notify``
+sends progress and log notifications.
 
 Useful helpers on the context: ``ctx.world`` (records), ``ctx.params`` (validated parameters),
 ``ctx.json_body``, ``ctx.now_ns`` / ``ctx.calendar(name)`` (time), ``ctx.respond`` / ``ctx.error``
@@ -37,3 +41,6 @@ WEBSOCKET_HANDLERS: dict[str, Callable[[WebSocket, RequestContext], Awaitable[No
 
 TOOL_HANDLERS: dict[str, Callable[[RequestContext, JsonObject], Awaitable[JsonValue]]] = {}
 """MCP tool name -> custom tool handler (tools whose behavior is ``computed``)."""
+
+METHOD_HANDLERS: dict[str, Callable[[RequestContext, JsonObject], Awaitable[JsonValue]]] = {}
+"""MCP method -> custom handler of its params (``None``: the recordings answer)."""

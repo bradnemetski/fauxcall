@@ -118,6 +118,12 @@ class RecordingStore:
         found = [read_model(p, Exchange) for p in _exchange_files(directory, recursive=False)]
         return [exchange for exchange in found if exchange.endpoint == endpoint_id]
 
+    def delete(self, path: Path, exchange: Exchange) -> None:
+        """Remove one stored exchange and its binary sidecars."""
+        for sidecar in path.parent.glob(f"{exchange.id}.*.bin"):
+            sidecar.unlink()
+        path.unlink()
+
     def sidecar_name(self, exchange_id: str, part: str) -> str:
         """File name for a binary body part."""
         return f"{exchange_id}.{part}.bin"

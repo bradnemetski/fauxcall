@@ -34,16 +34,19 @@ from fauxcall.runtime.journal import JournalEntry
 from fauxcall.runtime.matching import Candidate, match
 
 if TYPE_CHECKING:
-    from collections.abc import AsyncIterator, Awaitable, Callable
+    from collections.abc import AsyncIterator, Awaitable, Callable, Sequence
 
     from starlette.requests import Request
 
     from fauxcall.model.mcp import McpModel, McpToolModel
+    from fauxcall.model.recording import Exchange
     from fauxcall.runtime.app import FakeRuntime
     from fauxcall.runtime.context import RequestContext
     from fauxcall.types import JsonObject, JsonValue
 
     ToolHandler = Callable[[RequestContext, JsonObject], Awaitable[JsonValue]]
+    MethodHandler = Callable[[RequestContext, JsonObject], Awaitable[JsonValue]]
+    """``(ctx, params) -> result``, or ``None`` to fall back to the recordings."""
 
 log = get_logger(__name__)
 
@@ -70,6 +73,12 @@ class RpcError(Exception):
         self.message = message
         self.data = data
 
+
+_ACKNOWLEDGED: Final = frozenset({"ping", "logging/setLevel"})
+"""Methods answered with an empty result unless a handler or a recording says otherwise."""
+_SUBSCRIPTIONS: Final = frozenset({"resources/subscribe", "resources/unsubscribe"})
+_NAMED_TARGETS: Final = frozenset({"resources/read", "prompts/get"})
+"""Methods about one named resource or prompt: an unknown one gets the real "not found" error."""
 
 _PROBES: Final = {
     "unknown_tool": PROBE_TOOL,
@@ -113,7 +122,10 @@ class McpFake:
         self.model = model
         self.transport = model.transport
         self.tool_handlers: dict[str, ToolHandler] = {}
+        self.method_handlers: dict[str, MethodHandler] = {}
         self._sessions: dict[str, str] = {}
+        self._capabilities: dict[str, frozenset[str]] = {}
+        """MCP session -> the capabilities its client declared in ``initialize``."""
         self._sse_queues: dict[str, asyncio.Queue[str]] = {}
 
     # -- helpers ---------------------------------------------------------------------------------
@@ -153,6 +165,11 @@ class McpFake:
         inputs: dict[str, JsonValue],
         tool: McpToolModel | None,
     ) -> JsonValue | None:
+        """The recording that answers best: exact inputs first, then the closest.
+
+        Tool calls are matched by their arguments (``args.*``), the other methods (prompts,
+        resource reads, completions) by their whole params (``params.*``), as ``inputs`` are.
+        """
         exchanges = [
             e for e in self.runtime.recordings.for_endpoint(endpoint_id) if e.response is not None
         ]
@@ -164,7 +181,12 @@ class McpFake:
             sent = exchange.request.body.parsed()
             params = sent.get("params") if isinstance(sent, dict) else None
             arguments = params.get("arguments") if isinstance(params, dict) else None
-            candidates.append(Candidate(exchange.id, flatten_args(arguments)))
+            recorded = (
+                flatten_args(arguments)
+                if tool is not None
+                else json_inputs("params", params if isinstance(params, dict) else {})
+            )
+            candidates.append(Candidate(exchange.id, recorded))
             assert exchange.response is not None  # noqa: S101
             replies[exchange.id] = exchange.response.body.parsed()
         spec = tool.semantic.match if tool is not None and tool.semantic is not None else None
@@ -207,10 +229,9 @@ class McpFake:
                 )
                 body["protocolVersion"] = self._negotiate(params.get("protocolVersion"))
                 return protocol.result(request_id, body)
-            case "ping" | "logging/setLevel":
-                return protocol.result(request_id, {})
             case "tools/list":
-                tools = [t.definition for t in self.model.tools]
+                declared = self._capabilities.get(ctx.mcp_session or "", frozenset())
+                tools = [t.definition for t in self.model.tools if _offered(t, declared)]
                 return self._listing(request_id, method, self._page(params, tools, "tools"))
             case "resources/list":
                 page = self._page(params, self.model.resources, "resources")
@@ -223,24 +244,74 @@ class McpFake:
                 return self._listing(request_id, method, page)
             case "tools/call":
                 return await self._call_tool(ctx, request_id, params)
-            case "resources/read" | "prompts/get" | "completion/complete":
-                detail = params.get("uri") or params.get("name")
-                endpoint_id = method_endpoint(method, str(detail) if detail else None)
-                inputs = json_inputs("params", params)
-                recorded = await self._recorded_result(endpoint_id, inputs, None)
-                if isinstance(recorded, dict):
-                    return protocol.with_id(recorded, request_id)
-                return self._error(
-                    request_id,
-                    f"{method}_not_found",
-                    protocol.INVALID_PARAMS,
-                    "Not found",
-                    target=str(detail) if detail else None,
-                )
             case _:
-                return self._error(
-                    request_id, "method_not_found", protocol.METHOD_NOT_FOUND, "Method not found"
-                )
+                return await self._other_method(ctx, request_id, method, params)
+
+    async def _other_method(
+        self, ctx: RequestContext, request_id: JsonValue, method: str, params: JsonObject
+    ) -> JsonObject:
+        """Any other method: its custom handler, then a recording, then the protocol's default.
+
+        A handler (``register_method``) may return ``None`` to leave a call to the recordings, so
+        it can compute dynamic resources and let the recorded static ones replay.
+        """
+        handler = self.method_handlers.get(method)
+        if handler is not None:
+            answer = await self._handled(request_id, handler(ctx, params))
+            if answer is not None:
+                return answer
+        detail = params.get("uri") or params.get("name")
+        endpoint_id = method_endpoint(method, str(detail) if detail else None)
+        recorded = await self._recorded_result(endpoint_id, json_inputs("params", params), None)
+        if isinstance(recorded, dict):
+            return protocol.with_id(recorded, request_id)
+        if method in _ACKNOWLEDGED or (method in _SUBSCRIPTIONS and self._subscribable()):
+            return protocol.result(request_id, {})
+        if method == "completion/complete" and self._capability("completions") is not None:
+            return protocol.result(request_id, {"completion": {"values": [], "hasMore": False}})
+        if method in _NAMED_TARGETS:
+            return self._error(
+                request_id,
+                f"{method}_not_found",
+                protocol.INVALID_PARAMS,
+                "Not found",
+                target=str(detail) if detail else None,
+            )
+        return self._error(
+            request_id, "method_not_found", protocol.METHOD_NOT_FOUND, "Method not found"
+        )
+
+    def _capability(self, name: str) -> JsonValue:
+        """A capability the server advertised in ``initialize`` (``None``: not advertised)."""
+        result = self.model.initialize_result
+        capabilities = result.get("capabilities") if isinstance(result, dict) else None
+        return capabilities.get(name) if isinstance(capabilities, dict) else None
+
+    def _subscribable(self) -> bool:
+        """Whether the server advertised ``resources.subscribe``."""
+        resources = self._capability("resources")
+        return isinstance(resources, dict) and resources.get("subscribe") is True
+
+    async def _handled(
+        self, request_id: JsonValue, pending: Awaitable[JsonValue]
+    ) -> JsonObject | None:
+        """A custom handler's answer: its result, its ``RpcError``, or an internal error.
+
+        A handler that crashes answers like an SDK server does (``-32603``), never with a bare
+        HTTP 500. ``None`` means the handler left the call to the recordings.
+        """
+        try:
+            value = await pending
+        except RpcError as error:
+            return protocol.error(request_id, error.code, error.message, error.data)
+        except EarlyResponse:
+            raise
+        except Exception as error:  # any bug in custom code becomes -32603
+            log.exception("mcp_handler_failed")
+            return protocol.error(
+                request_id, protocol.INTERNAL_ERROR, str(error) or "Internal error"
+            )
+        return None if value is None else protocol.result(request_id, value)
 
     def _listing(self, request_id: JsonValue, method: str, page: JsonObject) -> JsonObject:
         """A listing page with the real result's other members, in the recorded order."""
@@ -271,10 +342,10 @@ class McpFake:
         self, ctx: RequestContext, request_id: JsonValue, params: JsonObject
     ) -> JsonObject:
         name = str(params.get("name", ""))
-        arguments = params.get("arguments") if isinstance(params.get("arguments"), dict) else {}
-        assert isinstance(arguments, dict)  # noqa: S101
+        sent = params.get("arguments", {})
         tool = self.model.tool(name)
-        if tool is None:
+        declared = self._capabilities.get(ctx.mcp_session or "", frozenset())
+        if tool is None or not _offered(tool, declared):
             return self._error(
                 request_id,
                 "unknown_tool",
@@ -282,6 +353,9 @@ class McpFake:
                 f"Unknown tool: {name}",
                 target=name,
             )
+        if not isinstance(sent, dict):  # null, a list, a string: not arguments at all
+            return await self._odd_arguments(request_id, tool, sent)
+        arguments = sent
         started = time.perf_counter()
         definition = tool.definition if isinstance(tool.definition, dict) else {}
         schema = definition.get("inputSchema")
@@ -300,6 +374,19 @@ class McpFake:
             raise
         await self._tool_latency(ctx, tool, answer, started)
         return answer
+
+    async def _odd_arguments(
+        self, request_id: JsonValue, tool: McpToolModel, sent: JsonValue
+    ) -> JsonObject:
+        """Non-object ``arguments``: the answer recorded for exactly them, else invalid params."""
+        wanted = jsonfmt.canonical_dumps(sent)
+        for exchange in self.runtime.recordings.for_endpoint(tool_endpoint(tool.name)):
+            reply = exchange.response.body.parsed() if exchange.response else None
+            if _sent_arguments(exchange) == wanted and isinstance(reply, dict):
+                return protocol.with_id(reply, request_id)
+        return protocol.error(
+            request_id, protocol.INVALID_PARAMS, "Invalid params: arguments must be an object"
+        )
 
     async def _tool_latency(
         self,
@@ -338,11 +425,8 @@ class McpFake:
                 return protocol.error(
                     request_id, protocol.INTERNAL_ERROR, f"fauxcall: no handler for {name}"
                 )
-            try:
-                value = await handler(ctx, arguments)
-            except RpcError as error:
-                return protocol.error(request_id, error.code, error.message, error.data)
-            return protocol.result(request_id, value)
+            answer = await self._handled(request_id, handler(ctx, arguments))
+            return answer if answer is not None else protocol.result(request_id, None)
         recorded = await self._recorded_result(tool_endpoint(name), flatten_args(arguments), tool)
         if isinstance(recorded, dict):
             return protocol.with_id(recorded, request_id)
@@ -376,7 +460,7 @@ class McpFake:
 
     # -- HTTP transport ---------------------------------------------------------------------------
 
-    def _reply(self, messages: list[JsonObject], headers: dict[str, str]) -> Response:
+    def _reply(self, messages: list[JsonValue], headers: dict[str, str]) -> Response:
         if self.transport.response_mode == "sse":
             text = "".join(
                 protocol.sse_event(
@@ -396,40 +480,60 @@ class McpFake:
 
     async def streamable(self, request: Request) -> Response:
         """Handle GET/POST/DELETE on the Streamable HTTP endpoint."""
-        session_header = self.transport.session_header
-        session = request.headers.get(session_header)
-        if request.method == "GET":
-            if self.transport.get_stream == "status":
-                status = self.transport.get_status
-                allow = {"allow": "POST, DELETE"} if status == 405 else {}  # noqa: PLR2004
-                return Response(status_code=status, headers=allow)
-            return StreamingResponse(
-                _idle_stream(self.runtime.pause), media_type=self.transport.content_type_sse
-            )
+        if request.method in {"GET", "DELETE"}:
+            return self._get_or_delete(request)
+        messages = _messages(await request.body())
+        if isinstance(messages, Response):
+            return messages
+        headers, refused = self._session_of(request, messages)
+        if refused is not None:
+            return refused
+        requests = [m for m in messages if protocol.is_request(m) and isinstance(m, dict)]
+        if not requests:
+            return Response(status_code=202)
+        streaming = self.transport.response_mode == "sse"
+        try:
+            if streaming and len(requests) == 1:
+                return await self._answer_streaming(request, requests[0], headers)
+            sent: list[JsonValue] = []
+            for message in requests:
+                notes, reply = await self._answer(request, message)
+                sent += [*notes, reply] if streaming else [reply]
+        except EarlyResponse as early:  # a tool answered the whole HTTP request
+            return early.response
+        return self._reply(sent, headers)
+
+    def _get_or_delete(self, request: Request) -> Response:
+        """A GET (the server's stream, or its refusal) or a DELETE (ends the session)."""
         if request.method == "DELETE":
+            session = request.headers.get(self.transport.session_header)
             if session:
                 self._sessions.pop(session, None)
+                self._capabilities.pop(session, None)
             return Response(status_code=self.transport.delete_status)
-        raw = await request.body()
-        try:
-            parsed = jsonfmt.loads(raw)
-        except ValueError:
-            parse_error = protocol.error(None, protocol.PARSE_ERROR, "Parse error")
-            return Response(
-                content=jsonfmt.dumps(parse_error).encode(),
-                status_code=400,
-                media_type="application/json",
-            )
-        messages = parsed if isinstance(parsed, list) else [parsed]
+        if self.transport.get_stream == "status":
+            status = self.transport.get_status
+            allow = {"allow": "POST, DELETE"} if status == 405 else {}  # noqa: PLR2004
+            return Response(status_code=status, headers=allow)
+        return StreamingResponse(
+            _idle_stream(self.runtime.pause), media_type=self.transport.content_type_sse
+        )
+
+    def _session_of(
+        self, request: Request, messages: Sequence[JsonValue]
+    ) -> tuple[dict[str, str], Response | None]:
+        """A new session's header for an ``initialize``; the refusal of a missing session."""
+        session_header = self.transport.session_header
+        session = request.headers.get(session_header)
         is_init = any(isinstance(m, dict) and m.get("method") == "initialize" for m in messages)
-        headers: dict[str, str] = {}
         if is_init and self.transport.issues_session:
             session = secrets.token_hex(16)
             self._sessions[session] = (
                 request.headers.get(self.runtime.settings.session_header) or DEFAULT_SESSION
             )
-            headers[session_header] = session
-        elif (
+            self._capabilities[session] = _declared(messages)
+            return {session_header: session}, None
+        if (
             self.transport.requires_session
             and self.transport.issues_session
             and (not session or session not in self._sessions)
@@ -437,21 +541,64 @@ class McpFake:
             missing: JsonValue = self.model.errors.get("missing_session") or protocol.error(
                 None, protocol.INVALID_REQUEST, "Bad Request: No valid session ID provided"
             )
-            return Response(
+            refused = Response(
                 content=jsonfmt.dumps(missing).encode(),
                 status_code=self.transport.missing_session_status,
                 media_type="application/json",
             )
-        requests = [m for m in messages if protocol.is_request(m)]
-        if not requests:
-            return Response(status_code=202)
-        try:
-            replies = [await self._answer(request, m) for m in requests if isinstance(m, dict)]
-        except EarlyResponse as early:  # a tool answered the whole HTTP request
-            return early.response
-        return self._reply(replies, headers)
+            return {}, refused
+        return {}, None
 
-    async def _answer(self, request: Request, message: JsonObject) -> JsonObject:
+    async def _answer_streaming(
+        self, request: Request, message: JsonObject, headers: dict[str, str]
+    ) -> Response:
+        """One request over SSE: notifications reach the client as they happen, then the answer.
+
+        Until the first notification nothing is sent, so an answer without any (or an HTTP-level
+        refusal) still goes out as one plain response.
+        """
+        queue: asyncio.Queue[JsonValue] = asyncio.Queue()
+        task = asyncio.create_task(self._answer(request, message, on_notify=queue.put_nowait))
+        waiting = asyncio.create_task(queue.get())
+        await asyncio.wait({task, waiting}, return_when=asyncio.FIRST_COMPLETED)
+        if task.done():
+            early = [waiting.result()] if waiting.done() else []
+            waiting.cancel()
+            notes, reply = task.result()  # raises the EarlyResponse of a refusal
+            return self._reply([*early, *_drain(queue), *notes, reply], headers)
+        first = waiting.result()
+        event_id = self.transport.sse_event_ids
+
+        async def events() -> AsyncIterator[bytes]:
+            try:
+                yield _sse(first, event_id=event_id)
+                while True:
+                    getter = asyncio.create_task(queue.get())
+                    await asyncio.wait({task, getter}, return_when=asyncio.FIRST_COMPLETED)
+                    if not getter.done():
+                        getter.cancel()
+                        break
+                    yield _sse(getter.result(), event_id=event_id)
+                try:  # every notification was streamed: a finished task left none behind
+                    _, reply = task.result()
+                except EarlyResponse:  # too late for an HTTP status: the stream has started
+                    reply = protocol.error(message.get("id"), protocol.INTERNAL_ERROR, "refused")
+                yield _sse(reply, event_id=event_id)
+            finally:
+                if not task.done():  # pragma: no cover - the client left mid-stream
+                    task.cancel()
+
+        return StreamingResponse(
+            events(), media_type=self.transport.content_type_sse, headers=headers
+        )
+
+    async def _answer(
+        self,
+        request: Request,
+        message: JsonObject,
+        on_notify: Callable[[JsonValue], None] | None = None,
+    ) -> tuple[list[JsonValue], JsonObject]:
+        """One request's reply, and the notifications its handler sent (unless streamed)."""
         started = time.perf_counter()
         method = str(message.get("method"))
         params = message.get("params")
@@ -459,6 +606,9 @@ class McpFake:
         endpoint_id = tool_endpoint(str(name)) if method == TOOLS_CALL else method_endpoint(method)
         ctx = self.runtime.new_context(request, None)
         ctx.identity = getattr(request.state, "fauxcall_identity", None)
+        ctx.json_body = message
+        ctx.mcp_session = request.headers.get(self.transport.session_header)
+        ctx.on_notify = on_notify
         bind_context(request_id=ctx.request_id, session=ctx.session, endpoint=endpoint_id)
         fault = self.runtime.faults.pick(endpoint_id, ctx.session)
         if fault is not None and fault.kind != "delay":
@@ -478,7 +628,7 @@ class McpFake:
             ctx, request, endpoint_id, message, reply, started, fault.kind if fault else None
         )
         clear_context()
-        return reply
+        return list(ctx.notifications), reply
 
     def _journal(
         self,
@@ -561,12 +711,67 @@ class McpFake:
             return Response(content=b"Could not parse message", status_code=400)
         for message in parsed if isinstance(parsed, list) else [parsed]:
             if protocol.is_request(message) and isinstance(message, dict):
+
+                def stream(note: JsonValue, queue: asyncio.Queue[str] = queue) -> None:
+                    queue.put_nowait(protocol.sse_event(note))
+
                 try:
-                    reply = await self._answer(request, message)
+                    _, reply = await self._answer(request, message, on_notify=stream)
                 except EarlyResponse as early:  # a tool answered the POST itself
                     return early.response
                 await queue.put(protocol.sse_event(reply))
         return Response(content=b"Accepted", status_code=202)
+
+
+def _declared(messages: Sequence[JsonValue]) -> frozenset[str]:
+    """The client capabilities the ``initialize`` among ``messages`` declared."""
+    found: set[str] = set()
+    for message in messages:
+        if isinstance(message, dict) and message.get("method") == "initialize":
+            params = message.get("params")
+            declared = params.get("capabilities") if isinstance(params, dict) else None
+            found.update(declared if isinstance(declared, dict) else ())
+    return frozenset(found)
+
+
+def _offered(tool: McpToolModel, declared: frozenset[str]) -> bool:
+    """Whether the server lists ``tool`` to a client that declared these capabilities."""
+    return not tool.requires or bool(declared & set(tool.requires))
+
+
+def _sent_arguments(exchange: Exchange) -> str | None:
+    """The ``arguments`` a recorded ``tools/call`` sent, as canonical JSON (``None``: none)."""
+    body = exchange.request.body.parsed()
+    params = body.get("params") if isinstance(body, dict) else None
+    if not isinstance(params, dict) or "arguments" not in params:
+        return None
+    return jsonfmt.canonical_dumps(params["arguments"])
+
+
+def _messages(raw: bytes) -> list[JsonValue] | Response:
+    """The JSON-RPC messages of a POST body, or the reply to one that doesn't parse."""
+    try:
+        parsed = jsonfmt.loads(raw)
+    except ValueError:
+        parse_error = protocol.error(None, protocol.PARSE_ERROR, "Parse error")
+        return Response(
+            content=jsonfmt.dumps(parse_error).encode(),
+            status_code=400,
+            media_type="application/json",
+        )
+    return parsed if isinstance(parsed, list) else [parsed]
+
+
+def _sse(message: JsonValue, *, event_id: bool) -> bytes:
+    return protocol.sse_event(message, event_id=secrets.token_hex(8) if event_id else None).encode()
+
+
+def _drain(queue: asyncio.Queue[JsonValue]) -> list[JsonValue]:
+    """Whatever is waiting in ``queue``, without waiting."""
+    found = []
+    while not queue.empty():
+        found.append(queue.get_nowait())
+    return found
 
 
 async def _idle_stream(pause: Callable[[float], Awaitable[None]]) -> AsyncIterator[bytes]:

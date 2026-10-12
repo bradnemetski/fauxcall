@@ -1,0 +1,126 @@
+{
+  "id": "000092",
+  "endpoint": "MCP tools/call:get-annotated-message",
+  "plan_call": "annot-debug",
+  "started_at": "2026-10-12T03:34:41.375654Z",
+  "started_ns": 1791776081375654000,
+  "elapsed_ms": 10.402,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 18,
+        "method": "tools/call",
+        "params": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": "debug"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:34:41 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Debug: Cache hit ratio 0.95, latency 150ms",
+              "annotations": {
+                "audience": [
+                  "assistant"
+                ],
+                "priority": 0.3
+              }
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 18
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 10.092,
+      "kind": "sse",
+      "event": "message",
+      "id": "140fe48a-48e4-4485-988c-dc438bd266c9",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Debug: Cache hit ratio 0.95, latency 150ms\",\"annotations\":{\"audience\":[\"assistant\"],\"priority\":0.3}}]},\"jsonrpc\":\"2.0\",\"id\":18}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

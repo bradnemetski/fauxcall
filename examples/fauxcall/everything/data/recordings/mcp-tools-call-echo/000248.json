@@ -1,0 +1,121 @@
+{
+  "id": "000248",
+  "endpoint": "MCP tools/call:echo",
+  "purpose": "variation",
+  "plan_call": "echo-while-sub",
+  "started_at": "2026-10-12T03:38:29.629782Z",
+  "started_ns": 1791776309629782000,
+  "elapsed_ms": 14.272,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 48,
+        "method": "tools/call",
+        "params": {
+          "name": "echo",
+          "arguments": {
+            "message": "while subscribed"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:38:29 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Echo: while subscribed"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 48
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 13.983,
+      "kind": "sse",
+      "event": "message",
+      "id": "1d5d0c29-2488-4c74-b48a-bbf4836a0728",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Echo: while subscribed\"}]},\"jsonrpc\":\"2.0\",\"id\":48}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

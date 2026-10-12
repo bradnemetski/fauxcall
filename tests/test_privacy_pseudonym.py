@@ -583,3 +583,14 @@ def test_public_account_ids_are_kept() -> None:
 def test_an_optional_id_group_that_did_not_match_keeps_the_text() -> None:
     pseudo = Pseudonymizer(KEY, identifiers=[r"\bkey_(?P<id>[0-9]{4})?x\b"])
     assert pseudo.pseudonymize_text("key_x") == "key_x"
+
+
+def test_home_folders_hide_the_account_name() -> None:
+    pseudo = Pseudonymizer(KEY)
+    mac = pseudo.pseudonymize_text('{"HOME": "/Users/janedoe", "PWD": "/Users/janedoe/code"}')
+    assert "janedoe" not in mac
+    assert mac.count("/Users/") == 2
+    assert mac.split('"')[3] == mac.split('"')[7].removesuffix("/code")  # the same pseudonym
+    assert "Jane Doe" not in pseudo.pseudonymize_text(r"C:\Users\Jane Doe\Documents")
+    for kept in ("/home/feed", "https://api.test/scim/v2/Users/2819c223", "dir/Users/x"):
+        assert pseudo.pseudonymize_text(kept) == kept  # routes and URLs keep their paths

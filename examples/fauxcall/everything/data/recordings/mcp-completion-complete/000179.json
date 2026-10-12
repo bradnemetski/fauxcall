@@ -1,0 +1,133 @@
+{
+  "id": "000179",
+  "endpoint": "MCP completion/complete",
+  "purpose": "variation",
+  "plan_call": "cc-name-sales",
+  "started_at": "2026-10-12T03:37:03.620739Z",
+  "started_ns": 1791776223620739000,
+  "elapsed_ms": 6.466,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 27,
+        "method": "completion/complete",
+        "params": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "name",
+            "value": ""
+          },
+          "context": {
+            "arguments": {
+              "department": "Sales"
+            }
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "174"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:37:03 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "completion": {
+            "values": [
+              "David",
+              "Eve",
+              "Frank"
+            ],
+            "total": 3,
+            "hasMore": false
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 27
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.255,
+      "kind": "sse",
+      "event": "message",
+      "id": "01197da8-ccc3-444a-b931-898b18e87be0",
+      "data": "{\"result\":{\"completion\":{\"values\":[\"David\",\"Eve\",\"Frank\"],\"total\":3,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":27}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

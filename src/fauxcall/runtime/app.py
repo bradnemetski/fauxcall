@@ -13,6 +13,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import time
+from collections import deque
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Final
@@ -79,7 +80,7 @@ if TYPE_CHECKING:
     from fauxcall.model.jobs import JobModel
     from fauxcall.model.recording import Exchange
     from fauxcall.runtime.auth import AuthFailure, Identity
-    from fauxcall.runtime.mcp_server import ToolHandler
+    from fauxcall.runtime.mcp_server import MethodHandler, ToolHandler
     from fauxcall.types import JsonValue
 
     Handler = Callable[[RequestContext], Awaitable[Response]]
@@ -137,6 +138,8 @@ class FakeRuntime:
         self.recordings = RecordingIndex(data / "recordings")
         self.series = SeriesStore(data / "series", origin_ns=self.clocks.default.now_ns())
         self._sleep = sleep
+        self.pauses: deque[float] = deque(maxlen=1000)
+        """The latest pauses (seconds) emulated latency and handlers took: for tests to check."""
         self._counters: dict[tuple[str, str], int] = {}
         self._session_seq: dict[str, int] = {}
         self._job_outcomes: dict[tuple[str, str, str], str] = {}
@@ -171,7 +174,11 @@ class FakeRuntime:
         ]
 
     async def pause(self, seconds: float) -> None:
-        """Sleep through the runtime's (injectable) sleep: emulated latency and fault delays."""
+        """Sleep through the runtime's (injectable) sleep: emulated latency and fault delays.
+
+        Every pause is noted in :attr:`pauses`.
+        """
+        self.pauses.append(seconds)
         await self._sleep(seconds)
 
     def calendar(self, name: str) -> TradingCalendar:
@@ -647,6 +654,20 @@ def register_tool(app: FastAPI, name: str, handler: ToolHandler) -> None:
     if fake is None:
         raise ValueError("this fake has no MCP server")
     fake.tool_handlers[name] = handler
+
+
+def register_method(app: FastAPI, method: str, handler: MethodHandler) -> None:
+    """Answer an MCP method with custom code: ``async (ctx, params) -> result``.
+
+    For dynamic resources (``resources/read``), prompts (``prompts/get``), completions,
+    subscriptions, ``logging/setLevel`` or any other method. Return ``None`` to let the recordings
+    answer the call (a handler for the dynamic resources, the static ones replayed); raise
+    :class:`~fauxcall.runtime.RpcError` for a JSON-RPC error.
+    """
+    fake = runtime_of_app(app).mcp
+    if fake is None:
+        raise ValueError("this fake has no MCP server")
+    fake.method_handlers[method] = handler
 
 
 def runtime_of_app(app: FastAPI) -> FakeRuntime:

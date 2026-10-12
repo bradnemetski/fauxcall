@@ -8,9 +8,11 @@ import pytest
 
 from fauxcall.model.api import ApiModel, RealTarget, SourceInfo
 from fauxcall.model.endpoints import EndpointModel, ResponseShape
-from fauxcall.model.fields import IgnorePolicy
+from fauxcall.model.fields import IgnorePolicy, PseudonymPolicy
 from fauxcall.model.plan import Approval, Approvals
 from fauxcall.model.recording import Body, CapturedRequest, CapturedResponse, Exchange
+from fauxcall.privacy import Pseudonymizer
+from fauxcall.recording.privacy_filter import PrivacyConfig, RecordingPrivacy
 from fauxcall.recording.store import RecordingStore
 from fauxcall.storage import write_model
 from fauxcall.testing.client import CompareOptions, ExchangeLog, LoggedCall
@@ -873,3 +875,54 @@ def test_polls_count_once_with_their_last_answer() -> None:
         _polled("POST", "/jobs", {"id": "b"}, 202),
     ]
     assert len(settled(writes)) == 2  # repeated writes are separate calls, never polls
+
+
+def test_the_real_side_is_compared_as_it_would_have_been_recorded() -> None:
+    key = "parity-test-key"
+    privacy = RecordingPrivacy(
+        PrivacyConfig(), secret_values=["sk-real-0123456789"], pseudonym_key=key
+    )
+    pseudonym = Pseudonymizer(key).pseudonym("jane.roe@example.org", "email")
+    spec = FakeUnderTest(app_factory=_no_app, privacy=privacy)
+    real = ExchangeLog(
+        [
+            _call("/me", {"email": "jane.roe@example.org", "plan": "pro"}),
+            _call("/me", {"email": "jane.roe@example.org", "plan": "free"}),
+        ]
+    )
+    fake = ExchangeLog(
+        [
+            _call("/me", {"email": pseudonym, "plan": "pro"}),
+            _call("/me", {"email": "someone.else@example.org", "plan": "pro"}),
+        ]
+    )
+    same, different = compare_logs("s", real, fake, spec)
+    assert same.score == 1.0  # the recorded pseudonym is what the real answer means
+    model = ApiModel(
+        name="me",
+        title="Me",
+        source=SourceInfo(
+            kind="openapi",
+            url="https://x/openapi.json",
+            fetched_at=datetime(2026, 1, 1, tzinfo=UTC),
+        ),
+        real=RealTarget(base_url="https://x"),
+        endpoints=[
+            EndpointModel(
+                id="GET /me",
+                method=HttpMethod.GET,
+                path="/me",
+                fields=[PseudonymPolicy(path="$.email", category="email")],
+            )
+        ],
+    )
+    policed = FakeUnderTest(app_factory=_no_app, model=model, privacy=privacy)
+    (checked, _) = compare_logs("s", real, fake, policed)
+    assert checked.score == 1.0  # a pseudonym field compares as recorded, not translated again
+    details = " ".join(check.detail for check in different.failures())
+    assert "jane.roe" not in details  # the report never holds the real value
+    assert str(pseudonym) in details
+    text = _call("/t", None)
+    text.observation.text = "token sk-real-0123456789 for jane"
+    stripped = compare_logs("s", ExchangeLog([text]), ExchangeLog([_call("/t", None)]), spec)
+    assert "sk-real-0123456789" not in " ".join(c.detail for c in stripped[0].checks)

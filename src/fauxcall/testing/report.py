@@ -42,6 +42,12 @@ def endpoint_matcher(model: ApiModel | None) -> list[tuple[str, re.Pattern[str]]
     for endpoint in sorted(model.endpoints, key=specificity):
         regex = _ESCAPED_PARAM.sub("[^/]+", re.escape(endpoint.path))
         patterns.append((endpoint.id, re.compile(f"^{endpoint.method.value} {regex}/?$", flags)))
+    for template in model.mcp.resource_templates if model.mcp is not None else []:
+        uri = template.get("uriTemplate") if isinstance(template, dict) else None
+        if isinstance(uri, str) and "{" in uri:
+            regex = _ESCAPED_PARAM.sub("[^/]+", re.escape(uri))
+            endpoint_id = f"MCP resources/read:{uri}"
+            patterns.append((endpoint_id, re.compile(f"^MCP resources/read:{regex}$")))
     return patterns
 
 
@@ -49,10 +55,12 @@ def endpoint_for(label: str, matchers: list[tuple[str, re.Pattern[str]]]) -> str
     """The endpoint a call belongs to (the label without its query when nothing matches).
 
     Absolute URLs (``GET https://api.example.com/pets/1``) are reduced to their path first. MCP
-    labels (``MCP tools/call:ask``, ``MCP resources/read:file:///a?b``) already are endpoint ids.
+    labels (``MCP tools/call:ask``, ``MCP resources/read:file:///a?b``) already are endpoint ids,
+    except reads of templated resources, which group under the template
+    (``MCP resources/read:demo://items/{id}``).
     """
-    if label.startswith("MCP "):
-        return label
+    if label.startswith("MCP "):  # a resource read groups under its template, if it has one
+        return next((i for i, pattern in matchers if pattern.match(label)), label)
     concrete = label.split("?", 1)[0]
     method, _, target = concrete.partition(" ")
     if "://" in target:

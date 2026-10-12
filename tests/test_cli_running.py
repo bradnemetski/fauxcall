@@ -366,6 +366,23 @@ def test_verify_runs_the_fake_suite_with_coverage(
     assert commands[1][0][-2:] == [str(fake.tests / "e2e"), "--allow-real-writes"]
 
 
+def test_parity_runs_apply_the_answers_files_approval(
+    ws: Workspace, commands: list[tuple[list[str], dict[str, object]]]
+) -> None:
+    model = rest_model()
+    model.endpoints.append(EndpointModel(id="POST /items", method=HttpMethod.POST, path="/items"))
+    fake = make_fake(ws, model)
+    (fake.root / "pyproject.toml").write_text("[project]\nname = 'x'\n")
+    (fake.root / "answers.json").write_text(
+        json.dumps({"mutations": {"approve": True, "endpoints": ["*"]}})
+    )
+    assert "applied" not in invoke("verify", "shop").output  # the fake alone writes nothing real
+    assert not fake.approvals_path.exists()
+    output = invoke("verify", "shop", "--target", "parity", code=3).output
+    assert "applied the write approval in answers.json" in output
+    assert fake.approvals_path.exists()
+
+
 def test_verify_from_the_project_root_with_a_relative_workspace(
     ws: Workspace,
     commands: list[tuple[list[str], dict[str, object]]],

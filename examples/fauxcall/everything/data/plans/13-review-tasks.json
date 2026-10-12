@@ -1,0 +1,156 @@
+{
+ "name": "13-review-tasks",
+ "created_at": "2026-10-12T02:30:00Z",
+ "note": "Probes proposed by the independent review.",
+ "calls": [
+  {
+   "id": "tl-make",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "paging"
+     },
+     "task": {}
+    }
+   },
+   "repeat": 11,
+   "interval_ms": 200
+  },
+  {
+   "id": "tl-page1",
+   "endpoint": "MCP tasks/list",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   },
+   "capture": {
+    "nc": "$.result.nextCursor"
+   }
+  },
+  {
+   "id": "tl-page2",
+   "endpoint": "MCP tasks/list",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "cursor": "{{nc}}"
+    }
+   }
+  },
+  {
+   "id": "tl-cursor-null",
+   "endpoint": "MCP tasks/list",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "cursor": null
+    }
+   }
+  },
+  {
+   "id": "tn-echo",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": "x"
+     },
+     "task": null
+    }
+   }
+  },
+  {
+   "id": "tn-research",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "x"
+     },
+     "task": null
+    }
+   }
+  },
+  {
+   "id": "tc-null",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": null
+    }
+   }
+  },
+  {
+   "id": "tc-array",
+   "endpoint": "MCP tools/call:get-sum",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-sum",
+     "arguments": [
+      1,
+      2
+     ]
+    }
+   }
+  },
+  {
+   "id": "tl-window",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "expiry window"
+     },
+     "task": {}
+    }
+   },
+   "capture": {
+    "tw": "$.result.task.taskId"
+   }
+  },
+  {
+   "id": "tl-window-get",
+   "endpoint": "MCP tasks/get",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{tw}}"
+    }
+   },
+   "repeat": 2,
+   "interval_ms": 302000
+  }
+ ]
+}

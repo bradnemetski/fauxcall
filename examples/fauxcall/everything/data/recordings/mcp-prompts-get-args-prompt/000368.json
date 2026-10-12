@@ -1,0 +1,118 @@
+{
+  "id": "000368",
+  "endpoint": "MCP prompts/get:args-prompt",
+  "purpose": "invalid",
+  "plan_call": "ap-state-num",
+  "started_at": "2026-10-12T03:48:59.292704Z",
+  "started_ns": 1791776939292704000,
+  "elapsed_ms": 9.219,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 24,
+        "method": "prompts/get",
+        "params": {
+          "name": "args-prompt",
+          "arguments": {
+            "city": "Austin",
+            "state": 7
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "357"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:48:59 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 24,
+        "error": {
+          "code": -32603,
+          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"params\",\n      \"arguments\",\n      \"state\"\n    ],\n    \"message\": \"Invalid input: expected string, received number\"\n  }\n]"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.864,
+      "kind": "sse",
+      "event": "message",
+      "id": "33e0e2d0-dfa4-44aa-9ab4-bc5e4d03aae2",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":24,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"expected\\\": \\\"string\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"arguments\\\",\\n      \\\"state\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected string, received number\\\"\\n  }\\n]\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "id": "000421",
+  "endpoint": "MCP resources/read",
+  "purpose": "edge",
+  "plan_call": "rr-backslash",
+  "started_at": "2026-10-12T04:35:39.012687Z",
+  "started_ns": 1791779739012687000,
+  "elapsed_ms": 7.207,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/static/document/a\\b.md"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "201"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 04:35:39 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Resource demo://resource/static/document/a\\b.md not found"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.931,
+      "kind": "sse",
+      "event": "message",
+      "id": "0a3de652-1f77-45b4-a5c5-675a5b28f881",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":7,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Resource demo://resource/static/document/a\\\\b.md not found\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

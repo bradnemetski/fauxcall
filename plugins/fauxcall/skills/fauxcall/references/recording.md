@@ -190,4 +190,5 @@ id, a named group `id` replaces just that part, consistently: e.g.
 
 Categories: email, phone, person_name, first_name, last_name, username, address, street, city,
 postal_code, ip, credit_card, ssn, date_of_birth, free_text, account_id. If a recording leaked something, fix
-`privacy.json`, delete the affected recordings and re-record — never hand-edit secrets out.
+`privacy.json`, delete the affected recordings (`fauxcall recordings-delete <name> --endpoint
+"<E>"` or `--id <id>`) and re-record — never hand-edit secrets out.

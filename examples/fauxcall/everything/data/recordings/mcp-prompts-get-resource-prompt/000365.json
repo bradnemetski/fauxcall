@@ -1,0 +1,115 @@
+{
+  "id": "000365",
+  "endpoint": "MCP prompts/get:resource-prompt",
+  "purpose": "invalid",
+  "plan_call": "rp-both-missing",
+  "started_at": "2026-10-12T03:48:57.785534Z",
+  "started_ns": 1791776937785534000,
+  "elapsed_ms": 2.499,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 21,
+        "method": "prompts/get",
+        "params": {
+          "name": "resource-prompt",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "322"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:48:57 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 21,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Invalid arguments for prompt resource-prompt: Invalid input: expected string, received undefined at resourceType\nInvalid input: expected string, received undefined at resourceId"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.393,
+      "kind": "sse",
+      "event": "message",
+      "id": "2f1ebdbc-acf3-47e5-a562-14a562948047",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":21,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Invalid arguments for prompt resource-prompt: Invalid input: expected string, received undefined at resourceType\\nInvalid input: expected string, received undefined at resourceId\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

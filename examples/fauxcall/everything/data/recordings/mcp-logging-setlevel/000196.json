@@ -1,0 +1,110 @@
+{
+  "id": "000196",
+  "endpoint": "MCP logging/setLevel",
+  "plan_call": "lvl-emergency",
+  "started_at": "2026-10-12T03:37:12.158954Z",
+  "started_ns": 1791776232158954000,
+  "elapsed_ms": 7.16,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 44,
+        "method": "logging/setLevel",
+        "params": {
+          "level": "emergency"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "101"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:37:12 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {},
+        "jsonrpc": "2.0",
+        "id": 44
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.896,
+      "kind": "sse",
+      "event": "message",
+      "id": "275af569-e6df-4d34-99f5-44a3b7e58906",
+      "data": "{\"result\":{},\"jsonrpc\":\"2.0\",\"id\":44}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

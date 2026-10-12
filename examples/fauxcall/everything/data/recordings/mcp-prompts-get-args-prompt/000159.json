@@ -1,0 +1,115 @@
+{
+  "id": "000159",
+  "endpoint": "MCP prompts/get:args-prompt",
+  "purpose": "invalid",
+  "plan_call": "args-missing",
+  "started_at": "2026-10-12T03:36:53.576704Z",
+  "started_ns": 1791776213576704000,
+  "elapsed_ms": 7.943,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "prompts/get",
+        "params": {
+          "name": "args-prompt",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "243"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:36:53 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Invalid arguments for prompt args-prompt: Invalid input: expected string, received undefined at city"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 7.68,
+      "kind": "sse",
+      "event": "message",
+      "id": "68e32cfe-7ed6-4d57-a558-0a15730a052f",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":7,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Invalid arguments for prompt args-prompt: Invalid input: expected string, received undefined at city\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

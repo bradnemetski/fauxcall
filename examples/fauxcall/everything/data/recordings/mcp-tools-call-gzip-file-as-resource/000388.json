@@ -1,0 +1,123 @@
+{
+  "id": "000388",
+  "endpoint": "MCP tools/call:gzip-file-as-resource",
+  "purpose": "edge",
+  "plan_call": "gz-data-no-comma",
+  "started_at": "2026-10-12T03:49:09.343544Z",
+  "started_ns": 1791776949343544000,
+  "elapsed_ms": 6.278,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 44,
+        "method": "tools/call",
+        "params": {
+          "name": "gzip-file-as-resource",
+          "arguments": {
+            "name": "nc.gz",
+            "data": "data:text/plain"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:49:09 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "fetch failed"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 44
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.022,
+      "kind": "sse",
+      "event": "message",
+      "id": "a4bfcb01-d681-4dc8-89e0-1f366fe0e4c7",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"fetch failed\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":44}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "id": "000279",
+  "endpoint": "MCP tools/call:simulate-research-query",
+  "purpose": "variation",
+  "plan_call": "rq-ambiguous",
+  "started_at": "2026-10-12T03:38:58.933731Z",
+  "started_ns": 1791776338933731000,
+  "elapsed_ms": 5.681,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 79,
+        "method": "tools/call",
+        "params": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "python",
+            "ambiguous": true
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "252"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:38:58 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "MCP error -32601: Tool simulate-research-query requires task augmentation (taskSupport: 'required')"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 79
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.437,
+      "kind": "sse",
+      "event": "message",
+      "id": "426aeb61-f848-4e91-b576-386884b64817",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32601: Tool simulate-research-query requires task augmentation (taskSupport: 'required')\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":79}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

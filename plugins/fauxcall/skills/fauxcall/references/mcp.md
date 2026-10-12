@@ -110,8 +110,36 @@ async def create_price(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
 ```
 
 `EarlyResponse` answers the whole HTTP request (and takes the tool's recorded error time);
-`ctx.state` is per-session state for what the world can't hold. Never monkeypatch FauxCall
-classes: if a behavior can't be expressed, say so in the model's `notes`.
+`ctx.state` is state for what the world can't hold, per FauxCall evaluation session
+(`X-Fauxcall-Session`); `ctx.mcp_session` is the connected client's `Mcp-Session-Id`, to key
+state per client. A handler that crashes answers `-32603`, as SDK servers do. Set a tool's
+behavior with `fauxcall model tool <name> <tools…> --behavior computed` (also `--invalid-args`,
+`--varies`/`--steady`), not by editing `data/model.json`. Never monkeypatch FauxCall classes:
+if a behavior can't be expressed, say so in the model's `notes`.
+
+## What the runtime serves
+
+| method | the fake answers with |
+|---|---|
+| `initialize`, `ping` | the recorded server info, capabilities and negotiated version; `{}` |
+| `tools/list`, `resources/list`, `resources/templates/list`, `prompts/list` | the recorded listings, paginated as recorded; tools with `requires` only to clients that declared one of those capabilities |
+| `tools/call` | its handler (`computed`), else the closest recording; schema checks per `invalid_args`; arguments that aren't an object are refused unless recorded |
+| `resources/read`, `prompts/get`, `completion/complete` | a `METHOD_HANDLERS` handler, else the recording that matches its params, else the real "not found" error (`completion/complete`: no values) |
+| `resources/subscribe` / `unsubscribe`, `logging/setLevel` | a handler or recording, else `{}` when the server advertised it |
+| anything else (`tasks/*` …) | a handler or recording, else the real "method not found" |
+
+`METHOD_HANDLERS` (in `handlers.py`) maps any method to `async (ctx, params) -> result`; return
+`None` to let the recordings answer (compute dynamic resources, replay the static ones). Both kinds
+of handler can send notifications: `ctx.progress(step, total, message)` (only when the call
+carried a `progressToken`, as on a real server) and `ctx.notify("notifications/message", {...})`.
+Over SSE they reach the client as they happen, before the answer. Take the real time between them
+with `await ctx.pause(seconds)`: skipped in fast mode (tests), and noted in `runtime.pauses` either
+way, so a test checks the timing by reading it (never by replacing FauxCall's private sleep).
+
+Tools some servers list only to clients that support sampling, elicitation or roots are found by
+introspection (one session per capability) and carry `requires`. The fake can't send requests
+back to the client (sampling, elicitation, roots): a tool that needs one should answer with the
+real server's error for a client that doesn't respond, and the README should say so.
 
 ## Auth (OAuth)
 

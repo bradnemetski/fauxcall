@@ -5,7 +5,8 @@ Generated fakes import from here::
     from fauxcall.runtime import RequestContext, create_app, handle, handle_websocket
 
 MCP tool handlers can also raise ``RpcError`` (a JSON-RPC error) or ``EarlyResponse`` (an HTTP
-reply), and keep per-session state in ``ctx.state``.
+reply), and keep per-session state in ``ctx.state``; ``register_method`` answers any other MCP
+method (dynamic resources, prompts, completions, subscriptions …) with code.
 """
 
 from fauxcall.runtime.app import (
@@ -13,6 +14,7 @@ from fauxcall.runtime.app import (
     create_app,
     handle,
     handle_websocket,
+    register_method,
     register_tool,
     runtime_of,
 )
@@ -27,6 +29,7 @@ __all__ = [
     "create_app",
     "handle",
     "handle_websocket",
+    "register_method",
     "register_tool",
     "runtime_of",
 ]

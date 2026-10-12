@@ -34,16 +34,9 @@ Jev). `fauxcall init` keeps that file and only adds the base URL and pseudonym k
 | `mutations.max_calls_per_endpoint` | real calls each approved endpoint may make (recording and parity together); omitted: 100, the `approval_budget` setting |
 | `scope` | `all` or a list of endpoint ids/globs |
 
-Apply it with the normal commands, then `fauxcall progress gate …`:
-
-```bash
-fauxcall plan approve <name> --endpoint "<id or glob>" --per-endpoint --max-calls N --reason "<reason>"
-```
-
-`--per-endpoint` gives every matching mutating endpoint its own budget of N, as
-`max_calls_per_endpoint` means; without it a glob shares one budget. (Interactively, `--planned`
-approves the exact writes a person reviewed instead; in a headless run the answers file is the
-approval, by endpoint.) Without `--max-calls` an
-approval allows 100 calls (the `approval_budget` setting); `--unlimited` only if the answers say so. Endpoint budgets are spent by recordings and by parity
-runs with `--allow-real-writes` alike, so plan for both. Approving an endpoint again adds N calls on
-top of what it already allowed (the command says how many in all).
+The write approval needs no command: the answers file *is* the user's approval, and `fauxcall
+record`, `plan review`, `plan check` and parity runs apply it themselves (each matching tool or
+write endpoint gets its own budget of `max_calls_per_endpoint`, for recording and parity
+together; omitted: 100, the `approval_budget` setting). Never run `fauxcall plan approve` in a
+headless run, and **never create or edit `answers.json`**: only the user writes it. Then record the
+gate: `fauxcall progress gate …`.

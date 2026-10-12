@@ -330,3 +330,27 @@ def test_mcp_coverage_expects_listings_and_every_tool() -> None:
         )
     )
     assert report.not_covered(websocket) == []  # streams are compared elsewhere
+
+
+def test_resource_reads_group_under_their_template() -> None:
+    model = PETSTORE.model_copy(
+        update={
+            "endpoints": [],
+            "kind": "mcp",
+            "mcp": McpModel(
+                resource_templates=[
+                    {"uriTemplate": "demo://items/{id}/text", "name": "item"},
+                    {"uriTemplate": "demo://static", "name": "plain"},
+                    "odd",
+                ]
+            ),
+        }
+    )
+    matchers = endpoint_matcher(model)
+    assert endpoint_for("MCP resources/read:demo://items/7/text", matchers) == (
+        "MCP resources/read:demo://items/{id}/text"
+    )
+    assert endpoint_for("MCP resources/read:demo://other", matchers) == (
+        "MCP resources/read:demo://other"
+    )
+    assert endpoint_for("MCP tools/call:ask", matchers) == "MCP tools/call:ask"

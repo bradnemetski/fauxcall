@@ -1,0 +1,122 @@
+{
+  "id": "000132",
+  "endpoint": "MCP tools/call:get-sum",
+  "purpose": "variation",
+  "plan_call": "sum-2",
+  "started_at": "2026-10-12T03:35:20.491880Z",
+  "started_ns": 1791776120491880000,
+  "elapsed_ms": 8.308,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 58,
+        "method": "tools/call",
+        "params": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 1.5,
+            "b": 2.5
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:35:20 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "The sum of 1.5 and 2.5 is 4."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 58
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.059,
+      "kind": "sse",
+      "event": "message",
+      "id": "6e45af55-8490-40b0-8bb4-ba9803c3a13d",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"The sum of 1.5 and 2.5 is 4.\"}]},\"jsonrpc\":\"2.0\",\"id\":58}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

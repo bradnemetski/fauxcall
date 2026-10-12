@@ -1,0 +1,119 @@
+{
+  "id": "000299",
+  "endpoint": "MCP tools/call:trigger-elicitation-request",
+  "plan_call": "elicit-nocap",
+  "started_at": "2026-10-12T03:39:13.596442Z",
+  "started_ns": 1791776353596442000,
+  "elapsed_ms": 5.131,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 99,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "213"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:39:13 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "MCP error -32602: Tool trigger-elicitation-request not found"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 99
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.914,
+      "kind": "sse",
+      "event": "message",
+      "id": "476b977b-f218-4ec0-9409-b1db5c3ed150",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Tool trigger-elicitation-request not found\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":99}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

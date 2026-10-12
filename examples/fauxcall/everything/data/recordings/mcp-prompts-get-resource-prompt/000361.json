@@ -1,0 +1,136 @@
+{
+  "id": "000361",
+  "endpoint": "MCP prompts/get:resource-prompt",
+  "purpose": "edge",
+  "plan_call": "rp-2.0",
+  "started_at": "2026-10-12T03:48:55.776515Z",
+  "started_ns": 1791776935776515000,
+  "elapsed_ms": 10.069,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 17,
+        "method": "prompts/get",
+        "params": {
+          "name": "resource-prompt",
+          "arguments": {
+            "resourceType": "Text",
+            "resourceId": "2.0"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:48:55 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "This prompt includes the Text resource with id: 2. Please analyze the following resource:"
+              }
+            },
+            {
+              "role": "user",
+              "content": {
+                "type": "resource",
+                "resource": {
+                  "uri": "demo://resource/dynamic/text/2",
+                  "mimeType": "text/plain",
+                  "text": "Resource 2: This is a plaintext resource created at 11:48:55 PM"
+                }
+              }
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 17
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 9.725,
+      "kind": "sse",
+      "event": "message",
+      "id": "fac94a25-f831-486a-a8aa-c0613e6b9f77",
+      "data": "{\"result\":{\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"This prompt includes the Text resource with id: 2. Please analyze the following resource:\"}},{\"role\":\"user\",\"content\":{\"type\":\"resource\",\"resource\":{\"uri\":\"demo://resource/dynamic/text/2\",\"mimeType\":\"text/plain\",\"text\":\"Resource 2: This is a plaintext resource created at 11:48:55 PM\"}}}]},\"jsonrpc\":\"2.0\",\"id\":17}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

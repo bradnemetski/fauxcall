@@ -1,0 +1,120 @@
+{
+  "id": "000336",
+  "endpoint": "MCP tools/call:echo",
+  "purpose": "edge",
+  "plan_call": "echo-task",
+  "started_at": "2026-10-12T03:41:40.787155Z",
+  "started_ns": 1791776500787155000,
+  "elapsed_ms": 8.582,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 30,
+        "method": "tools/call",
+        "params": {
+          "name": "echo",
+          "arguments": {
+            "message": "as task"
+          },
+          "task": {
+            "ttl": 1000
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:41:40 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 30,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Invalid task creation result: [\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"task\"\n    ],\n    \"message\": \"Invalid input: expected object, received undefined\"\n  }\n]"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.306,
+      "kind": "sse",
+      "event": "message",
+      "id": "09115373-f94a-426c-9797-af0a12d0bba5",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":30,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Invalid task creation result: [\\n  {\\n    \\\"expected\\\": \\\"object\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"task\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected object, received undefined\\\"\\n  }\\n]\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

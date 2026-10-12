@@ -1,0 +1,119 @@
+{
+  "id": "000394",
+  "endpoint": "MCP resources/read:demo://resource/session/",
+  "purpose": "write_readback",
+  "plan_call": "rr-empty-name",
+  "started_at": "2026-10-12T03:49:12.351716Z",
+  "started_ns": 1791776952351716000,
+  "elapsed_ms": 10.293,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 50,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/session/"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "216"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:49:12 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "contents": [
+            {
+              "uri": "demo://resource/session/",
+              "mimeType": "application/gzip",
+              "blob": "H4sIAAAAAAAAE6sAAIMW3IwBAAAA"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 50
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 9.978,
+      "kind": "sse",
+      "event": "message",
+      "id": "3938b1b7-fa03-4b7b-997d-85b344eed8e2",
+      "data": "{\"result\":{\"contents\":[{\"uri\":\"demo://resource/session/\",\"mimeType\":\"application/gzip\",\"blob\":\"H4sIAAAAAAAAE6sAAIMW3IwBAAAA\"}]},\"jsonrpc\":\"2.0\",\"id\":50}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

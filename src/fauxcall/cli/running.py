@@ -24,6 +24,7 @@ from fauxcall.cli.common import (
     load_model,
     workspace,
 )
+from fauxcall.cli.evidence import apply_answers
 from fauxcall.storage import atomic_write_text
 
 if TYPE_CHECKING:
@@ -216,6 +217,10 @@ def verify(
     root = fake.root.resolve()  # the run happens inside the fake: relative paths would break
     if not (root / "pyproject.toml").exists():
         raise fail("scaffold the fake first (`fauxcall scaffold`)")
+    if target != "fake":
+        added = apply_answers(fake)  # a headless run's approval, for the real side's writes
+        if added:
+            echo(f"applied the write approval in answers.json: {', '.join(added)}")
     command = ["uv", "run", "--project", str(root), "pytest", "--target", target]
     if e2e_only or target != "fake":
         command.append(str(fake.tests.resolve() / "e2e"))

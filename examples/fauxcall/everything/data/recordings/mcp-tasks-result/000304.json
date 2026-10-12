@@ -1,0 +1,114 @@
+{
+  "id": "000304",
+  "endpoint": "MCP tasks/result",
+  "purpose": "edge",
+  "plan_call": "xs-result",
+  "started_at": "2026-10-12T03:40:17.713082Z",
+  "started_ns": 1791776417713082000,
+  "elapsed_ms": 10.896,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tasks/result",
+        "params": {
+          "taskId": "d624cbe144a50c75e4cecead6a93da79"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "191"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:40:17 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Task not found: d624cbe144a50c75e4cecead6a93da79"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 10.565,
+      "kind": "sse",
+      "event": "message",
+      "id": "6b31784e-37a7-4dd3-821f-643c324ec50e",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":4,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Task not found: d624cbe144a50c75e4cecead6a93da79\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

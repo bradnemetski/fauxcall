@@ -14,7 +14,7 @@ import fnmatch
 import hashlib
 from typing import Literal
 
-from pydantic import AwareDatetime, Field, model_validator
+from pydantic import AwareDatetime, ConfigDict, Field, model_validator
 
 from fauxcall import jsonfmt
 from fauxcall.model.common import Model, Purpose, RawJson
@@ -263,3 +263,24 @@ class Approvals(Model):
         key = self.budget_key(approval)
         if self.used.get(key, 0) > 0:
             self.used[key] -= 1
+
+
+class HeadlessMutations(Model):
+    """``mutations`` in a headless run's ``answers.json``: the user's approval of writes."""
+
+    approve: bool = False
+    endpoints: list[str] = Field(default_factory=list, description="Endpoint ids or globs.")
+    max_calls_per_endpoint: int | None = Field(default=None, ge=1)
+    reason: str | None = None
+
+
+class HeadlessAnswers(Model):
+    """``fauxcall/<name>/answers.json``: what the user answered up front for a headless run.
+
+    Only the approval of writes is read by the CLI (which applies it itself, so the agent never
+    approves anything); the skill reads the rest.
+    """
+
+    model_config = ConfigDict(extra="ignore", populate_by_name=True, validate_assignment=True)
+
+    mutations: HeadlessMutations | None = None

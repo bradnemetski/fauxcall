@@ -1,0 +1,866 @@
+{
+ "name": "probes-more",
+ "created_at": "2026-10-12T00:50:00Z",
+ "note": "Id parsing, multi-issue validation messages, gzip URL bodies and failures, protocol param errors.",
+ "calls": [
+  {
+   "id": "id-1e3",
+   "endpoint": "MCP resources/read:demo://resource/dynamic/text/1e3",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/1e3"
+    }
+   }
+  },
+  {
+   "id": "id-0x10",
+   "endpoint": "MCP resources/read:demo://resource/dynamic/text/0x10",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/0x10"
+    }
+   }
+  },
+  {
+   "id": "id-+5",
+   "endpoint": "MCP resources/read:demo://resource/dynamic/text/+5",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/+5"
+    }
+   }
+  },
+  {
+   "id": "id-5.0",
+   "endpoint": "MCP resources/read:demo://resource/dynamic/text/5.0",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/5.0"
+    }
+   }
+  },
+  {
+   "id": "id-2.50",
+   "endpoint": "MCP resources/read:demo://resource/dynamic/text/2.50",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/2.50"
+    }
+   }
+  },
+  {
+   "id": "id-999999999999999999999",
+   "endpoint": "MCP resources/read:demo://resource/dynamic/text/999999999999999999999",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/999999999999999999999"
+    }
+   }
+  },
+  {
+   "id": "id-1%200",
+   "endpoint": "MCP resources/read:demo://resource/dynamic/text/1%200",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/1%200"
+    }
+   }
+  },
+  {
+   "id": "id-007",
+   "endpoint": "MCP resources/read:demo://resource/dynamic/text/007",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/007"
+    }
+   }
+  },
+  {
+   "id": "blob-1e1",
+   "endpoint": "MCP resources/read:demo://resource/dynamic/blob/1e1",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/blob/1e1"
+    }
+   }
+  },
+  {
+   "id": "upper-scheme",
+   "endpoint": "MCP resources/read:DEMO://resource/dynamic/text/4",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "DEMO://resource/dynamic/text/4"
+    }
+   }
+  },
+  {
+   "id": "static-query",
+   "endpoint": "MCP resources/read:demo://resource/static/document/features.md?x=1",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/static/document/features.md?x=1"
+    }
+   }
+  },
+  {
+   "id": "text-trailing-slash",
+   "endpoint": "MCP resources/read:demo://resource/dynamic/text/4/",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/4/"
+    }
+   }
+  },
+  {
+   "id": "not-a-uri",
+   "endpoint": "MCP resources/read:not a uri",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "not a uri"
+    }
+   }
+  },
+  {
+   "id": "rp-1e3",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Text",
+      "resourceId": "1e3"
+     }
+    }
+   }
+  },
+  {
+   "id": "rp-01",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Text",
+      "resourceId": "01"
+     }
+    }
+   }
+  },
+  {
+   "id": "rp-2.0",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Text",
+      "resourceId": "2.0"
+     }
+    }
+   }
+  },
+  {
+   "id": "rp-3",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Text",
+      "resourceId": " 3"
+     }
+    }
+   }
+  },
+  {
+   "id": "rp--2",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Text",
+      "resourceId": "-2"
+     }
+    }
+   }
+  },
+  {
+   "id": "rp-empty",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Text",
+      "resourceId": ""
+     }
+    }
+   }
+  },
+  {
+   "id": "rp-both-missing",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "cp-both-missing",
+   "endpoint": "MCP prompts/get:completable-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "completable-prompt",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "ap-city-num",
+   "endpoint": "MCP prompts/get:args-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "args-prompt",
+     "arguments": {
+      "city": 5
+     }
+    }
+   }
+  },
+  {
+   "id": "ap-state-num",
+   "endpoint": "MCP prompts/get:args-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "args-prompt",
+     "arguments": {
+      "city": "Austin",
+      "state": 7
+     }
+    }
+   }
+  },
+  {
+   "id": "sum-empty",
+   "endpoint": "MCP tools/call:get-sum",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-sum",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "sum-both-str",
+   "endpoint": "MCP tools/call:get-sum",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-sum",
+     "arguments": {
+      "a": "x",
+      "b": "y"
+     }
+    }
+   }
+  },
+  {
+   "id": "sum-nan-str",
+   "endpoint": "MCP tools/call:get-sum",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-sum",
+     "arguments": {
+      "a": 1,
+      "b": "NaN"
+     }
+    }
+   }
+  },
+  {
+   "id": "links-int-str-and-range",
+   "endpoint": "MCP tools/call:get-resource-links",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-resource-links",
+     "arguments": {
+      "count": 20.5
+     }
+    }
+   }
+  },
+  {
+   "id": "ref-both-bad",
+   "endpoint": "MCP tools/call:get-resource-reference",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-resource-reference",
+     "arguments": {
+      "resourceType": "Image",
+      "resourceId": "x"
+     }
+    }
+   }
+  },
+  {
+   "id": "annot-both-bad",
+   "endpoint": "MCP tools/call:get-annotated-message",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-annotated-message",
+     "arguments": {
+      "messageType": 5,
+      "includeImage": "no"
+     }
+    }
+   }
+  },
+  {
+   "id": "long-both-bad",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "arguments": {
+      "duration": "a",
+      "steps": "b"
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-array",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": [
+       "a"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-object",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": {
+       "a": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-bool",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": true
+     }
+    }
+   }
+  },
+  {
+   "id": "sum-bool",
+   "endpoint": "MCP tools/call:get-sum",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-sum",
+     "arguments": {
+      "a": true,
+      "b": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "sum-array",
+   "endpoint": "MCP tools/call:get-sum",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-sum",
+     "arguments": {
+      "a": [
+       1
+      ],
+      "b": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "gz-two-bad",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": 5,
+      "data": "bad"
+     }
+    }
+   }
+  },
+  {
+   "id": "gz-ex-inline",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "ex2.gz",
+      "data": "https://example.com/index.html",
+      "outputType": "resource"
+     }
+    }
+   }
+  },
+  {
+   "id": "gz-404-inline",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "m2.gz",
+      "data": "https://raw.githubusercontent.com/modelcontextprotocol/servers/refs/heads/main/DOES-NOT-EXIST.md",
+      "outputType": "resource"
+     }
+    }
+   }
+  },
+  {
+   "id": "gz-dns-fail",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "dns.gz",
+      "data": "https://fauxcall-probe.invalid/file.txt"
+     }
+    }
+   }
+  },
+  {
+   "id": "gz-http-plain",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "plainhttp.gz",
+      "data": "http://example.com/"
+     }
+    }
+   }
+  },
+  {
+   "id": "gz-ftp",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "ftp.gz",
+      "data": "ftp://example.com/file.txt"
+     }
+    }
+   }
+  },
+  {
+   "id": "gz-data-bad-b64",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "b.gz",
+      "data": "data:text/plain;base64,@@@"
+     }
+    }
+   }
+  },
+  {
+   "id": "gz-data-no-comma",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "nc.gz",
+      "data": "data:text/plain"
+     }
+    }
+   }
+  },
+  {
+   "id": "gz-empty-name",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "",
+      "data": "data:,x"
+     }
+    }
+   }
+  },
+  {
+   "id": "gz-name-only",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "just-name.gz"
+     }
+    }
+   }
+  },
+  {
+   "id": "gz-utf8",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "u.gz",
+      "data": "data:text/plain;charset=utf-8,h%C3%A9llo%20%F0%9F%8C%8D",
+      "outputType": "resource"
+     }
+    }
+   }
+  },
+  {
+   "id": "rr-u",
+   "endpoint": "MCP resources/read:demo://resource/session/u.gz",
+   "purpose": "write_readback",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/session/u.gz"
+    }
+   }
+  },
+  {
+   "id": "rr-just",
+   "endpoint": "MCP resources/read:demo://resource/session/just-name.gz",
+   "purpose": "write_readback",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/session/just-name.gz"
+    }
+   }
+  },
+  {
+   "id": "rr-empty-name",
+   "endpoint": "MCP resources/read:demo://resource/session/",
+   "purpose": "write_readback",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/session/"
+    }
+   }
+  },
+  {
+   "id": "sub-num",
+   "endpoint": "MCP resources/subscribe",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": 5
+    }
+   }
+  },
+  {
+   "id": "lvl-missing",
+   "endpoint": "MCP logging/setLevel",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "cc-noarg",
+   "endpoint": "MCP completion/complete",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "ref": {
+      "type": "ref/prompt",
+      "name": "completable-prompt"
+     }
+    }
+   }
+  },
+  {
+   "id": "cc-unknown-arg",
+   "endpoint": "MCP completion/complete",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "ref": {
+      "type": "ref/prompt",
+      "name": "completable-prompt"
+     },
+     "argument": {
+      "name": "zzz",
+      "value": ""
+     }
+    }
+   }
+  },
+  {
+   "id": "cc-simple",
+   "endpoint": "MCP completion/complete",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "ref": {
+      "type": "ref/prompt",
+      "name": "simple-prompt"
+     },
+     "argument": {
+      "name": "x",
+      "value": ""
+     }
+    }
+   }
+  },
+  {
+   "id": "cc-static-res",
+   "endpoint": "MCP completion/complete",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "ref": {
+      "type": "ref/resource",
+      "uri": "demo://resource/static/document/features.md"
+     },
+     "argument": {
+      "name": "x",
+      "value": ""
+     }
+    }
+   }
+  },
+  {
+   "id": "prompts-get-noname",
+   "endpoint": "MCP prompts/get",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "call-name-num",
+   "endpoint": "MCP tools/call",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": 5,
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "call-args-array",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": [
+      "hi"
+     ]
+    }
+   }
+  },
+  {
+   "id": "call-args-string",
+   "endpoint": "MCP tools/call:get-env",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-env",
+     "arguments": "x"
+    }
+   }
+  }
+ ]
+}

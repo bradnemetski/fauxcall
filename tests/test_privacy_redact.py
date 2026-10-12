@@ -80,6 +80,7 @@ def test_secret_names(name: str) -> None:
         "continuationToken",
         "NextToken",
         "next_sync_token",
+        "progressToken",  # MCP: identifies a request's progress notifications
         "X-RateLimit-Remaining-Tokens",
         "x-ratelimit-limit-tokens",
         "Access-Control-Allow-Credentials",

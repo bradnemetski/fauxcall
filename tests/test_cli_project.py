@@ -435,6 +435,10 @@ def test_progress_phase_records_timestamps_and_notes(ws: Workspace) -> None:
     assert progress.phases["record"].status == "done"
     assert progress.phases["record"].started_at == started
     assert progress.phases["record"].finished_at is not None
+    invoke("progress", "phase", "shop", "parity", "blocked", "--note", "95.87%")
+    invoke("progress", "phase", "shop", "parity", "blocked", "--note", "95.59%")
+    status = invoke("status", "shop").output
+    assert "| parity | blocked | 95.59% |" in status  # the latest note; the file keeps them all
 
 
 @pytest.mark.parametrize(
@@ -506,6 +510,55 @@ def test_endpoints_lists_mcp_tools(ws: Workspace) -> None:
     assert "| `read` | match | 0 |" in output
 
 
+def test_model_tool_sets_how_tools_are_answered(ws: Workspace) -> None:
+    write_fake(ws, "server", mcp_model(tools=["ask", "read", "search"]))
+    output = invoke(
+        "model",
+        "tool",
+        "server",
+        "ask",
+        "re*",
+        "--behavior",
+        "computed",
+        "--invalid-args",
+        "jsonrpc_error",
+        "--varies",
+    ).output
+    assert output.strip() == "ask, read: behavior=computed, invalid_args=jsonrpc_error, varies=True"
+    model = read_model(ws.fake("server").model_path, ApiModel)
+    assert model.mcp is not None
+    tools = {t.name: (t.behavior, t.invalid_args, t.varies) for t in model.mcp.tools}
+    assert tools == {
+        "ask": ("computed", "jsonrpc_error", True),
+        "read": ("computed", "jsonrpc_error", True),
+        "search": ("match", "tool_error", False),
+    }
+    assert invoke("model", "tool", "server", "search", "--steady").output.strip() == (
+        "search: varies=False"
+    )
+    assert "nothing to set" in invoke("model", "tool", "server", "ask", code=1).output
+    assert (
+        "no tool matches nope"
+        in invoke("model", "tool", "server", "nope", "--varies", code=1).output
+    )
+    assert (
+        "unknown behavior 'magic'"
+        in invoke("model", "tool", "server", "ask", "--behavior", "magic", code=1).output
+    )
+    broken = mcp_model(tools=["ask"])
+    broken.endpoints = [
+        EndpointModel(id="GET /x", method=HttpMethod.GET, path="/x", collection="missing")
+    ]
+    write_fake(ws, "broken", broken)
+    output = invoke("model", "tool", "broken", "ask", "--varies").output
+    assert "- problem: " in output
+    assert "unknown collection 'missing'" in output
+    write_fake(ws, "shop", rest_model())
+    assert (
+        "shop is not an MCP fake" in invoke("model", "tool", "shop", "x", "--varies", code=1).output
+    )
+
+
 def test_model_check(ws: Workspace) -> None:
     write_fake(ws, "shop", rest_model())
     assert "model OK: 2 endpoints, 0 collections" in invoke("model", "check", "shop").output
@@ -516,6 +569,11 @@ def test_model_check(ws: Workspace) -> None:
     assert "unknown collection 'missing'" in result.output
     ws.fake("shop").model_path.write_text('{"name": "shop"}')
     assert "model.json is invalid" in invoke("model", "check", "shop", code=1).output
+    write_fake(ws, "server", mcp_model(tools=["ask", "read"]))
+    assert (
+        "model OK: 2 tools, 0 resources, 0 resource templates, 0 prompts"
+        in invoke("model", "check", "server").output
+    )
 
 
 def test_model_schema_and_show(ws: Workspace) -> None:

@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fake: ["fakerestapi", "frankfurter", "petstore", "refapi", "timeapi"]
+        fake: ["everything", "fakerestapi", "frankfurter", "petstore", "refapi", "timeapi"]
     defaults:
       run:
         working-directory: examples/fauxcall/${{ matrix.fake }}

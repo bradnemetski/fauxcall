@@ -1,0 +1,140 @@
+{
+  "id": "000338",
+  "endpoint": "MCP tasks/list",
+  "purpose": "job_poll",
+  "plan_call": "list-mid",
+  "started_at": "2026-10-12T03:41:41.791819Z",
+  "started_ns": 1791776501791819000,
+  "elapsed_ms": 10.37,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 32,
+        "method": "tasks/list",
+        "params": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "796"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 03:41:41 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "tasks": [
+            {
+              "taskId": "8ae0d743d11b6179f9990866102077f0",
+              "status": "completed",
+              "ttl": 300000,
+              "createdAt": "2026-10-12T03:41:22.525Z",
+              "lastUpdatedAt": "2026-10-12T03:41:26.537Z",
+              "pollInterval": 1000,
+              "statusMessage": "Generating report..."
+            },
+            {
+              "taskId": "5b5585ebb164b8ba06edac78f09e3428",
+              "status": "completed",
+              "ttl": 300000,
+              "createdAt": "2026-10-12T03:41:27.056Z",
+              "lastUpdatedAt": "2026-10-12T03:41:31.066Z",
+              "pollInterval": 1000,
+              "statusMessage": "Generating report..."
+            },
+            {
+              "taskId": "4d12cd199c26f764ae6ca960e1d46e50",
+              "status": "cancelled",
+              "ttl": 300000,
+              "createdAt": "2026-10-12T03:41:34.198Z",
+              "lastUpdatedAt": "2026-10-12T03:41:36.742Z",
+              "pollInterval": 1000,
+              "statusMessage": "Client cancelled task execution."
+            }
+          ],
+          "_meta": {}
+        },
+        "jsonrpc": "2.0",
+        "id": 32
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 10.068,
+      "kind": "sse",
+      "event": "message",
+      "id": "8accd448-ca6b-4873-816d-4dba961057e6",
+      "data": "{\"result\":{\"tasks\":[{\"taskId\":\"8ae0d743d11b6179f9990866102077f0\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-12T03:41:22.525Z\",\"lastUpdatedAt\":\"2026-10-12T03:41:26.537Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},{\"taskId\":\"5b5585ebb164b8ba06edac78f09e3428\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-12T03:41:27.056Z\",\"lastUpdatedAt\":\"2026-10-12T03:41:31.066Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},{\"taskId\":\"4d12cd199c26f764ae6ca960e1d46e50\",\"status\":\"cancelled\",\"ttl\":300000,\"createdAt\":\"2026-10-12T03:41:34.198Z\",\"lastUpdatedAt\":\"2026-10-12T03:41:36.742Z\",\"pollInterval\":1000,\"statusMessage\":\"Client cancelled task execution.\"}],\"_meta\":{}},\"jsonrpc\":\"2.0\",\"id\":32}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

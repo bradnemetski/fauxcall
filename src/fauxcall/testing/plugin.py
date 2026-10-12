@@ -20,6 +20,7 @@ Writes to the real API are refused unless ``--allow-real-writes`` is given.
 from __future__ import annotations
 
 import contextlib
+import dataclasses
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -51,8 +52,11 @@ if TYPE_CHECKING:
 
     from fauxcall.model.api import ApiModel
     from fauxcall.model.endpoints import EndpointModel
+    from fauxcall.privacy.pii import PiiCategory
+    from fauxcall.recording.privacy_filter import RecordingPrivacy
     from fauxcall.testing.client import LoggedCall, Target
-    from fauxcall.testing.compare import Translate
+    from fauxcall.testing.compare import Observation, Translate
+    from fauxcall.types import JsonValue
 
 DEFAULT_THRESHOLD: Final = 0.98
 FAKE_BASE_URL: Final = "http://fake.test"
@@ -82,6 +86,10 @@ class FakeUnderTest:
     """Reach the real side through this transport (an in-process app …) rather than the network."""
     recordings_dir: Path | None = None
     """``data/recordings``: scenario calls that repeat one of these count apart in the report."""
+    privacy: RecordingPrivacy | None = None
+    """The fake's privacy filter: the real side's answers go through it before they are compared,
+    so they look as they would have been recorded (same pseudonyms as the fake, credentials
+    redacted) and no real personal data reaches the report."""
 
 
 @dataclass(slots=True)
@@ -398,12 +406,14 @@ def compare_logs(
             continue
         endpoint = model.find_endpoint(endpoint_for(label, matchers)) if model else None
         options = real_call.options
+        privacy = fake_spec.privacy
         comparison = compare(
             label,
-            real_call.observation,
+            _as_recorded(real_call.observation, privacy),
             fake_calls[index].observation,
             policies=[*(endpoint.fields if endpoint else []), *options.policies],
-            translate=fake_spec.translate,
+            # Already pseudonymized as recorded: a pseudonym field compares as it is.
+            translate=_unchanged if privacy is not None else fake_spec.translate,
             compare_lengths=options.lengths,
             max_value_checks=200 if options.values else 0,
             record_roots=record_roots(endpoint) if endpoint else None,
@@ -415,6 +425,20 @@ def compare_logs(
         comparison.real_status = real_call.observation.status
         comparisons.append(comparison)
     return comparisons
+
+
+def _unchanged(value: JsonValue, category: PiiCategory) -> JsonValue:
+    del category
+    return value
+
+
+def _as_recorded(observation: Observation, privacy: RecordingPrivacy | None) -> Observation:
+    """A real answer as the recorder would have stored it (personal data and secrets replaced)."""
+    if privacy is None:
+        return observation
+    body = privacy.json(observation.body)[0] if observation.body is not None else None
+    text = privacy.text(observation.text) if observation.text is not None else None
+    return dataclasses.replace(observation, body=body, text=text)
 
 
 def _credential_names(spec: FakeUnderTest) -> tuple[str, ...]:

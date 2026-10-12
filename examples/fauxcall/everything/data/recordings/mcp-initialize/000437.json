@@ -1,0 +1,101 @@
+{
+  "id": "000437",
+  "endpoint": "MCP initialize",
+  "purpose": "edge",
+  "plan_call": "init-unknown",
+  "started_at": "2026-10-12T04:35:48.267545Z",
+  "started_ns": 1791779748267545000,
+  "elapsed_ms": 10.831,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "initialize",
+        "params": {
+          "protocolVersion": "2099-01-01",
+          "capabilities": {},
+          "clientInfo": {
+            "name": "fauxcall",
+            "version": "0.1.2"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 400,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "107"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 04:35:48 GMT"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "keep-alive",
+        "timeout=5"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "error": {
+          "code": -32600,
+          "message": "Invalid Request: Server already initialized"
+        },
+        "id": null
+      }
+    }
+  },
+  "redacted": [
+    "request.header:mcp-session-id"
+  ]
+}

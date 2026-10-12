@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import fnmatch
 import itertools
 import json
 import os
@@ -162,7 +163,7 @@ def status(
     echo("| phase | status | notes |\n|---|---|---|")
     for phase in PHASES:
         state = progress.phases.get(phase, PhaseState())
-        echo(f"| {phase} | {state.status} | {'; '.join(state.notes[-2:])} |")
+        echo(f"| {phase} | {state.status} | {state.notes[-1] if state.notes else ''} |")
     if progress.endpoints:
         echo("\n| endpoint | " + " | ".join(ENDPOINT_STEPS) + " |")
         echo("|---|" + "---|" * len(ENDPOINT_STEPS))
@@ -324,6 +325,13 @@ def model_check(name: str) -> None:
     if problems:
         echo("Problems:\n" + "\n".join(f"- {p}" for p in problems))
         raise typer.Exit(1)
+    if model.mcp is not None:
+        mcp = model.mcp
+        echo(
+            f"model OK: {len(mcp.tools)} tools, {len(mcp.resources)} resources, "
+            f"{len(mcp.resource_templates)} resource templates, {len(mcp.prompts)} prompts"
+        )
+        return
     echo(f"model OK: {len(model.endpoints)} endpoints, {len(model.collections)} collections")
 
 
@@ -393,6 +401,56 @@ def _brief_part(name: str, spec: dict[str, Any]) -> str:
             text += f" — {hint.splitlines()[0]}"
         lines.append(text)
     return "\n".join(lines)
+
+
+@model_app.command("tool")
+@clean_errors
+def model_tool(
+    name: str,
+    tool_names: Annotated[list[str], typer.Argument(help="Tool names (globs work).")],
+    behavior: Annotated[str | None, typer.Option(help="match | replay | computed | error")] = None,
+    invalid_args: Annotated[
+        str | None,
+        typer.Option(
+            help="How the server refuses bad arguments: tool_error | jsonrpc_error | accept"
+        ),
+    ] = None,
+    varies: Annotated[
+        bool | None,
+        typer.Option("--varies/--steady", help="Whether the same arguments get different answers."),
+    ] = None,
+) -> None:
+    """Set how the fake answers MCP tools, instead of editing data/model.json by hand."""
+    fake = layout(name)
+    model = load_model(fake)
+    if model.mcp is None:
+        raise fail(f"{name} is not an MCP fake")
+    chosen = [
+        tool
+        for tool in model.mcp.tools
+        if any(fnmatch.fnmatchcase(tool.name, pattern) for pattern in tool_names)
+    ]
+    if not chosen:
+        raise fail(f"no tool matches {', '.join(tool_names)} (see: fauxcall model show {name})")
+    update: dict[str, Any] = {}
+    if behavior is not None:
+        update["behavior"] = _one_of("behavior", behavior, ("match", "replay", "computed", "error"))
+    if invalid_args is not None:
+        update["invalid_args"] = _one_of(
+            "invalid_args", invalid_args, ("tool_error", "jsonrpc_error", "accept")
+        )
+    if varies is not None:
+        update["varies"] = varies
+    if not update:
+        raise fail("nothing to set: pass --behavior, --invalid-args or --varies/--steady")
+    for tool in chosen:
+        for key, value in update.items():
+            setattr(tool, key, value)
+    problems = save_model(fake, model)
+    changed = ", ".join(f"{key}={value}" for key, value in update.items())
+    echo(f"{', '.join(t.name for t in chosen)}: {changed}")
+    for problem in problems:
+        echo(f"- problem: {problem}")
 
 
 @model_app.command("show")

@@ -137,8 +137,8 @@ uv run pytest tests/e2e --target=parity       # same tests against both; fails b
 ```
 
 The [`examples/`](examples/) folder has fakes FauxCall built by itself, from a single command each,
-while we were testing it: Frankfurter, timeapi.io, Swagger Petstore, FakeRESTApi and this
-repository's own reference API.
+while we were testing it: Frankfurter, timeapi.io, Swagger Petstore, FakeRESTApi, this
+repository's own reference API, and the MCP project's Everything reference server.
 
 ## Using fakes in tests
 
