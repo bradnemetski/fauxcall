@@ -6,6 +6,8 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.1.3]
+
 ### Added
 
 - **The parity report says what its score rests on.** Next to the overall compliance it gives the
@@ -137,7 +139,8 @@ The first release.
   outcomes, with cached answers and deterministic fallbacks.
 - Examples: fakes FauxCall built on its own while it was validated, from a single prompt each.
 
-[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/bradnemetski/fauxcall/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/bradnemetski/fauxcall/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/bradnemetski/fauxcall/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/bradnemetski/fauxcall/releases/tag/v0.1.0
