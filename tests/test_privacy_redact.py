@@ -18,6 +18,7 @@ from fauxcall.privacy import (
     redact_url,
     scrub_text,
 )
+from fauxcall.privacy.redact import REDACTED_UUID
 
 if TYPE_CHECKING:
     from fauxcall.types import JsonValue
@@ -533,3 +534,12 @@ def test_public_values_stay_under_secret_keys() -> None:
     assert users["users"][1]["password"] == REDACTED  # anyone else's is still redacted
     assert users["token"] == REDACTED  # a real credential, even when listed as public
     assert paths == ["$.users[1].password", "$.token"]
+
+
+def test_a_redacted_uuid_stays_a_uuid() -> None:
+    session = "3f2b8c1e-9d4a-4e6b-8a1c-2b7d9e0f1a2c"
+    meta: JsonValue = {"_meta": {"openai/widgetSessionId": session, "sessionId": "abc-123"}}
+    redacted, paths = redact_json(meta)
+    assert redacted == {"_meta": {"openai/widgetSessionId": REDACTED_UUID, "sessionId": REDACTED}}
+    assert paths == ['$._meta["openai/widgetSessionId"]', "$._meta.sessionId"]
+    assert redact_json(redacted) == (redacted, [])  # idempotent

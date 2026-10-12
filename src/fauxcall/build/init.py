@@ -465,6 +465,8 @@ async def _init_mcp(
             fetched_at=now,
         ),
         real=RealTarget(base_url=origin(endpoint)),
+        auth=introspection.auth,
+        errors=[introspection.auth_error] if introspection.auth_error else [],
         mcp=mcp,
     )
     write_json(

@@ -95,16 +95,28 @@ Prepare first, then ask in a single message (AskUserQuestion if available):
 1. **Credentials.** If the summary lists auth schemes, tell the user exactly which variables to put
    in `fauxcall/<name>/.env` (e.g. `FAUXCALL_REAL__HEADERS='{"X-API-Key": "…"}'`). Prefer a
    sandbox/test account. Verify with `fauxcall env check <name>` (prints no values).
+   **What the credentials may do:** once they are in place, record one cheap read of each endpoint
+   or tool (a read-only plan: no approval needed), then `fauxcall analyze access <name>`. If it
+   lists refusals, put them in the question: "your key can't use X, Y: the fake will refuse those
+   too. Keep it, or use a test key with the permissions your agents need?" A restricted key makes
+   a restricted fake. (MCP tools not annotated `readOnlyHint` need the approval even to read: check
+   those right after it, and if most are refused, ask before going on. A key that can't do the job
+   is worth stopping for.)
 2. **Jev key.** Ask whether they have a TypeSafe/Jev key. It is used only if they have one *and* the
    fake needs runtime judgments (free-text inputs, semantic outputs, outcome decisions); they add
    `TYPESAFE_API_KEY=…` to the same `.env`. Without one, fakes use deterministic fallbacks.
 3. **Mutating calls.** Write the recording plans for **every** endpoint now
-   ([recording](references/recording.md)) so the approval covers the whole build. Then
-   `fauxcall plan review <name>` and show the table: which endpoints, how many calls, what is created
-   and how it is cleaned up. Ask for the approval **and its budget** every time: how many real calls
-   each endpoint may make (recording and parity runs together), offering the default the review
-   prints (100 unless the user set `FAUXCALL_APPROVAL_BUDGET`). On approval:
+   ([recording](references/recording.md)), every write you will need in the whole build: the
+   approval covers exactly these calls. Then `fauxcall plan review <name>` and show the table: each
+   write, how often, what cleans it up, and what **stays on the real service** (no cleanup, or a
+   cleanup that failed). Also show the calls the plans declare read-only (`mutating: false`) on
+   tools or methods that could write. Ask for the approval **and the parity budget**: how many
+   writes parity runs may make per endpoint, offering the default the review prints (100 unless
+   the user set `FAUXCALL_APPROVAL_BUDGET`). On approval:
    `fauxcall plan approve <name> --planned --max-calls <their number> --reason "<the user's words>"`.
+   Recording may then run exactly the reviewed writes: one you add or change later shows as
+   **new**, is refused, and goes on the questions for the end of the build (rule 10). To run an
+   approved write again, the user approves it again (`--call <id>`).
 4. **Scope.** For very large APIs, confirm whether to fake everything or a subset.
 
 Then: `fauxcall progress gate <name> --credentials <none_needed|provided|missing> --jev|--no-jev --mutations <approved|declined|none_planned>`.
@@ -115,17 +127,22 @@ If writes were declined, model write endpoints from the documentation (lower fid
 Order: independent collections' reads → dependent reads → writes → async jobs → streams/websockets
 (`fauxcall endpoints <name>` lists them). For **each** endpoint E:
 
-1. **Understand** — `fauxcall endpoints <name> --show "<E>"`, plus the docs for E.
+1. **Understand** — `fauxcall endpoints <name> --show "<E>"`, plus the docs for E. Start a plan
+   entry with `fauxcall plan template <name> "<E>"` (REST endpoints and MCP tools alike).
 2. **Plan** — refine `data/plans/<slug>.json`: samples, variations, edge cases, invalid probes,
    time profile, pagination walk, write + read-back, job polling, streams
    ([recording](references/recording.md) says exactly what each kind of endpoint needs).
    `fauxcall plan check <name> data/plans/<slug>.json`.
 3. **Record** — `fauxcall record <name> data/plans/<slug>.json`. Read the report; re-plan on surprises.
    Browse what was recorded with `fauxcall recordings <name> --endpoint "<E>"` (one line per
-   exchange; `--status`, `--purpose`, `--grep` filter, `--show <id>` prints one in full).
+   exchange, MCP calls with their arguments and answer; `--status`, `--purpose`, `--grep` filter,
+   `--show <id>` prints one in full, `--jsonl` gives them all for a script). Never write your own
+   script over `data/recordings/`.
 4. **Analyze** — `fauxcall analyze endpoint <name> "<E>" --apply` (statuses, field profiles,
-   timestamp behavior, documented-vs-observed schema, latency). Add `analyze errors`, `analyze writes`,
-   `analyze jobs`, `fauxcall sql` as needed.
+   timestamp behavior, documented-vs-observed schema, latency; for an MCP tool also how it refuses
+   arguments that break its schema and whether it answers the same arguments differently, which
+   marks it `varies`). Add `analyze errors`, `analyze writes`, `analyze jobs`, `fauxcall sql` as
+   needed.
 5. **Model** — edit `data/model.json` for E ([model](references/model.md), [time](references/time.md)):
    role, collection + key, parameter behavior (`on_invalid` from your probes), error cases → templates,
    pagination, write semantics, field policies, Jev semantics if needed. Then `fauxcall model check <name>`.

@@ -17,6 +17,7 @@ from fauxcall.model.recording import Body, CapturedRequest, CapturedResponse, Ex
 from fauxcall.privacy.pseudonym import Pseudonymizer
 from fauxcall.recording.store import RecordingStore
 from fauxcall.runtime import FakeRuntime, create_app, register_tool
+from fauxcall.runtime.app import runtime_of_app
 from fauxcall.runtime.dynamic import dynamic_router
 from fauxcall.storage import read_model, write_model
 from fauxcall.testing.client import PLACEHOLDER_KEY, PLACEHOLDER_TOKEN
@@ -506,6 +507,37 @@ async def test_mcp_replay_reports_shape_and_member_differences(tmp_path: Path) -
         "recorded has 'result': False, fake: True",
         "recorded has 'error': True, fake: False",
     ]
+
+
+async def test_tools_that_vary_are_replayed_by_their_top_level_only(tmp_path: Path) -> None:
+    app = mcp_fake(tmp_path)
+    tools = runtime_of_app(app).model.mcp
+    assert tools is not None
+    tools.tools[0].varies = True
+    other: JsonObject = {  # a different answer inside: fine for a tool that varies
+        "jsonrpc": "2.0",
+        "id": 7,
+        "result": {
+            "content": [{"type": "text", "text": "3", "x": 1}, {"more": []}],
+            "isError": False,
+        },
+    }
+    outcome = await replay_against(app, case(rpc("5", request=CALL, response=other), mcp=True))
+    assert outcome.ok, outcome.explain()
+    changed: JsonObject = {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "result": {"content": {}, "structuredContent": {}},
+    }
+    outcome = await replay_against(app, case(rpc("6", request=CALL, response=changed), mcp=True))
+    assert outcome.problems == [
+        "shape: $.structuredContent: missing in fake",
+        "shape: $.isError: extra in fake",
+        "shape: $.content: object vs array",
+    ]
+    listing: JsonObject = {"jsonrpc": "2.0", "id": 7, "result": ["odd"]}
+    outcome = await replay_against(app, case(rpc("7", request=CALL, response=listing), mcp=True))
+    assert outcome.problems == ["shape: $: array vs object"]
 
 
 async def test_mcp_replay_reports_status_and_tolerates_odd_recordings(tmp_path: Path) -> None:

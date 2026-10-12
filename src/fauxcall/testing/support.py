@@ -22,7 +22,7 @@ from fauxcall.testing.client import (
     placeholder_credentials,
     with_query,
 )
-from fauxcall.testing.compare import shape_differences
+from fauxcall.testing.compare import shape_differences, type_name
 from fauxcall.testing.plugin import FakeUnderTest
 
 if TYPE_CHECKING:
@@ -279,7 +279,9 @@ async def _replay(app: FastAPI, case: RecordedCase) -> ReplayOutcome:
     assert expected is not None  # noqa: S101 - filtered by recorded_cases
     if case.mcp:
         async with streaming_client(app) as client:  # MCP streams never end: no buffering
-            return await _replay_mcp(client, case, _mcp_transport(app))
+            return await _replay_mcp(
+                client, case, _mcp_transport(app), varies=_varies(app, case.exchange)
+            )
     transport = httpx2.ASGITransport(app=app)
     async with httpx2.AsyncClient(transport=transport, base_url="http://fake.test") as client:
         headers, query = _replay_parts(case)
@@ -315,7 +317,11 @@ def _mcp_transport(app: FastAPI) -> McpTransportModel | None:
 
 
 async def _replay_mcp(
-    client: httpx2.AsyncClient, case: RecordedCase, transport: McpTransportModel | None
+    client: httpx2.AsyncClient,
+    case: RecordedCase,
+    transport: McpTransportModel | None,
+    *,
+    varies: bool = False,
 ) -> ReplayOutcome:
     from fauxcall.mcpwire.client import McpWireClient  # noqa: PLC0415
 
@@ -353,6 +359,35 @@ async def _replay_mcp(
                 f"recorded has {member!r}: {member in recorded}, fake: {member in actual}"
             )
     if "result" in recorded and "result" in actual:
-        differences = shape_differences(recorded["result"], actual["result"])
+        compared = _top_level if varies else shape_differences
+        differences = compared(recorded["result"], actual["result"])
         outcome.problems += [f"shape: {d}" for d in differences[:_MAX_SHAPE_PROBLEMS]]
     return outcome
+
+
+def _top_level(recorded: JsonValue, actual: JsonValue) -> list[str]:
+    """Differences in the members of a result and their types only (for tools that vary)."""
+    if not isinstance(recorded, dict) or not isinstance(actual, dict):
+        same = type_name(recorded) == type_name(actual)
+        return [] if same else [f"$: {type_name(recorded)} vs {type_name(actual)}"]
+    problems = [f"$.{key}: missing in fake" for key in recorded if key not in actual]
+    problems += [f"$.{key}: extra in fake" for key in actual if key not in recorded]
+    problems += [
+        f"$.{key}: {type_name(recorded[key])} vs {type_name(actual[key])}"
+        for key in recorded
+        if key in actual and type_name(recorded[key]) != type_name(actual[key])
+    ]
+    return problems
+
+
+def _varies(app: FastAPI, exchange: Exchange) -> bool:
+    """Whether the tool this recorded call used answers differently call to call."""
+    sent = exchange.request.body.parsed()
+    params = sent.get("params") if isinstance(sent, dict) else None
+    name = params.get("name") if isinstance(params, dict) else None
+    try:
+        mcp = runtime_of_app(app).model.mcp
+    except AttributeError:  # not a FauxCall app
+        return False
+    tool = mcp.tool(str(name)) if mcp is not None and name else None
+    return tool is not None and tool.varies

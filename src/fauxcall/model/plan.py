@@ -190,13 +190,26 @@ class RecordingPlan(Model):
         return [call for call in self.calls if call.is_mutating]
 
 
+ApprovalUse = Literal["recording", "parity"]
+
+
 class Approval(Model):
-    """Permission to make mutating calls."""
+    """Permission to make mutating calls.
+
+    ``scope: "call"`` approves one reviewed plan entry exactly (its fingerprint): editing the entry
+    makes it a new call that needs approving. ``scope: "endpoint"`` approves any call of an
+    endpoint (or glob) up to a budget. ``use`` limits an approval to recordings or to parity runs.
+    """
 
     scope: Literal["endpoint", "call"]
-    endpoint: str = Field(description="Endpoint id or glob (scope 'endpoint').")
-    max_calls: int | None = Field(default=None, ge=1, description="Budget for scope 'endpoint'.")
+    endpoint: str = Field(
+        description="Endpoint id or glob (scope 'endpoint'); the call's endpoint."
+    )
+    max_calls: int | None = Field(default=None, ge=1, description="Real calls it allows.")
     fingerprint: str | None = Field(default=None, description="Exact call (scope 'call').")
+    use: ApprovalUse | Literal["any"] = Field(
+        default="any", description="What it covers: recordings, parity runs, or both."
+    )
     reason: str | None = None
     approved_at: AwareDatetime
     approved_by: str = "user"
@@ -207,8 +220,10 @@ class Approval(Model):
             raise ValueError("call-scoped approvals need a fingerprint")
         return self
 
-    def covers(self, call: PlannedCall) -> bool:
+    def covers(self, call: PlannedCall, use: ApprovalUse = "recording") -> bool:
         """Whether this approval covers ``call`` (budget is checked separately)."""
+        if self.use not in {"any", use}:
+            return False
         if self.scope == "call":
             return call.fingerprint() == self.fingerprint
         return fnmatch.fnmatchcase(call.endpoint, self.endpoint)
@@ -227,10 +242,10 @@ class Approvals(Model):
         """Key under which an endpoint approval's usage is counted."""
         return f"{approval.scope}:{approval.endpoint}:{approval.fingerprint or ''}"
 
-    def find(self, call: PlannedCall) -> Approval | None:
-        """The first approval that covers ``call`` and still has budget."""
+    def find(self, call: PlannedCall, use: ApprovalUse = "recording") -> Approval | None:
+        """The first approval that covers ``call`` for ``use`` and still has budget."""
         for approval in self.approvals:
-            if not approval.covers(call):
+            if not approval.covers(call, use):
                 continue
             if approval.max_calls is None:
                 return approval
@@ -242,3 +257,9 @@ class Approvals(Model):
         """Record one mutating call against ``approval``."""
         key = self.budget_key(approval)
         self.used[key] = self.used.get(key, 0) + 1
+
+    def refund(self, approval: Approval) -> None:
+        """Give back one call that never reached the server (the connection failed)."""
+        key = self.budget_key(approval)
+        if self.used.get(key, 0) > 0:
+            self.used[key] -= 1

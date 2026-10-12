@@ -8,6 +8,18 @@ All notable changes to FauxCall are listed here. The format follows
 
 ### Added
 
+- `fauxcall analyze access` shows which endpoints and tools the credentials were refused for (the
+  fake will refuse them too); the skill checks this before planning the build.
+- `fauxcall plan template` works for MCP tools (arguments from the input schema), resources and
+  prompts.
+- `fauxcall recordings` shows MCP calls with their tool, arguments, how they answered and the
+  answer's text, and `--jsonl` prints matching recordings in full for scripts.
+- MCP plans can send a call without credentials or with a bad one (`"auth": "none" | "invalid"`).
+- `fauxcall init` with credentials records how the server refuses calls without them, and its OAuth
+  discovery documents when it has some, so the fake refuses and signs in clients the same way.
+- `analyze endpoint --apply` learns how an MCP tool refuses arguments that break its schema
+  (`invalid_args`) and whether it answers the same arguments differently (`varies`: replays and
+  parity then compare its answers by shape only).
 - `fauxcall doctor --skill-dir` checks that the running skill and the CLI come from the same
   release, and says how to update whichever is behind. The skills run it first and stop on a
   mismatch.
@@ -21,6 +33,14 @@ All notable changes to FauxCall are listed here. The format follows
 
 ### Changed
 
+- **Approvals cover exactly the reviewed calls.** `plan approve --planned` approves each write in
+  the plans as reviewed, its `repeat` times, for recording; editing it, or adding a write, needs
+  approving again (`--call <id>` approves one again). Parity runs get their own budget per
+  endpoint (`--max-calls`, 100 by default). `plan review` shows new writes, what stays on the real
+  service (no cleanup, or a cleanup that failed) and calls the plans declare read-only. A write
+  whose connection failed gives its approval back.
+- The fake's MCP endpoint is `/` when the server's URL has no path (it was `/mcp`).
+- A UUID under a secret-looking key is redacted to a UUID-shaped placeholder, not `[REDACTED]`.
 - Connecting to an MCP server says when the credentials were refused (with the server's
   `WWW-Authenticate` and what to fix), names what each transport answered, and retries a passing
   Streamable HTTP failure once.

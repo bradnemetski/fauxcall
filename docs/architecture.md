@@ -30,7 +30,9 @@ the same way every time.
    It includes samples, parameter variations, invalid inputs, unknown ids, auth failures, routing
    quirks, pagination walks, and polls of async jobs.
 3. **Approve** (`fauxcall plan approve`): calls that change data are listed once, up front, for the
-   user to approve. The recorder refuses any mutating call without an approval.
+   user to approve, with what stays behind on the real service. Recording runs exactly the
+   reviewed calls (a changed or new one needs approving again); parity runs get a per-endpoint
+   budget. The recorder refuses any mutating call without an approval.
 4. **Record** (`fauxcall record`): calls are paced (`record_rps`) and capped (`record_max_calls`).
    Every exchange is stored with timing, headers, the exact body bytes and any stream events.
    Credentials are redacted, and personal data is replaced with consistent pseudonyms (a keyed

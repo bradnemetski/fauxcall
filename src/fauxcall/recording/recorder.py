@@ -31,7 +31,7 @@ from fauxcall import jsonfmt, jsonpath
 from fauxcall.jsonfmt import infer_style
 from fauxcall.logs import get_logger
 from fauxcall.mcpwire.protocol import SseDecoder
-from fauxcall.model.plan import Approvals
+from fauxcall.model.plan import Approval, Approvals
 from fauxcall.model.recording import (
     Body,
     CapturedRequest,
@@ -239,6 +239,10 @@ class RunReport:
         return "\n".join(lines)
 
 
+NOT_SENT: Final = (httpx2.ConnectError, httpx2.ConnectTimeout)
+"""Failures that mean a request never reached the server: its approved call is given back."""
+
+
 class BudgetExhaustedError(Exception):
     """The recording budget ran out."""
 
@@ -391,7 +395,7 @@ def _scheme_of(value: str, header: str) -> str | None:
     return None
 
 
-def _keep_scheme(original: str, replacement: str, *, header: str = "") -> str:
+def keep_scheme(original: str, replacement: str, *, header: str = "") -> str:
     """Keep an auth scheme prefix when swapping a credential (``Bearer x`` -> ``Bearer y``)."""
     if replacement == original:
         return replacement
@@ -625,16 +629,26 @@ class Recorder:
             self.approvals = read_model(self.approvals_path, Approvals)
         return self.approvals
 
-    def _spend(self, call: PlannedCall) -> bool:
-        """Spend one call of the approval covering ``call`` and save it at once."""
+    def _spend(self, call: PlannedCall) -> Approval | None:
+        """Spend one call of the approval covering ``call`` and save it at once (``None``: none)."""
         approvals = self._current_approvals()
         approval = approvals.find(call)
         if approval is None:
-            return False
+            return None
         approvals.consume(approval)
         if self.approvals_path is not None:
             write_model(self.approvals_path, approvals)
-        return True
+        return approval
+
+    def _refund(self, approval: Approval | None) -> None:
+        """Give back a spent call whose request never reached the server."""
+        if approval is None:
+            return
+        approvals = self._current_approvals()
+        approvals.refund(approval)
+        self.approvals = approvals
+        if self.approvals_path is not None:
+            write_model(self.approvals_path, approvals)
 
     async def _execute(
         self, call: PlannedCall, variables: dict[str, JsonValue], outcome: CallOutcome
@@ -646,10 +660,15 @@ class Recorder:
                 outcome.skipped = f"approval budget used up after {index} call(s)"
                 return
             await self._pace()  # raises before an approval is spent when the budget is gone
-            if call.is_mutating and not self._spend(call):
+            approval = self._spend(call) if call.is_mutating else None
+            if call.is_mutating and approval is None:
                 outcome.skipped = f"approval budget used up after {index} call(s)"
                 return
-            raw = await self._once(call, variables, outcome)
+            try:
+                raw = await self._once(call, variables, outcome)
+            except NOT_SENT:
+                self._refund(approval)
+                raise
             for name, path in call.capture.items():
                 captured = jsonpath.get_one(raw, path)
                 if captured is not None:
@@ -729,7 +748,7 @@ class Recorder:
         if request.auth != "none":
             invalid = request.auth == "invalid"
             for name, value in self.target.headers.items():
-                sent = _keep_scheme(value, INVALID_CREDENTIAL, header=name) if invalid else value
+                sent = keep_scheme(value, INVALID_CREDENTIAL, header=name) if invalid else value
                 _set_header(headers, name, sent)
             query += [
                 (k, INVALID_CREDENTIAL if invalid else v) for k, v in self.target.query.items()

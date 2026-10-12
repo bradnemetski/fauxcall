@@ -19,7 +19,8 @@ Rules, applied to headers, query parameters, URLs, JSON bodies and text:
    always wins over ``allow_*``.
 2. **The shape survives.** ``Bearer abc`` becomes ``Bearer [REDACTED]``, cookies keep their names
    and attributes, JSON keeps its structure: only string leaves change, while numbers, booleans and
-   ``null`` under secret keys (token *counts*, ``password_set`` flags) are kept.
+   ``null`` under secret keys (token *counts*, ``password_set`` flags) are kept. A UUID under a
+   secret key becomes :data:`REDACTED_UUID`, still a UUID.
 3. **Embedded credentials** are removed from every other value: URL userinfo (``user:pass@``),
    ``?``/``&``/``#``/``;`` parameters with secret names, and JWTs.
 4. **Known secret values** — the real credentials from ``.env``, at least
@@ -46,6 +47,11 @@ if TYPE_CHECKING:
     from fauxcall.types import JsonValue
 
 REDACTED: Final = logs.REDACTED
+REDACTED_UUID: Final = "00000000-0000-4000-8000-000000000000"
+"""What a UUID under a secret key becomes, so it stays a UUID (an MCP ``widgetSessionId``)."""
+_UUID: Final = re.compile(
+    r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+)
 """What a credential is replaced with (the same marker the log pipeline uses)."""
 
 MIN_SECRET_LENGTH: Final = 4
@@ -417,8 +423,8 @@ class _JsonRedactor:
             ]
         if not isinstance(node, str):
             return node  # numbers, booleans and null are never credentials
-        if secret and node and node != REDACTED and node not in self._public:
-            new = REDACTED
+        if secret and node and node not in {REDACTED, REDACTED_UUID} and node not in self._public:
+            new = REDACTED_UUID if _UUID.fullmatch(node) else REDACTED
         else:
             new = self._scrub(_redact_embedded(node, self._names))
         if new != node:

@@ -41,8 +41,9 @@ fauxcall plan approve <name> --endpoint "<id or glob>" --per-endpoint --max-call
 ```
 
 `--per-endpoint` gives every matching mutating endpoint its own budget of N, as
-`max_calls_per_endpoint` means; without it a glob shares one budget. `--planned` instead approves
-the endpoints your current plans write to, each with its own budget. Without `--max-calls` an
+`max_calls_per_endpoint` means; without it a glob shares one budget. (Interactively, `--planned`
+approves the exact writes a person reviewed instead; in a headless run the answers file is the
+approval, by endpoint.) Without `--max-calls` an
 approval allows 100 calls (the `approval_budget` setting); `--unlimited` only if the answers say so. Endpoint budgets are spent by recordings and by parity
 runs with `--allow-real-writes` alike, so plan for both. Approving an endpoint again adds N calls on
 top of what it already allowed (the command says how many in all).

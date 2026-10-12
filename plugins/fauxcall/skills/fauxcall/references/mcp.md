@@ -73,7 +73,12 @@ errors (`isError: true`).
   `jsonrpc_error`, or `accept`), and `invalid_template` (a recorded error message, re-addressed).
 - `latency` — from `fauxcall analyze endpoint <name> "MCP tools/call:<tool>" --apply`, which times
   answers and errors (JSON-RPC errors, `isError` results) apart: a tool that refuses bad arguments
-  in 250 ms and answers in 15 s keeps both.
+  in 250 ms and answers in 15 s keeps both. The same command sets `invalid_args` from your
+  recorded calls whose arguments break the schema, and `varies` (below).
+- `varies` — the real tool answers the same arguments differently (search ranking, generated
+  text): record a few calls with the same arguments, and `analyze endpoint --apply` sets it when
+  most differ. Replays and parity then compare its answers by shape only, not values or lengths.
+  Never skip or xfail such recordings in tests instead.
 
 Errors for unknown tools, resources, prompts and methods and for missing sessions come from
 `model.mcp.errors` (recorded by the probes); the fake puts the caller's name where the real error
@@ -109,6 +114,12 @@ async def create_price(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
 classes: if a behavior can't be expressed, say so in the model's `notes`.
 
 ## Auth (OAuth)
+
+`fauxcall init` with credentials also calls the server **without** them. It records the refusal as
+the `unauthorized` error template, sets `auth` (the way your credentials are sent, plus `oauth2`
+when the server publishes OAuth discovery documents, which it saves), so the fake refuses and signs
+in clients the same way. To record other refusals, set `"auth": "none"` or `"auth": "invalid"` in a
+plan entry's `request`: the call goes without credentials, or with a bad one, outside the session.
 
 When the real server uses OAuth, the fake serves the same discovery documents (rewritten to its own
 URL) and a **browserless** authorization server: dynamic registration, `/authorize` (approves

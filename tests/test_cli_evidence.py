@@ -318,6 +318,92 @@ def test_plan_template_fills_parameters(ws: Workspace) -> None:
     assert create["request"]["json_body"] == {}
 
 
+def test_plan_template_for_mcp(ws: Workspace) -> None:
+    create: JsonValue = {
+        "name": "create_price",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "currency": {"type": "string", "enum": ["usd", "eur"]},
+                "unit_amount": {"type": "integer"},
+                "nickname": {"type": ["null", "string"]},
+                "recurring": {"type": "object"},
+                "tags": {"type": "array", "examples": [["a"]]},
+                "active": {"type": "boolean", "default": False},
+            },
+            "required": [
+                "currency",
+                "unit_amount",
+                "nickname",
+                "recurring",
+                "tags",
+                "active",
+                "undescribed",
+            ],
+        },
+    }
+    search: JsonValue = {
+        "name": "search",
+        "inputSchema": {"properties": {"q": {"type": "string"}, "n": {"const": 3}}},
+    }
+    model = ApiModel(
+        name="tools",
+        title="Tools",
+        kind="mcp",
+        source=SourceInfo(
+            kind="mcp", url=f"{BASE}/mcp", fetched_at=datetime(2026, 1, 5, tzinfo=UTC)
+        ),
+        real=RealTarget(base_url=BASE),
+        mcp=McpModel(
+            transport=McpTransportModel(path="/v1/mcp"),
+            tools=[
+                McpToolModel(definition=create),
+                McpToolModel(definition=search),
+                McpToolModel(definition={"name": "bare", "inputSchema": "odd"}),
+            ],
+        ),
+    )
+    make_fake(ws, model)
+
+    def template(endpoint: str, *options: str) -> Any:
+        return json.loads(invoke("plan", "template", "tools", endpoint, *options).output)
+
+    call = template("MCP tools/call:create_price", "--purpose", "variation")
+    assert call["id"] == "create-price-variation"
+    assert call["purpose"] == "variation"
+    assert call["request"] == {
+        "method": "POST",
+        "path": "/v1/mcp",
+        "json_body": {
+            "name": "create_price",
+            "arguments": {
+                "currency": "usd",
+                "unit_amount": 1,
+                "nickname": "value",
+                "recurring": {},
+                "tags": ["a"],
+                "active": False,
+                "undescribed": "value",
+            },
+        },
+    }
+    assert template("MCP tools/call:search")["request"]["json_body"]["arguments"] == {
+        "q": "value",
+        "n": 3,
+    }  # nothing required: every property
+    assert template("MCP tools/call:bare")["request"]["json_body"] == {
+        "name": "bare",
+        "arguments": {},
+    }
+    read = template("MCP resources/read:ui://widget/a.html")
+    assert read["request"]["json_body"] == {"uri": "ui://widget/a.html"}
+    prompt = template("MCP prompts/get:summarize")
+    assert prompt["request"]["json_body"] == {"name": "summarize", "arguments": {}}
+    assert template("MCP tools/list")["request"]["json_body"] == {}
+    unknown = invoke("plan", "template", "tools", "MCP tools/call:nope", code=1)
+    assert "unknown tool 'nope'" in unknown.output
+
+
 def test_plan_template_errors(ws: Workspace) -> None:
     make_fake(ws)
     assert (
@@ -370,13 +456,21 @@ def test_plan_review_and_approve(ws: Workspace) -> None:
         ],
     )
     review = invoke("plan", "review", "shop").output
-    assert "| writes.json | create | `POST /v1/items` | 2 | undo | no | make two |" in review
+    assert "| writes.json | create | `POST /v1/items` | 2 | undo | **new** | make two |" in review
+    assert "| writes.json | undo | `POST /v1/jobs` | 1 | **nothing: it stays on the real" in review
     assert "Totals per endpoint: POST /v1/items x2, POST /v1/jobs x1" in review
-    assert "Default budget: 100 real calls per endpoint" in review
-    approved = invoke("plan", "approve", "shop", "--planned").output
-    assert "approved POST /v1/items (max 100)" in approved  # the default budget, per endpoint
-    assert "approved POST /v1/jobs (max 100)" in approved
-    assert "| yes |" in invoke("plan", "review", "shop").output
+    assert "2 write(s) are new or changed since the user approved" in review
+    assert "Parity runs may also write: default 100 per endpoint" in review
+    approved = invoke("plan", "approve", "shop", "--planned", "--max-calls", "5").output
+    assert "approved the reviewed call `POST /v1/items` (" in approved
+    assert "for recording (max 2)" in approved  # exactly its `repeat`
+    assert "approved POST /v1/items for parity runs (max 5)" in approved
+    assert "approved POST /v1/jobs for parity runs (max 5)" in approved
+    review = invoke("plan", "review", "shop").output
+    assert "| create | `POST /v1/items` | 2 | undo | yes |" in review
+    assert "new or changed" not in review
+    again = invoke("plan", "approve", "shop", "--planned").output  # nothing new to approve
+    assert "reviewed call" not in again
     invoke("plan", "approve", "shop", "--endpoint", "DELETE /v1/*", "--reason", "cleanup")
     approvals = read_model(fake.approvals_path, Approvals)
     assert [a.endpoint for a in approvals.approvals][-1] == "DELETE /v1/*"
@@ -388,6 +482,144 @@ def test_plan_review_and_approve(ws: Workspace) -> None:
     )
     assert "not both" in both.output
     assert "nothing to approve" in invoke("plan", "approve", "shop", code=1).output
+
+
+def test_analyze_access(ws: Workspace) -> None:
+    fake = make_fake(ws)
+    assert "Nothing recorded yet" in invoke("analyze", "access", "shop").output
+    store = RecordingStore(fake.recordings)
+
+    def recorded(endpoint: str, path: str, status: int) -> None:
+        store.save(
+            Exchange(
+                id=store.next_id(),
+                endpoint=endpoint,
+                started_at=datetime(2026, 1, 5, tzinfo=UTC),
+                started_ns=0,
+                request=CapturedRequest(method=HttpMethod.GET, url=f"{BASE}{path}", path=path),
+                response=CapturedResponse(status=status),
+            )
+        )
+
+    recorded("GET /v1/items", "/v1/items", 200)
+    assert (
+        "refused nowhere (1 endpoints or tools called)"
+        in invoke("analyze", "access", "shop").output
+    )
+    recorded("GET /v1/items/{id}", "/v1/items/1", 403)
+    recorded("GET /v1/users/{id}", "/v1/users/1", 200)
+    recorded("GET /v1/users/{id}", "/v1/users/2", 403)
+    output = invoke("analyze", "access", "shop").output
+    assert "| `GET /v1/items/{id}` | 1 | 1 | HTTP 403 | /v1/items/1 |" in output
+    assert "1 other endpoints or tools were never refused." in output
+    assert "Refused every time: GET /v1/items/{id}." in output
+    assert "Refused for some arguments: GET /v1/users/{id}." in output
+    assert "The fake will refuse the same." in output
+
+
+def test_a_changed_write_needs_approving_again(ws: Workspace) -> None:
+    fake = make_fake(ws)
+
+    def create(name: str) -> dict[str, Any]:
+        return {
+            "id": "create",
+            "endpoint": "POST /v1/items",
+            "request": {"method": "POST", "path": "/v1/items", "json_body": {"name": name}},
+        }
+
+    write_plan(fake, "writes", [create("a")])
+    invoke("plan", "approve", "shop", "--planned")
+    edited = create("b")
+    plan = write_plan(fake, "writes", [edited])
+    assert "NEEDS APPROVAL (new or changed)" in invoke("plan", "check", "shop", str(plan)).output
+    assert "| **new** |" in invoke("plan", "review", "shop").output
+    invoke("plan", "approve", "shop", "--planned")
+    assert "— approved" in invoke("plan", "check", "shop", str(plan)).output
+    approvals = read_model(fake.approvals_path, Approvals)
+    (key,) = {Approvals.budget_key(a) for a in approvals.approvals if a.scope == "call"} - {
+        Approvals.budget_key(approvals.approvals[0])
+    }
+    approvals.used[key] = 1  # recorded once: its approval is spent
+    write_model(fake.approvals_path, approvals)
+    assert "| yes, all its calls made |" in invoke("plan", "review", "shop").output
+    more = invoke("plan", "approve", "shop", "--call", "create").output
+    assert "for recording: 1 more calls (2 in all; 1 already spent)" in more
+    assert (
+        "no plan entry with id 'nope'"
+        in invoke("plan", "approve", "shop", "--call", "nope", code=1).output
+    )
+
+
+def test_review_shows_failed_cleanups_and_writes_declared_read_only(ws: Workspace) -> None:
+    fake = make_fake(ws)
+    write_plan(
+        fake,
+        "writes",
+        [
+            {
+                "id": "create",
+                "endpoint": "POST /v1/items",
+                "request": {"method": "POST", "path": "/v1/items"},
+                "cleanup": ["remove"],
+            },
+            {
+                "id": "remove",
+                "endpoint": "POST /v1/jobs",
+                "request": {"method": "POST", "path": "/v1/jobs"},
+            },
+            {
+                "id": "sneaky",
+                "endpoint": "POST /v1/jobs",
+                "request": {"method": "POST", "path": "/v1/jobs"},
+                "mutating": False,
+                "note": "only validates",
+            },
+        ],
+    )
+    store = RecordingStore(fake.recordings)
+    failed = Exchange(
+        id=store.next_id(),
+        endpoint="POST /v1/jobs",
+        plan_call="remove",
+        started_at=datetime(2026, 1, 5, tzinfo=UTC),
+        started_ns=0,
+        request=CapturedRequest(method=HttpMethod.POST, url="https://x/v1/jobs", path="/v1/jobs"),
+        response=CapturedResponse(status=409),
+    )
+    store.save(failed)
+    replies: list[tuple[str, JsonValue]] = [("other", ["fine"]), ("rpc", {"error": {"code": 1}})]
+    for plan_call, reply in replies:
+        store.save(
+            failed.model_copy(
+                update={
+                    "id": store.next_id(),
+                    "plan_call": plan_call,
+                    "response": CapturedResponse(
+                        status=200, body=Body(kind="json", json_value=reply)
+                    ),
+                }
+            )
+        )
+    review = invoke("plan", "review", "shop").output
+    assert "| create | `POST /v1/items` | 1 | remove (**failed when recorded**) |" in review
+    assert "Declared read-only by the plans" in review
+    assert "- writes.json `sneaky`: `POST /v1/jobs` (only validates)" in review
+    write_plan(fake, "writes", [])
+    write_plan(
+        fake,
+        "quiet",
+        [
+            {
+                "id": "sneaky",
+                "endpoint": "POST /v1/jobs",
+                "request": {"method": "POST", "path": "/v1/jobs"},
+                "mutating": False,
+            }
+        ],
+    )
+    only_declared = invoke("plan", "review", "shop").output
+    assert only_declared.startswith("No mutating calls planned.")
+    assert "`sneaky`: `POST /v1/jobs` (no reason given)" in only_declared
 
 
 def test_the_default_budget_is_a_setting(ws: Workspace, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -485,7 +717,12 @@ def test_mcp_plans_need_approval_exactly_where_recording_does(ws: Workspace) -> 
     assert "MCP initialize" not in review
     invoke("plan", "approve", "tools", "--planned", "--reason", "reads public docs")
     approved = read_model(fake.approvals_path, Approvals).approvals
-    assert sorted(a.endpoint for a in approved) == ["MCP resources/read:x", "MCP tools/call:ask"]
+    assert sorted((a.scope, a.use, a.endpoint) for a in approved) == [
+        ("call", "recording", "MCP resources/read:x"),
+        ("call", "recording", "MCP tools/call:ask"),
+        ("endpoint", "parity", "MCP resources/read:x"),
+        ("endpoint", "parity", "MCP tools/call:ask"),
+    ]
 
 
 def test_plan_check(ws: Workspace, tmp_path: Path) -> None:
@@ -800,6 +1037,60 @@ def test_recordings_lists_filters_and_shows(ws: Workspace, monkeypatch: pytest.M
     assert "no recording" in invoke("recordings", "shop", "--show", "999999", code=1).output
 
 
+def test_recordings_of_mcp_calls_and_as_jsonl(ws: Workspace) -> None:
+    fake = make_fake(ws)
+    store = RecordingStore(fake.recordings)
+
+    def call(tool: str, arguments: JsonValue, reply: JsonValue, status: int = 200) -> None:
+        sent: JsonValue = {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "tools/call",
+            "params": {"name": tool, "arguments": arguments},
+        }
+        store.save(
+            Exchange(
+                id=store.next_id(),
+                endpoint=f"MCP tools/call:{tool}",
+                plan_call=tool,
+                started_at=datetime(2026, 1, 5, tzinfo=UTC),
+                started_ns=0,
+                elapsed_ms=12.4,
+                request=CapturedRequest(
+                    method=HttpMethod.POST,
+                    url=f"{BASE}/mcp",
+                    path="/mcp",
+                    body=Body(kind="json", json_value=sent),
+                ),
+                response=CapturedResponse(
+                    status=status,
+                    body=Body(kind="json", json_value=reply) if reply else Body(kind="empty"),
+                ),
+            )
+        )
+
+    text: JsonValue = {"result": {"content": [{"type": "text", "text": "two\n prices"}]}}
+    call("list", {"limit": 2}, text)
+    call("read", {}, {"result": {"isError": True, "content": [{"type": "text", "text": "No"}]}})
+    call("write", {"x": 1}, {"error": {"code": -32602, "message": "bad x"}})
+    call("denied", {}, None, status=403)
+    call("listed", {}, {"result": {"tools": []}})
+    rows = invoke("recordings", "shop").output.splitlines()
+    assert rows == [
+        '000001 list [sample] tools/call:list {"limit":2} -> 200 ok 12ms  two prices',
+        "000002 read [sample] tools/call:read -> 200 isError 12ms  No",
+        '000003 write [sample] tools/call:write {"x":1} -> 200 error -32602 12ms  bad x',
+        "000004 denied [sample] tools/call:denied -> 403 no reply 12ms",
+        '000005 listed [sample] tools/call:listed -> 200 ok 12ms  {"result":{"tools":[]}}',
+    ]
+    lines = invoke("recordings", "shop", "--jsonl", "--endpoint", "MCP tools/call:list").output
+    (line,) = lines.splitlines()
+    parsed = json.loads(line)
+    assert parsed["request"]["params"] == {"name": "list", "arguments": {"limit": 2}}
+    assert parsed["response"] == text
+    assert (parsed["status"], parsed["plan_call"], parsed["error"]) == (200, "list", None)
+
+
 def test_recordings_summarize_streams_binaries_and_failures(ws: Workspace) -> None:
     fake = make_fake(ws, shop_model())
     store = RecordingStore(fake.recordings)
@@ -1040,6 +1331,132 @@ def test_analyze_a_tool_times_answers_and_errors_apart(ws: Workspace) -> None:
         [12000.0, 15000.0],
         [200.0, 250.0],
     )
+
+
+def test_analyze_a_tool_learns_how_it_refuses_bad_arguments(ws: Workspace) -> None:
+    schema: JsonValue = {
+        "type": "object",
+        "properties": {"n": {"type": "integer"}},
+        "required": ["n"],
+    }
+    model = shop_model()
+    model.mcp = McpModel(
+        tools=[
+            McpToolModel(definition={"name": "count", "inputSchema": schema}),
+            McpToolModel(definition={"name": "loose"}),
+            McpToolModel(definition={"name": "broken", "inputSchema": {"type": 5}}),
+            McpToolModel(definition={"name": "strict", "inputSchema": schema}),
+        ]
+    )
+    fake = make_fake(ws, model)
+    store = RecordingStore(fake.recordings)
+
+    def recorded(
+        tool: str, arguments: JsonValue, reply: JsonValue, *, answered: bool = True
+    ) -> None:
+        sent: JsonValue = {"method": "tools/call", "params": {"name": tool, "arguments": arguments}}
+        store.save(
+            Exchange(
+                id=store.next_id(),
+                endpoint=f"MCP tools/call:{tool}",
+                started_at=datetime.now(UTC),
+                started_ns=0,
+                request=CapturedRequest(
+                    method=HttpMethod.POST,
+                    url=f"{BASE}/mcp",
+                    path="/mcp",
+                    body=Body(kind="json", json_value=sent),
+                ),
+                response=CapturedResponse(status=200, body=Body(kind="json", json_value=reply))
+                if answered
+                else None,
+            )
+        )
+
+    rpc_error: JsonValue = {"error": {"code": -32602, "message": "Invalid params"}}
+    failed: JsonValue = {"result": {"isError": True, "content": []}}
+    fine: JsonValue = {"result": {"content": []}}
+    recorded("count", {"n": "x"}, rpc_error)
+    recorded("count", {}, rpc_error)
+    recorded("count", {"n": 1.5}, failed)
+    recorded("count", {"n": 3}, failed)  # valid arguments the server rejects: not counted
+    recorded("count", {"n": "y"}, fine, answered=False)
+    recorded("count", {"n": "z"}, fine)  # one answered as if fine
+    output = invoke("analyze", "endpoint", "shop", "MCP tools/call:count", "--apply").output
+    assert "answered as jsonrpc_error (2 of 4 probes)" in output
+    rows = invoke("recordings", "shop", "--endpoint", "MCP tools/call:count").output
+    assert '{"n":"y"} -> no response' in rows
+    stored = read_model(fake.model_path, ApiModel)
+    assert stored.mcp is not None
+    tool = stored.mcp.tool("count")
+    assert tool is not None
+    assert tool.invalid_args == "jsonrpc_error"
+    recorded("loose", {"anything": 1}, fine)
+    assert (
+        "Arguments that break"
+        not in invoke("analyze", "endpoint", "shop", "MCP tools/call:loose").output
+    )  # no schema: nothing can break it
+    recorded("broken", {"n": 1}, fine)
+    assert (
+        "Arguments that break"
+        not in invoke("analyze", "endpoint", "shop", "MCP tools/call:broken").output
+    )  # an unusable schema
+    recorded("strict", {"n": 1}, fine)
+    strict = invoke("analyze", "endpoint", "shop", "MCP tools/call:strict").output
+    assert "Arguments that break" not in strict  # every call kept to the schema
+
+
+@pytest.mark.parametrize(
+    ("answers", "verdict", "varies"),
+    [
+        (["a", "b", "c", "d"], "2 of 2 repeated: it varies", True),
+        (["a", "b", "c", "c", "e", "e"], "1 of 3 repeated: mostly the same", False),
+        (["a", "a"], "0 of 1 repeated: it answers them the same", False),
+    ],
+)
+def test_analyze_a_tool_learns_whether_it_varies(
+    ws: Workspace, answers: list[str], verdict: str, varies: bool
+) -> None:
+    model = shop_model()
+    model.mcp = McpModel(tools=[McpToolModel(definition={"name": "search"})])
+    fake = make_fake(ws, model)
+    store = RecordingStore(fake.recordings)
+    calls = [(f"q{index // 2}", text) for index, text in enumerate(answers)]
+    calls += [("q9", "failed"), ("q9", "failed")]  # failures never count
+    for query, text in calls:
+        sent: JsonValue = {
+            "method": "tools/call",
+            "params": {"name": "search", "arguments": {"q": query}},
+        }
+        result: JsonValue = (
+            {"isError": True, "content": []}
+            if text == "failed"
+            else {"content": [{"type": "text", "text": text}], "_meta": {"session": query + text}}
+        )
+        store.save(
+            Exchange(
+                id=store.next_id(),
+                endpoint="MCP tools/call:search",
+                started_at=datetime.now(UTC),
+                started_ns=0,
+                request=CapturedRequest(
+                    method=HttpMethod.POST,
+                    url=f"{BASE}/mcp",
+                    path="/mcp",
+                    body=Body(kind="json", json_value=sent),
+                ),
+                response=CapturedResponse(
+                    status=200, body=Body(kind="json", json_value={"result": result})
+                ),
+            )
+        )
+    output = invoke("analyze", "endpoint", "shop", "MCP tools/call:search", "--apply").output
+    assert f"Same arguments, different answers: {verdict}" in output
+    stored = read_model(fake.model_path, ApiModel)
+    assert stored.mcp is not None
+    tool = stored.mcp.tool("search")
+    assert tool is not None
+    assert tool.varies is varies
 
 
 def test_analyze_endpoint_with_streams_and_text_bodies(ws: Workspace) -> None:

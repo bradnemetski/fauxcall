@@ -15,11 +15,12 @@ from fauxcall.model.mcp import PROBE_PROMPT, PROBE_RESOURCE, PROBE_TOOL
 from fauxcall.recording import McpRecorder, RecordingStore, tool_is_mutating
 from fauxcall.recording.mcp import (
     PROBE_METHOD,
-    _answer_of,
     _listing_extras,
     _may_pass,
     _method_of,
     _params_for,
+    _static_scheme,
+    answer_of,
     needs_approval,
 )
 from fauxcall.recording.privacy_filter import PrivacyConfig, RecordingPrivacy
@@ -35,6 +36,7 @@ from test_mcpwire_transport import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from pathlib import Path
 
     from fauxcall.model import McpModel
@@ -155,11 +157,11 @@ def test_unknown_tool_names_are_probes_not_writes() -> None:
     assert needs_approval(call("make_coffee"), {})  # no listing to tell: may modify state
 
 
-def test_answer_of_names_how_each_reply_answered() -> None:
-    assert _answer_of({"jsonrpc": "2.0", "id": 1, "result": {"content": []}}) == "ok"
-    assert _answer_of({"result": {"content": [], "isError": True}}) == "isError"
-    assert _answer_of({"error": {"code": -32602, "message": "bad"}}) == "error -32602"
-    assert _answer_of(None) == "no reply"
+def testanswer_of_names_how_each_reply_answered() -> None:
+    assert answer_of({"jsonrpc": "2.0", "id": 1, "result": {"content": []}}) == "ok"
+    assert answer_of({"result": {"content": [], "isError": True}}) == "isError"
+    assert answer_of({"error": {"code": -32602, "message": "bad"}}) == "error -32602"
+    assert answer_of(None) == "no reply"
 
 
 def test_only_passing_failures_are_tried_again() -> None:
@@ -437,7 +439,10 @@ class Scripted:
         sessions: bool = False,
         plain_errors: bool = False,
         report_version: bool = True,
+        token: str | None = None,
     ) -> None:
+        self.token = token
+        self.seen_auth: list[str | None] = []
         self.refuse = refuse
         self.sessions = sessions
         self.plain_errors = plain_errors
@@ -450,6 +455,9 @@ class Scripted:
             return httpx2.Response(405)
         message = j(jsonfmt.loads(request.content))
         method = message.get("method")
+        refused = self._refuse_credentials(request, message)
+        if refused is not None:
+            return refused
         has_session = bool(request.headers.get(protocol.SESSION_HEADER))
         if self.sessions and method != "initialize" and not has_session:
             return httpx2.Response(400, text="Bad Request: no session")
@@ -465,6 +473,18 @@ class Scripted:
         if method == "tools/call":
             return self._tool(request, message["id"], params)
         return httpx2.Response(200, json=protocol.error(message["id"], -32601, "Method not found"))
+
+    def _refuse_credentials(
+        self, request: httpx2.Request, message: dict[str, Any]
+    ) -> httpx2.Response | None:
+        if self.token is None or "id" not in message:
+            return None
+        sent = request.headers.get("authorization")
+        self.seen_auth.append(sent)
+        if sent == f"Bearer {self.token}" or request.headers.get("x-api-key") == self.token:
+            return None
+        challenge = {"WWW-Authenticate": 'Bearer error="invalid_token"'}
+        return httpx2.Response(401, headers=challenge, json={"error": "invalid_token"})
 
     def _initialize(self, request_id: JsonValue, params: dict[str, Any]) -> httpx2.Response:
         if params.get("protocolVersion") in self.refuse:
@@ -625,6 +645,197 @@ async def test_run_without_approvals_or_tool_definitions(tmp_path: Path) -> None
     assert report.outcomes[0].skipped == "needs approval (tool may modify state)"
     assert report.outcomes[1].statuses == [200]
     assert not (tmp_path / "approvals.json").exists()
+
+
+async def test_plans_record_how_the_server_refuses_missing_and_bad_credentials(
+    tmp_path: Path,
+) -> None:
+    server = Scripted(token="good-token")
+    safe = {"mutating": False}
+    calls = [
+        tool_call("echo", {"n": 1}, id="authed", **safe),
+        tool_call("echo", {"n": 1}, id="anonymous", **safe),
+        tool_call("echo", {"n": 1}, id="bad-token", **safe),
+    ]
+    calls[1]["request"]["auth"] = "none"
+    calls[2]["request"]["auth"] = "invalid"
+    async with httpx2.AsyncClient(transport=httpx2.MockTransport(server)) as http:
+        rec = recorder(
+            tmp_path, http, "http://mock/mcp", rps=0, headers={"Authorization": "Bearer good-token"}
+        )
+        report = await rec.run(plan(*calls))
+    authed, anonymous, bad = report.outcomes
+    assert authed.status_text() == "200 ok"
+    assert anonymous.status_text() == bad.status_text() == "401 no reply"
+    assert server.seen_auth[-2:] == [None, "Bearer fauxcall-invalid-credential"]
+    saved = {e.plan_call: e for _, e in RecordingStore(tmp_path / "recordings").iter_exchanges()}
+    assert "auth:none" in saved["anonymous"].tags
+    assert "auth:invalid" in saved["bad-token"].tags
+    assert "good-token" not in saved["bad-token"].model_dump_json()
+
+
+async def test_auth_probes_need_streamable_http(tmp_path: Path) -> None:
+    transport = McpTransportModel(kind="sse", path="/sse", messages_path="/rpc/messages/")
+    app = fake_app(tmp_path, fake_model(transport=transport))
+    call = tool_call("echo", {"text": "hi"}, mutating=False)
+    call["request"]["auth"] = "none"
+    async with streaming_client(app) as http:
+        report = await recorder(tmp_path, http, "http://fake.test/sse", rps=0).run(plan(call))
+    assert report.outcomes[0].error == (
+        "RecordingError: auth probes need the Streamable HTTP transport"
+    )
+
+
+RESOURCE_DOC: JsonValue = {
+    "resource": "http://mock/mcp",
+    "authorization_servers": ["https://auth.mock/"],
+    "scopes_supported": ["read", "write"],
+}
+SERVER_DOC: JsonValue = {"issuer": "https://auth.mock", "token_endpoint": "https://auth.mock/t"}
+
+
+def oauth_server(
+    *, challenge: bool = True, documents: bool = True, openid: bool = False
+) -> Callable[[httpx2.Request], httpx2.Response]:
+    """The scripted MCP server behind a token, publishing (or not) OAuth discovery documents."""
+    server = Scripted(token="good-token")
+    named = 'Bearer resource_metadata="http://mock/.well-known/oauth-protected-resource/mcp"'
+
+    def answer(request: httpx2.Request) -> httpx2.Response:
+        path = request.url.path
+        if request.method == "GET" and path.startswith("/.well-known/"):
+            assert "authorization" not in request.headers  # public documents: no credentials
+            if not documents:
+                return httpx2.Response(404)
+            if path == "/.well-known/oauth-protected-resource/mcp":
+                return httpx2.Response(200, json=RESOURCE_DOC)
+            if path == "/.well-known/oauth-authorization-server" and not openid:
+                return httpx2.Response(200, json=SERVER_DOC)
+            if path == "/.well-known/openid-configuration" and openid:
+                return httpx2.Response(200, json=SERVER_DOC)
+            return httpx2.Response(404)
+        response = server(request)
+        if response.status_code == 401 and not challenge:
+            del response.headers["www-authenticate"]
+        elif response.status_code == 401:
+            response.headers["www-authenticate"] = named
+        return response
+
+    return answer
+
+
+@pytest.mark.parametrize("openid", [False, True])
+async def test_introspection_learns_how_the_server_refuses_and_its_oauth(
+    tmp_path: Path, openid: bool
+) -> None:
+    transport = httpx2.MockTransport(oauth_server(openid=openid))
+    async with httpx2.AsyncClient(transport=transport, base_url="https://auth.mock") as http:
+        rec = recorder(
+            tmp_path, http, "http://mock/mcp", rps=0, headers={"Authorization": "Bearer good-token"}
+        )
+        found = await rec.introspect(probe_versions=False)
+    assert found.auth is not None
+    assert [scheme.kind for scheme in found.auth.schemes] == ["bearer", "oauth2"]
+    oauth = found.auth.schemes[1].oauth
+    assert oauth is not None
+    assert oauth.protected_resource_metadata == RESOURCE_DOC
+    assert oauth.authorization_server_metadata == SERVER_DOC
+    assert oauth.scopes == ["read", "write"]
+    assert (found.auth.missing_template, found.auth.invalid_template) == ("unauthorized",) * 2
+    error = found.auth_error
+    assert error is not None
+    assert (error.status, error.body_json, error.headers) == (401, {"error": "invalid_token"}, {})
+    assert "refuses calls without credentials (HTTP 401): bearer and oauth2" in found.notes
+    probe = [e for _, e in RecordingStore(tmp_path / "recordings").iter_exchanges()][-1]
+    assert probe.endpoint == "MCP initialize:no-credentials"
+    assert (probe.purpose, probe.tags) == ("auth", ["auth:none"])
+
+
+async def test_without_oauth_documents_the_challenge_is_kept(tmp_path: Path) -> None:
+    transport = httpx2.MockTransport(oauth_server(documents=False))
+    async with httpx2.AsyncClient(transport=transport) as http:
+        found = await recorder(
+            tmp_path, http, "http://mock/mcp", rps=0, headers={"X-Api-Key": "good-token"}
+        ).introspect(probe_versions=False)
+    assert found.auth is not None
+    (scheme,) = found.auth.schemes  # a key in a header, no OAuth
+    assert (scheme.kind, scheme.location, scheme.name) == ("api_key", "header", "X-Api-Key")
+    assert found.auth_error is not None
+    assert "resource_metadata" in found.auth_error.headers["WWW-Authenticate"]
+
+
+async def test_auth_probe_edge_cases(tmp_path: Path) -> None:
+    transport = httpx2.MockTransport(oauth_server(challenge=False, documents=False))
+    async with httpx2.AsyncClient(transport=transport) as http:
+        found = await recorder(
+            tmp_path, http, "http://mock/mcp", rps=0, headers={"X-Api-Key": "good-token"}
+        ).introspect(probe_versions=False)
+    assert found.auth_error is not None
+    assert found.auth_error.headers == {}  # no challenge to repeat
+    open_server = Scripted()
+    async with httpx2.AsyncClient(transport=httpx2.MockTransport(open_server)) as http:
+        found = await recorder(
+            tmp_path / "b", http, "http://mock/mcp", rps=0, headers={"Authorization": "Bearer x"}
+        ).introspect(probe_versions=False)
+    assert found.auth is None
+    assert "answers without credentials too (HTTP 200)" in found.notes
+    assert _static_scheme({"Authorization": "Basic abc"}).kind == "basic"
+
+
+@pytest.mark.parametrize("failure", ["unreachable", "not json", "a list"])
+async def test_unreadable_oauth_documents_mean_no_oauth(tmp_path: Path, failure: str) -> None:
+    serve = oauth_server()
+
+    def answer(request: httpx2.Request) -> httpx2.Response:
+        if request.method == "GET" and request.url.path.startswith("/.well-known/"):
+            if failure == "unreachable":
+                raise httpx2.ConnectError("down", request=request)
+            return httpx2.Response(200, text="<html>" if failure == "not json" else "[1]")
+        return serve(request)
+
+    async with httpx2.AsyncClient(transport=httpx2.MockTransport(answer)) as http:
+        found = await recorder(
+            tmp_path, http, "http://mock/mcp", rps=0, headers={"Authorization": "Bearer good-token"}
+        ).introspect(probe_versions=False)
+    assert found.auth is not None
+    assert [scheme.kind for scheme in found.auth.schemes] == ["bearer"]
+
+
+async def test_a_tool_call_that_never_left_gives_its_approval_back(tmp_path: Path) -> None:
+    server = Scripted()
+
+    def answer(request: httpx2.Request) -> httpx2.Response:
+        if b'"delete_item"' in request.content or b'"down"' in request.content:
+            raise httpx2.ConnectError("connection refused", request=request)
+        return server(request)
+
+    call = tool_call("delete_item", {"id": 1})
+    planned = PlannedCall.model_validate(call)
+    approvals = Approvals(
+        approvals=[
+            Approval(
+                scope="call",
+                endpoint=planned.endpoint,
+                fingerprint=planned.fingerprint(),
+                max_calls=1,
+                approved_at=datetime.now(UTC),
+            )
+        ]
+    )
+    async with httpx2.AsyncClient(transport=httpx2.MockTransport(answer)) as http:
+        rec = recorder(
+            tmp_path,
+            http,
+            "http://mock/mcp",
+            rps=0,
+            approvals=approvals,
+            approvals_path=tmp_path / "approvals.json",
+        )
+        read = tool_call("echo", {"text": "down"}, id="read", mutating=False)
+        report = await rec.run(plan(call, read), {"delete_item": DELETE_ITEM})
+    assert report.outcomes[0].error == "ConnectError: connection refused"
+    assert report.outcomes[1].error == "ConnectError: connection refused"  # nothing to give back
+    assert set(read_model(tmp_path / "approvals.json", Approvals).used.values()) == {0}
 
 
 async def test_run_errors_budget_and_odd_replies(tmp_path: Path) -> None:

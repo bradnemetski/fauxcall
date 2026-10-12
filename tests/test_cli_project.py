@@ -317,6 +317,10 @@ def test_init_uses_the_credentials_the_user_prepared_in_env(
     assert "MCP server **Demo MCP**" in result.output
     assert token in env.read_text()  # the user's file is kept
     assert token not in files_text(ws.fake("demo").root / "data")
+    model = read_model(ws.fake("demo").model_path, ApiModel)
+    assert model.auth is not None  # learned by calling it without the token
+    assert model.auth.missing_template == "unauthorized"
+    assert [e.name for e in model.errors] == ["unauthorized"]
 
 
 def test_init_without_the_token_cannot_discover_an_auth_protected_mcp_server(

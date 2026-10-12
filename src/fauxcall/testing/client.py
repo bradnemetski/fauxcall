@@ -138,8 +138,9 @@ def harness_identity(auth: AuthModel | None) -> IdentityConfig:
 class WriteBudget:
     """The up-front approval, spent by the real side's writes exactly as ``fauxcall record`` does.
 
-    Every write a real or parity run sends must be covered by an endpoint approval in
-    ``data/approvals.json`` with budget left; one call is spent before the request goes out.
+    Every write a real or parity run sends must be covered by an endpoint approval for parity
+    runs in ``data/approvals.json`` with budget left; one call is spent before the request goes
+    out. (Approvals of reviewed plan entries are for recording only.)
     Without an approvals file nothing may be written.
     """
 
@@ -158,7 +159,7 @@ class WriteBudget:
             endpoint=endpoint,
             request=PlannedRequest(method=HttpMethod(method), path=path.split("?", 1)[0]),
         )
-        approval = approvals.find(call)
+        approval = approvals.find(call, "parity")
         if approval is None:
             return (
                 f"no approval with budget left covers {endpoint} (data/approvals.json); "
@@ -469,6 +470,7 @@ class McpClient:
         log: ExchangeLog | None = None,
         pace: RealPace | None = None,
         budget: WriteBudget | None = None,
+        varies: Callable[[str], bool] = lambda _name: False,
     ) -> None:
         self.target: Target = target
         self.wire = wire
@@ -476,6 +478,8 @@ class McpClient:
         self.budget = budget
         """What the real side's tool calls that may modify state spend (``None``: no check)."""
         self.mutating = mutating
+        self.varies = varies
+        """Tools whose real answers vary call to call: compared by shape unless told otherwise."""
         self.log = log if log is not None else ExchangeLog()
         self.pace = pace
         """Rate-limit pacing for the real side (``None``: as fast as possible)."""
@@ -542,6 +546,8 @@ class McpClient:
             if refused is not None:
                 pytest.skip(f"real write refused: {refused}")
         params: JsonValue = {"name": name, "arguments": dict(arguments or {})}
+        if compare is None and self.varies(name):
+            compare = CompareOptions(values=False, lengths=False)
         return await self.request(
             "tools/call", params, label=label or f"tools/call:{name}", compare=compare
         )

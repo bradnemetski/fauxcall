@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import re
 import time
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -21,11 +22,13 @@ from urllib.parse import parse_qsl, urlsplit
 
 import httpx2
 
-from fauxcall import jsonpath
+from fauxcall import jsonfmt, jsonpath
 from fauxcall.errors import CredentialsRefusedError, HttpStatusError, RecordingError
 from fauxcall.logs import get_logger
 from fauxcall.mcpwire import protocol
 from fauxcall.mcpwire.client import McpWireClient, RpcCall, Transport
+from fauxcall.model.auth import AuthModel, AuthScheme, OAuthModel
+from fauxcall.model.errors import ErrorTemplate
 from fauxcall.model.mcp import (
     PROBE_PROMPT,
     PROBE_RESOURCE,
@@ -34,14 +37,17 @@ from fauxcall.model.mcp import (
     McpToolModel,
     McpTransportModel,
 )
-from fauxcall.model.plan import Approvals
+from fauxcall.model.plan import Approval, Approvals
 from fauxcall.model.recording import Body, CapturedRequest, CapturedResponse, Exchange, StreamEvent
 from fauxcall.recording.recorder import (
+    INVALID_CREDENTIAL,
+    NOT_SENT,
     CallOutcome,
     NoPrivacy,
     PrivacyFilter,
     RunReport,
     credential_values,
+    keep_scheme,
     private_text,
     scrub_exchange,
 )
@@ -63,6 +69,7 @@ log = get_logger(__name__)
 
 PROBE_METHOD: Final = "fauxcall/probe-unknown-method"
 MISSING_SESSION_PROBE_ID: Final = 9_000_001
+AUTH_PROBE_ID: Final = 9_000_002
 _HTTP_OK: Final = 200
 _HTTP_NOT_ALLOWED: Final = 405
 _HTTP_ERROR: Final = 400
@@ -118,6 +125,19 @@ _PASSING_STATUSES: Final = frozenset({405, 408, 425, 429})
 _REFUSED: Final = frozenset({401, 403})
 
 
+_RESOURCE_METADATA: Final = re.compile(r'resource_metadata="([^"]+)"')
+
+
+def _static_scheme(headers: Mapping[str, str]) -> AuthScheme:
+    """How the configured credentials are sent: a bearer token, or a key in a header."""
+    for name, value in headers.items():
+        if name.lower() == "authorization":
+            scheme = value.strip().partition(" ")[0].lower()
+            return AuthScheme(kind="basic" if scheme == "basic" else "bearer")
+    name = next(iter(headers))
+    return AuthScheme(kind="api_key", location="header", name=name)
+
+
 def _may_pass(error: Exception) -> bool:
     """Whether trying again could succeed: a dropped connection, a timeout or a server hiccup."""
     if isinstance(error, HttpStatusError):
@@ -152,6 +172,10 @@ class McpIntrospection:
     model: McpModel
     exchanges: list[str] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
+    auth: AuthModel | None = None
+    """How the server authenticates, learned by calling it without the credentials."""
+    auth_error: ErrorTemplate | None = None
+    """Its answer to a call without credentials (the ``unauthorized`` template)."""
 
 
 class McpRecorder:
@@ -374,7 +398,94 @@ class McpRecorder:
             model.transport.protocol_versions = await self._probe_versions(exchanges)
         counts = (len(model.tools), len(model.resources), len(model.prompts))
         notes = ["{} tools, {} resources, {} prompts".format(*counts)]
-        return McpIntrospection(model=model, exchanges=exchanges, notes=notes)
+        found = McpIntrospection(model=model, exchanges=exchanges, notes=notes)
+        if self.headers and model.transport.kind == "streamable_http":
+            await self._probe_auth(found)
+        return found
+
+    async def _probe_auth(self, found: McpIntrospection) -> None:
+        """Call the server without the credentials: its refusal, and OAuth metadata if any.
+
+        The fake then refuses the same way, and when the server publishes OAuth discovery
+        documents it serves them too (with its own built-in authorization server), so OAuth
+        clients can sign in to the fake as they do to the real server.
+        """
+        probe = McpWireClient(self.url, self.http, headers={})
+        await self._pace()
+        params: JsonObject = {
+            "protocolVersion": protocol.LATEST_HANDSHAKE_VERSION,
+            "capabilities": {},
+            "clientInfo": {"name": "fauxcall", "version": "probe"},
+        }
+        message = protocol.request(AUTH_PROBE_ID, "initialize", params)
+        call = await probe.post(message, include_session=False)
+        exchange = self.save(
+            call, method_endpoint("initialize", "no-credentials"), "auth", tags=["auth:none"]
+        )
+        found.exchanges.append(exchange)
+        if call.status not in _REFUSED:
+            found.notes.append(f"answers without credentials too (HTTP {call.status})")
+            return
+        challenge = call.header("www-authenticate")
+        oauth = await self._oauth_metadata(challenge)
+        schemes = [_static_scheme(self.headers)]
+        if oauth is not None:
+            schemes.append(AuthScheme(kind="oauth2", oauth=oauth))
+        found.auth = AuthModel(
+            schemes=schemes, missing_template="unauthorized", invalid_template="unauthorized"
+        )
+        reply = call.messages[0] if call.messages else None
+        headers = {} if oauth is not None or not challenge else {"WWW-Authenticate": challenge}
+        found.auth_error = ErrorTemplate(
+            name="unauthorized",
+            status=call.status,
+            content_type=call.content_type,
+            headers=headers,
+            body_json=reply if reply is not None else None,
+            body_text=None if reply is not None else (call.body or None),
+            examples=[exchange],
+        )
+        kinds = " and ".join(scheme.kind for scheme in schemes)
+        found.notes.append(f"refuses calls without credentials (HTTP {call.status}): {kinds}")
+
+    async def _oauth_metadata(self, challenge: str | None) -> OAuthModel | None:
+        """The protected-resource and authorization-server documents, when the server has them."""
+        parts = urlsplit(self.url)
+        root = f"{parts.scheme}://{parts.netloc}"
+        named = _RESOURCE_METADATA.search(challenge or "")
+        path = parts.path.rstrip("/")
+        resource = await self._json(
+            named[1] if named else f"{root}/.well-known/oauth-protected-resource{path}"
+        )
+        if resource is None:
+            return None
+        servers = resource.get("authorization_servers")
+        issuer = str(servers[0]).rstrip("/") if isinstance(servers, list) and servers else root
+        server = await self._json(f"{issuer}/.well-known/oauth-authorization-server")
+        if server is None:
+            server = await self._json(f"{issuer}/.well-known/openid-configuration")
+        supported = resource.get("scopes_supported")
+        scopes = [str(s) for s in supported] if isinstance(supported, list) else []
+        return OAuthModel(
+            protected_resource_metadata=resource,
+            authorization_server_metadata=server,
+            scopes=scopes,
+        )
+
+    async def _json(self, url: str) -> JsonObject | None:
+        """A public JSON document (no credentials sent), or ``None``."""
+        await self._pace()
+        try:
+            response = await self.http.get(url, headers={"accept": "application/json"})
+        except httpx2.HTTPError:
+            return None
+        if response.status_code != _HTTP_OK:
+            return None
+        try:
+            document = jsonfmt.loads(response.content)
+        except ValueError:
+            return None
+        return document if isinstance(document, dict) else None
 
     async def _listings(
         self,
@@ -423,7 +534,7 @@ class McpRecorder:
         messages_url = client.messages_url
         transport = McpTransportModel(
             kind=client.transport,
-            path=urlsplit(self.url).path or "/mcp",
+            path=urlsplit(self.url).path or "/",
             messages_path=urlsplit(messages_url).path if legacy and messages_url else None,
             response_mode=response_mode,
             issues_session=client.session_id is not None,
@@ -559,23 +670,60 @@ class McpRecorder:
             report.calls_made = self.calls_made
         return report
 
+    async def _auth_probe(
+        self, client: McpWireClient, call: PlannedCall, method: str, params: JsonValue
+    ) -> RpcCall:
+        """Send one request without credentials (``auth: none``) or with a bad one (``invalid``).
+
+        It goes outside the session, to record how the real server refuses it.
+        """
+        if client.transport != "streamable_http":
+            raise RecordingError("auth probes need the Streamable HTTP transport")
+        headers = (
+            {}
+            if call.request.auth == "none"
+            else {
+                name: keep_scheme(value, INVALID_CREDENTIAL, header=name)
+                for name, value in self.headers.items()
+            }
+        )
+        probe = McpWireClient(
+            self.url,
+            self.http,
+            headers=headers,
+            protocol_version=client.negotiated_version or protocol.LATEST_HANDSHAKE_VERSION,
+        )
+        request_id = AUTH_PROBE_ID
+        message = protocol.request(request_id, method, _params_for(call.endpoint, params))
+        return await probe.post(message, include_session=False)
+
     def _current_approvals(self) -> Approvals:
         """The approvals in force: the file when there is one (it may have changed meanwhile)."""
         if self.approvals_path is not None and self.approvals_path.exists():
             self.approvals = read_model(self.approvals_path, Approvals)
         return self.approvals if self.approvals is not None else Approvals()
 
-    def _spend(self, call: PlannedCall) -> bool:
-        """Spend one call of the approval covering ``call`` and save it at once."""
+    def _spend(self, call: PlannedCall) -> Approval | None:
+        """Spend one call of the approval covering ``call`` and save it at once (``None``: none)."""
         approvals = self._current_approvals()
         approval = approvals.find(call)
         if approval is None:
-            return False
+            return None
         approvals.consume(approval)
         self.approvals = approvals
         if self.approvals_path is not None:
             write_model(self.approvals_path, approvals)
-        return True
+        return approval
+
+    def _refund(self, approval: Approval | None) -> None:
+        """Give back a spent call whose request never reached the server."""
+        if approval is None:
+            return
+        approvals = self._current_approvals()
+        approvals.refund(approval)
+        self.approvals = approvals
+        if self.approvals_path is not None:
+            write_model(self.approvals_path, approvals)
 
     async def _run_call(
         self,
@@ -594,23 +742,33 @@ class McpRecorder:
                 outcome.skipped = f"approval budget used up after {index} call(s)"
                 return
             await self._pace()  # raises before an approval is spent when the budget is gone
-            if needs_approval and not self._spend(call):
+            approval = self._spend(call) if needs_approval else None
+            if needs_approval and approval is None:
                 outcome.skipped = f"approval budget used up after {index} call(s)"
                 return
             params = render(call.request.json_body, from_mapping(variables))
-            rpc = await client.call(method, _params_for(call.endpoint, params))
+            tags = list(call.tags)
+            try:
+                if call.request.auth == "default":
+                    rpc = await client.call(method, _params_for(call.endpoint, params))
+                else:
+                    rpc = await self._auth_probe(client, call, method, params)
+                    tags.append(f"auth:{call.request.auth}")
+            except NOT_SENT:
+                self._refund(approval)
+                raise
             outcome.exchanges.append(
-                self.save(rpc, call.endpoint, call.purpose, call.id, tags=call.tags)
+                self.save(rpc, call.endpoint, call.purpose, call.id, tags=tags)
             )
             outcome.statuses.append(rpc.status)
-            outcome.answers.append(_answer_of(rpc.response))
+            outcome.answers.append(answer_of(rpc.response))
             for name, path in call.capture.items():
                 captured = jsonpath.get_one(rpc.response, path)
                 if captured is not None:
                     variables[name] = captured
 
 
-def _answer_of(reply: JsonValue) -> str:
+def answer_of(reply: JsonValue) -> str:
     """How a JSON-RPC reply answered: ``ok``, ``isError`` (a tool error) or ``error <code>``."""
     if not isinstance(reply, dict):
         return "no reply"

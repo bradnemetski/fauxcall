@@ -285,6 +285,10 @@ async def mcp(
     url = with_query(str(http.base_url).rstrip("/") + fauxcall_fake.mcp_path, query)
     model = fauxcall_fake.model
 
+    def varies(name: str) -> bool:
+        tool = model.mcp.tool(name) if model is not None and model.mcp is not None else None
+        return tool is not None and tool.varies
+
     def mutating(name: str) -> bool:
         listed = model.mcp.tools if model is not None and model.mcp is not None else []
         tool = next((t for t in listed if t.name == name), None)
@@ -298,6 +302,7 @@ async def mcp(
             McpWireClient(url, http),
             allow_writes=bool(request.config.getoption("--allow-real-writes")),
             mutating=mutating,
+            varies=varies,
             log=fauxcall_log,
             pace=real_pace(request.config, fauxcall_fake) if target == "real" else None,
             budget=WriteBudget(fauxcall_fake.approvals_path, lambda _method, call: f"MCP {call}")

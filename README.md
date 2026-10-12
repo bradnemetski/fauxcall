@@ -172,10 +172,13 @@ its own data and its own clock. Set `FAUXCALL_FAST=1` to skip the realistic dela
   copied into Docker images.
 - **Personal data is replaced with realistic stand-ins** as it's recorded, consistently, so a
   customer's name is replaced the same way in every response.
-- **Nothing that changes data happens without your OK.** Before recording, you see the calls that
-  would create, change or delete things, and approve them once. You also set how many such calls
-  each endpoint may make (100 unless you choose otherwise; set `FAUXCALL_APPROVAL_BUDGET` to change
-  the default).
+- **Nothing that changes data happens without your OK.** Before recording, you see every call
+  that would create, change or delete something, and what would stay behind on the real service,
+  and approve them once. Only those exact calls run: anything new or changed needs your OK again.
+  You also set how many such calls the parity tests may make per endpoint (100 unless you choose
+  otherwise; set `FAUXCALL_APPROVAL_BUDGET` to change the default).
+- **It checks what your key can do.** Early on, FauxCall tells you which endpoints or tools your
+  credentials were refused for, because the fake will refuse them too.
 - **It's polite to the real service.** Recording is slowed down to stay within rate limits, and
   capped.
 

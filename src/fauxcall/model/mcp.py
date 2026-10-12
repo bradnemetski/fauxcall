@@ -68,6 +68,14 @@ class McpToolModel(Model):
     )
     latency: LatencyProfile | None = None
     semantic: SemanticModel | None = None
+    varies: bool = Field(
+        default=False,
+        description=(
+            "The real tool answers the same arguments differently from one call to the next "
+            "(search ranking, generated text): replays and parity compare the shape of its "
+            "answers only, not their values or lengths."
+        ),
+    )
 
     @model_serializer(mode="wrap")
     def _keep_behavior(self, handler: SerializerFunctionWrapHandler) -> dict[str, object]:

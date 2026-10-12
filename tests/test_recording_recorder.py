@@ -21,10 +21,10 @@ from fauxcall.model import Approval, Approvals, Exchange, PlannedCall, Recording
 from fauxcall.recording import NoPrivacy, RealTarget, Recorder, RecordingStore, classify_body
 from fauxcall.recording.recorder import (
     INVALID_CREDENTIAL,
-    _keep_scheme,
     _ws_url,
     credential_values,
     host_of,
+    keep_scheme,
     scrub_exchange,
 )
 from fauxcall.storage import read_model, write_model
@@ -576,6 +576,48 @@ async def test_a_spend_is_saved_before_the_call_goes_out(tmp_path: Path) -> None
     assert saved_when_sent == [{"endpoint:POST /pets:": 1}, {"endpoint:POST /pets:": 2}]
 
 
+async def test_a_write_that_never_left_gives_its_approval_back(tmp_path: Path) -> None:
+    attempts = iter(["refused", "ok"])
+
+    def flaky(request: httpx2.Request) -> httpx2.Response:
+        if next(attempts) == "refused":
+            raise httpx2.ConnectError("connection refused", request=request)
+        return httpx2.Response(201, json={"id": 1})
+
+    create = PlannedCall.model_validate(_create())
+    reviewed = Approval(
+        scope="call",
+        endpoint="POST /pets",
+        fingerprint=create.fingerprint(),
+        max_calls=1,
+        use="recording",
+        approved_at=datetime.now(UTC),
+    )
+    approvals = Approvals(approvals=[reviewed])
+    async with httpx2.AsyncClient(transport=httpx2.MockTransport(flaky)) as http:
+        first = await recorder(tmp_path, http, FakeClock(), approvals=approvals).run(
+            plan(_create())
+        )
+        assert first.outcomes[0].error == "ConnectError: connection refused"
+        saved = read_model(tmp_path / "approvals.json", Approvals)
+        assert set(saved.used.values()) == {0}  # the call never reached the server
+        again = await recorder(tmp_path, http, FakeClock(), approvals=saved).run(plan(_create()))
+    assert again.outcomes[0].statuses == [201]  # so the retry may run
+
+
+async def test_parity_approvals_dont_cover_recordings(tmp_path: Path) -> None:
+    app, seen = api()
+    parity = Approval(
+        scope="endpoint", endpoint="POST /pets", use="parity", approved_at=datetime.now(UTC)
+    )
+    async with asgi(app) as http:
+        report = await recorder(
+            tmp_path, http, FakeClock(), approvals=Approvals(approvals=[parity])
+        ).run(plan(_create()))
+    assert report.outcomes[0].skipped is not None
+    assert seen == []
+
+
 async def test_approvals_given_during_a_run_count_and_survive_it(tmp_path: Path) -> None:
     path = tmp_path / "approvals.json"
 
@@ -798,7 +840,7 @@ async def test_auth_modes(
 )
 def test_keep_scheme(original: str, header: str, expected: str) -> None:
     replacement = original if expected == original else "NEW"
-    assert _keep_scheme(original, replacement, header=header) == expected
+    assert keep_scheme(original, replacement, header=header) == expected
 
 
 def test_credential_values_and_scrubbing() -> None:

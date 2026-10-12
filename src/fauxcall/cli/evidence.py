@@ -4,15 +4,18 @@ from __future__ import annotations
 
 import fnmatch
 import json
+import re
 import statistics
 from collections import Counter, defaultdict
 from pathlib import Path  # noqa: TC003 - Typer resolves the annotations at runtime
-from typing import TYPE_CHECKING, Annotated, Final
+from typing import TYPE_CHECKING, Annotated, Final, Literal
 from urllib.parse import urlencode
 
+import jsonschema
 import typer
 
 from fauxcall import jsonfmt
+from fauxcall.analysis.access import access_report
 from fauxcall.cli import common
 from fauxcall.cli.common import (
     EXIT_ERROR,
@@ -32,7 +35,7 @@ from fauxcall.jsonfmt import infer_style
 from fauxcall.model.errors import ErrorTemplate
 from fauxcall.model.plan import Approval, Approvals, PlannedCall, PlannedRequest, RecordingPlan
 from fauxcall.model.realism import LatencyProfile
-from fauxcall.recording.mcp import McpRecorder, needs_approval
+from fauxcall.recording.mcp import McpRecorder, answer_of, needs_approval
 from fauxcall.recording.privacy_filter import PrivacyConfig, RecordingPrivacy
 from fauxcall.recording.recorder import RealTarget, Recorder, RunReport
 from fauxcall.recording.store import RecordingStore
@@ -81,6 +84,68 @@ def _example(schema: JsonValue) -> str:
     return {"integer": "1", "number": "1.5", "boolean": "true"}.get(str(kind), "value")
 
 
+def _example_value(schema: JsonValue) -> JsonValue:
+    """A typed placeholder for a JSON Schema: its example, default or first enum value if any."""
+    if not isinstance(schema, dict):
+        return "value"
+    examples = schema.get("examples")
+    if isinstance(examples, list) and examples:
+        return examples[0]
+    for key in ("example", "default", "const"):
+        if key in schema:
+            return schema[key]
+    enum = schema.get("enum")
+    if isinstance(enum, list) and enum:
+        return enum[0]
+    kind = schema.get("type")
+    if isinstance(kind, list):
+        kind = next((k for k in kind if k != "null"), "string")
+    placeholders: dict[str, JsonValue] = {
+        "integer": 1,
+        "number": 1.5,
+        "boolean": True,
+        "array": [],
+        "object": {},
+        "null": None,
+    }
+    return placeholders.get(str(kind), "value")
+
+
+def _mcp_template(model: ApiModel, endpoint: str, purpose: str) -> PlannedCall:
+    """A plan entry for ``MCP tools/call:<tool>``, ``resources/read:<uri>`` or ``prompts/get:…``."""
+    method, _, target = endpoint.removeprefix("MCP ").partition(":")
+    path = model.mcp.transport.path if model.mcp else "/mcp"
+    body: JsonValue
+    if method == "tools/call":
+        tool = model.mcp.tool(target) if model.mcp else None
+        if tool is None:
+            raise fail(f"unknown tool {target!r} (see: fauxcall endpoints {model.name})")
+        definition = tool.definition if isinstance(tool.definition, dict) else {}
+        schema = definition.get("inputSchema")
+        schema = schema if isinstance(schema, dict) else {}
+        properties = schema.get("properties")
+        properties = properties if isinstance(properties, dict) else {}
+        required = schema.get("required")
+        wanted = required if isinstance(required, list) and required else list(properties)
+        arguments = {str(k): _example_value(properties.get(str(k))) for k in wanted}
+        body = {"name": target, "arguments": arguments}
+    elif method == "resources/read" and target:
+        body = {"uri": target}
+    elif method == "prompts/get" and target:
+        body = {"name": target, "arguments": {}}
+    else:
+        body = {}
+    slug = re.sub(r"[^a-z0-9]+", "-", f"{target or method}-{purpose}".lower()).strip("-")
+    return PlannedCall.model_validate(
+        {
+            "id": slug,
+            "endpoint": endpoint,
+            "purpose": purpose,
+            "request": {"method": "POST", "path": path, "json_body": body},
+        }
+    )
+
+
 @plan_app.command("template")
 @clean_errors
 def plan_template(
@@ -90,8 +155,13 @@ def plan_template(
         str, typer.Option(help="sample | variation | edge | invalid | time_profile | …")
     ] = "sample",
 ) -> None:
-    """Print a starter plan entry for an endpoint (fill in real values before recording)."""
+    """Print a starter plan entry for an endpoint or MCP tool (fill in real values first)."""
     model = load_model(layout(name))
+    if endpoint.startswith("MCP "):
+        echo(
+            _mcp_template(model, endpoint, purpose).model_dump_json(indent=2, exclude_defaults=True)
+        )
+        return
     found = model.find_endpoint(endpoint)
     if found is None:
         raise fail(f"unknown endpoint {endpoint!r}")
@@ -122,34 +192,99 @@ def plan_template(
 @plan_app.command("review")
 @clean_errors
 def plan_review(name: str) -> None:
-    """Every mutating call across all plans — what the user approves once, up front."""
+    """Every write across all plans: exactly what the user approves, once, up front."""
     fake = layout(name)
     approvals = _approvals(fake)
-    writes = _writes(load_model(fake))
+    model = load_model(fake)
+    writes = _writes(model)
+    outcomes = _recorded_outcomes(fake)
     per_endpoint: Counter[str] = Counter()
     rows: list[str] = []
+    declared: list[str] = []
+    new = 0
     for path, plan in _plans(fake):
-        for call in filter(writes, plan.calls):
+        by_id = {call.id: call for call in plan.calls}
+        for call in plan.calls:
+            if not writes(call):
+                if call.mutating is False and writes(call.model_copy(update={"mutating": None})):
+                    why = call.note or "no reason given"
+                    declared.append(f"- {path.name} `{call.id}`: `{call.endpoint}` ({why})")
+                continue
             per_endpoint[call.endpoint] += call.repeat
-            covered = "yes" if approvals.find(call) else "no"
-            cleanup = ", ".join(call.cleanup) or "-"
+            approved = _approval_state(approvals, call)
+            new += approved == "**new**"
             rows.append(
-                f"| {path.name} | {call.id} | `{call.endpoint}` | {call.repeat} | {cleanup} | "
-                f"{covered} | {call.note or ''} |"
+                f"| {path.name} | {call.id} | `{call.endpoint}` | {call.repeat} | "
+                f"{_cleanup_state(call, by_id, outcomes)} | {approved} | {call.note or ''} |"
             )
-    if not rows:
+    if not rows and not declared:
         echo("No mutating calls planned.")
         return
+    if not rows:
+        echo("No mutating calls planned.")
+    else:
+        echo(
+            "| plan | call | endpoint | times | cleaned up by | approved | why |\n"
+            "|---|---|---|---|---|---|---|"
+        )
+        echo("\n".join(rows))
+        echo("\nTotals per endpoint: " + ", ".join(f"{k} x{v}" for k, v in per_endpoint.items()))
+        if new:
+            echo(
+                f"{new} write(s) are new or changed since the user approved: ask before recording."
+            )
+    if declared:
+        echo(
+            "\nDeclared read-only by the plans (`mutating: false`), so they run without approval; "
+            "show the user these too:\n" + "\n".join(declared)
+        )
     echo(
-        "| plan | call | endpoint | times | cleaned up by | approved | why |\n"
-        "|---|---|---|---|---|---|---|"
+        "\nRecording runs exactly these writes. Parity runs may also write: default "
+        f"{cli_settings().approval_budget} per endpoint (approval_budget, "
+        "FAUXCALL_APPROVAL_BUDGET). Ask the user for that number."
     )
-    echo("\n".join(rows))
-    echo("\nTotals per endpoint: " + ", ".join(f"{k} x{v}" for k, v in per_endpoint.items()))
-    echo(
-        f"Default budget: {cli_settings().approval_budget} real calls per endpoint, recording and "
-        "parity together (approval_budget, FAUXCALL_APPROVAL_BUDGET). Ask the user for theirs."
-    )
+
+
+def _approval_state(approvals: Approvals, call: PlannedCall) -> str:
+    if approvals.find(call) is not None:
+        return "yes"
+    if any(approval.covers(call) for approval in approvals.approvals):
+        return "yes, all its calls made"
+    return "**new**"
+
+
+def _recorded_outcomes(fake: FakeLayout) -> dict[tuple[str, str], bool]:
+    """``(plan call id, endpoint)`` -> whether its latest recording succeeded."""
+    outcomes: dict[tuple[str, str], bool] = {}
+    for _, exchange in RecordingStore(fake.recordings).iter_exchanges():
+        if exchange.plan_call is not None:
+            outcomes[exchange.plan_call, exchange.endpoint] = _succeeded(exchange)
+    return outcomes
+
+
+def _succeeded(exchange: Exchange) -> bool:
+    """A response below 400 that isn't a JSON-RPC error or a failed tool result."""
+    response = exchange.response
+    if response is None or response.status >= ERROR_STATUS:
+        return False
+    body = response.body.parsed()
+    if not isinstance(body, dict):
+        return True
+    result = body.get("result")
+    return "error" not in body and not (isinstance(result, dict) and result.get("isError"))
+
+
+def _cleanup_state(
+    call: PlannedCall, by_id: dict[str, PlannedCall], outcomes: dict[tuple[str, str], bool]
+) -> str:
+    if not call.cleanup:
+        return "**nothing: it stays on the real service**"
+    notes = []
+    for cleanup_id in call.cleanup:
+        cleanup = by_id.get(cleanup_id)
+        worked = outcomes.get((cleanup_id, cleanup.endpoint)) if cleanup else None
+        notes.append(cleanup_id + (" (**failed when recorded**)" if worked is False else ""))
+    return ", ".join(notes)
 
 
 @plan_app.command("approve")
@@ -162,7 +297,8 @@ def plan_approve(
         typer.Option(
             min=1,
             help="Real calls each approval allows (default: the approval_budget setting, 100). "
-            "A glob shares them across every endpoint it matches, unless --per-endpoint.",
+            "A glob shares them across every endpoint it matches, unless --per-endpoint. With "
+            "--planned: the writes parity runs may make per endpoint.",
         ),
     ] = None,
     unlimited: Annotated[
@@ -179,9 +315,19 @@ def plan_approve(
         bool,
         typer.Option(
             "--planned",
-            help="Approve every mutating endpoint in the current plans, each its own budget.",
+            help="Approve exactly the reviewed writes in the current plans (each its `repeat` "
+            "times, for recording; an edited or new write needs approving again), plus "
+            "--max-calls writes per endpoint for parity runs.",
         ),
     ] = False,
+    call_ids: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--call",
+            help="Approve this reviewed plan entry (by id) again, its `repeat` times more: "
+            "to re-run a write the user already approved once.",
+        ),
+    ] = None,
     reason: Annotated[
         str | None, typer.Option(help="What the user approved, in their words.")
     ] = None,
@@ -211,21 +357,54 @@ def plan_approve(
         ]
     if planned:
         writes = _writes(load_model(fake))
-        planned_ids = dict.fromkeys(
-            call.endpoint for _, plan in _plans(fake) for call in filter(writes, plan.calls)
-        )
+        calls = [call for _, plan in _plans(fake) for call in filter(writes, plan.calls)]
+        reviewed = {
+            call.fingerprint(): call
+            for call in calls
+            if not any(a.scope == "call" and a.covers(call) for a in approvals.approvals)
+        }
+        added += [
+            Approval(
+                scope="call",
+                endpoint=call.endpoint,
+                fingerprint=fingerprint,
+                max_calls=call.repeat,
+                use="recording",
+                reason=reason,
+                approved_at=now(),
+            )
+            for fingerprint, call in reviewed.items()
+        ]
         added += [
             Approval(
                 scope="endpoint",
                 endpoint=target,
                 max_calls=budget,
+                use="parity",
                 reason=reason,
                 approved_at=now(),
             )
-            for target in planned_ids
+            for target in dict.fromkeys(call.endpoint for call in calls)
+        ]
+    for call_id in call_ids or []:
+        writes = _writes(load_model(fake))
+        found = [c for _, plan in _plans(fake) for c in plan.calls if c.id == call_id]
+        if not found:
+            raise fail(f"no plan entry with id {call_id!r} (see: fauxcall plan review {name})")
+        added += [
+            Approval(
+                scope="call",
+                endpoint=call.endpoint,
+                fingerprint=call.fingerprint(),
+                max_calls=call.repeat,
+                use="recording",
+                reason=reason,
+                approved_at=now(),
+            )
+            for call in {c.fingerprint(): c for c in found if writes(c)}.values()
         ]
     if not added:
-        raise fail("nothing to approve: pass --endpoint or --planned")
+        raise fail("nothing to approve: pass --endpoint, --planned or --call")
     lines = [_on_top(approvals, approval) for approval in added]
     approvals.approvals.extend(added)
     write_model(fake.approvals_path, approvals)
@@ -233,26 +412,30 @@ def plan_approve(
 
 
 def _on_top(approvals: Approvals, approval: Approval) -> str:
-    """Make a new budget add to what earlier approvals of the endpoint allowed; describe it.
+    """Make a new budget add to what earlier approvals of the same thing allowed; describe it.
 
-    Spent calls are counted per endpoint (all approvals of it share the count), so approving 30
-    more after 33 were spent must allow 63 in all, not 30.
+    Spent calls are counted per endpoint (or per reviewed call), and all approvals of it share
+    the count: approving 30 more after 33 were spent must allow 63 in all, not 30.
     """
+    what = (
+        f"the reviewed call `{approval.endpoint}` ({approval.fingerprint}) for recording"
+        if approval.scope == "call"
+        else approval.endpoint + (" for parity runs" if approval.use == "parity" else "")
+    )
     if approval.max_calls is None:
-        return f"approved {approval.endpoint} (max unlimited)"
+        return f"approved {what} (max unlimited)"
     key = Approvals.budget_key(approval)
     spent = approvals.used.get(key, 0)
     earlier = [a.max_calls for a in approvals.approvals if Approvals.budget_key(a) == key]
     if None in earlier:
-        return f"approved {approval.endpoint}: already unlimited"
+        return f"approved {what}: already unlimited"
     allowed = max([spent, *(cap for cap in earlier if cap is not None)])
     if not allowed:
-        return f"approved {approval.endpoint} (max {approval.max_calls})"
+        return f"approved {what} (max {approval.max_calls})"
     more = approval.max_calls
     approval.max_calls = allowed + more
     return (
-        f"approved {approval.endpoint}: {more} more calls "
-        f"({approval.max_calls} in all; {spent} already spent)"
+        f"approved {what}: {more} more calls ({approval.max_calls} in all; {spent} already spent)"
     )
 
 
@@ -289,7 +472,7 @@ def plan_check(name: str, plan: Path) -> None:
         state = (
             "read-only"
             if not writes(call)
-            else ("approved" if approvals.find(call) else "NEEDS APPROVAL")
+            else ("approved" if approvals.find(call) else "NEEDS APPROVAL (new or changed)")
         )
         probe = " (routing probe: not in the model)" if call.endpoint in undocumented else ""
         echo(f"- {call.id}: {call.endpoint} x{call.repeat} — {state}{probe}")
@@ -408,7 +591,69 @@ def _preview(exchange: Exchange) -> str:
     return text if len(text) <= _PREVIEW else text[: _PREVIEW - 1] + "…"
 
 
+def _jsonl(exchange: Exchange) -> str:
+    """An exchange as one JSON line: what was sent and what came back, bodies parsed."""
+    response = exchange.response
+    line: JsonValue = {
+        "id": exchange.id,
+        "endpoint": exchange.endpoint,
+        "plan_call": exchange.plan_call,
+        "purpose": exchange.purpose,
+        "method": exchange.request.method.value,
+        "path": exchange.request.path,
+        "query": [list(pair) for pair in exchange.request.query],
+        "request": exchange.request.body.parsed(),
+        "status": response.status if response is not None else None,
+        "elapsed_ms": exchange.elapsed_ms,
+        "response": response.body.parsed() if response is not None else None,
+        "error": exchange.error,
+    }
+    return jsonfmt.dumps(line)
+
+
+def _mcp_row(exchange: Exchange) -> str:
+    """An MCP call: method and target, arguments, how it answered, and the answer's text."""
+    sent = exchange.request.body.parsed()
+    params = sent.get("params") if isinstance(sent, dict) else None
+    arguments = params.get("arguments") if isinstance(params, dict) else None
+    response = exchange.response
+    reply = response.body.parsed() if response is not None else None
+    if response is None:
+        outcome = "no response"
+    else:
+        outcome = f"{response.status} {answer_of(reply)} {exchange.elapsed_ms:.0f}ms"
+    shown = f" {_excerpt(jsonfmt.dumps(arguments))}" if arguments else ""
+    label = exchange.plan_call or "-"
+    method = exchange.endpoint.removeprefix("MCP ")
+    row = f"{exchange.id} {label} [{exchange.purpose}] {method}{shown} -> {outcome}"
+    text = _excerpt(_reply_text(reply) or _preview(exchange))
+    return f"{row}  {text}" if text else row
+
+
+def _reply_text(reply: JsonValue) -> str | None:
+    """The readable part of a JSON-RPC reply: an error's message, or a result's text blocks."""
+    if not isinstance(reply, dict):
+        return None
+    error = reply.get("error")
+    if isinstance(error, dict):
+        return str(error.get("message", ""))
+    result = reply.get("result")
+    content = result.get("content") if isinstance(result, dict) else None
+    if isinstance(content, list):
+        texts = [str(p.get("text")) for p in content if isinstance(p, dict) and p.get("text")]
+        if texts:
+            return " ".join(texts)
+    return None
+
+
+def _excerpt(text: str) -> str:
+    flat = " ".join(text.split())
+    return flat if len(flat) <= _PREVIEW else flat[: _PREVIEW - 1] + "…"
+
+
 def _row(exchange: Exchange) -> str:
+    if exchange.endpoint.startswith("MCP "):
+        return _mcp_row(exchange)
     request, response = exchange.request, exchange.response
     query = "?" + urlencode(request.query) if request.query else ""
     if response is None:
@@ -420,6 +665,30 @@ def _row(exchange: Exchange) -> str:
     return (
         f"{exchange.id} {label} [{exchange.purpose}] {request.method.value} {request.path}{query}"
         f" -> {outcome}  {_preview(exchange)}"
+    )
+
+
+def _show(store: RecordingStore, show: str, name: str) -> None:
+    for path, exchange in store.iter_exchanges():
+        if exchange.id == show or (show.isdigit() and exchange.id.lstrip("0") == show.lstrip("0")):
+            echo(path.read_text(encoding="utf-8").rstrip())
+            return
+    raise fail(f"no recording {show!r} (list them with: fauxcall recordings {name})")
+
+
+def _matches(
+    exchange: Exchange,
+    endpoint: str | None,
+    purpose: str | None,
+    status: int | None,
+    grep: str | None,
+) -> bool:
+    response = exchange.response
+    return not (
+        (endpoint is not None and not fnmatch.fnmatchcase(exchange.endpoint, endpoint))
+        or (purpose is not None and exchange.purpose != purpose)
+        or (status is not None and (response is None or response.status != status))
+        or (grep is not None and grep not in exchange.model_dump_json())
     )
 
 
@@ -436,28 +705,33 @@ def recordings(
     ] = None,
     show: Annotated[str | None, typer.Option(help="Print one exchange in full (by id).")] = None,
     limit: Annotated[int, typer.Option(min=1, help="Most rows to print (the newest).")] = 60,
+    jsonl: Annotated[
+        bool,
+        typer.Option(
+            "--jsonl",
+            help="One JSON object per matching exchange, in full and unlimited: for reading many "
+            "with a script instead of writing one over data/recordings.",
+        ),
+    ] = False,
 ) -> None:
-    """Browse recordings: one line per exchange (id, plan call, request, status, time, body)."""
+    """Browse recordings: one line per exchange (id, plan call, request, status, time, body).
+
+    MCP calls show their tool and arguments, how they answered (ok, isError, error -32602) and
+    the answer's text.
+    """
     store = RecordingStore(layout(name).recordings)
     if show is not None:
-        for path, exchange in store.iter_exchanges():
-            if exchange.id == show or (
-                show.isdigit() and exchange.id.lstrip("0") == show.lstrip("0")
-            ):
-                echo(path.read_text(encoding="utf-8").rstrip())
-                return
-        raise fail(f"no recording {show!r} (list them with: fauxcall recordings {name})")
+        _show(store, show, name)
+        return
     rows: list[str] = []
     for _, exchange in store.iter_exchanges():
-        response = exchange.response
-        if (
-            (endpoint is not None and not fnmatch.fnmatchcase(exchange.endpoint, endpoint))
-            or (purpose is not None and exchange.purpose != purpose)
-            or (status is not None and (response is None or response.status != status))
-            or (grep is not None and grep not in exchange.model_dump_json())
-        ):
+        if not _matches(exchange, endpoint, purpose, status, grep):
             continue
-        rows.append(_row(exchange))
+        rows.append(_jsonl(exchange) if jsonl else _row(exchange))
+    if jsonl:
+        for row in rows:
+            echo(row)
+        return
     if not rows:
         echo("no recordings match")
         return
@@ -561,12 +835,101 @@ def analyze_endpoint(
     )
     if apply and found is not None:
         _apply(fake, model, found.id, by_status, profile)
-    elif apply and (tool := _tool_of(model, endpoint)) is not None:
-        tool.latency = profile  # an MCP tool: its timing is what --apply can store
+    tool = _tool_of(model, endpoint)
+    learned = _invalid_args_mode(tool, exchanges) if tool is not None else None
+    if learned is not None:
+        mode, agreeing, probes = learned
+        echo(f"Arguments that break its schema: answered as {mode} ({agreeing} of {probes} probes)")
+    repeats = _repeated_answers(exchanges) if tool is not None else None
+    varies = repeats is not None and repeats[0] * 2 > repeats[1]
+    if repeats is not None:
+        differing, repeated = repeats
+        verdict = (
+            "it varies (compared by shape only)"
+            if varies
+            else "mostly the same (a difference can be state that changed in between)"
+            if differing
+            else "it answers them the same"
+        )
+        echo(f"Same arguments, different answers: {differing} of {repeated} repeated: {verdict}")
+    if apply and found is None and tool is not None:
+        tool.latency = profile  # an MCP tool: its timing, argument checking and repeatability
+        if learned is not None:
+            tool.invalid_args = learned[0]
+        if repeats is not None:
+            tool.varies = varies
         problems = save_model(fake, model)
         echo(
             "\nmodel updated" + ("" if not problems else " (problems: " + "; ".join(problems) + ")")
         )
+
+
+def _repeated_answers(exchanges: list[Exchange]) -> tuple[int, int] | None:
+    """Of the argument sets answered more than once, how many got different answers.
+
+    Only successful answers count, compared without ``_meta`` (per-session ids). ``None``: no
+    arguments were answered twice.
+    """
+    calls: Counter[str] = Counter()
+    answers: defaultdict[str, set[str]] = defaultdict(set)
+    for exchange in exchanges:
+        sent = exchange.request.body.parsed()
+        params = sent.get("params") if isinstance(sent, dict) else None
+        reply = exchange.response.body.parsed() if exchange.response is not None else None
+        result = reply.get("result") if isinstance(reply, dict) else None
+        if not isinstance(params, dict) or not isinstance(result, dict) or result.get("isError"):
+            continue
+        key = jsonfmt.canonical_dumps(params.get("arguments"))
+        calls[key] += 1
+        answers[key].add(jsonfmt.canonical_dumps({k: v for k, v in result.items() if k != "_meta"}))
+    repeated = [key for key, count in calls.items() if count > 1]
+    if not repeated:
+        return None
+    return sum(len(answers[key]) > 1 for key in repeated), len(repeated)
+
+
+InvalidArgs = Literal["jsonrpc_error", "tool_error", "accept"]
+
+
+def _invalid_args_mode(
+    tool: McpToolModel, exchanges: list[Exchange]
+) -> tuple[InvalidArgs, int, int] | None:
+    """How the server answered the recorded calls whose arguments break the tool's schema.
+
+    A JSON-RPC error, a failed tool result (``isError``), or an answer as if they were fine.
+    Only schema violations count: the fake checks the schema, and arguments that pass it but
+    the server rejects are answered like any other recorded call. ``None``: none recorded.
+    """
+    definition = tool.definition if isinstance(tool.definition, dict) else {}
+    schema = definition.get("inputSchema")
+    if not isinstance(schema, dict):
+        return None
+    votes: Counter[InvalidArgs] = Counter()
+    for exchange in exchanges:
+        sent = exchange.request.body.parsed()
+        params = sent.get("params") if isinstance(sent, dict) else None
+        arguments = params.get("arguments", {}) if isinstance(params, dict) else None
+        if arguments is None or exchange.response is None:
+            continue
+        try:
+            jsonschema.validate(jsonfmt.plain(arguments), schema)
+        except jsonschema.ValidationError:
+            pass
+        except jsonschema.SchemaError:
+            return None
+        else:
+            continue
+        answer = answer_of(exchange.response.body.parsed())
+        if answer.startswith("error"):
+            votes["jsonrpc_error"] += 1
+        elif answer == "isError":
+            votes["tool_error"] += 1
+        else:
+            votes["accept"] += 1
+    if not votes:
+        return None
+    ((mode, agreeing),) = votes.most_common(1)
+    return mode, agreeing, sum(votes.values())
 
 
 def _failed(exchange: Exchange) -> bool:
@@ -708,6 +1071,43 @@ def analyze_writes(
     )
     echo(describe(evidence))
     echo(evidence.model_dump_json(indent=2))
+
+
+@analyze_app.command("access")
+@clean_errors
+def analyze_access(name: str) -> None:
+    """What the credentials may do: endpoints and tools the real service refused for permission.
+
+    Record one cheap read of each endpoint or tool first. Show the user what was refused before
+    planning around it: the fake will refuse it too.
+    """
+    fake = layout(name)
+    report = access_report(e for _, e in RecordingStore(fake.recordings).iter_exchanges())
+    if not report:
+        echo("Nothing recorded yet: record one read of each endpoint or tool first.")
+        return
+    refused = [entry for entry in report if entry.refused]
+    fine = len(report) - len(refused)
+    if not refused:
+        echo(f"The credentials were refused nowhere ({fine} endpoints or tools called).")
+        return
+    echo("| endpoint | calls | refused | why | refused calls |\n|---|---|---|---|---|")
+    for entry in refused:
+        echo(
+            f"| `{entry.endpoint}` | {entry.calls} | {entry.refused} | "
+            f"{'; '.join(entry.reasons)} | {'; '.join(entry.examples) or '-'} |"
+        )
+    echo(f"\n{fine} other endpoints or tools were never refused.")
+    blocked = [e.endpoint for e in refused if e.all_refused]
+    partly = [e.endpoint for e in refused if not e.all_refused]
+    if blocked:
+        echo(f"\nRefused every time: {', '.join(blocked)}.")
+    if partly:
+        echo(f"Refused for some arguments: {', '.join(partly)}.")
+    echo(
+        "The fake will refuse the same. Tell the user before planning: keep these credentials, "
+        "or use a test key with the permissions their agents need."
+    )
 
 
 @analyze_app.command("errors")

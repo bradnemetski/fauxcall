@@ -267,6 +267,22 @@ def test_real_writes_spend_the_up_front_approval(tmp_path: Path) -> None:
     assert "POST /items{id}" in str(named.spend("POST", "/items1"))
 
 
+def test_real_runs_spend_only_approvals_for_parity(tmp_path: Path) -> None:
+    path = tmp_path / "approvals.json"
+    now = datetime.now(UTC)
+    recording_only = [
+        Approval(scope="endpoint", endpoint="POST /items", use="recording", approved_at=now),
+        Approval(
+            scope="call", endpoint="POST /items", fingerprint="0123456789abcdef", approved_at=now
+        ),
+    ]
+    write_model(path, Approvals(approvals=recording_only))
+    assert "no approval with budget left" in str(WriteBudget(path).spend("POST", "/items"))
+    parity = Approval(scope="endpoint", endpoint="POST /items", use="parity", approved_at=now)
+    write_model(path, Approvals(approvals=[*recording_only, parity]))
+    assert WriteBudget(path).spend("POST", "/items") is None
+
+
 async def test_clients_skip_real_writes_their_budget_refuses(tmp_path: Path) -> None:
     budget = WriteBudget(tmp_path / "approvals.json")
     client = api_client("real", allow_writes=True, budget=budget)
@@ -370,6 +386,20 @@ class _BrokenWire:
 
     async def close(self) -> None:
         self.closed += 1
+
+
+async def test_tools_that_vary_are_compared_by_shape(tmp_path: Path) -> None:
+    client, http = mcp_client(tmp_path)
+    client.varies = lambda name: name == "add"
+    async with http:
+        await client.call_tool("add", {"a": 1})
+        await client.call_tool("add", {"a": 1}, compare=CompareOptions(lengths=False))
+        await client.call_tool("reset")
+        await client.close()
+    loose, explicit, strict = (call.options for call in client.log.calls)
+    assert (loose.values, loose.lengths) == (False, False)
+    assert (explicit.values, explicit.lengths) == (True, False)  # the scenario's own choice wins
+    assert (strict.values, strict.lengths) == (True, True)
 
 
 async def test_mcp_transport_errors_are_logged_then_raised() -> None:
