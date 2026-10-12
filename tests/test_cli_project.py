@@ -325,7 +325,21 @@ def test_init_without_the_token_cannot_discover_an_auth_protected_mcp_server(
     server = mcp_app(tmp_path, mcp_model(tools=["ask"], auth=True))
     serve_with(monkeypatch, httpx2.ASGITransport(app=server))
     result = invoke("init", MCP_URL, "--name", "demo", code=1)
-    assert "authorization required" in result.output
+    assert (
+        "http://mcp.test/mcp refused the credentials: HTTP 401 (WWW-Authenticate:" in result.output
+    )
+    env = ws.fake("demo").env_file
+    assert f"The credentials go in {env} (created for you, gitignored)" in result.output
+    assert "configure credentials on the HTTP client" not in result.output
+    text = env.read_text()
+    assert '# FAUXCALL_REAL__HEADERS=\'{"Authorization": "Bearer ..."}\'' in text
+    assert "FAUXCALL_REAL__BASE_URL=http://mcp.test\n" in text
+    again = invoke("init", MCP_URL, "--mcp", "--name", "demo", code=1)  # it exists now: kept
+    assert f"The credentials go in {env} (gitignored)" in again.output
+    assert "No credentials were sent" in again.output
+    assert env.read_text() == text
+    without_name = invoke("init", MCP_URL, "--mcp", code=1)
+    assert "The credentials go in" not in without_name.output
 
 
 def test_init_paces_mcp_introspection_with_the_recording_settings(

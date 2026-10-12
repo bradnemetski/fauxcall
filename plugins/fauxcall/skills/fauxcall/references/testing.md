@@ -117,3 +117,6 @@ bound: the fake waits for the recorded time *minus the time already spent* answe
 be anything up to the sampled latency, or skipped when the answer already took that long.
 `assert all(p <= max(recorded) for p in pauses)` is stable; a lower bound above zero or an exact
 number of pauses fails whenever the machine is slow.
+
+Shared fixtures go in `tests/conftest.py`. A `conftest.py` in `tests/unit` or in `tests/e2e` is fine,
+but not in both: mypy sees two modules named `conftest`.

@@ -12,6 +12,11 @@ services:
     environment:
       FAUXCALL_HOST: "0.0.0.0"
       FAUXCALL_PORT: "8705"
+      # The real API's credentials and the pseudonym key are for recording and parity runs only:
+      # the running fake never uses them, so they stay out of the container.
+      FAUXCALL_REAL__HEADERS: "{}"
+      FAUXCALL_REAL__QUERY: "{}"
+      FAUXCALL_PSEUDONYM_KEY: ""
   frankfurter:
     build:
       context: .
@@ -24,6 +29,11 @@ services:
     environment:
       FAUXCALL_HOST: "0.0.0.0"
       FAUXCALL_PORT: "8701"
+      # The real API's credentials and the pseudonym key are for recording and parity runs only:
+      # the running fake never uses them, so they stay out of the container.
+      FAUXCALL_REAL__HEADERS: "{}"
+      FAUXCALL_REAL__QUERY: "{}"
+      FAUXCALL_PSEUDONYM_KEY: ""
   petstore:
     build:
       context: .
@@ -36,6 +46,11 @@ services:
     environment:
       FAUXCALL_HOST: "0.0.0.0"
       FAUXCALL_PORT: "8704"
+      # The real API's credentials and the pseudonym key are for recording and parity runs only:
+      # the running fake never uses them, so they stay out of the container.
+      FAUXCALL_REAL__HEADERS: "{}"
+      FAUXCALL_REAL__QUERY: "{}"
+      FAUXCALL_PSEUDONYM_KEY: ""
   refapi:
     build:
       context: .
@@ -48,6 +63,11 @@ services:
     environment:
       FAUXCALL_HOST: "0.0.0.0"
       FAUXCALL_PORT: "8702"
+      # The real API's credentials and the pseudonym key are for recording and parity runs only:
+      # the running fake never uses them, so they stay out of the container.
+      FAUXCALL_REAL__HEADERS: "{}"
+      FAUXCALL_REAL__QUERY: "{}"
+      FAUXCALL_PSEUDONYM_KEY: ""
   timeapi:
     build:
       context: .
@@ -60,3 +80,8 @@ services:
     environment:
       FAUXCALL_HOST: "0.0.0.0"
       FAUXCALL_PORT: "8703"
+      # The real API's credentials and the pseudonym key are for recording and parity runs only:
+      # the running fake never uses them, so they stay out of the container.
+      FAUXCALL_REAL__HEADERS: "{}"
+      FAUXCALL_REAL__QUERY: "{}"
+      FAUXCALL_PSEUDONYM_KEY: ""

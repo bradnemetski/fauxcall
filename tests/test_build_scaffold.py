@@ -606,8 +606,18 @@ def test_mcp_scenarios(tmp_path: Path) -> None:
             store, {"method": "tools/call", "params": {"name": "ask", "arguments": {"q": question}}}
         ),
     ]
-    other = mcp_call(store, {"method": "tools/call", "params": {"name": "now", "arguments": 3}})
-    calls.append(other.model_copy(update={"endpoint": "MCP tools/call:now"}))
+    now: JsonValue = {"method": "tools/call", "params": {"name": "now", "arguments": 3}}
+
+    def answered(status: int, reply: JsonValue) -> Exchange:
+        exchange = mcp_call(store, now)
+        response = CapturedResponse(status=status, body=Body(kind="json", json_value=reply))
+        return exchange.model_copy(update={"endpoint": "MCP tools/call:now", "response": response})
+
+    calls += [
+        answered(403, None),  # refused over HTTP: not a starter
+        answered(200, {"error": {"code": -32602, "message": "bad"}}),  # a JSON-RPC error
+        answered(200, {"result": {"content": []}}),
+    ]
     scenarios = scenarios_for(api, calls)
     assert [s["name"] for s in scenarios] == [
         "recorded_mcp_tools_call_ask",
@@ -1138,6 +1148,10 @@ def test_ports_members_and_listings_across_fakes(tmp_path: Path) -> None:
     assert compose["services"]["second"]["environment"] == {
         "FAUXCALL_HOST": "0.0.0.0",  # noqa: S104 - inside the container
         "FAUXCALL_PORT": "8702",
+        # .env holds the real API's key: the container gets empty values instead
+        "FAUXCALL_REAL__HEADERS": "{}",
+        "FAUXCALL_REAL__QUERY": "{}",
+        "FAUXCALL_PSEUDONYM_KEY": "",
     }
     assert compose["services"]["second"]["env_file"] == [{"path": "second/.env", "required": False}]
     workflow = yaml.safe_load((tmp_path / ".github" / "workflows" / "fauxcall.yml").read_text())

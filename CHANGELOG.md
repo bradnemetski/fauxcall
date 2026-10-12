@@ -34,6 +34,18 @@ All notable changes to FauxCall are listed here. The format follows
 - The skill never waits on a question after the up-front gate, runs the independent review in the
   foreground, and `fauxcall status` flags a review that never finished.
 - `FAUXCALL_LOG_LEVEL` accepts any case (`info`).
+- `init` on a service that refuses the credentials says so (whether or not `--mcp` was given),
+  creates the fake's `.env` with commented examples when it's missing, and prints its path.
+- Calls to tool names the server doesn't list are probes, not writes: they need no approval in
+  recordings or parity runs.
+- Generated starter scenarios for MCP tools come only from recordings that returned a result.
+- Generated fakes' mypy settings let `tests/unit` and `tests/e2e` have their own `conftest.py`.
+- `fauxcall verify` runs the fake's tests without the caller's `VIRTUAL_ENV` (no uv warning).
+
+### Security
+
+- The generated `compose.yaml` keeps the real API's credentials and the pseudonym key out of the
+  fakes' containers: a running fake never needs them.
 
 ### Fixed
 

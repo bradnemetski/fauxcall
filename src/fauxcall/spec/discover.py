@@ -34,7 +34,7 @@ from bs4 import BeautifulSoup
 from pydantic import Field
 
 from fauxcall import __version__, jsonfmt
-from fauxcall.errors import SpecError
+from fauxcall.errors import CredentialsRefusedError, SpecError
 from fauxcall.logs import get_logger
 from fauxcall.model.api import SourceKind
 from fauxcall.model.common import Model, RawJson
@@ -506,11 +506,13 @@ def _session_header(response: httpx2.Response) -> tuple[str, str] | None:
 def _auth_hint(response: httpx2.Response) -> str:
     challenge = response.headers.get("www-authenticate")
     if challenge and response.status_code in {httpx2.codes.UNAUTHORIZED, httpx2.codes.FORBIDDEN}:
-        return (
-            f" — authorization required (WWW-Authenticate: {excerpt(challenge)}); "
-            "configure credentials on the HTTP client"
-        )
+        return f" — authorization required (WWW-Authenticate: {excerpt(challenge)})"
     return ""
+
+
+def _challenge(response: httpx2.Response) -> str:
+    challenge = response.headers.get("www-authenticate")
+    return f" (WWW-Authenticate: {excerpt(challenge)})" if challenge else ""
 
 
 # ---------------------------------------------------------------------------
@@ -531,6 +533,8 @@ class _Discovery:
         self.client = client
         self.trail: list[str] = []
         self.fetched: set[str] = set()
+        self.refused: str | None = None
+        """How an MCP ``initialize`` was refused for its credentials (401/403), if it was."""
 
     def amend(self, text: str) -> None:
         """Add to the latest trail line (its outcome)."""
@@ -734,6 +738,8 @@ class _Discovery:
                     detail = f": {excerpt(body)}" if body.strip() else ""
                     status = response.status_code
                     self.trail.append(f"{label} -> HTTP {status}{_auth_hint(response)}{detail}")
+                    if status in {httpx2.codes.UNAUTHORIZED, httpx2.codes.FORBIDDEN}:
+                        self.refused = f"HTTP {status}{_challenge(response)}"
                     return None
                 streamed = media_type(content_type) == EVENT_STREAM
                 if streamed:
@@ -867,8 +873,15 @@ class _Discovery:
             notes=list(self.trail),
         )
 
-    def failure(self) -> SpecError:
+    def failure(self) -> SpecError | CredentialsRefusedError:
         tried = "\n".join(f"  - {line}" for line in self.trail)
+        if self.refused is not None:  # nothing else found, and an MCP endpoint wants credentials
+            return CredentialsRefusedError(
+                f"{self.target} refused the credentials: {self.refused}. If it needs a key or "
+                "token, put it in the fake's .env as "
+                'FAUXCALL_REAL__HEADERS=\'{"Authorization": "Bearer <token>"}\' '
+                f"and run init again with --name.\nTried:\n{tried}"
+            )
         return SpecError(
             f"could not find an OpenAPI/Swagger spec, docs page or MCP server at {self.target!r}."
             f"\nTried:\n{tried}\nPass the spec itself (a JSON/YAML file or URL), its Swagger UI or "

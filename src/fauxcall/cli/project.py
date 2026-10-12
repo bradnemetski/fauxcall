@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING, Annotated, Any, Final, cast, get_args
 import typer
 
 from fauxcall import __version__
-from fauxcall.build.init import ensure_env, init_fake
+from fauxcall.build.init import ensure_env, init_fake, origin
 from fauxcall.cli import common
 from fauxcall.cli.common import (
     clean_errors,
@@ -31,6 +31,7 @@ from fauxcall.cli.common import (
     secret_values,
     workspace,
 )
+from fauxcall.errors import CredentialsRefusedError
 from fauxcall.model.api import ApiModel
 from fauxcall.model.progress import ENDPOINT_STEPS, PHASES, GateAnswers, PhaseState, Status
 from fauxcall.privacy import Pseudonymizer
@@ -125,7 +126,19 @@ def init(
         )
         echo(f"Next: `fauxcall status {result.layout.name}`")
 
-    run(go())
+    try:
+        run(go())
+    except CredentialsRefusedError as error:
+        if not name:
+            raise
+        fake = workspace().fake(name)
+        created = not fake.env_file.exists()
+        if created:
+            fake.root.mkdir(parents=True, exist_ok=True)
+            ensure_env(fake, base_url or origin(target))
+        where = f"{fake.env_file} ({'created for you, ' if created else ''}gitignored)"
+        message = f"{error}\nThe credentials go in {where}; then run init again."
+        raise CredentialsRefusedError(message) from error
 
 
 @clean_errors

@@ -602,6 +602,8 @@ def credential_lines(model: ApiModel) -> list[str]:
     return lines
 
 
+_HTTP_OK: Final = 200
+
 AGENT_TOKEN: Final = "any-token"  # noqa: S105 - a placeholder, not a credential
 """The credential examples tell agents to send: a fake in auth mode ``any`` takes any value."""
 
@@ -641,6 +643,12 @@ def _scenario_target(model: ApiModel, exchange: Exchange) -> list[str] | None:
         sent = request.body.parsed()
         if not isinstance(sent, dict) or sent.get("method") != "tools/call":
             return None
+        assert exchange.response is not None  # noqa: S101 - checked by the caller
+        reply = exchange.response.body.parsed()
+        if exchange.response.status != _HTTP_OK or not isinstance(reply, dict):
+            return None  # refused over HTTP (a 403 …): not a starter for a result
+        if "result" not in reply:
+            return None  # a JSON-RPC error: call_tool would return the error, not a result
         params = sent.get("params")
         params = params if isinstance(params, dict) else {}
         arguments = params.get("arguments")

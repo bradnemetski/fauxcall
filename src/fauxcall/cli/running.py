@@ -225,7 +225,9 @@ def verify(
         command.append("--allow-real-writes")
     report = fake.reports.resolve() / "parity.md"
     before = _version_of(report)
-    completed = subprocess.run(command, cwd=root, check=False)  # noqa: S603 - fixed argv
+    # The fake has its own environment; an active one (the user's project's) only draws a warning.
+    environment = {key: value for key, value in os.environ.items() if key != "VIRTUAL_ENV"}
+    completed = subprocess.run(command, cwd=root, env=environment, check=False)  # noqa: S603
     if completed.returncode == _NO_TESTS:
         raise fail("no tests ran: is the fake scaffolded, and are its tests in place?")
     if target == "parity":

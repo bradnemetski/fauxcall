@@ -337,8 +337,11 @@ def commands(monkeypatch: pytest.MonkeyPatch) -> list[tuple[list[str], dict[str,
 
 
 def test_verify_runs_the_fake_suite_with_coverage(
-    ws: Workspace, commands: list[tuple[list[str], dict[str, object]]]
+    ws: Workspace,
+    commands: list[tuple[list[str], dict[str, object]]],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    monkeypatch.setenv("VIRTUAL_ENV", "/my/project/.venv")
     fake = make_fake(ws, rest_model())
     (fake.root / "pyproject.toml").write_text("[project]\nname = 'x'\n")
     invoke("verify", "shop")
@@ -354,6 +357,10 @@ def test_verify_runs_the_fake_suite_with_coverage(
         "--cov",
         "--cov-report=term-missing",
     ]
+    environment = options.pop("env")
+    assert isinstance(environment, dict)
+    assert "VIRTUAL_ENV" not in environment  # the user's own environment stays out of it
+    assert environment["PATH"] == os.environ["PATH"]
     assert options == {"cwd": fake.root, "check": False}
     invoke("verify", "shop", "--e2e-only", "--allow-real-writes")
     assert commands[1][0][-2:] == [str(fake.tests / "e2e"), "--allow-real-writes"]

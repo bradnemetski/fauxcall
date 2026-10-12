@@ -10,7 +10,7 @@ import httpx2
 import pytest
 
 from fauxcall import __version__
-from fauxcall.errors import SpecError
+from fauxcall.errors import CredentialsRefusedError, SpecError
 from fauxcall.spec import discover as discover_module
 from fauxcall.spec.discover import (
     _conventional_bases,
@@ -116,7 +116,7 @@ async def discovered(web: FakeWeb, target: str) -> discover_module.DiscoveredSou
 
 
 async def failure(web: FakeWeb, target: str) -> str:
-    with pytest.raises(SpecError) as caught:
+    with pytest.raises((SpecError, CredentialsRefusedError)) as caught:
         await discovered(web, target)
     return str(caught.value)
 
@@ -809,8 +809,7 @@ async def test_mcp_detected_from_json_rpc_or_paths(web: FakeWeb) -> None:
             ),
             (
                 "-> HTTP 401 — authorization required (WWW-Authenticate: Bearer "
-                'resource_metadata="https://a.example.com/.well-known/oauth-protected-resource"); '
-                "configure credentials on the HTTP client"
+                'resource_metadata="https://a.example.com/.well-known/oauth-protected-resource")'
             ),
         ),
         (httpx2.Response(403, text="denied"), "-> HTTP 403: denied"),
@@ -821,6 +820,19 @@ async def test_mcp_probe_failures(web: FakeWeb, response: httpx2.Response, probl
     web.respond(url, "Method Not Allowed", status=405)
     web.route("POST", url, lambda _: response)
     assert f"  - POST {url} (MCP initialize) {problem}\n" in await failure(web, url)
+
+
+@pytest.mark.parametrize("status", [401, 403])
+async def test_an_mcp_endpoint_refusing_the_credentials_says_so(web: FakeWeb, status: int) -> None:
+    url = "https://locked.example.com/mcp"
+    web.respond(url, "Method Not Allowed", status=405)
+    web.route("POST", url, lambda _: httpx2.Response(status))
+    with pytest.raises(CredentialsRefusedError) as caught:
+        await discovered(web, url)
+    assert str(caught.value).startswith(
+        f"{url} refused the credentials: HTTP {status}. If it needs a key or token, put it in "
+        "the fake's .env as FAUXCALL_REAL__HEADERS"
+    )
 
 
 async def test_mcp_event_streams_are_bounded(web: FakeWeb, monkeypatch: pytest.MonkeyPatch) -> None:

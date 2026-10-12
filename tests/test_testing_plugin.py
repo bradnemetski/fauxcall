@@ -621,6 +621,17 @@ def test_mcp_tools_count_as_writes_without_a_model(
     run(tools, "--target=real", "-k", "add").assert_outcomes(skipped=1)
 
 
+def test_mcp_unknown_tools_are_probes_not_writes(tools: pytest.Pytester) -> None:
+    tools.makepyfile(
+        test_unknown="""
+async def test_unknown(mcp):
+    refused = await mcp.call_tool("make_coffee", {})
+    assert refused["code"] == -32602
+"""
+    )
+    run(tools, "--target=real", "test_unknown.py").assert_outcomes(passed=1)  # no approval asked
+
+
 def test_mcp_parity_per_tool(tools: pytest.Pytester, monkeypatch: pytest.MonkeyPatch) -> None:
     approve(tools, "MCP tools/call:*")
     result = run(tools, "--target=parity", "--allow-real-writes")

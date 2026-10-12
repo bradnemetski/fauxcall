@@ -22,7 +22,7 @@ from urllib.parse import parse_qsl, urlsplit
 import httpx2
 
 from fauxcall import jsonpath
-from fauxcall.errors import HttpStatusError, RecordingError
+from fauxcall.errors import CredentialsRefusedError, HttpStatusError, RecordingError
 from fauxcall.logs import get_logger
 from fauxcall.mcpwire import protocol
 from fauxcall.mcpwire.client import McpWireClient, RpcCall, Transport
@@ -94,13 +94,17 @@ def needs_approval(call: PlannedCall, tools: Mapping[str, JsonValue]) -> bool:
     """Whether a planned call is a write, which needs the user's up-front approval.
 
     An explicit ``mutating`` wins. MCP: only ``tools/call`` of a tool that may modify state (no
-    ``readOnlyHint: true`` in its definition in ``tools``); the protocol's own methods
-    (``initialize``, listings, reads) never write. HTTP: anything but GET/HEAD/OPTIONS.
+    ``readOnlyHint: true`` in its definition in ``tools``); a name missing from a known listing is
+    a probe the server refuses as unknown, and the protocol's own methods (``initialize``,
+    listings, reads) never write. HTTP: anything but GET/HEAD/OPTIONS.
     """
     if call.mutating is not None:
         return call.mutating
     if call.endpoint.startswith("MCP tools/call:"):
-        return tool_is_mutating(tools.get(call.endpoint.split(":", 1)[1]))
+        name = call.endpoint.split(":", 1)[1]
+        if tools and name not in tools:  # a name the server doesn't list: refused as unknown
+            return False
+        return tool_is_mutating(tools.get(name))
     if call.endpoint.startswith("MCP "):
         return False
     return call.is_mutating
@@ -306,7 +310,7 @@ class McpRecorder:
                     await self._close(client)
                     if isinstance(error, HttpStatusError) and error.status in _REFUSED:
                         # It speaks this transport; the other one won't take the key either.
-                        raise RecordingError(self._auth_problem(error)) from error
+                        raise CredentialsRefusedError(self._auth_problem(error)) from error
                     failures.append(error)
                     if not _may_pass(error):
                         break

@@ -286,7 +286,10 @@ async def mcp(
     model = fauxcall_fake.model
 
     def mutating(name: str) -> bool:
-        tool = model.mcp.tool(name) if model is not None and model.mcp is not None else None
+        listed = model.mcp.tools if model is not None and model.mcp is not None else []
+        tool = next((t for t in listed if t.name == name), None)
+        if listed and tool is None:  # not a tool the server lists: it refuses it unknown
+            return False
         return tool_is_mutating(tool.definition if tool else None)
 
     async with http:

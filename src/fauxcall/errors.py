@@ -28,6 +28,10 @@ class HttpStatusError(RecordingError):
         self.www_authenticate = www_authenticate
 
 
+class CredentialsRefusedError(RecordingError):
+    """The real service refused the credentials (or their absence) with a 401 or 403."""
+
+
 class ApprovalRequiredError(RecordingError):
     """A mutating call was attempted without an up-front approval."""
 

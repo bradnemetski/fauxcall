@@ -10,7 +10,7 @@ from fauxcall import jsonfmt
 from fauxcall.errors import HttpStatusError, RecordingError
 from fauxcall.mcpwire import protocol
 from fauxcall.mcpwire.client import McpWireClient
-from fauxcall.model import Approval, Approvals, McpTransportModel, RecordingPlan
+from fauxcall.model import Approval, Approvals, McpTransportModel, PlannedCall, RecordingPlan
 from fauxcall.model.mcp import PROBE_PROMPT, PROBE_RESOURCE, PROBE_TOOL
 from fauxcall.recording import McpRecorder, RecordingStore, tool_is_mutating
 from fauxcall.recording.mcp import (
@@ -20,6 +20,7 @@ from fauxcall.recording.mcp import (
     _may_pass,
     _method_of,
     _params_for,
+    needs_approval,
 )
 from fauxcall.recording.privacy_filter import PrivacyConfig, RecordingPrivacy
 from fauxcall.storage import read_model, write_model
@@ -141,6 +142,17 @@ def test_listing_extras_keep_the_real_results_other_members_in_order() -> None:
     assert _listing_extras({"tools": [], "nextCursor": "c"}, "tools") is None  # nothing more
     assert _listing_extras({"other": 1}, "tools") is None
     assert _listing_extras(None, "tools") is None
+
+
+def test_unknown_tool_names_are_probes_not_writes() -> None:
+    def call(tool: str) -> PlannedCall:
+        return PlannedCall.model_validate(tool_call(tool, {}))
+
+    listed: dict[str, JsonValue] = {"echo": ECHO, "delete_item": DELETE_ITEM}
+    assert not needs_approval(call("make_coffee"), listed)  # refused as unknown
+    assert needs_approval(call("delete_item"), listed)
+    assert not needs_approval(call("echo"), listed)
+    assert needs_approval(call("make_coffee"), {})  # no listing to tell: may modify state
 
 
 def test_answer_of_names_how_each_reply_answered() -> None:

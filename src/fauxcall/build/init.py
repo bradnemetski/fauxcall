@@ -123,7 +123,9 @@ def ensure_env(layout: FakeLayout, base_url: str) -> bool:
         "# Secrets for this fake. Gitignored: never commit it.\n"
         f"FAUXCALL_REAL__BASE_URL={base_url}\n"
         f"FAUXCALL_PSEUDONYM_KEY={Pseudonymizer.generate_key()}\n"
-        "# Credentials for the real API go here (see .env.example), e.g.\n"
+        "# Credentials for the real API go here (see .env.example): one line, e.g. a token\n"
+        '# FAUXCALL_REAL__HEADERS=\'{"Authorization": "Bearer ..."}\'\n'
+        "# or an API key header\n"
         '# FAUXCALL_REAL__HEADERS=\'{"X-API-Key": "..."}\'\n'
         "# TYPESAFE_API_KEY=...\n"
     )

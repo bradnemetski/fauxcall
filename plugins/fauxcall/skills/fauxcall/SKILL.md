@@ -74,7 +74,9 @@ If the service needs credentials just to connect (an MCP server behind a key or 
 `mcp.stripe.com`), ask for them **before** init: the user puts them in `fauxcall/<name>/.env` as
 `FAUXCALL_REAL__HEADERS='{"Authorization": "Bearer …"}'`, and `init --name <name>` reads them from
 there. The same file serves recording and tests later, so it is the only place a key goes. Never
-read, print, source or move that file yourself: if init fails on auth, ask the user to check it.
+read, print, source or move that file yourself: if init fails on auth, it creates the file (with
+commented examples) when missing and prints its path; give the user that path and its advice.
+`fauxcall env check <name>` shows which headers are set, and their form, without their values.
 
 Read the summary. Free-form docs: follow [workflow § docs](references/workflow.md#free-form-documentation).
 MCP servers: also read [mcp](references/mcp.md).
@@ -149,6 +151,10 @@ Follow [consistency](references/consistency.md) and [time](references/time.md):
 fauxcall scaffold <name>
 cd fauxcall/<name> && uv sync
 ```
+
+(If uv warns that `VIRTUAL_ENV` doesn't match the project's environment, the user's own project
+environment is active: it is harmless, since uv uses the fake's `.venv`. `unset VIRTUAL_ENV` in
+that shell silences it.)
 
 Implement `computed`/`custom` endpoints (and MCP tools) in `src/<package>/handlers.py`
 ([model § custom handlers](references/model.md#custom-handlers)), with unit tests. Quality gates — all
