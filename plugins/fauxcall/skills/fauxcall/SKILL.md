@@ -47,13 +47,21 @@ Use the `fauxcall` command for every step (`uvx fauxcall` if `fauxcall` is not o
 9. **Ask only at the up-front gate** and for genuinely ambiguous real-world behavior. Batch questions.
    In a non-interactive environment, read answers from `fauxcall/<name>/answers.json`
    ([headless](references/headless.md)) — never wait for input that cannot come.
+10. **Never park the build on a question after the gate.** The user is usually away by then; one
+   question can stall hours of work. What the gate approved stands: don't ask again for writes it
+   already covers. If more writes or probes would help, note them (`fauxcall progress note`), carry on
+   with what you have, and ask once, in the final report. Stop only when nothing else can proceed.
 
 ## Phase 0 — start or resume
 
 ```bash
-fauxcall doctor
+fauxcall doctor --skill-dir "<the folder this SKILL.md is in>"
 fauxcall status                      # existing fakes and their next action
 ```
+
+If doctor says the skill doesn't match the CLI, **stop** and give the user the fix it prints: these
+instructions were written for a different release of the tool, and following them with it goes wrong
+in ways that are hard to see.
 
 If a fake for this input exists, run `fauxcall status <name>` and continue at its next action
 (skip to that phase). Otherwise create it, always with `--name`:
@@ -171,6 +179,9 @@ remaining failure is understood and explained. Checkpoint `e2e_tests`, `parity`.
   a new session) check the model, recordings and parity report against the docs. It works offline
   (never ask it to call the real API): when it needs evidence it proposes probes as plan entries,
   and you record them with `fauxcall record` (approval rules apply). Fix what it finds.
+  Checkpoint `fauxcall progress phase <name> review in_progress` first, then run the reviewer in the
+  **foreground** and wait for its report: never end your turn while it runs, since a review left in
+  the background is lost when the session ends. `fauxcall status` flags a review that never finished.
 - Write the known limitations (what differs from the real API, and why) into the fake's `README.md`
   between its `fauxcall:notes` markers: the only part of the README `fauxcall scaffold` keeps.
 - `fauxcall report <name>` → `data/reports/summary.md`.

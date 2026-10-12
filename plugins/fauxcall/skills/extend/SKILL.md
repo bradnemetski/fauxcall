@@ -13,6 +13,8 @@ allowed-tools: Bash(fauxcall *) Bash(uvx fauxcall *)
 Arguments: the fake's name, then optional endpoint ids/globs or tool names (default: everything in
 the current spec that the model lacks). Follow the main `/fauxcall` skill's rules and guides.
 
+0. `fauxcall doctor --skill-dir "<the folder this SKILL.md is in>"`: if it says the skill doesn't
+   match the CLI, stop and give the user the fix it prints.
 1. Find what's missing: REST — re-import the current spec (`fauxcall spec import <name> <file>` after
    saving the latest spec under `data/source/`), compare with `fauxcall endpoints <name>`;
    MCP — `fauxcall mcp introspect <name>` (keeps modeled behavior of existing tools).

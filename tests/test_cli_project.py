@@ -21,6 +21,7 @@ from fauxcall import __version__
 from fauxcall.cli import common
 from fauxcall.cli import main as cli_main
 from fauxcall.cli.main import app
+from fauxcall.cli.project import _release, skill_version
 from fauxcall.config import FakeSettings
 from fauxcall.model.api import ApiModel, RealTarget, SourceInfo
 from fauxcall.model.auth import AuthModel, AuthScheme
@@ -620,12 +621,33 @@ def test_env_check_never_prints_values(ws: Workspace) -> None:
     )
     write_fake(ws, "shop", rest_model(), env=env)
     output = invoke("env", "check", "shop").output
-    assert "- real headers: Authorization" in output
+    assert "- real headers: Authorization (Bearer …)" in output
     assert "- pseudonym key: set" in output
     assert "- Jev key (TYPESAFE_API_KEY): set" in output
     assert "- real base URL: (model default)" in output
     assert secret not in output
     assert "jev-secret-123" not in output
+
+
+@pytest.mark.parametrize(
+    ("headers", "shown"),
+    [
+        ('{"Authorization": "sk_test_0123456789"}', "Authorization (no scheme: most servers"),
+        ('{"Authorization": "hunter2 0123456789"}', "Authorization (unrecognized scheme)"),
+        ('{"X-API-Key": "sk_test_0123456789", "X-Empty": ""}', "X-API-Key, X-Empty (empty)"),
+    ],
+)
+def test_env_check_works_before_init_and_shows_only_shapes(
+    ws: Workspace, headers: str, shown: str
+) -> None:
+    fake = ws.fake("stripe")
+    fake.root.mkdir(parents=True)
+    fake.env_file.write_text(f"FAUXCALL_REAL__HEADERS='{headers}'\n")
+    output = invoke("env", "check", "stripe").output
+    assert f"- real headers: {shown}" in output
+    assert "0123456789" not in output
+    assert "hunter2" not in output
+    assert "error:" in invoke("env", "check", "nothing-here", code=1).output
 
 
 def test_env_key_creates_adds_or_keeps(ws: Workspace) -> None:
@@ -815,6 +837,43 @@ def test_doctor_without_uv(ws: Workspace, monkeypatch: pytest.MonkeyPatch) -> No
     assert "✗ uv on PATH: install: https://docs.astral.sh/uv/" in result.output
     assert "docker (optional): not found" in result.output
     assert f"fauxcall=={__version__} from PyPI" in result.output
+
+
+def _plugin_skill(root: Path, version: str) -> Path:
+    (root / ".claude-plugin").mkdir(parents=True)
+    (root / ".claude-plugin" / "plugin.json").write_text(json.dumps({"version": version}))
+    skill = root / "skills" / "fauxcall"
+    skill.mkdir(parents=True)
+    return skill
+
+
+def test_doctor_checks_the_skill_matches_the_cli(ws: Workspace, tmp_path: Path) -> None:
+    same = _plugin_skill(tmp_path / "same", __version__)
+    assert (
+        f"✓ skill matches the CLI: {__version__}"
+        in invoke("doctor", "--skill-dir", str(same)).output
+    )
+    older = _plugin_skill(tmp_path / "older", "0.0.1")
+    result = invoke("doctor", "--skill-dir", str(older), code=1)
+    assert f"✗ skill matches the CLI: skill 0.0.1, CLI {__version__}" in result.output
+    assert "claude plugin update fauxcall@fauxcall" in result.output
+    newer = _plugin_skill(tmp_path / "newer", "99.0.0")
+    assert "uv tool upgrade fauxcall" in invoke("doctor", "--skill-dir", str(newer), code=1).output
+    copied = tmp_path / "agents" / "skills" / "fauxcall"
+    copied.mkdir(parents=True)
+    assert "unknown (a copied skill)" in invoke("doctor", "--skill-dir", str(copied)).output
+
+
+def test_skill_version_of_odd_plugins(tmp_path: Path) -> None:
+    broken = _plugin_skill(tmp_path / "broken", "1")
+    (tmp_path / "broken" / ".claude-plugin" / "plugin.json").write_text("not json")
+    assert skill_version(broken) is None
+    unversioned = _plugin_skill(tmp_path / "unversioned", "1")
+    (tmp_path / "unversioned" / ".claude-plugin" / "plugin.json").write_text("{}")
+    assert skill_version(unversioned) is None
+    assert _release("0.1.10") > _release("0.1.2")
+    assert _release("1.2.3rc1") == (1, 2, 3)
+    assert _release("dev") == ()
 
 
 def test_module_entry_point_in_process(

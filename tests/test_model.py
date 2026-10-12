@@ -46,7 +46,7 @@ from fauxcall.model import (
     SourceInfo,
 )
 from fauxcall.model.plan import PlannedFile, StreamSpec, WsFrame
-from fauxcall.model.progress import GateAnswers, PhaseState
+from fauxcall.model.progress import PHASES, GateAnswers, PhaseState
 from fauxcall.storage import read_model, write_model
 from fauxcall.timefmt import TimeFormat
 from fauxcall.types import HttpMethod
@@ -496,8 +496,16 @@ def test_progress_tracks_phases_and_endpoints() -> None:
         entry.steps[step] = "done"
     assert entry.next_step() is None
     assert progress.next_action() == "record: pending"
-    for phase in list(progress.phases):
+    for phase in PHASES:
         progress.phases[phase] = PhaseState(status="done")
+    progress.phases["review"] = PhaseState(status="in_progress", started_at=NOW)
+    assert progress.next_action() == (
+        f"review: in progress since {NOW:%Y-%m-%d %H:%M} UTC; if no reviewer is running now, "
+        "it was interrupted: run it again (in the foreground)"
+    )
+    progress.phases["review"] = PhaseState(status="in_progress")
+    assert progress.next_action().startswith("review: in progress; if no reviewer")
+    progress.phases["review"] = PhaseState(status="done")
     assert progress.next_action() == "done"
     progress.gate = GateAnswers(jev_key=True, mutations="approved")
     assert Progress.model_validate(progress.model_dump()) == progress

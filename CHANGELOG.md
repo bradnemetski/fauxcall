@@ -6,6 +6,35 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- `fauxcall doctor --skill-dir` checks that the running skill and the CLI come from the same
+  release, and says how to update whichever is behind. The skills run it first and stop on a
+  mismatch.
+- MCP tool handlers can answer with a JSON-RPC error (`raise RpcError(code, message)`) or a whole
+  HTTP reply (`raise EarlyResponse(...)`, e.g. a bare `403`), and keep per-session state in
+  `ctx.state`, which `reset` clears.
+- Account ids are pseudonymized wherever they appear: Stripe's `acct_…` always, plus the patterns
+  in `privacy.json` `identifiers` (a named group `id` covers an account id embedded in other ids).
+- `fauxcall env check` works before `init`, on a folder holding only the prepared `.env`, and
+  shows each header's shape (`Authorization (Bearer …)`, or a missing scheme) without its value.
+
+### Changed
+
+- Connecting to an MCP server says when the credentials were refused (with the server's
+  `WWW-Authenticate` and what to fix), names what each transport answered, and retries a passing
+  Streamable HTTP failure once.
+- A fake repeats the real "unknown tool/resource/prompt" errors with the caller's name instead of
+  the probe's, and listing results keep the real server's other members (`ttlMs`, `_meta` …).
+- `fauxcall record` lists calls that failed and exits with an error when any did; MCP calls show
+  how they answered (`200 isError`, `200 error -32602`).
+- MCP fakes' READMEs give a ready MCP client configuration and say which credentials to send;
+  `fauxcall up` includes those headers too. The generated CI installs from the lockfile
+  (`--locked`) with Python 3.12.
+- The skill never waits on a question after the up-front gate, runs the independent review in the
+  foreground, and `fauxcall status` flags a review that never finished.
+- `FAUXCALL_LOG_LEVEL` accepts any case (`info`).
+
 ## [0.1.2]
 
 ### Fixed

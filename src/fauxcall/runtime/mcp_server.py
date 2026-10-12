@@ -3,6 +3,11 @@
 Tool definitions, capabilities, server info and instructions are served verbatim from the model;
 tool calls are answered from recordings (exact arguments first, then the closest recording —
 Jev when available), by custom handlers, or with the real server's error shapes.
+
+A custom tool handler returns the tool's result. To answer the way real servers also do, it can
+instead ``raise RpcError(code, message)`` (a JSON-RPC error) or raise
+:class:`~fauxcall.runtime.EarlyResponse` (a whole HTTP reply, like a bare ``403`` with a
+``WWW-Authenticate`` header). ``ctx.state`` holds per-session tool state that ``reset`` clears.
 """
 
 from __future__ import annotations
@@ -22,7 +27,8 @@ from fauxcall import jsonfmt
 from fauxcall.clock import ns_to_datetime
 from fauxcall.logs import bind_context, clear_context, get_logger
 from fauxcall.mcpwire import protocol
-from fauxcall.model.mcp import FALLBACK_PROTOCOL_VERSION
+from fauxcall.model.mcp import FALLBACK_PROTOCOL_VERSION, PROBE_PROMPT, PROBE_RESOURCE, PROBE_TOOL
+from fauxcall.runtime.context import EarlyResponse
 from fauxcall.runtime.inputs import json_inputs
 from fauxcall.runtime.journal import JournalEntry
 from fauxcall.runtime.matching import Candidate, match
@@ -53,6 +59,35 @@ def _is_error_answer(answer: JsonObject) -> bool:
 
 class _InvalidCursorError(ValueError):
     """A ``cursor`` this server never issued."""
+
+
+class RpcError(Exception):
+    """Raised by a tool handler to answer the call with a JSON-RPC error instead of a result."""
+
+    def __init__(self, code: int, message: str, data: JsonValue = None) -> None:
+        super().__init__(message)
+        self.code = code
+        self.message = message
+        self.data = data
+
+
+_PROBES: Final = {
+    "unknown_tool": PROBE_TOOL,
+    "resources/read_not_found": PROBE_RESOURCE,
+    "prompts/get_not_found": PROBE_PROMPT,
+}
+"""Situations whose recorded error names the probe introspection asked for."""
+
+
+def _renamed(value: JsonValue, probe: str, actual: str) -> JsonValue:
+    """``value`` with every mention of ``probe`` in its strings replaced by ``actual``."""
+    if isinstance(value, str):
+        return value.replace(probe, actual)
+    if isinstance(value, list):
+        return [_renamed(item, probe, actual) for item in value]
+    if isinstance(value, dict):
+        return {key: _renamed(item, probe, actual) for key, item in value.items()}
+    return value
 
 
 def tool_endpoint(name: str) -> str:
@@ -94,9 +129,21 @@ class McpFake:
             return str(result["protocolVersion"])
         return FALLBACK_PROTOCOL_VERSION
 
-    def _error(self, request_id: JsonValue, situation: str, code: int, message: str) -> JsonObject:
+    def _error(
+        self,
+        request_id: JsonValue,
+        situation: str,
+        code: int,
+        message: str,
+        *,
+        target: str | None = None,
+    ) -> JsonObject:
+        """The real server's error for ``situation``, naming the caller's ``target`` in it."""
         recorded = self.model.errors.get(situation)
         if isinstance(recorded, dict):
+            probe = _PROBES.get(situation)
+            if probe is not None and target is not None:
+                recorded = _renamed(recorded, probe, target)
             return protocol.with_id(recorded, request_id)
         return protocol.error(request_id, code, message)
 
@@ -163,23 +210,17 @@ class McpFake:
             case "ping" | "logging/setLevel":
                 return protocol.result(request_id, {})
             case "tools/list":
-                return protocol.result(
-                    request_id,
-                    self._page(params, [t.definition for t in self.model.tools], "tools"),
-                )
+                tools = [t.definition for t in self.model.tools]
+                return self._listing(request_id, method, self._page(params, tools, "tools"))
             case "resources/list":
-                return protocol.result(
-                    request_id, self._page(params, self.model.resources, "resources")
-                )
+                page = self._page(params, self.model.resources, "resources")
+                return self._listing(request_id, method, page)
             case "resources/templates/list":
-                return protocol.result(
-                    request_id,
-                    self._page(params, self.model.resource_templates, "resourceTemplates"),
-                )
+                page = self._page(params, self.model.resource_templates, "resourceTemplates")
+                return self._listing(request_id, method, page)
             case "prompts/list":
-                return protocol.result(
-                    request_id, self._page(params, self.model.prompts, "prompts")
-                )
+                page = self._page(params, self.model.prompts, "prompts")
+                return self._listing(request_id, method, page)
             case "tools/call":
                 return await self._call_tool(ctx, request_id, params)
             case "resources/read" | "prompts/get" | "completion/complete":
@@ -190,12 +231,25 @@ class McpFake:
                 if isinstance(recorded, dict):
                     return protocol.with_id(recorded, request_id)
                 return self._error(
-                    request_id, f"{method}_not_found", protocol.INVALID_PARAMS, "Not found"
+                    request_id,
+                    f"{method}_not_found",
+                    protocol.INVALID_PARAMS,
+                    "Not found",
+                    target=str(detail) if detail else None,
                 )
             case _:
                 return self._error(
                     request_id, "method_not_found", protocol.METHOD_NOT_FOUND, "Method not found"
                 )
+
+    def _listing(self, request_id: JsonValue, method: str, page: JsonObject) -> JsonObject:
+        """A listing page with the real result's other members, in the recorded order."""
+        extras = self.model.listing_extras.get(method)
+        if not isinstance(extras, dict):
+            return protocol.result(request_id, page)
+        body: JsonObject = {name: page.get(name, value) for name, value in extras.items()}
+        body.update({name: value for name, value in page.items() if name not in body})
+        return protocol.result(request_id, body)
 
     def _page(self, params: JsonObject, items: list[JsonValue], key: str) -> JsonObject:
         size = self.model.tools_page_size if key == "tools" else None
@@ -222,7 +276,11 @@ class McpFake:
         tool = self.model.tool(name)
         if tool is None:
             return self._error(
-                request_id, "unknown_tool", protocol.INVALID_PARAMS, f"Unknown tool: {name}"
+                request_id,
+                "unknown_tool",
+                protocol.INVALID_PARAMS,
+                f"Unknown tool: {name}",
+                target=name,
             )
         started = time.perf_counter()
         definition = tool.definition if isinstance(tool.definition, dict) else {}
@@ -234,7 +292,12 @@ class McpFake:
                 refused = self._invalid_args(request_id, tool, exc.message)
                 await self._tool_latency(ctx, tool, refused, started, refused_arguments=True)
                 return refused
-        answer = await self._tool_answer(ctx, request_id, tool, arguments)
+        try:
+            answer = await self._tool_answer(ctx, request_id, tool, arguments)
+        except EarlyResponse:  # an HTTP-level refusal takes the tool's error time too
+            refusal = protocol.error(request_id, protocol.INTERNAL_ERROR, "refused")
+            await self._tool_latency(ctx, tool, refusal, started)
+            raise
         await self._tool_latency(ctx, tool, answer, started)
         return answer
 
@@ -275,7 +338,10 @@ class McpFake:
                 return protocol.error(
                     request_id, protocol.INTERNAL_ERROR, f"fauxcall: no handler for {name}"
                 )
-            value = await handler(ctx, arguments)
+            try:
+                value = await handler(ctx, arguments)
+            except RpcError as error:
+                return protocol.error(request_id, error.code, error.message, error.data)
             return protocol.result(request_id, value)
         recorded = await self._recorded_result(tool_endpoint(name), flatten_args(arguments), tool)
         if isinstance(recorded, dict):
@@ -379,7 +445,10 @@ class McpFake:
         requests = [m for m in messages if protocol.is_request(m)]
         if not requests:
             return Response(status_code=202)
-        replies = [await self._answer(request, m) for m in requests if isinstance(m, dict)]
+        try:
+            replies = [await self._answer(request, m) for m in requests if isinstance(m, dict)]
+        except EarlyResponse as early:  # a tool answered the whole HTTP request
+            return early.response
         return self._reply(replies, headers)
 
     async def _answer(self, request: Request, message: JsonObject) -> JsonObject:
@@ -399,7 +468,12 @@ class McpFake:
         else:
             if fault is not None:
                 await self.runtime.pause(fault.delay_ms / 1000)
-            reply = await self.respond_to(ctx, message)
+            try:
+                reply = await self.respond_to(ctx, message)
+            except EarlyResponse as early:
+                self._journal(ctx, request, endpoint_id, message, None, started, None, early)
+                clear_context()
+                raise
         self._journal(
             ctx, request, endpoint_id, message, reply, started, fault.kind if fault else None
         )
@@ -412,12 +486,19 @@ class McpFake:
         request: Request,
         endpoint_id: str,
         message: JsonObject,
-        reply: JsonObject,
+        reply: JsonObject | None,
         started: float,
         fault: str | None,
+        early: EarlyResponse | None = None,
     ) -> None:
         if not self.runtime.journal.enabled:
             return
+        response_headers: list[tuple[str, str]] = []
+        response_text: str | None = None
+        if early is not None:
+            response_headers = self.runtime.redact(early.response.headers.items())
+            body = getattr(early.response, "body", b"")
+            response_text = bytes(body).decode("utf-8", "replace") or None
         self.runtime.journal.add(
             JournalEntry(
                 seq=ctx.seq,
@@ -429,8 +510,10 @@ class McpFake:
                 endpoint=endpoint_id,
                 request_headers=self.runtime.redact(request.headers.items()),
                 request_body=message,
-                status=200,
+                status=early.response.status_code if early is not None else 200,
+                response_headers=response_headers,
                 response_body=reply,
+                response_text=response_text,
                 duration_ms=round((time.perf_counter() - started) * 1000, 3),
                 fault=fault,
                 identity=ctx.identity.name if ctx.identity else None,
@@ -478,7 +561,10 @@ class McpFake:
             return Response(content=b"Could not parse message", status_code=400)
         for message in parsed if isinstance(parsed, list) else [parsed]:
             if protocol.is_request(message) and isinstance(message, dict):
-                reply = await self._answer(request, message)
+                try:
+                    reply = await self._answer(request, message)
+                except EarlyResponse as early:  # a tool answered the POST itself
+                    return early.response
                 await queue.put(protocol.sse_event(reply))
         return Response(content=b"Accepted", status_code=202)
 

@@ -1013,9 +1013,12 @@ def test_rescaffold_keeps_owned_files_and_rewrites_generated_ones(tmp_path: Path
     for path in generated:
         assert path in result.written
     for path in generated:
-        if path.name != ".env.example":
+        if path.name not in {".env.example", "README.md"}:
             assert path.read_text() == originals[path], path
     assert "Bearer your-token" in (layout.root / ".env.example").read_text()
+    readme = (layout.root / "README.md").read_text()
+    send = "refuses calls without credentials: send `Authorization: Bearer any-token` (any\n"
+    assert send in readme
     assert workspace.root / "pyproject.toml" in result.kept
 
 
@@ -1141,8 +1144,9 @@ def test_ports_members_and_listings_across_fakes(tmp_path: Path) -> None:
     job = workflow["jobs"]["fake"]
     assert job["strategy"]["matrix"]["fake"] == ["first", "second"]
     assert job["defaults"]["run"]["working-directory"] == "fakes/${{ matrix.fake }}"
+    assert job["steps"][1]["with"] == {"python-version": "3.12"}
     assert [step.get("run") for step in job["steps"][2:]] == [
-        "uv sync --all-groups",
+        "uv sync --locked --all-groups",
         "uv run ruff check .",
         "uv run ruff format --check .",
         "uv run mypy",
@@ -1281,8 +1285,14 @@ def test_mcp_fake(tmp_path: Path) -> None:
         in scenarios
     )
     readme = (layout.root / "README.md").read_text()
-    assert "MCP endpoint: `http://127.0.0.1:8701/mcp`" in readme
-    assert "tools: 3" in readme
+    assert "Point your agent's MCP client at `http://127.0.0.1:8701/mcp`" in readme
+    assert '"url": "http://127.0.0.1:8701/mcp"' in readme
+    assert "claude mcp add --transport http deepwiki http://127.0.0.1:8701/mcp`." in readme
+    assert "Tools: 3 · resources: 0 · prompts: 0." in readme
+    assert "Endpoints:" not in readme
+    assert "data/world/" not in readme  # no collections, no world
+    assert "routes.py" not in readme  # an MCP fake has no REST routes
+    assert "refuses calls without credentials" not in readme  # DeepWiki needs none
 
 
 @dataclass(frozen=True, slots=True)

@@ -127,5 +127,11 @@ class Progress(Model):
             if state.status == "blocked":
                 note = state.notes[-1] if state.notes else "see notes"
                 return f"{phase}: blocked ({note})"
+            if phase == "review" and state.status == "in_progress":
+                since = f" since {state.started_at:%Y-%m-%d %H:%M} UTC" if state.started_at else ""
+                return (
+                    f"review: in progress{since}; if no reviewer is running now, it was "
+                    "interrupted: run it again (in the foreground)"
+                )
             return f"{phase}: {state.status}"
         return "done"

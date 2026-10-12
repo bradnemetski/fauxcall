@@ -13,6 +13,8 @@ allowed-tools: Bash(fauxcall *) Bash(uvx fauxcall *)
 The argument is the fake's name (see `fauxcall status`). Follow the main `/fauxcall` skill's ground
 rules (approvals, secrets, evidence) and its reference guides.
 
+0. `fauxcall doctor --skill-dir "<the folder this SKILL.md is in>"`: if it says the skill doesn't
+   match the CLI, stop and give the user the fix it prints.
 1. `fauxcall status <name>` and `fauxcall report <name>` — know what exists and the last parity score.
 2. **Drift check first (read-only):** `fauxcall verify <name> --target parity` (no writes). The report
    lists every place the real API now differs.

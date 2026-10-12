@@ -19,6 +19,15 @@ class RecordingError(FauxcallError):
     """A recording plan could not be executed."""
 
 
+class HttpStatusError(RecordingError):
+    """The server answered a protocol step with an HTTP error status."""
+
+    def __init__(self, message: str, status: int, www_authenticate: str | None = None) -> None:
+        super().__init__(message)
+        self.status = status
+        self.www_authenticate = www_authenticate
+
+
 class ApprovalRequiredError(RecordingError):
     """A mutating call was attempted without an up-front approval."""
 

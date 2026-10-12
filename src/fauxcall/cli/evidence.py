@@ -15,6 +15,7 @@ import typer
 from fauxcall import jsonfmt
 from fauxcall.cli import common
 from fauxcall.cli.common import (
+    EXIT_ERROR,
     clean_errors,
     cli_settings,
     echo,
@@ -33,7 +34,7 @@ from fauxcall.model.plan import Approval, Approvals, PlannedCall, PlannedRequest
 from fauxcall.model.realism import LatencyProfile
 from fauxcall.recording.mcp import McpRecorder, needs_approval
 from fauxcall.recording.privacy_filter import PrivacyConfig, RecordingPrivacy
-from fauxcall.recording.recorder import RealTarget, Recorder
+from fauxcall.recording.recorder import RealTarget, Recorder, RunReport
 from fauxcall.recording.store import RecordingStore
 from fauxcall.storage import read_model, write_model
 
@@ -326,7 +327,7 @@ def record(
     approvals = _approvals(fake)
     store = RecordingStore(fake.recordings)
 
-    async def go() -> str:
+    async def go() -> RunReport:
         async with common.http_client(follow_redirects=False) as http:
             if model.kind == "mcp":
                 tools = {t.name: t.definition for t in (model.mcp.tools if model.mcp else [])}
@@ -362,9 +363,12 @@ def record(
                     files_root=fake.root,
                 )
                 report = await recorder.run(parsed)
-        return report.summary()
+        return report
 
-    echo(run(go()))
+    report = run(go())
+    echo(report.summary())
+    if report.failed:
+        raise typer.Exit(EXIT_ERROR)
 
 
 @clean_errors

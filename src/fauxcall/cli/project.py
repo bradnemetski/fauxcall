@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import itertools
 import json
 import os
 import shutil
@@ -450,18 +451,38 @@ env_app = typer.Typer(help="The fake's .env (credentials, keys) — values are n
 @env_app.command("check")
 @clean_errors
 def env_check(name: str) -> None:
-    """Which settings are present (without showing values)."""
-    fake = layout(name)
+    """Which settings are present (without showing values).
+
+    Works before ``init`` too, on a folder holding only the ``.env`` the user prepared.
+    """
+    fake = workspace().fake(name)
+    if not fake.env_file.exists():
+        fake = layout(name)  # a clear error when the fake doesn't exist either
     settings = fake_settings(fake)
+    headers = {key: value.get_secret_value() for key, value in settings.real.headers.items()}
     rows = [
         ("real base URL", settings.real.base_url or "(model default)"),
-        ("real headers", ", ".join(settings.real.headers) or "-"),
+        ("real headers", ", ".join(_header_shape(k, v) for k, v in headers.items()) or "-"),
         ("real query params", ", ".join(settings.real.query) or "-"),
         ("pseudonym key", "set" if settings.pseudonym_key else "MISSING"),
         ("Jev key (TYPESAFE_API_KEY)", "set" if settings.typesafe_api_key else "not set"),
     ]
     for label, value in rows:
         echo(f"- {label}: {value}")
+
+
+_AUTH_SCHEMES = frozenset({"bearer", "basic", "token", "digest", "bot", "apikey", "dpop"})
+
+
+def _header_shape(name: str, value: str) -> str:
+    """A header's name and the shape of its value: never the value itself."""
+    if name.lower() != "authorization":
+        return name if value else f"{name} (empty)"
+    scheme, _, credential = value.strip().partition(" ")
+    if not credential.strip():
+        return f"{name} (no scheme: most servers expect 'Bearer <token>')"
+    known = scheme.lower() in _AUTH_SCHEMES  # only a known word: the value could be anything
+    return f"{name} ({scheme} …)" if known else f"{name} (unrecognized scheme)"
 
 
 @env_app.command("key")
@@ -562,13 +583,73 @@ def mcp_introspect(name: str) -> None:
 # -- doctor ---------------------------------------------------------------------------------------
 
 
+PLUGIN_UPDATE: Final = (
+    "claude plugin marketplace update fauxcall && claude plugin update fauxcall@fauxcall, "
+    "then restart Claude Code"
+)
+
+
+def skill_version(skill_dir: Path) -> str | None:
+    """The version of the plugin a skill folder belongs to (``None`` for a copied skill)."""
+    for folder in [skill_dir, *skill_dir.parents][:4]:
+        manifest = folder / ".claude-plugin" / "plugin.json"
+        if manifest.is_file():
+            try:
+                version = json.loads(manifest.read_text(encoding="utf-8")).get("version")
+            except (ValueError, OSError, AttributeError):
+                return None
+            return str(version) if version else None
+    return None
+
+
+def _release(version: str) -> tuple[int, ...]:
+    """``"0.1.10"`` -> ``(0, 1, 10)``, so versions compare as numbers (suffixes are ignored)."""
+    parts = []
+    for part in version.split("."):
+        digits = "".join(itertools.takewhile(str.isdigit, part))
+        if not digits:
+            break
+        parts.append(int(digits))
+    return tuple(parts)
+
+
+def _skill_check(skill_dir: Path | None) -> tuple[str, bool, str] | None:
+    """Whether the skill's instructions and this CLI come from the same release."""
+    if skill_dir is None:
+        return None
+    version = skill_version(skill_dir)
+    if version is None:
+        return ("skill matches the CLI", True, "unknown (a copied skill): copy it again on upgrade")
+    if version == __version__:
+        return ("skill matches the CLI", True, version)
+    fix = (
+        f"update the plugin: {PLUGIN_UPDATE}"
+        if _release(version) < _release(__version__)
+        else "upgrade the CLI (`uv tool upgrade fauxcall`) or run the plugin's own `fauxcall`"
+    )
+    return (
+        "skill matches the CLI",
+        False,
+        f"skill {version}, CLI {__version__}: the instructions and the tool disagree; {fix}",
+    )
+
+
 @clean_errors
-def doctor() -> None:
+def doctor(
+    skill_dir: Annotated[
+        Path | None,
+        typer.Option(
+            help="The folder the running skill was loaded from: checks it matches this CLI."
+        ),
+    ] = None,
+) -> None:
     """Check the environment FauxCall needs."""
     settings = cli_settings()
     uv = shutil.which("uv")
+    skill = _skill_check(skill_dir)
     checks = [
         ("fauxcall", True, __version__),
+        *([skill] if skill is not None else []),
         ("python >= 3.12", sys.version_info >= (3, 12), sys.version.split()[0]),
         ("uv on PATH", uv is not None, uv or "install: https://docs.astral.sh/uv/"),
         ("workspace", True, f"{settings.workspace} ({len(workspace().fakes())} fakes)"),

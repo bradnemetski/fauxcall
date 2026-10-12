@@ -8,9 +8,17 @@ Precedence (highest first): explicit arguments, environment variables (``FAUXCAL
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, ClassVar, Final, Literal
+from typing import TYPE_CHECKING, Annotated, ClassVar, Final, Literal
 
-from pydantic import AliasChoices, AwareDatetime, BaseModel, ConfigDict, Field, SecretStr
+from pydantic import (
+    AliasChoices,
+    AwareDatetime,
+    BaseModel,
+    BeforeValidator,
+    ConfigDict,
+    Field,
+    SecretStr,
+)
 from pydantic_settings import BaseSettings, SettingsConfigDict, TomlConfigSettingsSource
 
 from fauxcall import __version__
@@ -24,6 +32,14 @@ DEFAULT_JEV_MODEL: Final = "jev-1.13.0"
 
 DEFAULT_ADMIN_PREFIX: Final = "/__fauxcall"
 DEFAULT_SESSION_HEADER: Final = "X-Fauxcall-Session"
+
+
+def _upper(value: object) -> object:
+    return value.upper() if isinstance(value, str) else value
+
+
+Level = Annotated[LogLevel, BeforeValidator(_upper)]
+"""A log level in any case (``info`` is ``INFO``)."""
 
 
 class _Section(BaseModel):
@@ -153,7 +169,7 @@ class FakeSettings(_FauxcallSettings):
     name: str = "fake"
     host: str = "127.0.0.1"
     port: int = Field(default=8000, ge=0, le=65535)
-    log_level: LogLevel = "INFO"
+    log_level: Level = "INFO"
     log_format: LogFormat = "auto"
     data_dir: Path = Path("data")
     fast: bool = Field(default=False, description="Disable latency and rate-limit emulation.")
@@ -214,7 +230,7 @@ class CliSettings(_FauxcallSettings):
     )
 
     workspace: Path = Field(default=Path("fauxcall"), description="Where fakes are generated.")
-    log_level: LogLevel = "WARNING"
+    log_level: Level = "WARNING"
     log_format: LogFormat = "auto"
     user_agent: str = f"fauxcall/{__version__} (+https://github.com/bradnemetski/fauxcall)"
     record_rps: float = Field(default=2.0, gt=0, description="Max requests/second to real APIs.")

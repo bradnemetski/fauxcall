@@ -571,6 +571,25 @@ def test_record_skips_unapproved_writes(ws: Workspace, monkeypatch: pytest.Monke
     assert exchanges(fake) == []
 
 
+def test_record_exits_with_an_error_when_calls_fail(
+    ws: Workspace, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def refused(request: httpx2.Request) -> httpx2.Response:
+        raise httpx2.ConnectError("connection refused", request=request)
+
+    def client(*, follow_redirects: bool = True) -> httpx2.AsyncClient:
+        return httpx2.AsyncClient(
+            transport=httpx2.MockTransport(refused), follow_redirects=follow_redirects
+        )
+
+    monkeypatch.setattr(common, "http_client", client)
+    fake = make_fake(ws)
+    plan = write_plan(fake, "r", [get("list", "/v1/items", "GET /v1/items")])
+    output = invoke("record", "shop", str(plan), code=1).output
+    assert "**1 call(s) failed** and recorded nothing: list." in output
+    assert exchanges(fake) == []
+
+
 def test_record_keeps_every_credential_out_of_recordings(
     ws: Workspace, monkeypatch: pytest.MonkeyPatch
 ) -> None:

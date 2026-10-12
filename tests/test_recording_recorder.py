@@ -718,7 +718,11 @@ async def test_transport_errors_are_reported_per_call(tmp_path: Path) -> None:
         )
     assert report.outcomes[0].error == "ConnectError: connection refused"
     assert report.outcomes[1].statuses == [200]
-    assert "connection refused" in report.summary()
+    assert [outcome.call for outcome in report.failed] == ["down"]
+    summary = report.summary()
+    assert "| down | GET /down |  | - | **failed:** ConnectError: connection refused |" in summary
+    assert "| up | GET /up | 200 |" in summary
+    assert "**1 call(s) failed** and recorded nothing: down. Everything else" in summary
 
 
 # -- auth ------------------------------------------------------------------------------------------

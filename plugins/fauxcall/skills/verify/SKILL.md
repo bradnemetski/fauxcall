@@ -12,6 +12,8 @@ allowed-tools: Bash(fauxcall *) Bash(uvx fauxcall *)
 
 The argument is the fake's name, optionally followed by `--offline` (skip the real API).
 
+0. `fauxcall doctor --skill-dir "<the folder this SKILL.md is in>"`: if it says the skill doesn't
+   match the CLI, stop and give the user the fix it prints.
 1. In `fauxcall/<name>`: `uv sync`, then `uv run ruff check .`, `uv run ruff format --check .`,
    `uv run mypy` — report any failure precisely.
 2. `fauxcall verify <name>` — unit + end-to-end on the fake, with coverage (must be ≥ 95 %).

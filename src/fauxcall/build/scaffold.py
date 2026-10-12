@@ -602,6 +602,33 @@ def credential_lines(model: ApiModel) -> list[str]:
     return lines
 
 
+AGENT_TOKEN: Final = "any-token"  # noqa: S105 - a placeholder, not a credential
+"""The credential examples tell agents to send: a fake in auth mode ``any`` takes any value."""
+
+
+def mcp_server_config(model: ApiModel, port: int) -> dict[str, object]:
+    """An MCP client's entry for the fake (``.mcp.json``): its URL and any headers it needs."""
+    path = model.mcp.transport.path if model.mcp else "/mcp"
+    entry: dict[str, object] = {"type": "http", "url": f"http://127.0.0.1:{port}{path}"}
+    headers = agent_headers(model)
+    if headers:
+        entry["headers"] = headers
+    return entry
+
+
+def agent_headers(model: ApiModel) -> dict[str, str]:
+    """Headers an agent sends the fake when the real service wants credentials in headers."""
+    headers: dict[str, str] = {}
+    for scheme in model.auth.schemes if model.auth is not None else []:
+        if scheme.kind in {"bearer", "oauth2"}:
+            headers.setdefault("Authorization", f"Bearer {AGENT_TOKEN}")
+        elif scheme.kind == "basic":
+            headers.setdefault("Authorization", "Basic YW55OnRva2Vu")  # any:token
+        elif scheme.kind == "api_key" and scheme.location == "header" and scheme.name:
+            headers.setdefault(scheme.name, AGENT_TOKEN)
+    return headers
+
+
 def _auth_query_names(model: ApiModel) -> set[str]:
     schemes = model.auth.schemes if model.auth is not None else []
     return {s.name or "" for s in schemes if s.kind == "api_key" and s.location == "query"}
@@ -734,6 +761,15 @@ def scaffold(
         "credential_lines": credential_lines(model),
         "endpoint_count": len(model.endpoints),
         "tool_count": len(model.mcp.tools) if model.mcp else 0,
+        "resource_count": len(model.mcp.resources) if model.mcp else 0,
+        "prompt_count": len(model.mcp.prompts) if model.mcp else 0,
+        "has_world": bool(model.collections) or (layout.data / "world").is_dir(),
+        "agent_headers": agent_headers(model),
+        "mcp_config": json.dumps(
+            {"mcpServers": {layout.name: mcp_server_config(model, port)}}, indent=2
+        )
+        if model.kind == "mcp"
+        else "",
         "scenarios": scenarios_for(model, exchanges),
         "fixture": "mcp" if model.kind == "mcp" else "api",
         "fixture_type": "McpClient" if model.kind == "mcp" else "ApiClient",

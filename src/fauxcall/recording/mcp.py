@@ -22,11 +22,18 @@ from urllib.parse import parse_qsl, urlsplit
 import httpx2
 
 from fauxcall import jsonpath
-from fauxcall.errors import RecordingError
+from fauxcall.errors import HttpStatusError, RecordingError
 from fauxcall.logs import get_logger
 from fauxcall.mcpwire import protocol
 from fauxcall.mcpwire.client import McpWireClient, RpcCall, Transport
-from fauxcall.model.mcp import McpModel, McpToolModel, McpTransportModel
+from fauxcall.model.mcp import (
+    PROBE_PROMPT,
+    PROBE_RESOURCE,
+    PROBE_TOOL,
+    McpModel,
+    McpToolModel,
+    McpTransportModel,
+)
 from fauxcall.model.plan import Approvals
 from fauxcall.model.recording import Body, CapturedRequest, CapturedResponse, Exchange, StreamEvent
 from fauxcall.recording.recorder import (
@@ -54,7 +61,6 @@ if TYPE_CHECKING:
 
 log = get_logger(__name__)
 
-PROBE_TOOL: Final = "__fauxcall_probe_unknown_tool__"
 PROBE_METHOD: Final = "fauxcall/probe-unknown-method"
 MISSING_SESSION_PROBE_ID: Final = 9_000_001
 _HTTP_OK: Final = 200
@@ -102,6 +108,37 @@ def needs_approval(call: PlannedCall, tools: Mapping[str, JsonValue]) -> bool:
 
 def _is_event_stream(content_type: str | None) -> bool:
     return bool(content_type) and "text/event-stream" in str(content_type).lower()
+
+
+_PASSING_STATUSES: Final = frozenset({405, 408, 425, 429})
+_REFUSED: Final = frozenset({401, 403})
+
+
+def _may_pass(error: Exception) -> bool:
+    """Whether trying again could succeed: a dropped connection, a timeout or a server hiccup."""
+    if isinstance(error, HttpStatusError):
+        return error.status >= 500 or error.status in _PASSING_STATUSES  # noqa: PLR2004
+    return isinstance(error, httpx2.HTTPError | TimeoutError)
+
+
+def _describe(error: Exception) -> str:
+    return str(error) or type(error).__name__
+
+
+def _listing_extras(result: JsonValue, key: str) -> JsonObject | None:
+    """A listing result's members in order, the list itself as ``None``, when it has more.
+
+    ``None`` when the result is just the list (and ``nextCursor``): nothing to reproduce.
+    """
+    if not isinstance(result, dict) or key not in result:
+        return None
+    if not set(result) - {key, "nextCursor"}:
+        return None
+    return {
+        name: None if name == key else value
+        for name, value in result.items()
+        if name != "nextCursor"
+    }
 
 
 @dataclass(slots=True)
@@ -250,23 +287,61 @@ class McpRecorder:
     # -- introspection -----------------------------------------------------------------------------
 
     async def _connect(self) -> tuple[McpWireClient, RpcCall]:
-        """Initialize over Streamable HTTP, falling back to the legacy HTTP+SSE transport."""
-        client = self._client()
-        await self._pace()
-        try:
-            return client, await client.initialize()
-        except (RecordingError, httpx2.HTTPError) as first:
-            log.info("mcp_streamable_failed_trying_sse", error=str(first)[:200])
-            await self._close(client)
-        client = self._client("sse")
-        await self._pace()
-        try:
-            return client, await client.initialize()
-        except (RecordingError, httpx2.HTTPError, TimeoutError) as second:
-            await self._close(client)
-            raise RecordingError(
-                f"{self.url} does not speak MCP over Streamable HTTP or SSE: {second}"
-            ) from second
+        """Initialize over Streamable HTTP, falling back to the legacy HTTP+SSE transport.
+
+        A Streamable HTTP failure that may be passing (a 5xx, 405 or 429, a dropped connection) is
+        tried once more first. A refusal of the credentials says so instead of blaming the
+        transport, and every failure names what each transport answered.
+        """
+        failures: list[Exception] = []
+        attempts: tuple[tuple[Transport, int], ...] = (("streamable_http", 2), ("sse", 1))
+        for transport, tries in attempts:
+            for _ in range(tries):
+                client = self._client(transport)
+                await self._pace()
+                try:
+                    return client, await client.initialize()
+                except (RecordingError, httpx2.HTTPError, TimeoutError) as error:
+                    log.info("mcp_connect_failed", transport=transport, error=str(error)[:200])
+                    await self._close(client)
+                    if isinstance(error, HttpStatusError) and error.status in _REFUSED:
+                        # It speaks this transport; the other one won't take the key either.
+                        raise RecordingError(self._auth_problem(error)) from error
+                    failures.append(error)
+                    if not _may_pass(error):
+                        break
+        streamable, sse = failures[0], failures[-1]
+        raise RecordingError(
+            f"{self.url} does not speak MCP over Streamable HTTP or SSE. "
+            f"Streamable HTTP: {_describe(streamable)}; SSE: {_describe(sse)}"
+        ) from sse
+
+    def _auth_problem(self, error: HttpStatusError) -> str:
+        """Why the server refused, and what to fix (never showing a credential)."""
+        challenge = (
+            f" (WWW-Authenticate: {error.www_authenticate})" if error.www_authenticate else ""
+        )
+        message = f"{self.url} refused the credentials: HTTP {error.status}{challenge}."
+        authorization = next(
+            (v for k, v in self.headers.items() if k.lower() == "authorization"), None
+        )
+        if not self.headers:
+            message += (
+                " No credentials were sent: put them in the fake's .env as"
+                ' FAUXCALL_REAL__HEADERS=\'{"Authorization": "Bearer <token>"}\''
+                " (or pass --auth-env NAME=ENV_VAR), then run init again."
+            )
+        elif authorization is not None and " " not in authorization.strip():
+            message += (
+                " The Authorization value has no scheme; most servers expect"
+                ' "Bearer <token>". Check FAUXCALL_REAL__HEADERS in the fake\'s .env.'
+            )
+        else:
+            message += (
+                " Check that the credentials in FAUXCALL_REAL__HEADERS (the fake's .env) are"
+                " current and allowed to use this server."
+            )
+        return message
 
     async def introspect(self, *, probe_versions: bool = True) -> McpIntrospection:
         """Capture the server's identity, capabilities, listings and transport behavior."""
@@ -280,7 +355,11 @@ class McpRecorder:
                 client, capabilities if isinstance(capabilities, dict) else {}, model, exchanges
             )
             model.transport, missing_session = await self._probe_transport(client, init, exchanges)
-            model.errors.update(await self._probe_errors(client, exchanges))
+            model.errors.update(
+                await self._probe_errors(
+                    client, capabilities if isinstance(capabilities, dict) else {}, exchanges
+                )
+            )
             if missing_session is not None:
                 model.errors["missing_session"] = missing_session
         finally:
@@ -312,6 +391,9 @@ class McpRecorder:
                 continue
             items, calls = await client.list_all(method, key, before_page=self._pace)
             exchanges += [self.save(c, method_endpoint(method)) for c in calls]
+            extras = _listing_extras(calls[0].result if calls else None, key)
+            if extras is not None:
+                model.listing_extras[method] = extras
             if method == "tools/list":
                 model.tools = [McpToolModel(definition=item) for item in items]
                 first = calls[0].result if calls else None
@@ -372,9 +454,12 @@ class McpRecorder:
         return transport, missing_session
 
     async def _probe_errors(
-        self, client: McpWireClient, exchanges: list[str]
+        self, client: McpWireClient, capabilities: JsonObject, exchanges: list[str]
     ) -> dict[str, JsonValue]:
-        """The server's exact errors for an unknown method and an unknown tool."""
+        """The server's exact errors for an unknown method, tool, resource and prompt.
+
+        The fake answers with them, putting the caller's name where they repeat the probe's.
+        """
         errors: dict[str, JsonValue] = {}
         await self._pace()
         unknown_method = await client.call(PROBE_METHOD)
@@ -386,6 +471,18 @@ class McpRecorder:
         exchanges.append(self.save(unknown_tool, tool_endpoint(PROBE_TOOL)))
         if isinstance(unknown_tool.response, dict):
             errors["unknown_tool"] = unknown_tool.response
+        probes = (
+            ("resources", "resources/read", "uri", PROBE_RESOURCE),
+            ("prompts", "prompts/get", "name", PROBE_PROMPT),
+        )
+        for capability, method, param, target in probes:
+            if capability not in capabilities:
+                continue
+            await self._pace()
+            unknown = await client.call(method, {param: target})
+            exchanges.append(self.save(unknown, method_endpoint(method, target)))
+            if isinstance(unknown.response, dict) and "error" in unknown.response:
+                errors[f"{method}_not_found"] = unknown.response
         return errors
 
     async def _probe_versions(self, exchanges: list[str]) -> dict[str, str]:
@@ -502,10 +599,22 @@ class McpRecorder:
                 self.save(rpc, call.endpoint, call.purpose, call.id, tags=call.tags)
             )
             outcome.statuses.append(rpc.status)
+            outcome.answers.append(_answer_of(rpc.response))
             for name, path in call.capture.items():
                 captured = jsonpath.get_one(rpc.response, path)
                 if captured is not None:
                     variables[name] = captured
+
+
+def _answer_of(reply: JsonValue) -> str:
+    """How a JSON-RPC reply answered: ``ok``, ``isError`` (a tool error) or ``error <code>``."""
+    if not isinstance(reply, dict):
+        return "no reply"
+    error = reply.get("error")
+    if isinstance(error, dict):
+        return f"error {error.get('code')}"
+    result = reply.get("result")
+    return "isError" if isinstance(result, dict) and result.get("isError") is True else "ok"
 
 
 def _method_of(endpoint: str) -> str:

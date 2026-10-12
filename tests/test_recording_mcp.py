@@ -7,12 +7,20 @@ import httpx2
 import pytest
 
 from fauxcall import jsonfmt
-from fauxcall.errors import RecordingError
+from fauxcall.errors import HttpStatusError, RecordingError
 from fauxcall.mcpwire import protocol
 from fauxcall.mcpwire.client import McpWireClient
 from fauxcall.model import Approval, Approvals, McpTransportModel, RecordingPlan
+from fauxcall.model.mcp import PROBE_PROMPT, PROBE_RESOURCE, PROBE_TOOL
 from fauxcall.recording import McpRecorder, RecordingStore, tool_is_mutating
-from fauxcall.recording.mcp import PROBE_METHOD, PROBE_TOOL, _method_of, _params_for
+from fauxcall.recording.mcp import (
+    PROBE_METHOD,
+    _answer_of,
+    _listing_extras,
+    _may_pass,
+    _method_of,
+    _params_for,
+)
 from fauxcall.recording.privacy_filter import PrivacyConfig, RecordingPrivacy
 from fauxcall.storage import read_model, write_model
 from fauxcall.testing.asgi import streaming_client
@@ -127,6 +135,31 @@ def test_params_for(endpoint: str, params: JsonValue, expected: JsonValue) -> No
     assert _params_for(endpoint, params) == expected
 
 
+def test_listing_extras_keep_the_real_results_other_members_in_order() -> None:
+    result: JsonValue = {"resultType": "x", "tools": [1], "nextCursor": "c", "_meta": {"a": 1}}
+    assert _listing_extras(result, "tools") == {"resultType": "x", "tools": None, "_meta": {"a": 1}}
+    assert _listing_extras({"tools": [], "nextCursor": "c"}, "tools") is None  # nothing more
+    assert _listing_extras({"other": 1}, "tools") is None
+    assert _listing_extras(None, "tools") is None
+
+
+def test_answer_of_names_how_each_reply_answered() -> None:
+    assert _answer_of({"jsonrpc": "2.0", "id": 1, "result": {"content": []}}) == "ok"
+    assert _answer_of({"result": {"content": [], "isError": True}}) == "isError"
+    assert _answer_of({"error": {"code": -32602, "message": "bad"}}) == "error -32602"
+    assert _answer_of(None) == "no reply"
+
+
+def test_only_passing_failures_are_tried_again() -> None:
+    request = httpx2.Request("POST", "http://mock/mcp")
+    assert _may_pass(httpx2.ConnectError("dropped", request=request))
+    assert _may_pass(TimeoutError())
+    assert _may_pass(HttpStatusError("busy", 503))
+    assert _may_pass(HttpStatusError("not now", 429))
+    assert not _may_pass(HttpStatusError("no such path", 404))
+    assert not _may_pass(RecordingError("not MCP"))
+
+
 def test_method_of() -> None:
     assert _method_of("MCP tools/call:ask_question") == "tools/call"
     assert _method_of("MCP resources/read:demo://a:b") == "resources/read"
@@ -188,7 +221,12 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         assert learned.content_type_json == "application/json"
     else:
         assert learned.content_type_sse == "text/event-stream; charset=utf-8"
-    assert set(model.errors) == {"method_not_found", "unknown_tool", "missing_session"}
+    assert set(model.errors) == {
+        "method_not_found",
+        "unknown_tool",
+        "missing_session",
+        "prompts/get_not_found",  # prompts are advertised, resources aren't
+    }
     assert j(model.errors["missing_session"]) == {
         "jsonrpc": "2.0",
         "id": None,
@@ -196,6 +234,7 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
     }
     assert j(model.errors["method_not_found"])["error"]["code"] == protocol.METHOD_NOT_FOUND
     assert j(model.errors["unknown_tool"])["error"]["message"] == f"Unknown tool: {PROBE_TOOL}"
+    assert j(model.errors["prompts/get_not_found"])["error"]["message"] == "Not found"
     assert found.notes == ["3 tools, 0 resources, 1 prompts"]
     assert endpoints(tmp_path) == [
         "MCP initialize",
@@ -205,14 +244,15 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         "MCP tools/list:missing-session",
         f"MCP {PROBE_METHOD}",
         f"MCP tools/call:{PROBE_TOOL}",
+        f"MCP prompts/get:{PROBE_PROMPT}",
         "MCP initialize:version-2024-11-05",
         "MCP initialize:version-2025-03-26",
         "MCP initialize:version-2025-06-18",
         "MCP initialize:version-2025-11-25",
     ]
-    assert len(found.exchanges) == 11
+    assert len(found.exchanges) == 12
     # every request was paced: 2 rps -> 0.5 s apart (cleanup DELETEs included)
-    assert clock.sleeps == [0.5] * 16
+    assert clock.sleeps == [0.5] * 17
     # A fake built from what was learned behaves the same on the wire.
     rebuilt = fake_model(transport=model.transport, page_size=model.tools_page_size)
     rebuilt.mcp = model.model_copy(update={"tools": rebuilt.mcp.tools if rebuilt.mcp else []})
@@ -242,6 +282,10 @@ async def test_introspect_the_official_sdk_server(tmp_path: Path) -> None:
     }
     assert j(model.errors["unknown_tool"])["result"]["isError"] is True
     assert j(model.errors["method_not_found"])["error"]["code"] == protocol.METHOD_NOT_FOUND
+    assert j(model.errors["resources/read_not_found"])["error"]["data"] == {"uri": PROBE_RESOURCE}
+    assert j(model.errors["prompts/get_not_found"])["error"]["message"] == (
+        f"Unknown prompt: {PROBE_PROMPT}"
+    )
     # FauxCall's fake, built from the recording, answers like the SDK server.
     fake = fake_model(transport=learned)
     fake.mcp = model.model_copy(update={"tools": fake.mcp.tools if fake.mcp else []})
@@ -251,10 +295,26 @@ async def test_introspect_the_official_sdk_server(tmp_path: Path) -> None:
         assert wire.negotiated_version == "2025-03-26"
         unknown = await wire.call("tools/call", {"name": "nope", "arguments": {}})
         assert j(unknown.result)["isError"] is True
+        # The caller's names, where the real errors repeated the probes'
+        missing = await wire.call("resources/read", {"uri": "demo://nope"})
+        assert j(missing.error)["message"] == "Unknown resource: demo://nope"
+        assert j(missing.error)["data"] == {"uri": "demo://nope"}
+        missing = await wire.call("prompts/get", {"name": "frobnicate"})
+        assert j(missing.error)["message"] == "Unknown prompt: frobnicate"
         no_session = await wire.post(protocol.request(3, "tools/list"), include_session=False)
         assert (no_session.status, no_session.response) == (400, model.errors["missing_session"])
         assert (await wire.get_stream_status())[0] == 200
         await wire.close()
+
+
+async def test_introspect_keeps_the_listings_other_members(tmp_path: Path) -> None:
+    extras: JsonValue = {"tools": None, "ttlMs": 60000, "_meta": {"region": "eu"}}
+    model = fake_model(listing_extras={"tools/list": extras})
+    async with streaming_client(fake_app(tmp_path / "a", model)) as http:
+        found = await recorder(tmp_path, http, "http://fake.test/mcp", rps=0).introspect(
+            probe_versions=False
+        )
+    assert found.model.listing_extras == {"tools/list": extras}
 
 
 async def test_introspect_falls_back_to_the_legacy_transport(tmp_path: Path) -> None:
@@ -281,6 +341,78 @@ async def test_introspect_fails_cleanly(tmp_path: Path) -> None:
         with pytest.raises(RecordingError, match="does not speak MCP over Streamable HTTP or SSE"):
             await rec.introspect()
     assert rec.calls_made == 2
+
+
+CHALLENGE = 'Bearer resource_metadata="https://mock/.well-known/oauth-protected-resource"'
+
+
+def _refusing(status: int) -> httpx2.MockTransport:
+    return httpx2.MockTransport(
+        lambda _: httpx2.Response(status, headers={"WWW-Authenticate": CHALLENGE})
+    )
+
+
+@pytest.mark.parametrize(
+    ("headers", "advice"),
+    [
+        ({}, "No credentials were sent: put them in the fake's .env as FAUXCALL_REAL__HEADERS"),
+        ({"Authorization": "sk_test_abc"}, "The Authorization value has no scheme; most servers"),
+        ({"Authorization": "Bearer sk_test_abc"}, "Check that the credentials in"),
+    ],
+)
+async def test_introspect_says_when_the_credentials_are_refused(
+    tmp_path: Path, headers: dict[str, str], advice: str
+) -> None:
+    async with httpx2.AsyncClient(transport=_refusing(401)) as http:
+        rec = recorder(tmp_path, http, "http://mock/mcp", headers=headers)
+        with pytest.raises(RecordingError) as caught:
+            await rec.introspect()
+    message = str(caught.value)
+    assert message.startswith("http://mock/mcp refused the credentials: HTTP 401")
+    assert f"(WWW-Authenticate: {CHALLENGE})" in message
+    assert advice in message
+    assert "sk_test_abc" not in message  # never the credential itself
+    assert rec.calls_made == 1  # a refusal isn't retried, nor tried over SSE
+
+
+async def test_introspect_names_what_each_transport_answered(tmp_path: Path) -> None:
+    def answer(request: httpx2.Request) -> httpx2.Response:
+        return httpx2.Response(404 if request.method == "POST" else 410)
+
+    async with httpx2.AsyncClient(transport=httpx2.MockTransport(answer)) as http:
+        with pytest.raises(RecordingError) as caught:
+            await recorder(tmp_path, http, "http://mock/mcp").introspect()
+    message = str(caught.value)
+    assert "Streamable HTTP: MCP initialize failed: HTTP 404" in message
+    assert "SSE: SSE transport: GET http://mock/mcp returned 410" in message
+
+
+async def test_a_passing_streamable_http_failure_is_tried_again(tmp_path: Path) -> None:
+    app = fake_app(tmp_path / "a", fake_model())
+    answers = iter([503])
+
+    async with streaming_client(app) as inner:
+
+        async def flaky(request: httpx2.Request) -> httpx2.Response:
+            status = next(answers, None)
+            if status is not None:
+                return httpx2.Response(status)
+            forwarded = await inner.send(
+                inner.build_request(
+                    request.method,
+                    str(request.url),
+                    headers=request.headers,
+                    content=request.content,
+                )
+            )
+            return httpx2.Response(
+                forwarded.status_code, headers=forwarded.headers, content=forwarded.content
+            )
+
+        async with httpx2.AsyncClient(transport=httpx2.MockTransport(flaky)) as http:
+            rec = recorder(tmp_path, http, "http://fake.test/mcp")
+            found = await rec.introspect(probe_versions=False)
+    assert found.model.transport.kind == "streamable_http"  # no fall back to SSE
 
 
 class Scripted:
@@ -502,6 +634,8 @@ async def test_run_errors_budget_and_odd_replies(tmp_path: Path) -> None:
     assert crash.statuses == [500]
     assert silent.statuses == [200]
     assert echo.statuses == [200]
+    assert [o.answers for o in (crash, silent, echo)] == [["no reply"], ["no reply"], ["ok"]]
+    assert echo.status_text() == "200 ok"
     assert (over.skipped, never.skipped) == ("budget exhausted", "budget exhausted")
     assert report.budget_exhausted
     assert report.calls_made == 5  # this server has no sessions, so nothing to DELETE

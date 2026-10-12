@@ -97,9 +97,11 @@ def fake_under_test[S: FakeSettings](
         from fauxcall.recording.privacy_filter import PrivacyConfig  # noqa: PLC0415
 
         privacy = settings.data_dir / "privacy.json"
-        public = read_model(privacy, PrivacyConfig).public_values if privacy.exists() else []
+        config = read_model(privacy, PrivacyConfig) if privacy.exists() else PrivacyConfig()
         key = settings.pseudonym_key.get_secret_value()
-        translate = Pseudonymizer(key, public=public).translate
+        translate = Pseudonymizer(
+            key, public=config.public_values, identifiers=config.identifier_patterns
+        ).translate
 
     def factory() -> FastAPI:
         return build_app(settings_for_tests(settings_cls))

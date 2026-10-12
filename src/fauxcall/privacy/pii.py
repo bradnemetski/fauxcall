@@ -48,6 +48,7 @@ PiiCategory = Literal[
     "ssn",
     "date_of_birth",
     "free_text",
+    "account_id",
 ]
 """Kinds of personal data FauxCall pseudonymizes (see :class:`~fauxcall.privacy.Pseudonymizer`)."""
 

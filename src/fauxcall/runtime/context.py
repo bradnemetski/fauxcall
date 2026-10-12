@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING, Any, Final
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from starlette.requests import Request
@@ -112,6 +112,15 @@ class RequestContext:
     def world(self) -> SessionWorld:
         """This session's view of the world."""
         return self.runtime.world.session(self.session)
+
+    @property
+    def state(self) -> dict[str, Any]:
+        """This session's free-form handler state: kept across calls, cleared by reset.
+
+        For state the world can't hold, like what an MCP tool created (``ctx.state["prices"]``).
+        It lives in memory only.
+        """
+        return self.runtime.handler_state(self.session)
 
     @property
     def endpoint_id(self) -> str:

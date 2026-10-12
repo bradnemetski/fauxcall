@@ -74,7 +74,7 @@ RANDOMUSER: JsonValue = {
 
 def test_categories() -> None:
     assert get_args(PiiCategory) == PII_CATEGORIES
-    assert len(PII_CATEGORIES) == 15
+    assert len(PII_CATEGORIES) == 16
     for category in PII_CATEGORIES:
         assert as_pii_category(category) == category
     with pytest.raises(ValueError, match="unknown PII category 'name'"):

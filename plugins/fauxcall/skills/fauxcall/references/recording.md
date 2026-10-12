@@ -166,7 +166,8 @@ fake value everywhere) before anything is written. Tune detection in `data/priva
 {"include": {"$.owner.login": "username"}, "exclude": ["$.name"],
  "path_params": {"username": "username"}, "query_params": {"email": "email"},
  "extra_secret_names": ["X-Session-Token"], "allow_names": ["token_count"],
- "public_values": ["user1", "john@email.com"]}
+ "public_values": ["user1", "john@email.com"],
+ "identifiers": ["\\bws_[a-z0-9]{12}\\b"]}
 ```
 
 `exclude` is for fields that only *look* personal (a product's `name`). When some values of a truly
@@ -179,6 +180,14 @@ generates for demo users): list those values rather than allowing the name (`all
 password in the same field is still redacted. `allow_names` is for names that only look secret
 (`token_count`); credentials from `.env` are always redacted, listed or not.
 
+**Account and tenant ids** identify the user's account wherever they appear: in fields, in prose,
+in MCP text results. Stripe's `acct_…` ids are always pseudonymized; before recording, look at the
+service's documented ids and add its account, tenant, workspace or organization ids to
+`identifiers` (regular expressions, matched in every string). When other ids embed the account's
+id, a named group `id` replaces just that part, consistently: e.g.
+`"\\b[a-z]+_[A-Za-z0-9]{6}(?P<id>[A-Za-z0-9]{10})[A-Za-z0-9]{8}\\b"`. Tests compare them with
+`client.pii(real_value, "account_id")`.
+
 Categories: email, phone, person_name, first_name, last_name, username, address, street, city,
-postal_code, ip, credit_card, ssn, date_of_birth, free_text. If a recording leaked something, fix
+postal_code, ip, credit_card, ssn, date_of_birth, free_text, account_id. If a recording leaked something, fix
 `privacy.json`, delete the affected recordings and re-record — never hand-edit secrets out.

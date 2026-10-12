@@ -13,6 +13,12 @@ from fauxcall.model.semantic import SemanticModel
 FALLBACK_PROTOCOL_VERSION: Final = "2025-06-18"
 """What a fake answers an unsupported protocol version when nothing better was recorded."""
 
+PROBE_TOOL: Final = "__fauxcall_probe_unknown_tool__"
+PROBE_RESOURCE: Final = "fauxcall://probe/unknown-resource"
+PROBE_PROMPT: Final = "__fauxcall_probe_unknown_prompt__"
+"""Names introspection asks for so the real "unknown …" errors get recorded; a fake puts the
+caller's name where the real error repeats one of these."""
+
 
 class McpTransportModel(Model):
     """How the real server speaks MCP over HTTP — reproduced exactly so clients can't tell."""
@@ -97,6 +103,14 @@ class McpModel(Model):
     errors: dict[str, RawJson] = Field(
         default_factory=dict,
         description="JSON-RPC error objects by situation: method_not_found, unknown_tool, …",
+    )
+    listing_extras: dict[str, RawJson] = Field(
+        default_factory=dict,
+        description=(
+            "Per listing method (tools/list …), the recorded result's members in their order, "
+            "when it has more than the list and nextCursor (resultType, ttlMs, _meta …); the "
+            "list itself is a null placeholder."
+        ),
     )
 
     def tool(self, name: str) -> McpToolModel | None:

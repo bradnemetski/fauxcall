@@ -58,6 +58,11 @@ MIN_TEXT_LENGTH: Final = 2
 """Shorter real values are not replaced inside free text (a lone initial would hit everything)."""
 
 _DIGITS: Final = frozenset("0123456789")
+_ID_PREFIX: Final = re.compile(r"^[A-Za-z]+_")
+
+DEFAULT_IDENTIFIERS: Final = (r"\bacct_[A-Za-z0-9]{16}\b",)
+"""Account and tenant ids found in any text, whatever field (or prose) holds them: Stripe's
+``acct_…``. A fake's ``data/privacy.json`` adds its service's own (``identifiers``)."""
 _SSN_DIGITS: Final = 9
 _NS_PER_DAY: Final = 86_400 * NS_PER_SECOND
 _COMPACT_DATE: Final = TimeFormat(kind="strftime", pattern="%Y%m%d")
@@ -226,6 +231,21 @@ def _fill_digits(template: str, digits: Iterable[str]) -> str:
     return "".join(next(replacements) if char in _DIGITS else char for char in template)
 
 
+def _shaped(stream: _Entropy, text: str) -> str:
+    """New characters of the same kinds: digits stay digits, letters keep their case."""
+    shaped: list[str] = []
+    for char in text:
+        if char in _DIGITS:
+            shaped.append(stream.digit())
+        elif "A" <= char <= "Z":
+            shaped.append(stream.letter())
+        elif "a" <= char <= "z":
+            shaped.append(stream.letter().lower())
+        else:
+            shaped.append(char)
+    return "".join(shaped)
+
+
 def _match_case(original: str, generated: str) -> str:
     """Give ``generated`` the case style of ``original`` when it is all upper or all lower case."""
     if original.isupper():
@@ -375,6 +395,11 @@ class Pseudonymizer:
     * ``date_of_birth``: moved 1-365 days earlier or later and spelled exactly like the original;
       unparseable values get new digits instead.
     * ``free_text``: ``text-<12 hex>``.
+    * ``account_id``: a leading ``prefix_`` is kept and every other character replaced by one of
+      its kind (digit, lower or upper case letter), so ``acct_1AbC…`` stays ``acct_`` + 16.
+      Besides fields, :meth:`pseudonymize_text` finds them in any text with the ``identifiers``
+      patterns; a pattern's ``id`` group, when it has one, is the part replaced (an account id
+      embedded in other ids).
 
     Non-string values are returned unchanged, except numeric (epoch) dates of birth. Empty strings,
     :data:`~fauxcall.privacy.REDACTED` and ``public`` values (personal-looking data that is public,
@@ -385,12 +410,19 @@ class Pseudonymizer:
     Instances are not thread-safe.
     """
 
-    def __init__(self, key: str | bytes, *, public: Iterable[str] = ()) -> None:
+    def __init__(
+        self,
+        key: str | bytes,
+        *,
+        public: Iterable[str] = (),
+        identifiers: Iterable[str] = DEFAULT_IDENTIFIERS,
+    ) -> None:
         raw = key.encode() if isinstance(key, str) else bytes(key)
         if not raw:
             raise ValueError("the pseudonym key must not be empty")
         self._key = raw
         self._public = frozenset(public)
+        self._identifiers = [re.compile(pattern) for pattern in dict.fromkeys(identifiers)]
         self._mapping: dict[str, str] = {}
         self._index: _TextIndex | None = None
         self._generators: dict[PiiCategory, Callable[[str], str]] = {
@@ -409,6 +441,7 @@ class Pseudonymizer:
             "ssn": self._ssn,
             "date_of_birth": self._date_of_birth,
             "free_text": self._free_text,
+            "account_id": self._account_id,
         }
 
     def __repr__(self) -> str:
@@ -488,9 +521,13 @@ class Pseudonymizer:
         ``email=jane%40example.com``) and text bodies. Values only match as whole words (never
         inside a longer run of letters and digits), the longest known value wins, and values
         shorter than :data:`MIN_TEXT_LENGTH` are skipped. Matching is case-sensitive.
+
+        Account ids matching the ``identifiers`` patterns are replaced too, seen before or not.
         """
         if not text:
             return text
+        for pattern in self._identifiers:
+            text = pattern.sub(self._identifier, text)
         if self._index is None:
             self._index = _TextIndex(self._mapping)
         index = self._index
@@ -607,18 +644,7 @@ class Pseudonymizer:
         return _match_case(value, _fake(seed, lambda faker: faker.city()))
 
     def _postal_code(self, value: str) -> str:
-        stream = self._stream("postal_code", value.strip().upper())
-        shaped: list[str] = []
-        for char in value:
-            if char in _DIGITS:
-                shaped.append(stream.digit())
-            elif "A" <= char <= "Z":
-                shaped.append(stream.letter())
-            elif "a" <= char <= "z":
-                shaped.append(stream.letter().lower())
-            else:
-                shaped.append(char)
-        return "".join(shaped)
+        return _shaped(self._stream("postal_code", value.strip().upper()), value)
 
     def _ip(self, value: str) -> str:
         text = value.strip()
@@ -686,6 +712,21 @@ class Pseudonymizer:
     def _numeric_date_of_birth(self, value: JsonValue) -> JsonValue:
         shifted = self._shifted_date(value)
         return value if shifted is None else shifted
+
+    def _identifier(self, match: re.Match[str]) -> str:
+        group = "id" if "id" in match.re.groupindex else 0
+        real = match[group]
+        if real is None:
+            return match[0]
+        fake = str(self.pseudonym(real, "account_id"))
+        start, end = match.span(group)
+        offset = match.start()
+        return match[0][: start - offset] + fake + match[0][end - offset :]
+
+    def _account_id(self, value: str) -> str:
+        found = _ID_PREFIX.match(value)
+        prefix = found[0] if found else ""
+        return prefix + _shaped(self._stream("account_id", value), value[len(prefix) :])
 
     def _free_text(self, value: str) -> str:
         return f"text-{self._hex('free_text', value)[:12]}"

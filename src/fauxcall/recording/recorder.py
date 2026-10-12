@@ -183,8 +183,18 @@ class CallOutcome:
     endpoint: str
     exchanges: list[str] = field(default_factory=list)
     statuses: list[int] = field(default_factory=list)
+    answers: list[str] = field(default_factory=list)
+    """MCP: how each JSON-RPC reply answered (``ok``, ``isError``, ``error -32602``)."""
     skipped: str | None = None
     error: str | None = None
+
+    def status_text(self) -> str:
+        """The HTTP statuses, each with its JSON-RPC answer when there is one."""
+        answers = self.answers + [""] * (len(self.statuses) - len(self.answers))
+        return ",".join(
+            f"{status} {answer}".strip()
+            for status, answer in zip(self.statuses, answers, strict=False)
+        )
 
 
 @dataclass(slots=True)
@@ -196,6 +206,11 @@ class RunReport:
     calls_made: int = 0
     budget_exhausted: bool = False
 
+    @property
+    def failed(self) -> list[CallOutcome]:
+        """Calls that didn't complete (a connection error, a timeout …), not refusals."""
+        return [outcome for outcome in self.outcomes if outcome.error]
+
     def summary(self) -> str:
         """A compact markdown table."""
         lines = [
@@ -206,14 +221,21 @@ class RunReport:
             "|---|---|---|---|---|",
         ]
         for outcome in self.outcomes:
-            note = outcome.skipped or outcome.error or ""
-            statuses = ",".join(str(s) for s in outcome.statuses)
+            note = outcome.skipped or (f"**failed:** {outcome.error}" if outcome.error else "")
+            statuses = outcome.status_text()
             exchanges = (
                 f"{outcome.exchanges[0]}..{outcome.exchanges[-1]}" if outcome.exchanges else "-"
             )
             lines.append(
                 f"| {outcome.call} | {outcome.endpoint} | {statuses} | {exchanges} | {note} |"
             )
+        if self.failed:
+            lines += [
+                "",
+                f"**{len(self.failed)} call(s) failed** and recorded nothing: "
+                + ", ".join(outcome.call for outcome in self.failed)
+                + ". Everything else was recorded; run the plan again to retry them.",
+            ]
         return "\n".join(lines)
 
 

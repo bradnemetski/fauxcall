@@ -9,8 +9,13 @@ Configured per fake in ``data/privacy.json`` (committed — it holds rules, not 
       "query_params": {"email": "email"},
       "extra_secret_names": ["X-Session"],       // custom credential headers/fields
       "allow_names": ["token_count"],            // secret-looking names that aren't secrets
-      "public_values": ["user1"]                 // personal-looking values that are public
+      "public_values": ["user1"],                // personal-looking values that are public
+      "identifiers": ["ws_[a-z0-9]{12}"]         // the service's account/tenant ids
     }
+
+Account and tenant ids are pseudonymized wherever they appear, in any field or text: Stripe's
+``acct_…`` always, plus the regular expressions under ``identifiers`` (a named group ``id`` limits
+the replacement to that part, for an account id embedded in other ids).
 
 The pseudonym key (``FAUXCALL_PSEUDONYM_KEY``) lives in the fake's gitignored ``.env``. With
 ``"enabled": false`` nothing is pseudonymized (and no key is needed), but credentials are still
@@ -23,10 +28,11 @@ parameters, headers and text bodies, raw or percent-encoded.
 
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING, Final
 from urllib.parse import quote, urlsplit, urlunsplit
 
-from pydantic import Field
+from pydantic import Field, field_validator
 
 from fauxcall.errors import ConfigurationError
 from fauxcall.jsonpath import WILDCARD, format_path, parse
@@ -41,6 +47,7 @@ from fauxcall.privacy import (
     scrub_text,
 )
 from fauxcall.privacy.pii import PiiCategory
+from fauxcall.privacy.pseudonym import DEFAULT_IDENTIFIERS
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
@@ -70,6 +77,30 @@ class PrivacyConfig(Model):
             "of the same fields are pseudonymized or redacted. Real credentials never are."
         ),
     )
+    identifiers: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Regular expressions for the service's account or tenant ids, pseudonymized wherever "
+            "they appear (Stripe's acct_ ids always are). A named group 'id' limits the "
+            "replacement to that part."
+        ),
+    )
+
+    @field_validator("identifiers")
+    @classmethod
+    def _compiles(cls, patterns: list[str]) -> list[str]:
+        for pattern in patterns:
+            try:
+                re.compile(pattern)
+            except re.error as error:
+                message = f"identifiers: {pattern!r} is not a regular expression: {error}"
+                raise ValueError(message) from error
+        return patterns
+
+    @property
+    def identifier_patterns(self) -> list[str]:
+        """The built-in account id patterns, then this fake's."""
+        return [*DEFAULT_IDENTIFIERS, *self.identifiers]
 
 
 def _replace_segments(path: str, real: str, fake: str) -> str:
@@ -138,7 +169,11 @@ class RecordingPrivacy:
                 "(run `fauxcall env key <name>`)"
             )
         self.pseudonymizer = (
-            Pseudonymizer(pseudonym_key, public=config.public_values)
+            Pseudonymizer(
+                pseudonym_key,
+                public=config.public_values,
+                identifiers=config.identifier_patterns,
+            )
             if config.enabled and pseudonym_key
             else None
         )

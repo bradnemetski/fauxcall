@@ -224,6 +224,28 @@ def test_public_values_of_secret_fields_are_kept() -> None:
     assert (body, notes) == ({"password": "Password1"}, [])
 
 
+def test_account_ids_are_pseudonymized_in_fields_and_embedded_text() -> None:
+    account = "acct_1AbCdE2fGhIjK3lM"
+    filtering = privacy(identifiers=[r"\bws_[a-z0-9]{12}\b"])
+    tool_result: JsonValue = {
+        "content": [{"type": "text", "text": f'{{"id": "{account}", "ws": "ws_abcdef123456"}}'}],
+        "structuredContent": {"account": account},
+    }
+    value, _, _ = filtering.json(tool_result)
+    text = jsonfmt.dumps(value)
+    assert account not in text
+    assert "ws_abcdef123456" not in text
+    assert "acct_" in text
+    fake = j(value)["structuredContent"]["account"]
+    assert fake.startswith("acct_")
+    assert filtering.text(f"see {account}") == f"see {fake}"  # the same pseudonym in text
+
+
+def test_identifiers_must_be_regular_expressions() -> None:
+    with pytest.raises(ValueError, match="is not a regular expression"):
+        PrivacyConfig(identifiers=["acct_[unclosed"])
+
+
 def test_response_headers_and_text_use_known_values() -> None:
     filter_ = privacy()
     value, _, _ = filter_.json({"author": {"email": EMAIL, "username": "jroe"}})

@@ -529,3 +529,57 @@ def test_public_values_are_never_replaced() -> None:
         pseudonymizer.pseudonymize_text(text)
         == f"/user/user1 and /user/{fake} wrote to john@email.com"
     )
+
+
+ACCOUNT = "acct_1AbCdE2fGhIjK3lM"
+
+
+def test_account_ids_keep_their_prefix_and_shape(pseudo: Pseudonymizer) -> None:
+    fake = str(pseudo.pseudonym(ACCOUNT, "account_id"))
+    assert fake != ACCOUNT
+    assert fake.startswith("acct_")
+    assert len(fake) == len(ACCOUNT)
+    kinds = [(c.isdigit(), c.isupper(), c.islower()) for c in ACCOUNT]
+    assert [(c.isdigit(), c.isupper(), c.islower()) for c in fake] == kinds
+    assert pseudo.pseudonym("T0ABC12", "account_id") != "T0ABC12"  # no prefix: all of it
+
+
+def test_account_ids_are_found_in_any_text(pseudo: Pseudonymizer) -> None:
+    fake = str(pseudo.pseudonym(ACCOUNT, "account_id"))
+    text = f'{{"account": "{ACCOUNT}"}} and in prose: {ACCOUNT}.'
+    assert pseudo.pseudonymize_text(text) == f'{{"account": "{fake}"}} and in prose: {fake}.'
+    fresh = Pseudonymizer(KEY)  # never saw it before: found by the built-in pattern
+    assert fresh.pseudonymize_text(f"id={ACCOUNT}") == f"id={fake}"
+    assert fresh.pseudonymize_text("acct_short and xacct_1AbCdE2fGhIjK3lMx") == (
+        "acct_short and xacct_1AbCdE2fGhIjK3lMx"  # not an account id's shape or not whole
+    )
+
+
+def test_identifier_patterns_can_replace_an_embedded_part() -> None:
+    embedded = r"\b[a-z]+_[A-Za-z0-9]{6}(?P<id>[A-Za-z0-9]{10})[A-Za-z0-9]{8}\b"
+    pseudo = Pseudonymizer(KEY, identifiers=[r"\bws_[a-z0-9]{12}\b", embedded, embedded])
+    tail = ACCOUNT[-10:]
+    price = f"price_1XyZ9q{tail}AbCd1234"
+    out = pseudo.pseudonymize_text(f"{price} in ws_abcdef123456")
+    new_price, _, workspace = out.partition(" in ")
+    assert new_price.startswith("price_1XyZ9q")
+    assert new_price.endswith("AbCd1234")
+    assert tail not in new_price
+    assert workspace.startswith("ws_")
+    assert workspace != "ws_abcdef123456"
+    assert (
+        pseudo.pseudonymize_text(f"other_000000{tail}11111111").count(
+            str(pseudo.pseudonym(tail, "account_id"))
+        )
+        == 1
+    )  # the same part gets the same pseudonym everywhere
+
+
+def test_public_account_ids_are_kept() -> None:
+    pseudo = Pseudonymizer(KEY, public=[ACCOUNT])
+    assert pseudo.pseudonymize_text(ACCOUNT) == ACCOUNT
+
+
+def test_an_optional_id_group_that_did_not_match_keeps_the_text() -> None:
+    pseudo = Pseudonymizer(KEY, identifiers=[r"\bkey_(?P<id>[0-9]{4})?x\b"])
+    assert pseudo.pseudonymize_text("key_x") == "key_x"

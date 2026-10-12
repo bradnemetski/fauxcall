@@ -89,6 +89,14 @@ def test_validation_errors() -> None:
         ClockSettings.model_validate({"at": "2026-01-05T15:30:00"})  # must be timezone-aware
 
 
+def test_log_levels_in_any_case(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("FAUXCALL_LOG_LEVEL", "info")
+    assert FakeSettings().log_level == "INFO"
+    assert CliSettings().log_level == "INFO"
+    with pytest.raises(ValidationError):
+        FakeSettings.model_validate({"log_level": "loud"})
+
+
 def test_identity_defaults() -> None:
     identity = IdentityConfig(name="alice")
     assert identity.status == "allowed"

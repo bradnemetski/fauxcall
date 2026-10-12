@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING, Annotated, Final, TypedDict
 
 import typer
 
+from fauxcall.build.scaffold import mcp_server_config
 from fauxcall.cli.common import (
     clean_errors,
     echo,
@@ -161,10 +162,7 @@ def up(
             running[fake.name] = _start(fake, port, fast=fast, wait=wait)
         model = load_model(fake)
         if model.mcp is not None:
-            mcp_servers[fake.name] = {
-                "type": "http",
-                "url": f"http://127.0.0.1:{running[fake.name]['port']}{model.mcp.transport.path}",
-            }
+            mcp_servers[fake.name] = mcp_server_config(model, running[fake.name]["port"])
     _write_run(running)
     if mcp_servers:
         echo("\nMCP config (e.g. .mcp.json):\n" + json.dumps({"mcpServers": mcp_servers}, indent=2))

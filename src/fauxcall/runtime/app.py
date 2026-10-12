@@ -15,7 +15,7 @@ import hashlib
 import time
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING, Any, Final
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -137,6 +137,7 @@ class FakeRuntime:
         self._job_outcomes: dict[tuple[str, str, str], str] = {}
         self._blobs: dict[tuple[str, str, str], Blob] = {}
         self._pending: dict[str, Blob] = {}
+        self._handler_state: dict[str, dict[str, Any]] = {}
         self.mcp: McpFake | None = None
         self._secret_names = frozenset(
             scheme.name.lower()
@@ -230,6 +231,10 @@ class FakeRuntime:
         """Forget uploaded bytes (record deleted)."""
         self._blobs.pop((ctx.session, collection, str(key)), None)
 
+    def handler_state(self, session: str) -> dict[str, Any]:
+        """Free-form state custom handlers keep for one session (``ctx.state``), until reset."""
+        return self._handler_state.setdefault(session, {})
+
     def reset(self, session: str | None = None, *, journal: bool = False) -> None:
         """Back to the recorded seed (one session or all), including clocks, counters, limits."""
         self.world.reset(session)
@@ -247,8 +252,10 @@ class FakeRuntime:
         }
         if session is None:
             self._session_seq.clear()
+            self._handler_state.clear()
         else:
             self._session_seq.pop(session, None)
+            self._handler_state.pop(session, None)
         if journal:
             self.journal.clear(session)
         self.persist()

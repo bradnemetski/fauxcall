@@ -17,7 +17,7 @@ from urllib.parse import urljoin
 import httpx2
 
 from fauxcall import __version__, jsonfmt
-from fauxcall.errors import RecordingError
+from fauxcall.errors import HttpStatusError, RecordingError
 from fauxcall.mcpwire import protocol
 
 if TYPE_CHECKING:
@@ -233,6 +233,12 @@ class McpWireClient:
         if isinstance(call.result, dict):
             version = call.result.get("protocolVersion")
             self.negotiated_version = str(version) if version else None
+        if call.status >= 400:  # noqa: PLR2004
+            raise HttpStatusError(
+                f"MCP initialize failed: HTTP {call.status} {call.body[:300]}".rstrip(),
+                call.status,
+                call.header("www-authenticate"),
+            )
         if call.response is None or call.error is not None:
             raise RecordingError(f"MCP initialize failed: HTTP {call.status} {call.body[:300]}")
         await self.notify("notifications/initialized")
@@ -339,7 +345,11 @@ class McpWireClient:
     ) -> str:
         """Start reading the stream and wait for the ``endpoint`` event (the messages URL)."""
         if response.status_code != 200:  # noqa: PLR2004
-            raise RecordingError(f"SSE transport: GET {self.url} returned {response.status_code}")
+            raise HttpStatusError(
+                f"SSE transport: GET {self.url} returned {response.status_code}",
+                response.status_code,
+                response.headers.get("www-authenticate"),
+            )
         self.sse_content_type = response.headers.get("content-type")
         self._sse_task = asyncio.create_task(self._read_sse(response, queue))
         item = await asyncio.wait_for(queue.get(), timeout=self.timeout_s)

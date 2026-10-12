@@ -75,7 +75,38 @@ errors (`isError: true`).
   answers and errors (JSON-RPC errors, `isError` results) apart: a tool that refuses bad arguments
   in 250 ms and answers in 15 s keeps both.
 
-Errors for unknown tools/methods/missing sessions come from `model.mcp.errors` (recorded by the probes).
+Errors for unknown tools, resources, prompts and methods and for missing sessions come from
+`model.mcp.errors` (recorded by the probes); the fake puts the caller's name where the real error
+repeated the probe's. Members of listing results besides the list (`resultType`, `ttlMs`, `_meta`)
+are replayed from `model.mcp.listing_extras`.
+
+## Computed tools
+
+A `computed` tool's handler (`handlers.TOOL_HANDLERS`) returns the tool result. It can also answer
+the way real servers do, without patching FauxCall:
+
+```python
+from fauxcall.runtime import EarlyResponse, RequestContext, RpcError
+from fauxcall.types import JsonObject, JsonValue
+from starlette.responses import Response
+
+
+async def create_price(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+    if "unit_amount" not in arguments:  # the real server's JSON-RPC error
+        raise RpcError(-32602, "Invalid params: unit_amount is required")
+    if arguments.get("product") in ARCHIVED:  # a bare HTTP refusal, as recorded
+        raise EarlyResponse(
+            Response(
+                status_code=403, headers={"WWW-Authenticate": 'Bearer error="insufficient_scope"'}
+            )
+        )
+    prices = ctx.state.setdefault("prices", [])  # per session, cleared by reset
+    ...
+```
+
+`EarlyResponse` answers the whole HTTP request (and takes the tool's recorded error time);
+`ctx.state` is per-session state for what the world can't hold. Never monkeypatch FauxCall
+classes: if a behavior can't be expressed, say so in the model's `notes`.
 
 ## Auth (OAuth)
 
