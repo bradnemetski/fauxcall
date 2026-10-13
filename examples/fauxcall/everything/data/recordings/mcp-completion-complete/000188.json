@@ -1,11 +1,10 @@
 {
   "id": "000188",
   "endpoint": "MCP completion/complete",
-  "purpose": "variation",
-  "plan_call": "cc-res-blob",
-  "started_at": "2026-10-12T03:37:08.141929Z",
-  "started_ns": 1791776228141929000,
-  "elapsed_ms": 7.105,
+  "plan_call": "cmp-name-eng",
+  "started_at": "2026-10-12T22:19:15.650891Z",
+  "started_ns": 1791843555650891000,
+  "elapsed_ms": 2.411,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,16 +32,21 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 36,
+        "id": 6,
         "method": "completion/complete",
         "params": {
           "ref": {
-            "type": "ref/resource",
-            "uri": "demo://resource/dynamic/blob/{resourceId}"
+            "type": "ref/prompt",
+            "name": "completable-prompt"
           },
           "argument": {
-            "name": "resourceId",
+            "name": "name",
             "value": ""
+          },
+          "context": {
+            "arguments": {
+              "department": "Engineering"
+            }
           }
         }
       }
@@ -85,11 +89,11 @@
       ],
       [
         "content-length",
-        "153"
+        "175"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:37:08 GMT"
+        "Mon, 12 Oct 2026 22:19:15 GMT"
       ]
     ],
     "body": {
@@ -98,23 +102,27 @@
       "json": {
         "result": {
           "completion": {
-            "values": [],
-            "total": 0,
+            "values": [
+              "Alice",
+              "Bob",
+              "Charlie"
+            ],
+            "total": 3,
             "hasMore": false
           }
         },
         "jsonrpc": "2.0",
-        "id": 36
+        "id": 6
       }
     }
   },
   "stream": [
     {
-      "t_ms": 6.885,
+      "t_ms": 2.306,
       "kind": "sse",
       "event": "message",
-      "id": "76894b8d-30f9-4b29-b61b-a1a619195def",
-      "data": "{\"result\":{\"completion\":{\"values\":[],\"total\":0,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":36}"
+      "id": "e29fe839-6eb4-4db6-9f8f-b66560c8349d",
+      "data": "{\"result\":{\"completion\":{\"values\":[\"Alice\",\"Bob\",\"Charlie\"],\"total\":3,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":6}"
     }
   ],
   "redacted": [

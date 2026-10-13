@@ -69,11 +69,36 @@ log = get_logger(__name__)
 
 PROBE_METHOD: Final = "fauxcall/probe-unknown-method"
 CLIENT_CAPABILITIES: Final[dict[str, JsonObject]] = {
-    "sampling": {},
-    "elicitation": {},
-    "roots": {"listChanged": True},
+    "sampling": {"sampling": {}},
+    "elicitation": {"elicitation": {}},
+    "elicitation.url": {"elicitation": {"form": {}, "url": {}}},
+    "roots": {"roots": {"listChanged": True}},
+    "tasks.requests": {
+        "tasks": {"requests": {"sampling": {"createMessage": {}}, "elicitation": {"create": {}}}}
+    },
 }
-"""Client capabilities introspection declares one at a time, to find the tools they unlock."""
+"""Client capabilities introspection declares one at a time (by the path ``requires`` names), to
+find the tools they unlock; then all of them together."""
+_ALL: Final = "all"
+
+
+def _all_capabilities() -> JsonObject:
+    """Every probed capability at once (nested objects merged)."""
+    merged: JsonObject = {}
+    for declared in CLIENT_CAPABILITIES.values():
+        _merge(merged, declared)
+    return merged
+
+
+def _merge(into: JsonObject, extra: JsonObject) -> None:
+    for key, value in extra.items():
+        current = into.get(key)
+        if isinstance(current, dict) and isinstance(value, dict):
+            _merge(current, value)
+        else:
+            into[key] = dict(value) if isinstance(value, dict) else value
+
+
 MISSING_SESSION_PROBE_ID: Final = 9_000_001
 AUTH_PROBE_ID: Final = 9_000_002
 _HTTP_OK: Final = 200
@@ -394,6 +419,8 @@ class McpRecorder:
                     client, capabilities if isinstance(capabilities, dict) else {}, exchanges
                 )
             )
+            with contextlib.suppress(_BudgetExhaustedError):  # optional, budget allowing
+                await self._probe_malformed(client, model, exchanges)
             if missing_session is not None:
                 model.errors["missing_session"] = missing_session
             if model.transport.kind == "streamable_http":  # optional: last, budget allowing
@@ -533,36 +560,49 @@ class McpRecorder:
     async def _capability_tools(self, model: McpModel, exchanges: list[str]) -> None:
         """Tools the server lists only to clients declaring a capability (sampling …).
 
-        One session per capability, its tools compared with the plain listing; the extra ones are
-        added with ``requires`` set, so the fake shows them to the same clients only.
+        One session per capability (:data:`CLIENT_CAPABILITIES`), then one declaring all of them;
+        tools missing from the plain listing are added with ``requires``: each capability that
+        unlocked them on its own, else all of them together.
         """
         known = {tool.name for tool in model.tools}
-        for capability, declared in CLIENT_CAPABILITIES.items():
-            client = self._client()
-            try:
-                await self._pace()
-                await client.initialize(capabilities={capability: declared})
-                tools, calls = await client.list_all("tools/list", "tools", before_page=self._pace)
-            except _BudgetExhaustedError:
-                return  # the recording budget is spent: fewer probes, not a failed init
-            except (RecordingError, httpx2.HTTPError, TimeoutError) as error:
-                log.info("mcp_capability_probe_failed", capability=capability, error=str(error))
+        unlocked: dict[str, tuple[JsonValue, list[str]]] = {}
+        probes = [*CLIENT_CAPABILITIES.items(), (_ALL, _all_capabilities())]
+        for label, declared in probes:
+            listed = await self._tools_for(label, declared, exchanges)
+            if listed is None:
+                if self._spent():
+                    break
                 continue
-            finally:
-                await self._close(client)
-            exchanges += [
-                self.save(c, method_endpoint("tools/list", f"with-{capability}")) for c in calls
-            ]
-            for definition in tools:
+            for definition in listed:
                 name = definition.get("name") if isinstance(definition, dict) else None
-                if name in known:
-                    existing = model.tool(str(name))
-                    if existing is not None and existing.requires:
-                        existing.requires = sorted({*existing.requires, capability})
-                    continue
-                if isinstance(name, str):
-                    known.add(name)
-                    model.tools.append(McpToolModel(definition=definition, requires=[capability]))
+                if isinstance(name, str) and name not in known:
+                    unlocked.setdefault(name, (definition, []))[1].append(label)
+        for definition, labels in unlocked.values():
+            alone = [[label] for label in labels if label != _ALL]
+            needs = alone or [list(CLIENT_CAPABILITIES)]
+            model.tools.append(McpToolModel(definition=definition, requires=needs))
+
+    def _spent(self) -> bool:
+        return self.calls_made >= self.max_calls
+
+    async def _tools_for(
+        self, label: str, declared: JsonObject, exchanges: list[str]
+    ) -> list[JsonValue] | None:
+        """The tools listed to a client declaring ``declared`` (``None``: the probe failed)."""
+        client = self._client()
+        try:
+            await self._pace()
+            await client.initialize(capabilities=declared)
+            tools, calls = await client.list_all("tools/list", "tools", before_page=self._pace)
+        except _BudgetExhaustedError:
+            return None  # the recording budget is spent: fewer probes, not a failed init
+        except (RecordingError, httpx2.HTTPError, TimeoutError) as error:
+            log.info("mcp_capability_probe_failed", capability=label, error=str(error))
+            return None
+        finally:
+            await self._close(client)
+        exchanges += [self.save(c, method_endpoint("tools/list", f"with-{label}")) for c in calls]
+        return tools
 
     async def _probe_transport(
         self, client: McpWireClient, init: RpcCall, exchanges: list[str]
@@ -641,6 +681,42 @@ class McpRecorder:
             if isinstance(unknown.response, dict) and "error" in unknown.response:
                 errors[f"{method}_not_found"] = unknown.response
         return errors
+
+    async def _probe_malformed(
+        self, client: McpWireClient, model: McpModel, exchanges: list[str]
+    ) -> None:
+        """The server's answers to malformed calls, which the fake repeats.
+
+        A ``tools/call`` without a name; ``arguments`` that aren't an object (sent to a read-only
+        tool, so nothing can change); and a second ``initialize`` in the same session (last: it
+        may end the session).
+        """
+        await self._pace()
+        nameless = await client.call("tools/call", {"arguments": {}})
+        exchanges.append(self.save(nameless, tool_endpoint(""), "invalid"))
+        if isinstance(nameless.response, dict) and "error" in nameless.response:
+            model.errors["tool_call_without_name"] = nameless.response
+        reader = next((t for t in model.tools if not tool_is_mutating(t.definition)), None)
+        if reader is not None:
+            await self._pace()
+            odd = await client.call("tools/call", {"name": reader.name, "arguments": []})
+            exchanges.append(self.save(odd, tool_endpoint(reader.name), "invalid"))
+            if isinstance(odd.response, dict) and "error" in odd.response:
+                model.errors["arguments_not_object"] = odd.response
+                model.arguments_probe_tool = reader.name
+        if client.session_id is None:
+            return
+        await self._pace()
+        params: JsonObject = {
+            "protocolVersion": client.negotiated_version or protocol.LATEST_HANDSHAKE_VERSION,
+            "capabilities": {},
+            "clientInfo": {"name": "fauxcall", "version": "probe"},
+        }
+        again = await client.call("initialize", params)
+        exchanges.append(self.save(again, method_endpoint("initialize", "again"), "invalid"))
+        if isinstance(again.response, dict) and "error" in again.response:
+            model.errors["second_initialize"] = again.response
+            model.transport.reinitialize_status = again.status
 
     async def _probe_versions(self, exchanges: list[str]) -> dict[str, str]:
         """Which protocol version the server answers to each known version it is offered."""

@@ -1,11 +1,11 @@
 {
   "id": "000225",
   "endpoint": "MCP tools/call:gzip-file-as-resource",
-  "purpose": "edge",
-  "plan_call": "gz-empty",
-  "started_at": "2026-10-12T03:38:09.543623Z",
-  "started_ns": 1791776289543623000,
-  "elapsed_ms": 5.737,
+  "purpose": "invalid",
+  "plan_call": "gz-bad-name-type",
+  "started_at": "2026-10-12T22:19:40.937177Z",
+  "started_ns": 1791843580937177000,
+  "elapsed_ms": 2.587,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,13 +33,13 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 25,
+        "id": 14,
         "method": "tools/call",
         "params": {
           "name": "gzip-file-as-resource",
           "arguments": {
-            "name": "empty.gz",
-            "data": "data:,"
+            "name": 5,
+            "data": "data:text/plain,hello%20gzip%20world"
           }
         }
       }
@@ -82,7 +82,7 @@
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:38:09 GMT"
+        "Mon, 12 Oct 2026 22:19:40 GMT"
       ],
       [
         "transfer-encoding",
@@ -96,25 +96,24 @@
         "result": {
           "content": [
             {
-              "name": "empty.gz",
-              "uri": "demo://resource/session/empty.gz",
-              "mimeType": "application/gzip",
-              "type": "resource_link"
+              "type": "text",
+              "text": "MCP error -32602: Input validation error: Invalid arguments for tool gzip-file-as-resource: Invalid input: expected string, received number at name"
             }
-          ]
+          ],
+          "isError": true
         },
         "jsonrpc": "2.0",
-        "id": 25
+        "id": 14
       }
     }
   },
   "stream": [
     {
-      "t_ms": 5.52,
+      "t_ms": 2.471,
       "kind": "sse",
       "event": "message",
-      "id": "4c035a2a-6b14-483f-9d06-1da45fbccc84",
-      "data": "{\"result\":{\"content\":[{\"name\":\"empty.gz\",\"uri\":\"demo://resource/session/empty.gz\",\"mimeType\":\"application/gzip\",\"type\":\"resource_link\"}]},\"jsonrpc\":\"2.0\",\"id\":25}"
+      "id": "44abec0d-6200-4aca-9212-59259c2eb8a0",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Input validation error: Invalid arguments for tool gzip-file-as-resource: Invalid input: expected string, received number at name\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":14}"
     }
   ],
   "redacted": [

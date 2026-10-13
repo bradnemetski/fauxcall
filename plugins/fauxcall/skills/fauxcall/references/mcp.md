@@ -122,8 +122,9 @@ if a behavior can't be expressed, say so in the model's `notes`.
 | method | the fake answers with |
 |---|---|
 | `initialize`, `ping` | the recorded server info, capabilities and negotiated version; `{}` |
-| `tools/list`, `resources/list`, `resources/templates/list`, `prompts/list` | the recorded listings, paginated as recorded; tools with `requires` only to clients that declared one of those capabilities |
-| `tools/call` | its handler (`computed`), else the closest recording; schema checks per `invalid_args`; arguments that aren't an object are refused unless recorded |
+| `tools/list`, `resources/list`, `resources/templates/list`, `prompts/list` | a `METHOD_HANDLERS` handler (to add what a session created), else the recorded listing, paginated as recorded; tools with `requires` only to clients whose capabilities satisfy it |
+| `tools/call` | its handler (`computed`), else the closest recording; schema checks per `invalid_args`; a call without a name, or with arguments that aren't an object, gets the real server's recorded refusal |
+| a second `initialize` in a session | the real refusal, when the server refused it during introspection |
 | `resources/read`, `prompts/get`, `completion/complete` | a `METHOD_HANDLERS` handler, else the recording that matches its params, else the real "not found" error (`completion/complete`: no values) |
 | `resources/subscribe` / `unsubscribe`, `logging/setLevel` | a handler or recording, else `{}` when the server advertised it |
 | anything else (`tasks/*` …) | a handler or recording, else the real "method not found" |
@@ -132,12 +133,20 @@ if a behavior can't be expressed, say so in the model's `notes`.
 `None` to let the recordings answer (compute dynamic resources, replay the static ones). Both kinds
 of handler can send notifications: `ctx.progress(step, total, message)` (only when the call
 carried a `progressToken`, as on a real server) and `ctx.notify("notifications/message", {...})`.
-Over SSE they reach the client as they happen, before the answer. Take the real time between them
+Over SSE they reach the client as they happen, before the answer. Outside any call, a server
+can also send on the client's open GET stream (resource updates, periodic log messages):
+`ctx.push(method, params)` sends there, and `ctx.background(work)` keeps running
+`async work(channel)` (with `channel.push(...)` and `await channel.pause(seconds)`) until it ends,
+is cancelled (keep the returned task in `ctx.state` to stop it) or the client ends its session.
+`ctx.client_capabilities` holds what the client declared (sampling, elicitation …), to answer
+differently for clients that can do more. Take the real time between them
 with `await ctx.pause(seconds)`: skipped in fast mode (tests), and noted in `runtime.pauses` either
 way, so a test checks the timing by reading it (never by replacing FauxCall's private sleep).
 
-Tools some servers list only to clients that support sampling, elicitation or roots are found by
-introspection (one session per capability) and carry `requires`. The fake can't send requests
+Tools some servers list only to clients that support sampling, elicitation (form or URL), roots or
+tasks are found by introspection (one session per capability, then one declaring them all) and
+carry `requires`: alternatives, each a set of capability paths a client must all declare
+(`[["sampling"], ["tasks.requests", "sampling"]]`). The fake can't send requests
 back to the client (sampling, elicitation, roots): a tool that needs one should answer with the
 real server's error for a client that doesn't respond, and the README should say so.
 

@@ -64,6 +64,41 @@ class _InvalidCursorError(ValueError):
     """A ``cursor`` this server never issued."""
 
 
+class Channel:
+    """One MCP client's way to receive messages outside any call: its open GET stream.
+
+    Handlers reach it through ``ctx.push`` and ``ctx.background``; background work gets it as
+    its argument.
+    """
+
+    def __init__(self, fake: McpFake, session: str) -> None:
+        self._fake = fake
+        self.session = session
+
+    def push(self, method: str, params: JsonValue = None) -> bool:
+        """Send a notification on the client's GET stream; ``False``: none is open."""
+        message: JsonObject = {"jsonrpc": "2.0", "method": method}
+        if params is not None:
+            message["params"] = params
+        stream = self._fake.streams.get(self.session)
+        if stream is None:
+            return False
+        stream.put_nowait(message)
+        return True
+
+    async def pause(self, seconds: float) -> None:
+        """Wait (the runtime's sleep, so tests can control it)."""
+        await self._fake.runtime.pause(seconds)
+
+    def background(self, work: Callable[[Channel], Awaitable[None]]) -> asyncio.Task[None]:
+        """Run ``work(self)`` until it ends, is cancelled, or the client's session ends."""
+        task = asyncio.ensure_future(work(self))
+        tasks = self._fake.background.setdefault(self.session, set())
+        tasks.add(task)
+        task.add_done_callback(tasks.discard)
+        return task
+
+
 class RpcError(Exception):
     """Raised by a tool handler to answer the call with a JSON-RPC error instead of a result."""
 
@@ -74,6 +109,9 @@ class RpcError(Exception):
         self.data = data
 
 
+_LISTINGS: Final = frozenset(
+    {"tools/list", "resources/list", "resources/templates/list", "prompts/list"}
+)
 _ACKNOWLEDGED: Final = frozenset({"ping", "logging/setLevel"})
 """Methods answered with an empty result unless a handler or a recording says otherwise."""
 _SUBSCRIPTIONS: Final = frozenset({"resources/subscribe", "resources/unsubscribe"})
@@ -124,7 +162,11 @@ class McpFake:
         self.tool_handlers: dict[str, ToolHandler] = {}
         self.method_handlers: dict[str, MethodHandler] = {}
         self._sessions: dict[str, str] = {}
-        self._capabilities: dict[str, frozenset[str]] = {}
+        self._capabilities: dict[str, JsonObject] = {}
+        self.streams: dict[str, asyncio.Queue[JsonValue]] = {}
+        """MCP session -> its open GET stream (messages pushed outside any call)."""
+        self.background: dict[str, set[asyncio.Task[None]]] = {}
+        """MCP session -> work handlers left running after a call (``ctx.background``)."""
         """MCP session -> the capabilities its client declared in ``initialize``."""
         self._sse_queues: dict[str, asyncio.Queue[str]] = {}
 
@@ -229,9 +271,26 @@ class McpFake:
                 )
                 body["protocolVersion"] = self._negotiate(params.get("protocolVersion"))
                 return protocol.result(request_id, body)
+            case _ if method in _LISTINGS and method in self.method_handlers:
+                handler = self.method_handlers[method]
+                answer = await self._handled(request_id, handler(ctx, params))
+                return answer or await self._dispatch_listing(ctx, request_id, method, params)
+            case "tools/list" | "resources/list" | "resources/templates/list" | "prompts/list":
+                return await self._dispatch_listing(ctx, request_id, method, params)
+            case "tools/call":
+                return await self._call_tool(ctx, request_id, params)
+            case _:
+                return await self._other_method(ctx, request_id, method, params)
+
+    async def _dispatch_listing(
+        self, ctx: RequestContext, request_id: JsonValue, method: str, params: JsonObject
+    ) -> JsonObject:
+        """A recorded listing, paginated as recorded (tools: only those this client is offered)."""
+        match method:
             case "tools/list":
-                declared = self._capabilities.get(ctx.mcp_session or "", frozenset())
-                tools = [t.definition for t in self.model.tools if _offered(t, declared)]
+                tools = [
+                    t.definition for t in self.model.tools if t.offered_to(ctx.client_capabilities)
+                ]
                 return self._listing(request_id, method, self._page(params, tools, "tools"))
             case "resources/list":
                 page = self._page(params, self.model.resources, "resources")
@@ -239,13 +298,9 @@ class McpFake:
             case "resources/templates/list":
                 page = self._page(params, self.model.resource_templates, "resourceTemplates")
                 return self._listing(request_id, method, page)
-            case "prompts/list":
+            case _:
                 page = self._page(params, self.model.prompts, "prompts")
                 return self._listing(request_id, method, page)
-            case "tools/call":
-                return await self._call_tool(ctx, request_id, params)
-            case _:
-                return await self._other_method(ctx, request_id, method, params)
 
     async def _other_method(
         self, ctx: RequestContext, request_id: JsonValue, method: str, params: JsonObject
@@ -341,11 +396,18 @@ class McpFake:
     async def _call_tool(
         self, ctx: RequestContext, request_id: JsonValue, params: JsonObject
     ) -> JsonObject:
-        name = str(params.get("name", ""))
+        named = params.get("name")
+        if not isinstance(named, str) or not named:  # the real refusal, when recorded
+            return self._error(
+                request_id,
+                "tool_call_without_name",
+                protocol.INVALID_PARAMS,
+                "Invalid params: name is required",
+            )
+        name = named
         sent = params.get("arguments", {})
         tool = self.model.tool(name)
-        declared = self._capabilities.get(ctx.mcp_session or "", frozenset())
-        if tool is None or not _offered(tool, declared):
+        if tool is None or not tool.offered_to(ctx.client_capabilities):
             return self._error(
                 request_id,
                 "unknown_tool",
@@ -384,6 +446,10 @@ class McpFake:
             reply = exchange.response.body.parsed() if exchange.response else None
             if _sent_arguments(exchange) == wanted and isinstance(reply, dict):
                 return protocol.with_id(reply, request_id)
+        recorded = self.model.errors.get("arguments_not_object")
+        probe = self.model.arguments_probe_tool
+        if isinstance(recorded, dict) and probe:
+            return protocol.with_id(_renamed(recorded, probe, tool.name), request_id)
         return protocol.error(
             request_id, protocol.INVALID_PARAMS, "Invalid params: arguments must be an object"
         )
@@ -505,19 +571,45 @@ class McpFake:
 
     def _get_or_delete(self, request: Request) -> Response:
         """A GET (the server's stream, or its refusal) or a DELETE (ends the session)."""
+        session = request.headers.get(self.transport.session_header)
         if request.method == "DELETE":
-            session = request.headers.get(self.transport.session_header)
             if session:
-                self._sessions.pop(session, None)
-                self._capabilities.pop(session, None)
+                self._end(session)
             return Response(status_code=self.transport.delete_status)
         if self.transport.get_stream == "status":
             status = self.transport.get_status
             allow = {"allow": "POST, DELETE"} if status == 405 else {}  # noqa: PLR2004
             return Response(status_code=status, headers=allow)
         return StreamingResponse(
-            _idle_stream(self.runtime.pause), media_type=self.transport.content_type_sse
+            self._server_stream(session or ""), media_type=self.transport.content_type_sse
         )
+
+    def _end(self, session: str) -> None:
+        """A client ended its session: forget it and stop what it left running."""
+        self._sessions.pop(session, None)
+        self._capabilities.pop(session, None)
+        self.streams.pop(session, None)
+        for task in self.background.pop(session, set()):
+            task.cancel()
+
+    async def _server_stream(self, session: str) -> AsyncIterator[bytes]:
+        """The client's GET stream: pushed notifications, and comments that keep it open."""
+        queue: asyncio.Queue[JsonValue] = asyncio.Queue()
+        self.streams[session] = queue
+        try:
+            while True:
+                getter = asyncio.ensure_future(queue.get())
+                idle = asyncio.ensure_future(self.runtime.pause(KEEP_ALIVE_SECONDS))
+                await asyncio.wait({getter, idle}, return_when=asyncio.FIRST_COMPLETED)
+                if getter.done():
+                    idle.cancel()
+                    yield _sse(getter.result(), event_id=self.transport.sse_event_ids)
+                else:
+                    getter.cancel()
+                    yield b": keep-alive\n\n"
+        finally:
+            if self.streams.get(session) is queue:
+                del self.streams[session]
 
     def _session_of(
         self, request: Request, messages: Sequence[JsonValue]
@@ -526,6 +618,17 @@ class McpFake:
         session_header = self.transport.session_header
         session = request.headers.get(session_header)
         is_init = any(isinstance(m, dict) and m.get("method") == "initialize" for m in messages)
+        again = self.model.errors.get("second_initialize")
+        if is_init and session in self._sessions and isinstance(again, dict):
+            init = next(
+                m for m in messages if isinstance(m, dict) and m.get("method") == "initialize"
+            )
+            refused = Response(
+                content=jsonfmt.dumps(protocol.with_id(again, init.get("id"))).encode(),
+                status_code=self.transport.reinitialize_status or 400,
+                media_type="application/json",
+            )
+            return {}, refused
         if is_init and self.transport.issues_session:
             session = secrets.token_hex(16)
             self._sessions[session] = (
@@ -608,6 +711,8 @@ class McpFake:
         ctx.identity = getattr(request.state, "fauxcall_identity", None)
         ctx.json_body = message
         ctx.mcp_session = request.headers.get(self.transport.session_header)
+        ctx.client_capabilities = dict(self._capabilities.get(ctx.mcp_session or "", {}))
+        ctx.channel = Channel(self, ctx.mcp_session or "")
         ctx.on_notify = on_notify
         bind_context(request_id=ctx.request_id, session=ctx.session, endpoint=endpoint_id)
         fault = self.runtime.faults.pick(endpoint_id, ctx.session)
@@ -723,20 +828,15 @@ class McpFake:
         return Response(content=b"Accepted", status_code=202)
 
 
-def _declared(messages: Sequence[JsonValue]) -> frozenset[str]:
+def _declared(messages: Sequence[JsonValue]) -> JsonObject:
     """The client capabilities the ``initialize`` among ``messages`` declared."""
-    found: set[str] = set()
     for message in messages:
         if isinstance(message, dict) and message.get("method") == "initialize":
             params = message.get("params")
             declared = params.get("capabilities") if isinstance(params, dict) else None
-            found.update(declared if isinstance(declared, dict) else ())
-    return frozenset(found)
-
-
-def _offered(tool: McpToolModel, declared: frozenset[str]) -> bool:
-    """Whether the server lists ``tool`` to a client that declared these capabilities."""
-    return not tool.requires or bool(declared & set(tool.requires))
+            if isinstance(declared, dict):
+                return declared
+    return {}
 
 
 def _sent_arguments(exchange: Exchange) -> str | None:
@@ -772,10 +872,3 @@ def _drain(queue: asyncio.Queue[JsonValue]) -> list[JsonValue]:
     while not queue.empty():
         found.append(queue.get_nowait())
     return found
-
-
-async def _idle_stream(pause: Callable[[float], Awaitable[None]]) -> AsyncIterator[bytes]:
-    """The server-to-client stream of a server that never pushes: comments keep it open."""
-    while True:
-        await pause(KEEP_ALIVE_SECONDS)
-        yield b": keep-alive\n\n"

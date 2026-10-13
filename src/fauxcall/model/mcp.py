@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from typing import Final, Literal
+from typing import Annotated, Final, Literal
 
-from pydantic import Field, SerializerFunctionWrapHandler, model_serializer
+from pydantic import BeforeValidator, Field, SerializerFunctionWrapHandler, model_serializer
 
 from fauxcall.model.common import Model, RawJson
 from fauxcall.model.realism import LatencyProfile
@@ -52,8 +52,28 @@ class McpTransportModel(Model):
         ),
     )
     sse_event_ids: bool = False
+    reinitialize_status: int | None = Field(
+        default=None, description="HTTP status of a refused second initialize in a session."
+    )
     content_type_json: str = "application/json"
     content_type_sse: str = "text/event-stream"
+
+
+def _alternatives(value: object) -> object:
+    """``["sampling", "roots"]`` (any one of them) -> ``[["sampling"], ["roots"]]``."""
+    if isinstance(value, list):
+        return [[item] if isinstance(item, str) else item for item in value]
+    return value
+
+
+def has_capability(declared: object, path: str) -> bool:
+    """Whether client capabilities hold ``path`` (``"elicitation.url"``)."""
+    node = declared
+    for part in path.split("."):
+        if not isinstance(node, dict) or part not in node:
+            return False
+        node = node[part]
+    return True
 
 
 class McpToolModel(Model):
@@ -68,11 +88,12 @@ class McpToolModel(Model):
     )
     latency: LatencyProfile | None = None
     semantic: SemanticModel | None = None
-    requires: list[str] = Field(
+    requires: Annotated[list[list[str]], BeforeValidator(_alternatives)] = Field(
         default_factory=list,
         description=(
-            "Client capabilities the server lists this tool only to (sampling, elicitation, "
-            "roots): a client sees it when it declared any of them."
+            "Client capabilities the server lists this tool only to: alternatives, each a set of "
+            "capability paths that must all be declared (``[['sampling'], ['tasks.requests', "
+            "'sampling']]``). Empty: every client sees it."
         ),
     )
     varies: bool = Field(
@@ -94,6 +115,13 @@ class McpToolModel(Model):
         position = 1 if items and items[0][0] == "definition" else 0
         items.insert(position, ("behavior", self.behavior))
         return dict(items)
+
+    def offered_to(self, declared: object) -> bool:
+        """Whether the server lists this tool to a client that declared these capabilities."""
+        return not self.requires or any(
+            all(has_capability(declared, path) for path in alternative)
+            for alternative in self.requires
+        )
 
     @property
     def name(self) -> str:
@@ -118,6 +146,10 @@ class McpModel(Model):
     errors: dict[str, RawJson] = Field(
         default_factory=dict,
         description="JSON-RPC error objects by situation: method_not_found, unknown_tool, …",
+    )
+    arguments_probe_tool: str | None = Field(
+        default=None,
+        description="The tool given non-object arguments by introspection (arguments_not_object).",
     )
     listing_extras: dict[str, RawJson] = Field(
         default_factory=dict,

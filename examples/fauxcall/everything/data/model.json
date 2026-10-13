@@ -8,7 +8,7 @@
     "spec_url": "http://127.0.0.1:3101/mcp",
     "spec_file": "source/mcp.json",
     "title": "Everything Reference Server",
-    "fetched_at": "2026-10-12T03:29:51.784033Z"
+    "fetched_at": "2026-10-12T22:13:33.192010Z"
   },
   "real": {
     "base_url": "http://127.0.0.1:3101"
@@ -20,10 +20,12 @@
         "2024-11-05": "2024-11-05",
         "2025-03-26": "2025-03-26",
         "2025-06-18": "2025-06-18",
-        "2025-11-25": "2025-11-25"
+        "2025-11-25": "2025-11-25",
+        "2024-10-07": "2024-10-07"
       },
-      "default_protocol_version": "2025-06-18",
-      "sse_event_ids": true
+      "default_protocol_version": "2025-11-25",
+      "sse_event_ids": true,
+      "reinitialize_status": 400
     },
     "initialize_result": {
       "protocolVersion": "2025-06-18",
@@ -90,32 +92,31 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            7.025,
-            7.227,
-            7.239,
-            7.524,
-            7.764,
-            7.998,
-            8.003,
-            8.459,
-            8.83,
-            9.231,
-            9.454,
-            9.695,
-            10.996,
-            11.257,
-            14.272
+            2.539,
+            3.108,
+            3.429,
+            4.152,
+            4.707,
+            5.393,
+            5.458,
+            7.088,
+            7.143,
+            8.707,
+            9.383,
+            9.594,
+            9.917
           ],
           "error_samples_ms": [
-            2.472,
-            6.356,
-            7.938,
-            8.582,
-            9.153
+            2.307,
+            5.225,
+            5.848,
+            6.286,
+            7.701,
+            8.098
           ],
-          "p50_ms": 8.459,
-          "p90_ms": 11.1526,
-          "p99_ms": 13.8499
+          "p50_ms": 5.458000000000001,
+          "p90_ms": 9.5518,
+          "p99_ms": 9.87824
         }
       },
       {
@@ -160,23 +161,26 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            3.444,
-            7.241,
-            7.598,
-            8.372,
-            9.103,
-            9.982,
-            10.139,
-            10.402
+            2.28,
+            2.551,
+            2.631,
+            2.908,
+            4.146,
+            4.887,
+            6.466,
+            7.813,
+            10.443,
+            12.667
           ],
           "error_samples_ms": [
-            7.856,
-            8.466,
-            16.451
+            2.699,
+            2.831,
+            4.632,
+            9.896
           ],
-          "p50_ms": 8.7375,
-          "p90_ms": 10.2179,
-          "p99_ms": 10.38359
+          "p50_ms": 4.5165,
+          "p90_ms": 10.6654,
+          "p99_ms": 12.46684
         }
       },
       {
@@ -199,17 +203,18 @@
             "taskSupport": "forbidden"
           }
         },
-        "behavior": "computed",
-        "invalid_args": "accept",
+        "behavior": "match",
         "latency": {
           "samples_ms": [
-            8.537,
-            8.964,
-            10.774
+            2.228,
+            2.754,
+            3.841,
+            4.055,
+            4.632
           ],
-          "p50_ms": 8.964,
-          "p90_ms": 10.412,
-          "p99_ms": 10.7378
+          "p50_ms": 3.841,
+          "p90_ms": 4.401199999999999,
+          "p99_ms": 4.6089199999999995
         }
       },
       {
@@ -244,22 +249,27 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.847,
-            6.427,
-            6.977,
-            10.942,
-            11.534,
-            44.112
+            4.198,
+            5.421,
+            5.424,
+            7.036,
+            7.292,
+            9.055,
+            9.441,
+            10.463,
+            10.66,
+            13.403,
+            54.235
           ],
           "error_samples_ms": [
-            7.64,
-            8.713,
-            9.964,
-            11.575
+            3.022,
+            5.701,
+            6.354,
+            8.068
           ],
-          "p50_ms": 8.9595,
-          "p90_ms": 27.823,
-          "p99_ms": 42.48310000000001
+          "p50_ms": 9.055,
+          "p90_ms": 13.402999999999999,
+          "p99_ms": 50.151799999999994
         }
       },
       {
@@ -300,30 +310,28 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            5.732,
-            5.819,
-            6.357,
-            6.361,
-            6.979,
-            8.038,
-            8.269,
-            8.622,
-            9.661,
-            9.726,
-            10.009
+            3.948,
+            5.151,
+            5.25,
+            5.372,
+            6.194,
+            6.77,
+            7.168,
+            9.544,
+            11.128
           ],
           "error_samples_ms": [
-            7.132,
-            8.615,
-            8.64,
-            8.643,
-            17.033
+            4.757,
+            5.007,
+            5.455,
+            6.025,
+            6.999,
+            12.581
           ],
-          "p50_ms": 8.038,
-          "p90_ms": 9.726,
-          "p99_ms": 9.9807
-        },
-        "varies": true
+          "p50_ms": 6.194,
+          "p90_ms": 9.8608,
+          "p99_ms": 11.001280000000001
+        }
       },
       {
         "definition": {
@@ -386,19 +394,22 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            8.14,
-            8.223,
-            8.495,
-            9.254,
-            10.374
+            2.35,
+            2.594,
+            5.339,
+            5.418,
+            7.014,
+            7.115
           ],
           "error_samples_ms": [
-            4.645,
-            8.424
+            4.578,
+            5.079,
+            5.851,
+            8.768
           ],
-          "p50_ms": 8.495,
-          "p90_ms": 9.926,
-          "p99_ms": 10.3292
+          "p50_ms": 5.378500000000002,
+          "p90_ms": 7.064500000000001,
+          "p99_ms": 7.109950000000001
         }
       },
       {
@@ -438,25 +449,28 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            4.965,
-            7.204,
-            7.24,
-            7.288,
-            8.308,
-            8.518,
-            8.551,
-            9.159,
-            9.23
+            3.041,
+            5.744,
+            5.763,
+            5.989,
+            6.144,
+            6.422,
+            7.199,
+            8.884,
+            11.004,
+            11.188,
+            12.357
           ],
           "error_samples_ms": [
-            7.131,
-            8.373,
-            8.414,
-            11.631
+            4.41,
+            4.731,
+            5.455,
+            5.87,
+            5.966
           ],
-          "p50_ms": 8.308,
-          "p90_ms": 9.173200000000001,
-          "p99_ms": 9.22432
+          "p50_ms": 6.422,
+          "p90_ms": 11.187999999999999,
+          "p99_ms": 12.2401
         }
       },
       {
@@ -479,16 +493,18 @@
             "taskSupport": "forbidden"
           }
         },
-        "behavior": "computed",
-        "invalid_args": "accept",
+        "behavior": "match",
         "latency": {
           "samples_ms": [
-            8.924,
-            9.846
+            3.919,
+            4.98,
+            5.364,
+            6.603,
+            6.67
           ],
-          "p50_ms": 9.385,
-          "p90_ms": 9.7538,
-          "p99_ms": 9.83678
+          "p50_ms": 5.364,
+          "p90_ms": 6.643199999999999,
+          "p99_ms": 6.66732
         }
       },
       {
@@ -536,26 +552,20 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            12.2,
-            7.2,
-            6.9,
-            8.3,
-            5.7,
-            7.0,
-            6.1,
-            5.6,
-            6.3
+            2.324,
+            2.867,
+            3.106,
+            7.603
           ],
           "error_samples_ms": [
-            4.7,
-            6.0,
-            5.2,
-            6.5,
-            6.1
+            2.254,
+            2.574,
+            2.587,
+            40.599
           ],
-          "p50_ms": 6.9,
-          "p90_ms": 10.0,
-          "p99_ms": 12.0
+          "p50_ms": 3.106,
+          "p90_ms": 177.046,
+          "p99_ms": 278.7118
         }
       },
       {
@@ -582,14 +592,16 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            5.421,
-            5.561,
-            5.734,
-            6.591
+            2.135,
+            2.16,
+            2.19,
+            2.193,
+            2.229,
+            3.368
           ],
-          "p50_ms": 5.6475,
-          "p90_ms": 6.3339,
-          "p99_ms": 6.56529
+          "p50_ms": 2.1915,
+          "p90_ms": 2.7985,
+          "p99_ms": 3.31105
         },
         "varies": true
       },
@@ -617,14 +629,16 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.532,
-            3.26,
-            5.703,
-            7.589
+            2.149,
+            2.376,
+            2.413,
+            2.475,
+            2.769,
+            5.62
           ],
-          "p50_ms": 4.4815000000000005,
-          "p90_ms": 7.0232,
-          "p99_ms": 7.532420000000001
+          "p50_ms": 2.444,
+          "p90_ms": 4.194500000000001,
+          "p99_ms": 5.47745
         },
         "varies": true
       },
@@ -663,18 +677,16 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            6.1,
-            6.9,
-            6.4,
-            11.5
+            2.385,
+            7.096
           ],
           "error_samples_ms": [
-            11.5,
-            5.2
+            2.232,
+            2.573
           ],
-          "p50_ms": 6.6,
-          "p90_ms": 11.0,
-          "p99_ms": 11.5
+          "p50_ms": 1029.013,
+          "p90_ms": 4411.4258,
+          "p99_ms": 9453.347479999999
         }
       },
       {
@@ -701,12 +713,14 @@
         "invalid_args": "accept",
         "latency": {
           "error_samples_ms": [
-            4.919,
-            7.321
+            4.996,
+            11.737
           ]
         },
         "requires": [
-          "roots"
+          [
+            "roots"
+          ]
         ]
       },
       {
@@ -733,11 +747,72 @@
         "invalid_args": "accept",
         "latency": {
           "error_samples_ms": [
-            5.131
+            5.358,
+            6.373
           ]
         },
         "requires": [
-          "elicitation"
+          [
+            "elicitation"
+          ]
+        ]
+      },
+      {
+        "definition": {
+          "name": "trigger-url-elicitation",
+          "title": "Trigger URL Elicitation Tool",
+          "description": "Trigger a URL elicitation so the client can direct the user to a browser flow. Supports two mechanisms: the request path (elicitation/create, default) which awaits the user's response, and the error path (UrlElicitationRequiredError, -32042) which signals the client to handle URL elicitation via the error response. Set errorPath=true to use the error path.",
+          "inputSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "description": "The URL the user should open"
+              },
+              "message": {
+                "default": "Please open the link to complete this action.",
+                "description": "Message shown to the user before opening the URL",
+                "type": "string"
+              },
+              "elicitationId": {
+                "description": "Optional explicit elicitation ID. Defaults to a random UUID.",
+                "type": "string"
+              },
+              "errorPath": {
+                "default": false,
+                "description": "Controls which elicitation mechanism is used. When false (default), sends an elicitation/create request (request path). When true, throws a UrlElicitationRequiredError (MCP error code -32042) so the client handles the URL elicitation via the error path rather than waiting for a response. To clear the error, satisfy the prerequisite and retry this call with the same arguments; the retry ignores errorPath and proceeds, so the client does not loop on the same error.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "url"
+            ]
+          },
+          "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": false,
+            "openWorldHint": true
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        },
+        "behavior": "computed",
+        "invalid_args": "accept",
+        "latency": {
+          "error_samples_ms": [
+            5.412,
+            5.481,
+            5.631
+          ]
+        },
+        "requires": [
+          [
+            "elicitation.url"
+          ]
         ]
       },
       {
@@ -777,11 +852,15 @@
         "invalid_args": "accept",
         "latency": {
           "error_samples_ms": [
-            4.904
+            5.273,
+            5.359,
+            6.469
           ]
         },
         "requires": [
-          "sampling"
+          [
+            "sampling"
+          ]
         ]
       },
       {
@@ -821,28 +900,103 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            4.36,
-            4.395,
-            5.567,
-            5.803,
-            6.252,
-            6.645,
-            7.289,
-            8.841,
-            10.048
+            2.784,
+            2.865,
+            2.941,
+            10.755
           ],
           "error_samples_ms": [
-            3.37,
-            4.528,
-            5.147,
-            5.416,
-            5.503,
-            5.681
+            4.156,
+            4.689,
+            6.608
           ],
-          "p50_ms": 6.251999999999999,
-          "p90_ms": 9.0824,
-          "p99_ms": 9.95144
+          "p50_ms": 2.9029999999999996,
+          "p90_ms": 8.4108,
+          "p99_ms": 10.520580000000002
         }
+      },
+      {
+        "definition": {
+          "name": "trigger-sampling-request-async",
+          "title": "Trigger Async Sampling Request Tool",
+          "description": "Trigger an async sampling request that the CLIENT executes as a background task. Demonstrates bidirectional MCP tasks where the server sends a request and the client executes it asynchronously, allowing the server to poll for progress and results.",
+          "inputSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+              "prompt": {
+                "type": "string",
+                "description": "The prompt to send to the LLM"
+              },
+              "maxTokens": {
+                "default": 100,
+                "description": "Maximum number of tokens to generate",
+                "type": "number"
+              }
+            },
+            "required": [
+              "prompt"
+            ]
+          },
+          "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": false,
+            "openWorldHint": true
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        },
+        "behavior": "computed",
+        "invalid_args": "accept",
+        "latency": {
+          "error_samples_ms": [
+            4.477,
+            5.488
+          ]
+        },
+        "requires": [
+          [
+            "sampling",
+            "tasks.requests.sampling.createMessage"
+          ]
+        ]
+      },
+      {
+        "definition": {
+          "name": "trigger-elicitation-request-async",
+          "title": "Trigger Async Elicitation Request Tool",
+          "description": "Trigger an async elicitation request that the CLIENT executes as a background task. Demonstrates bidirectional MCP tasks where the server sends an elicitation request and the client handles user input asynchronously, allowing the server to poll for completion.",
+          "inputSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {}
+          },
+          "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": false,
+            "openWorldHint": false
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        },
+        "behavior": "computed",
+        "invalid_args": "accept",
+        "latency": {
+          "error_samples_ms": [
+            3.349,
+            4.877
+          ]
+        },
+        "requires": [
+          [
+            "elicitation",
+            "tasks.requests.elicitation.create"
+          ]
+        ]
       }
     ],
     "resources": [
@@ -998,6 +1152,30 @@
           "message": "MCP error -32602: Prompt __fauxcall_probe_unknown_prompt__ not found"
         }
       },
+      "tool_call_without_name": {
+        "jsonrpc": "2.0",
+        "id": 10,
+        "error": {
+          "code": -32603,
+          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"params\",\n      \"name\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+        }
+      },
+      "arguments_not_object": {
+        "jsonrpc": "2.0",
+        "id": 11,
+        "error": {
+          "code": -32603,
+          "message": "[\n  {\n    \"expected\": \"record\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"params\",\n      \"arguments\"\n    ],\n    \"message\": \"Invalid input: expected record, received array\"\n  }\n]"
+        }
+      },
+      "second_initialize": {
+        "jsonrpc": "2.0",
+        "error": {
+          "code": -32600,
+          "message": "Invalid Request: Server already initialized"
+        },
+        "id": null
+      },
       "missing_session": {
         "jsonrpc": "2.0",
         "error": {
@@ -1006,30 +1184,19 @@
         },
         "id": null
       }
-    }
-  },
-  "default_headers": {
-    "X-Powered-By": "Express",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Expose-Headers": "mcp-session-id,last-event-id,mcp-protocol-version"
+    },
+    "arguments_probe_tool": "echo"
   },
   "notes": [
-    "Server: @modelcontextprotocol/server-everything 2026.8.31 (serverInfo mcp-servers/everything 2.0.0), Streamable HTTP, SSE answers, run locally with an empty environment.",
-    "Tool argument validation reproduces Zod 4 messages exactly: 'MCP error -32602: Input validation error: Invalid arguments for tool <name>: <issue> at <path>' with issues joined by newlines, as isError results (recorded for every tool).",
-    "Dynamic resources demo://resource/dynamic/{text|blob}/{id}: id parsed like JS Number() (1e3, 0x10, +5, 5.0, 007 accepted; 0, negatives, fractions, words rejected with -32603 'Unknown resource: <normalized uri>'); text embeds the server's local time as h:mm:ss AM/PM. The recorded server ran in UTC-4 (America/New_York, EDT): the fake uses FAUXCALL_LOCAL_TZ, default America/New_York.",
-    "Blob resources answer mimeType text/plain (the template lists application/octet-stream): recorded.",
-    "trigger-long-running-operation sleeps duration/steps seconds per step and sends notifications/progress {progress:i,total:steps} only when the call carries a progressToken (recorded 0 to 10 s).",
-    "simulate-research-query requires task augmentation; tasks are per MCP session, ttl always 300000 ms whatever the client asks, stages Gathering sources / Analyzing content / Synthesizing findings / Generating report advance every ~1.0 s, completed at ~4.0 s, expire 300 s after their last update; tasks/result blocks until completion (recorded).",
-    "gzip-file-as-resource: data: URLs are decoded and compressed like Node zlib (byte-identical, OS byte 0x13); http(s) URLs: the fake is offline and serves only the recorded URLs (the default README, example.com, the GitHub 404 page); other hosts answer 'fetch failed' like an unreachable host. Session resources live per MCP session.",
-    "Session resources created by gzip-file-as-resource appear in the real resources/list; FauxCall serves resources/list from the model, so the fake's listing never shows them (resources/read does).",
-    "toggle-simulated-logging / toggle-subscriber-updates alternate Started/Stopped per MCP session and name the session id; the real server then pushes notifications every 5 s on the standalone GET stream, which the fake does not emit.",
-    "Not modeled (not listed to any client FauxCall could introspect): trigger-url-elicitation (needs elicitation.url), trigger-sampling-request-async and trigger-elicitation-request-async (need tasks.requests.* client capabilities), documented in features.md.",
-    "Capability tools (get-roots-list, trigger-elicitation-request, trigger-sampling-request) are listed just before simulate-research-query, in that order (recorded one capability at a time; the three-capability order observed in parity). For a client that declares sampling/elicitation but never answers the server's request, the real server answers isError 'MCP error -32001: Request timed out' after 60 s; get-roots-list answers at once that no roots are configured (both observed in parity runs).",
-    "URIs are normalized like new URL(): dot segments (also %2e) resolved, forbidden host code points or ports > 65535 rejected with -32603 'Invalid URL', backslash kept; template ids stop at '/' and ',' (review probes 000416-000422).",
-    "Session resources are registered under the raw URI and looked up by the normalized one, so names with spaces or dot segments can't be read back (000428-000434).",
-    "tasks/list pages 10 tasks with nextCursor = last task id of the page; cursor null -> Zod -32603; task: null on tools/call -> Zod -32603 at params.task; a task still exists 302 s after creation (expiry counts from the last update) (000439-000459).",
-    "completion/complete: invalid ref -> invalid_union with one branch per ref kind, reported together with argument issues; template variables without a completer answer without 'total' (000411-000414, parity).",
-    "A second initialize in a session gets 400 -32600 'Invalid Request: Server already initialized' on the real server (000437); FauxCall answers it.",
-    "simulate-research-query ambiguous:true from an elicitation-capable client: real task goes input_required with statusMessage 'Found multiple interpretations for \"<topic>\". Requesting clarification...' (parity run 3); not modeled because handlers can't see the client's declared capabilities."
+    "Evidence: ~380 recorded exchanges (all tools, all protocol methods, edge and invalid probes) against @modelcontextprotocol/server-everything 2026.8.31 (SDK ^1.30) on 127.0.0.1:3101. Where recording was impossible, the server's and the SDK's published npm source was read as documentation (marked below).",
+    "Computed in handlers.py: echo, get-sum (JavaScript number formatting), get-annotated-message, get-structured-content, get-resource-links, get-resource-reference, trigger-long-running-operation (progress notifications, Node timer semantics), gzip-file-as-resource (byte-identical gzip, session resources), toggles, simulate-research-query + tasks/*, dynamic resources, prompts, completions. get-env and get-tiny-image, the static documents and the listings replay recordings.",
+    "Validation errors reproduce Zod 4 wording verified against recordings (Invalid input / Invalid option / Too small / Too big / Invalid URL, joined by newlines, in schema order).",
+    "Dynamic resource text embeds toLocaleTimeString() in the server's zone: observed US Eastern (EDT); the fake uses FAUXCALL_EVERYTHING_TZ, default America/New_York.",
+    "From source (not recordable: the recorder opens no GET stream): toggle-simulated-logging sends one log message at once and then one every 5 s, random level, data '<Level>-level message - SessionId <id>', filtered by logging/setLevel; toggle-subscriber-updates sends notifications/resources/updated for each subscribed URI at once and every 5 s; resources/subscribe and unsubscribe log an info message; registering a session resource sends notifications/resources/list_changed.",
+    "From source (the recorder declares no client capabilities, so the real server hides these tools): trigger-sampling-request(-async), trigger-elicitation-request(-async), trigger-url-elicitation and get-roots-list send requests TO the client, which FauxCall cannot do. The fake answers as the SDK does for a client that never responds: 'MCP error -32001: Request timed out' after 60 s (10 min for the elicitation tools), get-roots-list's 'no roots configured' text after 60 s; trigger-url-elicitation's errorPath=true answers the -32042 UrlElicitationRequiredError as the source builds it. Clients without the capability get the recorded 'Tool X not found'.",
+    "gzip-file-as-resource never fetches from the network: data: URLs are decoded (WHATWG rules), the default README URL replays the recorded file, and any other http(s) URL answers 'fetch failed' (the real server would fetch it).",
+    "simulate-research-query: stage timing (~1 s per stage, completes after ~4 s), ttl forced to 300000, per-session task store, cancel/result/list/get errors and tasks/list paging (10 a page, nextCursor = last task id, invalid cursor error) all recorded. The ambiguous=true clarification path for elicitation-capable clients follows the source and is not recorded. Expiry: the fake drops a task its TTL after its last update (source: the cleanup timer starts at creation and resets at terminal states).",
+    "Review round (recordings 000385-000427): task param on non-task tools (-32602 after the tool runs), malformed progressToken (HTTP 400 -32700), WHATWG URI normalization and undecoded UriTemplate matching in resources/read, -32603 request-schema issues for prompts/get, completion/complete and tasks/list, Zod 'received Infinity' for non-finite numbers, completion on a fixed resource URI. Capability gating and tool order now follow recordings 14-19 and the source predicates.",
+    "Runtime-level transport differences (key order of results, id formats, priming event, session/Accept/Content-Type refusals, unknown tool + task) are listed in the README; they can't be changed from handlers."
   ]
 }

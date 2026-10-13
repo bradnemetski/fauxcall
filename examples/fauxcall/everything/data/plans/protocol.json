@@ -1,0 +1,60 @@
+{
+  "name": "protocol",
+  "created_at": "2026-10-12T22:30:00Z",
+  "calls": [
+    {
+      "id": "proto-ping",
+      "endpoint": "MCP ping",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      },
+      "repeat": 3,
+      "interval_ms": 500
+    },
+    {
+      "id": "proto-tools-list",
+      "endpoint": "MCP tools/list",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "proto-tools-list-cursor",
+      "endpoint": "MCP tools/list",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "cursor": "bogus"
+        }
+      }
+    },
+    {
+      "id": "proto-tasks-list-empty",
+      "endpoint": "MCP tasks/list",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "proto-unknown-method",
+      "endpoint": "MCP fauxcall/nothing",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    }
+  ]
+}

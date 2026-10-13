@@ -1,11 +1,11 @@
 {
   "id": "000185",
   "endpoint": "MCP completion/complete",
-  "purpose": "invalid",
-  "plan_call": "cc-unknown-prompt",
-  "started_at": "2026-10-12T03:37:06.634922Z",
-  "started_ns": 1791776226634922000,
-  "elapsed_ms": 8.396,
+  "purpose": "variation",
+  "plan_call": "cmp-dept-e",
+  "started_at": "2026-10-12T22:19:14.147653Z",
+  "started_ns": 1791843554147653000,
+  "elapsed_ms": 2.166,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,16 +33,16 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 33,
+        "id": 3,
         "method": "completion/complete",
         "params": {
           "ref": {
             "type": "ref/prompt",
-            "name": "nope"
+            "name": "completable-prompt"
           },
           "argument": {
-            "name": "x",
-            "value": ""
+            "name": "department",
+            "value": "E"
           }
         }
       }
@@ -89,29 +89,34 @@
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:37:06 GMT"
+        "Mon, 12 Oct 2026 22:19:14 GMT"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "text/event-stream",
       "json": {
+        "result": {
+          "completion": {
+            "values": [
+              "Engineering"
+            ],
+            "total": 1,
+            "hasMore": false
+          }
+        },
         "jsonrpc": "2.0",
-        "id": 33,
-        "error": {
-          "code": -32602,
-          "message": "MCP error -32602: Prompt nope not found"
-        }
+        "id": 3
       }
     }
   },
   "stream": [
     {
-      "t_ms": 8.076,
+      "t_ms": 2.067,
       "kind": "sse",
       "event": "message",
-      "id": "3c67084b-79f1-4128-8da8-72f63f5f4909",
-      "data": "{\"jsonrpc\":\"2.0\",\"id\":33,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Prompt nope not found\"}}"
+      "id": "dc262c75-2940-451c-b51f-cb9d32257b87",
+      "data": "{\"result\":{\"completion\":{\"values\":[\"Engineering\"],\"total\":1,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":3}"
     }
   ],
   "redacted": [

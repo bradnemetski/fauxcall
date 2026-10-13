@@ -2,10 +2,10 @@
   "id": "000278",
   "endpoint": "MCP tasks/result",
   "purpose": "job_poll",
-  "plan_call": "rq-task3-result",
-  "started_at": "2026-10-12T03:38:58.423740Z",
-  "started_ns": 1791776338423740000,
-  "elapsed_ms": 8.854,
+  "plan_call": "rq-result-ambiguous",
+  "started_at": "2026-10-12T22:20:19.236487Z",
+  "started_ns": 1791843619236487000,
+  "elapsed_ms": 7.528,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,10 +33,10 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 78,
+        "id": 28,
         "method": "tasks/result",
         "params": {
-          "taskId": "17ef0a0866e2f54e353d058e620db18c"
+          "taskId": "bbb5966ef331dac4a95ec29390eb88ea"
         }
       }
     }
@@ -78,7 +78,7 @@
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:38:58 GMT"
+        "Mon, 12 Oct 2026 22:20:19 GMT"
       ],
       [
         "transfer-encoding",
@@ -89,22 +89,31 @@
       "kind": "json",
       "content_type": "text/event-stream",
       "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "# Research Report: python\n\n## Research Parameters\n- **Topic**: python\n\n\n## Synthesis\nThis research query was processed through 4 stages:\n- Stage 1: Gathering sources ✓\n- Stage 2: Analyzing content ✓\n- Stage 3: Synthesizing findings ✓\n- Stage 4: Generating report ✓\n\n---\n\n## About This Demo (SEP-1686: Tasks)\n\nThis tool demonstrates MCP's task-based execution pattern for long-running operations:\n\n**Task Lifecycle Demonstrated:**\n1. `tools/call` with `task` parameter → Server returns `CreateTaskResult` (not the final result)\n2. Client polls `tasks/get` → Server returns current status and `statusMessage`\n3. Status progressed: `working` → `completed`\n4. Client calls `tasks/result` → Server returns this final result\n\n\n**Key Concepts:**\n- Tasks enable \"call now, fetch later\" patterns\n- `statusMessage` provides human-readable progress updates\n- Tasks have TTL (time-to-live) for automatic cleanup\n- `pollInterval` suggests how often to check status\n- Elicitation requests use `relatedTask` to queue via tasks/result (works on all transports)\n\n*This is a simulated research report from the Everything MCP Server.*\n"
+            }
+          ],
+          "_meta": {
+            "io.modelcontextprotocol/related-task": {
+              "taskId": "bbb5966ef331dac4a95ec29390eb88ea"
+            }
+          }
+        },
         "jsonrpc": "2.0",
-        "id": 78,
-        "error": {
-          "code": -32603,
-          "message": "Task 17ef0a0866e2f54e353d058e620db18c has no result stored"
-        }
+        "id": 28
       }
     }
   },
   "stream": [
     {
-      "t_ms": 8.597,
+      "t_ms": 7.223,
       "kind": "sse",
       "event": "message",
-      "id": "e16a8301-fbfb-444e-8414-5a7162b9ac80",
-      "data": "{\"jsonrpc\":\"2.0\",\"id\":78,\"error\":{\"code\":-32603,\"message\":\"Task 17ef0a0866e2f54e353d058e620db18c has no result stored\"}}"
+      "id": "fa9e6b83-3f46-4084-98e6-7c690edc4719",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"# Research Report: python\\n\\n## Research Parameters\\n- **Topic**: python\\n\\n\\n## Synthesis\\nThis research query was processed through 4 stages:\\n- Stage 1: Gathering sources ✓\\n- Stage 2: Analyzing content ✓\\n- Stage 3: Synthesizing findings ✓\\n- Stage 4: Generating report ✓\\n\\n---\\n\\n## About This Demo (SEP-1686: Tasks)\\n\\nThis tool demonstrates MCP's task-based execution pattern for long-running operations:\\n\\n**Task Lifecycle Demonstrated:**\\n1. `tools/call` with `task` parameter → Server returns `CreateTaskResult` (not the final result)\\n2. Client polls `tasks/get` → Server returns current status and `statusMessage`\\n3. Status progressed: `working` → `completed`\\n4. Client calls `tasks/result` → Server returns this final result\\n\\n\\n**Key Concepts:**\\n- Tasks enable \\\"call now, fetch later\\\" patterns\\n- `statusMessage` provides human-readable progress updates\\n- Tasks have TTL (time-to-live) for automatic cleanup\\n- `pollInterval` suggests how often to check status\\n- Elicitation requests use `relatedTask` to queue via tasks/result (works on all transports)\\n\\n*This is a simulated research report from the Everything MCP Server.*\\n\"}],\"_meta\":{\"io.modelcontextprotocol/related-task\":{\"taskId\":\"bbb5966ef331dac4a95ec29390eb88ea\"}}},\"jsonrpc\":\"2.0\",\"id\":28}"
     }
   ],
   "redacted": [

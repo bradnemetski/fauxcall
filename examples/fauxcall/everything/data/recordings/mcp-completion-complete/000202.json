@@ -1,11 +1,11 @@
 {
   "id": "000202",
   "endpoint": "MCP completion/complete",
-  "purpose": "variation",
-  "plan_call": "cc2-0",
-  "started_at": "2026-10-12T03:37:57.987368Z",
-  "started_ns": 1791776277987368000,
-  "elapsed_ms": 8.414,
+  "purpose": "invalid",
+  "plan_call": "cmp-unknown-template",
+  "started_at": "2026-10-12T22:19:22.662484Z",
+  "started_ns": 1791843562662484000,
+  "elapsed_ms": 2.607,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,21 +33,16 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 2,
+        "id": 20,
         "method": "completion/complete",
         "params": {
           "ref": {
-            "type": "ref/prompt",
-            "name": "completable-prompt"
+            "type": "ref/resource",
+            "uri": "demo://nope/{x}"
           },
           "argument": {
-            "name": "name",
+            "name": "x",
             "value": ""
-          },
-          "context": {
-            "arguments": {
-              "department": "Marketing"
-            }
           }
         }
       }
@@ -90,40 +85,33 @@
       ],
       [
         "content-length",
-        "174"
+        "187"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:37:57 GMT"
+        "Mon, 12 Oct 2026 22:19:22 GMT"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "text/event-stream",
       "json": {
-        "result": {
-          "completion": {
-            "values": [
-              "Grace",
-              "Henry",
-              "Iris"
-            ],
-            "total": 3,
-            "hasMore": false
-          }
-        },
         "jsonrpc": "2.0",
-        "id": 2
+        "id": 20,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Resource template demo://nope/{x} not found"
+        }
       }
     }
   },
   "stream": [
     {
-      "t_ms": 8.1,
+      "t_ms": 2.508,
       "kind": "sse",
       "event": "message",
-      "id": "7aa3a681-fd85-46c0-a201-92608ebf2247",
-      "data": "{\"result\":{\"completion\":{\"values\":[\"Grace\",\"Henry\",\"Iris\"],\"total\":3,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":2}"
+      "id": "df8fe96d-5353-413e-9c96-6d785efa130e",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":20,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Resource template demo://nope/{x} not found\"}}"
     }
   ],
   "redacted": [

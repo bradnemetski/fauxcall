@@ -2,10 +2,10 @@
   "id": "000257",
   "endpoint": "MCP tasks/get",
   "purpose": "job_poll",
-  "plan_call": "rq-task-get",
-  "started_at": "2026-10-12T03:38:38.697828Z",
-  "started_ns": 1791776318697828000,
-  "elapsed_ms": 7.116,
+  "plan_call": "rq-get-1",
+  "started_at": "2026-10-12T22:20:00.604286Z",
+  "started_ns": 1791843600604286000,
+  "elapsed_ms": 4.301,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,10 +33,10 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 57,
+        "id": 7,
         "method": "tasks/get",
         "params": {
-          "taskId": "d624cbe144a50c75e4cecead6a93da79"
+          "taskId": "ac237ae0a33c7d811a405e41a02fb731"
         }
       }
     }
@@ -78,11 +78,11 @@
       ],
       [
         "content-length",
-        "321"
+        "316"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:38:38 GMT"
+        "Mon, 12 Oct 2026 22:20:00 GMT"
       ]
     ],
     "body": {
@@ -90,26 +90,26 @@
       "content_type": "text/event-stream",
       "json": {
         "result": {
-          "taskId": "d624cbe144a50c75e4cecead6a93da79",
+          "taskId": "ac237ae0a33c7d811a405e41a02fb731",
           "status": "working",
           "ttl": 300000,
-          "createdAt": "2026-10-12T03:38:36.177Z",
-          "lastUpdatedAt": "2026-10-12T03:38:38.185Z",
+          "createdAt": "2026-10-12T22:19:57.081Z",
+          "lastUpdatedAt": "2026-10-12T22:20:00.088Z",
           "pollInterval": 1000,
-          "statusMessage": "Synthesizing findings..."
+          "statusMessage": "Generating report..."
         },
         "jsonrpc": "2.0",
-        "id": 57
+        "id": 7
       }
     }
   },
   "stream": [
     {
-      "t_ms": 6.823,
+      "t_ms": 3.98,
       "kind": "sse",
       "event": "message",
-      "id": "7458a645-2e9e-453f-927d-007c625c77b1",
-      "data": "{\"result\":{\"taskId\":\"d624cbe144a50c75e4cecead6a93da79\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-12T03:38:36.177Z\",\"lastUpdatedAt\":\"2026-10-12T03:38:38.185Z\",\"pollInterval\":1000,\"statusMessage\":\"Synthesizing findings...\"},\"jsonrpc\":\"2.0\",\"id\":57}"
+      "id": "629074ab-f300-4780-b29d-b711c1608ea6",
+      "data": "{\"result\":{\"taskId\":\"ac237ae0a33c7d811a405e41a02fb731\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-12T22:19:57.081Z\",\"lastUpdatedAt\":\"2026-10-12T22:20:00.088Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\",\"id\":7}"
     }
   ],
   "redacted": [

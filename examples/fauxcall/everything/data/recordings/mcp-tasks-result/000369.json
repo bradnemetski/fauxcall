@@ -1,0 +1,123 @@
+{
+  "id": "000369",
+  "endpoint": "MCP tasks/result",
+  "purpose": "job_poll",
+  "plan_call": "pt-result-twice-1",
+  "started_at": "2026-10-12T22:27:27.834831Z",
+  "started_ns": 1791844047834831000,
+  "elapsed_ms": 3009.623,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "tasks/result",
+        "params": {
+          "taskId": "20f56f2cde84e5035e17e0991a9614af"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 22:27:27 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "# Research Report: coral reefs\n\n## Research Parameters\n- **Topic**: coral reefs\n\n\n## Synthesis\nThis research query was processed through 4 stages:\n- Stage 1: Gathering sources ✓\n- Stage 2: Analyzing content ✓\n- Stage 3: Synthesizing findings ✓\n- Stage 4: Generating report ✓\n\n---\n\n## About This Demo (SEP-1686: Tasks)\n\nThis tool demonstrates MCP's task-based execution pattern for long-running operations:\n\n**Task Lifecycle Demonstrated:**\n1. `tools/call` with `task` parameter → Server returns `CreateTaskResult` (not the final result)\n2. Client polls `tasks/get` → Server returns current status and `statusMessage`\n3. Status progressed: `working` → `completed`\n4. Client calls `tasks/result` → Server returns this final result\n\n\n**Key Concepts:**\n- Tasks enable \"call now, fetch later\" patterns\n- `statusMessage` provides human-readable progress updates\n- Tasks have TTL (time-to-live) for automatic cleanup\n- `pollInterval` suggests how often to check status\n- Elicitation requests use `relatedTask` to queue via tasks/result (works on all transports)\n\n*This is a simulated research report from the Everything MCP Server.*\n"
+            }
+          ],
+          "_meta": {
+            "io.modelcontextprotocol/related-task": {
+              "taskId": "20f56f2cde84e5035e17e0991a9614af"
+            }
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 6
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 3009.29,
+      "kind": "sse",
+      "event": "message",
+      "id": "fa879246-8f97-4f6f-9c1b-51399b51d2b8",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"# Research Report: coral reefs\\n\\n## Research Parameters\\n- **Topic**: coral reefs\\n\\n\\n## Synthesis\\nThis research query was processed through 4 stages:\\n- Stage 1: Gathering sources ✓\\n- Stage 2: Analyzing content ✓\\n- Stage 3: Synthesizing findings ✓\\n- Stage 4: Generating report ✓\\n\\n---\\n\\n## About This Demo (SEP-1686: Tasks)\\n\\nThis tool demonstrates MCP's task-based execution pattern for long-running operations:\\n\\n**Task Lifecycle Demonstrated:**\\n1. `tools/call` with `task` parameter → Server returns `CreateTaskResult` (not the final result)\\n2. Client polls `tasks/get` → Server returns current status and `statusMessage`\\n3. Status progressed: `working` → `completed`\\n4. Client calls `tasks/result` → Server returns this final result\\n\\n\\n**Key Concepts:**\\n- Tasks enable \\\"call now, fetch later\\\" patterns\\n- `statusMessage` provides human-readable progress updates\\n- Tasks have TTL (time-to-live) for automatic cleanup\\n- `pollInterval` suggests how often to check status\\n- Elicitation requests use `relatedTask` to queue via tasks/result (works on all transports)\\n\\n*This is a simulated research report from the Everything MCP Server.*\\n\"}],\"_meta\":{\"io.modelcontextprotocol/related-task\":{\"taskId\":\"20f56f2cde84e5035e17e0991a9614af\"}}},\"jsonrpc\":\"2.0\",\"id\":6}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

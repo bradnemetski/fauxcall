@@ -1,11 +1,11 @@
 {
   "id": "000412",
   "endpoint": "MCP completion/complete",
-  "purpose": "invalid",
-  "plan_call": "cc-p2",
-  "started_at": "2026-10-12T04:35:33.878124Z",
-  "started_ns": 1791779733878124000,
-  "elapsed_ms": 8.526,
+  "purpose": "edge",
+  "plan_call": "q-cmp-static-uri",
+  "started_at": "2026-10-12T23:04:24.743422Z",
+  "started_ns": 1791846264743422000,
+  "elapsed_ms": 5.4,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,14 +33,17 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 3,
+        "id": 29,
         "method": "completion/complete",
         "params": {
           "ref": {
-            "type": "ref/prompt",
-            "name": "completable-prompt"
+            "type": "ref/resource",
+            "uri": "demo://resource/static/document/architecture.md"
           },
-          "argument": {}
+          "argument": {
+            "name": "x",
+            "value": ""
+          }
         }
       }
     }
@@ -82,33 +85,35 @@
       ],
       [
         "content-length",
-        "587"
+        "143"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 04:35:33 GMT"
+        "Mon, 12 Oct 2026 23:04:24 GMT"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "text/event-stream",
       "json": {
+        "result": {
+          "completion": {
+            "values": [],
+            "hasMore": false
+          }
+        },
         "jsonrpc": "2.0",
-        "id": 3,
-        "error": {
-          "code": -32603,
-          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"params\",\n      \"argument\",\n      \"name\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"params\",\n      \"argument\",\n      \"value\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
-        }
+        "id": 29
       }
     }
   },
   "stream": [
     {
-      "t_ms": 8.235,
+      "t_ms": 5.125,
       "kind": "sse",
       "event": "message",
-      "id": "8e846401-0547-4ee3-a356-5e274a6f7a03",
-      "data": "{\"jsonrpc\":\"2.0\",\"id\":3,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"expected\\\": \\\"string\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"argument\\\",\\n      \\\"name\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n  },\\n  {\\n    \\\"expected\\\": \\\"string\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"argument\\\",\\n      \\\"value\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n  }\\n]\"}}"
+      "id": "8a0adb18-a940-4dd3-982e-f1a859e6724c",
+      "data": "{\"result\":{\"completion\":{\"values\":[],\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":29}"
     }
   ],
   "redacted": [

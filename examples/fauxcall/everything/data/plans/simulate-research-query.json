@@ -1,0 +1,308 @@
+{
+  "name": "simulate-research-query",
+  "created_at": "2026-10-12T22:30:00Z",
+  "calls": [
+    {
+      "id": "rq-no-task",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "quantum computing"
+          }
+        }
+      }
+    },
+    {
+      "id": "rq-task",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "renewable energy storage"
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      },
+      "capture": {
+        "task1": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "rq-get-1",
+      "endpoint": "MCP tasks/get",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task1}}"
+        }
+      },
+      "repeat": 8,
+      "interval_ms": 1000
+    },
+    {
+      "id": "rq-result-1",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task1}}"
+        }
+      }
+    },
+    {
+      "id": "rq-list",
+      "endpoint": "MCP tasks/list",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "rq-task-2",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "history of the printing press"
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      },
+      "capture": {
+        "task2": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "rq-result-2-wait",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task2}}"
+        }
+      }
+    },
+    {
+      "id": "rq-get-2",
+      "endpoint": "MCP tasks/get",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task2}}"
+        }
+      }
+    },
+    {
+      "id": "rq-task-cancel",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "deep sea mining"
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      },
+      "capture": {
+        "task3": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "rq-cancel",
+      "endpoint": "MCP tasks/cancel",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task3}}"
+        }
+      }
+    },
+    {
+      "id": "rq-get-cancelled",
+      "endpoint": "MCP tasks/get",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task3}}"
+        }
+      }
+    },
+    {
+      "id": "rq-cancel-again",
+      "endpoint": "MCP tasks/cancel",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task3}}"
+        }
+      }
+    },
+    {
+      "id": "rq-ambiguous",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "python",
+            "ambiguous": true
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      },
+      "capture": {
+        "task4": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "rq-get-ambiguous",
+      "endpoint": "MCP tasks/get",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task4}}"
+        }
+      },
+      "repeat": 6,
+      "interval_ms": 1000
+    },
+    {
+      "id": "rq-result-ambiguous",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task4}}"
+        }
+      }
+    },
+    {
+      "id": "rq-list-end",
+      "endpoint": "MCP tasks/list",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "rq-get-unknown",
+      "endpoint": "MCP tasks/get",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "fauxcall-no-such-task"
+        }
+      }
+    },
+    {
+      "id": "rq-result-unknown",
+      "endpoint": "MCP tasks/result",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "fauxcall-no-such-task"
+        }
+      }
+    },
+    {
+      "id": "rq-cancel-unknown",
+      "endpoint": "MCP tasks/cancel",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "fauxcall-no-such-task"
+        }
+      }
+    },
+    {
+      "id": "rq-missing-topic",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {},
+          "task": {
+            "ttl": 60000
+          }
+        }
+      }
+    },
+    {
+      "id": "rq-bad-topic",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": 12
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      }
+    }
+  ]
+}

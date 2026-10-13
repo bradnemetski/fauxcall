@@ -2,10 +2,10 @@
   "id": "000266",
   "endpoint": "MCP tasks/get",
   "purpose": "job_poll",
-  "plan_call": "rq-task-get",
-  "started_at": "2026-10-12T03:38:47.842986Z",
-  "started_ns": 1791776327842986000,
-  "elapsed_ms": 7.626,
+  "plan_call": "rq-get-2",
+  "started_at": "2026-10-12T22:20:10.667370Z",
+  "started_ns": 1791843610667370000,
+  "elapsed_ms": 3.909,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,10 +33,10 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 66,
+        "id": 16,
         "method": "tasks/get",
         "params": {
-          "taskId": "d624cbe144a50c75e4cecead6a93da79"
+          "taskId": "e63b8c5d5841b67071bbfa59861f6faf"
         }
       }
     }
@@ -82,7 +82,7 @@
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:38:47 GMT"
+        "Mon, 12 Oct 2026 22:20:10 GMT"
       ]
     ],
     "body": {
@@ -90,26 +90,26 @@
       "content_type": "text/event-stream",
       "json": {
         "result": {
-          "taskId": "d624cbe144a50c75e4cecead6a93da79",
+          "taskId": "e63b8c5d5841b67071bbfa59861f6faf",
           "status": "completed",
           "ttl": 300000,
-          "createdAt": "2026-10-12T03:38:36.177Z",
-          "lastUpdatedAt": "2026-10-12T03:38:40.191Z",
+          "createdAt": "2026-10-12T22:20:06.150Z",
+          "lastUpdatedAt": "2026-10-12T22:20:10.159Z",
           "pollInterval": 1000,
           "statusMessage": "Generating report..."
         },
         "jsonrpc": "2.0",
-        "id": 66
+        "id": 16
       }
     }
   },
   "stream": [
     {
-      "t_ms": 7.328,
+      "t_ms": 3.798,
       "kind": "sse",
       "event": "message",
-      "id": "f0013d1e-9e79-46ae-8e44-180a68c20001",
-      "data": "{\"result\":{\"taskId\":\"d624cbe144a50c75e4cecead6a93da79\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-12T03:38:36.177Z\",\"lastUpdatedAt\":\"2026-10-12T03:38:40.191Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\",\"id\":66}"
+      "id": "80ec0fa2-efcd-4d0d-9db1-2ff3ebd5069e",
+      "data": "{\"result\":{\"taskId\":\"e63b8c5d5841b67071bbfa59861f6faf\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-12T22:20:06.150Z\",\"lastUpdatedAt\":\"2026-10-12T22:20:10.159Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\",\"id\":16}"
     }
   ],
   "redacted": [

@@ -1,0 +1,114 @@
+{
+  "id": "000404",
+  "endpoint": "MCP resources/read",
+  "purpose": "edge",
+  "plan_call": "q-read-arabic",
+  "started_at": "2026-10-12T23:04:20.725454Z",
+  "started_ns": 1791846260725454000,
+  "elapsed_ms": 5.473,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 21,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/dynamic/text/١٢"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "185"
+      ],
+      [
+        "date",
+        "Mon, 12 Oct 2026 23:04:20 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 21,
+        "error": {
+          "code": -32603,
+          "message": "Unknown resource: demo://resource/dynamic/text/%D9%A1%D9%A2"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.232,
+      "kind": "sse",
+      "event": "message",
+      "id": "d8507989-868c-4442-9a9c-b03d645944e5",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":21,\"error\":{\"code\":-32603,\"message\":\"Unknown resource: demo://resource/dynamic/text/%D9%A1%D9%A2\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "name": "probes-tasks-a",
+  "created_at": "2026-10-12T22:30:00Z",
+  "calls": [
+    {
+      "id": "pt-create",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "tidal power"
+          },
+          "task": {
+            "ttl": 1000
+          }
+        }
+      },
+      "capture": {
+        "tA": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "pt-create-no-ttl",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "coral reefs"
+          },
+          "task": {}
+        }
+      },
+      "capture": {
+        "tB": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "pt-list",
+      "endpoint": "MCP tasks/list",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "pt-ambiguous-bad",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "x",
+            "ambiguous": "yes"
+          },
+          "task": {
+            "ttl": 1000
+          }
+        }
+      }
+    },
+    {
+      "id": "pt-result-twice-1",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{tB}}"
+        }
+      }
+    },
+    {
+      "id": "pt-result-twice-2",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{tB}}"
+        }
+      }
+    },
+    {
+      "id": "pt-get-after-result",
+      "endpoint": "MCP tasks/get",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{tB}}"
+        }
+      }
+    },
+    {
+      "id": "pt-cancel-completed",
+      "endpoint": "MCP tasks/cancel",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{tB}}"
+        }
+      }
+    }
+  ]
+}

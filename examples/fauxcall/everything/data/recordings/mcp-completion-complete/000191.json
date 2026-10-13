@@ -2,10 +2,10 @@
   "id": "000191",
   "endpoint": "MCP completion/complete",
   "purpose": "variation",
-  "plan_call": "cc-resprompt-id",
-  "started_at": "2026-10-12T03:37:09.649014Z",
-  "started_ns": 1791776229649014000,
-  "elapsed_ms": 8.727,
+  "plan_call": "cmp-name-support",
+  "started_at": "2026-10-12T22:19:17.153475Z",
+  "started_ns": 1791843557153475000,
+  "elapsed_ms": 2.208,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,16 +33,21 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 39,
+        "id": 9,
         "method": "completion/complete",
         "params": {
           "ref": {
             "type": "ref/prompt",
-            "name": "resource-prompt"
+            "name": "completable-prompt"
           },
           "argument": {
-            "name": "resourceId",
+            "name": "name",
             "value": ""
+          },
+          "context": {
+            "arguments": {
+              "department": "Support"
+            }
           }
         }
       }
@@ -85,11 +90,11 @@
       ],
       [
         "content-length",
-        "153"
+        "170"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:37:09 GMT"
+        "Mon, 12 Oct 2026 22:19:17 GMT"
       ]
     ],
     "body": {
@@ -98,23 +103,27 @@
       "json": {
         "result": {
           "completion": {
-            "values": [],
-            "total": 0,
+            "values": [
+              "John",
+              "Kim",
+              "Lee"
+            ],
+            "total": 3,
             "hasMore": false
           }
         },
         "jsonrpc": "2.0",
-        "id": 39
+        "id": 9
       }
     }
   },
   "stream": [
     {
-      "t_ms": 8.448,
+      "t_ms": 2.072,
       "kind": "sse",
       "event": "message",
-      "id": "2ac54689-fc26-4b1d-820a-5c980221144f",
-      "data": "{\"result\":{\"completion\":{\"values\":[],\"total\":0,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":39}"
+      "id": "5488aa22-5091-4944-825f-d8d040d63df5",
+      "data": "{\"result\":{\"completion\":{\"values\":[\"John\",\"Kim\",\"Lee\"],\"total\":3,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":9}"
     }
   ],
   "redacted": [

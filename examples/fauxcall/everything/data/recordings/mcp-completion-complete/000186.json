@@ -2,10 +2,10 @@
   "id": "000186",
   "endpoint": "MCP completion/complete",
   "purpose": "variation",
-  "plan_call": "cc-res-tmpl",
-  "started_at": "2026-10-12T03:37:07.137293Z",
-  "started_ns": 1791776227137293000,
-  "elapsed_ms": 9.978,
+  "plan_call": "cmp-dept-ma",
+  "started_at": "2026-10-12T22:19:14.648707Z",
+  "started_ns": 1791843554648707000,
+  "elapsed_ms": 2.121,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,16 +33,16 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 34,
+        "id": 4,
         "method": "completion/complete",
         "params": {
           "ref": {
-            "type": "ref/resource",
-            "uri": "demo://resource/dynamic/text/{resourceId}"
+            "type": "ref/prompt",
+            "name": "completable-prompt"
           },
           "argument": {
-            "name": "resourceId",
-            "value": ""
+            "name": "department",
+            "value": "ma"
           }
         }
       }
@@ -85,11 +85,11 @@
       ],
       [
         "content-length",
-        "153"
+        "152"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:37:07 GMT"
+        "Mon, 12 Oct 2026 22:19:14 GMT"
       ]
     ],
     "body": {
@@ -104,17 +104,17 @@
           }
         },
         "jsonrpc": "2.0",
-        "id": 34
+        "id": 4
       }
     }
   },
   "stream": [
     {
-      "t_ms": 9.74,
+      "t_ms": 2.025,
       "kind": "sse",
       "event": "message",
-      "id": "0bd7a338-1191-4683-982c-1688083362e6",
-      "data": "{\"result\":{\"completion\":{\"values\":[],\"total\":0,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":34}"
+      "id": "8956748e-0431-49e2-a74f-04215f872eb6",
+      "data": "{\"result\":{\"completion\":{\"values\":[],\"total\":0,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":4}"
     }
   ],
   "redacted": [

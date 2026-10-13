@@ -1,0 +1,54 @@
+{
+  "name": "trigger-url-elicitation",
+  "created_at": "2026-10-12T22:30:00Z",
+  "calls": [
+    {
+      "id": "trigger-url-elicitation-0",
+      "endpoint": "MCP tools/call:trigger-url-elicitation",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-url-elicitation",
+          "arguments": {
+            "url": "https://example.com/approve"
+          }
+        }
+      }
+    },
+    {
+      "id": "trigger-url-elicitation-1",
+      "endpoint": "MCP tools/call:trigger-url-elicitation",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-url-elicitation",
+          "arguments": {
+            "url": "https://example.com/approve",
+            "errorPath": true,
+            "elicitationId": "fc-elicit-1"
+          }
+        }
+      }
+    },
+    {
+      "id": "trigger-url-elicitation-bad",
+      "endpoint": "MCP tools/call:trigger-url-elicitation",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-url-elicitation",
+          "arguments": {
+            "url": 5
+          }
+        }
+      }
+    }
+  ],
+  "note": "Called without the client capability the tool needs (the recorder declares none)."
+}

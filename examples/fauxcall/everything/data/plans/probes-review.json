@@ -1,0 +1,472 @@
+{
+  "name": "probes-review",
+  "created_at": "2026-10-12T23:10:00Z",
+  "calls": [
+    {
+      "id": "q-echo-task",
+      "endpoint": "MCP tools/call:echo",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "echo",
+          "arguments": {
+            "message": "hi"
+          },
+          "task": {}
+        }
+      }
+    },
+    {
+      "id": "q-sum-task",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 1
+          },
+          "task": {
+            "ttl": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "q-unknown-tool-task",
+      "endpoint": "MCP tools/call:nope",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "nope",
+          "arguments": {},
+          "task": {}
+        }
+      }
+    },
+    {
+      "id": "q-echo-no-arguments",
+      "endpoint": "MCP tools/call:echo",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "echo"
+        }
+      }
+    },
+    {
+      "id": "q-links-no-arguments",
+      "endpoint": "MCP tools/call:get-resource-links",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-links"
+        }
+      }
+    },
+    {
+      "id": "q-sum-overflow",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000,
+            "b": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "q-lro-token-obj",
+      "endpoint": "MCP tools/call:trigger-long-running-operation",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": 0,
+            "steps": 1
+          },
+          "_meta": {
+            "progressToken": {
+              "a": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "q-gzip-space-url",
+      "endpoint": "MCP tools/call:gzip-file-as-resource",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "gzip-file-as-resource",
+          "arguments": {
+            "name": "s.gz",
+            "data": " data:,hi "
+          }
+        }
+      }
+    },
+    {
+      "id": "q-gzip-unicode",
+      "endpoint": "MCP tools/call:gzip-file-as-resource",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "gzip-file-as-resource",
+          "arguments": {
+            "name": "café.gz",
+            "data": "data:,x"
+          }
+        }
+      }
+    },
+    {
+      "id": "q-read-unicode-session",
+      "endpoint": "MCP resources/read",
+      "purpose": "write_readback",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/session/café.gz"
+        }
+      }
+    },
+    {
+      "id": "q-read-pct",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/%31"
+        }
+      }
+    },
+    {
+      "id": "q-read-space",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/ 1"
+        }
+      }
+    },
+    {
+      "id": "q-read-query",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/1?x=1"
+        }
+      }
+    },
+    {
+      "id": "q-read-fragment",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/1#f"
+        }
+      }
+    },
+    {
+      "id": "q-read-comma",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/1,2"
+        }
+      }
+    },
+    {
+      "id": "q-read-not-url",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "not a uri"
+        }
+      }
+    },
+    {
+      "id": "q-read-empty",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": ""
+        }
+      }
+    },
+    {
+      "id": "q-read-upper",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "DEMO://resource/dynamic/text/1"
+        }
+      }
+    },
+    {
+      "id": "q-read-dots",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/../text/1"
+        }
+      }
+    },
+    {
+      "id": "q-read-arabic",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/١٢"
+        }
+      }
+    },
+    {
+      "id": "q-read-hex",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/0x10"
+        }
+      }
+    },
+    {
+      "id": "q-read-underscore",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/1_0"
+        }
+      }
+    },
+    {
+      "id": "q-prompt-num",
+      "endpoint": "MCP prompts/get",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "args-prompt",
+          "arguments": {
+            "city": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "q-prompt-null-state",
+      "endpoint": "MCP prompts/get",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "args-prompt",
+          "arguments": {
+            "city": "A",
+            "state": null
+          }
+        }
+      }
+    },
+    {
+      "id": "q-prompt-list-args",
+      "endpoint": "MCP prompts/get",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "args-prompt",
+          "arguments": [
+            "a"
+          ]
+        }
+      }
+    },
+    {
+      "id": "q-cmp-no-value",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "department"
+          }
+        }
+      }
+    },
+    {
+      "id": "q-cmp-value-num",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "department",
+            "value": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "q-cmp-static-uri",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/resource",
+            "uri": "demo://resource/static/document/architecture.md"
+          },
+          "argument": {
+            "name": "x",
+            "value": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "q-tasks-list-bad-cursor",
+      "endpoint": "MCP tasks/list",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "cursor": "zzz"
+        }
+      }
+    },
+    {
+      "id": "q-tasks-list-num-cursor",
+      "endpoint": "MCP tasks/list",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "cursor": 5
+        }
+      }
+    },
+    {
+      "id": "q-tasks-create-11",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "page"
+          },
+          "task": {}
+        }
+      },
+      "repeat": 11,
+      "interval_ms": 50
+    },
+    {
+      "id": "q-tasks-list-paged",
+      "endpoint": "MCP tasks/list",
+      "purpose": "pagination",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      },
+      "capture": {
+        "cur": "$.result.nextCursor"
+      }
+    },
+    {
+      "id": "q-tasks-list-page2",
+      "endpoint": "MCP tasks/list",
+      "purpose": "pagination",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "cursor": "{{cur}}"
+        }
+      }
+    }
+  ]
+}

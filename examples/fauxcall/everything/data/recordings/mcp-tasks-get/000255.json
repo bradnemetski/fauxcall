@@ -2,10 +2,10 @@
   "id": "000255",
   "endpoint": "MCP tasks/get",
   "purpose": "job_poll",
-  "plan_call": "rq-task-get",
-  "started_at": "2026-10-12T03:38:36.666711Z",
-  "started_ns": 1791776316666711000,
-  "elapsed_ms": 10.573,
+  "plan_call": "rq-get-1",
+  "started_at": "2026-10-12T22:19:58.584372Z",
+  "started_ns": 1791843598584372000,
+  "elapsed_ms": 6.477,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,10 +33,10 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 55,
+        "id": 5,
         "method": "tasks/get",
         "params": {
-          "taskId": "d624cbe144a50c75e4cecead6a93da79"
+          "taskId": "ac237ae0a33c7d811a405e41a02fb731"
         }
       }
     }
@@ -78,11 +78,11 @@
       ],
       [
         "content-length",
-        "317"
+        "316"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:38:36 GMT"
+        "Mon, 12 Oct 2026 22:19:58 GMT"
       ]
     ],
     "body": {
@@ -90,26 +90,26 @@
       "content_type": "text/event-stream",
       "json": {
         "result": {
-          "taskId": "d624cbe144a50c75e4cecead6a93da79",
+          "taskId": "ac237ae0a33c7d811a405e41a02fb731",
           "status": "working",
           "ttl": 300000,
-          "createdAt": "2026-10-12T03:38:36.177Z",
-          "lastUpdatedAt": "2026-10-12T03:38:36.177Z",
+          "createdAt": "2026-10-12T22:19:57.081Z",
+          "lastUpdatedAt": "2026-10-12T22:19:58.085Z",
           "pollInterval": 1000,
-          "statusMessage": "Gathering sources..."
+          "statusMessage": "Analyzing content..."
         },
         "jsonrpc": "2.0",
-        "id": 55
+        "id": 5
       }
     }
   },
   "stream": [
     {
-      "t_ms": 10.202,
+      "t_ms": 6.089,
       "kind": "sse",
       "event": "message",
-      "id": "a10347ac-8a99-4efc-83f1-7e56215365e4",
-      "data": "{\"result\":{\"taskId\":\"d624cbe144a50c75e4cecead6a93da79\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-12T03:38:36.177Z\",\"lastUpdatedAt\":\"2026-10-12T03:38:36.177Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"},\"jsonrpc\":\"2.0\",\"id\":55}"
+      "id": "6a128e4f-26ef-4eab-a0b8-0cabc4471390",
+      "data": "{\"result\":{\"taskId\":\"ac237ae0a33c7d811a405e41a02fb731\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-12T22:19:57.081Z\",\"lastUpdatedAt\":\"2026-10-12T22:19:58.085Z\",\"pollInterval\":1000,\"statusMessage\":\"Analyzing content...\"},\"jsonrpc\":\"2.0\",\"id\":5}"
     }
   ],
   "redacted": [

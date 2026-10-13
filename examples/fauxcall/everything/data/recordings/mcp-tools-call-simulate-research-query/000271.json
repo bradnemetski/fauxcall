@@ -2,10 +2,10 @@
   "id": "000271",
   "endpoint": "MCP tools/call:simulate-research-query",
   "purpose": "variation",
-  "plan_call": "rq-task2",
-  "started_at": "2026-10-12T03:38:51.389767Z",
-  "started_ns": 1791776331389767000,
-  "elapsed_ms": 4.36,
+  "plan_call": "rq-ambiguous",
+  "started_at": "2026-10-12T22:20:13.177534Z",
+  "started_ns": 1791843613177534000,
+  "elapsed_ms": 2.941,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,15 +33,16 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 71,
+        "id": 21,
         "method": "tools/call",
         "params": {
           "name": "simulate-research-query",
           "arguments": {
-            "topic": "coral reef ecology"
+            "topic": "python",
+            "ambiguous": true
           },
           "task": {
-            "ttl": 30000
+            "ttl": 60000
           }
         }
       }
@@ -84,7 +85,7 @@
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:38:51 GMT"
+        "Mon, 12 Oct 2026 22:20:13 GMT"
       ],
       [
         "transfer-encoding",
@@ -97,27 +98,27 @@
       "json": {
         "result": {
           "task": {
-            "taskId": "555f5fc0d110bdfb6b50b0a744ca1df3",
+            "taskId": "bbb5966ef331dac4a95ec29390eb88ea",
             "status": "working",
             "ttl": 300000,
-            "createdAt": "2026-10-12T03:38:51.393Z",
-            "lastUpdatedAt": "2026-10-12T03:38:51.393Z",
+            "createdAt": "2026-10-12T22:20:13.179Z",
+            "lastUpdatedAt": "2026-10-12T22:20:13.179Z",
             "pollInterval": 1000,
             "statusMessage": "Gathering sources..."
           }
         },
         "jsonrpc": "2.0",
-        "id": 71
+        "id": 21
       }
     }
   },
   "stream": [
     {
-      "t_ms": 4.209,
+      "t_ms": 2.797,
       "kind": "sse",
       "event": "message",
-      "id": "43e244a0-717d-42fe-8a81-b6491d2062fb",
-      "data": "{\"result\":{\"task\":{\"taskId\":\"555f5fc0d110bdfb6b50b0a744ca1df3\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-12T03:38:51.393Z\",\"lastUpdatedAt\":\"2026-10-12T03:38:51.393Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"}},\"jsonrpc\":\"2.0\",\"id\":71}"
+      "id": "0b4bc8d1-8b30-4878-b2f7-4edb5c8d2202",
+      "data": "{\"result\":{\"task\":{\"taskId\":\"bbb5966ef331dac4a95ec29390eb88ea\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-12T22:20:13.179Z\",\"lastUpdatedAt\":\"2026-10-12T22:20:13.179Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"}},\"jsonrpc\":\"2.0\",\"id\":21}"
     }
   ],
   "redacted": [

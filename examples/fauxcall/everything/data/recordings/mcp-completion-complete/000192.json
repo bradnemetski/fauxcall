@@ -1,11 +1,11 @@
 {
   "id": "000192",
   "endpoint": "MCP completion/complete",
-  "purpose": "invalid",
-  "plan_call": "cc-bad",
-  "started_at": "2026-10-12T03:37:10.149943Z",
-  "started_ns": 1791776230149943000,
-  "elapsed_ms": 9.864,
+  "purpose": "edge",
+  "plan_call": "cmp-name-nodept",
+  "started_at": "2026-10-12T22:19:17.653998Z",
+  "started_ns": 1791843557653998000,
+  "elapsed_ms": 5.249,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,14 +33,15 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 40,
+        "id": 10,
         "method": "completion/complete",
         "params": {
           "ref": {
-            "type": "ref/bogus"
+            "type": "ref/prompt",
+            "name": "completable-prompt"
           },
           "argument": {
-            "name": "a",
+            "name": "name",
             "value": ""
           }
         }
@@ -84,33 +85,36 @@
       ],
       [
         "content-length",
-        "1328"
+        "153"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:37:10 GMT"
+        "Mon, 12 Oct 2026 22:19:17 GMT"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "text/event-stream",
       "json": {
+        "result": {
+          "completion": {
+            "values": [],
+            "total": 0,
+            "hasMore": false
+          }
+        },
         "jsonrpc": "2.0",
-        "id": 40,
-        "error": {
-          "code": -32603,
-          "message": "[\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"ref/prompt\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"ref/prompt\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"ref/resource\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"ref/resource\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"uri\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"params\",\n      \"ref\"\n    ],\n    \"message\": \"Invalid input\"\n  }\n]"
-        }
+        "id": 10
       }
     }
   },
   "stream": [
     {
-      "t_ms": 9.397,
+      "t_ms": 5.129,
       "kind": "sse",
       "event": "message",
-      "id": "f1350dcf-b42e-4ea4-9fb4-831f6c323d05",
-      "data": "{\"jsonrpc\":\"2.0\",\"id\":40,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"code\\\": \\\"invalid_union\\\",\\n    \\\"errors\\\": [\\n      [\\n        {\\n          \\\"code\\\": \\\"invalid_value\\\",\\n          \\\"values\\\": [\\n            \\\"ref/prompt\\\"\\n          ],\\n          \\\"path\\\": [\\n            \\\"type\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected \\\\\\\"ref/prompt\\\\\\\"\\\"\\n        },\\n        {\\n          \\\"expected\\\": \\\"string\\\",\\n          \\\"code\\\": \\\"invalid_type\\\",\\n          \\\"path\\\": [\\n            \\\"name\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n        }\\n      ],\\n      [\\n        {\\n          \\\"code\\\": \\\"invalid_value\\\",\\n          \\\"values\\\": [\\n            \\\"ref/resource\\\"\\n          ],\\n          \\\"path\\\": [\\n            \\\"type\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected \\\\\\\"ref/resource\\\\\\\"\\\"\\n        },\\n        {\\n          \\\"expected\\\": \\\"string\\\",\\n          \\\"code\\\": \\\"invalid_type\\\",\\n          \\\"path\\\": [\\n            \\\"uri\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n        }\\n      ]\\n    ],\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"ref\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input\\\"\\n  }\\n]\"}}"
+      "id": "15e810f1-90d5-4feb-9aab-73ad507942c8",
+      "data": "{\"result\":{\"completion\":{\"values\":[],\"total\":0,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":10}"
     }
   ],
   "redacted": [

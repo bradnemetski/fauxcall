@@ -27,7 +27,8 @@ from fauxcall.runtime.templating import (
 from fauxcall.timefmt import TimeFormat
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    import asyncio
+    from collections.abc import Awaitable, Callable
     from datetime import tzinfo
 
     from starlette.requests import HTTPConnection
@@ -40,6 +41,7 @@ if TYPE_CHECKING:
     from fauxcall.model.world import WorldRecord
     from fauxcall.runtime.app import FakeRuntime
     from fauxcall.runtime.auth import Identity
+    from fauxcall.runtime.mcp_server import Channel
     from fauxcall.types import JsonValue
     from fauxcall.world import SessionWorld
 
@@ -105,10 +107,14 @@ class RequestContext:
     json_error: bool = False
     mcp_session: str | None = None
     """MCP: the call's ``Mcp-Session-Id`` (one per connected client), when the server issues one."""
+    client_capabilities: dict[str, JsonValue] = field(default_factory=dict)
+    """MCP: the capabilities the connected client declared in ``initialize`` (sampling …)."""
     notifications: list[JsonValue] = field(default_factory=list)
     """MCP: notifications sent while answering (``notify``), when nothing streams them."""
     on_notify: Callable[[JsonValue], None] | None = None
     """MCP: where ``notify`` sends a notification as it happens (an SSE response stream)."""
+    channel: Channel | None = None
+    """MCP: this client's channel for messages outside any request (``push``, ``background``)."""
 
     # -- shortcuts ---------------------------------------------------------------------------
 
@@ -140,6 +146,23 @@ class RequestContext:
             self.runtime.pauses.append(seconds)
             return
         await self.runtime.pause(seconds)
+
+    def push(self, method: str, params: JsonValue = None) -> bool:
+        """MCP: send this client a notification outside the call, on its open GET stream.
+
+        Like a real server's ``notifications/resources/updated``. Returns whether a stream was
+        open to take it (else it is dropped, as a real server would).
+        """
+        return self.channel.push(method, params) if self.channel is not None else False
+
+    def background(self, work: Callable[[Channel], Awaitable[None]]) -> asyncio.Task[None] | None:
+        """MCP: keep doing ``work(channel)`` after the call (periodic log messages …).
+
+        It runs until it returns, is cancelled (keep the task, e.g. in ``ctx.state``, to stop
+        it), or the client's session ends. ``channel.push(...)`` sends, ``await
+        channel.pause(seconds)`` waits.
+        """
+        return self.channel.background(work) if self.channel is not None else None
 
     def notify(self, method: str, params: JsonValue = None) -> None:
         """MCP: send the client a notification while answering (``notifications/message`` …).

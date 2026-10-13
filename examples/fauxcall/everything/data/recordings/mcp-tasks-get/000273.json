@@ -2,10 +2,10 @@
   "id": "000273",
   "endpoint": "MCP tasks/get",
   "purpose": "job_poll",
-  "plan_call": "rq-task2-get",
-  "started_at": "2026-10-12T03:38:55.911864Z",
-  "started_ns": 1791776335911864000,
-  "elapsed_ms": 4.785,
+  "plan_call": "rq-get-ambiguous",
+  "started_at": "2026-10-12T22:20:14.686418Z",
+  "started_ns": 1791843614686418000,
+  "elapsed_ms": 4.073,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,10 +33,10 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 73,
+        "id": 23,
         "method": "tasks/get",
         "params": {
-          "taskId": "555f5fc0d110bdfb6b50b0a744ca1df3"
+          "taskId": "bbb5966ef331dac4a95ec29390eb88ea"
         }
       }
     }
@@ -78,11 +78,11 @@
       ],
       [
         "content-length",
-        "319"
+        "317"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:38:55 GMT"
+        "Mon, 12 Oct 2026 22:20:14 GMT"
       ]
     ],
     "body": {
@@ -90,26 +90,26 @@
       "content_type": "text/event-stream",
       "json": {
         "result": {
-          "taskId": "555f5fc0d110bdfb6b50b0a744ca1df3",
-          "status": "completed",
+          "taskId": "bbb5966ef331dac4a95ec29390eb88ea",
+          "status": "working",
           "ttl": 300000,
-          "createdAt": "2026-10-12T03:38:51.393Z",
-          "lastUpdatedAt": "2026-10-12T03:38:55.404Z",
+          "createdAt": "2026-10-12T22:20:13.179Z",
+          "lastUpdatedAt": "2026-10-12T22:20:14.181Z",
           "pollInterval": 1000,
-          "statusMessage": "Generating report..."
+          "statusMessage": "Analyzing content..."
         },
         "jsonrpc": "2.0",
-        "id": 73
+        "id": 23
       }
     }
   },
   "stream": [
     {
-      "t_ms": 4.639,
+      "t_ms": 3.894,
       "kind": "sse",
       "event": "message",
-      "id": "6614e7cb-71be-49b1-8e7e-398beb139dd8",
-      "data": "{\"result\":{\"taskId\":\"555f5fc0d110bdfb6b50b0a744ca1df3\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-12T03:38:51.393Z\",\"lastUpdatedAt\":\"2026-10-12T03:38:55.404Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\",\"id\":73}"
+      "id": "dbbbf866-e6b1-4531-918b-6c3a9e50329c",
+      "data": "{\"result\":{\"taskId\":\"bbb5966ef331dac4a95ec29390eb88ea\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-12T22:20:13.179Z\",\"lastUpdatedAt\":\"2026-10-12T22:20:14.181Z\",\"pollInterval\":1000,\"statusMessage\":\"Analyzing content...\"},\"jsonrpc\":\"2.0\",\"id\":23}"
     }
   ],
   "redacted": [

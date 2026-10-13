@@ -247,7 +247,10 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         "unknown_tool",
         "missing_session",
         "prompts/get_not_found",  # prompts are advertised, resources aren't
+        "tool_call_without_name",
+        "arguments_not_object",  # FauxCall's fake takes a second initialize: nothing recorded
     }
+    assert model.arguments_probe_tool == "echo"  # the first read-only tool
     assert j(model.errors["missing_session"]) == {
         "jsonrpc": "2.0",
         "id": None,
@@ -266,17 +269,23 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         f"MCP {PROBE_METHOD}",
         f"MCP tools/call:{PROBE_TOOL}",
         f"MCP prompts/get:{PROBE_PROMPT}",
+        "MCP tools/call:",  # no name
+        "MCP tools/call:echo",  # arguments that aren't an object
+        "MCP initialize:again",
         *["MCP tools/list:with-sampling"] * 2,  # two pages each
         *["MCP tools/list:with-elicitation"] * 2,
+        *["MCP tools/list:with-elicitation.url"] * 2,
         *["MCP tools/list:with-roots"] * 2,
+        *["MCP tools/list:with-tasks.requests"] * 2,
+        *["MCP tools/list:with-all"] * 2,
         "MCP initialize:version-2024-11-05",
         "MCP initialize:version-2025-03-26",
         "MCP initialize:version-2025-06-18",
         "MCP initialize:version-2025-11-25",
     ]
-    assert len(found.exchanges) == 18
+    assert len(found.exchanges) == 27
     # every request was paced: 2 rps -> 0.5 s apart (cleanup DELETEs included)
-    assert clock.sleeps == [0.5] * 29  # each capability probe: initialize, 2 pages, DELETE
+    assert clock.sleeps == [0.5] * 44  # each capability probe: initialize, 2 pages, DELETE
     # A fake built from what was learned behaves the same on the wire.
     rebuilt = fake_model(transport=model.transport, page_size=model.tools_page_size)
     rebuilt.mcp = model.model_copy(update={"tools": rebuilt.mcp.tools if rebuilt.mcp else []})
@@ -345,19 +354,19 @@ async def test_tools_only_some_clients_see(tmp_path: Path) -> None:
     sample: JsonValue = {"name": "ask_the_model", "inputSchema": {"type": "object"}}
     model = fake_model()
     assert model.mcp is not None
-    model.mcp.tools.append(McpToolModel(definition=sample, requires=["sampling"]))
+    model.mcp.tools.append(McpToolModel(definition=sample, requires=[["sampling"]]))
     either: JsonValue = {"name": "ask_either", "inputSchema": {"type": "object"}}
-    model.mcp.tools.append(McpToolModel(definition=either, requires=["sampling", "roots"]))
+    model.mcp.tools.append(McpToolModel(definition=either, requires=[["sampling"], ["roots"]]))
     async with streaming_client(fake_app(tmp_path / "a", model)) as http:
         found = await recorder(tmp_path, http, "http://fake.test/mcp", rps=0).introspect(
             probe_versions=False
         )
         learned = found.model.tool("ask_the_model")
         assert learned is not None
-        assert learned.requires == ["sampling"]
+        assert learned.requires == [["sampling"]]
         both = found.model.tool("ask_either")
         assert both is not None
-        assert both.requires == ["roots", "sampling"]  # listed to clients with either
+        assert both.requires == [["sampling"], ["roots"]]  # listed to clients with either
         assert [t.name for t in found.model.tools if not t.requires] == [
             "echo",
             "delete_item",
@@ -589,12 +598,12 @@ async def test_version_probes_skip_refusals_and_stop_at_the_budget(tmp_path: Pat
         assert found.model.transport.issues_session is False
         assert found.model.transport.get_stream == "status"
         assert "missing_session" not in found.model.errors
-        # 11 calls of introspection (5, and 2 per client capability probed), then one per
-        # probed version: the refused 2024-11-05, then 2025-03-26, and the budget is gone
-        tight = recorder(tmp_path / "b", http, "http://mock/mcp", rps=0, max_calls=13)
+        # 19 calls of introspection (7, and 2 per client capability probe), then one per probed
+        # version: the refused 2024-11-05, then 2025-03-26, and the budget is gone
+        tight = recorder(tmp_path / "b", http, "http://mock/mcp", rps=0, max_calls=21)
         limited = await tight.introspect()
         assert limited.model.transport.protocol_versions == {"2025-03-26": "2025-03-26"}
-        assert tight.calls_made == 13
+        assert tight.calls_made == 21
         # A budget spent while probing capabilities leaves fewer probes, not a failed init
         tighter = recorder(tmp_path / "c", http, "http://mock/mcp", rps=0, max_calls=6)
         assert (await tighter.introspect()).model.transport.protocol_versions == {}
@@ -1014,3 +1023,49 @@ async def test_tool_budgets_without_an_approvals_file(tmp_path: Path) -> None:
     assert rec.approvals is not None
     assert rec.approvals.used == {"endpoint:MCP tools/call:delete_item:": 1}
     assert not (tmp_path / "approvals.json").exists()
+
+
+async def test_a_tool_that_needs_every_capability_together(tmp_path: Path) -> None:
+    model = fake_model()
+    assert model.mcp is not None
+    both: JsonValue = {"name": "ask_async", "inputSchema": {"type": "object"}}
+    model.mcp.tools.append(McpToolModel(definition=both, requires=[["sampling", "tasks.requests"]]))
+    async with streaming_client(fake_app(tmp_path / "a", model)) as http:
+        found = await recorder(tmp_path, http, "http://fake.test/mcp", rps=0).introspect(
+            probe_versions=False
+        )
+    learned = found.model.tool("ask_async")
+    assert learned is not None
+    assert learned.requires == [
+        ["sampling", "elicitation", "elicitation.url", "roots", "tasks.requests"]
+    ]  # only the probe declaring everything saw it
+
+
+async def test_capability_probes_stop_when_the_budget_runs_out(tmp_path: Path) -> None:
+    async with httpx2.AsyncClient(transport=httpx2.MockTransport(Scripted())) as http:
+        rec = recorder(tmp_path, http, "http://mock/mcp", rps=0, max_calls=9)
+        found = await rec.introspect(probe_versions=False)
+    assert rec.calls_made == 9
+    assert [t.name for t in found.model.tools] == ["echo"]
+
+
+async def test_introspection_records_a_refused_second_initialize(tmp_path: Path) -> None:
+    refusal: JsonValue = {
+        "jsonrpc": "2.0",
+        "id": 0,
+        "error": {"code": -32600, "message": "Invalid Request: Server already initialized"},
+    }
+    model = fake_model(transport=McpTransportModel(response_mode="json", reinitialize_status=400))
+    assert model.mcp is not None
+    model.mcp.errors["second_initialize"] = refusal
+    async with streaming_client(fake_app(tmp_path / "a", model)) as http:
+        found = await recorder(tmp_path, http, "http://fake.test/mcp", rps=0).introspect(
+            probe_versions=False
+        )
+    assert j(found.model.errors["second_initialize"])["error"]["code"] == -32600
+    assert found.model.transport.reinitialize_status == 400
+
+
+def test_requires_must_be_capability_lists() -> None:
+    with pytest.raises(ValueError, match="requires"):
+        McpToolModel.model_validate({"definition": {"name": "x"}, "requires": "sampling"})

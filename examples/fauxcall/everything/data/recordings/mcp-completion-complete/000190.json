@@ -2,10 +2,10 @@
   "id": "000190",
   "endpoint": "MCP completion/complete",
   "purpose": "variation",
-  "plan_call": "cc-resprompt-type",
-  "started_at": "2026-10-12T03:37:09.146745Z",
-  "started_ns": 1791776229146745000,
-  "elapsed_ms": 10.482,
+  "plan_call": "cmp-name-marketing-a",
+  "started_at": "2026-10-12T22:19:16.652390Z",
+  "started_ns": 1791843556652390000,
+  "elapsed_ms": 2.431,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,16 +33,21 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 38,
+        "id": 8,
         "method": "completion/complete",
         "params": {
           "ref": {
             "type": "ref/prompt",
-            "name": "resource-prompt"
+            "name": "completable-prompt"
           },
           "argument": {
-            "name": "resourceType",
-            "value": ""
+            "name": "name",
+            "value": "A"
+          },
+          "context": {
+            "arguments": {
+              "department": "Marketing"
+            }
           }
         }
       }
@@ -85,11 +90,11 @@
       ],
       [
         "content-length",
-        "166"
+        "152"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:37:09 GMT"
+        "Mon, 12 Oct 2026 22:19:16 GMT"
       ]
     ],
     "body": {
@@ -98,26 +103,23 @@
       "json": {
         "result": {
           "completion": {
-            "values": [
-              "Text",
-              "Blob"
-            ],
-            "total": 2,
+            "values": [],
+            "total": 0,
             "hasMore": false
           }
         },
         "jsonrpc": "2.0",
-        "id": 38
+        "id": 8
       }
     }
   },
   "stream": [
     {
-      "t_ms": 10.162,
+      "t_ms": 2.317,
       "kind": "sse",
       "event": "message",
-      "id": "cfe01a97-f025-45ce-acb4-3d670731d9c0",
-      "data": "{\"result\":{\"completion\":{\"values\":[\"Text\",\"Blob\"],\"total\":2,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":38}"
+      "id": "7711af01-e54d-4188-bb59-6154a29cef3f",
+      "data": "{\"result\":{\"completion\":{\"values\":[],\"total\":0,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":8}"
     }
   ],
   "redacted": [

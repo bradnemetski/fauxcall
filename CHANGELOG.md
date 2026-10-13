@@ -10,8 +10,17 @@ All notable changes to FauxCall are listed here. The format follows
 
 ### Added
 
+- MCP handlers can push notifications on a client's open GET stream (`ctx.push`) and leave work
+  running after a call (`ctx.background`), ended with the client's session; they see the
+  client's declared capabilities (`ctx.client_capabilities`) and can answer listings too
+  (`resources/list` with what a session created).
+- Introspection also probes `elicitation.url`, `tasks` and all capabilities together; `requires`
+  holds alternatives of capability sets. It records the real refusals of a `tools/call` without
+  a name, of arguments that aren't an object, and of a second `initialize`, and the fake repeats
+  them.
+
 - An MCP example: `examples/fauxcall/everything`, a fake of the MCP project's Everything reference
-  server built by a headless run (99.91% parity, independent 99.91%).
+  server built by a headless run (100% parity, independent 100% over 144 of 192 calls).
 
 - **MCP fakes can answer every method with code.** `METHOD_HANDLERS` (`register_method`) handles
   dynamic resources, prompts, completions, subscriptions, `logging/setLevel` or any other method,

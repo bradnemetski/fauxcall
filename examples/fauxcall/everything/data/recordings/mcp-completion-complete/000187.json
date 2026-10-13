@@ -1,11 +1,11 @@
 {
   "id": "000187",
   "endpoint": "MCP completion/complete",
-  "purpose": "variation",
-  "plan_call": "cc-res-tmpl-1",
-  "started_at": "2026-10-12T03:37:07.639680Z",
-  "started_ns": 1791776227639680000,
-  "elapsed_ms": 7.628,
+  "purpose": "edge",
+  "plan_call": "cmp-dept-zz",
+  "started_at": "2026-10-12T22:19:15.149778Z",
+  "started_ns": 1791843555149778000,
+  "elapsed_ms": 2.027,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,16 +33,16 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 35,
+        "id": 5,
         "method": "completion/complete",
         "params": {
           "ref": {
-            "type": "ref/resource",
-            "uri": "demo://resource/dynamic/text/{resourceId}"
+            "type": "ref/prompt",
+            "name": "completable-prompt"
           },
           "argument": {
-            "name": "resourceId",
-            "value": "1"
+            "name": "department",
+            "value": "zz"
           }
         }
       }
@@ -85,11 +85,11 @@
       ],
       [
         "content-length",
-        "156"
+        "152"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:37:07 GMT"
+        "Mon, 12 Oct 2026 22:19:15 GMT"
       ]
     ],
     "body": {
@@ -98,25 +98,23 @@
       "json": {
         "result": {
           "completion": {
-            "values": [
-              "1"
-            ],
-            "total": 1,
+            "values": [],
+            "total": 0,
             "hasMore": false
           }
         },
         "jsonrpc": "2.0",
-        "id": 35
+        "id": 5
       }
     }
   },
   "stream": [
     {
-      "t_ms": 7.377,
+      "t_ms": 1.932,
       "kind": "sse",
       "event": "message",
-      "id": "9e29cc8d-b2ff-438e-a972-b55a4a5b1185",
-      "data": "{\"result\":{\"completion\":{\"values\":[\"1\"],\"total\":1,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":35}"
+      "id": "cb34192f-7acf-42fb-aeec-20fd4317382a",
+      "data": "{\"result\":{\"completion\":{\"values\":[],\"total\":0,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":5}"
     }
   ],
   "redacted": [

@@ -1,11 +1,11 @@
 {
   "id": "000203",
   "endpoint": "MCP completion/complete",
-  "purpose": "variation",
-  "plan_call": "cc2-1",
-  "started_at": "2026-10-12T03:37:58.489517Z",
-  "started_ns": 1791776278489517000,
-  "elapsed_ms": 8.381,
+  "purpose": "invalid",
+  "plan_call": "cmp-bad-ref",
+  "started_at": "2026-10-12T22:19:23.162763Z",
+  "started_ns": 1791843563162763000,
+  "elapsed_ms": 2.616,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,21 +33,15 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 3,
+        "id": 21,
         "method": "completion/complete",
         "params": {
           "ref": {
-            "type": "ref/prompt",
-            "name": "completable-prompt"
+            "type": "ref/other"
           },
           "argument": {
-            "name": "name",
-            "value": "B"
-          },
-          "context": {
-            "arguments": {
-              "department": "Engineering"
-            }
+            "name": "x",
+            "value": ""
           }
         }
       }
@@ -90,38 +84,33 @@
       ],
       [
         "content-length",
-        "157"
+        "1328"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:37:58 GMT"
+        "Mon, 12 Oct 2026 22:19:23 GMT"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "text/event-stream",
       "json": {
-        "result": {
-          "completion": {
-            "values": [
-              "Bob"
-            ],
-            "total": 1,
-            "hasMore": false
-          }
-        },
         "jsonrpc": "2.0",
-        "id": 3
+        "id": 21,
+        "error": {
+          "code": -32603,
+          "message": "[\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"ref/prompt\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"ref/prompt\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"ref/resource\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"ref/resource\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"uri\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"params\",\n      \"ref\"\n    ],\n    \"message\": \"Invalid input\"\n  }\n]"
+        }
       }
     }
   },
   "stream": [
     {
-      "t_ms": 8.127,
+      "t_ms": 2.5,
       "kind": "sse",
       "event": "message",
-      "id": "0b9ce287-7a6a-40d7-ba71-166422873590",
-      "data": "{\"result\":{\"completion\":{\"values\":[\"Bob\"],\"total\":1,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":3}"
+      "id": "c7304aee-947d-45f1-9473-3a4be70df0ab",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":21,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"code\\\": \\\"invalid_union\\\",\\n    \\\"errors\\\": [\\n      [\\n        {\\n          \\\"code\\\": \\\"invalid_value\\\",\\n          \\\"values\\\": [\\n            \\\"ref/prompt\\\"\\n          ],\\n          \\\"path\\\": [\\n            \\\"type\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected \\\\\\\"ref/prompt\\\\\\\"\\\"\\n        },\\n        {\\n          \\\"expected\\\": \\\"string\\\",\\n          \\\"code\\\": \\\"invalid_type\\\",\\n          \\\"path\\\": [\\n            \\\"name\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n        }\\n      ],\\n      [\\n        {\\n          \\\"code\\\": \\\"invalid_value\\\",\\n          \\\"values\\\": [\\n            \\\"ref/resource\\\"\\n          ],\\n          \\\"path\\\": [\\n            \\\"type\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected \\\\\\\"ref/resource\\\\\\\"\\\"\\n        },\\n        {\\n          \\\"expected\\\": \\\"string\\\",\\n          \\\"code\\\": \\\"invalid_type\\\",\\n          \\\"path\\\": [\\n            \\\"uri\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n        }\\n      ]\\n    ],\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"ref\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input\\\"\\n  }\\n]\"}}"
     }
   ],
   "redacted": [

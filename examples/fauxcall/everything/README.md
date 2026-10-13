@@ -59,69 +59,49 @@ uv run pytest                                   # unit + offline end-to-end (no 
 uv run pytest tests/e2e --target=parity         # compare with the real API (needs .env)
 ```
 
-Tools: 16 · resources: 7 · prompts: 4.
+Tools: 19 · resources: 7 · prompts: 4.
 
 ## Known limitations and notes
 
 <!-- fauxcall:notes (kept by `fauxcall scaffold`; the rest of this file is regenerated) -->
-Built from ~400 recorded exchanges with `@modelcontextprotocol/server-everything` 2026.8.31
-(serverInfo `mcp-servers/everything` 2.0.0) over Streamable HTTP. Every tool is computed from
-rules found in the recordings (exact Zod error wording, JavaScript number formatting, `Number()`
-id parsing, WHATWG URL normalization, per-session state), not replayed.
+### Known limitations (what differs from the real Everything server, and why)
 
-**Matches the real server**
-- All 16 tools, 7 static documents, both resource templates, 4 prompts, completions,
-  `logging/setLevel`, subscriptions, `ping`, version negotiation (2024-11-05 to 2025-11-25).
-- MCP Tasks for `simulate-research-query`: task required, stages about 1 s apart, completion after
-  about 4 s, `ttl` always 300000, expiry 300 s after the last update (a task was still there 302 s
-  after creation; the exact end of the window wasn't measured), cancel/result semantics,
-  tasks scoped to their MCP session.
-- `gzip-file-as-resource` output matched Node's zlib byte for byte for every recorded input (on
-  the recording host; Node's bundled zlib can differ by CPU, clients decompress anyway). Session
-  resources are readable only in the session that created them, under their normalized URI (so,
-  as on the real server, names with spaces or `..` can't be read back); a re-used name replaces
-  the content.
-- URI handling follows `new URL()`: dot segments resolved, bad hosts and ports refused as
-  `Invalid URL`; `tasks/list` pages by 10 with the last task id as `nextCursor`.
-- Dynamic resources print the local time like `toLocaleTimeString()`. The recorded server ran
-  at UTC-4; the fake uses `FAUXCALL_LOCAL_TZ` (default `America/New_York`). Set it to the zone of
-  the server you compare against.
-- `trigger-long-running-operation` takes `duration` seconds and sends `notifications/progress`
-  only when the call carries a `progressToken`.
+Evidence: ~430 recorded exchanges against `@modelcontextprotocol/server-everything` 2026.8.31 (SDK ^1.30); where recording was impossible, the server's and SDK's published source was read as documentation. Parity: 100% overall and independent over 129 scenarios.
 
-**Differs, and why**
-- `resources/list` never shows the session resources `gzip-file-as-resource` creates (the real
-  server appends them): FauxCall serves listings from the model, so handlers can't extend them.
-  `resources/read` of those URIs works.
-- The fake is offline: `gzip-file-as-resource` serves only the URLs fetched while recording (the
-  default README, `example.com`, a GitHub 404 page); any other `http(s)` URL answers
-  `fetch failed`, as the real server does for an unreachable host. `data:` URLs work fully.
-- No server-initiated traffic outside a request: after `toggle-simulated-logging` or
-  `toggle-subscriber-updates` the real server pushes `notifications/message` /
-  `notifications/resources/updated` every 5 s on the standalone GET stream; the fake doesn't.
-  Nor does it send `notifications/resources/list_changed` after gzip.
-- `trigger-sampling-request` and `trigger-elicitation-request` (offered only to clients declaring
-  sampling / elicitation) make the server call the client back, which the fake can't do. It answers
-  as the real server does when the client never responds: after 60 s,
-  `MCP error -32001: Request timed out` (observed in parity runs). Agents that do answer sampling
-  or elicitation get a different result from the real server. `get-roots-list` always reports
-  that no roots are configured, since the fake never asks the client for them.
-- Not modeled: `trigger-url-elicitation`, `trigger-sampling-request-async` and
-  `trigger-elicitation-request-async`, which the real server lists only to clients declaring
-  `elicitation.url` or `tasks.requests.*` capabilities (FauxCall's introspection doesn't declare
-  those).
-- `tools/call` without a string `name`, or with `arguments` that aren't an object (other than the
-  recorded cases), get FauxCall's generic errors instead of the server's Zod `-32603` list; a second
-  `initialize` in a session is answered instead of refused with `-32600`.
-- `simulate-research-query` with `ambiguous: true` from a client that declares elicitation: the
-  real server sends `elicitation/create` and parks the task in `input_required`
-  (`Found multiple interpretations for "<topic>". Requesting clarification...`, observed in
-  parity); the fake can't see the client's capabilities from a handler and completes the task in
-  about 4 s, as it does for every other client.
-- `gzip-file-as-resource` doesn't enforce the server's `GZIP_MAX_FETCH_SIZE` (10 MB) and
-  `GZIP_MAX_FETCH_TIME_MILLIS` limits on `data:` URLs.
-- Wire details: the fake's `Mcp-Session-Id` is 32 hex digits (the real one a dashed UUID), SSE
-  event ids are 16 hex digits (real: UUIDs), every JSON-RPC message puts `jsonrpc` first (the real
-  server last), and 2025-11-25 sessions get no empty priming SSE event before the answer.
-- `get-env` returns the recorded environment of the real process (near-empty by design).
+**Tools that send requests to the client.** FauxCall can't send requests back to a client (sampling, elicitation, roots). The real server lists `trigger-sampling-request`, `trigger-elicitation-request`, `trigger-url-elicitation`, `get-roots-list` and the two `-async` tools only to clients declaring the matching capabilities, and the fake gates them the same way (order and predicates from the recordings and source). Called by such a client, the fake behaves as the real server does with a client that **never answers**:
+- `trigger-sampling-request(-async)`, `trigger-elicitation-request-async`: `MCP error -32001: Request timed out` after 60 s.
+- `trigger-elicitation-request`, `trigger-url-elicitation`: the same after 10 minutes.
+- `get-roots-list`: "no roots are currently configured" after 60 s. The real server would list the client's roots at once.
+
+`trigger-url-elicitation` with `errorPath: true` answers the real `-32042` error. Clients like Claude Code declare roots and elicitation, so expect these stalls; the fast mode used in tests skips them. Without the capability, the tools answer the recorded "Tool … not found".
+
+**Ambiguous research queries.** With an elicitation-capable client, `simulate-research-query` `ambiguous: true` follows the source: `input_required`, then the SDK's 60 s timeout, then the "elicitation unavailable" default interpretation. This path is not recorded.
+
+**GET-stream notifications** (simulated logs, `resources/updated`, subscribe/unsubscribe logs, `resources/list_changed`):
+- Modeled from source; the subscribe log, the first update and the first simulated log message were verified against the real server (`test_pushed_log_and_update_messages`).
+- Messages are random and on a 5 s pace, so values differ run to run.
+- `notifications/resources/list_changed` on session-resource registration comes from the SDK source and is unverified.
+
+**`gzip-file-as-resource` never goes to the network.**
+- `data:` URLs are decoded per WHATWG.
+- The default README URL replays the README recorded on 2026-10-12. The live one on GitHub may have changed since.
+- Any other http(s) URL answers `fetch failed`; the real server would fetch it (10 MB / 30 s limits not modeled).
+- Fetch latency (~200-300 ms for real) is not added.
+
+**Session resources are per session.** In the real server a module-global map means session B gzipping the same name removes session A's resource. The fake keeps them per session.
+
+**Tasks.** The store keeps a task for its TTL (300000 ms, always) after its last update. The real cleanup timer starts at creation and resets at terminal states.
+
+**Transport and protocol details the FauxCall runtime handles generically** (not adjustable from the fake's code):
+- Responses put `jsonrpc`/`id` before `result`; the real server puts `result` first.
+- Session ids are 32-hex and SSE event ids 16-hex; the real server uses UUIDs.
+- No priming SSE event for 2025-11-25 clients.
+- No `400 Unsupported protocol version` for a bad `mcp-protocol-version` header.
+- A bogus or stale `Mcp-Session-Id` gets "Server not initialized" instead of "No valid session ID provided".
+- No 406/415 for wrong `Accept`/`Content-Type`.
+- No `Last-Event-ID` replay, no 409 for a second GET stream, no handling of `notifications/cancelled`.
+- `tools/call` of an **unknown** tool with a `task` param answers "Tool … not found" (the real SDK: `-32602 Invalid task creation result`). For known tools the fake matches.
+- Unsupported protocol versions negotiate to `2025-11-25` (the SDK's latest; per source, not probed).
+
+**Time.** Dynamic resources embed `toLocaleTimeString()` of the server's zone: US Eastern observed; set `FAUXCALL_EVERYTHING_TZ` to change it.
 <!-- /fauxcall:notes -->

@@ -1,0 +1,254 @@
+{
+  "name": "resources",
+  "created_at": "2026-10-12T22:30:00Z",
+  "calls": [
+    {
+      "id": "res-static-architecture",
+      "endpoint": "MCP resources/read",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/static/document/architecture.md"
+        }
+      }
+    },
+    {
+      "id": "res-static-extension",
+      "endpoint": "MCP resources/read",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/static/document/extension.md"
+        }
+      }
+    },
+    {
+      "id": "res-static-features",
+      "endpoint": "MCP resources/read",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/static/document/features.md"
+        }
+      }
+    },
+    {
+      "id": "res-static-how-it-works",
+      "endpoint": "MCP resources/read",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/static/document/how-it-works.md"
+        }
+      }
+    },
+    {
+      "id": "res-static-instructions",
+      "endpoint": "MCP resources/read",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/static/document/instructions.md"
+        }
+      }
+    },
+    {
+      "id": "res-static-startup",
+      "endpoint": "MCP resources/read",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/static/document/startup.md"
+        }
+      }
+    },
+    {
+      "id": "res-static-structure",
+      "endpoint": "MCP resources/read",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/static/document/structure.md"
+        }
+      }
+    },
+    {
+      "id": "res-text-1",
+      "endpoint": "MCP resources/read",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/1"
+        }
+      }
+    },
+    {
+      "id": "res-text-2",
+      "endpoint": "MCP resources/read",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/2"
+        }
+      }
+    },
+    {
+      "id": "res-text-99",
+      "endpoint": "MCP resources/read",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/99"
+        }
+      }
+    },
+    {
+      "id": "res-blob-1",
+      "endpoint": "MCP resources/read",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/blob/1"
+        }
+      }
+    },
+    {
+      "id": "res-blob-5",
+      "endpoint": "MCP resources/read",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/blob/5"
+        }
+      }
+    },
+    {
+      "id": "res-text-0",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/0"
+        }
+      }
+    },
+    {
+      "id": "res-text-neg",
+      "endpoint": "MCP resources/read",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/-1"
+        }
+      }
+    },
+    {
+      "id": "res-text-abc",
+      "endpoint": "MCP resources/read",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/abc"
+        }
+      }
+    },
+    {
+      "id": "res-text-frac",
+      "endpoint": "MCP resources/read",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/1.5"
+        }
+      }
+    },
+    {
+      "id": "res-static-missing",
+      "endpoint": "MCP resources/read",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/static/document/missing.md"
+        }
+      }
+    },
+    {
+      "id": "res-no-uri",
+      "endpoint": "MCP resources/read",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "res-text-repeat",
+      "endpoint": "MCP resources/read",
+      "purpose": "time_profile",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/3"
+        }
+      },
+      "repeat": 3,
+      "interval_ms": 1500
+    },
+    {
+      "id": "res-list",
+      "endpoint": "MCP resources/list",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "res-templates",
+      "endpoint": "MCP resources/templates/list",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    }
+  ]
+}

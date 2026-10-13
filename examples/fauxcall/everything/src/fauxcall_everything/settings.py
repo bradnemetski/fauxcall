@@ -27,5 +27,3 @@ class Settings(FakeSettings):
     name: str = "everything"
     port: int = 8701
     data_dir: Path = ROOT / "data"
-    local_tz: str = "America/New_York"
-    """The real server's local time zone: dynamic resources print the time in it."""

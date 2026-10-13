@@ -2,10 +2,10 @@
   "id": "000276",
   "endpoint": "MCP tasks/get",
   "purpose": "job_poll",
-  "plan_call": "rq-task3-get",
-  "started_at": "2026-10-12T03:38:57.419188Z",
-  "started_ns": 1791776337419188000,
-  "elapsed_ms": 14.552,
+  "plan_call": "rq-get-ambiguous",
+  "started_at": "2026-10-12T22:20:17.720276Z",
+  "started_ns": 1791843617720276000,
+  "elapsed_ms": 5.916,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,10 +33,10 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 76,
+        "id": 26,
         "method": "tasks/get",
         "params": {
-          "taskId": "17ef0a0866e2f54e353d058e620db18c"
+          "taskId": "bbb5966ef331dac4a95ec29390eb88ea"
         }
       }
     }
@@ -78,11 +78,11 @@
       ],
       [
         "content-length",
-        "331"
+        "319"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:38:57 GMT"
+        "Mon, 12 Oct 2026 22:20:17 GMT"
       ]
     ],
     "body": {
@@ -90,26 +90,26 @@
       "content_type": "text/event-stream",
       "json": {
         "result": {
-          "taskId": "17ef0a0866e2f54e353d058e620db18c",
-          "status": "cancelled",
+          "taskId": "bbb5966ef331dac4a95ec29390eb88ea",
+          "status": "completed",
           "ttl": 300000,
-          "createdAt": "2026-10-12T03:38:56.425Z",
-          "lastUpdatedAt": "2026-10-12T03:38:56.925Z",
+          "createdAt": "2026-10-12T22:20:13.179Z",
+          "lastUpdatedAt": "2026-10-12T22:20:17.186Z",
           "pollInterval": 1000,
-          "statusMessage": "Client cancelled task execution."
+          "statusMessage": "Generating report..."
         },
         "jsonrpc": "2.0",
-        "id": 76
+        "id": 26
       }
     }
   },
   "stream": [
     {
-      "t_ms": 14.273,
+      "t_ms": 5.633,
       "kind": "sse",
       "event": "message",
-      "id": "8fc6eb07-666e-461b-bef3-34eb5bd2032c",
-      "data": "{\"result\":{\"taskId\":\"17ef0a0866e2f54e353d058e620db18c\",\"status\":\"cancelled\",\"ttl\":300000,\"createdAt\":\"2026-10-12T03:38:56.425Z\",\"lastUpdatedAt\":\"2026-10-12T03:38:56.925Z\",\"pollInterval\":1000,\"statusMessage\":\"Client cancelled task execution.\"},\"jsonrpc\":\"2.0\",\"id\":76}"
+      "id": "cd713179-650c-4dad-bd11-8e0ea538d8bd",
+      "data": "{\"result\":{\"taskId\":\"bbb5966ef331dac4a95ec29390eb88ea\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-12T22:20:13.179Z\",\"lastUpdatedAt\":\"2026-10-12T22:20:17.186Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\",\"id\":26}"
     }
   ],
   "redacted": [

@@ -49,7 +49,7 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
 | Swagger Petstore | **99.71%** | 96 (98.48% over 80 with real writes) | 19 | 370 | 361, 99% coverage | 1 | $15.21 |
 | FakeRESTApi | **100%** | 115 | 27 | 323 | 671, 99% coverage | 1 | $13.02 |
 | DeepWiki (MCP) | **100%** | 20 | 3 tools | 70 | 175, 98% coverage | 3 | over $8 |
-| Everything (MCP) | **99.91%** | 170 (independent: 99.91% over 157 of 213 calls) | 16 tools, 7 resources, 2 templates, 4 prompts | 458 | 493, 99% coverage | 2 | $33.10 | *Parity* is the weighted
+| Everything (MCP) | **100%** | 129 (independent: 100% over 144 of 192 calls) | 19 tools, 7 resources, 2 templates, 4 prompts | 427 | 510, 99% coverage | 3 | $54.15 | *Parity* is the weighted
 share of checks (status, shape, content type, values, lengths, headers) on which the fake answered
 like the real service, over end-to-end scenarios run against both. *Reported cost* is what Claude
 Code reported for the sessions. The finished fakes are in [`examples/`](../examples/), except
@@ -159,7 +159,9 @@ Every problem a run hit became a fix in the tools or skills, never in the fake. 
   subscriptions and tools offered only to some clients weren't supported; a crashing handler gave
   a bare HTTP 500. The runtime gained handlers for any method, streamed progress and log
   notifications, capability-gated tools and `-32603` for crashes, and the second build reached
-  99.91%. Headless approvals were refused by the agent's own permission checks, so the CLI now
+  99.91%. Its notes named what was still missing (extensible listings, the client's capabilities
+  in handlers, pushes on the GET stream, the tools for `elicitation.url` and `tasks` clients, the
+  real refusals of malformed calls); with those added, the third build reached 100%. Headless approvals were refused by the agent's own permission checks, so the CLI now
   applies `answers.json` itself; parity reports now pseudonymize the real side's answers.
 - **Docs for agents.** Where auth probes go, how to probe an approved rate limit, how to record when
   the user prepared `.env` first, and a readable `fauxcall model schema --brief` (`ebcaa3d`,

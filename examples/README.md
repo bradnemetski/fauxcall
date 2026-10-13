@@ -9,7 +9,7 @@ folder per fake, sharing a uv workspace.
 
 | Fake | Imitates | Built from | Endpoints | Recordings | Parity with the real API | Offline tests |
 |---|---|---|---|---|---|---|
-| [`everything`](fauxcall/everything/README.md) | The MCP project's [Everything](https://github.com/modelcontextprotocol/servers/tree/main/src/everything) reference server, which exercises the whole protocol | MCP server (Streamable HTTP) | 16 tools, 7 resources, 2 resource templates, 4 prompts | 458 | **99.91%** over 170 scenarios (independent: 99.91% over 157 of 213 calls) | 493, 99% coverage |
+| [`everything`](fauxcall/everything/README.md) | The MCP project's [Everything](https://github.com/modelcontextprotocol/servers/tree/main/src/everything) reference server, which exercises the whole protocol | MCP server (Streamable HTTP) | 19 tools, 7 resources, 2 resource templates, 4 prompts | 427 | **100%** over 129 scenarios (independent: 100% over 144 of 192 calls) | 510, 99% coverage |
 | [`fakerestapi`](fauxcall/fakerestapi/README.md) | [FakeRESTApi](https://fakerestapi.azurewebsites.net), a demo API that echoes writes without storing them | Swagger UI page | 27 | 323 | **100%** over 115 scenarios | 671, 99% coverage |
 | [`frankfurter`](fauxcall/frankfurter/README.md) | [Frankfurter](https://frankfurter.dev), ECB exchange rates | OpenAPI document | 9 | 219 | **100%** over 142 scenarios | 427, 99% coverage |
 | [`petstore`](fauxcall/petstore/README.md) | [Swagger Petstore v3](https://petstore3.swagger.io), a shared public sandbox | Swagger UI page | 19 | 370 | **99.71%** over 96 scenarios; 98.48% over 80 with real writes | 361, 99% coverage |

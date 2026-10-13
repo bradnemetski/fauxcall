@@ -1,11 +1,11 @@
 {
   "id": "000223",
   "endpoint": "MCP tools/call:gzip-file-as-resource",
-  "purpose": "edge",
-  "plan_call": "gz-dup-name",
-  "started_at": "2026-10-12T03:38:08.539940Z",
-  "started_ns": 1791776288539940000,
-  "elapsed_ms": 8.297,
+  "purpose": "invalid",
+  "plan_call": "gz-disallowed-domain",
+  "started_at": "2026-10-12T22:19:39.935099Z",
+  "started_ns": 1791843579935099000,
+  "elapsed_ms": 40.599,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,13 +33,13 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 23,
+        "id": 12,
         "method": "tools/call",
         "params": {
           "name": "gzip-file-as-resource",
           "arguments": {
-            "name": "hello.txt.gz",
-            "data": "data:text/plain;base64,QWdhaW4="
+            "name": "x.gz",
+            "data": "https://example.invalid/file.txt"
           }
         }
       }
@@ -82,7 +82,7 @@
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 03:38:08 GMT"
+        "Mon, 12 Oct 2026 22:19:39 GMT"
       ],
       [
         "transfer-encoding",
@@ -96,25 +96,24 @@
         "result": {
           "content": [
             {
-              "name": "hello.txt.gz",
-              "uri": "demo://resource/session/hello.txt.gz",
-              "mimeType": "application/gzip",
-              "type": "resource_link"
+              "type": "text",
+              "text": "fetch failed"
             }
-          ]
+          ],
+          "isError": true
         },
         "jsonrpc": "2.0",
-        "id": 23
+        "id": 12
       }
     }
   },
   "stream": [
     {
-      "t_ms": 8.026,
+      "t_ms": 40.417,
       "kind": "sse",
       "event": "message",
-      "id": "63fe02d2-9a98-4e59-bcff-fb4e78dc4123",
-      "data": "{\"result\":{\"content\":[{\"name\":\"hello.txt.gz\",\"uri\":\"demo://resource/session/hello.txt.gz\",\"mimeType\":\"application/gzip\",\"type\":\"resource_link\"}]},\"jsonrpc\":\"2.0\",\"id\":23}"
+      "id": "8608612e-454d-4d1d-a71b-292c46ce24ab",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"fetch failed\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":12}"
     }
   ],
   "redacted": [

@@ -1,59 +1,58 @@
 {
   "fake": "everything",
   "source": "http://127.0.0.1:3101/mcp",
-  "started_at": "2026-10-12T03:29:51.784033Z",
-  "updated_at": "2026-10-12T04:56:54.658777Z",
+  "started_at": "2026-10-12T22:13:33.192010Z",
+  "updated_at": "2026-10-12T23:09:35.551052Z",
   "phases": {
     "discover": {
       "status": "done",
-      "started_at": "2026-10-12T03:29:51.784033Z",
-      "finished_at": "2026-10-12T03:29:51.784033Z"
+      "started_at": "2026-10-12T22:13:33.192010Z",
+      "finished_at": "2026-10-12T22:13:33.192010Z"
     },
     "gate": {
       "status": "done",
-      "finished_at": "2026-10-12T03:30:20.749192Z"
+      "finished_at": "2026-10-12T22:17:08.297287Z"
     },
     "record": {
       "status": "done",
-      "finished_at": "2026-10-12T03:51:03.332925Z"
+      "finished_at": "2026-10-12T22:28:40.159368Z"
     },
     "model": {
       "status": "done",
-      "finished_at": "2026-10-12T03:51:03.844317Z"
+      "finished_at": "2026-10-12T22:41:00.212020Z"
     },
     "world": {
       "status": "done",
-      "finished_at": "2026-10-12T03:51:04.849031Z"
+      "finished_at": "2026-10-12T22:41:00.771737Z"
     },
     "scaffold": {
       "status": "done",
-      "finished_at": "2026-10-12T04:04:13.311094Z"
+      "finished_at": "2026-10-12T22:41:01.287811Z"
     },
     "implement": {
       "status": "done",
-      "finished_at": "2026-10-12T04:04:13.815328Z"
+      "finished_at": "2026-10-12T22:41:01.806609Z"
     },
     "unit_tests": {
       "status": "done",
-      "finished_at": "2026-10-12T04:04:14.313330Z"
+      "finished_at": "2026-10-12T22:41:02.313673Z"
     },
     "e2e_tests": {
       "status": "done",
-      "finished_at": "2026-10-12T04:09:33.777569Z"
+      "finished_at": "2026-10-12T22:47:32.827954Z"
     },
     "parity": {
       "status": "done",
-      "started_at": "2026-10-12T04:09:34.287071Z",
-      "finished_at": "2026-10-12T04:56:34.404833Z"
+      "finished_at": "2026-10-12T22:47:33.327895Z"
     },
     "review": {
       "status": "done",
-      "started_at": "2026-10-12T04:23:14.989192Z",
-      "finished_at": "2026-10-12T04:56:34.915857Z"
+      "started_at": "2026-10-12T22:47:34.338067Z",
+      "finished_at": "2026-10-12T23:09:33.707595Z"
     },
     "report": {
       "status": "done",
-      "finished_at": "2026-10-12T04:56:54.658361Z"
+      "finished_at": "2026-10-12T23:09:35.550612Z"
     }
   },
   "endpoints": [
@@ -208,7 +207,37 @@
       }
     },
     {
+      "endpoint": "MCP tools/call:trigger-url-elicitation",
+      "steps": {
+        "recorded": "done",
+        "analyzed": "done",
+        "modeled": "done",
+        "implemented": "done",
+        "tested": "done"
+      }
+    },
+    {
       "endpoint": "MCP tools/call:get-roots-list",
+      "steps": {
+        "recorded": "done",
+        "analyzed": "done",
+        "modeled": "done",
+        "implemented": "done",
+        "tested": "done"
+      }
+    },
+    {
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "steps": {
+        "recorded": "done",
+        "analyzed": "done",
+        "modeled": "done",
+        "implemented": "done",
+        "tested": "done"
+      }
+    },
+    {
+      "endpoint": "MCP tools/call:trigger-elicitation-request-async",
       "steps": {
         "recorded": "done",
         "analyzed": "done",
@@ -220,14 +249,13 @@
   ],
   "gate": {
     "mutations": "approved",
-    "answered_at": "2026-10-12T03:30:20.748763Z"
+    "answered_at": "2026-10-12T22:17:08.296255Z"
   },
   "log": [
-    "2026-10-12 03:30 headless: answers.json approves MCP tools/call:* at 60 calls/tool; no creds, no Jev",
-    "2026-10-12 03:36 zod-style isError messages for schema violations; dynamic resources embed local time h:mm:ss AM/PM (server zone UTC-4, America/New_York?); long-running sleeps duration/steps per step, progress only with token",
-    "2026-10-12 03:51 All tools computed except get-env/get-tiny-image (match). Resources/prompts/completions/tasks via METHOD_HANDLERS. resources/list can't show session resources (FauxCall limitation).",
-    "2026-10-12 04:00 08-gaps: malformed gzip call (args at top level) deleted as 000406; re-recorded in 09-http-example",
-    "2026-10-12 04:43 Review: 16 findings; probes 10-14 recorded; fixed completion union, fast-mode task completion, URL normalization (dots/host/port/empty path), data URL fragment/trim, raw session keys, tasks/list paging, task:null, completer-less totals",
-    "2026-10-12 04:56 Final parity 99.91% overall / 99.91% independent (157/213); remaining: resources/list session resources (FauxCall), ambiguous research input_required (capabilities not visible to handlers)"
+    "2026-10-12 22:17 Gate from answers.json (headless): no credentials, no Jev, tools/call:* approved, 60 calls per tool. All writes are session-scoped (gzip resources, toggles, tasks) on a local server and end with the session.",
+    "2026-10-12 22:28 Recorded 370+ exchanges incl. round-2 edge probes; server source (npm 2026.8.31) read as documentation for unobservable behavior (GET-stream logs, subscription updates, capability-gated tools).",
+    "2026-10-12 22:41 Implemented all tools/methods in handlers.py (zod-like validation, JS number formatting, gzip byte-identical, tasks per session); unit tests 339 pass, 99% coverage. Next: e2e parity scenarios.",
+    "2026-10-12 22:47 Parity 100% overall / 100% independent (130 of 178 calls independent), 118 scenarios. GET-stream pushes verified against the real server in test_pushed_log_and_update_messages. Next: independent review.",
+    "2026-10-12 23:09 Review fixed: tool order/gating, task on non-task tools, URI normalization, schema -32603 issues, tasks/list paging, zod Infinity, jsnum ASCII, gzip trim; 43 more probes recorded. Remaining differences (runtime transport details, client-request tools) in README."
   ]
 }

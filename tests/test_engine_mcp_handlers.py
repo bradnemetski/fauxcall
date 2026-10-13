@@ -20,8 +20,14 @@ from fauxcall.mcpwire.client import McpWireClient
 from fauxcall.model import AuthModel, AuthScheme, McpToolModel, McpTransportModel
 from fauxcall.model.mcp import PROBE_PROMPT, PROBE_RESOURCE, PROBE_TOOL
 from fauxcall.model.realism import LatencyProfile
-from fauxcall.runtime import EarlyResponse, RpcError, register_method, register_tool
-from fauxcall.runtime.mcp_server import method_endpoint
+from fauxcall.runtime import (
+    EarlyResponse,
+    RequestContext,
+    RpcError,
+    register_method,
+    register_tool,
+)
+from fauxcall.runtime.mcp_server import Channel, method_endpoint
 from fauxcall.testing.asgi import streaming_client
 
 if TYPE_CHECKING:
@@ -29,7 +35,6 @@ if TYPE_CHECKING:
 
     import httpx2
 
-    from fauxcall.runtime import RequestContext
     from fauxcall.types import JsonObject, JsonValue
 
 JSON_MODE = McpTransportModel(response_mode="json", issues_session=False, requires_session=False)
@@ -493,8 +498,8 @@ def test_wire_helpers() -> None:
     from fauxcall.types import HttpMethod  # noqa: PLC0415
 
     init: JsonValue = {"method": "initialize", "params": {"capabilities": {"sampling": {}}}}
-    assert _declared([{"method": "ping"}, init, "odd"]) == {"sampling"}
-    assert _declared([{"method": "initialize", "params": {"capabilities": []}}]) == frozenset()
+    assert _declared([{"method": "ping"}, init, "odd"]) == {"sampling": {}}
+    assert _declared([{"method": "initialize", "params": {"capabilities": []}}]) == {}
     sent = Exchange(
         id="1",
         endpoint="MCP tools/call:x",
@@ -508,3 +513,149 @@ def test_wire_helpers() -> None:
         ),
     )
     assert _sent_arguments(sent) is None  # no arguments were sent
+
+
+def test_tools_can_require_sets_of_capabilities() -> None:
+    url_only = McpToolModel.model_validate(
+        {"definition": {"name": "a"}, "requires": ["elicitation.url"]}
+    )
+    assert url_only.requires == [["elicitation.url"]]  # the short form: any one of them
+    assert url_only.offered_to({"elicitation": {"url": {}}})
+    assert not url_only.offered_to({"elicitation": {}})
+    both = McpToolModel(definition={"name": "b"}, requires=[["sampling", "tasks.requests"]])
+    assert both.offered_to({"sampling": {}, "tasks": {"requests": {}}})
+    assert not both.offered_to({"sampling": {}})
+    assert McpToolModel(definition={"name": "c"}).offered_to({})
+
+
+async def test_listings_and_capabilities_reach_handlers(tmp_path: Path) -> None:
+    sessions = McpTransportModel(response_mode="sse")  # capabilities live in the MCP session
+    app, _ = mcp_app(tmp_path, mcp_model(transport=sessions, tools=[]))
+    seen: list[JsonValue] = []
+
+    async def resources(ctx: RequestContext, params: JsonObject) -> JsonValue:
+        seen.append(ctx.client_capabilities)
+        made = ctx.state.get("made", [])
+        if not made:
+            return None  # nothing created yet: the recorded listing
+        return {"resources": [*ctx.model.mcp.resources, *made]}  # type: ignore[union-attr]
+
+    async def create(ctx: RequestContext, params: JsonObject) -> JsonValue:
+        ctx.state.setdefault("made", []).append({"uri": "session://1", "name": "made"})
+        return {}
+
+    register_method(app, "resources/list", resources)
+    register_method(app, "custom/create", create)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize(capabilities={"sampling": {}})
+        assert j((await wire.call("resources/list")).result) == {"resources": []}
+        await wire.call("custom/create")
+        listed = j((await wire.call("resources/list")).result)["resources"]
+        assert listed == [{"uri": "session://1", "name": "made"}]
+        await wire.close()
+    assert seen[0] == {"sampling": {}}
+
+
+async def test_malformed_calls_get_the_recorded_answers(tmp_path: Path) -> None:
+    def refused(message: str) -> JsonValue:
+        return {"jsonrpc": "2.0", "id": 0, "error": {"code": -32603, "message": message}}
+
+    model = mcp_model(transport=McpTransportModel(response_mode="json", reinitialize_status=400))
+    assert model.mcp is not None
+    model.mcp.errors |= {
+        "tool_call_without_name": refused("name: Required"),
+        "arguments_not_object": refused("read_wiki_structure: arguments must be an object"),
+        "second_initialize": refused("Invalid Request: Server already initialized"),
+    }
+    model.mcp.arguments_probe_tool = "read_wiki_structure"
+    app, _ = mcp_app(tmp_path, model)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize()
+        nameless = await wire.call("tools/call", {"arguments": {}})
+        assert j(nameless.error) == {"code": -32603, "message": "name: Required"}
+        odd = await wire.call("tools/call", {"name": "ask_question", "arguments": "x"})
+        assert j(odd.error)["message"] == "ask_question: arguments must be an object"
+        again = await wire.post(protocol.request(9, "initialize", {"capabilities": {}}))
+        assert again.status == 400
+        assert j(again.response) == {
+            "jsonrpc": "2.0",
+            "id": 9,
+            "error": {"code": -32603, "message": "Invalid Request: Server already initialized"},
+        }
+        await wire.close()
+    plain, _ = mcp_app(tmp_path / "plain", mcp_model(transport=JSON_MODE))
+    async with asgi_client(plain) as http:
+        reply = j((await http.post("/mcp", json=protocol.request(1, "tools/call", {}))).json())
+    assert reply["error"] == {"code": -32602, "message": "Invalid params: name is required"}
+
+
+async def test_pushes_reach_the_clients_open_stream(tmp_path: Path) -> None:
+    transport = McpTransportModel(response_mode="json", get_stream="sse")
+    toggle: JsonObject = {"name": "toggle", "inputSchema": {"type": "object"}}
+    app, _ = mcp_app(
+        tmp_path,
+        mcp_model(
+            transport=transport, tools=[McpToolModel(definition=toggle, behavior="computed")]
+        ),
+    )
+    started: list[asyncio.Task[None] | None] = []
+
+    async def ticking(channel: Channel) -> None:
+        for n in range(2):
+            await channel.pause(0.01)
+            channel.push("notifications/message", {"level": "info", "data": f"tick {n}"})
+        await channel.pause(60)  # still running when the session ends
+
+    async def on(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        assert ctx.push("notifications/resources/list_changed")
+        started.append(ctx.background(ticking))
+        return {"content": []}
+
+    register_tool(app, "toggle", on)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize()
+        assert wire.session_id is not None
+        headers = {"mcp-session-id": wire.session_id, "accept": "text/event-stream"}
+        async with http.stream("GET", "/mcp", headers=headers) as stream:
+            lines = stream.aiter_lines()
+            await wire.call("tools/call", {"name": "toggle", "arguments": {}})
+            received: list[str] = []
+            while len(received) < 3:
+                line = await anext(lines)
+                if line.startswith("data:"):
+                    received.append(json.loads(line[5:])["method"])
+        assert received == [
+            "notifications/resources/list_changed",
+            "notifications/message",
+            "notifications/message",
+        ]
+        await wire.close()  # DELETE ends the session and what it left running
+    (task,) = started
+    assert task is not None
+    await asyncio.sleep(0)
+    assert task.cancelled()
+
+
+async def test_without_an_open_stream_pushes_are_dropped(tmp_path: Path) -> None:
+    app, _ = _app(tmp_path)
+    pushed: list[bool] = []
+
+    async def lonely(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        pushed.append(ctx.push("notifications/message"))
+        return {"content": []}
+
+    register_tool(app, "create_price", lonely)
+    async with asgi_client(app) as http:
+        await _call(http, "create_price", {"amount": 1})
+    assert pushed == [False]
+    context = RequestContext.__new__(RequestContext)
+    context.channel = None
+    assert context.push("x") is False
+    assert context.background(ticking_never) is None
+
+
+async def ticking_never(channel: Channel) -> None:  # pragma: no cover - never started
+    del channel

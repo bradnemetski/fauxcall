@@ -1,8 +1,0 @@
-{"name": "gaps", "created_at": "2026-10-12T01:20:00Z",
- "note": "Body of http://example.com/ (gzip), empty dynamic resource id.",
- "calls": [
-  {"id": "gz-http-plain-inline", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "variation",
-   "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "plainhttp2.gz", "data": "http://example.com/", "outputType": "resource"}}},
-  {"id": "dyn-empty-id", "endpoint": "MCP resources/read:demo://resource/dynamic/text/", "purpose": "edge",
-   "request": {"method": "POST", "path": "/mcp", "json_body": {"uri": "demo://resource/dynamic/text/"}}}
- ]}
