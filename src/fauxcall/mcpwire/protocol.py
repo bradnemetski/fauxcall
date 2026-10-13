@@ -25,6 +25,8 @@ INVALID_REQUEST: Final = -32600
 METHOD_NOT_FOUND: Final = -32601
 INVALID_PARAMS: Final = -32602
 INTERNAL_ERROR: Final = -32603
+REQUEST_TIMEOUT: Final = -32001
+"""The MCP SDKs' code for a request the other side never answered."""
 
 LATEST_HANDSHAKE_VERSION: Final = "2025-06-18"
 KNOWN_VERSIONS: Final = ("2024-11-05", "2025-03-26", "2025-06-18", "2025-11-25")

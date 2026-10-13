@@ -21,10 +21,13 @@ from __future__ import annotations
 
 import contextlib
 import dataclasses
+import ipaddress
 import re
+import socket
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Final
+from urllib.parse import urlsplit
 
 import httpx2
 import pytest
@@ -46,7 +49,7 @@ from fauxcall.testing.replays import recorded_keys
 from fauxcall.testing.report import ParityReport, endpoint_for, endpoint_matcher
 
 if TYPE_CHECKING:
-    from collections.abc import AsyncIterator, Callable, Sequence
+    from collections.abc import AsyncIterator, Callable, Iterator, Sequence
 
     from fastapi import FastAPI
 
@@ -152,6 +155,82 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 def _target(config: pytest.Config) -> str:
     value: str = config.getoption("--target")
     return value
+
+
+@pytest.fixture(autouse=True)
+def _fauxcall_offline(request: pytest.FixtureRequest) -> Iterator[None]:
+    """Against the fake alone, nothing may reach the network: a fake answers from what it holds.
+
+    A fake that fetched URLs or called the real service would pass while the real service
+    happened to be up and fail anywhere else (CI, another machine). Connections to the local
+    machine stay open (in-process servers, test sockets), except to the real service's own
+    address; any other attempt fails the test, even if the fake swallowed the error.
+    """
+    config = request.config
+    if _target(config) != "fake" or config.getoption("--fake-url"):
+        yield
+        return
+    real = _real_address(request)
+    attempts: list[str] = []
+    original = socket.socket.connect
+
+    def guarded(sock: socket.socket, address: Any) -> None:  # noqa: ANN401 - socket addresses
+        if _offline_refuses(sock, address, real):
+            attempts.append(f"{address[0]}:{address[1]}")
+            raise ConnectionRefusedError(f"fauxcall: a fake can't reach the network ({address})")
+        original(sock, address)
+
+    setattr(socket.socket, "connect", guarded)  # noqa: B010 - replacing a method for the run
+    try:
+        yield
+    finally:
+        setattr(socket.socket, "connect", original)  # noqa: B010
+    if attempts:
+        pytest.fail(
+            "the fake tried to reach the network ("
+            + ", ".join(dict.fromkeys(attempts))
+            + "): a fake must answer from its recordings and data, never by calling out",
+            pytrace=False,
+        )
+
+
+def _real_address(request: pytest.FixtureRequest) -> tuple[str, int] | None:
+    """The real service's (host, port), when the fake under test names it."""
+    try:
+        spec = request.getfixturevalue("fauxcall_fake")
+    except pytest.FixtureLookupError:
+        return None
+    base = spec.real_base_url or (spec.model.real.base_url if spec.model else None)
+    if not base:
+        return None
+    parts = urlsplit(base)
+    port = parts.port or (443 if parts.scheme == "https" else 80)
+    return (parts.hostname or "", port)
+
+
+def _offline_refuses(sock: socket.socket, address: Any, real: tuple[str, int] | None) -> bool:  # noqa: ANN401
+    """Whether an offline run refuses this connection: off the machine, or to the real service."""
+    if sock.family not in {socket.AF_INET, socket.AF_INET6} or not isinstance(address, tuple):
+        return False
+    host, port = str(address[0]), int(address[1])
+    try:
+        local = ipaddress.ip_address(host.split("%", 1)[0]).is_loopback
+    except ValueError:
+        local = host == "localhost"
+    if not local:
+        return True
+    if real is None:
+        return False
+    real_host, real_port = real
+    real_local = real_host in {"localhost", ""} or _loopback(real_host)
+    return real_local and port == real_port
+
+
+def _loopback(host: str) -> bool:
+    try:
+        return ipaddress.ip_address(host).is_loopback
+    except ValueError:
+        return False
 
 
 def _as_target(value: str) -> Target:

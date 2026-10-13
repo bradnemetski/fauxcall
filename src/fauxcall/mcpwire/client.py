@@ -54,6 +54,7 @@ class RpcCall:
     elapsed_ms: float
     sse_events: list[tuple[float, str, str, str | None]] = field(default_factory=list)
     """``(ms since the request started, event, data, id)`` for every SSE event received."""
+    http_method: str = "POST"
 
     def header(self, name: str) -> str | None:
         """A response header (case-insensitive)."""
@@ -116,6 +117,9 @@ class McpWireClient:
         self.timeout_s = timeout_s
         self.session_id: str | None = None
         self.negotiated_version: str | None = None
+        self.on_request: Callable[[JsonObject], Awaitable[JsonValue | None]] | None = None
+        """Answers requests the server sends mid-call (``sampling/createMessage`` …): the reply
+        message to POST back, or ``None`` to leave one unanswered."""
         self.sse_content_type: str | None = None
         """Content type of the legacy transport's event stream (once opened)."""
         self._ids = itertools.count(1)
@@ -131,6 +135,20 @@ class McpWireClient:
         return self._sse_messages_url
 
     # -- request plumbing ------------------------------------------------------------------------
+
+    async def _answer_server(self, data: str) -> None:
+        """Answer a request the server sent mid-call (sampling …), when the client knows how."""
+        if self.on_request is None:
+            return
+        try:
+            message = jsonfmt.loads(data)
+        except ValueError:
+            return
+        if not protocol.is_request(message) or not isinstance(message, dict):
+            return
+        reply = await self.on_request(message)
+        if reply is not None:
+            await self.post(reply)
 
     def _version_header(self, headers: dict[str, str]) -> dict[str, str]:
         if self.negotiated_version and self.negotiated_version != _LEGACY_VERSION:
@@ -189,6 +207,7 @@ class McpWireClient:
                 for event in decoder.feed(text):
                     events.append((stamp, event.event, event.data, event.id))
                     answered = answered or _answers(event, wanted)
+                    await self._answer_server(event.data)
                 if answered:
                     break
             if decoder is not None and not answered:
@@ -301,6 +320,83 @@ class McpWireClient:
         self._version_header(headers)
         async with self.http.stream("GET", self.url, headers=headers, timeout=10.0) as response:
             return response.status_code, response.headers.get("content-type")
+
+    def _stream_headers(self, session: str | None) -> dict[str, str]:
+        headers = {"accept": "text/event-stream", **self.headers}
+        if session:
+            headers[protocol.SESSION_HEADER] = session
+        return self._version_header(headers)
+
+    async def probe_http(self, http_method: str, session: str | None) -> RpcCall:
+        """A GET or DELETE with ``session`` as its session id.
+
+        A refusal is read whole; a stream the server opens is closed at once.
+        """
+        headers = self._stream_headers(session)
+        started_ns = time.time_ns()
+        started = time.perf_counter()
+        async with self.http.stream(http_method, self.url, headers=headers, timeout=10.0) as answer:
+            content_type = answer.headers.get("content-type")
+            body = "" if _is_event_stream(content_type) else (await answer.aread()).decode()
+        messages = _parse_lenient(body, content_type, answer.status_code)
+        return RpcCall(
+            method=http_method,
+            sent=None,
+            status=answer.status_code,
+            request_headers=list(headers.items()),
+            response_headers=list(answer.headers.multi_items()),
+            content_type=content_type,
+            body=body,
+            messages=messages,
+            response=_reply_to(messages, None),
+            started_ns=started_ns,
+            elapsed_ms=(time.perf_counter() - started) * 1000,
+            http_method=http_method,
+        )
+
+    async def watch_stream(self, within: float) -> tuple[RpcCall | None, RpcCall | None]:
+        """Hold the client's GET stream open: its first keep-alive, and a second stream's answer.
+
+        The second GET is for the same session, sent while the first stream is open.
+
+        The comment comes back as a call whose body is that line and whose time is how long the
+        stream stayed idle before it (``None``: none within ``within`` seconds, or no stream).
+        """
+        headers = self._stream_headers(self.session_id)
+        started_ns = time.time_ns()
+        started = time.perf_counter()
+        comment: str | None = None
+        async with self.http.stream(
+            "GET", self.url, headers=headers, timeout=within + 10
+        ) as stream:
+            content_type = stream.headers.get("content-type")
+            if stream.status_code != 200 or not _is_event_stream(content_type):  # noqa: PLR2004
+                return None, None
+            second = await self.probe_http("GET", self.session_id) if self.session_id else None
+            with contextlib.suppress(TimeoutError):
+                async with asyncio.timeout(within):
+                    async for line in stream.aiter_lines():
+                        if line.startswith(":"):
+                            comment = line
+                            break
+            elapsed = (time.perf_counter() - started) * 1000
+            response_headers = list(stream.headers.multi_items())
+        if comment is None:
+            return None, second
+        return RpcCall(
+            method="GET",
+            sent=None,
+            status=200,
+            request_headers=list(headers.items()),
+            response_headers=response_headers,
+            content_type=content_type,
+            body=comment,
+            messages=[],
+            response=None,
+            started_ns=started_ns,
+            elapsed_ms=elapsed,
+            http_method="GET",
+        ), second
 
     async def delete_session(self) -> int | None:
         """End the session (DELETE); returns the status, or ``None`` without a session.

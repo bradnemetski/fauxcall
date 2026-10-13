@@ -15,6 +15,7 @@ from __future__ import annotations
 import asyncio
 import base64
 import binascii
+import itertools
 import secrets
 import time
 import uuid
@@ -51,7 +52,8 @@ if TYPE_CHECKING:
 log = get_logger(__name__)
 
 TOOLS_CALL: Final = "tools/call"
-KEEP_ALIVE_SECONDS: Final = 15.0
+CLIENT_TIMEOUT_SECONDS: Final = 60.0
+"""How long a server waits for a client's answer (the MCP SDKs' default)."""
 
 
 def _is_error_answer(answer: JsonObject) -> bool:
@@ -90,6 +92,48 @@ class Channel:
         """Wait (the runtime's sleep, so tests can control it)."""
         await self._fake.runtime.pause(seconds)
 
+    async def ask(
+        self,
+        method: str,
+        params: JsonValue = None,
+        *,
+        within: float = CLIENT_TIMEOUT_SECONDS,
+        send: Callable[[JsonValue], None] | None = None,
+    ) -> JsonValue:
+        """Send the client a request (``sampling/createMessage`` …) and wait for its answer.
+
+        ``send`` delivers it (the call's SSE stream); without one it goes on the GET stream.
+        Returns the client's ``result``; raises :class:`ClientError` with its ``error``, or when
+        it can't be reached or doesn't answer ``within`` seconds (``-32001 Request timed
+        out``, as the SDKs say).
+        """
+        request_id = f"fauxcall-{next(self._fake.request_ids)}"
+        message = protocol.request(request_id, method, params)
+        if send is None:
+            stream = self._fake.streams.get(self.session)
+            if stream is None:
+                raise ClientError(protocol.REQUEST_TIMEOUT, "Request timed out")
+            send = stream.put_nowait
+        waiting: asyncio.Future[JsonObject] = asyncio.get_running_loop().create_future()
+        key = (self.session, request_id)
+        self._fake.awaiting[key] = waiting
+        try:
+            send(message)
+            async with asyncio.timeout(within):
+                answer = await waiting
+        except TimeoutError as error:
+            raise ClientError(protocol.REQUEST_TIMEOUT, "Request timed out") from error
+        finally:
+            self._fake.awaiting.pop(key, None)
+        failure = answer.get("error")
+        if isinstance(failure, dict):
+            raise ClientError(
+                int(failure.get("code", protocol.INTERNAL_ERROR)),  # type: ignore[arg-type]
+                str(failure.get("message", "")),
+                failure.get("data"),
+            )
+        return answer.get("result")
+
     def background(self, work: Callable[[Channel], Awaitable[None]]) -> asyncio.Task[None]:
         """Run ``work(self)`` until it ends, is cancelled, or the client's session ends."""
         task = asyncio.ensure_future(work(self))
@@ -107,6 +151,14 @@ class RpcError(Exception):
         self.code = code
         self.message = message
         self.data = data
+
+
+class ClientError(RpcError):
+    """The client refused a request the server sent it, or never answered.
+
+    Raise it on (or let it propagate) to answer the call with the same error, as SDK servers do
+    (``MCP error -32001: Request timed out``).
+    """
 
 
 _LISTINGS: Final = frozenset(
@@ -163,9 +215,14 @@ class McpFake:
         self.method_handlers: dict[str, MethodHandler] = {}
         self._sessions: dict[str, str] = {}
         self._capabilities: dict[str, JsonObject] = {}
+        self._versions: dict[str, str] = {}
+        """MCP session -> the protocol version it negotiated."""
         self.streams: dict[str, asyncio.Queue[JsonValue]] = {}
         """MCP session -> its open GET stream (messages pushed outside any call)."""
         self.background: dict[str, set[asyncio.Task[None]]] = {}
+        self.awaiting: dict[tuple[str, str], asyncio.Future[JsonObject]] = {}
+        """(MCP session, request id) -> the server's request waiting for the client's answer."""
+        self.request_ids = itertools.count(1)
         """MCP session -> work handlers left running after a call (``ctx.background``)."""
         """MCP session -> the capabilities its client declared in ``initialize``."""
         self._sse_queues: dict[str, asyncio.Queue[str]] = {}
@@ -526,18 +583,18 @@ class McpFake:
 
     # -- HTTP transport ---------------------------------------------------------------------------
 
-    def _reply(self, messages: list[JsonValue], headers: dict[str, str]) -> Response:
+    def _reply(
+        self, messages: list[JsonValue], headers: dict[str, str], session: str = ""
+    ) -> Response:
         if self.transport.response_mode == "sse":
-            text = "".join(
-                protocol.sse_event(
-                    m, event_id=secrets.token_hex(8) if self.transport.sse_event_ids else None
-                )
-                for m in messages
-            )
+            events = b"".join(self._event(m) for m in messages)
             return Response(
-                content=text.encode(), media_type=self.transport.content_type_sse, headers=headers
+                content=self._priming(session) + events,
+                media_type=self.transport.content_type_sse,
+                headers=headers,
             )
-        payload: JsonValue = messages[0] if len(messages) == 1 else list(messages)
+        ordered = [self._ordered(m) for m in messages]
+        payload: JsonValue = ordered[0] if len(ordered) == 1 else ordered
         return Response(
             content=jsonfmt.dumps(payload).encode(),
             media_type=self.transport.content_type_json,
@@ -548,31 +605,106 @@ class McpFake:
         """Handle GET/POST/DELETE on the Streamable HTTP endpoint."""
         if request.method in {"GET", "DELETE"}:
             return self._get_or_delete(request)
+        refused = self._http_refusal(request)
+        if refused is not None:
+            return refused
         messages = _messages(await request.body())
         if isinstance(messages, Response):
             return messages
         headers, refused = self._session_of(request, messages)
         if refused is not None:
             return refused
+        session = (
+            headers.get(self.transport.session_header)
+            or request.headers.get(self.transport.session_header)
+            or ""
+        )
+        self._resolve(session, messages)
+        self._notified(request, messages)
         requests = [m for m in messages if protocol.is_request(m) and isinstance(m, dict)]
         if not requests:
             return Response(status_code=202)
         streaming = self.transport.response_mode == "sse"
         try:
             if streaming and len(requests) == 1:
-                return await self._answer_streaming(request, requests[0], headers)
+                return await self._answer_streaming(request, requests[0], headers, session)
             sent: list[JsonValue] = []
             for message in requests:
                 notes, reply = await self._answer(request, message)
                 sent += [*notes, reply] if streaming else [reply]
         except EarlyResponse as early:  # a tool answered the whole HTTP request
             return early.response
-        return self._reply(sent, headers)
+        return self._reply(sent, headers, session)
+
+    def _http_refusal(self, request: Request) -> Response | None:
+        """The real server's HTTP-level refusal of this POST, if it would refuse it."""
+        headers = request.headers
+        accept = headers.get("accept", "")
+        situations = {
+            "accept": "text/event-stream" not in accept or "application/json" not in accept,
+            "content_type": "application/json" not in headers.get("content-type", ""),
+            "protocol_header": headers.get(protocol.PROTOCOL_HEADER, "")
+            not in {
+                "",
+                *protocol.KNOWN_VERSIONS,
+                *self.transport.protocol_versions,
+            },
+            "unknown_session": bool(headers.get(self.transport.session_header))
+            and headers[self.transport.session_header] not in self._sessions,
+        }
+        for situation, applies in situations.items():
+            refused = self._refusal(situation) if applies else None
+            if refused is not None:
+                return refused
+        return None
+
+    def _refusal(self, situation: str) -> Response | None:
+        """The real server's recorded HTTP refusal in ``situation``, if introspection saw one."""
+        recorded = self.transport.refusals.get(situation)
+        if not isinstance(recorded, dict):
+            return None
+        status = recorded.get("status")
+        return Response(
+            content=str(recorded.get("body") or "").encode(),
+            status_code=status if isinstance(status, int) else 400,
+            media_type=str(recorded.get("content_type") or "text/plain"),
+        )
+
+    def _ordered(self, message: JsonValue) -> JsonValue:
+        """A response with its members in the order the real server writes them."""
+        order = self.transport.member_order
+        if not order or not isinstance(message, dict) or "method" in message:
+            return message
+        rank = {name: index for index, name in enumerate(order)}
+        return dict(sorted(message.items(), key=lambda item: rank.get(item[0], len(rank))))
+
+    def _event(self, message: JsonValue) -> bytes:
+        """One SSE event, with an id shaped like the real server's when it sends them."""
+        event_id = self._new_id(self.transport.event_id_format, 8)
+        ordered = self._ordered(message)
+        return protocol.sse_event(
+            ordered, event_id=event_id if self.transport.sse_event_ids else None
+        ).encode()
+
+    def _priming(self, session: str) -> bytes:
+        """The empty event newer protocol versions open SSE answers with, when the server does."""
+        if self._versions.get(session) not in self.transport.priming_versions:
+            return b""
+        return f"id: {self._new_id(self.transport.event_id_format, 8)}\ndata: \n\n".encode()
+
+    @staticmethod
+    def _new_id(shape: str, size: int) -> str:
+        """A fresh id shaped like the real server's (a UUID, or hex)."""
+        return str(uuid.uuid4()) if shape == "uuid" else secrets.token_hex(size)
 
     def _get_or_delete(self, request: Request) -> Response:
         """A GET (the server's stream, or its refusal) or a DELETE (ends the session)."""
         session = request.headers.get(self.transport.session_header)
+        unknown = bool(session) and session not in self._sessions
         if request.method == "DELETE":
+            refused = self._refusal("delete_unknown_session") if unknown else None
+            if refused is not None:
+                return refused
             if session:
                 self._end(session)
             return Response(status_code=self.transport.delete_status)
@@ -580,9 +712,48 @@ class McpFake:
             status = self.transport.get_status
             allow = {"allow": "POST, DELETE"} if status == 405 else {}  # noqa: PLR2004
             return Response(status_code=status, headers=allow)
-        return StreamingResponse(
-            self._server_stream(session or ""), media_type=self.transport.content_type_sse
+        situation = (
+            "get_unknown_session"
+            if unknown
+            else "get_second_stream"
+            if session in self.streams
+            else None
         )
+        refused = self._refusal(situation) if situation else None
+        if refused is not None:
+            return refused
+        queue: asyncio.Queue[JsonValue] = asyncio.Queue()
+        self.streams[session or ""] = queue  # open from now: a second GET is refused at once
+        return StreamingResponse(
+            self._server_stream(session or "", queue), media_type=self.transport.content_type_sse
+        )
+
+    def _resolve(self, session: str, messages: Sequence[JsonValue]) -> None:
+        """Hand the client's answers to the requests the server sent it."""
+        for message in messages:
+            if protocol.is_response(message) and isinstance(message, dict):
+                waiting = self.awaiting.get((session, str(message.get("id"))))
+                if waiting is not None and not waiting.done():
+                    waiting.set_result(message)
+
+    def _notified(self, request: Request, messages: Sequence[JsonValue]) -> None:
+        """Run the handlers of the client's notifications (``register_method``).
+
+        Each runs in the background, so the client gets its ``202`` at once, as from a real
+        server; it may ask the client things (``roots/list`` after
+        ``notifications/roots/list_changed``), and ends with the client's session.
+        """
+        for message in messages:
+            if not (protocol.is_notification(message) and isinstance(message, dict)):
+                continue
+            handler = self.method_handlers.get(str(message.get("method")))
+            if handler is None:
+                continue
+            ctx = self._context(request, message)
+            params = message.get("params")
+            work = handler(ctx, params if isinstance(params, dict) else {})
+            assert ctx.channel is not None  # noqa: S101 - _context always gives one
+            ctx.channel.background(_quietly(work))
 
     def _end(self, session: str) -> None:
         """A client ended its session: forget it and stop what it left running."""
@@ -592,21 +763,33 @@ class McpFake:
         for task in self.background.pop(session, set()):
             task.cancel()
 
-    async def _server_stream(self, session: str) -> AsyncIterator[bytes]:
+    def _keep_alive(self) -> bytes:
+        """The comment the real server writes to keep an idle SSE stream open."""
+        return f"{self.transport.keep_alive}\n\n".encode()
+
+    async def _idle(self) -> None:
+        """Wait out the real server's keep-alive interval.
+
+        Wall-clock time, like the real server's timer: not a pause, so it is never skipped or
+        noted in ``runtime.pauses``.
+        """
+        await asyncio.sleep(self.transport.keep_alive_seconds)
+
+    async def _server_stream(
+        self, session: str, queue: asyncio.Queue[JsonValue]
+    ) -> AsyncIterator[bytes]:
         """The client's GET stream: pushed notifications, and comments that keep it open."""
-        queue: asyncio.Queue[JsonValue] = asyncio.Queue()
-        self.streams[session] = queue
         try:
             while True:
                 getter = asyncio.ensure_future(queue.get())
-                idle = asyncio.ensure_future(self.runtime.pause(KEEP_ALIVE_SECONDS))
+                idle = asyncio.ensure_future(self._idle())
                 await asyncio.wait({getter, idle}, return_when=asyncio.FIRST_COMPLETED)
                 if getter.done():
                     idle.cancel()
-                    yield _sse(getter.result(), event_id=self.transport.sse_event_ids)
+                    yield self._event(getter.result())
                 else:
                     getter.cancel()
-                    yield b": keep-alive\n\n"
+                    yield self._keep_alive()
         finally:
             if self.streams.get(session) is queue:
                 del self.streams[session]
@@ -630,7 +813,13 @@ class McpFake:
             )
             return {}, refused
         if is_init and self.transport.issues_session:
-            session = secrets.token_hex(16)
+            session = self._new_id(self.transport.session_id_format, 16)
+            init = next(
+                m for m in messages if isinstance(m, dict) and m.get("method") == "initialize"
+            )
+            params = init.get("params")
+            requested = params.get("protocolVersion") if isinstance(params, dict) else None
+            self._versions[session] = self._negotiate(requested)
             self._sessions[session] = (
                 request.headers.get(self.runtime.settings.session_header) or DEFAULT_SESSION
             )
@@ -653,7 +842,7 @@ class McpFake:
         return {}, None
 
     async def _answer_streaming(
-        self, request: Request, message: JsonObject, headers: dict[str, str]
+        self, request: Request, message: JsonObject, headers: dict[str, str], session: str = ""
     ) -> Response:
         """One request over SSE: notifications reach the client as they happen, then the answer.
 
@@ -663,30 +852,40 @@ class McpFake:
         queue: asyncio.Queue[JsonValue] = asyncio.Queue()
         task = asyncio.create_task(self._answer(request, message, on_notify=queue.put_nowait))
         waiting = asyncio.create_task(queue.get())
-        await asyncio.wait({task, waiting}, return_when=asyncio.FIRST_COMPLETED)
+        idle = asyncio.create_task(self._idle())
+        await asyncio.wait({task, waiting, idle}, return_when=asyncio.FIRST_COMPLETED)
+        idle.cancel()
         if task.done():
             early = [waiting.result()] if waiting.done() else []
             waiting.cancel()
             notes, reply = task.result()  # raises the EarlyResponse of a refusal
-            return self._reply([*early, *_drain(queue), *notes, reply], headers)
-        first = waiting.result()
-        event_id = self.transport.sse_event_ids
+            return self._reply([*early, *_drain(queue), *notes, reply], headers, session)
+        if waiting.done():
+            opening = self._event(waiting.result())
+        else:  # a long call: the stream opens with a keep-alive, as the real server's does
+            waiting.cancel()
+            opening = self._keep_alive()
 
         async def events() -> AsyncIterator[bytes]:
             try:
-                yield _sse(first, event_id=event_id)
+                yield self._priming(session) + opening
                 while True:
                     getter = asyncio.create_task(queue.get())
-                    await asyncio.wait({task, getter}, return_when=asyncio.FIRST_COMPLETED)
-                    if not getter.done():
-                        getter.cancel()
+                    idle = asyncio.create_task(self._idle())
+                    await asyncio.wait({task, getter, idle}, return_when=asyncio.FIRST_COMPLETED)
+                    idle.cancel()
+                    if getter.done():
+                        yield self._event(getter.result())
+                        continue
+                    getter.cancel()
+                    if task.done():
                         break
-                    yield _sse(getter.result(), event_id=event_id)
+                    yield self._keep_alive()
                 try:  # every notification was streamed: a finished task left none behind
                     _, reply = task.result()
                 except EarlyResponse:  # too late for an HTTP status: the stream has started
                     reply = protocol.error(message.get("id"), protocol.INTERNAL_ERROR, "refused")
-                yield _sse(reply, event_id=event_id)
+                yield self._event(reply)
             finally:
                 if not task.done():  # pragma: no cover - the client left mid-stream
                     task.cancel()
@@ -694,6 +893,18 @@ class McpFake:
         return StreamingResponse(
             events(), media_type=self.transport.content_type_sse, headers=headers
         )
+
+    def _context(self, request: Request, message: JsonObject) -> RequestContext:
+        """The context a handler gets for one message from the client."""
+        ctx = self.runtime.new_context(request, None)
+        ctx.identity = getattr(request.state, "fauxcall_identity", None)
+        ctx.json_body = message
+        ctx.mcp_session = request.headers.get(self.transport.session_header) or _legacy_session(
+            request
+        )
+        ctx.client_capabilities = dict(self._capabilities.get(ctx.mcp_session or "", {}))
+        ctx.channel = Channel(self, ctx.mcp_session or "")
+        return ctx
 
     async def _answer(
         self,
@@ -707,12 +918,7 @@ class McpFake:
         params = message.get("params")
         name = params.get("name") if isinstance(params, dict) else None
         endpoint_id = tool_endpoint(str(name)) if method == TOOLS_CALL else method_endpoint(method)
-        ctx = self.runtime.new_context(request, None)
-        ctx.identity = getattr(request.state, "fauxcall_identity", None)
-        ctx.json_body = message
-        ctx.mcp_session = request.headers.get(self.transport.session_header)
-        ctx.client_capabilities = dict(self._capabilities.get(ctx.mcp_session or "", {}))
-        ctx.channel = Channel(self, ctx.mcp_session or "")
+        ctx = self._context(request, message)
         ctx.on_notify = on_notify
         bind_context(request_id=ctx.request_id, session=ctx.session, endpoint=endpoint_id)
         fault = self.runtime.faults.pick(endpoint_id, ctx.session)
@@ -814,7 +1020,10 @@ class McpFake:
             parsed = jsonfmt.loads(await request.body())
         except ValueError:
             return Response(content=b"Could not parse message", status_code=400)
-        for message in parsed if isinstance(parsed, list) else [parsed]:
+        messages = parsed if isinstance(parsed, list) else [parsed]
+        self._resolve(session, messages)
+        self._notified(request, messages)
+        for message in messages:
             if protocol.is_request(message) and isinstance(message, dict):
 
                 def stream(note: JsonValue, queue: asyncio.Queue[str] = queue) -> None:
@@ -826,6 +1035,27 @@ class McpFake:
                     return early.response
                 await queue.put(protocol.sse_event(reply))
         return Response(content=b"Accepted", status_code=202)
+
+
+def _quietly(work: Awaitable[JsonValue]) -> Callable[[Channel], Awaitable[None]]:
+    """A notification handler's work: it has no one to answer, so a failure is only logged."""
+
+    async def run(_channel: Channel) -> None:
+        try:
+            await work
+        except Exception:  # custom code: never let it crash the server
+            log.exception("mcp_notification_handler_failed")
+
+    return run
+
+
+def _legacy_session(request: Request) -> str | None:
+    """The legacy SSE transport's session (its messages URL's ``session_id``)."""
+    session = request.query_params.get("session_id")
+    try:
+        return uuid.UUID(hex=session).hex if session else None
+    except ValueError:
+        return None
 
 
 def _declared(messages: Sequence[JsonValue]) -> JsonObject:
@@ -860,10 +1090,6 @@ def _messages(raw: bytes) -> list[JsonValue] | Response:
             media_type="application/json",
         )
     return parsed if isinstance(parsed, list) else [parsed]
-
-
-def _sse(message: JsonValue, *, event_id: bool) -> bytes:
-    return protocol.sse_event(message, event_id=secrets.token_hex(8) if event_id else None).encode()
 
 
 def _drain(queue: asyncio.Queue[JsonValue]) -> list[JsonValue]:

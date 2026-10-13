@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 from typing import TYPE_CHECKING, Any
 
 import httpx2
@@ -158,15 +157,13 @@ async def test_mcp_forbidden_callers_get_no_auth_challenge(tmp_path: Path) -> No
 
 
 async def test_idle_get_stream_sends_keep_alives(tmp_path: Path) -> None:
-    transport = McpTransportModel(get_stream="sse")
+    # the real server's text and interval (wall clock: never noted as a pause)
+    transport = McpTransportModel(
+        get_stream="sse", keep_alive=": keepalive", keep_alive_seconds=0.01
+    )
     app, runtime = mcp_app(tmp_path, mcp_model(transport=transport))
-
-    async def quick(seconds: float) -> None:
-        del seconds
-        await asyncio.sleep(0.01)
-
-    runtime._sleep = quick
     async with live_server(app) as base, httpx2.AsyncClient(base_url=base) as http:
         async with http.stream("GET", "/mcp", headers={"accept": "text/event-stream"}) as stream:
             first = await anext(stream.aiter_bytes())
-        assert first == b": keep-alive\n\n"
+        assert first == b": keepalive\n\n"
+        assert not runtime.pauses

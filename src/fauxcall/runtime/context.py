@@ -164,6 +164,24 @@ class RequestContext:
         """
         return self.channel.background(work) if self.channel is not None else None
 
+    async def ask_client(
+        self, method: str, params: JsonValue = None, *, within: float | None = None
+    ) -> JsonValue:
+        """MCP: ask the client something and wait for its answer, as real servers do mid-call.
+
+        For ``sampling/createMessage``, ``elicitation/create`` or ``roots/list``. The request goes
+        on this call's SSE stream, else on the client's GET stream. Returns the client's result;
+        raises ``ClientError`` (an ``RpcError``: let it propagate to answer the call with it) when
+        the client refuses, can't be reached, or doesn't answer in time.
+        """
+        if self.channel is None:
+            from fauxcall.runtime.mcp_server import ClientError  # noqa: PLC0415
+
+            raise ClientError(-32001, "Request timed out")
+        if within is None:
+            return await self.channel.ask(method, params, send=self.on_notify)
+        return await self.channel.ask(method, params, within=within, send=self.on_notify)
+
     def notify(self, method: str, params: JsonValue = None) -> None:
         """MCP: send the client a notification while answering (``notifications/message`` …).
 

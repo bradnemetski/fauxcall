@@ -128,6 +128,15 @@ if a behavior can't be expressed, say so in the model's `notes`.
 | `resources/read`, `prompts/get`, `completion/complete` | a `METHOD_HANDLERS` handler, else the recording that matches its params, else the real "not found" error (`completion/complete`: no values) |
 | `resources/subscribe` / `unsubscribe`, `logging/setLevel` | a handler or recording, else `{}` when the server advertised it |
 | anything else (`tasks/*` …) | a handler or recording, else the real "method not found" |
+| a notification from the client (`notifications/roots/list_changed` …) | `202` at once; its `METHOD_HANDLERS` handler, if any, runs in the background |
+| a POST with the wrong `Accept` or `Content-Type`, an unknown `MCP-Protocol-Version`, or an unknown session id | the real HTTP refusal, recorded by introspection |
+| a GET or DELETE for an unknown session, or a second GET stream in a session | the real HTTP refusal, recorded by introspection |
+
+The wire itself follows the recordings too: response members in the real server's order, session
+and SSE event ids shaped like the real ones (UUIDs or hex), the empty priming event that newer
+protocol versions open SSE answers with (for the versions that sent one), and the real
+keep-alive comment (`: keepalive` …) at the real interval, on an idle GET stream and on a long
+call's stream. Introspection waits up to 20 seconds on the GET stream to learn the keep-alive.
 
 `METHOD_HANDLERS` (in `handlers.py`) maps any method to `async (ctx, params) -> result`; return
 `None` to let the recordings answer (compute dynamic resources, replay the static ones). Both kinds
@@ -139,9 +148,22 @@ can also send on the client's open GET stream (resource updates, periodic log me
 `async work(channel)` (with `channel.push(...)` and `await channel.pause(seconds)`) until it ends,
 is cancelled (keep the returned task in `ctx.state` to stop it) or the client ends its session.
 `ctx.client_capabilities` holds what the client declared (sampling, elicitation …), to answer
-differently for clients that can do more. Take the real time between them
+differently for clients that can do more. A handler registered for a client notification
+(`"notifications/roots/list_changed"`) reacts to it as the real server does, e.g. by asking the
+client again with `await ctx.ask_client("roots/list")`; it runs in the background, its result is
+ignored, and a crash is only logged. Take the real time between them
 with `await ctx.pause(seconds)`: skipped in fast mode (tests), and noted in `runtime.pauses` either
 way, so a test checks the timing by reading it (never by replacing FauxCall's private sleep).
+
+**Requests to the client.** A handler can ask the client, mid-call, as real servers do:
+`await ctx.ask_client("sampling/createMessage", {...})` (or `elicitation/create`, `roots/list`)
+sends the request on the call's SSE stream (else the client's GET stream) and returns the
+client's answer. A refusal, or no answer within 60 s (`within=` to change it), raises
+`ClientError`; let it propagate and the call answers with that error (`-32001 Request timed out`),
+as an SDK server does. To record such tools, a plan declares the client's capabilities
+(`"client_capabilities": {"sampling": {}}`) and each call says how the recorder answers the
+server's requests (`"client_replies": {"sampling/createMessage": {...a result...}}`, or
+`{"error": {...}}` to refuse); unlisted requests get "Method not found".
 
 Tools some servers list only to clients that support sampling, elicitation (form or URL), roots or
 tasks are found by introspection (one session per capability, then one declaring them all) and

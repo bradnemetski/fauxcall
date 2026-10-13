@@ -36,6 +36,7 @@ from fauxcall.model.mcp import (
     McpModel,
     McpToolModel,
     McpTransportModel,
+    id_format,
 )
 from fauxcall.model.plan import Approval, Approvals
 from fauxcall.model.recording import Body, CapturedRequest, CapturedResponse, Exchange, StreamEvent
@@ -100,6 +101,11 @@ def _merge(into: JsonObject, extra: JsonObject) -> None:
 
 
 MISSING_SESSION_PROBE_ID: Final = 9_000_001
+REFUSAL_PROBE_ID: Final = 9_000_003
+UNKNOWN_SESSION: Final = "fauxcall-unknown-session"
+"""A session id no server issued, sent to learn how the server refuses it."""
+KEEP_ALIVE_PROBE_SECONDS: Final = 20.0
+"""How long introspection waits for an idle stream's keep-alive (the SDKs send one every 15 s)."""
 AUTH_PROBE_ID: Final = 9_000_002
 _HTTP_OK: Final = 200
 _HTTP_NOT_ALLOWED: Final = 405
@@ -112,6 +118,11 @@ _TARGET_PARAM: Final = {
     "resources/unsubscribe": "uri",
 }
 """Methods whose endpoint id names their target (``MCP tools/call:<name>``): the param it fills."""
+
+
+def _refusal(call: RpcCall) -> JsonValue:
+    """A recorded HTTP refusal, as the fake repeats it."""
+    return {"status": call.status, "content_type": call.content_type, "body": call.body}
 
 
 class _BudgetExhaustedError(RecordingError):
@@ -180,6 +191,17 @@ def _describe(error: Exception) -> str:
     return str(error) or type(error).__name__
 
 
+def _member_order(call: RpcCall) -> list[str]:
+    """The order the server writes a response's members in (``result``, ``jsonrpc``, ``id``)."""
+    return list(call.response) if isinstance(call.response, dict) else []
+
+
+def _primes(call: RpcCall) -> bool:
+    """Whether an SSE answer opened with an empty priming event (an id, no data)."""
+    first = call.sse_events[0] if call.sse_events else None
+    return first is not None and not first[2].strip() and first[3] is not None
+
+
 def _listing_extras(result: JsonValue, key: str) -> JsonObject | None:
     """A listing result's members in order, the list itself as ``None``, when it has more.
 
@@ -241,6 +263,7 @@ class McpRecorder:
         self._secrets = credential_values(self.headers)
         self.calls_made = 0
         self._last: float | None = None
+        self.keep_alive_within = KEEP_ALIVE_PROBE_SECONDS
 
     # -- plumbing ----------------------------------------------------------------------------------
 
@@ -326,12 +349,14 @@ class McpRecorder:
             started_ns=call.started_ns,
             elapsed_ms=round(call.elapsed_ms, 3),
             request=CapturedRequest(
-                method=HttpMethod.POST,
+                method=HttpMethod(call.http_method),
                 url=url,
                 path=safe_path,
                 query=query,
                 headers=headers,
-                body=Body(kind="json", content_type="application/json", json_value=sent),
+                body=Body(kind="json", content_type="application/json", json_value=sent)
+                if call.sent is not None
+                else Body(kind="empty"),
             ),
             response=CapturedResponse(status=call.status, headers=response_headers, body=body),
             stream=events,
@@ -345,7 +370,9 @@ class McpRecorder:
 
     # -- introspection -----------------------------------------------------------------------------
 
-    async def _connect(self) -> tuple[McpWireClient, RpcCall]:
+    async def _connect(
+        self, capabilities: JsonObject | None = None
+    ) -> tuple[McpWireClient, RpcCall]:
         """Initialize over Streamable HTTP, falling back to the legacy HTTP+SSE transport.
 
         A Streamable HTTP failure that may be passing (a 5xx, 405 or 429, a dropped connection) is
@@ -359,7 +386,7 @@ class McpRecorder:
                 client = self._client(transport)
                 await self._pace()
                 try:
-                    return client, await client.initialize()
+                    return client, await client.initialize(capabilities=capabilities)
                 except (RecordingError, httpx2.HTTPError, TimeoutError) as error:
                     log.info("mcp_connect_failed", transport=transport, error=str(error)[:200])
                     await self._close(client)
@@ -424,13 +451,18 @@ class McpRecorder:
             if missing_session is not None:
                 model.errors["missing_session"] = missing_session
             if model.transport.kind == "streamable_http":  # optional: last, budget allowing
+                with contextlib.suppress(_BudgetExhaustedError):
+                    model.transport.refusals = await self._probe_refusals(client, exchanges)
+                    await self._probe_streams(client, model.transport, exchanges)
                 await self._capability_tools(model, exchanges)
         finally:
             status = await self._close(client)
         if status is not None:
             model.transport.delete_status = status
         if probe_versions and model.transport.kind == "streamable_http":
-            model.transport.protocol_versions = await self._probe_versions(exchanges)
+            primed = model.transport.priming_versions
+            model.transport.protocol_versions = await self._probe_versions(exchanges, primed)
+            model.transport.priming_versions = sorted(set(primed))
         counts = (len(model.tools), len(model.resources), len(model.prompts))
         notes = ["{} tools, {} resources, {} prompts".format(*counts)]
         found = McpIntrospection(model=model, exchanges=exchanges, notes=notes)
@@ -622,7 +654,12 @@ class McpRecorder:
             issues_session=client.session_id is not None,
             default_protocol_version=client.negotiated_version or protocol.LATEST_HANDSHAKE_VERSION,
             sse_event_ids=any(event_id is not None for *_, event_id in init.sse_events),
+            member_order=_member_order(init),
+            session_id_format=id_format(client.session_id),
+            event_id_format=id_format(next((i for *_, i in init.sse_events if i), None)),
         )
+        if _primes(init) and client.negotiated_version:
+            transport.priming_versions = [client.negotiated_version]
         if content_type:
             if response_mode == "sse":
                 transport.content_type_sse = content_type
@@ -649,6 +686,68 @@ class McpRecorder:
             if transport.requires_session and isinstance(missing.response, dict):
                 missing_session = missing.response
         return transport, missing_session
+
+    async def _probe_refusals(
+        self, client: McpWireClient, exchanges: list[str]
+    ) -> dict[str, JsonValue]:
+        """How the server refuses requests at the HTTP level, which the fake repeats.
+
+        A client that won't take SSE answers, a body that isn't JSON, an unknown protocol
+        version header, and a session id the server never issued.
+        """
+        probe = protocol.request(REFUSAL_PROBE_ID, "tools/list")
+        situations: dict[str, tuple[dict[str, str], bool]] = {
+            "accept": ({"accept": "application/json"}, True),
+            "content_type": ({"content-type": "text/plain"}, True),
+            "protocol_header": ({protocol.PROTOCOL_HEADER: "1999-01-01"}, True),
+            "unknown_session": ({protocol.SESSION_HEADER: UNKNOWN_SESSION}, False),
+        }
+        refusals: dict[str, JsonValue] = {}
+        for situation, (headers, with_session) in situations.items():
+            if situation == "unknown_session" and client.session_id is None:
+                continue
+            await self._pace()
+            call = await client.post(probe, include_session=with_session, extra_headers=headers)
+            # "discovery": a replay can't send the odd headers that drew these refusals
+            exchanges.append(self.save(call, method_endpoint("tools/list", situation)))
+            if call.status >= _HTTP_ERROR:
+                refusals[situation] = _refusal(call)
+        return refusals
+
+    async def _probe_streams(
+        self, client: McpWireClient, transport: McpTransportModel, exchanges: list[str]
+    ) -> None:
+        """How the server refuses GETs and DELETEs it won't serve, and keeps streams alive.
+
+        A GET and a DELETE for a session it never issued, a second GET stream for the same
+        session, and the comment it writes to an idle stream (waited for, at most
+        ``keep_alive_within`` seconds).
+        """
+        if client.session_id is not None:
+            for http_method, situation in (
+                ("GET", "get_unknown_session"),
+                ("DELETE", "delete_unknown_session"),
+            ):
+                if http_method == "GET" and transport.get_stream != "sse":
+                    continue
+                await self._pace()
+                call = await client.probe_http(http_method, UNKNOWN_SESSION)
+                exchanges.append(self.save(call, method_endpoint(http_method, situation)))
+                if call.status >= _HTTP_ERROR:
+                    transport.refusals[situation] = _refusal(call)
+        if transport.get_stream != "sse":
+            return
+        await self._pace()
+        await self._pace()  # the stream, and a second one meanwhile
+        comment, second = await client.watch_stream(self.keep_alive_within)
+        if second is not None:
+            exchanges.append(self.save(second, method_endpoint("GET", "second_stream")))
+            if second.status >= _HTTP_ERROR:
+                transport.refusals["get_second_stream"] = _refusal(second)
+        if comment is not None:
+            exchanges.append(self.save(comment, method_endpoint("GET", "keep_alive")))
+            transport.keep_alive = comment.body
+            transport.keep_alive_seconds = max(round(comment.elapsed_ms / 1000, 1), 0.1)
 
     async def _probe_errors(
         self, client: McpWireClient, capabilities: JsonObject, exchanges: list[str]
@@ -718,8 +817,13 @@ class McpRecorder:
             model.errors["second_initialize"] = again.response
             model.transport.reinitialize_status = again.status
 
-    async def _probe_versions(self, exchanges: list[str]) -> dict[str, str]:
-        """Which protocol version the server answers to each known version it is offered."""
+    async def _probe_versions(
+        self, exchanges: list[str], primed: list[str] | None = None
+    ) -> dict[str, str]:
+        """Which protocol version the server answers to each known version it is offered.
+
+        Versions whose handshake opened with a priming event are added to ``primed``.
+        """
         mapping: dict[str, str] = {}
         for version in protocol.KNOWN_VERSIONS:
             client = self._client(version=version)
@@ -737,6 +841,8 @@ class McpRecorder:
                 )
                 if client.negotiated_version:
                     mapping[version] = client.negotiated_version
+                    if _primes(call) and primed is not None:
+                        primed.append(client.negotiated_version)
             finally:
                 await self._close(client)
         return mapping
@@ -754,11 +860,14 @@ class McpRecorder:
         ``{{capture}}`` placeholders, and ``capture`` paths apply to the whole JSON-RPC response
         (``$.result.structuredContent.id``). Tool calls need an approval unless the tool is
         annotated ``readOnlyHint: true`` in ``tools`` (or the call sets ``mutating: false``).
+        The session declares the plan's ``client_capabilities``; requests the server sends during
+        a call (sampling …) are answered with the call's ``client_replies``.
         """
         report = RunReport(plan=plan.name)
         definitions = tools or {}
         variables: dict[str, JsonValue] = {}
-        client, init = await self._connect()
+        declared = plan.client_capabilities if isinstance(plan.client_capabilities, dict) else None
+        client, init = await self._connect(declared)
         try:
             self.save(init, method_endpoint("initialize"), purpose="sample")
             for position, call in enumerate(plan.calls):
@@ -866,6 +975,7 @@ class McpRecorder:
                 return
             params = render(call.request.json_body, from_mapping(variables))
             tags = list(call.tags)
+            client.on_request = _replier(call.client_replies)
             try:
                 if call.request.auth == "default":
                     rpc = await client.call(method, _params_for(call.endpoint, params))
@@ -884,6 +994,29 @@ class McpRecorder:
                 captured = jsonpath.get_one(rpc.response, path)
                 if captured is not None:
                     variables[name] = captured
+
+
+def _replier(
+    replies: Mapping[str, JsonValue],
+) -> Callable[[JsonObject], Awaitable[JsonValue | None]]:
+    """How the recorder answers a server's request (sampling …) during a call.
+
+    With the plan's reply for its method; otherwise 'Method not found', as a client without that
+    capability would.
+    """
+
+    async def reply(request: JsonObject) -> JsonValue | None:
+        method = str(request.get("method"))
+        found = replies.get(method)
+        request_id = request.get("id")
+        if isinstance(found, dict) and isinstance(found.get("error"), dict):
+            error = found["error"]
+            return {"jsonrpc": "2.0", "id": request_id, "error": error}
+        if found is None:
+            return protocol.error(request_id, protocol.METHOD_NOT_FOUND, "Method not found")
+        return protocol.result(request_id, found)
+
+    return reply
 
 
 def answer_of(reply: JsonValue) -> str:

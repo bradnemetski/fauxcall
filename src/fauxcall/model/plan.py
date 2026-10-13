@@ -144,6 +144,14 @@ class PlannedCall(Model):
     poll: PollSpec | None = None
     stream: StreamSpec | None = None
     cleanup: list[str] = Field(default_factory=list, description="Ids of calls that undo this.")
+    client_replies: dict[str, RawJson] = Field(
+        default_factory=dict,
+        description=(
+            "MCP: how the recorder answers requests the server sends during this call, by method "
+            "(``sampling/createMessage`` -> a result, or ``{'error': {...}}``); others get "
+            "'Method not found', like a client without that capability."
+        ),
+    )
     mutating: bool | None = Field(default=None, description="Defaults to 'not a safe method'.")
     tags: list[str] = Field(default_factory=list)
     note: str | None = None
@@ -161,6 +169,8 @@ class PlannedCall(Model):
         stream = payload.get("stream")
         if isinstance(stream, dict) and not stream.get("frames"):
             del stream["frames"]  # added later: absent when unused, so older approvals still match
+        if not payload.get("client_replies"):
+            payload.pop("client_replies", None)  # likewise
         return hashlib.sha256(jsonfmt.canonical_dumps(payload).encode()).hexdigest()[:16]
 
 
@@ -169,6 +179,10 @@ class RecordingPlan(Model):
 
     name: str
     created_at: AwareDatetime
+    client_capabilities: RawJson = Field(
+        default=None,
+        description="MCP: the capabilities the recorder declares (sampling, elicitation, roots …).",
+    )
     calls: list[PlannedCall] = Field(default_factory=list)
     note: str | None = None
 

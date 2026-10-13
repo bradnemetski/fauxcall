@@ -47,7 +47,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from fauxcall.model import McpModel
-    from fauxcall.types import JsonValue
+    from fauxcall.types import JsonObject, JsonValue
 
 TOKEN = "sk-mcp-0123456789"
 
@@ -77,7 +77,7 @@ def recorder(
     **options: Any,
 ) -> McpRecorder:
     clock = clock or FakeClock()
-    return McpRecorder(
+    made = McpRecorder(
         RecordingStore(tmp_path / "recordings"),
         url,
         http,
@@ -85,6 +85,8 @@ def recorder(
         monotonic=clock.monotonic,
         **options,
     )
+    made.keep_alive_within = 0.2  # a fake's keep-alive comes sooner, or not at all
+    return made
 
 
 def endpoints(tmp_path: Path) -> list[str]:
@@ -272,6 +274,13 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         "MCP tools/call:",  # no name
         "MCP tools/call:echo",  # arguments that aren't an object
         "MCP initialize:again",
+        "MCP tools/list:accept",  # how the server refuses at the HTTP level
+        "MCP tools/list:content_type",
+        "MCP tools/list:protocol_header",
+        "MCP tools/list:unknown_session",
+        *(["MCP GET:get_unknown_session"] if mode == "sse" else []),  # a GET only with a stream
+        "MCP DELETE:delete_unknown_session",
+        *(["MCP GET:second_stream"] if mode == "sse" else []),  # no keep-alive within 0.2 s
         *["MCP tools/list:with-sampling"] * 2,  # two pages each
         *["MCP tools/list:with-elicitation"] * 2,
         *["MCP tools/list:with-elicitation.url"] * 2,
@@ -283,9 +292,10 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         "MCP initialize:version-2025-06-18",
         "MCP initialize:version-2025-11-25",
     ]
-    assert len(found.exchanges) == 27
-    # every request was paced: 2 rps -> 0.5 s apart (cleanup DELETEs included)
-    assert clock.sleeps == [0.5] * 44  # each capability probe: initialize, 2 pages, DELETE
+    assert len(found.exchanges) == (34 if mode == "sse" else 32)
+    # every request was paced: 2 rps -> 0.5 s apart (cleanup DELETEs included); each
+    # capability probe: initialize, 2 pages, DELETE; watching the stream: it and a second one
+    assert clock.sleeps == [0.5] * (52 if mode == "sse" else 49)
     # A fake built from what was learned behaves the same on the wire.
     rebuilt = fake_model(transport=model.transport, page_size=model.tools_page_size)
     rebuilt.mcp = model.model_copy(update={"tools": rebuilt.mcp.tools if rebuilt.mcp else []})
@@ -598,12 +608,12 @@ async def test_version_probes_skip_refusals_and_stop_at_the_budget(tmp_path: Pat
         assert found.model.transport.issues_session is False
         assert found.model.transport.get_stream == "status"
         assert "missing_session" not in found.model.errors
-        # 19 calls of introspection (7, and 2 per client capability probe), then one per probed
-        # version: the refused 2024-11-05, then 2025-03-26, and the budget is gone
-        tight = recorder(tmp_path / "b", http, "http://mock/mcp", rps=0, max_calls=21)
+        # 22 calls of introspection (10, and 2 per client capability probe), then one per
+        # probed version: the refused 2024-11-05, then 2025-03-26, and the budget is gone
+        tight = recorder(tmp_path / "b", http, "http://mock/mcp", rps=0, max_calls=24)
         limited = await tight.introspect()
         assert limited.model.transport.protocol_versions == {"2025-03-26": "2025-03-26"}
-        assert tight.calls_made == 21
+        assert tight.calls_made == 24
         # A budget spent while probing capabilities leaves fewer probes, not a failed init
         tighter = recorder(tmp_path / "c", http, "http://mock/mcp", rps=0, max_calls=6)
         assert (await tighter.introspect()).model.transport.protocol_versions == {}
@@ -1069,3 +1079,115 @@ async def test_introspection_records_a_refused_second_initialize(tmp_path: Path)
 def test_requires_must_be_capability_lists() -> None:
     with pytest.raises(ValueError, match="requires"):
         McpToolModel.model_validate({"definition": {"name": "x"}, "requires": "sampling"})
+
+
+async def test_recordings_answer_the_servers_requests_as_the_plan_says(tmp_path: Path) -> None:
+    from _mcp import mcp_app, mcp_model  # noqa: PLC0415
+    from fauxcall.runtime import ClientError, RequestContext, register_tool  # noqa: PLC0415
+
+    ask: JsonValue = {
+        "name": "ask_the_model",
+        "inputSchema": {"type": "object"},
+        "annotations": {"readOnlyHint": True},
+    }
+    app, _ = mcp_app(
+        tmp_path / "server",
+        mcp_model(
+            transport=McpTransportModel(), tools=[McpToolModel(definition=ask, behavior="computed")]
+        ),
+    )
+    seen: list[JsonValue] = []
+
+    async def ask_the_model(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        seen.append(ctx.client_capabilities)
+        try:
+            answer = await ctx.ask_client("sampling/createMessage", {"messages": []})
+        except ClientError as error:
+            return {"content": [{"type": "text", "text": f"refused: {error.message}"}]}
+        return {"content": [{"type": "text", "text": str(answer)}]}
+
+    register_tool(app, "ask_the_model", ask_the_model)
+    sample: JsonValue = {"role": "assistant", "content": {"type": "text", "text": "hi"}}
+    answered = tool_call("ask_the_model", {}, id="answered")
+    answered["client_replies"] = {"sampling/createMessage": sample}
+    declined = tool_call("ask_the_model", {}, id="declined")
+    declined["client_replies"] = {
+        "sampling/createMessage": {"error": {"code": -1, "message": "User rejected"}}
+    }
+    unknown = tool_call("ask_the_model", {}, id="unknown")
+    the_plan = plan(answered, declined, unknown)
+    the_plan.client_capabilities = {"sampling": {}}
+    async with streaming_client(app) as http:
+        report = await recorder(tmp_path, http, "http://fake.test/mcp", rps=0).run(
+            the_plan, {"ask_the_model": ask}
+        )
+    assert [o.status_text() for o in report.outcomes] == ["200 ok"] * 3
+    texts = [
+        j(e.response.body.parsed())["result"]["content"][0]["text"]
+        for _, e in RecordingStore(tmp_path / "recordings").iter_exchanges()
+        if e.plan_call in {"answered", "declined", "unknown"} and e.response is not None
+    ]
+    assert texts == [str(sample), "refused: User rejected", "refused: Method not found"]
+    assert seen[0] == {"sampling": {}}  # the plan's capabilities were declared
+
+
+async def test_transport_details_round_trip(tmp_path: Path) -> None:
+    refusals: dict[str, JsonValue] = {
+        "accept": {"status": 406, "content_type": "application/json", "body": '{"e":"accept"}'},
+        "content_type": {"status": 415, "content_type": "text/plain", "body": "json only"},
+        "protocol_header": {"status": 400, "content_type": "text/plain", "body": "bad version"},
+        "unknown_session": {"status": 404, "content_type": "text/plain", "body": "no session"},
+        "get_unknown_session": {"status": 404, "content_type": "text/plain", "body": "no GET"},
+        "get_second_stream": {"status": 409, "content_type": "text/plain", "body": "one stream"},
+        "delete_unknown_session": {"status": 404, "content_type": "text/plain", "body": "no DEL"},
+    }
+    detailed = McpTransportModel(
+        response_mode="sse",
+        get_stream="sse",
+        keep_alive=": keepalive",
+        keep_alive_seconds=0.05,
+        sse_event_ids=True,
+        member_order=["result", "error", "jsonrpc", "id"],
+        session_id_format="uuid",
+        event_id_format="uuid",
+        priming_versions=["2025-11-25"],
+        refusals=refusals,
+        protocol_versions={v: v for v in protocol.KNOWN_VERSIONS},
+    )
+    async with streaming_client(fake_app(tmp_path / "a", fake_model(transport=detailed))) as http:
+        found = await recorder(tmp_path, http, "http://fake.test/mcp", rps=0).introspect()
+        learned = found.model.transport
+        assert learned.member_order == ["result", "jsonrpc", "id"]  # as an answer showed it
+        assert (learned.session_id_format, learned.event_id_format) == ("uuid", "uuid")
+        assert learned.priming_versions == ["2025-11-25"]
+        assert learned.keep_alive == ": keepalive"
+        assert learned.keep_alive_seconds == 0.1  # rounded, and never below 0.1 s
+        assert {k: (v["status"], v["body"]) for k, v in j(learned.refusals).items()} == {
+            k: (v["status"], v["body"]) for k, v in j(refusals).items()
+        }  # (text content types gain a charset on the way, as on a real server)
+        wire = McpWireClient("http://fake.test/mcp", http, protocol_version="2025-11-25")
+        init = await wire.initialize()
+        assert init.sse_events[0][2] == ""  # the priming event comes first
+        assert list(j(init.response)) == ["result", "jsonrpc", "id"]
+        refused = await wire.post(
+            protocol.request(1, "tools/list"), extra_headers={"content-type": "text/plain"}
+        )
+        assert (refused.status, refused.body) == (415, "json only")
+        for http_method, answer in (("GET", (404, "no GET")), ("DELETE", (404, "no DEL"))):
+            stranger = await wire.probe_http(http_method, "never-issued")
+            assert (stranger.status, stranger.body) == answer
+        first, second = await wire.watch_stream(0.5)
+        assert first is not None
+        assert first.body == ": keepalive"
+        assert second is not None
+        assert (second.status, second.body) == (409, "one stream")
+        await wire.close()
+
+
+async def test_a_primed_handshake_is_learned(tmp_path: Path) -> None:
+    primed = McpTransportModel(response_mode="sse", priming_versions=["2025-06-18"])
+    async with streaming_client(fake_app(tmp_path / "a", fake_model(transport=primed))) as http:
+        found = await recorder(tmp_path, http, "http://fake.test/mcp", rps=0).introspect(
+            probe_versions=False
+        )
+    assert found.model.transport.priming_versions == ["2025-06-18"]

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Annotated, Final, Literal
 
 from pydantic import BeforeValidator, Field, SerializerFunctionWrapHandler, model_serializer
@@ -18,6 +19,21 @@ PROBE_RESOURCE: Final = "fauxcall://probe/unknown-resource"
 PROBE_PROMPT: Final = "__fauxcall_probe_unknown_prompt__"
 """Names introspection asks for so the real "unknown …" errors get recorded; a fake puts the
 caller's name where the real error repeats one of these."""
+
+
+_UUID: Final = re.compile(r"[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}")
+IdFormat = Literal["hex", "uuid", "other"]
+"""How ids look: 32 hex digits, a dashed UUID, or something else (served as hex)."""
+
+
+def id_format(value: str | None) -> IdFormat:
+    """The format of an id a server issued."""
+    text = value or ""
+    if re.fullmatch(
+        r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}", text
+    ):
+        return "uuid"
+    return "hex" if re.fullmatch(r"[0-9a-fA-F]+", text) else "other"
 
 
 class McpTransportModel(Model):
@@ -52,6 +68,31 @@ class McpTransportModel(Model):
         ),
     )
     sse_event_ids: bool = False
+    member_order: list[str] = Field(
+        default_factory=list,
+        description="A response's members in the order the server writes them (result, id …).",
+    )
+    session_id_format: IdFormat = "hex"
+    event_id_format: IdFormat = "hex"
+    priming_versions: list[str] = Field(
+        default_factory=list,
+        description="Protocol versions whose SSE answers open with an empty priming event.",
+    )
+    refusals: dict[str, RawJson] = Field(
+        default_factory=dict,
+        description=(
+            "How the server refuses a request at the HTTP level, by situation (POSTs: accept, "
+            "content_type, protocol_header, unknown_session; get_unknown_session, "
+            "get_second_stream, delete_unknown_session): {status, content_type, body}."
+        ),
+    )
+    keep_alive: str = Field(
+        default=": keep-alive",
+        description="The comment line the server writes to keep an idle SSE stream open.",
+    )
+    keep_alive_seconds: float = Field(
+        default=15.0, gt=0, description="How long an SSE stream stays idle before a keep-alive."
+    )
     reinitialize_status: int | None = Field(
         default=None, description="HTTP status of a refused second initialize in a session."
     )

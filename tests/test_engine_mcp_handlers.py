@@ -9,7 +9,9 @@ import json
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
+import httpx2
 import pytest
+from mcp.shared.exceptions import MCPError
 from starlette.responses import Response
 
 from _engine import j
@@ -21,6 +23,7 @@ from fauxcall.model import AuthModel, AuthScheme, McpToolModel, McpTransportMode
 from fauxcall.model.mcp import PROBE_PROMPT, PROBE_RESOURCE, PROBE_TOOL
 from fauxcall.model.realism import LatencyProfile
 from fauxcall.runtime import (
+    ClientError,
     EarlyResponse,
     RequestContext,
     RpcError,
@@ -32,8 +35,6 @@ from fauxcall.testing.asgi import streaming_client
 
 if TYPE_CHECKING:
     from pathlib import Path
-
-    import httpx2
 
     from fauxcall.types import JsonObject, JsonValue
 
@@ -659,3 +660,226 @@ async def test_without_an_open_stream_pushes_are_dropped(tmp_path: Path) -> None
 
 async def ticking_never(channel: Channel) -> None:  # pragma: no cover - never started
     del channel
+
+
+async def test_the_official_sdk_answers_the_fakes_requests(tmp_path: Path) -> None:
+    from mcp import Client, types  # noqa: PLC0415
+    from mcp.client.streamable_http import streamable_http_client  # noqa: PLC0415
+
+    ask: JsonObject = {"name": "ask_the_model", "inputSchema": {"type": "object"}}
+    roots: JsonObject = {"name": "list_roots", "inputSchema": {"type": "object"}}
+    tools = [
+        McpToolModel(definition=ask, behavior="computed", requires=[["sampling"]]),
+        McpToolModel(definition=roots, behavior="computed"),
+    ]
+    app, _ = mcp_app(tmp_path, mcp_model(transport=McpTransportModel(), tools=tools))
+
+    async def ask_the_model(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        answer = await ctx.ask_client(
+            "sampling/createMessage",
+            {
+                "messages": [{"role": "user", "content": {"type": "text", "text": "hi"}}],
+                "maxTokens": 9,
+            },
+        )
+        text = answer["content"]["text"]  # type: ignore[index, call-overload]
+        return {"content": [{"type": "text", "text": f"the model said: {text}"}]}
+
+    async def list_roots(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        answer = await ctx.ask_client("roots/list", within=0.2)  # a client that never answers
+        return {"content": [{"type": "text", "text": str(answer)}]}
+
+    register_tool(app, "ask_the_model", ask_the_model)
+    register_tool(app, "list_roots", list_roots)
+
+    async def sample(
+        context: Any, params: types.CreateMessageRequestParams
+    ) -> types.CreateMessageResult:
+        return types.CreateMessageResult(
+            role="assistant", content=types.TextContent(type="text", text="hello"), model="m"
+        )
+
+    async with (
+        streaming_client(app) as http,
+        Client(
+            streamable_http_client("http://fake.test/mcp", http_client=http),
+            sampling_callback=sample,
+        ) as client,
+    ):
+        result = await client.call_tool("ask_the_model", {})
+        assert j(result.content[0]).text == "the model said: hello"
+        with pytest.raises(MCPError, match="List roots not supported"):  # the client refused
+            await client.call_tool("list_roots", {})
+
+
+async def test_a_client_that_never_answers_times_out(tmp_path: Path) -> None:
+    roots: JsonObject = {"name": "list_roots", "inputSchema": {"type": "object"}}
+    tools = [McpToolModel(definition=roots, behavior="computed")]
+    app, _ = mcp_app(tmp_path, mcp_model(transport=McpTransportModel(), tools=tools))
+
+    async def list_roots(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        return await ctx.ask_client("roots/list", within=0.05)
+
+    async def on_get_stream(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        return await ctx.channel.ask("roots/list", within=0.05)  # type: ignore[union-attr]
+
+    register_tool(app, "list_roots", list_roots)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)  # reads the request, never answers
+        await wire.initialize()
+        silent = await wire.call("tools/call", {"name": "list_roots", "arguments": {}})
+        assert j(silent.error) == {"code": -32001, "message": "Request timed out"}
+        asked = next(json.loads(d) for _, _, d, _ in silent.sse_events)
+        assert (asked["method"], asked["id"]) == ("roots/list", "fauxcall-1")
+        register_tool(app, "list_roots", on_get_stream)  # no GET stream open: unreachable
+        unreachable = await wire.call("tools/call", {"name": "list_roots", "arguments": {}})
+        assert j(unreachable.error)["code"] == -32001
+        await wire.close()
+
+
+async def test_client_errors_and_odd_answers(tmp_path: Path) -> None:
+    sessions = McpTransportModel(response_mode="json", get_stream="sse")
+    definition: JsonObject = {"name": "ask", "inputSchema": {"type": "object"}}
+    tools = [McpToolModel(definition=definition, behavior="computed")]
+    app, _ = mcp_app(tmp_path, mcp_model(transport=sessions, tools=tools))
+    asked: list[JsonValue] = []
+
+    async def ask(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        try:
+            return await ctx.ask_client("elicitation/create", {"message": "?"}, within=5)
+        except ClientError as error:
+            return {"content": [{"type": "text", "text": f"{error.code} {error.message}"}]}
+
+    register_tool(app, "ask", ask)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize()
+        headers = {"mcp-session-id": str(wire.session_id), "accept": "text/event-stream"}
+        async with http.stream("GET", "/mcp", headers=headers) as stream:
+            lines = stream.aiter_lines()
+            call = asyncio.ensure_future(wire.call("tools/call", {"name": "ask", "arguments": {}}))
+            while True:  # JSON mode: the request arrives on the GET stream
+                line = await anext(lines)
+                if line.startswith("data:"):
+                    asked.append(json.loads(line[5:]))
+                    break
+            request_id = asked[0]["id"]  # type: ignore[index, call-overload]
+            await wire.post({"jsonrpc": "2.0", "id": "unknown", "result": {}})  # nobody waits
+            refusal: JsonValue = {
+                "jsonrpc": "2.0",
+                "id": request_id,
+                "error": {"code": -1, "message": "no"},
+            }
+            await wire.post(refusal)
+            answered = await call
+        assert j(answered.result)["content"][0]["text"] == "-1 no"
+        await wire.close()
+
+
+async def test_client_notifications_reach_their_handlers(tmp_path: Path) -> None:
+    sessions = McpTransportModel(response_mode="json", get_stream="sse")
+    app, _ = mcp_app(tmp_path, mcp_model(transport=sessions))
+    roots: list[JsonValue] = []
+    done = asyncio.Event()
+
+    async def roots_changed(ctx: RequestContext, params: JsonObject) -> JsonValue:
+        roots.append(await ctx.ask_client("roots/list", within=5))  # as the real server does
+        done.set()
+        return None
+
+    async def broken(ctx: RequestContext, params: JsonObject) -> JsonValue:
+        raise RuntimeError("a bug in custom code")
+
+    register_method(app, "notifications/roots/list_changed", roots_changed)
+    register_method(app, "notifications/broken", broken)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize()
+        headers = {"mcp-session-id": str(wire.session_id), "accept": "text/event-stream"}
+        async with http.stream("GET", "/mcp", headers=headers) as stream:
+            lines = stream.aiter_lines()
+            broke = await wire.post({"jsonrpc": "2.0", "method": "notifications/broken"})
+            told = await wire.post({"jsonrpc": "2.0", "method": "notifications/roots/list_changed"})
+            assert (broke.status, told.status) == (202, 202)  # at once, before any answer
+            asked: dict[str, JsonValue] = {}
+            while not asked:  # the question arrives on the GET stream
+                line = await anext(lines)
+                if line.startswith("data:"):
+                    asked = json.loads(line[5:])
+            assert asked["method"] == "roots/list"
+            listed: JsonValue = {"roots": [{"uri": "file:///work"}]}
+            await wire.post({"jsonrpc": "2.0", "id": asked["id"], "result": listed})
+            await asyncio.wait_for(done.wait(), 5)
+        assert roots == [listed]
+        await wire.close()
+
+
+async def test_ask_client_edges() -> None:
+    from starlette.requests import Request as StarletteRequest  # noqa: PLC0415
+
+    from fauxcall.mcpwire.client import McpWireClient as Wire  # noqa: PLC0415
+    from fauxcall.runtime.mcp_server import _legacy_session  # noqa: PLC0415
+
+    context = RequestContext.__new__(RequestContext)
+    context.channel = None  # not an MCP call: there is no client to ask
+    with pytest.raises(ClientError, match="Request timed out"):
+        await context.ask_client("roots/list")
+    scope = {"type": "http", "query_string": b"session_id=not-hex", "headers": []}
+    assert _legacy_session(StarletteRequest(scope)) is None
+    wire = Wire("http://x/mcp", httpx2.AsyncClient())
+    asked: list[JsonValue] = []
+
+    async def never(request: JsonObject) -> JsonValue:
+        asked.append(request)
+        return None  # leave it unanswered
+
+    wire.on_request = never
+    await wire._answer_server("not json")
+    await wire._answer_server('{"jsonrpc": "2.0", "method": "notifications/x"}')  # no id
+    await wire._answer_server('{"jsonrpc": "2.0", "id": 1, "method": "roots/list"}')
+    assert asked == [{"jsonrpc": "2.0", "id": 1, "method": "roots/list"}]
+    await wire.http.aclose()
+
+
+async def test_long_calls_keep_their_stream_alive(tmp_path: Path) -> None:
+    alive = McpTransportModel(
+        response_mode="sse", keep_alive=": keepalive", keep_alive_seconds=0.02
+    )
+    definition: JsonObject = {"name": "slow", "inputSchema": {"type": "object"}}
+    tools = [McpToolModel(definition=definition, behavior="computed")]
+    app, _ = mcp_app(tmp_path, mcp_model(transport=alive, tools=tools))
+
+    async def slow(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        await asyncio.sleep(0.1)  # idle long enough for a keep-alive before anything is sent
+        ctx.notify("notifications/message", {"level": "info", "data": "halfway"})
+        await asyncio.sleep(0.1)  # and again between the notification and the answer
+        return {"content": []}
+
+    register_tool(app, "slow", slow)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize()
+        headers = {
+            "mcp-session-id": str(wire.session_id),
+            "accept": "application/json, text/event-stream",
+            "content-type": "application/json",
+        }
+        call = protocol.request(7, "tools/call", {"name": "slow", "arguments": {}})
+        response = await http.post("/mcp", json=call, headers=headers)
+        frames = [frame for frame in response.text.split("\n\n") if frame]
+        assert frames[0] == ": keepalive"  # the stream opened on the first keep-alive
+        data = [json.loads(f.split("data: ", 1)[1]) for f in frames if "data: " in f]
+        assert [m.get("method") or m["id"] for m in data] == ["notifications/message", 7]
+        between = frames[frames.index(next(f for f in frames if "halfway" in f)) + 1]
+        assert between == ": keepalive"
+        await wire.close()
+
+
+async def test_no_stream_to_watch(tmp_path: Path) -> None:
+    refused = McpTransportModel(get_stream="status")
+    app, _ = mcp_app(tmp_path, mcp_model(transport=refused))
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize()
+        assert await wire.watch_stream(0.1) == (None, None)
+        await wire.close()

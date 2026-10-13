@@ -98,8 +98,9 @@ The Python package reads it from there when it's built, the plugin's `fauxcall` 
 `uvx fauxcall==<version>` from it, and the release workflow checks the tag against it.
 
 1. Change the version in `plugin.json`, and move the "Unreleased" changelog entries under it.
-2. Commit, push, then tag that commit `v<version>` and push the tag. The release workflow
-   publishes to PyPI and creates the GitHub release.
+2. Commit, push, then tag that commit with an annotated tag whose message is the release's
+   changelog section (`git tag -a v<version> -F <notes file>`), and push the tag. The release
+   workflow publishes to PyPI and creates the GitHub release, with the tag's message as its notes.
 
 By contributing, you agree that your contributions are licensed under the
 [Apache License 2.0](LICENSE).

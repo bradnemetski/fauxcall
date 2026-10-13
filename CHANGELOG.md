@@ -6,39 +6,96 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
-## [0.1.3]
+## [0.2.0]
+
+Full MCP support. A fake of an MCP server now behaves like the real one at every level the protocol
+defines: every method answered by code; progress and other notifications as they happen; requests
+to the client (sampling, elicitation, roots); background work and pushes on the client's open
+stream; tools listed only to capable clients; the real refusals; and the wire itself (response
+member order, id shapes, priming events). The new `examples/fauxcall/everything` fake of the MCP
+project's Everything reference server, built by a headless run, shows all of it.
 
 ### Added
 
-- MCP handlers can push notifications on a client's open GET stream (`ctx.push`) and leave work
-  running after a call (`ctx.background`), ended with the client's session; they see the
-  client's declared capabilities (`ctx.client_capabilities`) and can answer listings too
-  (`resources/list` with what a session created).
-- Introspection also probes `elicitation.url`, `tasks` and all capabilities together; `requires`
-  holds alternatives of capability sets. It records the real refusals of a `tools/call` without
-  a name, of arguments that aren't an object, and of a second `initialize`, and the fake repeats
-  them.
+**MCP fakes**
 
+- **Every method can be answered by code.** `METHOD_HANDLERS` (`register_method`) handles dynamic
+  resources, prompts, completions, subscriptions, `logging/setLevel` or any other method, falling
+  back to the recordings when a handler returns `None`. Without one, the fake answers
+  subscriptions, `logging/setLevel` and completions the way the protocol says, and an unknown
+  method with the real "method not found". Listings can be answered too (`resources/list` with
+  what a session created).
+- **Notifications.** `ctx.progress(…)` (when the call carried a `progressToken`) and
+  `ctx.notify(…)`; over SSE they reach the client as they happen, before the answer.
+  `ctx.push(…)` sends on the client's open GET stream, and `ctx.background(…)` leaves work running
+  after a call, ended with the client's session.
+- **Requests to the client.** `await ctx.ask_client("sampling/createMessage", …)` (or
+  elicitation, roots) sends the request mid-call and returns the client's answer; a refusal or a
+  timeout answers the call with the same error, as SDK servers do.
+- **Time and sessions.** `ctx.pause(seconds)` takes real time (skipped in fast mode) and every
+  pause is noted in `runtime.pauses` for tests; `ctx.mcp_session` is the client's
+  `Mcp-Session-Id` and `ctx.client_capabilities` what it declared.
+- **Tools for capable clients.** Introspection finds tools a server lists only to clients that
+  support sampling, elicitation (form or URL), roots or tasks, alone or together (`requires`), and
+  the fake lists them only to such clients.
+- **The client's notifications.** A `METHOD_HANDLERS` handler for a notification
+  (`notifications/roots/list_changed` …) runs in the background after the client's `202`, and
+  can react as the real server does, e.g. by asking for the roots again.
+- **The real refusals.** Introspection records how the server refuses a `tools/call` without a
+  name, arguments that aren't an object, a second `initialize`, a wrong `Accept` or
+  `Content-Type`, an unknown protocol-version header, an unknown session (on POST, GET and
+  DELETE) and a second GET stream in a session, and the fake repeats each one.
+- **The wire.** The fake writes response members in the real server's order, shapes session and
+  SSE event ids like the real ones (UUIDs or hex), sends the empty priming event newer protocol
+  versions open SSE answers with, and keeps streams alive with the real comment at the real
+  interval, on idle GET streams and during long calls.
+- **Recording.** Plans declare the client's capabilities (`client_capabilities`) and how the
+  recorder answers the server's requests (`client_replies`), so tools that sample, elicit or ask
+  for roots can be recorded.
 - An MCP example: `examples/fauxcall/everything`, a fake of the MCP project's Everything reference
   server built by a headless run (100% parity, independent 100% over 144 of 192 calls).
 
-- **MCP fakes can answer every method with code.** `METHOD_HANDLERS` (`register_method`) handles
-  dynamic resources, prompts, completions, subscriptions, `logging/setLevel` or any other method,
-  falling back to the recordings when a handler returns `None`. Without one, the fake answers
-  subscriptions, `logging/setLevel` and completions the way the protocol says, and an unknown
-  method with the real "method not found".
-- MCP handlers can send notifications: `ctx.progress(…)` (when the call carried a
-  `progressToken`) and `ctx.notify(…)`. Over SSE they reach the client as they happen, before the
-  answer. `ctx.pause(seconds)` takes real time (skipped in fast mode) and every pause is noted in
-  `runtime.pauses` for tests; `ctx.mcp_session` is the client's `Mcp-Session-Id`.
-- Tools a server lists only to clients that support sampling, elicitation or roots are found by
-  introspection (`requires`), and the fake lists them only to such clients.
-- `fauxcall model tool <name> <tools…>` sets a tool's `--behavior`, `--invalid-args` and
-  `--varies`/`--steady`; `fauxcall recordings-delete` removes recordings by id or endpoint.
+**Testing**
+
+- **Offline test runs refuse the network.** Against the fake alone, any connection off the
+  machine, or to the real service, fails the test that tried (even when the fake swallowed the
+  error): a fake answers from its recordings and data, never by calling out.
+
+**Building fakes**
+
 - **Headless runs apply `answers.json` themselves.** `record`, `plan review`/`check` and parity
   runs turn the answers file's write approval into approvals, so the agent never approves anything.
-- Home folders hide their account name (`/Users/<name>`, `C:\Users\<name>`) wherever they
-  appear, and MCP's `progressToken` is no longer redacted as a secret.
+- `fauxcall model tool <name> <tools…>` sets a tool's `--behavior`, `--invalid-args` and
+  `--varies`/`--steady`; `fauxcall recordings-delete` removes recordings by id or endpoint.
+- Home folders hide their account name (`/Users/<name>`, `C:\Users\<name>`) wherever they appear.
+
+### Changed
+
+- **Existing fakes' tests can now fail** if the fake reaches the network: that was a fidelity bug
+  the tests couldn't see. Serve what was recorded instead, and answer as the real service does
+  when the network fails.
+- MCP introspection makes a few more calls (the capability and refusal probes) and, when the
+  server offers a GET stream, waits up to 20 seconds on it to learn its keep-alive; the optional
+  probes come last and stop when the recording budget runs out.
+- MCP's `progressToken` is no longer redacted as a secret.
+
+### Fixed
+
+- MCP prompts, resource reads and completions answer with the recording that matches their
+  params; before, the first recording answered every call.
+- Parity compares the real side's answers as they would have been recorded (same pseudonyms as
+  the fake, credentials redacted), so no real personal data reaches the parity report.
+- A crashing MCP handler answers `-32603` instead of a bare HTTP 500, and tool arguments that
+  aren't an object are no longer turned into `{}`.
+- `model check` counts an MCP fake's tools, resources and prompts; `analyze endpoint` profiles an
+  MCP tool's result, not the JSON-RPC envelope; the parity report groups resource reads by
+  template; `status` shows a phase's latest note; `init` prints its notes once.
+- A checkout's installed `fauxcall` reports the new version after a bump (`uv` rebuilds it when
+  `plugin.json` changes), so `doctor --skill-dir` no longer sees a mismatch that isn't there.
+
+## [0.1.3]
+
+### Added
 
 - **The parity report says what its score rests on.** Next to the overall compliance it gives the
   *independent* score, without the calls that only repeat a recorded request (which the fake
@@ -109,16 +166,6 @@ All notable changes to FauxCall are listed here. The format follows
 
 ### Fixed
 
-- MCP prompts, resource reads and completions answer with the recording that matches their
-  params; before, the first recording answered every call.
-- Parity compares the real side's answers as they would have been recorded (same pseudonyms as
-  the fake, credentials redacted), so no real personal data reaches the parity report.
-- A crashing MCP handler answers `-32603` instead of a bare HTTP 500, and tool arguments that
-  aren't an object are no longer turned into `{}`.
-- `model check` counts an MCP fake's tools, resources and prompts; `analyze endpoint` profiles an
-  MCP tool's result, not the JSON-RPC envelope; the parity report groups resource reads by
-  template; `status` shows a phase's latest note; `init` prints its notes once.
-
 - Recorded requests are replayed on the clock of the moment they were recorded, so a replay can't
   start failing when the date moves on (Frankfurter's replays of then-future dates broke on
   2026-10-12). Existing fakes get this without regenerating.
@@ -179,7 +226,8 @@ The first release.
   outcomes, with cached answers and deterministic fallbacks.
 - Examples: fakes FauxCall built on its own while it was validated, from a single prompt each.
 
-[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/bradnemetski/fauxcall/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/bradnemetski/fauxcall/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/bradnemetski/fauxcall/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/bradnemetski/fauxcall/compare/v0.1.0...v0.1.1

@@ -38,6 +38,10 @@ Use the `fauxcall` command for every step (`uvx fauxcall` if `fauxcall` is not o
    `fauxcall/<name>/.env`, which the *user* edits. Recordings are redacted and pseudonymized by the CLI.
 4. **Evidence, not assumptions.** Every behavior in the model comes from recordings. When something
    cannot be recorded (e.g. a rare failure), use the documentation and say so in the model's `notes`.
+   **A fake never reaches the network:** where the real service fetches a URL or calls another
+   service, the fake serves what was recorded and otherwise answers as the real one does when the
+   network fails. Offline test runs refuse any connection off the machine or to the real service,
+   and fail the test that tried.
 5. **Checkpoint after every step** with `fauxcall progress …` — the run can be interrupted at any time
    and is resumed by invoking this skill again.
 6. **One endpoint at a time** through the endpoint loop, in dependency order.

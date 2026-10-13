@@ -83,6 +83,8 @@ packages = ["src/fauxcall"]
 
 [tool.uv]
 default-groups = ["dev"]
+# Rebuild the editable install when the version changes (it lives in the plugin manifest).
+cache-keys = [{ file = "pyproject.toml" }, { file = "plugins/fauxcall/.claude-plugin/plugin.json" }]
 
 [tool.uv.sources]
 fauxcall-reference-api = { workspace = true }

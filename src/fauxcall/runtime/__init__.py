@@ -19,9 +19,11 @@ from fauxcall.runtime.app import (
     runtime_of,
 )
 from fauxcall.runtime.context import EarlyResponse, RequestContext
-from fauxcall.runtime.mcp_server import RpcError
+from fauxcall.runtime.mcp_server import Channel, ClientError, RpcError
 
 __all__ = [
+    "Channel",
+    "ClientError",
     "EarlyResponse",
     "FakeRuntime",
     "RequestContext",

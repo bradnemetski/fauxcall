@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import socket
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
@@ -926,3 +927,132 @@ def test_the_real_side_is_compared_as_it_would_have_been_recorded() -> None:
     text.observation.text = "token sk-real-0123456789 for jane"
     stripped = compare_logs("s", ExchangeLog([text]), ExchangeLog([_call("/t", None)]), spec)
     assert "sk-real-0123456789" not in " ".join(c.detail for c in stripped[0].checks)
+
+
+OFFLINE_CONFTEST = """
+from datetime import UTC, datetime
+
+import pytest
+from fastapi import FastAPI
+
+from fauxcall.testing import FakeUnderTest
+
+
+@pytest.fixture(scope="session")
+def fauxcall_fake() -> FakeUnderTest:
+    return FakeUnderTest(app_factory=FastAPI, real_base_url="http://127.0.0.1:9")
+"""
+
+OFFLINE_SCENARIOS = """
+import socket
+
+
+def attempt(host, port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.settimeout(0.2)
+        try:
+            sock.connect((host, port))
+        except OSError:
+            pass  # a fake that swallows the error is still caught
+
+
+def test_off_the_machine():
+    attempt("192.0.2.1", 80)
+
+
+def test_the_real_service():
+    attempt("127.0.0.1", 9)
+
+
+def test_another_local_port():
+    attempt("127.0.0.1", 1)  # nothing listens: refused by the OS, not by FauxCall
+"""
+
+
+def test_offline_runs_refuse_the_network(pytester: pytest.Pytester) -> None:
+    pytester.makeini(INI)
+    pytester.makeconftest(OFFLINE_CONFTEST)
+    pytester.makepyfile(test_offline=OFFLINE_SCENARIOS)
+    result = run(pytester)
+    result.assert_outcomes(passed=3, errors=2)  # the guard fails a test at teardown
+    result.stdout.fnmatch_lines(
+        [
+            "*the fake tried to reach the network (192.0.2.1:80)*",
+            "*the fake tried to reach the network (127.0.0.1:9)*",
+        ]
+    )
+    run(pytester, "--target=real", "-k", "another").assert_outcomes(passed=1)  # guard off
+
+
+def test_what_offline_runs_refuse() -> None:
+    from fauxcall.testing.plugin import _offline_refuses  # noqa: PLC0415
+
+    tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    unix = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    try:
+        real = ("localhost", 8443)
+        assert _offline_refuses(tcp, ("203.0.113.5", 443), None)
+        assert not _offline_refuses(tcp, ("127.0.0.1", 8443), None)  # no real service named
+        assert _offline_refuses(tcp, ("127.0.0.1", 8443), real)
+        assert not _offline_refuses(tcp, ("localhost", 8000), real)
+        assert not _offline_refuses(tcp, ("::1%lo0", 8000), real)
+        assert not _offline_refuses(tcp, ("127.0.0.1", 8443), ("api.example.com", 8443))
+        assert not _offline_refuses(unix, "/tmp/some.sock", real)  # noqa: S108 - just a name
+    finally:
+        tcp.close()
+        unix.close()
+
+
+@pytest.mark.parametrize(
+    ("conftest", "address"),
+    [
+        ("", None),  # a test suite without a fake
+        ("FakeUnderTest(app_factory=FastAPI)", None),  # no real service known
+        (
+            "FakeUnderTest(app_factory=FastAPI, model=MODEL)",
+            ("api.example.com", 443),
+        ),  # the model's https base URL, default port
+    ],
+)
+def test_the_real_address_comes_from_the_fake(
+    pytester: pytest.Pytester, conftest: str, address: Any
+) -> None:
+    fixture = (
+        ""
+        if not conftest
+        else f"""
+from datetime import UTC, datetime
+
+import pytest
+from fastapi import FastAPI
+
+from fauxcall.model.api import ApiModel, RealTarget, SourceInfo
+from fauxcall.testing import FakeUnderTest
+
+MODEL = ApiModel(
+    name="x",
+    title="X",
+    source=SourceInfo(
+        kind="openapi", url="https://x/o.json", fetched_at=datetime(2026, 1, 1, tzinfo=UTC)
+    ),
+    real=RealTarget(base_url="https://api.example.com"),
+)
+
+
+@pytest.fixture(scope="session")
+def fauxcall_fake():
+    return {conftest}
+"""
+    )
+    pytester.makeini(INI)
+    pytester.makeconftest(fixture)
+    pytester.makepyfile(
+        test_address=f"""
+from fauxcall.testing.plugin import _real_address
+
+
+def test_address(request):
+    assert _real_address(request) == {address!r}
+"""
+    )
+    run(pytester).assert_outcomes(passed=1)
