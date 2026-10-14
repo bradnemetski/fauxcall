@@ -188,6 +188,13 @@ class McpModel(Model):
         default_factory=dict,
         description="JSON-RPC error objects by situation: method_not_found, unknown_tool, …",
     )
+    capability_tools_after_initialized: bool = Field(
+        default=False,
+        description=(
+            "Tools with requires appear only once the client sent notifications/initialized "
+            "(servers that register them then; learned by introspection)."
+        ),
+    )
     arguments_probe_tool: str | None = Field(
         default=None,
         description="The tool given non-object arguments by introspection (arguments_not_object).",

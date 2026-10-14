@@ -286,16 +286,17 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         *["MCP tools/list:with-elicitation.url"] * 2,
         *["MCP tools/list:with-roots"] * 2,
         *["MCP tools/list:with-tasks.requests"] * 2,
+        *["MCP tools/list:with-all-before-initialized"] * 2,  # some servers wait for it
         *["MCP tools/list:with-all"] * 2,
         "MCP initialize:version-2024-11-05",
         "MCP initialize:version-2025-03-26",
         "MCP initialize:version-2025-06-18",
         "MCP initialize:version-2025-11-25",
     ]
-    assert len(found.exchanges) == (34 if mode == "sse" else 32)
+    assert len(found.exchanges) == (36 if mode == "sse" else 34)
     # every request was paced: 2 rps -> 0.5 s apart (cleanup DELETEs included); each
     # capability probe: initialize, 2 pages, DELETE; watching the stream: it and a second one
-    assert clock.sleeps == [0.5] * (52 if mode == "sse" else 49)
+    assert clock.sleeps == [0.5] * (54 if mode == "sse" else 51)
     # A fake built from what was learned behaves the same on the wire.
     rebuilt = fake_model(transport=model.transport, page_size=model.tools_page_size)
     rebuilt.mcp = model.model_copy(update={"tools": rebuilt.mcp.tools if rebuilt.mcp else []})
@@ -608,12 +609,13 @@ async def test_version_probes_skip_refusals_and_stop_at_the_budget(tmp_path: Pat
         assert found.model.transport.issues_session is False
         assert found.model.transport.get_stream == "status"
         assert "missing_session" not in found.model.errors
-        # 22 calls of introspection (10, and 2 per client capability probe), then one per
+        # 23 calls of introspection (10, 2 per client capability probe, and the listing before
+        # notifications/initialized), then one per
         # probed version: the refused 2024-11-05, then 2025-03-26, and the budget is gone
-        tight = recorder(tmp_path / "b", http, "http://mock/mcp", rps=0, max_calls=24)
+        tight = recorder(tmp_path / "b", http, "http://mock/mcp", rps=0, max_calls=25)
         limited = await tight.introspect()
         assert limited.model.transport.protocol_versions == {"2025-03-26": "2025-03-26"}
-        assert tight.calls_made == 24
+        assert tight.calls_made == 25
         # A budget spent while probing capabilities leaves fewer probes, not a failed init
         tighter = recorder(tmp_path / "c", http, "http://mock/mcp", rps=0, max_calls=6)
         assert (await tighter.introspect()).model.transport.protocol_versions == {}
@@ -1261,3 +1263,32 @@ async def test_listening_where_there_is_no_stream(tmp_path: Path) -> None:
     )
     assert refused.response is not None
     assert refused.response.status == 405  # recorded as the server answered
+
+
+async def test_tools_that_wait_for_initialized(tmp_path: Path) -> None:
+    sample: JsonValue = {"name": "ask_the_model", "inputSchema": {"type": "object"}}
+    model = fake_model()
+    assert model.mcp is not None
+    model.mcp.tools.append(McpToolModel(definition=sample, requires=[["sampling"]]))
+    model.mcp.capability_tools_after_initialized = True
+    async with streaming_client(fake_app(tmp_path / "a", model)) as http:
+        found = await recorder(tmp_path, http, "http://fake.test/mcp", rps=0).introspect(
+            probe_versions=False
+        )
+        assert found.model.capability_tools_after_initialized  # learned from the two listings
+        early = McpWireClient("http://fake.test/mcp", http)
+        await early.initialize(capabilities={"sampling": {}}, announce=False)
+        names = [t["name"] for t in j((await early.call("tools/list")).result)["tools"]]
+        assert "ask_the_model" not in names  # not yet
+        hidden = await early.call("tools/call", {"name": "ask_the_model", "arguments": {}})
+        assert hidden.error is not None or j(hidden.result)["isError"] is True
+        await early.notify("notifications/initialized")
+        names = [t["name"] for t in j((await early.call("tools/list")).result)["tools"]]
+        assert "ask_the_model" in names  # now
+        await early.close()
+    model.mcp.capability_tools_after_initialized = False
+    async with streaming_client(fake_app(tmp_path / "b", model)) as http:
+        found = await recorder(tmp_path / "b", http, "http://fake.test/mcp", rps=0).introspect(
+            probe_versions=False
+        )
+    assert not found.model.capability_tools_after_initialized  # listed from the start

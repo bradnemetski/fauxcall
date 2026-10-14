@@ -731,7 +731,7 @@ async def test_a_client_that_never_answers_times_out(tmp_path: Path) -> None:
         silent = await wire.call("tools/call", {"name": "list_roots", "arguments": {}})
         assert j(silent.error) == {"code": -32001, "message": "Request timed out"}
         asked = next(json.loads(d) for _, _, d, _ in silent.sse_events)
-        assert (asked["method"], asked["id"]) == ("roots/list", "fauxcall-1")
+        assert (asked["method"], asked["id"]) == ("roots/list", 0)  # numbered as the SDKs do
         register_tool(app, "list_roots", on_get_stream)  # no GET stream open: unreachable
         unreachable = await wire.call("tools/call", {"name": "list_roots", "arguments": {}})
         assert j(unreachable.error)["code"] == -32001
@@ -972,3 +972,21 @@ async def test_servers_without_numbered_events_drop_what_nobody_hears(tmp_path: 
     assert fake is not None
     fake.keep_for_later("session", {"jsonrpc": "2.0", "method": "notifications/x"})
     assert fake._sent == {}
+
+
+async def test_a_refusal_recorded_without_an_id_keeps_none(tmp_path: Path) -> None:
+    model = mcp_model(transport=McpTransportModel(response_mode="json", reinitialize_status=400))
+    assert model.mcp is not None
+    unaddressed: JsonValue = {
+        "jsonrpc": "2.0",
+        "error": {"code": -32600, "message": "Invalid Request: Server already initialized"},
+        "id": None,  # the real server answered without addressing the request
+    }
+    model.mcp.errors["second_initialize"] = unaddressed
+    app, _ = mcp_app(tmp_path, model)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize()
+        again = await wire.post(protocol.request(9, "initialize", {"capabilities": {}}))
+        assert j(again.response) == unaddressed
+        await wire.close()

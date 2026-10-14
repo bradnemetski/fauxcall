@@ -6,6 +6,16 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Requests an MCP fake sends to the client (sampling, elicitation, roots) are numbered from 0 in
+  each session, as the MCP SDKs number them; they were strings (`fauxcall-1`).
+- A recorded refusal that the real server sent with a `null` id (a second `initialize`) keeps
+  it; the fake put the caller's id in.
+- Tools a server offers only to capable clients wait for the client's
+  `notifications/initialized` when the real server adds them only then. Introspection learns it
+  by listing tools before and after sending it (`capability_tools_after_initialized`).
+
 ## [0.2.0]
 
 Full MCP support. A fake of an MCP server now behaves like the real one at every level the protocol

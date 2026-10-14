@@ -599,8 +599,10 @@ class McpRecorder:
         known = {tool.name for tool in model.tools}
         unlocked: dict[str, tuple[JsonValue, list[str]]] = {}
         probes = [*CLIENT_CAPABILITIES.items(), (_ALL, _all_capabilities())]
+        early: list[JsonValue] | None = None
         for label, declared in probes:
-            listed = await self._tools_for(label, declared, exchanges)
+            listed, before = await self._tools_for(label, declared, exchanges)
+            early = before if label == _ALL else early
             if listed is None:
                 if self._spent():
                     break
@@ -613,28 +615,45 @@ class McpRecorder:
             alone = [[label] for label in labels if label != _ALL]
             needs = alone or [list(CLIENT_CAPABILITIES)]
             model.tools.append(McpToolModel(definition=definition, requires=needs))
+        if unlocked and early is not None:  # listed before notifications/initialized?
+            names = {d.get("name") for d in early if isinstance(d, dict)}
+            model.capability_tools_after_initialized = not names & set(unlocked)
 
     def _spent(self) -> bool:
         return self.calls_made >= self.max_calls
 
     async def _tools_for(
         self, label: str, declared: JsonObject, exchanges: list[str]
-    ) -> list[JsonValue] | None:
-        """The tools listed to a client declaring ``declared`` (``None``: the probe failed)."""
+    ) -> tuple[list[JsonValue] | None, list[JsonValue] | None]:
+        """The tools listed to a client declaring ``declared`` (``None``: the probe failed).
+
+        The session declaring all capabilities also lists them before it sends
+        ``notifications/initialized`` (second value): some servers add their capability tools
+        only then.
+        """
         client = self._client()
+        early: list[JsonValue] | None = None
+        calls: list[RpcCall] = []
         try:
             await self._pace()
-            await client.initialize(capabilities=declared)
+            await client.initialize(capabilities=declared, announce=label != _ALL)
+            if label == _ALL:
+                early, before = await client.list_all("tools/list", "tools", before_page=self._pace)
+                exchanges += [
+                    self.save(c, method_endpoint("tools/list", f"with-{label}-before-initialized"))
+                    for c in before
+                ]
+                await client.notify("notifications/initialized")
             tools, calls = await client.list_all("tools/list", "tools", before_page=self._pace)
         except _BudgetExhaustedError:
-            return None  # the recording budget is spent: fewer probes, not a failed init
+            return None, early  # the recording budget is spent: fewer probes, not a failed init
         except (RecordingError, httpx2.HTTPError, TimeoutError) as error:
             log.info("mcp_capability_probe_failed", capability=label, error=str(error))
-            return None
+            return None, early
         finally:
             await self._close(client)
         exchanges += [self.save(c, method_endpoint("tools/list", f"with-{label}")) for c in calls]
-        return tools
+        return tools, early
 
     async def _probe_transport(
         self, client: McpWireClient, init: RpcCall, exchanges: list[str]

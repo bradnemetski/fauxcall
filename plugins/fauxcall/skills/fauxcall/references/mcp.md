@@ -122,7 +122,7 @@ if a behavior can't be expressed, say so in the model's `notes`.
 | method | the fake answers with |
 |---|---|
 | `initialize`, `ping` | the recorded server info, capabilities and negotiated version; `{}` |
-| `tools/list`, `resources/list`, `resources/templates/list`, `prompts/list` | a `METHOD_HANDLERS` handler (to add what a session created), else the recorded listing, paginated as recorded; tools with `requires` only to clients whose capabilities satisfy it |
+| `tools/list`, `resources/list`, `resources/templates/list`, `prompts/list` | a `METHOD_HANDLERS` handler (to add what a session created), else the recorded listing, paginated as recorded; tools with `requires` only to clients whose capabilities satisfy it, and only after `notifications/initialized` when the real server waits for it (`capability_tools_after_initialized`, learned by introspection) |
 | `tools/call` | its handler (`computed`), else the closest recording; schema checks per `invalid_args`; a call without a name, or with arguments that aren't an object, gets the real server's recorded refusal |
 | a second `initialize` in a session | the real refusal, when the server refused it during introspection |
 | `resources/read`, `prompts/get`, `completion/complete` | a `METHOD_HANDLERS` handler, else the recording that matches its params, else the real "not found" error (`completion/complete`: no values) |

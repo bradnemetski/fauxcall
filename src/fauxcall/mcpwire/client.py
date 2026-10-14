@@ -262,12 +262,17 @@ class McpWireClient:
     # -- the protocol ------------------------------------------------------------------------------
 
     async def initialize(
-        self, *, protocol_version: str | None = None, capabilities: JsonObject | None = None
+        self,
+        *,
+        protocol_version: str | None = None,
+        capabilities: JsonObject | None = None,
+        announce: bool = True,
     ) -> RpcCall:
         """Open a session (``initialize`` + ``notifications/initialized``).
 
         ``capabilities`` are the client's (none by default): some servers list more tools to
-        clients that support sampling, elicitation or roots.
+        clients that support sampling, elicitation or roots. ``announce=False`` leaves out
+        ``notifications/initialized`` (send it later with :meth:`notify`).
         """
         if self.transport == "sse" and self._sse_task is None:
             await self._open_sse()
@@ -291,7 +296,8 @@ class McpWireClient:
             )
         if call.response is None or call.error is not None:
             raise RecordingError(f"MCP initialize failed: HTTP {call.status} {call.body[:300]}")
-        await self.notify("notifications/initialized")
+        if announce:
+            await self.notify("notifications/initialized")
         return call
 
     async def call(self, method: str, params: JsonValue = None) -> RpcCall:

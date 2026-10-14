@@ -117,7 +117,8 @@ class Channel:
         it can't be reached or doesn't answer ``within`` seconds (``-32001 Request timed
         out``, as the SDKs say).
         """
-        request_id = f"fauxcall-{next(self._fake.request_ids)}"
+        # numbered from 0 in each session, as the MCP SDKs number a server's requests
+        request_id = next(self._fake.request_ids.setdefault(self.session, itertools.count()))
         message = protocol.request(request_id, method, params)
         if send is None:
             stream = self._fake.streams.get(self.session)
@@ -125,7 +126,7 @@ class Channel:
                 raise ClientError(protocol.REQUEST_TIMEOUT, "Request timed out")
             send = stream.put_nowait
         waiting: asyncio.Future[JsonObject] = asyncio.get_running_loop().create_future()
-        key = (self.session, request_id)
+        key = (self.session, str(request_id))
         self._fake.awaiting[key] = waiting
         try:
             send(message)
@@ -225,6 +226,8 @@ class McpFake:
         self.method_handlers: dict[str, MethodHandler] = {}
         self._sessions: dict[str, str] = {}
         self._capabilities: dict[str, JsonObject] = {}
+        self._initialized: set[str] = set()
+        """MCP sessions whose client sent ``notifications/initialized``."""
         self._sent: dict[str, deque[tuple[str, str, JsonValue]]] = {}
         """MCP session -> the numbered events sent to it: (stream, event id, message)."""
         self._versions: dict[str, str] = {}
@@ -234,7 +237,8 @@ class McpFake:
         self.background: dict[str, set[asyncio.Task[None]]] = {}
         self.awaiting: dict[tuple[str, str], asyncio.Future[JsonObject]] = {}
         """(MCP session, request id) -> the server's request waiting for the client's answer."""
-        self.request_ids = itertools.count(1)
+        self.request_ids: dict[str, itertools.count[int]] = {}
+        """MCP session -> the numbers of the requests the server sends that client."""
         """MCP session -> work handlers left running after a call (``ctx.background``)."""
         """MCP session -> the capabilities its client declared in ``initialize``."""
         self._sse_queues: dict[str, asyncio.Queue[str]] = {}
@@ -357,9 +361,7 @@ class McpFake:
         """A recorded listing, paginated as recorded (tools: only those this client is offered)."""
         match method:
             case "tools/list":
-                tools = [
-                    t.definition for t in self.model.tools if t.offered_to(ctx.client_capabilities)
-                ]
+                tools = [t.definition for t in self.model.tools if self._offered(t, ctx)]
                 return self._listing(request_id, method, self._page(params, tools, "tools"))
             case "resources/list":
                 page = self._page(params, self.model.resources, "resources")
@@ -476,7 +478,7 @@ class McpFake:
         name = named
         sent = params.get("arguments", {})
         tool = self.model.tool(name)
-        if tool is None or not tool.offered_to(ctx.client_capabilities):
+        if tool is None or not self._offered(tool, ctx):
             return self._error(
                 request_id,
                 "unknown_tool",
@@ -799,6 +801,8 @@ class McpFake:
         for message in messages:
             if not (protocol.is_notification(message) and isinstance(message, dict)):
                 continue
+            if message.get("method") == "notifications/initialized":
+                self._initialized.add(self._session_in(request))
             handler = self.method_handlers.get(str(message.get("method")))
             if handler is None:
                 continue
@@ -813,6 +817,8 @@ class McpFake:
         self._sessions.pop(session, None)
         self._capabilities.pop(session, None)
         self._sent.pop(session, None)
+        self.request_ids.pop(session, None)
+        self._initialized.discard(session)
         self.streams.pop(session, None)
         for task in self.background.pop(session, set()):
             task.cancel()
@@ -869,7 +875,7 @@ class McpFake:
                 m for m in messages if isinstance(m, dict) and m.get("method") == "initialize"
             )
             refused = Response(
-                content=jsonfmt.dumps(protocol.with_id(again, init.get("id"))).encode(),
+                content=jsonfmt.dumps(_addressed(again, init.get("id"))).encode(),
                 status_code=self.transport.reinitialize_status or 400,
                 media_type="application/json",
             )
@@ -957,6 +963,21 @@ class McpFake:
         return StreamingResponse(
             events(), media_type=self.transport.content_type_sse, headers=headers
         )
+
+    def _offered(self, tool: McpToolModel, ctx: RequestContext) -> bool:
+        """Whether this client may see and call ``tool`` now.
+
+        Tools for capable clients wait for ``notifications/initialized`` on servers that only
+        add them then (learned by introspection).
+        """
+        if not tool.offered_to(ctx.client_capabilities):
+            return False
+        waits = tool.requires and self.model.capability_tools_after_initialized
+        return not waits or (ctx.mcp_session or "") in self._initialized
+
+    def _session_in(self, request: Request) -> str:
+        """The MCP session a request belongs to (``""``: none)."""
+        return request.headers.get(self.transport.session_header) or _legacy_session(request) or ""
 
     def _context(self, request: Request, message: JsonObject) -> RequestContext:
         """The context a handler gets for one message from the client."""
@@ -1099,6 +1120,13 @@ class McpFake:
                     return early.response
                 await queue.put(protocol.sse_event(reply))
         return Response(content=b"Accepted", status_code=202)
+
+
+def _addressed(recorded: JsonObject, request_id: JsonValue) -> JsonValue:
+    """A recorded error answering ``request_id``; one the server sent with a null id keeps it."""
+    if "id" in recorded and recorded["id"] is None:
+        return recorded
+    return protocol.with_id(recorded, request_id)
 
 
 def _quietly(work: Awaitable[JsonValue]) -> Callable[[Channel], Awaitable[None]]:
