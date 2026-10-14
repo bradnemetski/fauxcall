@@ -1,0 +1,76 @@
+{
+  "id": "000019",
+  "endpoint": "MCP DELETE:delete_unknown_session",
+  "purpose": "discovery",
+  "started_at": "2026-10-14T01:34:59.748986Z",
+  "started_ns": 1791941699748986000,
+  "elapsed_ms": 7.037,
+  "request": {
+    "method": "DELETE",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "content-length",
+        "95"
+      ],
+      [
+        "etag",
+        "W/\"5f-yGKrXbkLhApmVYswnToQyaFrApg\""
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:34:59 GMT"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "keep-alive",
+        "timeout=5"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json; charset=utf-8",
+      "text": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: No valid session ID provided\"}}"
+    }
+  },
+  "redacted": [
+    "request.header:mcp-session-id"
+  ]
+}

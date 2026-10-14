@@ -1,0 +1,129 @@
+{
+  "id": "000350",
+  "endpoint": "MCP tools/call:trigger-sampling-request",
+  "purpose": "edge",
+  "plan_call": "smp-badreply",
+  "started_at": "2026-10-14T01:49:02.351347Z",
+  "started_ns": 1791942542351347000,
+  "elapsed_ms": 4.447,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 8,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "bad reply"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:49:02 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"model\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 8
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.717,
+      "kind": "sse",
+      "event": "message",
+      "id": "20288fef-0eaa-4e9d-8529-a31f4a4f38f6",
+      "data": "{\"method\":\"sampling/createMessage\",\"params\":{\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"Resource trigger-sampling-request context: bad reply\"}}],\"systemPrompt\":\"You are a helpful test server.\",\"maxTokens\":100,\"temperature\":0.7},\"jsonrpc\":\"2.0\",\"id\":6}"
+    },
+    {
+      "t_ms": 4.324,
+      "kind": "sse",
+      "event": "message",
+      "id": "ce0e94e1-b4e0-4249-b923-3b5344551a02",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[\\n  {\\n    \\\"expected\\\": \\\"string\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"model\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n  }\\n]\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":8}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

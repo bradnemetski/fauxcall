@@ -1,0 +1,127 @@
+{
+  "id": "000048",
+  "endpoint": "MCP tools/call:trigger-sampling-request",
+  "plan_call": "acc-sampling",
+  "started_at": "2026-10-14T01:37:08.601994Z",
+  "started_ns": 1791941828601994000,
+  "elapsed_ms": 14.26,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 17,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "Say hi"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:37:08 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "LLM sampling result: \n{\n  \"model\": \"fauxcall-test-model\",\n  \"stopReason\": \"endTurn\",\n  \"role\": \"assistant\",\n  \"content\": {\n    \"type\": \"text\",\n    \"text\": \"Hi there!\"\n  }\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 17
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.72,
+      "kind": "sse",
+      "event": "message",
+      "id": "d9550a2d-c1cd-40e6-8fab-a2301c8d36df",
+      "data": "{\"method\":\"sampling/createMessage\",\"params\":{\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"Resource trigger-sampling-request context: Say hi\"}}],\"systemPrompt\":\"You are a helpful test server.\",\"maxTokens\":100,\"temperature\":0.7},\"jsonrpc\":\"2.0\",\"id\":1}"
+    },
+    {
+      "t_ms": 13.98,
+      "kind": "sse",
+      "event": "message",
+      "id": "f8c265b6-f886-4438-9def-7df22e58a921",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"LLM sampling result: \\n{\\n  \\\"model\\\": \\\"fauxcall-test-model\\\",\\n  \\\"stopReason\\\": \\\"endTurn\\\",\\n  \\\"role\\\": \\\"assistant\\\",\\n  \\\"content\\\": {\\n    \\\"type\\\": \\\"text\\\",\\n    \\\"text\\\": \\\"Hi there!\\\"\\n  }\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":17}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

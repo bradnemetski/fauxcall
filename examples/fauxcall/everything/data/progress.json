@@ -1,58 +1,58 @@
 {
   "fake": "everything",
   "source": "http://127.0.0.1:3101/mcp",
-  "started_at": "2026-10-12T22:13:33.192010Z",
-  "updated_at": "2026-10-12T23:09:35.551052Z",
+  "started_at": "2026-10-14T01:34:50.201006Z",
+  "updated_at": "2026-10-14T02:55:26.524459Z",
   "phases": {
     "discover": {
       "status": "done",
-      "started_at": "2026-10-12T22:13:33.192010Z",
-      "finished_at": "2026-10-12T22:13:33.192010Z"
+      "started_at": "2026-10-14T01:34:50.201006Z",
+      "finished_at": "2026-10-14T01:34:50.201006Z"
     },
     "gate": {
       "status": "done",
-      "finished_at": "2026-10-12T22:17:08.297287Z"
+      "finished_at": "2026-10-14T01:38:23.201961Z"
     },
     "record": {
       "status": "done",
-      "finished_at": "2026-10-12T22:28:40.159368Z"
+      "finished_at": "2026-10-14T01:52:42.449140Z"
     },
     "model": {
       "status": "done",
-      "finished_at": "2026-10-12T22:41:00.212020Z"
+      "finished_at": "2026-10-14T01:53:37.188992Z"
     },
     "world": {
       "status": "done",
-      "finished_at": "2026-10-12T22:41:00.771737Z"
+      "finished_at": "2026-10-14T01:53:37.694528Z"
     },
     "scaffold": {
       "status": "done",
-      "finished_at": "2026-10-12T22:41:01.287811Z"
+      "finished_at": "2026-10-14T02:09:28.626015Z"
     },
     "implement": {
       "status": "done",
-      "finished_at": "2026-10-12T22:41:01.806609Z"
+      "finished_at": "2026-10-14T02:09:29.380692Z"
     },
     "unit_tests": {
       "status": "done",
-      "finished_at": "2026-10-12T22:41:02.313673Z"
+      "finished_at": "2026-10-14T02:09:30.029057Z"
     },
     "e2e_tests": {
       "status": "done",
-      "finished_at": "2026-10-12T22:47:32.827954Z"
+      "finished_at": "2026-10-14T02:35:35.802178Z"
     },
     "parity": {
       "status": "done",
-      "finished_at": "2026-10-12T22:47:33.327895Z"
+      "finished_at": "2026-10-14T02:35:36.346406Z"
     },
     "review": {
       "status": "done",
-      "started_at": "2026-10-12T22:47:34.338067Z",
-      "finished_at": "2026-10-12T23:09:33.707595Z"
+      "started_at": "2026-10-14T02:35:37.459660Z",
+      "finished_at": "2026-10-14T02:55:25.282248Z"
     },
     "report": {
       "status": "done",
-      "finished_at": "2026-10-12T23:09:35.550612Z"
+      "finished_at": "2026-10-14T02:55:26.524077Z"
     }
   },
   "endpoints": [
@@ -249,13 +249,13 @@
   ],
   "gate": {
     "mutations": "approved",
-    "answered_at": "2026-10-12T22:17:08.296255Z"
+    "answered_at": "2026-10-14T01:38:23.200961Z"
   },
   "log": [
-    "2026-10-12 22:17 Gate from answers.json (headless): no credentials, no Jev, tools/call:* approved, 60 calls per tool. All writes are session-scoped (gzip resources, toggles, tasks) on a local server and end with the session.",
-    "2026-10-12 22:28 Recorded 370+ exchanges incl. round-2 edge probes; server source (npm 2026.8.31) read as documentation for unobservable behavior (GET-stream logs, subscription updates, capability-gated tools).",
-    "2026-10-12 22:41 Implemented all tools/methods in handlers.py (zod-like validation, JS number formatting, gzip byte-identical, tasks per session); unit tests 339 pass, 99% coverage. Next: e2e parity scenarios.",
-    "2026-10-12 22:47 Parity 100% overall / 100% independent (130 of 178 calls independent), 118 scenarios. GET-stream pushes verified against the real server in test_pushed_log_and_update_messages. Next: independent review.",
-    "2026-10-12 23:09 Review fixed: tool order/gating, task on non-task tools, URI normalization, schema -32603 issues, tasks/list paging, zod Infinity, jsnum ASCII, gzip trim; 43 more probes recorded. Remaining differences (runtime transport details, client-request tools) in README."
+    "2026-10-14 01:38 Headless: answers.json approves MCP tools/call:* (60/tool, recording+parity). Access check: all 19 tools answer; get-env shows only PATH/HOME=/nonexistent/home/PORT/__CF_USER_TEXT_ENCODING (nothing private). simulate-research-query needs task augmentation.",
+    "2026-10-14 01:52 Recorded all 19 tools + resources/prompts/completions/logging/subscriptions/tasks. Real server source (npm package, read-only) used as docs. Plan: every tool computed (handlers), resources/prompts/completion/tasks via METHOD_HANDLERS.",
+    "2026-10-14 02:09 Implemented all tools + methods in handlers (tools.py, methods.py, research.py, jsfmt.py). Unit: 342 pass, 99% cov; test_recorded_sessions replays all 27 plans as recorded (ids/times normalized). Next: e2e scenarios + parity.",
+    "2026-10-14 02:35 Parity run 2: 100% overall, 100% independent (160 independent / 205 compared; 38 replayed, 7 shape-only). Run 1 found 2 gaps (Invalid URL on resources/read, zod content-union issue in sampling reply check) - recorded evidence and fixed. No credentials exist, so no refusal check applies.",
+    "2026-10-14 02:55 Review (fauxcall:reviewer) done: fixed version negotiation (SDK source), roots handshake (recorded 000497: initial request lost without stream), task TTL + tasks/list paging (recorded), URL trimming, comma template URIs, completion on session files, IPv6 hosts, Infinity, timer overflow, elicit null content; session replay now compares mid-call server messages (78). Parity run 3: 100%/100%. Remaining gaps documented in README notes."
   ]
 }

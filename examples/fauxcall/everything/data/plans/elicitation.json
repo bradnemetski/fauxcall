@@ -1,0 +1,451 @@
+{
+ "name": "elicitation",
+ "created_at": "2026-10-13T22:00:00Z",
+ "calls": [
+  {
+   "id": "eli-accept",
+   "endpoint": "MCP tools/call:trigger-elicitation-request",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept",
+     "content": {
+      "name": "Ada Lovelace",
+      "check": true,
+      "firstLine": "Call me Ishmael.",
+      "email": "ada@example.com",
+      "homepage": "https://example.com/ada",
+      "birthdate": "1815-12-10",
+      "integer": 7,
+      "number": 2.5,
+      "untitledSingleSelectEnum": "Joey",
+      "untitledMultipleSelectEnum": [
+       "Piano",
+       "Drums"
+      ],
+      "titledSingleSelectEnum": "hero-2",
+      "titledMultipleSelectEnum": [
+       "fish-1",
+       "fish-3"
+      ],
+      "legacyTitledEnum": "pet-3"
+     }
+    }
+   }
+  },
+  {
+   "id": "eli-partial",
+   "endpoint": "MCP tools/call:trigger-elicitation-request",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept",
+     "content": {
+      "name": "Grace",
+      "check": false,
+      "integer": 0,
+      "number": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "eli-extra-fields",
+   "endpoint": "MCP tools/call:trigger-elicitation-request",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept",
+     "content": {
+      "name": "Linus",
+      "color": "green",
+      "petType": "cat"
+     }
+    }
+   }
+  },
+  {
+   "id": "eli-accept-empty",
+   "endpoint": "MCP tools/call:trigger-elicitation-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept",
+     "content": {}
+    }
+   }
+  },
+  {
+   "id": "eli-accept-nocontent",
+   "endpoint": "MCP tools/call:trigger-elicitation-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept"
+    }
+   }
+  },
+  {
+   "id": "eli-decline",
+   "endpoint": "MCP tools/call:trigger-elicitation-request",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "decline"
+    }
+   }
+  },
+  {
+   "id": "eli-cancel",
+   "endpoint": "MCP tools/call:trigger-elicitation-request",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "cancel"
+    }
+   }
+  },
+  {
+   "id": "eli-error",
+   "endpoint": "MCP tools/call:trigger-elicitation-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "error": {
+      "code": -32600,
+      "message": "Elicitation not available"
+     }
+    }
+   }
+  },
+  {
+   "id": "eli-args",
+   "endpoint": "MCP tools/call:trigger-elicitation-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request",
+     "arguments": {
+      "foo": "bar"
+     }
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "decline"
+    }
+   }
+  },
+  {
+   "id": "url-accept",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {
+      "url": "https://example.com/oauth/start?client=fauxcall"
+     }
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept"
+    }
+   }
+  },
+  {
+   "id": "url-decline",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {
+      "url": "https://example.com/pay"
+     }
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "decline"
+    }
+   }
+  },
+  {
+   "id": "url-cancel",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {
+      "url": "https://example.com/consent",
+      "message": "Grant access to your calendar."
+     }
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "cancel"
+    }
+   }
+  },
+  {
+   "id": "url-id",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {
+      "url": "https://example.com/verify",
+      "elicitationId": "fauxcall-elicit-001",
+      "message": "Verify your identity"
+     }
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept"
+    }
+   }
+  },
+  {
+   "id": "url-errpath",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {
+      "url": "https://example.com/auth",
+      "errorPath": true
+     }
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept"
+    }
+   }
+  },
+  {
+   "id": "url-errpath-retry",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {
+      "url": "https://example.com/auth",
+      "errorPath": true
+     }
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept"
+    }
+   }
+  },
+  {
+   "id": "url-errpath-3",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {
+      "url": "https://example.com/auth",
+      "errorPath": true
+     }
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept"
+    }
+   }
+  },
+  {
+   "id": "url-errpath-id",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {
+      "url": "https://example.com/auth",
+      "errorPath": true,
+      "elicitationId": "fixed-id-1"
+     }
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept"
+    }
+   }
+  },
+  {
+   "id": "url-notaurl",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {
+      "url": "not a url"
+     }
+    }
+   }
+  },
+  {
+   "id": "url-missing",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "url-error-reply",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {
+      "url": "https://example.com/x"
+     }
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "error": {
+      "code": -32600,
+      "message": "URL elicitation refused"
+     }
+    }
+   }
+  },
+  {
+   "id": "url-mailto",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {
+      "url": "mailto:someone@example.com"
+     }
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept"
+    }
+   }
+  }
+ ],
+ "client_capabilities": {
+  "elicitation": {
+   "form": {},
+   "url": {}
+  }
+ }
+}

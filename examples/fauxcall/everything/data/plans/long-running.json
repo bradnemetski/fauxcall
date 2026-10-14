@@ -1,0 +1,225 @@
+{
+ "name": "long-running",
+ "created_at": "2026-10-13T22:00:00Z",
+ "calls": [
+  {
+   "id": "lro-2-4",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "arguments": {
+      "duration": 2,
+      "steps": 4
+     },
+     "_meta": {
+      "progressToken": "lro-token-1"
+     }
+    }
+   }
+  },
+  {
+   "id": "lro-1-1",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "arguments": {
+      "duration": 1,
+      "steps": 1
+     },
+     "_meta": {
+      "progressToken": 7
+     }
+    }
+   }
+  },
+  {
+   "id": "lro-0-3",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "arguments": {
+      "duration": 0,
+      "steps": 3
+     },
+     "_meta": {
+      "progressToken": "t0"
+     }
+    }
+   }
+  },
+  {
+   "id": "lro-3-2",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "arguments": {
+      "duration": 3,
+      "steps": 2
+     },
+     "_meta": {
+      "progressToken": "t3"
+     }
+    }
+   }
+  },
+  {
+   "id": "lro-frac",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "arguments": {
+      "duration": 1.5,
+      "steps": 3
+     },
+     "_meta": {
+      "progressToken": "tf"
+     }
+    }
+   }
+  },
+  {
+   "id": "lro-steps0",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "arguments": {
+      "duration": 1,
+      "steps": 0
+     },
+     "_meta": {
+      "progressToken": "ts0"
+     }
+    }
+   }
+  },
+  {
+   "id": "lro-steps-frac",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "arguments": {
+      "duration": 1,
+      "steps": 2.5
+     },
+     "_meta": {
+      "progressToken": "tsf"
+     }
+    }
+   }
+  },
+  {
+   "id": "lro-neg",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "arguments": {
+      "duration": -1,
+      "steps": 2
+     },
+     "_meta": {
+      "progressToken": "tn"
+     }
+    }
+   }
+  },
+  {
+   "id": "lro-notoken",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "arguments": {
+      "duration": 1,
+      "steps": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "lro-default",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "_meta": {
+      "progressToken": "tdef"
+     }
+    }
+   }
+  },
+  {
+   "id": "lro-bad-dur",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "arguments": {
+      "duration": "x"
+     },
+     "_meta": {
+      "progressToken": "tb"
+     }
+    }
+   }
+  },
+  {
+   "id": "lro-bad-steps",
+   "endpoint": "MCP tools/call:trigger-long-running-operation",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-long-running-operation",
+     "arguments": {
+      "steps": null
+     },
+     "_meta": {
+      "progressToken": "tb2"
+     }
+    }
+   }
+  }
+ ]
+}

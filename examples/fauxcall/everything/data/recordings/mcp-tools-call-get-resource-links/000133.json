@@ -1,0 +1,170 @@
+{
+  "id": "000133",
+  "endpoint": "MCP tools/call:get-resource-links",
+  "purpose": "variation",
+  "plan_call": "links-7",
+  "started_at": "2026-10-14T01:40:41.195370Z",
+  "started_ns": 1791942041195370000,
+  "elapsed_ms": 4.533,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "tools/call",
+        "params": {
+          "name": "get-resource-links",
+          "arguments": {
+            "count": 7
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:40:41 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Here are 7 resource links to resources available in this server:"
+            },
+            {
+              "name": "Blob Resource 1",
+              "uri": "demo://resource/dynamic/blob/1",
+              "description": "Resource 1: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            },
+            {
+              "name": "Text Resource 2",
+              "uri": "demo://resource/dynamic/text/2",
+              "description": "Resource 2: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            },
+            {
+              "name": "Blob Resource 3",
+              "uri": "demo://resource/dynamic/blob/3",
+              "description": "Resource 3: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            },
+            {
+              "name": "Text Resource 4",
+              "uri": "demo://resource/dynamic/text/4",
+              "description": "Resource 4: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            },
+            {
+              "name": "Blob Resource 5",
+              "uri": "demo://resource/dynamic/blob/5",
+              "description": "Resource 5: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            },
+            {
+              "name": "Text Resource 6",
+              "uri": "demo://resource/dynamic/text/6",
+              "description": "Resource 6: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            },
+            {
+              "name": "Blob Resource 7",
+              "uri": "demo://resource/dynamic/blob/7",
+              "description": "Resource 7: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 7
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.333,
+      "kind": "sse",
+      "event": "message",
+      "id": "991f9dd1-378b-472e-9b47-bc99fd84dbcb",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Here are 7 resource links to resources available in this server:\"},{\"name\":\"Blob Resource 1\",\"uri\":\"demo://resource/dynamic/blob/1\",\"description\":\"Resource 1: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Text Resource 2\",\"uri\":\"demo://resource/dynamic/text/2\",\"description\":\"Resource 2: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Blob Resource 3\",\"uri\":\"demo://resource/dynamic/blob/3\",\"description\":\"Resource 3: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Text Resource 4\",\"uri\":\"demo://resource/dynamic/text/4\",\"description\":\"Resource 4: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Blob Resource 5\",\"uri\":\"demo://resource/dynamic/blob/5\",\"description\":\"Resource 5: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Text Resource 6\",\"uri\":\"demo://resource/dynamic/text/6\",\"description\":\"Resource 6: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Blob Resource 7\",\"uri\":\"demo://resource/dynamic/blob/7\",\"description\":\"Resource 7: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"}]},\"jsonrpc\":\"2.0\",\"id\":7}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

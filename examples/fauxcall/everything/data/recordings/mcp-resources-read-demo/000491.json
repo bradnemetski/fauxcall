@@ -1,0 +1,114 @@
+{
+  "id": "000491",
+  "endpoint": "MCP resources/read:demo:",
+  "purpose": "edge",
+  "plan_call": "iu-4",
+  "started_at": "2026-10-14T02:23:10.674737Z",
+  "started_ns": 1791944590674737000,
+  "elapsed_ms": 5.905,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo:"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "167"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 02:23:10 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Resource demo: not found"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.613,
+      "kind": "sse",
+      "event": "message",
+      "id": "b31a2e4b-3da9-48aa-b00c-51b1529d0d1f",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":5,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Resource demo: not found\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+ "name": "no-capabilities",
+ "created_at": "2026-10-13T22:00:00Z",
+ "calls": [
+  {
+   "id": "nc-sampling",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "hi"
+     }
+    }
+   }
+  },
+  {
+   "id": "nc-elicit",
+   "endpoint": "MCP tools/call:trigger-elicitation-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "nc-url",
+   "endpoint": "MCP tools/call:trigger-url-elicitation",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-url-elicitation",
+     "arguments": {
+      "url": "https://example.com"
+     }
+    }
+   }
+  },
+  {
+   "id": "nc-roots",
+   "endpoint": "MCP tools/call:get-roots-list",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-roots-list",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "nc-sa",
+   "endpoint": "MCP tools/call:trigger-sampling-request-async",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request-async",
+     "arguments": {
+      "prompt": "hi"
+     }
+    }
+   }
+  },
+  {
+   "id": "nc-ea",
+   "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request-async",
+     "arguments": {}
+    }
+   }
+  }
+ ],
+ "client_capabilities": {}
+}

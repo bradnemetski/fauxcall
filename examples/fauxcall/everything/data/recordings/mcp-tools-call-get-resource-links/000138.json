@@ -1,0 +1,135 @@
+{
+  "id": "000138",
+  "endpoint": "MCP tools/call:get-resource-links",
+  "purpose": "invalid",
+  "plan_call": "links-bad-3",
+  "started_at": "2026-10-14T01:40:43.700938Z",
+  "started_ns": 1791942043700938000,
+  "elapsed_ms": 2.49,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 12,
+        "method": "tools/call",
+        "params": {
+          "name": "get-resource-links",
+          "arguments": {
+            "count": 2.5
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:40:43 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Here are 2.5 resource links to resources available in this server:"
+            },
+            {
+              "name": "Blob Resource 1",
+              "uri": "demo://resource/dynamic/blob/1",
+              "description": "Resource 1: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            },
+            {
+              "name": "Text Resource 2",
+              "uri": "demo://resource/dynamic/text/2",
+              "description": "Resource 2: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 12
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.369,
+      "kind": "sse",
+      "event": "message",
+      "id": "97744dff-78ff-44b1-aae4-ebea7ae050c2",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Here are 2.5 resource links to resources available in this server:\"},{\"name\":\"Blob Resource 1\",\"uri\":\"demo://resource/dynamic/blob/1\",\"description\":\"Resource 1: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Text Resource 2\",\"uri\":\"demo://resource/dynamic/text/2\",\"description\":\"Resource 2: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"}]},\"jsonrpc\":\"2.0\",\"id\":12}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

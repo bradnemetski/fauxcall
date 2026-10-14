@@ -1,126 +1,126 @@
 {
-  "name": "get-structured-content",
-  "created_at": "2026-10-12T22:30:00Z",
-  "calls": [
-    {
-      "id": "sc-ny",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": "New York"
-          }
-        }
-      }
-    },
-    {
-      "id": "sc-chi",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": "Chicago"
-          }
-        }
-      }
-    },
-    {
-      "id": "sc-la",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": "Los Angeles"
-          }
-        }
-      }
-    },
-    {
-      "id": "sc-boston",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": "Boston"
-          }
-        }
-      }
-    },
-    {
-      "id": "sc-case",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": "new york"
-          }
-        }
-      }
-    },
-    {
-      "id": "sc-missing",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {}
-        }
-      }
-    },
-    {
-      "id": "sc-number",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": 1
-          }
-        }
-      }
-    },
-    {
-      "id": "sc-repeat",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "time_profile",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": "Chicago"
-          }
-        }
-      },
-      "repeat": 3,
-      "interval_ms": 1500
+ "name": "get-structured-content",
+ "created_at": "2026-10-13T22:00:00Z",
+ "calls": [
+  {
+   "id": "sc-0",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": "New York"
+     }
     }
-  ]
+   }
+  },
+  {
+   "id": "sc-1",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": "Chicago"
+     }
+    }
+   }
+  },
+  {
+   "id": "sc-2",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": "Los Angeles"
+     }
+    }
+   }
+  },
+  {
+   "id": "sc-repeat",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": "New York"
+     }
+    }
+   },
+   "repeat": 3,
+   "interval_ms": 1000
+  },
+  {
+   "id": "sc-bad",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": "Boston"
+     }
+    }
+   }
+  },
+  {
+   "id": "sc-lower",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": "chicago"
+     }
+    }
+   }
+  },
+  {
+   "id": "sc-missing",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "sc-number",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": 5
+     }
+    }
+   }
+  }
+ ]
 }

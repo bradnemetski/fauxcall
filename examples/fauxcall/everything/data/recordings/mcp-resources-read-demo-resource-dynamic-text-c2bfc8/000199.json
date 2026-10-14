@@ -1,0 +1,114 @@
+{
+  "id": "000199",
+  "endpoint": "MCP resources/read:demo://resource/dynamic/text",
+  "purpose": "invalid",
+  "plan_call": "read-unknown-2",
+  "started_at": "2026-10-14T01:43:07.499909Z",
+  "started_ns": 1791942187499909000,
+  "elapsed_ms": 3.021,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 34,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/dynamic/text"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "191"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:43:07 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 34,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Resource demo://resource/dynamic/text not found"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.782,
+      "kind": "sse",
+      "event": "message",
+      "id": "bf29a9a3-d486-4eb8-8393-485c659752a4",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":34,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Resource demo://resource/dynamic/text not found\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "id": "000087",
+  "endpoint": "MCP tools/call:get-sum",
+  "purpose": "variation",
+  "plan_call": "sum-12",
+  "started_at": "2026-10-14T01:40:13.843064Z",
+  "started_ns": 1791942013843064000,
+  "elapsed_ms": 2.595,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 14,
+        "method": "tools/call",
+        "params": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 100,
+            "b": 0.001
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:40:13 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "The sum of 100 and 0.001 is 100.001."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 14
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.474,
+      "kind": "sse",
+      "event": "message",
+      "id": "841785f3-8698-40e4-90d1-27e181bc70d5",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"The sum of 100 and 0.001 is 100.001.\"}]},\"jsonrpc\":\"2.0\",\"id\":14}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

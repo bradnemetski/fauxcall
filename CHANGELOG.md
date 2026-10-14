@@ -58,7 +58,7 @@ project's Everything reference server, built by a headless run, shows all of it.
   pushes while no stream is open, and replays the rest of a stream to a client that reconnects
   with `Last-Event-ID`, as the real server does.
 - An MCP example: `examples/fauxcall/everything`, a fake of the MCP project's Everything reference
-  server built by a headless run (100% parity, independent 100% over 144 of 192 calls).
+  server built by a headless run (100% parity, independent 100% over 160 of 205 calls).
 
 **Testing**
 

@@ -1,0 +1,129 @@
+{
+  "id": "000345",
+  "endpoint": "MCP tools/call:trigger-sampling-request",
+  "purpose": "variation",
+  "plan_call": "smp-max",
+  "started_at": "2026-10-14T01:48:59.845695Z",
+  "started_ns": 1791942539845695000,
+  "elapsed_ms": 4.605,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "Summarize MCP in one line",
+            "maxTokens": 20
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:48:59 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "LLM sampling result: \n{\n  \"model\": \"claude-test\",\n  \"stopReason\": \"maxTokens\",\n  \"role\": \"assistant\",\n  \"content\": {\n    \"type\": \"text\",\n    \"text\": \"MCP connects models to tools.\"\n  }\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 3
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.841,
+      "kind": "sse",
+      "event": "message",
+      "id": "7abb9d31-0185-414b-ba75-8bb0053a26e3",
+      "data": "{\"method\":\"sampling/createMessage\",\"params\":{\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"Resource trigger-sampling-request context: Summarize MCP in one line\"}}],\"systemPrompt\":\"You are a helpful test server.\",\"maxTokens\":20,\"temperature\":0.7},\"jsonrpc\":\"2.0\",\"id\":1}"
+    },
+    {
+      "t_ms": 4.493,
+      "kind": "sse",
+      "event": "message",
+      "id": "1760d4ea-be8b-484d-bed5-28908af7bd0a",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"LLM sampling result: \\n{\\n  \\\"model\\\": \\\"claude-test\\\",\\n  \\\"stopReason\\\": \\\"maxTokens\\\",\\n  \\\"role\\\": \\\"assistant\\\",\\n  \\\"content\\\": {\\n    \\\"type\\\": \\\"text\\\",\\n    \\\"text\\\": \\\"MCP connects models to tools.\\\"\\n  }\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":3}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

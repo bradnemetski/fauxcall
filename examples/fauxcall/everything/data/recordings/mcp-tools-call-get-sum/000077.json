@@ -1,0 +1,122 @@
+{
+  "id": "000077",
+  "endpoint": "MCP tools/call:get-sum",
+  "purpose": "variation",
+  "plan_call": "sum-2",
+  "started_at": "2026-10-14T01:40:08.825163Z",
+  "started_ns": 1791942008825163000,
+  "elapsed_ms": 10.077,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tools/call",
+        "params": {
+          "name": "get-sum",
+          "arguments": {
+            "a": -5,
+            "b": 12
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:40:08 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "The sum of -5 and 12 is 7."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 4
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 9.718,
+      "kind": "sse",
+      "event": "message",
+      "id": "348e5222-fab8-4e86-b33a-4301dbf99339",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"The sum of -5 and 12 is 7.\"}]},\"jsonrpc\":\"2.0\",\"id\":4}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

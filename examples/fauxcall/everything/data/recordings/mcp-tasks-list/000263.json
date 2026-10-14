@@ -1,10 +1,10 @@
 {
   "id": "000263",
   "endpoint": "MCP tasks/list",
-  "plan_call": "rq-list",
-  "started_at": "2026-10-12T22:20:05.645109Z",
-  "started_ns": 1791843605645109000,
-  "elapsed_ms": 6.977,
+  "plan_call": "tasks-list-empty",
+  "started_at": "2026-10-14T01:44:03.472133Z",
+  "started_ns": 1791942243472133000,
+  "elapsed_ms": 4.422,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -32,7 +32,7 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 13,
+        "id": 58,
         "method": "tasks/list",
         "params": {}
       }
@@ -75,11 +75,11 @@
       ],
       [
         "content-length",
-        "342"
+        "122"
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 22:20:05 GMT"
+        "Wed, 14 Oct 2026 01:44:03 GMT"
       ]
     ],
     "body": {
@@ -87,31 +87,21 @@
       "content_type": "text/event-stream",
       "json": {
         "result": {
-          "tasks": [
-            {
-              "taskId": "ac237ae0a33c7d811a405e41a02fb731",
-              "status": "completed",
-              "ttl": 300000,
-              "createdAt": "2026-10-12T22:19:57.081Z",
-              "lastUpdatedAt": "2026-10-12T22:20:01.090Z",
-              "pollInterval": 1000,
-              "statusMessage": "Generating report..."
-            }
-          ],
+          "tasks": [],
           "_meta": {}
         },
         "jsonrpc": "2.0",
-        "id": 13
+        "id": 58
       }
     }
   },
   "stream": [
     {
-      "t_ms": 6.628,
+      "t_ms": 4.279,
       "kind": "sse",
       "event": "message",
-      "id": "5107168b-78ef-4c31-a261-6708a1316c97",
-      "data": "{\"result\":{\"tasks\":[{\"taskId\":\"ac237ae0a33c7d811a405e41a02fb731\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-12T22:19:57.081Z\",\"lastUpdatedAt\":\"2026-10-12T22:20:01.090Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"}],\"_meta\":{}},\"jsonrpc\":\"2.0\",\"id\":13}"
+      "id": "32e1c1e8-fb55-47ec-b771-68d66a88add3",
+      "data": "{\"result\":{\"tasks\":[],\"_meta\":{}},\"jsonrpc\":\"2.0\",\"id\":58}"
     }
   ],
   "redacted": [

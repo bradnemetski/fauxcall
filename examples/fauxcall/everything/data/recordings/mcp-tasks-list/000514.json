@@ -1,0 +1,114 @@
+{
+  "id": "000514",
+  "endpoint": "MCP tasks/list",
+  "purpose": "edge",
+  "plan_call": "tl-badcursor",
+  "started_at": "2026-10-14T02:50:26.333198Z",
+  "started_ns": 1791946226333198000,
+  "elapsed_ms": 5.458,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 15,
+        "method": "tasks/list",
+        "params": {
+          "cursor": "bogus"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "187"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 02:50:26 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 15,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Failed to list tasks: Invalid cursor: bogus"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.183,
+      "kind": "sse",
+      "event": "message",
+      "id": "75b8b06e-36d0-49ab-878d-f8f504b251f9",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":15,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Failed to list tasks: Invalid cursor: bogus\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

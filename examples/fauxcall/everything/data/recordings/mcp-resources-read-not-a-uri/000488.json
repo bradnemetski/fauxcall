@@ -1,0 +1,114 @@
+{
+  "id": "000488",
+  "endpoint": "MCP resources/read:not a uri",
+  "purpose": "edge",
+  "plan_call": "iu-1",
+  "started_at": "2026-10-14T02:23:09.168056Z",
+  "started_ns": 1791944589168056000,
+  "elapsed_ms": 4.863,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "resources/read",
+        "params": {
+          "uri": "not a uri"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "136"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 02:23:09 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "error": {
+          "code": -32603,
+          "message": "Invalid URL"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.609,
+      "kind": "sse",
+      "event": "message",
+      "id": "3e5acf8b-8b28-4b49-8d17-0b68182432c4",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":2,\"error\":{\"code\":-32603,\"message\":\"Invalid URL\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

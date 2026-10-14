@@ -1,0 +1,101 @@
+{
+  "id": "000482",
+  "endpoint": "MCP GET:stream",
+  "started_at": "2026-10-14T01:51:51.140184Z",
+  "started_ns": 1791942711140184000,
+  "elapsed_ms": 12569.069,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:51:51 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "content_type": "text/event-stream"
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 518.042,
+      "kind": "sse",
+      "event": "message",
+      "id": "3461a901-a028-40ec-9ba9-716a69fc914d",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"emergency\",\"data\":\"Emergency-level message - SessionId 378cc29d-47cd-43f9-86d2-21a260f65c3f\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 5522.88,
+      "kind": "sse",
+      "event": "message",
+      "id": "09a53bf9-1382-4a3c-b378-7e913bd54de2",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"alert\",\"data\":\"Alert level-message - SessionId 378cc29d-47cd-43f9-86d2-21a260f65c3f\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10521.715,
+      "kind": "sse",
+      "event": "message",
+      "id": "e8998386-c411-4475-9493-659ee994badc",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"alert\",\"data\":\"Alert level-message - SessionId 378cc29d-47cd-43f9-86d2-21a260f65c3f\"},\"jsonrpc\":\"2.0\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

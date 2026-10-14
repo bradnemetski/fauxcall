@@ -1,0 +1,114 @@
+{
+  "id": "000266",
+  "endpoint": "MCP tasks/cancel",
+  "purpose": "invalid",
+  "plan_call": "tasks-cancel-unknown",
+  "started_at": "2026-10-14T01:44:04.975532Z",
+  "started_ns": 1791942244975532000,
+  "elapsed_ms": 8.3,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 61,
+        "method": "tasks/cancel",
+        "params": {
+          "taskId": "no-such-task"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "172"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:44:04 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 61,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Task not found: no-such-task"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 7.824,
+      "kind": "sse",
+      "event": "message",
+      "id": "b4f65558-4261-4a24-8be7-e7ac205ba156",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":61,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Task not found: no-such-task\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

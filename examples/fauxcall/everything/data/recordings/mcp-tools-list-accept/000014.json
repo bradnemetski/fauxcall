@@ -1,0 +1,92 @@
+{
+  "id": "000014",
+  "endpoint": "MCP tools/list:accept",
+  "purpose": "discovery",
+  "started_at": "2026-10-14T01:34:57.238967Z",
+  "started_ns": 1791941697238967000,
+  "elapsed_ms": 7.35,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 9000003,
+        "method": "tools/list"
+      }
+    }
+  },
+  "response": {
+    "status": 406,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "142"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:34:57 GMT"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "keep-alive",
+        "timeout=5"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "error": {
+          "code": -32000,
+          "message": "Not Acceptable: Client must accept both application/json and text/event-stream"
+        },
+        "id": null
+      }
+    }
+  },
+  "redacted": [
+    "request.header:mcp-session-id"
+  ]
+}

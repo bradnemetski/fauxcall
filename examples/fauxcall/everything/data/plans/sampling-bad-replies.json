@@ -1,0 +1,78 @@
+{
+ "name": "sampling-bad-replies",
+ "created_at": "2026-10-13T22:00:00Z",
+ "calls": [
+  {
+   "id": "sbr-1",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "a"
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "role": "user",
+     "content": {}
+    }
+   }
+  },
+  {
+   "id": "sbr-2",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "b"
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "model": "m",
+     "role": "assistant",
+     "content": {
+      "type": "video"
+     }
+    }
+   }
+  },
+  {
+   "id": "sbr-3",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "c"
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "model": 5,
+     "role": "robot",
+     "content": {
+      "type": "text"
+     }
+    }
+   }
+  }
+ ],
+ "client_capabilities": {
+  "sampling": {}
+ }
+}

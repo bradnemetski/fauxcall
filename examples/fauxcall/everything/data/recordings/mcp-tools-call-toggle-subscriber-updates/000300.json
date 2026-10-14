@@ -1,0 +1,118 @@
+{
+  "id": "000300",
+  "endpoint": "MCP tools/call:toggle-subscriber-updates",
+  "plan_call": "lg-sub-on",
+  "started_at": "2026-10-14T01:47:27.766300Z",
+  "started_ns": 1791942447766300000,
+  "elapsed_ms": 5.082,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "tools/call",
+        "params": {
+          "name": "toggle-subscriber-updates",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:47:27 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Started simulated resource updated notifications for session 66961bb9-d8bb-4ce0-8443-f1eff2c979e6 at a 5 second pace. Client will receive updates for any resources the it is subscribed to."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 6
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.905,
+      "kind": "sse",
+      "event": "message",
+      "id": "fc06107d-044d-4bad-920c-3108ae6b3448",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Started simulated resource updated notifications for session 66961bb9-d8bb-4ce0-8443-f1eff2c979e6 at a 5 second pace. Client will receive updates for any resources the it is subscribed to.\"}]},\"jsonrpc\":\"2.0\",\"id\":6}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

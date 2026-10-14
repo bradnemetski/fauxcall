@@ -64,44 +64,63 @@ Tools: 19 · resources: 7 · prompts: 4.
 ## Known limitations and notes
 
 <!-- fauxcall:notes (kept by `fauxcall scaffold`; the rest of this file is regenerated) -->
-### Known limitations (what differs from the real Everything server, and why)
+Built from recordings of `@modelcontextprotocol/server-everything` 2026.8.31 (serverInfo
+`mcp-servers/everything` 2.0.0), run locally. Every tool and method is computed by
+`src/fauxcall_everything/` from what was recorded; the package's published source was read as
+documentation (never run or called) to explain the rules behind the recordings.
 
-Evidence: ~430 recorded exchanges against `@modelcontextprotocol/server-everything` 2026.8.31 (SDK ^1.30); where recording was impossible, the server's and SDK's published source was read as documentation. Parity: 100% overall and independent over 129 scenarios.
+What differs from the real server, and why:
 
-**Tools that send requests to the client.** FauxCall can't send requests back to a client (sampling, elicitation, roots). The real server lists `trigger-sampling-request`, `trigger-elicitation-request`, `trigger-url-elicitation`, `get-roots-list` and the two `-async` tools only to clients declaring the matching capabilities, and the fake gates them the same way (order and predicates from the recordings and source). Called by such a client, the fake behaves as the real server does with a client that **never answers**:
-- `trigger-sampling-request(-async)`, `trigger-elicitation-request-async`: `MCP error -32001: Request timed out` after 60 s.
-- `trigger-elicitation-request`, `trigger-url-elicitation`: the same after 10 minutes.
-- `get-roots-list`: "no roots are currently configured" after 60 s. The real server would list the client's roots at once.
-
-`trigger-url-elicitation` with `errorPath: true` answers the real `-32042` error. Clients like Claude Code declare roots and elicitation, so expect these stalls; the fast mode used in tests skips them. Without the capability, the tools answer the recorded "Tool … not found".
-
-**Ambiguous research queries.** With an elicitation-capable client, `simulate-research-query` `ambiguous: true` follows the source: `input_required`, then the SDK's 60 s timeout, then the "elicitation unavailable" default interpretation. This path is not recorded.
-
-**GET-stream notifications** (simulated logs, `resources/updated`, subscribe/unsubscribe logs, `resources/list_changed`):
-- Modeled from source; the subscribe log, the first update and the first simulated log message were verified against the real server (`test_pushed_log_and_update_messages`).
-- Messages are random and on a 5 s pace, so values differ run to run.
-- `notifications/resources/list_changed` on session-resource registration comes from the SDK source and is unverified.
-
-**`gzip-file-as-resource` never goes to the network.**
-- `data:` URLs are decoded per WHATWG.
-- The default README URL replays the README recorded on 2026-10-12. The live one on GitHub may have changed since.
-- Any other http(s) URL answers `fetch failed`; the real server would fetch it (10 MB / 30 s limits not modeled).
-- Fetch latency (~200-300 ms for real) is not added.
-
-**Session resources are per session.** In the real server a module-global map means session B gzipping the same name removes session A's resource. The fake keeps them per session.
-
-**Tasks.** The store keeps a task for its TTL (300000 ms, always) after its last update. The real cleanup timer starts at creation and resets at terminal states.
-
-**Transport and protocol details the FauxCall runtime handles generically** (not adjustable from the fake's code):
-- Responses put `jsonrpc`/`id` before `result`; the real server puts `result` first.
-- Session ids are 32-hex and SSE event ids 16-hex; the real server uses UUIDs.
-- No priming SSE event for 2025-11-25 clients.
-- No `400 Unsupported protocol version` for a bad `mcp-protocol-version` header.
-- A bogus or stale `Mcp-Session-Id` gets "Server not initialized" instead of "No valid session ID provided".
-- No 406/415 for wrong `Accept`/`Content-Type`.
-- No `Last-Event-ID` replay, no 409 for a second GET stream, no handling of `notifications/cancelled`.
-- `tools/call` of an **unknown** tool with a `task` param answers "Tool … not found" (the real SDK: `-32602 Invalid task creation result`). For known tools the fake matches.
-- Unsupported protocol versions negotiate to `2025-11-25` (the SDK's latest; per source, not probed).
-
-**Time.** Dynamic resources embed `toLocaleTimeString()` of the server's zone: US Eastern observed; set `FAUXCALL_EVERYTHING_TZ` to change it.
+- **No network.** `gzip-file-as-resource` gzips `data:` URIs exactly as the real server does
+  (byte-identical output). For `http(s)` URLs the fake never fetches: the default README URL
+  returns the bytes recorded on 2026-10-14; any other URL answers `fetch failed`, which is what
+  the real server says when its fetch fails. Against the real server, other public URLs would
+  succeed.
+- **Server clock and zone.** Dynamic resources print `toLocaleTimeString()` in the real server's
+  local zone, modeled as `America/New_York` (recordings showed UTC-4 in October; a host in a
+  UTC-4 zone without daylight saving time would differ in winter). Move the fake's
+  clock with `POST /__fauxcall/clock` and these times follow it. Task timestamps
+  (`createdAt`, `lastUpdatedAt`) land on whole seconds after creation; the real server adds a few
+  milliseconds of scheduling jitter.
+- **Random log levels.** `toggle-simulated-logging` sends a log message at a random level every
+  5 seconds, as the real one does. The fake's random sequence isn't the real one's, and its order
+  is repeatable per session.
+- **Roots handshake.** The real server asks for roots on the client's GET stream 350 ms after
+  `initialized`. If no stream is open then, that request is lost (recording 000497), and the
+  roots are asked for again when `get-roots-list` runs. The fake does the same. Without a GET
+  stream, `get-roots-list` waits out the SDK's 60 s timeout on both sides; in fast mode (tests)
+  the fake skips that wait.
+- **Shared server state across clients.** The real server keeps some maps per process: a gzip
+  file registered under a name another client already used removes it from that client's
+  session, and resource subscriptions are ordered by first subscription. The fake keeps these per
+  FauxCall evaluation session (`X-Fauxcall-Session`), so parallel evaluations stay isolated.
+  When a gzip file moves to another client, the original client gets no
+  `notifications/resources/list_changed`; the real server would send one.
+- **Not recorded, taken from the server's source:** the 10-minute elicitation timeout, the 60- and
+  600-poll limits of the async client-task tools, zod's message for a sampling reply missing
+  `content`, resource-template completion for arguments other than `resourceId`, task expiry
+  (300 s after creation, restarted when the task ends), non-finite numbers, and Node's timer
+  overflow (steps longer than 2^31-1 ms fire after 1 ms). `tasks/list` paging was recorded:
+  10 per page, and the cursor is the last task id of the page.
+- **Before `notifications/initialized`.** The real server registers its capability-dependent
+  tools (sampling, elicitation, roots, research, async) when the client sends `initialized`, and
+  announces them with `notifications/tools/list_changed`. A client that lists or calls tools
+  between `initialize` and `initialized` sees only the 12 base tools there. The fake offers them
+  from `initialize` on and sends no `list_changed`; every MCP client sends `initialized` first.
+- **Protocol versions.** The fake negotiates like the SDK's source: a supported version
+  (2025-11-25, 2025-06-18, 2025-03-26, 2024-11-05, 2024-10-07) is echoed, and anything else gets
+  2025-11-25. The recorder can't send a second `initialize` to probe this, so it comes from the
+  source.
+- **Wire details of the FauxCall runtime.** Requests the fake sends to the client use string ids
+  (`"fauxcall-1"`); the real server numbers them per session. A second `initialize` in a session
+  is refused with the caller's request id; the real server answers with `"id": null`. A body
+  that isn't JSON gets `Parse error`; the real server says `Parse error: Invalid JSON`.
+- **Reply checks not reproduced.** The real server checks client replies with zod. The fake
+  reproduces the checks on sampling results and on the elicitation `action`, but not these:
+  - elicitation `content` values that aren't primitives;
+  - a `trigger-sampling-request-async` reply that is neither a task nor a full message. The fake
+    echoes it as `[SYNC]`; the real server answers with a zod error.
+- **`get-env`** returns the recorded environment of the real server's process (an almost empty
+  one: `PATH`, `HOME=/nonexistent/home`, `PORT`, and macOS's `__CF_USER_TEXT_ENCODING`, which
+  includes the local uid 501).
 <!-- /fauxcall:notes -->

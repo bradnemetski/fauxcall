@@ -1,0 +1,132 @@
+{
+  "id": "000375",
+  "endpoint": "MCP tools/call:trigger-url-elicitation",
+  "purpose": "edge",
+  "plan_call": "url-mailto",
+  "started_at": "2026-10-14T01:49:15.465573Z",
+  "started_ns": 1791942555465573000,
+  "elapsed_ms": 9.617,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 22,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-url-elicitation",
+          "arguments": {
+            "url": "mailto:someone@example.com"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:49:15 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "✅ User completed the URL elicitation flow.\nElicitation ID: 28a8029c-2681-4b90-ad1d-5df62b0ecaa9\nURL: mailto:someone@example.com"
+            },
+            {
+              "type": "text",
+              "text": "\nRaw result: {\n  \"action\": \"accept\"\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 22
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.954,
+      "kind": "sse",
+      "event": "message",
+      "id": "321c901d-e289-47fb-b825-7389906e9ba3",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"mode\":\"url\",\"url\":\"mailto:someone@example.com\",\"message\":\"Please open the link to complete this action.\",\"elicitationId\":\"28a8029c-2681-4b90-ad1d-5df62b0ecaa9\"},\"jsonrpc\":\"2.0\",\"id\":15}"
+    },
+    {
+      "t_ms": 9.351,
+      "kind": "sse",
+      "event": "message",
+      "id": "0ccd943e-efd5-4194-b4d6-ea9d9ab5c4f5",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"✅ User completed the URL elicitation flow.\\nElicitation ID: 28a8029c-2681-4b90-ad1d-5df62b0ecaa9\\nURL: mailto:someone@example.com\"},{\"type\":\"text\",\"text\":\"\\nRaw result: {\\n  \\\"action\\\": \\\"accept\\\"\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":22}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

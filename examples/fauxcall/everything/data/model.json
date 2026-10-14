@@ -8,7 +8,7 @@
     "spec_url": "http://127.0.0.1:3101/mcp",
     "spec_file": "source/mcp.json",
     "title": "Everything Reference Server",
-    "fetched_at": "2026-10-12T22:13:33.192010Z"
+    "fetched_at": "2026-10-14T01:34:50.201006Z"
   },
   "real": {
     "base_url": "http://127.0.0.1:3101"
@@ -25,6 +25,54 @@
       },
       "default_protocol_version": "2025-11-25",
       "sse_event_ids": true,
+      "member_order": [
+        "result",
+        "jsonrpc",
+        "id"
+      ],
+      "session_id_format": "uuid",
+      "event_id_format": "uuid",
+      "priming_versions": [
+        "2025-11-25"
+      ],
+      "refusals": {
+        "accept": {
+          "status": 406,
+          "content_type": "application/json",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Not Acceptable: Client must accept both application/json and text/event-stream\"},\"id\":null}"
+        },
+        "content_type": {
+          "status": 415,
+          "content_type": "application/json",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Unsupported Media Type: Content-Type must be application/json\"},\"id\":null}"
+        },
+        "protocol_header": {
+          "status": 400,
+          "content_type": "application/json",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: Unsupported protocol version: 1999-01-01 (supported versions: 2025-11-25, 2025-06-18, 2025-03-26, 2024-11-05, 2024-10-07)\"},\"id\":null}"
+        },
+        "unknown_session": {
+          "status": 400,
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: No valid session ID provided\"}}"
+        },
+        "get_unknown_session": {
+          "status": 400,
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: No valid session ID provided\"}}"
+        },
+        "delete_unknown_session": {
+          "status": 400,
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: No valid session ID provided\"}}"
+        },
+        "get_second_stream": {
+          "status": 409,
+          "content_type": "application/json",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Conflict: Only one SSE stream is allowed per session\"},\"id\":null}"
+        }
+      },
+      "keep_alive": ": keepalive",
       "reinitialize_status": 400
     },
     "initialize_result": {
@@ -92,31 +140,33 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.539,
-            3.108,
-            3.429,
-            4.152,
-            4.707,
-            5.393,
-            5.458,
-            7.088,
-            7.143,
-            8.707,
-            9.383,
-            9.594,
-            9.917
+            2.45,
+            2.735,
+            3.97,
+            5.22,
+            6.644,
+            7.495,
+            8.107,
+            8.11,
+            8.131,
+            8.621,
+            8.816,
+            9.191,
+            9.59,
+            11.127,
+            11.541
           ],
           "error_samples_ms": [
-            2.307,
-            5.225,
-            5.848,
-            6.286,
-            7.701,
-            8.098
+            3.206,
+            6.87,
+            8.12,
+            8.456,
+            8.854,
+            12.868
           ],
-          "p50_ms": 5.458000000000001,
-          "p90_ms": 9.5518,
-          "p99_ms": 9.87824
+          "p50_ms": 8.11,
+          "p90_ms": 10.5122,
+          "p99_ms": 11.48304
         }
       },
       {
@@ -161,26 +211,25 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.28,
-            2.551,
-            2.631,
-            2.908,
-            4.146,
-            4.887,
-            6.466,
-            7.813,
-            10.443,
-            12.667
+            8.176,
+            8.819,
+            9.745,
+            10.539,
+            10.93,
+            10.969,
+            12.323,
+            12.695
           ],
           "error_samples_ms": [
-            2.699,
-            2.831,
-            4.632,
-            9.896
+            5.02,
+            8.008,
+            8.289,
+            10.975,
+            11.673
           ],
-          "p50_ms": 4.5165,
-          "p90_ms": 10.6654,
-          "p99_ms": 12.46684
+          "p50_ms": 10.734499999999999,
+          "p90_ms": 12.4346,
+          "p99_ms": 12.66896
         }
       },
       {
@@ -203,18 +252,18 @@
             "taskSupport": "forbidden"
           }
         },
-        "behavior": "match",
+        "behavior": "computed",
+        "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.228,
-            2.754,
-            3.841,
-            4.055,
-            4.632
+            4.062,
+            4.237,
+            10.07,
+            13.232
           ],
-          "p50_ms": 3.841,
-          "p90_ms": 4.401199999999999,
-          "p99_ms": 4.6089199999999995
+          "p50_ms": 7.1535,
+          "p90_ms": 12.283400000000002,
+          "p99_ms": 13.137139999999999
         }
       },
       {
@@ -249,27 +298,27 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            4.198,
-            5.421,
-            5.424,
-            7.036,
-            7.292,
-            9.055,
-            9.441,
-            10.463,
-            10.66,
-            13.403,
-            54.235
+            2.49,
+            2.509,
+            2.825,
+            3.269,
+            3.437,
+            3.559,
+            4.533,
+            7.046,
+            22.472
           ],
           "error_samples_ms": [
-            3.022,
-            5.701,
-            6.354,
-            8.068
+            2.586,
+            3.536,
+            6.618,
+            9.061,
+            9.704,
+            10.661
           ],
-          "p50_ms": 9.055,
-          "p90_ms": 13.402999999999999,
-          "p99_ms": 50.151799999999994
+          "p50_ms": 3.437,
+          "p90_ms": 10.131200000000002,
+          "p99_ms": 21.23792
         }
       },
       {
@@ -310,28 +359,38 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            3.948,
-            5.151,
-            5.25,
-            5.372,
-            6.194,
-            6.77,
-            7.168,
-            9.544,
-            11.128
+            2.557,
+            4.584,
+            4.616,
+            4.892,
+            6.048,
+            6.918,
+            7.408,
+            7.426,
+            7.961,
+            8.303,
+            9.015,
+            9.801,
+            9.807,
+            9.924,
+            10.153,
+            10.395,
+            10.841,
+            11.216
           ],
           "error_samples_ms": [
-            4.757,
-            5.007,
-            5.455,
-            6.025,
-            6.999,
-            12.581
+            2.328,
+            3.793,
+            4.657,
+            5.817,
+            7.406,
+            10.668
           ],
-          "p50_ms": 6.194,
-          "p90_ms": 9.8608,
-          "p99_ms": 11.001280000000001
-        }
+          "p50_ms": 8.132,
+          "p90_ms": 10.528799999999999,
+          "p99_ms": 11.152249999999999
+        },
+        "varies": true
       },
       {
         "definition": {
@@ -394,22 +453,23 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.35,
-            2.594,
-            5.339,
-            5.418,
-            7.014,
-            7.115
+            7.859,
+            8.391,
+            8.458,
+            9.098,
+            9.409,
+            10.501,
+            10.786
           ],
           "error_samples_ms": [
-            4.578,
-            5.079,
-            5.851,
-            8.768
+            4.741,
+            7.682,
+            8.289,
+            9.425
           ],
-          "p50_ms": 5.378500000000002,
-          "p90_ms": 7.064500000000001,
-          "p99_ms": 7.109950000000001
+          "p50_ms": 9.098,
+          "p90_ms": 10.615,
+          "p99_ms": 10.7689
         }
       },
       {
@@ -449,28 +509,34 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            3.041,
-            5.744,
-            5.763,
-            5.989,
-            6.144,
-            6.422,
-            7.199,
-            8.884,
-            11.004,
-            11.188,
-            12.357
+            2.595,
+            4.99,
+            5.663,
+            6.066,
+            6.095,
+            7.712,
+            7.944,
+            7.945,
+            8.171,
+            8.273,
+            8.969,
+            8.973,
+            9.161,
+            9.258,
+            10.077,
+            10.093
           ],
           "error_samples_ms": [
-            4.41,
-            4.731,
-            5.455,
-            5.87,
-            5.966
+            4.505,
+            6.115,
+            7.444,
+            10.427,
+            10.633,
+            13.46
           ],
-          "p50_ms": 6.422,
-          "p90_ms": 11.187999999999999,
-          "p99_ms": 12.2401
+          "p50_ms": 8.058,
+          "p90_ms": 9.6675,
+          "p99_ms": 10.0906
         }
       },
       {
@@ -493,18 +559,18 @@
             "taskSupport": "forbidden"
           }
         },
-        "behavior": "match",
+        "behavior": "computed",
+        "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            3.919,
-            4.98,
-            5.364,
-            6.603,
-            6.67
+            7.896,
+            9.014,
+            9.105,
+            9.147
           ],
-          "p50_ms": 5.364,
-          "p90_ms": 6.643199999999999,
-          "p99_ms": 6.66732
+          "p50_ms": 9.0595,
+          "p90_ms": 9.134400000000001,
+          "p99_ms": 9.14574
         }
       },
       {
@@ -552,20 +618,27 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.324,
-            2.867,
-            3.106,
-            7.603
+            2.708,
+            3.306,
+            4.747,
+            5.344,
+            5.899,
+            6.056,
+            8.777,
+            16.579,
+            200.738
           ],
           "error_samples_ms": [
-            2.254,
-            2.574,
-            2.587,
-            40.599
+            2.132,
+            4.997,
+            5.484,
+            5.515,
+            6.014,
+            6.122
           ],
-          "p50_ms": 3.106,
-          "p90_ms": 177.046,
-          "p99_ms": 278.7118
+          "p50_ms": 5.899,
+          "p90_ms": 53.4108,
+          "p99_ms": 186.00528000000003
         }
       },
       {
@@ -592,16 +665,18 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.135,
-            2.16,
-            2.19,
-            2.193,
-            2.229,
-            3.368
+            2.467,
+            4.607,
+            4.61,
+            5.427,
+            5.465,
+            6.257,
+            7.177,
+            9.647
           ],
-          "p50_ms": 2.1915,
-          "p90_ms": 2.7985,
-          "p99_ms": 3.31105
+          "p50_ms": 5.445999999999999,
+          "p90_ms": 7.917999999999999,
+          "p99_ms": 9.4741
         },
         "varies": true
       },
@@ -629,16 +704,16 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.149,
-            2.376,
-            2.413,
-            2.475,
-            2.769,
-            5.62
+            2.406,
+            4.387,
+            5.082,
+            5.584,
+            6.453,
+            9.193
           ],
-          "p50_ms": 2.444,
-          "p90_ms": 4.194500000000001,
-          "p99_ms": 5.47745
+          "p50_ms": 5.332999999999999,
+          "p90_ms": 7.8229999999999995,
+          "p99_ms": 9.056
         },
         "varies": true
       },
@@ -675,19 +750,7 @@
         },
         "behavior": "computed",
         "invalid_args": "accept",
-        "latency": {
-          "samples_ms": [
-            2.385,
-            7.096
-          ],
-          "error_samples_ms": [
-            2.232,
-            2.573
-          ],
-          "p50_ms": 1029.013,
-          "p90_ms": 4411.4258,
-          "p99_ms": 9453.347479999999
-        }
+        "latency": null
       },
       {
         "definition": {
@@ -711,12 +774,7 @@
         },
         "behavior": "computed",
         "invalid_args": "accept",
-        "latency": {
-          "error_samples_ms": [
-            4.996,
-            11.737
-          ]
-        },
+        "latency": null,
         "requires": [
           [
             "roots"
@@ -746,10 +804,25 @@
         "behavior": "computed",
         "invalid_args": "accept",
         "latency": {
+          "samples_ms": [
+            4.935,
+            6.989,
+            9.052,
+            9.223,
+            9.818,
+            9.892,
+            10.005,
+            10.663,
+            11.253,
+            11.362
+          ],
           "error_samples_ms": [
-            5.358,
-            6.373
-          ]
+            2.058,
+            8.412
+          ],
+          "p50_ms": 9.855,
+          "p90_ms": 11.2639,
+          "p99_ms": 11.35219
         },
         "requires": [
           [
@@ -803,17 +876,35 @@
         "behavior": "computed",
         "invalid_args": "accept",
         "latency": {
+          "samples_ms": [
+            5.459,
+            7.56,
+            8.344,
+            9.617,
+            10.134,
+            10.25,
+            10.409
+          ],
           "error_samples_ms": [
-            5.412,
-            5.481,
-            5.631
-          ]
+            2.177,
+            2.383,
+            3.931,
+            4.587,
+            4.922,
+            5.645,
+            5.683,
+            6.011
+          ],
+          "p50_ms": 9.617,
+          "p90_ms": 10.313600000000001,
+          "p99_ms": 10.39946
         },
         "requires": [
           [
             "elicitation.url"
           ]
-        ]
+        ],
+        "varies": true
       },
       {
         "definition": {
@@ -851,11 +942,25 @@
         "behavior": "computed",
         "invalid_args": "accept",
         "latency": {
+          "samples_ms": [
+            4.546,
+            4.605,
+            4.673,
+            4.864,
+            5.742,
+            14.26
+          ],
           "error_samples_ms": [
-            5.273,
-            5.359,
-            6.469
-          ]
+            1.626,
+            1.734,
+            1.996,
+            4.447,
+            4.648,
+            4.754
+          ],
+          "p50_ms": 4.7685,
+          "p90_ms": 10.001,
+          "p99_ms": 13.834100000000001
         },
         "requires": [
           [
@@ -900,20 +1005,24 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.784,
-            2.865,
-            2.941,
-            10.755
+            2.134,
+            2.272,
+            2.465,
+            3.768,
+            4.193,
+            6.993,
+            7.657
           ],
           "error_samples_ms": [
-            4.156,
-            4.689,
-            6.608
+            2.094,
+            2.255,
+            5.263
           ],
-          "p50_ms": 2.9029999999999996,
-          "p90_ms": 8.4108,
-          "p99_ms": 10.520580000000002
-        }
+          "p50_ms": 3.7679999999999993,
+          "p90_ms": 7.2586,
+          "p99_ms": 7.61716
+        },
+        "varies": true
       },
       {
         "definition": {
@@ -950,12 +1059,7 @@
         },
         "behavior": "computed",
         "invalid_args": "accept",
-        "latency": {
-          "error_samples_ms": [
-            4.477,
-            5.488
-          ]
-        },
+        "latency": null,
         "requires": [
           [
             "sampling",
@@ -985,12 +1089,7 @@
         },
         "behavior": "computed",
         "invalid_args": "accept",
-        "latency": {
-          "error_samples_ms": [
-            3.349,
-            4.877
-          ]
-        },
+        "latency": null,
         "requires": [
           [
             "elicitation",
@@ -1188,15 +1287,11 @@
     "arguments_probe_tool": "echo"
   },
   "notes": [
-    "Evidence: ~380 recorded exchanges (all tools, all protocol methods, edge and invalid probes) against @modelcontextprotocol/server-everything 2026.8.31 (SDK ^1.30) on 127.0.0.1:3101. Where recording was impossible, the server's and the SDK's published npm source was read as documentation (marked below).",
-    "Computed in handlers.py: echo, get-sum (JavaScript number formatting), get-annotated-message, get-structured-content, get-resource-links, get-resource-reference, trigger-long-running-operation (progress notifications, Node timer semantics), gzip-file-as-resource (byte-identical gzip, session resources), toggles, simulate-research-query + tasks/*, dynamic resources, prompts, completions. get-env and get-tiny-image, the static documents and the listings replay recordings.",
-    "Validation errors reproduce Zod 4 wording verified against recordings (Invalid input / Invalid option / Too small / Too big / Invalid URL, joined by newlines, in schema order).",
-    "Dynamic resource text embeds toLocaleTimeString() in the server's zone: observed US Eastern (EDT); the fake uses FAUXCALL_EVERYTHING_TZ, default America/New_York.",
-    "From source (not recordable: the recorder opens no GET stream): toggle-simulated-logging sends one log message at once and then one every 5 s, random level, data '<Level>-level message - SessionId <id>', filtered by logging/setLevel; toggle-subscriber-updates sends notifications/resources/updated for each subscribed URI at once and every 5 s; resources/subscribe and unsubscribe log an info message; registering a session resource sends notifications/resources/list_changed.",
-    "From source (the recorder declares no client capabilities, so the real server hides these tools): trigger-sampling-request(-async), trigger-elicitation-request(-async), trigger-url-elicitation and get-roots-list send requests TO the client, which FauxCall cannot do. The fake answers as the SDK does for a client that never responds: 'MCP error -32001: Request timed out' after 60 s (10 min for the elicitation tools), get-roots-list's 'no roots configured' text after 60 s; trigger-url-elicitation's errorPath=true answers the -32042 UrlElicitationRequiredError as the source builds it. Clients without the capability get the recorded 'Tool X not found'.",
-    "gzip-file-as-resource never fetches from the network: data: URLs are decoded (WHATWG rules), the default README URL replays the recorded file, and any other http(s) URL answers 'fetch failed' (the real server would fetch it).",
-    "simulate-research-query: stage timing (~1 s per stage, completes after ~4 s), ttl forced to 300000, per-session task store, cancel/result/list/get errors and tasks/list paging (10 a page, nextCursor = last task id, invalid cursor error) all recorded. The ambiguous=true clarification path for elicitation-capable clients follows the source and is not recorded. Expiry: the fake drops a task its TTL after its last update (source: the cleanup timer starts at creation and resets at terminal states).",
-    "Review round (recordings 000385-000427): task param on non-task tools (-32602 after the tool runs), malformed progressToken (HTTP 400 -32700), WHATWG URI normalization and undecoded UriTemplate matching in resources/read, -32603 request-schema issues for prompts/get, completion/complete and tasks/list, Zod 'received Infinity' for non-finite numbers, completion on a fixed resource URI. Capability gating and tool order now follow recordings 14-19 and the source predicates.",
-    "Runtime-level transport differences (key order of results, id formats, priming event, session/Accept/Content-Type refusals, unknown tool + task) are listed in the README; they can't be changed from handlers."
+    "Source: the server is @modelcontextprotocol/server-everything 2026.8.31 (serverInfo 2.0.0). Every tool, resource, prompt and completion is computed in handlers.py from recorded behavior; the package's published source was read (never executed or called) as documentation to explain recorded behavior.",
+    "Conditional tools: trigger-sampling-request-async needs sampling + tasks.requests.sampling.createMessage, trigger-elicitation-request-async needs elicitation + tasks.requests.elicitation.create (server source; recordings confirm a sampling-only client is not offered it). Introspection only saw them with every capability at once.",
+    "Dynamic resource timestamps use JavaScript toLocaleTimeString() in the server's local zone; recorded at 01:40Z showing 9:40 PM, i.e. UTC-4 in October: modeled as America/New_York.",
+    "gzip-file-as-resource: the fake never fetches http(s) URLs. The default README URL serves the recorded bytes (recorded 2026-10-14); any other http(s) URL answers 'fetch failed', as the real server does when the network fails. data: URIs are decoded and gzipped exactly (byte-identical to Node's zlib for the recorded inputs).",
+    "get-roots-list without an open GET stream: the real server's roots/list request goes unanswered and the call returns after the SDK's 60 s timeout; the fake pauses 60 s (skipped in fast mode).",
+    "Protocol negotiation: the SDK (types.js SUPPORTED_PROTOCOL_VERSIONS, LATEST_PROTOCOL_VERSION) echoes a supported version (incl. 2024-10-07, listed in the recorded 400 for a bad version header) and answers anything else with 2025-11-25. The recorder can't send a second initialize in a session, so this comes from the source, not a recording."
   ]
 }

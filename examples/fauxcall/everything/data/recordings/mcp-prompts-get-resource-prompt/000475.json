@@ -1,0 +1,118 @@
+{
+  "id": "000475",
+  "endpoint": "MCP prompts/get:resource-prompt",
+  "purpose": "edge",
+  "plan_call": "x-prp-blob-lower",
+  "started_at": "2026-10-14T01:51:49.419442Z",
+  "started_ns": 1791942709419442000,
+  "elapsed_ms": 6.897,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 32,
+        "method": "prompts/get",
+        "params": {
+          "name": "resource-prompt",
+          "arguments": {
+            "resourceType": "blob",
+            "resourceId": "2"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "175"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:51:49 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 32,
+        "error": {
+          "code": -32603,
+          "message": "Invalid resourceType: blob. Must be Text or Blob."
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.615,
+      "kind": "sse",
+      "event": "message",
+      "id": "cc88fa71-07c8-44de-a0c5-7a74d93034ef",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":32,\"error\":{\"code\":-32603,\"message\":\"Invalid resourceType: blob. Must be Text or Blob.\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "id": "000192",
+  "endpoint": "MCP resources/read:demo://resource/dynamic/blob/-1",
+  "purpose": "invalid",
+  "plan_call": "read-blob-bad--1",
+  "started_at": "2026-10-14T01:43:03.987365Z",
+  "started_ns": 1791942183987365000,
+  "elapsed_ms": 4.529,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 27,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/dynamic/blob/-1"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "175"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:43:03 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 27,
+        "error": {
+          "code": -32603,
+          "message": "Unknown resource: demo://resource/dynamic/blob/-1"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.367,
+      "kind": "sse",
+      "event": "message",
+      "id": "a06b7e6f-1e8e-46b0-97a3-01075752bec4",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":27,\"error\":{\"code\":-32603,\"message\":\"Unknown resource: demo://resource/dynamic/blob/-1\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

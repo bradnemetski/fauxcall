@@ -1,0 +1,379 @@
+{
+ "name": "research",
+ "created_at": "2026-10-13T22:00:00Z",
+ "calls": [
+  {
+   "id": "rq-1",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "quantum computing"
+     },
+     "task": {
+      "ttl": 60000
+     }
+    }
+   },
+   "capture": {
+    "t1": "$.result.task.taskId"
+   }
+  },
+  {
+   "id": "rq-1-get",
+   "endpoint": "MCP tasks/get",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t1}}"
+    }
+   },
+   "repeat": 6,
+   "interval_ms": 1000
+  },
+  {
+   "id": "rq-list",
+   "endpoint": "MCP tasks/list",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "rq-1-result",
+   "endpoint": "MCP tasks/result",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t1}}"
+    }
+   }
+  },
+  {
+   "id": "rq-1-get-after",
+   "endpoint": "MCP tasks/get",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t1}}"
+    }
+   }
+  },
+  {
+   "id": "rq-1-result-again",
+   "endpoint": "MCP tasks/result",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t1}}"
+    }
+   }
+  },
+  {
+   "id": "rq-2",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "Python",
+      "ambiguous": true
+     },
+     "task": {
+      "ttl": 60000
+     }
+    }
+   },
+   "capture": {
+    "t2": "$.result.task.taskId"
+   }
+  },
+  {
+   "id": "rq-2-get",
+   "endpoint": "MCP tasks/get",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t2}}"
+    }
+   },
+   "repeat": 3,
+   "interval_ms": 1000
+  },
+  {
+   "id": "rq-2-result",
+   "endpoint": "MCP tasks/result",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t2}}"
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept",
+     "content": {
+      "interpretation": "snake"
+     }
+    }
+   }
+  },
+  {
+   "id": "rq-2-get-after",
+   "endpoint": "MCP tasks/get",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t2}}"
+    }
+   }
+  },
+  {
+   "id": "rq-3",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "climate policy",
+      "ambiguous": true
+     },
+     "task": {
+      "ttl": 120000
+     }
+    }
+   },
+   "capture": {
+    "t3": "$.result.task.taskId"
+   }
+  },
+  {
+   "id": "rq-3-result",
+   "endpoint": "MCP tasks/result",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t3}}"
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "decline"
+    }
+   }
+  },
+  {
+   "id": "rq-4",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "cancel me"
+     },
+     "task": {
+      "ttl": 60000
+     }
+    }
+   },
+   "capture": {
+    "t4": "$.result.task.taskId"
+   }
+  },
+  {
+   "id": "rq-4-cancel",
+   "endpoint": "MCP tasks/cancel",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t4}}"
+    }
+   }
+  },
+  {
+   "id": "rq-4-get",
+   "endpoint": "MCP tasks/get",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t4}}"
+    }
+   }
+  },
+  {
+   "id": "rq-4-result",
+   "endpoint": "MCP tasks/result",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t4}}"
+    }
+   }
+  },
+  {
+   "id": "rq-4-cancel-again",
+   "endpoint": "MCP tasks/cancel",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t4}}"
+    }
+   }
+  },
+  {
+   "id": "rq-5",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "slow reader"
+     },
+     "task": {
+      "ttl": 60000
+     }
+    }
+   },
+   "capture": {
+    "t5": "$.result.task.taskId"
+   }
+  },
+  {
+   "id": "rq-5-result-early",
+   "endpoint": "MCP tasks/result",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{t5}}"
+    }
+   }
+  },
+  {
+   "id": "rq-bad",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {},
+     "task": {
+      "ttl": 60000
+     }
+    }
+   }
+  },
+  {
+   "id": "rq-bad-type",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": 42
+     },
+     "task": {
+      "ttl": 60000
+     }
+    }
+   }
+  },
+  {
+   "id": "rq-nottl",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "no ttl"
+     },
+     "task": {}
+    }
+   },
+   "capture": {
+    "t6": "$.result.task.taskId"
+   }
+  },
+  {
+   "id": "rq-list-end",
+   "endpoint": "MCP tasks/list",
+   "purpose": "job_poll",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  }
+ ],
+ "client_capabilities": {
+  "sampling": {},
+  "elicitation": {
+   "form": {},
+   "url": {}
+  },
+  "roots": {
+   "listChanged": true
+  },
+  "tasks": {
+   "requests": {
+    "sampling": {
+     "createMessage": {}
+    },
+    "elicitation": {
+     "create": {}
+    }
+   }
+  }
+ }
+}

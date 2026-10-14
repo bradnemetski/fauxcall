@@ -1,0 +1,90 @@
+{
+ "name": "roots",
+ "created_at": "2026-10-13T22:00:00Z",
+ "calls": [
+  {
+   "id": "roots-1",
+   "endpoint": "MCP tools/call:get-roots-list",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-roots-list",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "roots/list": {
+     "roots": [
+      {
+       "uri": "file:///workspace/project",
+       "name": "project"
+      },
+      {
+       "uri": "file:///workspace/docs"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "roots-2",
+   "endpoint": "MCP tools/call:get-roots-list",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-roots-list",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "roots/list": {
+     "roots": [
+      {
+       "uri": "file:///other",
+       "name": "other"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "roots-args",
+   "endpoint": "MCP tools/call:get-roots-list",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-roots-list",
+     "arguments": {
+      "x": 1
+     }
+    }
+   },
+   "client_replies": {
+    "roots/list": {
+     "roots": [
+      {
+       "uri": "file:///workspace/project",
+       "name": "project"
+      },
+      {
+       "uri": "file:///workspace/docs"
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "client_capabilities": {
+  "roots": {
+   "listChanged": true
+  }
+ },
+ "listen": true,
+ "listen_after_seconds": 1
+}

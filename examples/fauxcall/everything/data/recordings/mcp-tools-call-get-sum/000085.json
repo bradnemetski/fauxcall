@@ -1,0 +1,122 @@
+{
+  "id": "000085",
+  "endpoint": "MCP tools/call:get-sum",
+  "purpose": "variation",
+  "plan_call": "sum-10",
+  "started_at": "2026-10-14T01:40:12.840463Z",
+  "started_ns": 1791942012840463000,
+  "elapsed_ms": 4.99,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 12,
+        "method": "tools/call",
+        "params": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 9007199254740991,
+            "b": 2
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:40:12 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "The sum of 9007199254740991 and 2 is 9007199254740992."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 12
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.852,
+      "kind": "sse",
+      "event": "message",
+      "id": "3f5f48c9-c2cc-4fde-88fc-2953e811d66b",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"The sum of 9007199254740991 and 2 is 9007199254740992.\"}]},\"jsonrpc\":\"2.0\",\"id\":12}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

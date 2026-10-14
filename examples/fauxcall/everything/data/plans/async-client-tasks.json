@@ -1,0 +1,378 @@
+{
+ "name": "async-client-tasks",
+ "created_at": "2026-10-13T22:00:00Z",
+ "calls": [
+  {
+   "id": "sa-task",
+   "endpoint": "MCP tools/call:trigger-sampling-request-async",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request-async",
+     "arguments": {
+      "prompt": "Plan a trip"
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "task": {
+      "taskId": "client-task-1",
+      "status": "working",
+      "createdAt": "2026-10-13T22:00:00.000Z",
+      "lastUpdatedAt": "2026-10-13T22:00:00.000Z",
+      "ttl": 300000,
+      "pollInterval": 1000
+     }
+    },
+    "tasks/get": {
+     "taskId": "client-task-1",
+     "status": "completed",
+     "createdAt": "2026-10-13T22:00:00.000Z",
+     "lastUpdatedAt": "2026-10-13T22:00:01.000Z",
+     "ttl": 300000,
+     "pollInterval": 1000
+    },
+    "tasks/result": {
+     "role": "assistant",
+     "model": "fauxcall-test-model",
+     "content": {
+      "type": "text",
+      "text": "Day 1: arrive."
+     },
+     "stopReason": "endTurn"
+    }
+   }
+  },
+  {
+   "id": "sa-task-failed",
+   "endpoint": "MCP tools/call:trigger-sampling-request-async",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request-async",
+     "arguments": {
+      "prompt": "fail please",
+      "maxTokens": 10
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "task": {
+      "taskId": "client-task-2",
+      "status": "working",
+      "createdAt": "2026-10-13T22:00:00.000Z",
+      "lastUpdatedAt": "2026-10-13T22:00:00.000Z",
+      "ttl": 300000,
+      "pollInterval": 1000
+     }
+    },
+    "tasks/get": {
+     "taskId": "client-task-2",
+     "status": "failed",
+     "createdAt": "2026-10-13T22:00:00.000Z",
+     "lastUpdatedAt": "2026-10-13T22:00:01.000Z",
+     "ttl": 300000,
+     "pollInterval": 1000,
+     "statusMessage": "Model overloaded"
+    }
+   }
+  },
+  {
+   "id": "sa-task-cancelled",
+   "endpoint": "MCP tools/call:trigger-sampling-request-async",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request-async",
+     "arguments": {
+      "prompt": "cancel"
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "task": {
+      "taskId": "client-task-3",
+      "status": "working",
+      "createdAt": "2026-10-13T22:00:00.000Z",
+      "lastUpdatedAt": "2026-10-13T22:00:00.000Z",
+      "ttl": 300000,
+      "pollInterval": 1000
+     }
+    },
+    "tasks/get": {
+     "taskId": "client-task-3",
+     "status": "cancelled",
+     "createdAt": "2026-10-13T22:00:00.000Z",
+     "lastUpdatedAt": "2026-10-13T22:00:01.000Z",
+     "ttl": 300000,
+     "pollInterval": 1000
+    }
+   }
+  },
+  {
+   "id": "sa-task-done-now",
+   "endpoint": "MCP tools/call:trigger-sampling-request-async",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request-async",
+     "arguments": {
+      "prompt": "instant"
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "task": {
+      "taskId": "client-task-4",
+      "status": "completed",
+      "createdAt": "2026-10-13T22:00:00.000Z",
+      "lastUpdatedAt": "2026-10-13T22:00:00.000Z",
+      "ttl": 300000,
+      "pollInterval": 1000
+     }
+    },
+    "tasks/result": {
+     "role": "assistant",
+     "model": "fauxcall-test-model",
+     "content": {
+      "type": "text",
+      "text": "instant answer"
+     },
+     "stopReason": "endTurn"
+    }
+   }
+  },
+  {
+   "id": "sa-sync",
+   "endpoint": "MCP tools/call:trigger-sampling-request-async",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request-async",
+     "arguments": {
+      "prompt": "sync please",
+      "maxTokens": 50
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "role": "assistant",
+     "model": "fauxcall-test-model",
+     "content": {
+      "type": "text",
+      "text": "synchronous"
+     },
+     "stopReason": "endTurn"
+    }
+   }
+  },
+  {
+   "id": "sa-missing",
+   "endpoint": "MCP tools/call:trigger-sampling-request-async",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request-async",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "role": "assistant",
+     "model": "fauxcall-test-model",
+     "content": {
+      "type": "text",
+      "text": "x"
+     },
+     "stopReason": "endTurn"
+    }
+   }
+  },
+  {
+   "id": "ea-task",
+   "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request-async",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "task": {
+      "taskId": "client-task-5",
+      "status": "input_required",
+      "createdAt": "2026-10-13T22:00:00.000Z",
+      "lastUpdatedAt": "2026-10-13T22:00:00.000Z",
+      "ttl": 300000,
+      "pollInterval": 1000
+     }
+    },
+    "tasks/get": {
+     "taskId": "client-task-5",
+     "status": "completed",
+     "createdAt": "2026-10-13T22:00:00.000Z",
+     "lastUpdatedAt": "2026-10-13T22:00:01.000Z",
+     "ttl": 300000,
+     "pollInterval": 1000
+    },
+    "tasks/result": {
+     "action": "accept",
+     "content": {
+      "name": "Ada",
+      "favoriteColor": "Blue",
+      "agreeToTerms": true
+     }
+    }
+   }
+  },
+  {
+   "id": "ea-task-decline",
+   "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request-async",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "task": {
+      "taskId": "client-task-6",
+      "status": "working",
+      "createdAt": "2026-10-13T22:00:00.000Z",
+      "lastUpdatedAt": "2026-10-13T22:00:00.000Z",
+      "ttl": 300000,
+      "pollInterval": 1000
+     }
+    },
+    "tasks/get": {
+     "taskId": "client-task-6",
+     "status": "completed",
+     "createdAt": "2026-10-13T22:00:00.000Z",
+     "lastUpdatedAt": "2026-10-13T22:00:01.000Z",
+     "ttl": 300000,
+     "pollInterval": 1000
+    },
+    "tasks/result": {
+     "action": "decline"
+    }
+   }
+  },
+  {
+   "id": "ea-task-failed",
+   "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request-async",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "task": {
+      "taskId": "client-task-7",
+      "status": "working",
+      "createdAt": "2026-10-13T22:00:00.000Z",
+      "lastUpdatedAt": "2026-10-13T22:00:00.000Z",
+      "ttl": 300000,
+      "pollInterval": 1000
+     }
+    },
+    "tasks/get": {
+     "taskId": "client-task-7",
+     "status": "failed",
+     "createdAt": "2026-10-13T22:00:00.000Z",
+     "lastUpdatedAt": "2026-10-13T22:00:01.000Z",
+     "ttl": 300000,
+     "pollInterval": 1000
+    }
+   }
+  },
+  {
+   "id": "ea-sync-accept",
+   "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request-async",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept",
+     "content": {
+      "name": "Bob"
+     }
+    }
+   }
+  },
+  {
+   "id": "ea-sync-cancel",
+   "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request-async",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "cancel"
+    }
+   }
+  }
+ ],
+ "client_capabilities": {
+  "sampling": {},
+  "elicitation": {
+   "form": {},
+   "url": {}
+  },
+  "roots": {
+   "listChanged": true
+  },
+  "tasks": {
+   "requests": {
+    "sampling": {
+     "createMessage": {}
+    },
+    "elicitation": {
+     "create": {}
+    }
+   }
+  }
+ }
+}

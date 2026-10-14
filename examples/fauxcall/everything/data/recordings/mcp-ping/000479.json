@@ -1,0 +1,109 @@
+{
+  "id": "000479",
+  "endpoint": "MCP ping",
+  "purpose": "time_profile",
+  "plan_call": "ld-wait",
+  "started_at": "2026-10-14T01:51:57.168452Z",
+  "started_ns": 1791942717168452000,
+  "elapsed_ms": 10.035,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "ping",
+        "params": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "100"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:51:57 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {},
+        "jsonrpc": "2.0",
+        "id": 4
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 9.739,
+      "kind": "sse",
+      "event": "message",
+      "id": "c9f56dae-ba19-4909-a783-b74c72ccd4aa",
+      "data": "{\"result\":{},\"jsonrpc\":\"2.0\",\"id\":4}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

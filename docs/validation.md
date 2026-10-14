@@ -49,8 +49,9 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
 | Swagger Petstore | **99.71%** | 96 (98.48% over 80 with real writes) | 19 | 370 | 361, 99% coverage | 1 | $15.21 |
 | FakeRESTApi | **100%** | 115 | 27 | 323 | 671, 99% coverage | 1 | $13.02 |
 | DeepWiki (MCP) | **100%** | 20 | 3 tools | 70 | 175, 98% coverage | 3 | over $8 |
-| Everything (MCP) | **100%** | 129 (independent: 100% over 144 of 192 calls) | 19 tools, 7 resources, 2 templates, 4 prompts | 427 | 510, 99% coverage | 3 | $54.15 | *Parity* is the weighted
-share of checks (status, shape, content type, values, lengths, headers) on which the fake answered
+| Everything (MCP) | **100%** | 140 (independent: 100% over 160 of 205 calls) | 19 tools, 7 resources, 2 templates, 4 prompts | 514 | 507, 99% coverage | 1 | $24.76 |
+
+*Parity* is the weighted share of checks (status, shape, content type, values, lengths, headers) on which the fake answered
 like the real service, over end-to-end scenarios run against both. *Reported cost* is what Claude
 Code reported for the sessions. The finished fakes are in [`examples/`](../examples/), except
 DeepWiki's (see below).
@@ -163,6 +164,21 @@ Every problem a run hit became a fix in the tools or skills, never in the fake. 
   in handlers, pushes on the GET stream, the tools for `elicitation.url` and `tasks` clients, the
   real refusals of malformed calls); with those added, the third build reached 100%. Headless approvals were refused by the agent's own permission checks, so the CLI now
   applies `answers.json` itself; parity reports now pseudonymize the real side's answers.
+- **A fake never calls out.** The fourth build also scored 100%, but its `gzip-file-as-resource`
+  fetched URLs live (GitHub, and the real server itself): its tests passed only while the real
+  server ran. Offline test runs now refuse any connection off the machine or to the real service
+  and fail the test that tried. That build's review also found the last protocol gaps (a GET or
+  DELETE for an unknown session, a second GET stream, the real keep-alive, reacting to the
+  client's notifications), now learned and repeated.
+- **Clients that answer back.** The sixth build passed at 100% but had to skip 23 scenarios
+  in-process and reach into FauxCall's internals: the in-process test transport buffered answers,
+  so a scenario couldn't answer the server mid-call. Its notes also showed that `fauxcall up`
+  served only the model (no `handlers.py`), that recordings couldn't see the client's GET stream
+  (the server asks for roots there), and that the fake dropped what a reconnecting client had
+  missed. Scenarios now open sessions with capabilities and answers (`mcp.open`), the in-process
+  fake streams, `up` runs the fake's own code, plans can `listen` on the GET stream, and the fake
+  replays missed events. The seventh build, the one in `examples/`, used all of it in one session:
+  100%, independent 100% over 160 of 205 calls, nothing skipped.
 - **Docs for agents.** Where auth probes go, how to probe an approved rate limit, how to record when
   the user prepared `.env` first, and a readable `fauxcall model schema --brief` (`ebcaa3d`,
   `a450dd1`, `818a252`, `05dcd98`).

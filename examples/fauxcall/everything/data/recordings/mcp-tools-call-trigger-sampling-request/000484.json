@@ -1,0 +1,129 @@
+{
+  "id": "000484",
+  "endpoint": "MCP tools/call:trigger-sampling-request",
+  "purpose": "edge",
+  "plan_call": "sbr-1",
+  "started_at": "2026-10-14T02:23:06.572181Z",
+  "started_ns": 1791944586572181000,
+  "elapsed_ms": 11.317,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "a"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 02:23:06 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"model\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [],\n    \"note\": \"No matching discriminator\",\n    \"discriminator\": \"type\",\n    \"options\": [\n      \"text\",\n      \"image\",\n      \"audio\"\n    ],\n    \"path\": [\n      \"content\",\n      \"type\"\n    ],\n    \"message\": \"Invalid discriminator value. Expected 'text' | 'image' | 'audio'\"\n  }\n]"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 2
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.614,
+      "kind": "sse",
+      "event": "message",
+      "id": "ae811014-20b1-49cf-8828-3a76502c3929",
+      "data": "{\"method\":\"sampling/createMessage\",\"params\":{\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"Resource trigger-sampling-request context: a\"}}],\"systemPrompt\":\"You are a helpful test server.\",\"maxTokens\":100,\"temperature\":0.7},\"jsonrpc\":\"2.0\",\"id\":0}"
+    },
+    {
+      "t_ms": 11.014,
+      "kind": "sse",
+      "event": "message",
+      "id": "f8ebe50e-76cc-4b88-b259-38ef7fbdfb36",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[\\n  {\\n    \\\"expected\\\": \\\"string\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"model\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n  },\\n  {\\n    \\\"code\\\": \\\"invalid_union\\\",\\n    \\\"errors\\\": [],\\n    \\\"note\\\": \\\"No matching discriminator\\\",\\n    \\\"discriminator\\\": \\\"type\\\",\\n    \\\"options\\\": [\\n      \\\"text\\\",\\n      \\\"image\\\",\\n      \\\"audio\\\"\\n    ],\\n    \\\"path\\\": [\\n      \\\"content\\\",\\n      \\\"type\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid discriminator value. Expected 'text' | 'image' | 'audio'\\\"\\n  }\\n]\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":2}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

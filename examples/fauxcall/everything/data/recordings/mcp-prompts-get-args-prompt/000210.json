@@ -1,0 +1,123 @@
+{
+  "id": "000210",
+  "endpoint": "MCP prompts/get:args-prompt",
+  "plan_call": "p-args-city",
+  "started_at": "2026-10-14T01:43:36.920249Z",
+  "started_ns": 1791942216920249000,
+  "elapsed_ms": 3.05,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "method": "prompts/get",
+        "params": {
+          "name": "args-prompt",
+          "arguments": {
+            "city": "Chicago"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:43:36 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "What's weather in Chicago?"
+              }
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 5
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.914,
+      "kind": "sse",
+      "event": "message",
+      "id": "3fa6f00c-4fad-4a81-9717-bcab613342d1",
+      "data": "{\"result\":{\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"What's weather in Chicago?\"}}]},\"jsonrpc\":\"2.0\",\"id\":5}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

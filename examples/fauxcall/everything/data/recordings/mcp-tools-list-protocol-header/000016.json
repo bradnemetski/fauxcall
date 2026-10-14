@@ -1,0 +1,92 @@
+{
+  "id": "000016",
+  "endpoint": "MCP tools/list:protocol_header",
+  "purpose": "discovery",
+  "started_at": "2026-10-14T01:34:58.241948Z",
+  "started_ns": 1791941698241948000,
+  "elapsed_ms": 4.143,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "1999-01-01"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 9000003,
+        "method": "tools/list"
+      }
+    }
+  },
+  "response": {
+    "status": 400,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "198"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:34:58 GMT"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "keep-alive",
+        "timeout=5"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "error": {
+          "code": -32000,
+          "message": "Bad Request: Unsupported protocol version: 1999-01-01 (supported versions: 2025-11-25, 2025-06-18, 2025-03-26, 2024-11-05, 2024-10-07)"
+        },
+        "id": null
+      }
+    }
+  },
+  "redacted": [
+    "request.header:mcp-session-id"
+  ]
+}

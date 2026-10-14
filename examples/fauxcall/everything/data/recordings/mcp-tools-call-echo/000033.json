@@ -1,11 +1,10 @@
 {
   "id": "000033",
   "endpoint": "MCP tools/call:echo",
-  "purpose": "edge",
-  "plan_call": "echo-extra-arg",
-  "started_at": "2026-10-12T22:17:17.887816Z",
-  "started_ns": 1791843437887816000,
-  "elapsed_ms": 7.088,
+  "plan_call": "acc-echo",
+  "started_at": "2026-10-14T01:37:00.538936Z",
+  "started_ns": 1791941820538936000,
+  "elapsed_ms": 7.495,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,13 +32,12 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 10,
+        "id": 2,
         "method": "tools/call",
         "params": {
           "name": "echo",
           "arguments": {
-            "message": "with extra",
-            "unexpected": 1
+            "message": "hello from fauxcall"
           }
         }
       }
@@ -82,7 +80,7 @@
       ],
       [
         "date",
-        "Mon, 12 Oct 2026 22:17:17 GMT"
+        "Wed, 14 Oct 2026 01:37:00 GMT"
       ],
       [
         "transfer-encoding",
@@ -97,22 +95,22 @@
           "content": [
             {
               "type": "text",
-              "text": "Echo: with extra"
+              "text": "Echo: hello from fauxcall"
             }
           ]
         },
         "jsonrpc": "2.0",
-        "id": 10
+        "id": 2
       }
     }
   },
   "stream": [
     {
-      "t_ms": 6.83,
+      "t_ms": 7.373,
       "kind": "sse",
       "event": "message",
-      "id": "a6d07b9e-9062-4c30-94cf-28d330f6a15e",
-      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Echo: with extra\"}]},\"jsonrpc\":\"2.0\",\"id\":10}"
+      "id": "e39975c5-fd9b-4134-b4c1-8f7347bb6612",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Echo: hello from fauxcall\"}]},\"jsonrpc\":\"2.0\",\"id\":2}"
     }
   ],
   "redacted": [

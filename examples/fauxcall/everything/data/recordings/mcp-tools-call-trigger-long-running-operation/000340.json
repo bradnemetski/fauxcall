@@ -1,0 +1,156 @@
+{
+  "id": "000340",
+  "endpoint": "MCP tools/call:trigger-long-running-operation",
+  "purpose": "variation",
+  "plan_call": "lro-default",
+  "started_at": "2026-10-14T01:48:47.120203Z",
+  "started_ns": 1791942527120203000,
+  "elapsed_ms": 10012.593,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 11,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-long-running-operation",
+          "_meta": {
+            "progressToken": "tdef"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:48:47 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Long running operation completed. Duration: 10 seconds, Steps: 5."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 11
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2005.985,
+      "kind": "sse",
+      "event": "message",
+      "id": "7468eb71-037e-4856-9f03-11f3c65ba310",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":1,\"total\":5,\"progressToken\":\"tdef\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 4009.426,
+      "kind": "sse",
+      "event": "message",
+      "id": "0788fcdb-3f7e-44fc-aa69-c3fa02e6d12e",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":2,\"total\":5,\"progressToken\":\"tdef\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 6008.639,
+      "kind": "sse",
+      "event": "message",
+      "id": "d3902b41-7ce0-4ab1-a0ff-1c7fc320d3e3",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":3,\"total\":5,\"progressToken\":\"tdef\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 8012.284,
+      "kind": "sse",
+      "event": "message",
+      "id": "e81bf372-a00f-4aa5-9319-7b812428a844",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":4,\"total\":5,\"progressToken\":\"tdef\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10012.383,
+      "kind": "sse",
+      "event": "message",
+      "id": "f6ca0694-e0ab-4ad3-af88-83a1d1978ed6",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":5,\"total\":5,\"progressToken\":\"tdef\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10012.437,
+      "kind": "sse",
+      "event": "message",
+      "id": "ad46281c-2e13-4781-8605-82d226437c82",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Long running operation completed. Duration: 10 seconds, Steps: 5.\"}]},\"jsonrpc\":\"2.0\",\"id\":11}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

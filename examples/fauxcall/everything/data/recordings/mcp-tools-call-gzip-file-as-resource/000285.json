@@ -1,0 +1,123 @@
+{
+  "id": "000285",
+  "endpoint": "MCP tools/call:gzip-file-as-resource",
+  "purpose": "invalid",
+  "plan_call": "g-ftp",
+  "started_at": "2026-10-14T01:47:18.392036Z",
+  "started_ns": 1791942438392036000,
+  "elapsed_ms": 5.484,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 17,
+        "method": "tools/call",
+        "params": {
+          "name": "gzip-file-as-resource",
+          "arguments": {
+            "name": "x.gz",
+            "data": "ftp://example.com/file.txt"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Wed, 14 Oct 2026 01:47:18 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Error processing file ftp://example.com/file.txt: Unsupported URL protocol for ftp://example.com/file.txt. Only http, https, and data URLs are supported."
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 17
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.257,
+      "kind": "sse",
+      "event": "message",
+      "id": "395b8246-36d1-48c7-b1fa-3fb74fc3f215",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Error processing file ftp://example.com/file.txt: Unsupported URL protocol for ftp://example.com/file.txt. Only http, https, and data URLs are supported.\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":17}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}
