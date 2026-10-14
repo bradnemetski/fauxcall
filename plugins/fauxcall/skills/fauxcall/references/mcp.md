@@ -165,12 +165,23 @@ as an SDK server does. To record such tools, a plan declares the client's capabi
 server's requests (`"client_replies": {"sampling/createMessage": {...a result...}}`, or
 `{"error": {...}}` to refuse); unlisted requests get "Method not found".
 
+**What the server sends outside a call.** Many servers also send on the client's GET stream: log
+messages, resource updates, and requests such as `roots/list`. To record them, set
+`"listen": true` in the plan: the recorder holds the GET stream open for the session, records
+everything sent there with its timing (endpoint `MCP GET:stream`) and answers the server's
+requests with the running call's `client_replies`; `"listen_after_seconds": 12` keeps listening
+after the last call, for periodic pushes. Without it, a server that asks for roots on the GET
+stream gets no answer, and the recording shows only its timeout.
+
+**Reconnecting.** A server that numbers its SSE events (`sse_event_ids`) keeps what it sends, and
+a client that reconnects with `Last-Event-ID` gets the rest of that stream, including pushes sent
+while no stream was open; the fake does the same (`ctx.push` returns `False` then, but the message
+is kept). A server without event ids drops them, and so does its fake.
+
 Tools some servers list only to clients that support sampling, elicitation (form or URL), roots or
 tasks are found by introspection (one session per capability, then one declaring them all) and
 carry `requires`: alternatives, each a set of capability paths a client must all declare
-(`[["sampling"], ["tasks.requests", "sampling"]]`). The fake can't send requests
-back to the client (sampling, elicitation, roots): a tool that needs one should answer with the
-real server's error for a client that doesn't respond, and the README should say so.
+(`[["sampling"], ["tasks.requests", "sampling"]]`).
 
 ## Auth (OAuth)
 
@@ -195,7 +206,28 @@ async def test_ask_about_hooks(mcp: McpClient) -> None:
         "ask_question", {"repoName": "facebook/react", "question": "What are hooks?"}
     )
     assert result["content"][0]["type"] == "text"
+
+
+async def test_sampling_tool(mcp: McpClient) -> None:
+    # open the session as a client that can sample, answering the server's request mid-call
+    await mcp.open(
+        capabilities={"sampling": {}},
+        replies={
+            "sampling/createMessage": {
+                "role": "assistant",
+                "model": "m",
+                "content": {"type": "text", "text": "hi"},
+            }
+        },
+    )
+    result = await mcp.call_tool("trigger-sampling-request", {"prompt": "Say hi"})
 ```
+
+`mcp.open(...)` comes before the scenario's first request (which otherwise opens a session without
+capabilities); `mcp.answer_with(replies)` changes the answers mid-scenario. By default the client
+answers the server's requests with "Method not found", like a client without those capabilities.
+This works in-process and against a served fake alike: never reach into `mcp.wire` or skip such
+scenarios in-process.
 
 Also run the official SDK against the fake once (the generated unit tests do) — real MCP clients must
 connect without noticing anything.

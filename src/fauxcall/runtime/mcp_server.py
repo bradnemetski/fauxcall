@@ -19,6 +19,7 @@ import itertools
 import secrets
 import time
 import uuid
+from collections import deque
 from typing import TYPE_CHECKING, Final
 
 import jsonschema
@@ -53,6 +54,10 @@ log = get_logger(__name__)
 
 TOOLS_CALL: Final = "tools/call"
 CLIENT_TIMEOUT_SECONDS: Final = 60.0
+GET_STREAM: Final = "get"
+"""The stream key of the client's GET stream (each SSE answer gets its own)."""
+KEPT_EVENTS: Final = 1000
+"""How many numbered events a session keeps for clients that reconnect."""
 """How long a server waits for a client's answer (the MCP SDKs' default)."""
 
 
@@ -78,12 +83,17 @@ class Channel:
         self.session = session
 
     def push(self, method: str, params: JsonValue = None) -> bool:
-        """Send a notification on the client's GET stream; ``False``: none is open."""
+        """Send a notification on the client's GET stream; ``False``: none is open.
+
+        A server that numbers its events keeps one sent while no stream is open, for a client
+        that reconnects with ``Last-Event-ID``.
+        """
         message: JsonObject = {"jsonrpc": "2.0", "method": method}
         if params is not None:
             message["params"] = params
         stream = self._fake.streams.get(self.session)
         if stream is None:
+            self._fake.keep_for_later(self.session, message)
             return False
         stream.put_nowait(message)
         return True
@@ -215,6 +225,8 @@ class McpFake:
         self.method_handlers: dict[str, MethodHandler] = {}
         self._sessions: dict[str, str] = {}
         self._capabilities: dict[str, JsonObject] = {}
+        self._sent: dict[str, deque[tuple[str, str, JsonValue]]] = {}
+        """MCP session -> the numbered events sent to it: (stream, event id, message)."""
         self._versions: dict[str, str] = {}
         """MCP session -> the protocol version it negotiated."""
         self.streams: dict[str, asyncio.Queue[JsonValue]] = {}
@@ -587,9 +599,11 @@ class McpFake:
         self, messages: list[JsonValue], headers: dict[str, str], session: str = ""
     ) -> Response:
         if self.transport.response_mode == "sse":
-            events = b"".join(self._event(m) for m in messages)
+            stream = secrets.token_hex(4)
+            priming = self._priming(session, stream)  # first, as it goes out first
+            events = b"".join(self._event(m, session, stream) for m in messages)
             return Response(
-                content=self._priming(session) + events,
+                content=priming + events,
                 media_type=self.transport.content_type_sse,
                 headers=headers,
             )
@@ -678,19 +692,56 @@ class McpFake:
         rank = {name: index for index, name in enumerate(order)}
         return dict(sorted(message.items(), key=lambda item: rank.get(item[0], len(rank))))
 
-    def _event(self, message: JsonValue) -> bytes:
-        """One SSE event, with an id shaped like the real server's when it sends them."""
-        event_id = self._new_id(self.transport.event_id_format, 8)
-        ordered = self._ordered(message)
+    def _event(
+        self,
+        message: JsonValue,
+        session: str = "",
+        stream: str = "",
+        *,
+        event_id: str | None = None,
+    ) -> bytes:
+        """One SSE event, with an id shaped like the real server's when it sends them.
+
+        A numbered event is kept for the session (``stream`` names the SSE response it went
+        on), so a client that reconnects with ``Last-Event-ID`` gets what followed it.
+        """
+        numbered = self.transport.sse_event_ids
+        event_id = event_id or self._new_id(self.transport.event_id_format, 8)
+        if numbered and session:
+            self._kept(session).append((stream, event_id, message))
         return protocol.sse_event(
-            ordered, event_id=event_id if self.transport.sse_event_ids else None
+            self._ordered(message), event_id=event_id if numbered else None
         ).encode()
 
-    def _priming(self, session: str) -> bytes:
+    def _priming(self, session: str, stream: str) -> bytes:
         """The empty event newer protocol versions open SSE answers with, when the server does."""
         if self._versions.get(session) not in self.transport.priming_versions:
             return b""
-        return f"id: {self._new_id(self.transport.event_id_format, 8)}\ndata: \n\n".encode()
+        event_id = self._new_id(self.transport.event_id_format, 8)
+        if session:
+            self._kept(session).append((stream, event_id, None))  # a client may resume from it
+        return f"id: {event_id}\ndata: \n\n".encode()
+
+    def _kept(self, session: str) -> deque[tuple[str, str, JsonValue]]:
+        return self._sent.setdefault(session, deque(maxlen=KEPT_EVENTS))
+
+    def keep_for_later(self, session: str, message: JsonValue) -> None:
+        """A message for the client's GET stream while none is open, kept to replay later.
+
+        Only a server that numbers its events can replay them; others drop it, as they do.
+        """
+        if self.transport.sse_event_ids and session:
+            event_id = self._new_id(self.transport.event_id_format, 8)
+            self._kept(session).append((GET_STREAM, event_id, message))
+
+    def _after(self, session: str, last_event_id: str) -> list[tuple[str, JsonValue]]:
+        """The events that followed ``last_event_id`` on its stream: (event id, message)."""
+        kept = list(self._sent.get(session, ()))
+        found = next((i for i, (_, eid, _) in enumerate(kept) if eid == last_event_id), None)
+        if found is None:
+            return []
+        stream = kept[found][0]
+        return [(eid, m) for s, eid, m in kept[found + 1 :] if s == stream and m is not None]
 
     @staticmethod
     def _new_id(shape: str, size: int) -> str:
@@ -724,8 +775,10 @@ class McpFake:
             return refused
         queue: asyncio.Queue[JsonValue] = asyncio.Queue()
         self.streams[session or ""] = queue  # open from now: a second GET is refused at once
+        missed = self._after(session or "", request.headers.get("last-event-id", ""))
         return StreamingResponse(
-            self._server_stream(session or "", queue), media_type=self.transport.content_type_sse
+            self._server_stream(session or "", queue, missed),
+            media_type=self.transport.content_type_sse,
         )
 
     def _resolve(self, session: str, messages: Sequence[JsonValue]) -> None:
@@ -759,6 +812,7 @@ class McpFake:
         """A client ended its session: forget it and stop what it left running."""
         self._sessions.pop(session, None)
         self._capabilities.pop(session, None)
+        self._sent.pop(session, None)
         self.streams.pop(session, None)
         for task in self.background.pop(session, set()):
             task.cancel()
@@ -776,9 +830,17 @@ class McpFake:
         await asyncio.sleep(self.transport.keep_alive_seconds)
 
     async def _server_stream(
-        self, session: str, queue: asyncio.Queue[JsonValue]
+        self,
+        session: str,
+        queue: asyncio.Queue[JsonValue],
+        missed: Sequence[tuple[str, JsonValue]] = (),
     ) -> AsyncIterator[bytes]:
-        """The client's GET stream: pushed notifications, and comments that keep it open."""
+        """The client's GET stream: pushed notifications, and comments that keep it open.
+
+        A client reconnecting with ``Last-Event-ID`` first gets what it missed.
+        """
+        for event_id, message in missed:  # with their ids: the client may reconnect again
+            yield self._event(message, event_id=event_id)
         try:
             while True:
                 getter = asyncio.ensure_future(queue.get())
@@ -786,7 +848,7 @@ class McpFake:
                 await asyncio.wait({getter, idle}, return_when=asyncio.FIRST_COMPLETED)
                 if getter.done():
                     idle.cancel()
-                    yield self._event(getter.result())
+                    yield self._event(getter.result(), session, GET_STREAM)
                 else:
                     getter.cancel()
                     yield self._keep_alive()
@@ -860,22 +922,24 @@ class McpFake:
             waiting.cancel()
             notes, reply = task.result()  # raises the EarlyResponse of a refusal
             return self._reply([*early, *_drain(queue), *notes, reply], headers, session)
+        stream = secrets.token_hex(4)
+        priming = self._priming(session, stream)  # first, as it goes out first
         if waiting.done():
-            opening = self._event(waiting.result())
+            opening = self._event(waiting.result(), session, stream)
         else:  # a long call: the stream opens with a keep-alive, as the real server's does
             waiting.cancel()
             opening = self._keep_alive()
 
         async def events() -> AsyncIterator[bytes]:
             try:
-                yield self._priming(session) + opening
+                yield priming + opening
                 while True:
                     getter = asyncio.create_task(queue.get())
                     idle = asyncio.create_task(self._idle())
                     await asyncio.wait({task, getter, idle}, return_when=asyncio.FIRST_COMPLETED)
                     idle.cancel()
                     if getter.done():
-                        yield self._event(getter.result())
+                        yield self._event(getter.result(), session, stream)
                         continue
                     getter.cancel()
                     if task.done():
@@ -885,7 +949,7 @@ class McpFake:
                     _, reply = task.result()
                 except EarlyResponse:  # too late for an HTTP status: the stream has started
                     reply = protocol.error(message.get("id"), protocol.INTERNAL_ERROR, "refused")
-                yield self._event(reply)
+                yield self._event(reply, session, stream)
             finally:
                 if not task.done():  # pragma: no cover - the client left mid-stream
                     task.cancel()

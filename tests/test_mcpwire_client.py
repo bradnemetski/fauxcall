@@ -488,3 +488,18 @@ async def test_list_all_gives_up_after_max_pages(monkeypatch: pytest.MonkeyPatch
     async with _client(endless) as http:
         items, calls = await McpWireClient("http://mock/mcp", http).list_all("tools/list", "tools")
     assert (len(items), len(calls)) == (3, 3)
+
+
+async def test_listening_when_the_stream_never_opens() -> None:
+    from fauxcall.mcpwire.client import _json_or_nothing  # noqa: PLC0415
+
+    assert _json_or_nothing("") == []  # a priming event carries no message
+    assert _json_or_nothing('{"a": 1}') == [{"a": 1}]
+
+    def refuse(request: httpx2.Request) -> httpx2.Response:
+        raise httpx2.ConnectError("down", request=request)
+
+    async with httpx2.AsyncClient(transport=httpx2.MockTransport(refuse)) as http:
+        wire = McpWireClient("http://x/mcp", http)
+        await wire.listen()  # returns once the attempt is over
+        assert await wire.stop_listening() is None

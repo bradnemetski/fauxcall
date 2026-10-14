@@ -56,13 +56,19 @@ def serve(
         bool, typer.Option("--fast", help="No latency or rate-limit emulation.")
     ] = False,
 ) -> None:
-    """Serve a fake in the foreground (works before scaffolding: routes come from the model)."""
+    """Serve a fake in the foreground.
+
+    A scaffolded fake runs its own code (its handlers, routes and settings); before scaffolding,
+    FauxCall's engine serves the routes the model describes.
+    """
     import uvicorn  # noqa: PLC0415
 
     from fauxcall.runtime.app import create_app  # noqa: PLC0415
     from fauxcall.runtime.dynamic import dynamic_router  # noqa: PLC0415
 
     fake = layout(name)
+    if _scaffolded(fake):
+        raise typer.Exit(_serve_own_code(fake, port=port, host=host, fast=fast))
     overrides: dict[str, object] = {"host": host, "fast": fast}
     if port is not None:
         overrides["port"] = port
@@ -71,6 +77,26 @@ def serve(
     app = create_app(settings, routers=[dynamic_router(model)])
     echo(f"serving {name} on http://{settings.host}:{settings.port}")
     uvicorn.run(app, host=settings.host, port=settings.port, log_config=None, access_log=False)
+
+
+def _scaffolded(fake: FakeLayout) -> bool:
+    """Whether the fake has its own project and entry point (``fauxcall scaffold`` ran)."""
+    return (fake.root / "pyproject.toml").exists() and (fake.src / "__main__.py").exists()
+
+
+def _serve_own_code(fake: FakeLayout, *, port: int | None, host: str, fast: bool) -> int:
+    """Run the fake's own command in its own environment; returns its exit code."""
+    root = fake.root.resolve()
+    environment = _own_environment() | {
+        "FAUXCALL_HOST": host,
+        "FAUXCALL_FAST": "true" if fast else "false",
+    }
+    if port is not None:
+        environment["FAUXCALL_PORT"] = str(port)
+    settings = fake_settings(fake, host=host, **({"port": port} if port is not None else {}))
+    echo(f"serving {fake.name} (its own code) on http://{settings.host}:{settings.port}")
+    command = ["uv", "run", "--project", str(root), f"fauxcall-{fake.name}"]
+    return subprocess.run(command, cwd=root, env=environment, check=False).returncode  # noqa: S603
 
 
 def _run_file() -> Path:
@@ -209,6 +235,10 @@ def verify(
     target: Annotated[str, typer.Option(help="fake | real | parity")] = "fake",
     allow_real_writes: Annotated[bool, typer.Option("--allow-real-writes")] = False,
     e2e_only: Annotated[bool, typer.Option("--e2e-only")] = False,
+    fake_url: Annotated[
+        str | None,
+        typer.Option(help="Test a running fake (e.g. one started with `fauxcall up`)."),
+    ] = None,
 ) -> None:
     """Run the fake's test suite (and, with --target parity, the compliance gate)."""
     if target not in TARGETS:
@@ -221,17 +251,12 @@ def verify(
         added = apply_answers(fake)  # a headless run's approval, for the real side's writes
         if added:
             echo(f"applied the write approval in answers.json: {', '.join(added)}")
-    command = ["uv", "run", "--project", str(root), "pytest", "--target", target]
-    if e2e_only or target != "fake":
-        command.append(str(fake.tests.resolve() / "e2e"))
-    else:
-        command += ["--cov", "--cov-report=term-missing"]
-    if allow_real_writes:
-        command.append("--allow-real-writes")
+    command = _pytest_command(
+        fake, target, e2e_only=e2e_only, allow_real_writes=allow_real_writes, fake_url=fake_url
+    )
     report = fake.reports.resolve() / "parity.md"
     before = _version_of(report)
-    # The fake has its own environment; an active one (the user's project's) only draws a warning.
-    environment = {key: value for key, value in os.environ.items() if key != "VIRTUAL_ENV"}
+    environment = _own_environment()
     completed = subprocess.run(command, cwd=root, env=environment, check=False)  # noqa: S603
     if completed.returncode == _NO_TESTS:
         raise fail("no tests ran: is the fake scaffolded, and are its tests in place?")
@@ -241,6 +266,30 @@ def verify(
         else:
             echo("This run wrote no parity report (an earlier one is not reprinted).")
     raise typer.Exit(completed.returncode)
+
+
+def _pytest_command(
+    fake: FakeLayout, target: str, *, e2e_only: bool, allow_real_writes: bool, fake_url: str | None
+) -> list[str]:
+    """The fake's pytest run, in its own project."""
+    command = ["uv", "run", "--project", str(fake.root.resolve()), "pytest", "--target", target]
+    if e2e_only or target != "fake":
+        command.append(str(fake.tests.resolve() / "e2e"))
+    else:
+        command += ["--cov", "--cov-report=term-missing"]
+    if allow_real_writes:
+        command.append("--allow-real-writes")
+    if fake_url:
+        command += ["--fake-url", fake_url]
+    return command
+
+
+def _own_environment() -> dict[str, str]:
+    """The environment for a command in the fake's project.
+
+    The fake has its own environment; an active one (the user's project's) only draws a warning.
+    """
+    return {key: value for key, value in os.environ.items() if key != "VIRTUAL_ENV"}
 
 
 def _version_of(path: Path) -> tuple[int, bytes] | None:

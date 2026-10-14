@@ -377,9 +377,10 @@ class _BrokenWire:
 
     def __init__(self) -> None:
         self.closed = 0
+        self.on_request: object = None
 
-    async def initialize(self) -> None:
-        return None
+    async def initialize(self, *, capabilities: JsonValue = None) -> None:
+        del capabilities
 
     async def call(self, method: str, params: JsonValue = None) -> None:
         del method, params

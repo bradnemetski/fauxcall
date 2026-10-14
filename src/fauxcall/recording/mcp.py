@@ -26,7 +26,7 @@ from fauxcall import jsonfmt, jsonpath
 from fauxcall.errors import CredentialsRefusedError, HttpStatusError, RecordingError
 from fauxcall.logs import get_logger
 from fauxcall.mcpwire import protocol
-from fauxcall.mcpwire.client import McpWireClient, RpcCall, Transport
+from fauxcall.mcpwire.client import McpWireClient, RpcCall, Transport, replier
 from fauxcall.model.auth import AuthModel, AuthScheme, OAuthModel
 from fauxcall.model.errors import ErrorTemplate
 from fauxcall.model.mcp import (
@@ -870,6 +870,10 @@ class McpRecorder:
         client, init = await self._connect(declared)
         try:
             self.save(init, method_endpoint("initialize"), purpose="sample")
+            if plan.listen:
+                await self._pace()
+                client.on_request = replier({})  # until a call says how to answer
+                await client.listen()
             for position, call in enumerate(plan.calls):
                 outcome = CallOutcome(call=call.id, endpoint=call.endpoint)
                 report.outcomes.append(outcome)
@@ -893,9 +897,19 @@ class McpRecorder:
                     outcome.error = f"{type(exc).__name__}: {exc}"[:300]
                     log.warning("mcp_call_failed", call=call.id, error=outcome.error)
         finally:
+            if plan.listen:
+                await self._heard(client, plan.listen_after_seconds)
             await self._close(client)
             report.calls_made = self.calls_made
         return report
+
+    async def _heard(self, client: McpWireClient, linger: float) -> None:
+        """Stop listening on the client's GET stream (after ``linger`` seconds) and save it."""
+        if linger:
+            await self._sleep(linger)
+        heard = await client.stop_listening()
+        if heard is not None:
+            self.save(heard, method_endpoint("GET", "stream"), purpose="sample")
 
     async def _auth_probe(
         self, client: McpWireClient, call: PlannedCall, method: str, params: JsonValue
@@ -975,7 +989,7 @@ class McpRecorder:
                 return
             params = render(call.request.json_body, from_mapping(variables))
             tags = list(call.tags)
-            client.on_request = _replier(call.client_replies)
+            client.on_request = replier(call.client_replies)
             try:
                 if call.request.auth == "default":
                     rpc = await client.call(method, _params_for(call.endpoint, params))
@@ -994,29 +1008,6 @@ class McpRecorder:
                 captured = jsonpath.get_one(rpc.response, path)
                 if captured is not None:
                     variables[name] = captured
-
-
-def _replier(
-    replies: Mapping[str, JsonValue],
-) -> Callable[[JsonObject], Awaitable[JsonValue | None]]:
-    """How the recorder answers a server's request (sampling …) during a call.
-
-    With the plan's reply for its method; otherwise 'Method not found', as a client without that
-    capability would.
-    """
-
-    async def reply(request: JsonObject) -> JsonValue | None:
-        method = str(request.get("method"))
-        found = replies.get(method)
-        request_id = request.get("id")
-        if isinstance(found, dict) and isinstance(found.get("error"), dict):
-            error = found["error"]
-            return {"jsonrpc": "2.0", "id": request_id, "error": error}
-        if found is None:
-            return protocol.error(request_id, protocol.METHOD_NOT_FOUND, "Method not found")
-        return protocol.result(request_id, found)
-
-    return reply
 
 
 def answer_of(reply: JsonValue) -> str:

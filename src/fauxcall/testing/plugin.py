@@ -35,6 +35,7 @@ import pytest_asyncio
 
 from fauxcall.mcpwire.client import McpWireClient
 from fauxcall.runtime.app import runtime_of_app
+from fauxcall.testing.asgi import StreamingASGITransport
 from fauxcall.testing.client import (
     ApiClient,
     ExchangeLog,
@@ -284,7 +285,9 @@ def _fake_client(
     url = config.getoption("--fake-url")
     if url:
         return httpx2.AsyncClient(base_url=url, **options), credentials.query
-    transport = httpx2.ASGITransport(app=_fake_app(config, fake))
+    # streamed like a real server's answers: a client can read the server's requests mid-call
+    # (sampling, elicitation, roots) and answer them, and endless streams don't hang the test
+    transport = StreamingASGITransport(_fake_app(config, fake))
     client = httpx2.AsyncClient(transport=transport, base_url=FAKE_BASE_URL, **options)
     return client, credentials.query
 

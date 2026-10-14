@@ -30,6 +30,7 @@ from fauxcall.runtime import (
     register_method,
     register_tool,
 )
+from fauxcall.runtime.app import runtime_of_app
 from fauxcall.runtime.mcp_server import Channel, method_endpoint
 from fauxcall.testing.asgi import streaming_client
 
@@ -883,3 +884,91 @@ async def test_no_stream_to_watch(tmp_path: Path) -> None:
         await wire.initialize()
         assert await wire.watch_stream(0.1) == (None, None)
         await wire.close()
+
+
+async def _events(stream: httpx2.Response, count: int) -> list[tuple[str, JsonValue]]:
+    """The next ``count`` events on an SSE stream: (id, message)."""
+    found: list[tuple[str, JsonValue]] = []
+    event_id = ""
+    lines = stream.aiter_lines()
+    while len(found) < count:
+        async with asyncio.timeout(5):  # a missing event fails the test instead of hanging it
+            line = await anext(lines)
+        if line.startswith("id:"):
+            event_id = line[3:].strip()
+        elif line.startswith("data:") and line[5:].strip():
+            found.append((event_id, json.loads(line[5:])))
+    return found
+
+
+async def test_a_reconnecting_client_gets_what_it_missed(tmp_path: Path) -> None:
+    numbered = McpTransportModel(response_mode="json", get_stream="sse", sse_event_ids=True)
+    definition: JsonObject = {"name": "say", "inputSchema": {"type": "object"}}
+    tools = [McpToolModel(definition=definition, behavior="computed")]
+    app, _ = mcp_app(tmp_path, mcp_model(transport=numbered, tools=tools))
+
+    async def say(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        ctx.push("notifications/message", {"level": "info", "data": arguments["text"]})
+        return {"content": []}
+
+    register_tool(app, "say", say)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize()
+        headers = {"mcp-session-id": str(wire.session_id), "accept": "text/event-stream"}
+        async with http.stream("GET", "/mcp", headers=headers) as stream:
+            await wire.call("tools/call", {"name": "say", "arguments": {"text": "one"}})
+            [(first_id, _)] = await _events(stream, 1)
+        for text in ("two", "three"):  # no stream open: kept, not dropped
+            await wire.call("tools/call", {"name": "say", "arguments": {"text": text}})
+        resumed = {**headers, "last-event-id": first_id}
+        async with http.stream("GET", "/mcp", headers=resumed) as stream:
+            missed = await _events(stream, 2)
+        assert [j(m)["params"]["data"] for _, m in missed] == ["two", "three"]
+        async with http.stream("GET", "/mcp", headers={**headers, "last-event-id": missed[0][0]}):
+            pass  # the replayed events kept their ids: resuming from them works too
+        unknown = {**headers, "last-event-id": "never-sent"}
+        async with http.stream("GET", "/mcp", headers=unknown) as stream:
+            assert stream.status_code == 200  # nothing to replay: just the stream
+        await wire.close()
+
+
+async def test_resuming_a_calls_stream(tmp_path: Path) -> None:
+    numbered = McpTransportModel(
+        response_mode="sse",
+        get_stream="sse",
+        sse_event_ids=True,
+        priming_versions=["2025-11-25"],
+        protocol_versions={v: v for v in protocol.KNOWN_VERSIONS},  # so 2025-11-25 is spoken
+    )
+    definition: JsonObject = {"name": "slow", "inputSchema": {"type": "object"}}
+    tools = [McpToolModel(definition=definition, behavior="computed")]
+    app, _ = mcp_app(tmp_path, mcp_model(transport=numbered, tools=tools))
+
+    async def slow(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        ctx.notify("notifications/message", {"level": "info", "data": "halfway"})
+        await asyncio.sleep(0.05)
+        return {"content": [{"type": "text", "text": "done"}]}
+
+    register_tool(app, "slow", slow)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http, protocol_version="2025-11-25")
+        await wire.initialize()
+        answered = await wire.call("tools/call", {"name": "slow", "arguments": {}})
+        priming, halfway = answered.sse_events[0][3], answered.sse_events[1][3]
+        headers = {"mcp-session-id": str(wire.session_id), "accept": "text/event-stream"}
+        for resume_from, expected in ((halfway, 1), (priming, 2)):
+            resumed = {**headers, "last-event-id": str(resume_from)}
+            async with http.stream("GET", "/mcp", headers=resumed) as stream:
+                replayed = await _events(stream, expected)
+            assert j(replayed[-1][1])["result"]["content"][0]["text"] == "done"
+        await wire.close()
+
+
+async def test_servers_without_numbered_events_drop_what_nobody_hears(tmp_path: Path) -> None:
+    unnumbered = McpTransportModel(response_mode="json", get_stream="sse")
+    app, _ = mcp_app(tmp_path, mcp_model(transport=unnumbered))
+    fake = runtime_of_app(app).mcp
+    assert fake is not None
+    fake.keep_for_later("session", {"jsonrpc": "2.0", "method": "notifications/x"})
+    assert fake._sent == {}

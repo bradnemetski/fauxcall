@@ -185,6 +185,20 @@ class RecordingPlan(Model):
     )
     calls: list[PlannedCall] = Field(default_factory=list)
     note: str | None = None
+    listen: bool = Field(
+        default=False,
+        description=(
+            "MCP: hold the client's GET stream open for the session, recording what the server "
+            "sends there (pushes, requests to the client) and answering its requests with the "
+            "running call's client_replies."
+        ),
+    )
+    listen_after_seconds: float = Field(
+        default=0.0,
+        ge=0,
+        le=300,
+        description="MCP: how long to keep listening after the last call (periodic pushes).",
+    )
 
     @model_validator(mode="after")
     def _unique_ids(self) -> RecordingPlan:

@@ -1191,3 +1191,73 @@ async def test_a_primed_handshake_is_learned(tmp_path: Path) -> None:
             probe_versions=False
         )
     assert found.model.transport.priming_versions == ["2025-06-18"]
+
+
+async def test_recordings_listen_on_the_clients_stream(tmp_path: Path) -> None:
+    from _mcp import mcp_app, mcp_model  # noqa: PLC0415
+    from fauxcall.runtime import RequestContext, register_tool  # noqa: PLC0415
+
+    roots: JsonValue = {
+        "name": "list_roots",
+        "inputSchema": {"type": "object"},
+        "annotations": {"readOnlyHint": True},
+    }
+    # JSON answers: the server's question can only travel on the client's GET stream
+    transport = McpTransportModel(response_mode="json", get_stream="sse")
+    tools = [McpToolModel(definition=roots, behavior="computed")]
+    app, _ = mcp_app(tmp_path / "server", mcp_model(transport=transport, tools=tools))
+
+    async def list_roots(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        ctx.push("notifications/message", {"level": "info", "data": "listing"})
+        listed = await ctx.ask_client("roots/list", within=5)
+        return {"content": [{"type": "text", "text": str(listed)}]}
+
+    register_tool(app, "list_roots", list_roots)
+    listed: JsonValue = {"roots": [{"uri": "file:///work"}]}
+    call = tool_call("list_roots", {}, id="roots")
+    call["client_replies"] = {"roots/list": listed}
+    the_plan = plan(call)
+    the_plan.client_capabilities = {"roots": {}}
+    the_plan.listen = True
+    the_plan.listen_after_seconds = 1.5
+    clock = FakeClock()
+    async with streaming_client(app) as http:
+        made = recorder(tmp_path, http, "http://fake.test/mcp", clock, rps=0)
+        report = await made.run(the_plan, {"list_roots": roots})
+    assert [o.status_text() for o in report.outcomes] == ["200 ok"]
+    exchanges = {e.endpoint: e for _, e in RecordingStore(tmp_path / "recordings").iter_exchanges()}
+    answer = exchanges["MCP tools/call:list_roots"].response
+    assert answer is not None
+    assert j(answer.body.parsed())["result"]["content"][0]["text"] == str(listed)
+    heard = exchanges["MCP GET:stream"]  # what the server sent outside the call
+    assert heard.request.method == "GET"
+    assert [j(jsonfmt.loads(event.data or "{}"))["method"] for event in heard.stream] == [
+        "notifications/message",
+        "roots/list",
+    ]
+    assert 1.5 in clock.sleeps  # it kept listening after the last call
+    assert made.calls_made == 4  # initialize, the stream, the call, and the closing DELETE
+
+
+async def test_listening_where_there_is_no_stream(tmp_path: Path) -> None:
+    from _mcp import mcp_app, mcp_model  # noqa: PLC0415
+
+    transport = McpTransportModel(get_stream="status", get_status=405)
+    app, _ = mcp_app(tmp_path / "server", mcp_model(transport=transport))
+    the_plan = plan()
+    the_plan.listen = True
+    async with streaming_client(app) as http:
+        await recorder(tmp_path, http, "http://fake.test/mcp", rps=0).run(the_plan)
+        wire = McpWireClient("http://fake.test/mcp", http)
+        assert await wire.stop_listening() is None  # never listened
+        await wire.initialize()
+        await wire.listen()
+        await wire.listen()  # once is enough
+        await wire.close()
+    refused = next(
+        e
+        for _, e in RecordingStore(tmp_path / "recordings").iter_exchanges()
+        if e.endpoint == "MCP GET:stream"
+    )
+    assert refused.response is not None
+    assert refused.response.status == 405  # recorded as the server answered

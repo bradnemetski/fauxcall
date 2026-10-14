@@ -15,6 +15,7 @@ import httpx2
 import pytest
 
 from fauxcall import jsonfmt
+from fauxcall.mcpwire.client import replier
 from fauxcall.mcpwire.protocol import parse_sse_events
 from fauxcall.model.plan import Approvals, PlannedCall, PlannedRequest
 from fauxcall.storage import read_model, write_model
@@ -33,7 +34,7 @@ if TYPE_CHECKING:
     from fauxcall.model.fields import FieldPolicy
     from fauxcall.privacy.pii import PiiCategory
     from fauxcall.testing.compare import Translate
-    from fauxcall.types import JsonValue
+    from fauxcall.types import JsonObject, JsonValue
 
 Target = Literal["real", "fake"]
 _SAFE: Final = frozenset({"GET", "HEAD", "OPTIONS"})
@@ -498,11 +499,37 @@ class McpClient:
         self.pace = pace
         """Rate-limit pacing for the real side (``None``: as fast as possible)."""
         self._open = False
+        self.answer_with({})  # like a client without sampling, roots …: "Method not found"
 
     async def _ensure(self) -> None:
         if not self._open:
-            await self.wire.initialize()
-            self._open = True
+            await self.open()
+
+    async def open(
+        self,
+        *,
+        capabilities: JsonObject | None = None,
+        replies: Mapping[str, JsonValue] | None = None,
+    ) -> None:
+        """Open the session as a client declaring ``capabilities`` (``{"sampling": {}}`` …).
+
+        The server's requests are answered with ``replies`` (see :meth:`answer_with`). Call it
+        before the scenario's first request, which otherwise opens a session without any.
+        """
+        if self._open:
+            raise RuntimeError("the session is already open: call open() before any request")
+        await self.wire.initialize(capabilities=capabilities)
+        self._open = True
+        if replies is not None:
+            self.answer_with(replies)
+
+    def answer_with(self, replies: Mapping[str, JsonValue]) -> None:
+        """From now on, answer the server's requests (sampling, elicitation, roots …) mid-call.
+
+        ``replies`` maps a method to its result, or to ``{"error": {...}}`` to refuse it; any
+        other request gets "Method not found", as from a client without that capability.
+        """
+        self.wire.on_request = replier(replies)
 
     async def request(
         self,

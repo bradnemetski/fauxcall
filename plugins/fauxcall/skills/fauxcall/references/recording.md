@@ -53,6 +53,10 @@ One JSON file per endpoint (or per flow) in `fauxcall/<name>/data/plans/`. Start
 `purpose`, `repeat`, `interval_ms`, `capture`, `poll`, `stream`, `cleanup`, `mutating` (override),
 `tags`, `note`.
 
+MCP plans also take, on the plan, `client_capabilities` (what the recording client declares),
+`listen` and `listen_after_seconds` (record the client's GET stream), and on each call
+`client_replies` (how the recorder answers the server's requests during it); see `mcp.md`.
+
 Purposes matter: world building only uses `sample`, `variation`, `edge`, `pagination`,
 `time_profile` and `series` by default; `invalid`, `auth`, `write_readback`, `job_poll`, `cleanup`
 recordings are evidence for errors and behavior, not data.

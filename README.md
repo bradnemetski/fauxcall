@@ -195,7 +195,7 @@ The skills drive the `fauxcall` command-line tool, and you can use it directly t
 
 ```bash
 uvx fauxcall status                 # how far each fake's build has got
-uvx fauxcall serve petstore         # run one fake in the foreground
+uvx fauxcall serve petstore         # run one fake in the foreground (with its own handlers)
 uvx fauxcall verify petstore --target parity
 uvx fauxcall --help                 # everything else
 ```

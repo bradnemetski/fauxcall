@@ -443,3 +443,54 @@ def test_verify_errors(ws: Workspace, commands: list[tuple[list[str], dict[str, 
     assert "unknown target 'prod'" in invoke("verify", "shop", "--target", "prod", code=1).output
     assert "scaffold the fake first" in invoke("verify", "shop", code=1).output
     assert commands == []
+
+
+def test_a_scaffolded_fake_serves_its_own_code(
+    ws: Workspace,
+    commands: list[tuple[list[str], dict[str, object]]],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("VIRTUAL_ENV", "/my/project/.venv")
+    fake = make_fake(ws, rest_model(), port=8765)
+    (fake.root / "pyproject.toml").write_text("[project]\nname = 'x'\n")
+    fake.src.mkdir(parents=True)
+    (fake.src / "__main__.py").write_text("")
+    served = invoke("serve", "shop").output.strip()
+    assert served == "serving shop (its own code) on http://127.0.0.1:8765"
+    invoke("serve", "shop", "--port", "9001", "--host", "0.0.0.0", "--fast")  # noqa: S104
+    (command, options), (_, fast_options) = commands
+    assert command == ["uv", "run", "--project", str(fake.root.resolve()), "fauxcall-shop"]
+    environment = options.pop("env")
+    assert isinstance(environment, dict)
+    assert "VIRTUAL_ENV" not in environment
+    assert (environment["FAUXCALL_FAST"], "FAUXCALL_PORT" in environment) == ("false", False)
+    assert options == {"cwd": fake.root.resolve(), "check": False}
+    fast = fast_options["env"]
+    assert isinstance(fast, dict)
+    assert (fast["FAUXCALL_FAST"], fast["FAUXCALL_PORT"], fast["FAUXCALL_HOST"]) == (
+        "true",
+        "9001",
+        "0.0.0.0",  # noqa: S104
+    )
+
+
+def test_serving_own_code_passes_its_exit_code_on(
+    ws: Workspace, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fake = make_fake(ws, rest_model())
+    (fake.root / "pyproject.toml").write_text("[project]\nname = 'x'\n")
+    fake.src.mkdir(parents=True)
+    (fake.src / "__main__.py").write_text("")
+    failed: subprocess.CompletedProcess[bytes] = subprocess.CompletedProcess(["uv"], 2)
+    monkeypatch.setattr(subprocess, "run", lambda *_args, **_options: failed)
+    invoke("serve", "shop", code=2)
+
+
+def test_verify_against_a_running_fake(
+    ws: Workspace, commands: list[tuple[list[str], dict[str, object]]]
+) -> None:
+    fake = make_fake(ws, rest_model())
+    (fake.root / "pyproject.toml").write_text("[project]\nname = 'x'\n")
+    invoke("verify", "shop", "--e2e-only", "--fake-url", "http://127.0.0.1:8701")
+    [(command, _)] = commands
+    assert command[-2:] == ["--fake-url", "http://127.0.0.1:8701"]

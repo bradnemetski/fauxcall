@@ -1056,3 +1056,94 @@ def test_address(request):
 """
     )
     run(pytester).assert_outcomes(passed=1)
+
+
+ASKING_CONFTEST = """
+from datetime import UTC, datetime
+from pathlib import Path
+
+import pytest
+
+from fauxcall.config import FakeSettings
+from fauxcall.model.api import ApiModel, RealTarget, SourceInfo
+from fauxcall.model.mcp import McpModel, McpToolModel, McpTransportModel
+from fauxcall.runtime import FakeRuntime, create_app, register_tool
+from fauxcall.testing import FakeUnderTest
+
+HERE = Path(__file__).parent
+MODEL = ApiModel(
+    name="asking",
+    title="Asking",
+    kind="mcp",
+    source=SourceInfo(
+        kind="mcp", url="https://mcp.example.com/mcp", fetched_at=datetime(2026, 10, 10, tzinfo=UTC)
+    ),
+    real=RealTarget(base_url="https://mcp.example.com"),
+    mcp=McpModel(
+        initialize_result={
+            "protocolVersion": "2025-06-18",
+            "capabilities": {"tools": {}},
+            "serverInfo": {"name": "asking", "version": "1.0.0"},
+        },
+        tools=[McpToolModel(definition={"name": "ask", "inputSchema": {"type": "object"}})],
+        transport=McpTransportModel(response_mode="sse"),
+    ),
+)
+
+
+def asking_app():
+    settings = FakeSettings(name="asking", data_dir=HERE / "data", fast=True, log_level="WARNING")
+    app = create_app(settings, runtime=FakeRuntime(settings, MODEL), configure_logs=False)
+
+    async def ask(ctx, arguments):
+        sampled = await ctx.ask_client("sampling/createMessage", {"messages": []}, within=5)
+        return {"content": [sampled["content"]]}
+
+    register_tool(app, "ask", ask)
+    return app
+
+
+@pytest.fixture(scope="session")
+def fauxcall_fake():
+    return FakeUnderTest(app_factory=asking_app, model=MODEL, reports_dir=HERE / "reports")
+"""
+
+ASKING_SCENARIOS = """
+import time
+
+import pytest
+
+SAMPLED = {"role": "assistant", "content": {"type": "text", "text": "hi"}, "model": "m"}
+
+
+async def test_answered_mid_call(mcp):
+    await mcp.open(capabilities={"sampling": {}}, replies={"sampling/createMessage": SAMPLED})
+    result = await mcp.call_tool("ask")
+    assert result["content"][0]["text"] == "hi"
+
+
+async def test_refused_like_a_client_without_sampling(mcp):
+    started = time.monotonic()
+    error = await mcp.call_tool("ask")
+    assert error["code"] == -32601  # "Method not found", at once: nobody waits for a timeout
+    assert time.monotonic() - started < 2
+
+
+async def test_answers_can_change(mcp):
+    await mcp.open(capabilities={"sampling": {}})
+    mcp.answer_with({"sampling/createMessage": {"error": {"code": -1, "message": "declined"}}})
+    assert (await mcp.call_tool("ask"))["message"] == "declined"
+
+
+async def test_open_comes_first(mcp):
+    await mcp.list_tools()
+    with pytest.raises(RuntimeError, match="already open"):
+        await mcp.open()
+"""
+
+
+def test_scenarios_answer_the_server_mid_call_in_process(pytester: pytest.Pytester) -> None:
+    pytester.makeini(INI)
+    pytester.makeconftest(ASKING_CONFTEST)
+    pytester.makepyfile(test_asking=ASKING_SCENARIOS)
+    run(pytester).assert_outcomes(passed=4)

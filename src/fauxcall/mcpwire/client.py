@@ -96,6 +96,30 @@ def _reply_to(messages: list[JsonValue], wanted: JsonValue) -> JsonValue:
     return next((m for m in responses if m.get("id") is None and "error" in m), None)
 
 
+@dataclass
+class _Listening:
+    """The client's GET stream, held open by :meth:`McpWireClient.listen`."""
+
+    headers: dict[str, str]
+    opened: asyncio.Event = field(default_factory=asyncio.Event)
+    task: asyncio.Task[None] | None = None
+    status: int | None = None
+    content_type: str | None = None
+    response_headers: list[tuple[str, str]] = field(default_factory=list)
+    body: str = ""
+    events: list[tuple[float, str, str, str | None]] = field(default_factory=list)
+    started: float = field(default_factory=time.perf_counter)
+    started_ns: int = field(default_factory=time.time_ns)
+
+
+def _json_or_nothing(data: str) -> list[JsonValue]:
+    """An event's JSON message, if it carries one."""
+    try:
+        return [jsonfmt.loads(data)]
+    except ValueError:
+        return []
+
+
 class McpWireClient:
     """Minimal MCP client that records everything."""
 
@@ -126,6 +150,7 @@ class McpWireClient:
         self._sse_messages_url: str | None = None
         self._sse_queue: asyncio.Queue[_QueuedEvent] | None = None
         self._sse_task: asyncio.Task[None] | None = None
+        self._listening: _Listening | None = None
         self._sse_stream: contextlib.AbstractAsyncContextManager[httpx2.Response] | None = None
         self._sse_ended = False
 
@@ -410,8 +435,77 @@ class McpWireClient:
         response = await self.http.delete(self.url, headers=headers, timeout=self.timeout_s)
         return response.status_code
 
+    async def listen(self) -> None:
+        """Open the client's GET stream and keep it open in the background.
+
+        Every event the server sends there is kept (with when it arrived), and its requests are
+        answered through ``on_request``, until :meth:`stop_listening`. Returns once the server
+        has answered the GET.
+        """
+        if self._listening is not None:
+            return
+        listening = _Listening(headers=self._stream_headers(self.session_id))
+        self._listening = listening
+        listening.task = asyncio.create_task(self._listen(listening))
+        await asyncio.wait(
+            {listening.task, asyncio.ensure_future(listening.opened.wait())},
+            return_when=asyncio.FIRST_COMPLETED,
+        )
+
+    async def _listen(self, listening: _Listening) -> None:
+        timeout = httpx2.Timeout(self.timeout_s, read=None)  # idle streams are normal
+        try:
+            async with self.http.stream(
+                "GET", self.url, headers=listening.headers, timeout=timeout
+            ) as response:
+                listening.status = response.status_code
+                listening.content_type = response.headers.get("content-type")
+                listening.response_headers = list(response.headers.multi_items())
+                listening.opened.set()
+                if not _is_event_stream(listening.content_type):
+                    listening.body = (await response.aread()).decode("utf-8", "replace")
+                    return
+                decoder = protocol.SseDecoder()
+                async for text in response.aiter_text():
+                    stamp = (time.perf_counter() - listening.started) * 1000
+                    for event in decoder.feed(text):
+                        listening.events.append((stamp, event.event, event.data, event.id))
+                        await self._answer_server(event.data)
+        finally:
+            listening.opened.set()
+
+    async def stop_listening(self) -> RpcCall | None:
+        """Close the GET stream :meth:`listen` opened; what the server sent there, as one call."""
+        listening, self._listening = self._listening, None
+        if listening is None:
+            return None
+        if listening.task is not None:  # (cancelling a finished task changes nothing)
+            listening.task.cancel()
+            with contextlib.suppress(asyncio.CancelledError, httpx2.HTTPError):
+                await listening.task
+        if listening.status is None:  # the GET failed before the server answered
+            return None
+        messages = [m for _, _, data, _ in listening.events for m in _json_or_nothing(data)]
+        return RpcCall(
+            method="GET",
+            sent=None,
+            status=listening.status,
+            request_headers=list(listening.headers.items()),
+            response_headers=listening.response_headers,
+            content_type=listening.content_type,
+            body=listening.body,
+            messages=messages,
+            response=None,
+            started_ns=listening.started_ns,
+            elapsed_ms=(time.perf_counter() - listening.started) * 1000,
+            sse_events=listening.events,
+            http_method="GET",
+        )
+
     async def close(self) -> None:
         """Close the session and any SSE stream (safe to call more than once)."""
+        with contextlib.suppress(httpx2.HTTPError):
+            await self.stop_listening()
         with contextlib.suppress(httpx2.HTTPError):
             await self.delete_session()
         if self._sse_task is not None:
@@ -540,3 +634,26 @@ def _answers(event: protocol.SseEvent, wanted: JsonValue) -> bool:
     except ValueError:
         return False
     return protocol.is_response(parsed) and isinstance(parsed, dict) and parsed.get("id") == wanted
+
+
+def replier(
+    replies: Mapping[str, JsonValue],
+) -> Callable[[JsonObject], Awaitable[JsonValue | None]]:
+    """How a client answers the server's requests (sampling, elicitation, roots …) mid-call.
+
+    ``replies`` maps a method to its result, or to ``{"error": {...}}`` to refuse it; any other
+    request gets "Method not found", as from a client without that capability.
+    """
+
+    async def reply(request: JsonObject) -> JsonValue | None:
+        method = str(request.get("method"))
+        found = replies.get(method)
+        request_id = request.get("id")
+        if isinstance(found, dict) and isinstance(found.get("error"), dict):
+            error = found["error"]
+            return {"jsonrpc": "2.0", "id": request_id, "error": error}
+        if found is None:
+            return protocol.error(request_id, protocol.METHOD_NOT_FOUND, "Method not found")
+        return protocol.result(request_id, found)
+
+    return reply

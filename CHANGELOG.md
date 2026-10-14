@@ -51,7 +51,12 @@ project's Everything reference server, built by a headless run, shows all of it.
   interval, on idle GET streams and during long calls.
 - **Recording.** Plans declare the client's capabilities (`client_capabilities`) and how the
   recorder answers the server's requests (`client_replies`), so tools that sample, elicit or ask
-  for roots can be recorded.
+  for roots can be recorded. With `"listen": true` the recorder also holds the client's GET
+  stream open, records what the server sends there (log messages, resource updates, requests such
+  as `roots/list`) and answers its requests; `listen_after_seconds` waits for periodic pushes.
+- **Reconnecting.** A fake of a server that numbers its SSE events keeps what it sends, including
+  pushes while no stream is open, and replays the rest of a stream to a client that reconnects
+  with `Last-Event-ID`, as the real server does.
 - An MCP example: `examples/fauxcall/everything`, a fake of the MCP project's Everything reference
   server built by a headless run (100% parity, independent 100% over 144 of 192 calls).
 
@@ -60,6 +65,11 @@ project's Everything reference server, built by a headless run, shows all of it.
 - **Offline test runs refuse the network.** Against the fake alone, any connection off the
   machine, or to the real service, fails the test that tried (even when the fake swallowed the
   error): a fake answers from its recordings and data, never by calling out.
+- **Scenarios can be any MCP client.** `await mcp.open(capabilities=…, replies=…)` opens the
+  session as a client that supports sampling, roots … and answers the server's requests mid-call;
+  `mcp.answer_with(…)` changes the answers. The in-process fake now streams its answers, so this
+  works without serving the fake.
+- `fauxcall verify --fake-url` runs the scenarios against a fake that is already running.
 
 **Building fakes**
 
@@ -71,6 +81,8 @@ project's Everything reference server, built by a headless run, shows all of it.
 
 ### Changed
 
+- In scenarios, the server's requests to the client get "Method not found" (as from a client
+  without those capabilities) unless the scenario answers them, instead of no answer at all.
 - **Existing fakes' tests can now fail** if the fake reaches the network: that was a fidelity bug
   the tests couldn't see. Serve what was recorded instead, and answer as the real service does
   when the network fails.
@@ -81,6 +93,8 @@ project's Everything reference server, built by a headless run, shows all of it.
 
 ### Fixed
 
+- `fauxcall serve` and `fauxcall up` run a scaffolded fake's own code. They served only the routes
+  the model describes, so tools and methods answered by `handlers.py` answered "no handler".
 - MCP prompts, resource reads and completions answer with the recording that matches their
   params; before, the first recording answered every call.
 - Parity compares the real side's answers as they would have been recorded (same pseudonyms as
