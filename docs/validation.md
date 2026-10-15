@@ -43,13 +43,13 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
 
 | Target | Parity | Scenarios | Endpoints | Recordings | Offline tests | Sessions | Reported cost |
 |---|---|---|---|---|---|---|---|
-| Reference API | **100%** | 188, real writes included | 21 | 877 | 818, 99% coverage | 3 | over $23 |
+| Reference API | **100%** | 65, real writes included (independent: 100% over 168 of 230 calls) | 21 | 859 | 716, 98% coverage | 2 | $41.73 |
 | Frankfurter | **100%** | 142 | 9 | 219 | 427, 99% coverage | 2 | $14.06 |
 | timeapi.io | **100%** | 192 | 28 | 576 | 1,366, 98% coverage | 1 | $19.72 |
 | Swagger Petstore | **99.71%** | 96 (98.48% over 80 with real writes) | 19 | 370 | 361, 99% coverage | 1 | $15.21 |
 | FakeRESTApi | **100%** | 115 | 27 | 323 | 671, 99% coverage | 1 | $13.02 |
 | DeepWiki (MCP) | **100%** | 20 | 3 tools | 70 | 175, 98% coverage | 3 | over $8 |
-| Everything (MCP) | **100%** | 140 (independent: 100% over 160 of 205 calls) | 19 tools, 7 resources, 2 templates, 4 prompts | 514 | 507, 99% coverage | 1 | $24.76 |
+| Everything (MCP) | **100%** | 233 (independent: 100% over 234 of 289 calls) | 19 tools, 7 resources, 2 templates, 4 prompts | 526 | 747, 98% coverage | 2 | $87.93 |
 
 *Parity* is the weighted share of checks (status, shape, content type, values, lengths, headers) on which the fake answered
 like the real service, over end-to-end scenarios run against both. *Reported cost* is what Claude
@@ -60,8 +60,10 @@ DeepWiki's (see below).
 pagination, a fixed-window rate limit, an SSE stream and a WebSocket feed. The first session was cut
 off by a usage limit and resumed. The build missed the WebSocket feed, which only the API's
 description mentions; the independent review caught it, the session recorded 36 conversations and
-added it, and the skill now reads the docs' prose for such endpoints. All recordings and parity runs
-happened on a Sunday, so open-market quotes follow the documentation and are untested live.
+added it, and the skill now reads the docs' prose for such endpoints. That build recorded on a
+Sunday, so open-market quotes followed the documentation. The fake in `examples/` is a later
+rebuild that recorded on a weekday night, so it has the opposite gap: weekend and holiday closures
+follow the documentation, unverified live.
 
 **Frankfurter.** Daily ECB rates published at 16:00 Central European time, with TARGET holidays.
 The fake computes "latest" and date ranges on its own clock. Its main limit: rates stop moving after
@@ -177,8 +179,20 @@ Every problem a run hit became a fix in the tools or skills, never in the fake. 
   (the server asks for roots there), and that the fake dropped what a reconnecting client had
   missed. Scenarios now open sessions with capabilities and answers (`mcp.open`), the in-process
   fake streams, `up` runs the fake's own code, plans can `listen` on the GET stream, and the fake
-  replays missed events. The seventh build, the one in `examples/`, used all of it in one session:
-  100%, independent 100% over 160 of 205 calls, nothing skipped.
+  replays missed events. The seventh build used all of it in one session: 100%, independent 100%
+  over 160 of 205 calls, nothing skipped. The eighth, the one in `examples/`, also learned that the
+  server adds its capability tools only after `notifications/initialized`; its session ended at
+  the usage limit during the review and a second one finished it from the saved progress.
+- **Consistency both ways.** Relations used to be checked one way only (every ticker's exchange
+  exists), on the built data only: nothing said whether every exchange must list tickers, writes
+  could leave references dangling, and the model's `on_delete` was never carried out. Relations
+  now have a reverse minimum and write rules, each decided from evidence and the domain, enforced
+  by the runtime (custom handlers included) and checked after every scenario. The rebuilt
+  Reference API decided all three of its relations with evidence: every exchange lists tickers
+  and every ticker has a quote (`min_per_target: 1`), tickers need no watchlist (`0`), and a
+  watchlist naming an unknown symbol is refused, as three recorded writes showed. Its first
+  session ended at the usage limit just before the report; the second resumed from the saved
+  progress for $2.98.
 - **Docs for agents.** Where auth probes go, how to probe an approved rate limit, how to record when
   the user prepared `.env` first, and a readable `fauxcall model schema --brief` (`ebcaa3d`,
   `a450dd1`, `818a252`, `05dcd98`).

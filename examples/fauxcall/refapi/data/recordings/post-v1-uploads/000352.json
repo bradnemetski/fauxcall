@@ -1,0 +1,120 @@
+{
+  "id": "000352",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "variation",
+  "plan_call": "up-ok-3",
+  "started_at": "2026-10-15T00:45:49.875870Z",
+  "started_ns": 1792025149875870000,
+  "elapsed_ms": 19.35,
+  "ttfb_ms": 19.041,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-length",
+        "342"
+      ],
+      [
+        "content-type",
+        "multipart/form-data; boundary=694a6d8006ff47db8fac335893ca10eb"
+      ]
+    ],
+    "body": {
+      "kind": "multipart",
+      "content_type": "multipart/form-data; boundary=694a6d8006ff47db8fac335893ca10eb",
+      "size": 342,
+      "parts": [
+        {
+          "name": "label",
+          "text": "fauxcall-probe-3",
+          "size": 16
+        },
+        {
+          "name": "file",
+          "filename": "pixel.png",
+          "content_type": "image/png",
+          "file": "000352.part0.bin",
+          "size": 70
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 202,
+    "reason": "Accepted",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:45:49 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "184"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "11"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025151"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": "f7cda037-aae8-43f1-b01b-f8d638c500b9",
+        "status": "queued",
+        "filename": "pixel.png",
+        "size": 70,
+        "label": "fauxcall-probe-3",
+        "created_at": "2026-10-15T00:45:49.894077+00:00",
+        "progress": 0
+      },
+      "size": 184
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,192 @@
+{
+  "id": "000113",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "variation",
+  "plan_call": "tl-sec-Financials",
+  "started_at": "2026-10-15T00:41:58.357698Z",
+  "started_ns": 1792024918357698000,
+  "elapsed_ms": 51.414,
+  "ttfb_ms": 51.098,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?sector=Financials",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "sector",
+        "Financials"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:41:58 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "1629"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "11"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024920"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "0005.HK",
+            "name": "HSBC Holdings plc",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Financials",
+            "listed_on": "1991-04-01"
+          },
+          {
+            "symbol": "0388.HK",
+            "name": "Hong Kong Exchanges and Clearing Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Financials",
+            "listed_on": "2000-06-27"
+          },
+          {
+            "symbol": "8306.T",
+            "name": "Mitsubishi UFJ Financial Group, Inc.",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Financials",
+            "listed_on": "2001-04-02"
+          },
+          {
+            "symbol": "BAC",
+            "name": "Bank of America Corporation",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1973-09-04"
+          },
+          {
+            "symbol": "BARC.L",
+            "name": "Barclays PLC",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Financials",
+            "listed_on": "1985-05-01"
+          },
+          {
+            "symbol": "BNP.PA",
+            "name": "BNP Paribas SA",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Financials",
+            "listed_on": "1993-10-18"
+          },
+          {
+            "symbol": "GS",
+            "name": "The Goldman Sachs Group, Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1999-05-04"
+          },
+          {
+            "symbol": "HSBA.L",
+            "name": "HSBC Holdings plc",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Financials",
+            "listed_on": "1992-07-10"
+          },
+          {
+            "symbol": "JPM",
+            "name": "JPMorgan Chase & Co.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1969-03-05"
+          },
+          {
+            "symbol": "PYPL",
+            "name": "PayPal Holdings, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "2015-07-20"
+          },
+          {
+            "symbol": "V",
+            "name": "Visa Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "2008-03-19"
+          },
+          {
+            "symbol": "WFC",
+            "name": "Wells Fargo & Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1978-01-03"
+          }
+        ],
+        "next_cursor": null,
+        "total": 12
+      },
+      "size": 1629
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

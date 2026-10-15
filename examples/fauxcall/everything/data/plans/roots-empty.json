@@ -1,29 +1,16 @@
 {
- "name": "roots-empty",
- "created_at": "2026-10-13T22:00:00Z",
- "calls": [
-  {
-   "id": "roots-empty",
-   "endpoint": "MCP tools/call:get-roots-list",
-   "purpose": "variation",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "get-roots-list",
-     "arguments": {}
-    }
-   },
-   "client_replies": {
-    "roots/list": {
-     "roots": []
-    }
-   }
-  }
- ],
- "client_capabilities": {
-  "roots": {}
- },
- "listen": true,
- "listen_after_seconds": 1
+  "name": "roots-empty",
+  "created_at": "2026-10-15T00:55:00Z",
+  "note": "get-roots-list when the client answers with no roots (GET stream open).",
+  "client_capabilities": {"roots": {}},
+  "listen": true,
+  "listen_after_seconds": 1,
+  "calls": [
+    {"id": "roots-empty", "endpoint": "MCP tools/call:get-roots-list", "purpose": "variation",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-roots-list", "arguments": {}}},
+     "client_replies": {"roots/list": {"roots": []}}},
+    {"id": "roots-empty-again", "endpoint": "MCP tools/call:get-roots-list", "purpose": "edge",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-roots-list", "arguments": {}}},
+     "client_replies": {"roots/list": {"roots": [{"uri": "file:///late", "name": "late"}]}}}
+  ]
 }

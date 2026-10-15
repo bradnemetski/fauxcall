@@ -1,0 +1,160 @@
+{
+  "id": "000705",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "pagination",
+  "plan_call": "tl2-xnys-walk-2",
+  "started_at": "2026-10-15T00:53:27.427252Z",
+  "started_ns": 1792025607427252000,
+  "elapsed_ms": 48.447,
+  "ttfb_ms": 48.133,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?exchange=XNYS&limit=10&cursor=eyJhZnRlciI6IkpOSiJ9",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "exchange",
+        "XNYS"
+      ],
+      [
+        "limit",
+        "10"
+      ],
+      [
+        "cursor",
+        "eyJhZnRlciI6IkpOSiJ9"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:27 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "955"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025618"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "JPM",
+            "name": "JPMorgan Chase & Co.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1969-03-05"
+          },
+          {
+            "symbol": "KO",
+            "name": "The Coca-Cola Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Consumer Staples",
+            "listed_on": "1919-09-05"
+          },
+          {
+            "symbol": "PFE",
+            "name": "Pfizer Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Healthcare",
+            "listed_on": "1944-01-03"
+          },
+          {
+            "symbol": "TSM",
+            "name": "Taiwan Semiconductor Manufacturing Co., Ltd.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Semiconductors",
+            "listed_on": "1997-10-08"
+          },
+          {
+            "symbol": "V",
+            "name": "Visa Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "2008-03-19"
+          },
+          {
+            "symbol": "WFC",
+            "name": "Wells Fargo & Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1978-01-03"
+          },
+          {
+            "symbol": "XOM",
+            "name": "Exxon Mobil Corporation",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Energy",
+            "listed_on": "1920-03-31"
+          }
+        ],
+        "next_cursor": null,
+        "total": 16
+      },
+      "size": 955
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

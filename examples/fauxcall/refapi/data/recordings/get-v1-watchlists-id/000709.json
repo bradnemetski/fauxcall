@@ -1,0 +1,91 @@
+{
+  "id": "000709",
+  "endpoint": "GET /v1/watchlists/{id}",
+  "purpose": "invalid",
+  "plan_call": "wl2-get-leading-zeros-unknown",
+  "started_at": "2026-10-15T00:53:29.435734Z",
+  "started_ns": 1792025609435734000,
+  "elapsed_ms": 49.522,
+  "ttfb_ms": 49.18,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/watchlists/007",
+    "path": "/v1/watchlists/007",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:29 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "128"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025618"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "watchlist_not_found",
+          "message": "No watchlist with id 7.",
+          "request_id": "3c918fdf-147c-4794-8ee9-60e8d0434abe"
+        }
+      },
+      "size": 128
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

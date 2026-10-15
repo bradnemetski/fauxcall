@@ -1,0 +1,91 @@
+{
+  "id": "000063",
+  "endpoint": "GET /v1/tickers/{symbol}/quote",
+  "purpose": "invalid",
+  "plan_call": "q-unknown",
+  "started_at": "2026-10-15T00:40:29.862716Z",
+  "started_ns": 1792024829862716000,
+  "elapsed_ms": 25.11,
+  "ttfb_ms": 24.538,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/ZZZZ/quote",
+    "path": "/v1/tickers/ZZZZ/quote",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:40:29 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "131"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024840"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "ticker_not_found",
+          "message": "No ticker with symbol 'ZZZZ'.",
+          "request_id": "5260c140-9f52-44e0-bc88-b88c7af61fe4"
+        }
+      },
+      "size": 131
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "id": "000330",
+  "endpoint": "MCP tools/call:trigger-url-elicitation",
+  "purpose": "variation",
+  "plan_call": "url-decline-id",
+  "started_at": "2026-10-15T00:49:18.030266Z",
+  "started_ns": 1792025358030266000,
+  "elapsed_ms": 10.452,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-url-elicitation",
+          "arguments": {
+            "url": "https://example.com/pay",
+            "message": "Complete the payment",
+            "elicitationId": "pay-123"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:49:18 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "❌ User declined to open the URL (Elicitation ID: pay-123)."
+            },
+            {
+              "type": "text",
+              "text": "\nRaw result: {\n  \"action\": \"decline\"\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 3
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.96,
+      "kind": "sse",
+      "event": "message",
+      "id": "074ad121-a3e6-4643-9cff-1ac4c4fa7bb1",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"mode\":\"url\",\"url\":\"https://example.com/pay\",\"message\":\"Complete the payment\",\"elicitationId\":\"pay-123\"},\"jsonrpc\":\"2.0\",\"id\":1}"
+    },
+    {
+      "t_ms": 10.124,
+      "kind": "sse",
+      "event": "message",
+      "id": "4452a7de-a7fe-4124-aee1-c16b38fc5cec",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"❌ User declined to open the URL (Elicitation ID: pay-123).\"},{\"type\":\"text\",\"text\":\"\\nRaw result: {\\n  \\\"action\\\": \\\"decline\\\"\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":3}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

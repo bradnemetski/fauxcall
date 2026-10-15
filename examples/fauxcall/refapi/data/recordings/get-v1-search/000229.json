@@ -1,20 +1,20 @@
 {
   "id": "000229",
   "endpoint": "GET /v1/search",
-  "purpose": "variation",
-  "plan_call": "s-10",
-  "started_at": "2026-10-11T06:18:30.117705Z",
-  "started_ns": 1791699510117705000,
-  "elapsed_ms": 42.528,
-  "ttfb_ms": 42.39,
+  "purpose": "invalid",
+  "plan_call": "s-two-spaces",
+  "started_at": "2026-10-15T00:42:57.138603Z",
+  "started_ns": 1792024977138603000,
+  "elapsed_ms": 46.116,
+  "ttfb_ms": 45.567,
   "request": {
     "method": "GET",
-    "url": "http://127.0.0.1:9100/v1/search?q=chip",
+    "url": "http://127.0.0.1:9100/v1/search?q=++",
     "path": "/v1/search",
     "query": [
       [
         "q",
-        "chip"
+        "  "
       ]
     ],
     "headers": [
@@ -36,7 +36,7 @@
       ],
       [
         "user-agent",
-        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
       ],
       [
         "x-api-key",
@@ -51,7 +51,7 @@
     "headers": [
       [
         "date",
-        "Sun, 11 Oct 2026 06:18:30 GMT"
+        "Thu, 15 Oct 2026 00:42:56 GMT"
       ],
       [
         "server",
@@ -59,7 +59,7 @@
       ],
       [
         "content-length",
-        "555"
+        "27"
       ],
       [
         "content-type",
@@ -71,62 +71,21 @@
       ],
       [
         "x-ratelimit-remaining",
-        "19"
+        "15"
       ],
       [
         "x-ratelimit-reset",
-        "1791699516"
+        "1792024981"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "application/json",
       "json": {
-        "query": "chip",
-        "results": [
-          {
-            "symbol": "0981.HK",
-            "name": "Semiconductor Manufacturing International",
-            "score": 0.5
-          },
-          {
-            "symbol": "8035.T",
-            "name": "Tokyo Electron Limited",
-            "score": 0.5
-          },
-          {
-            "symbol": "AMD",
-            "name": "Advanced Micro Devices, Inc.",
-            "score": 0.5
-          },
-          {
-            "symbol": "AVGO",
-            "name": "Broadcom Inc.",
-            "score": 0.5
-          },
-          {
-            "symbol": "INTC",
-            "name": "Intel Corporation",
-            "score": 0.5
-          },
-          {
-            "symbol": "NVDA",
-            "name": "NVIDIA Corporation",
-            "score": 0.5
-          },
-          {
-            "symbol": "QCOM",
-            "name": "QUALCOMM Incorporated",
-            "score": 0.5
-          },
-          {
-            "symbol": "TSM",
-            "name": "Taiwan Semiconductor Manufacturing Co., Ltd.",
-            "score": 0.5
-          }
-        ]
+        "query": "  ",
+        "results": []
       },
-      "size": 555
+      "size": 27
     }
   },
   "redacted": [

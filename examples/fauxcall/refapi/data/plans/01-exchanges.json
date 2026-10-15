@@ -1,0 +1,156 @@
+{
+  "name": "01-exchanges",
+  "created_at": "2026-10-14T20:45:00Z",
+  "calls": [
+    {
+      "id": "ex-list-1",
+      "endpoint": "GET /v1/exchanges",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges"
+      }
+    },
+    {
+      "id": "ex-list-unknown-param",
+      "endpoint": "GET /v1/exchanges",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges",
+        "query": [
+          [
+            "foo",
+            "bar"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "exg-xhkg",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XHKG"
+      }
+    },
+    {
+      "id": "exg-xlon",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XLON"
+      }
+    },
+    {
+      "id": "exg-xnas",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XNAS"
+      }
+    },
+    {
+      "id": "exg-xnys",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XNYS"
+      }
+    },
+    {
+      "id": "exg-xpar",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XPAR"
+      }
+    },
+    {
+      "id": "exg-xtks",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XTKS"
+      }
+    },
+    {
+      "id": "exg-lower",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/xnys"
+      }
+    },
+    {
+      "id": "exg-mixed",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XnAs"
+      }
+    },
+    {
+      "id": "exg-lower-tks",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/xtks"
+      }
+    },
+    {
+      "id": "exg-unknown",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XXXX"
+      }
+    },
+    {
+      "id": "exg-digits",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/1234"
+      }
+    },
+    {
+      "id": "exg-long",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      }
+    },
+    {
+      "id": "exg-short",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/X"
+      }
+    },
+    {
+      "id": "exg-dot",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XNYS.US"
+      }
+    }
+  ]
+}

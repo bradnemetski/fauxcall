@@ -1,0 +1,107 @@
+{
+  "id": "000289",
+  "endpoint": "PATCH /v1/watchlists/{id}",
+  "purpose": "invalid",
+  "plan_call": "wl-patch-unknown-id",
+  "started_at": "2026-10-15T00:44:36.625095Z",
+  "started_ns": 1792025076625095000,
+  "elapsed_ms": 58.294,
+  "ttfb_ms": 57.687,
+  "request": {
+    "method": "PATCH",
+    "url": "http://127.0.0.1:9100/v1/watchlists/999999",
+    "path": "/v1/watchlists/999999",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "27"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "name": "fauxcall-probe-x"
+      },
+      "size": 27
+    }
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:36 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "133"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "13"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025079"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "watchlist_not_found",
+          "message": "No watchlist with id 999999.",
+          "request_id": "d1251aa9-80b0-4b12-8c6d-03d31fad4b56"
+        }
+      },
+      "size": 133
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

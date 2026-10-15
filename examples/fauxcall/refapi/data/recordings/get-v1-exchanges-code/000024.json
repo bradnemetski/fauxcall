@@ -1,12 +1,12 @@
 {
   "id": "000024",
   "endpoint": "GET /v1/exchanges/{code}",
-  "purpose": "invalid",
-  "plan_call": "ex-404-0",
-  "started_at": "2026-10-11T06:05:02.444805Z",
-  "started_ns": 1791698702444805000,
-  "elapsed_ms": 69.546,
-  "ttfb_ms": 68.418,
+  "purpose": "auth",
+  "plan_call": "auth-readonly-404",
+  "started_at": "2026-10-15T00:37:59.248241Z",
+  "started_ns": 1792024679248241000,
+  "elapsed_ms": 69.598,
+  "ttfb_ms": 69.268,
   "request": {
     "method": "GET",
     "url": "http://127.0.0.1:9100/v1/exchanges/XXXX",
@@ -29,12 +29,12 @@
         "keep-alive"
       ],
       [
-        "user-agent",
-        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
-      ],
-      [
         "x-api-key",
         "[REDACTED]"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
       ]
     ]
   },
@@ -45,7 +45,7 @@
     "headers": [
       [
         "date",
-        "Sun, 11 Oct 2026 06:05:01 GMT"
+        "Thu, 15 Oct 2026 00:37:58 GMT"
       ],
       [
         "server",
@@ -65,11 +65,11 @@
       ],
       [
         "x-ratelimit-remaining",
-        "21"
+        "28"
       ],
       [
         "x-ratelimit-reset",
-        "1791698709"
+        "1792024686"
       ]
     ],
     "body": {
@@ -79,12 +79,15 @@
         "error": {
           "code": "exchange_not_found",
           "message": "No exchange with code 'XXXX'.",
-          "request_id": "dd8e545e-cfbb-4e72-8d28-76f0169a5a29"
+          "request_id": "a33dd5bb-cc2f-40b6-aa7b-74f9dbf568a4"
         }
       },
       "size": 133
     }
   },
+  "tags": [
+    "auth:none"
+  ],
   "redacted": [
     "request.header:x-api-key"
   ]

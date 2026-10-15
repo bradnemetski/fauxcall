@@ -15,12 +15,27 @@ if TYPE_CHECKING:
 
 
 async def test_recorded_mcp_tools_call_echo(mcp: McpClient) -> None:
-    result = await mcp.call_tool("echo", {"message": "hello from fauxcall"})
+    result = await mcp.call_tool("echo", {"message": "hello"})
+    assert result is not None
+
+
+async def test_recorded_mcp_tools_call_get_sum(mcp: McpClient) -> None:
+    result = await mcp.call_tool("get-sum", {"a": 1, "b": 2})
     assert result is not None
 
 
 async def test_recorded_mcp_tools_call_get_annotated_message(mcp: McpClient) -> None:
-    result = await mcp.call_tool("get-annotated-message", {"messageType": "success"})
+    result = await mcp.call_tool("get-annotated-message", {"messageType": "error"})
+    assert result is not None
+
+
+async def test_recorded_mcp_tools_call_get_structured_conten(mcp: McpClient) -> None:
+    result = await mcp.call_tool("get-structured-content", {"location": "New York"})
+    assert result is not None
+
+
+async def test_recorded_mcp_tools_call_get_tiny_image(mcp: McpClient) -> None:
+    result = await mcp.call_tool("get-tiny-image", {})
     assert result is not None
 
 
@@ -39,26 +54,20 @@ async def test_recorded_mcp_tools_call_get_resource_referenc(mcp: McpClient) -> 
     assert result is not None
 
 
-async def test_recorded_mcp_tools_call_get_structured_conten(mcp: McpClient) -> None:
-    result = await mcp.call_tool("get-structured-content", {"location": "Chicago"})
-    assert result is not None
-
-
-async def test_recorded_mcp_tools_call_get_sum(mcp: McpClient) -> None:
-    result = await mcp.call_tool("get-sum", {"a": 2, "b": 3})
-    assert result is not None
-
-
-async def test_recorded_mcp_tools_call_get_tiny_image(mcp: McpClient) -> None:
-    result = await mcp.call_tool("get-tiny-image", {})
-    assert result is not None
-
-
 async def test_recorded_mcp_tools_call_gzip_file_as_resource(mcp: McpClient) -> None:
     result = await mcp.call_tool(
         "gzip-file-as-resource",
-        {"name": "hello.txt.gz", "data": "data:text/plain;base64,aGVsbG8gd29ybGQK"},
+        {
+            "name": "hello.txt.gz",
+            "data": "data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==",
+            "outputType": "resource",
+        },
     )
+    assert result is not None
+
+
+async def test_recorded_mcp_tools_call_trigger_long_running(mcp: McpClient) -> None:
+    result = await mcp.call_tool("trigger-long-running-operation", {"duration": 2, "steps": 4})
     assert result is not None
 
 
@@ -69,9 +78,4 @@ async def test_recorded_mcp_tools_call_toggle_simulated_logg(mcp: McpClient) -> 
 
 async def test_recorded_mcp_tools_call_toggle_subscriber_upd(mcp: McpClient) -> None:
     result = await mcp.call_tool("toggle-subscriber-updates", {})
-    assert result is not None
-
-
-async def test_recorded_mcp_tools_call_trigger_long_running(mcp: McpClient) -> None:
-    result = await mcp.call_tool("trigger-long-running-operation", {"duration": 1, "steps": 2})
     assert result is not None

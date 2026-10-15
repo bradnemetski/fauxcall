@@ -1,0 +1,95 @@
+{
+  "id": "000257",
+  "endpoint": "POST /v1/watchlists",
+  "purpose": "invalid",
+  "plan_call": "wl-create-no-body",
+  "started_at": "2026-10-15T00:44:20.549974Z",
+  "started_ns": 1792025060549974000,
+  "elapsed_ms": 30.945,
+  "ttfb_ms": 30.596,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/watchlists",
+    "path": "/v1/watchlists",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "content-length",
+        "0"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:20 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "133"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025069"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_body",
+          "message": "Request body must be a JSON object.",
+          "request_id": "1e9a9949-67b4-400d-8058-3276feec4a85"
+        }
+      },
+      "size": 133
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

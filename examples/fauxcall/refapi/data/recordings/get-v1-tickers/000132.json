@@ -1,0 +1,98 @@
+{
+  "id": "000132",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "invalid",
+  "plan_call": "tl-sec-unknown",
+  "started_at": "2026-10-15T00:42:07.900130Z",
+  "started_ns": 1792024927900130000,
+  "elapsed_ms": 49.845,
+  "ttfb_ms": 49.45,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?sector=Crypto",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "sector",
+        "Crypto"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:42:07 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "144"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "12"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024930"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Unknown sector 'Crypto'.",
+          "request_id": "32122d0d-bf3c-4c0d-839d-a8241eb27668",
+          "param": "sector"
+        }
+      },
+      "size": 144
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "id": "000854",
+  "endpoint": "OPTIONS /healthz",
+  "purpose": "edge",
+  "plan_call": "h-options",
+  "started_at": "2026-10-15T03:36:08.391246Z",
+  "started_ns": 1792035368391246000,
+  "elapsed_ms": 11.306,
+  "ttfb_ms": 11.162,
+  "request": {
+    "method": "OPTIONS",
+    "url": "http://127.0.0.1:9100/healthz",
+    "path": "/healthz",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 405,
+    "reason": "Method Not Allowed",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 03:36:07 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "allow",
+        "GET"
+      ],
+      [
+        "content-length",
+        "147"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "method_not_allowed",
+          "message": "Method OPTIONS is not allowed for /healthz.",
+          "request_id": "71df67df-9d5c-45a0-8ada-fe14b2d0bfb8"
+        }
+      },
+      "size": 147
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

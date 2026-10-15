@@ -1,0 +1,99 @@
+{
+  "id": "000119",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "variation",
+  "plan_call": "tl-ex-sec-empty",
+  "started_at": "2026-10-15T00:42:01.372451Z",
+  "started_ns": 1792024921372451000,
+  "elapsed_ms": 49.171,
+  "ttfb_ms": 48.597,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?exchange=XLON&sector=Semiconductors",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "exchange",
+        "XLON"
+      ],
+      [
+        "sector",
+        "Semiconductors"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:42:00 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "40"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024930"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [],
+        "next_cursor": null,
+        "total": 0
+      },
+      "size": 40
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -2,19 +2,19 @@
   "id": "000231",
   "endpoint": "GET /v1/search",
   "purpose": "variation",
-  "plan_call": "s-12",
-  "started_at": "2026-10-11T06:18:31.120384Z",
-  "started_ns": 1791699511120384000,
-  "elapsed_ms": 42.619,
-  "ttfb_ms": 42.491,
+  "plan_call": "s-same-1",
+  "started_at": "2026-10-15T00:42:58.143952Z",
+  "started_ns": 1792024978143952000,
+  "elapsed_ms": 49.0,
+  "ttfb_ms": 48.681,
   "request": {
     "method": "GET",
-    "url": "http://127.0.0.1:9100/v1/search?q=semiconductor",
+    "url": "http://127.0.0.1:9100/v1/search?q=tech",
     "path": "/v1/search",
     "query": [
       [
         "q",
-        "semiconductor"
+        "tech"
       ]
     ],
     "headers": [
@@ -36,7 +36,7 @@
       ],
       [
         "user-agent",
-        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
       ],
       [
         "x-api-key",
@@ -51,7 +51,7 @@
     "headers": [
       [
         "date",
-        "Sun, 11 Oct 2026 06:18:31 GMT"
+        "Thu, 15 Oct 2026 00:42:57 GMT"
       ],
       [
         "server",
@@ -59,7 +59,7 @@
       ],
       [
         "content-length",
-        "564"
+        "312"
       ],
       [
         "content-type",
@@ -71,62 +71,47 @@
       ],
       [
         "x-ratelimit-remaining",
-        "17"
+        "13"
       ],
       [
         "x-ratelimit-reset",
-        "1791699516"
+        "1792024981"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "application/json",
       "json": {
-        "query": "semiconductor",
+        "query": "tech",
         "results": [
           {
-            "symbol": "0981.HK",
-            "name": "Semiconductor Manufacturing International",
-            "score": 0.8
-          },
-          {
-            "symbol": "TSM",
-            "name": "Taiwan Semiconductor Manufacturing Co., Ltd.",
-            "score": 0.8
-          },
-          {
-            "symbol": "8035.T",
-            "name": "Tokyo Electron Limited",
+            "symbol": "6758.T",
+            "name": "Sony Group Corporation",
             "score": 0.5
           },
           {
-            "symbol": "AMD",
-            "name": "Advanced Micro Devices, Inc.",
+            "symbol": "AAPL",
+            "name": "Apple Inc.",
             "score": 0.5
           },
           {
-            "symbol": "AVGO",
-            "name": "Broadcom Inc.",
+            "symbol": "ADBE",
+            "name": "Adobe Inc.",
             "score": 0.5
           },
           {
-            "symbol": "INTC",
-            "name": "Intel Corporation",
+            "symbol": "CSCO",
+            "name": "Cisco Systems, Inc.",
             "score": 0.5
           },
           {
-            "symbol": "NVDA",
-            "name": "NVIDIA Corporation",
-            "score": 0.5
-          },
-          {
-            "symbol": "QCOM",
-            "name": "QUALCOMM Incorporated",
+            "symbol": "MSFT",
+            "name": "Microsoft Corporation",
             "score": 0.5
           }
         ]
       },
-      "size": 564
+      "size": 312
     }
   },
   "redacted": [

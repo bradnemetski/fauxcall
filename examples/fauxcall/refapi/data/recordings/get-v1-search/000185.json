@@ -1,0 +1,100 @@
+{
+  "id": "000185",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s-25",
+  "started_at": "2026-10-15T00:42:35.033240Z",
+  "started_ns": 1792024955033240000,
+  "elapsed_ms": 50.316,
+  "ttfb_ms": 49.757,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=hong+kong",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "hong kong"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:42:34 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "116"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "19"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024961"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "hong kong",
+        "results": [
+          {
+            "symbol": "0388.HK",
+            "name": "Hong Kong Exchanges and Clearing Limited",
+            "score": 0.8
+          }
+        ]
+      },
+      "size": 116
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

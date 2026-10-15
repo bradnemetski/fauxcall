@@ -1,0 +1,122 @@
+{
+  "id": "000808",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "edge",
+  "plan_call": "p-up-two-files",
+  "started_at": "2026-10-15T01:16:19.383014Z",
+  "started_ns": 1792026979383014000,
+  "elapsed_ms": 19.698,
+  "ttfb_ms": 19.4,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-length",
+        "318"
+      ],
+      [
+        "content-type",
+        "multipart/form-data; boundary=7e940e6648014f859582445a4d3d802d"
+      ]
+    ],
+    "body": {
+      "kind": "multipart",
+      "content_type": "multipart/form-data; boundary=7e940e6648014f859582445a4d3d802d",
+      "size": 318,
+      "parts": [
+        {
+          "name": "file",
+          "filename": "first.txt",
+          "content_type": "text/plain",
+          "text": "first\n",
+          "size": 6
+        },
+        {
+          "name": "file",
+          "filename": "second.txt",
+          "content_type": "text/plain",
+          "text": "second\n",
+          "size": 7
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 202,
+    "reason": "Accepted",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:16:19 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "170"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "18"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792026984"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": "f141b04a-2155-47e4-bafc-4ce3baff8e3d",
+        "status": "queued",
+        "filename": "second.txt",
+        "size": 7,
+        "label": null,
+        "created_at": "2026-10-15T01:16:19.401442+00:00",
+        "progress": 0
+      },
+      "size": 170
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

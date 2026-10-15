@@ -1,14 +1,14 @@
 {
   "id": "000014",
   "endpoint": "GET /v1/exchanges",
-  "purpose": "invalid",
-  "plan_call": "ex-list-post",
-  "started_at": "2026-10-11T06:04:27.751878Z",
-  "started_ns": 1791698667751878000,
-  "elapsed_ms": 53.321,
-  "ttfb_ms": 53.184,
+  "purpose": "auth",
+  "plan_call": "auth-invalid",
+  "started_at": "2026-10-15T00:37:54.222239Z",
+  "started_ns": 1792024674222239000,
+  "elapsed_ms": 42.445,
+  "ttfb_ms": 41.662,
   "request": {
-    "method": "POST",
+    "method": "GET",
     "url": "http://127.0.0.1:9100/v1/exchanges",
     "path": "/v1/exchanges",
     "headers": [
@@ -30,64 +30,34 @@
       ],
       [
         "user-agent",
-        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
       ],
       [
         "x-api-key",
         "[REDACTED]"
-      ],
-      [
-        "content-type",
-        "application/json"
-      ],
-      [
-        "content-length",
-        "2"
       ]
-    ],
-    "body": {
-      "kind": "json",
-      "content_type": "application/json",
-      "json": {},
-      "size": 2
-    }
+    ]
   },
   "response": {
-    "status": 405,
-    "reason": "Method Not Allowed",
+    "status": 401,
+    "reason": "Unauthorized",
     "http_version": "HTTP/1.1",
     "headers": [
       [
         "date",
-        "Sun, 11 Oct 2026 06:04:27 GMT"
+        "Thu, 15 Oct 2026 00:37:53 GMT"
       ],
       [
         "server",
         "uvicorn"
       ],
       [
-        "allow",
-        "GET"
-      ],
-      [
         "content-length",
-        "149"
+        "117"
       ],
       [
         "content-type",
         "application/json"
-      ],
-      [
-        "x-ratelimit-limit",
-        "30"
-      ],
-      [
-        "x-ratelimit-remaining",
-        "25"
-      ],
-      [
-        "x-ratelimit-reset",
-        "1791698673"
       ]
     ],
     "body": {
@@ -95,14 +65,17 @@
       "content_type": "application/json",
       "json": {
         "error": {
-          "code": "method_not_allowed",
-          "message": "Method POST is not allowed for /v1/exchanges.",
-          "request_id": "4b90cb91-75a4-437a-bd56-ccc8cc53d624"
+          "code": "invalid_api_key",
+          "message": "Invalid API key.",
+          "request_id": "7dc471c5-9ccc-4238-89e5-35cc0a7bc5eb"
         }
       },
-      "size": 149
+      "size": 117
     }
   },
+  "tags": [
+    "auth:invalid"
+  ],
   "redacted": [
     "request.header:x-api-key"
   ]

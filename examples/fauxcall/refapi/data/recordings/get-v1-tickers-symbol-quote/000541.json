@@ -1,0 +1,90 @@
+{
+  "id": "000541",
+  "endpoint": "GET /v1/tickers/{symbol}/quote",
+  "plan_call": "qa-HSBA.L",
+  "started_at": "2026-10-15T00:52:04.344137Z",
+  "started_ns": 1792025524344137000,
+  "elapsed_ms": 67.907,
+  "ttfb_ms": 67.546,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/HSBA.L/quote",
+    "path": "/v1/tickers/HSBA.L/quote",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:03 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "113"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "14"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025527"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "HSBA.L",
+        "price": "7.08",
+        "currency": "GBP",
+        "market_state": "closed",
+        "as_of": "2026-10-14T15:30:00.000000Z"
+      },
+      "size": 113
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

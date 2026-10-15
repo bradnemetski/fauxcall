@@ -12,10 +12,10 @@ uv run fauxcall-refapi            # http://127.0.0.1:8702
 uvx fauxcall up refapi            # same, from the workspace root
 ```
 
-Point your agent at `http://127.0.0.1:8702` instead of
-`http://127.0.0.1:9100`. The WebSocket quote feed is at `ws://127.0.0.1:8702/v1/ws/quotes?api_key=…`
-(same protocol as the real one). Out of scope: the MCP server at `/mcp` and the `/docs` Swagger UI.
+Point your agent at `http://127.0.0.1:8702` instead of `http://127.0.0.1:9100`.
 
+Like the real API, it refuses calls without credentials: send `X-API-Key: any-token` (any
+value works unless `auth.mode` is `allowlist` in `fauxcall.toml`). Never your real key.
 ## Control it during evaluations
 
 Every fake has an admin API under `/__fauxcall` (send `X-Fauxcall-Session: <id>` to isolate parallel runs):
@@ -31,16 +31,6 @@ Every fake has an admin API under `/__fauxcall` (send `X-Fauxcall-Session: <id>`
 
 Settings come from `FAUXCALL_*` variables, `.env` and `fauxcall.toml` (e.g. `FAUXCALL_FAST=1` turns off
 latency and rate-limit emulation).
-
-Known limits:
-
-- With rate limiting on, changing the clock (`freeze`/`travel`/`scale`) does not move the rate-limit
-  window: the limiter runs on wall-clock time, so `X-RateLimit-Reset` drifts and a 429 only lifts in
-  real time (a FauxCall runtime limitation in `runtime/ratelimit.py`).
-- Besides the real demo keys (`demo-key`, `readonly-key`, `revoked-key`), the fake also accepts
-  `fauxcall-test-key` (the test harness's placeholder); the real API rejects it.
-- Holidays are not modeled, and the open-market quote behavior follows the documentation (the
-  recordings were made on a weekend).
 
 ## What's inside
 
@@ -61,3 +51,49 @@ uv run pytest tests/e2e --target=parity         # compare with the real API (nee
 ```
 
 Endpoints: 21.
+
+## Known limitations and notes
+
+<!-- fauxcall:notes (kept by `fauxcall scaffold`; the rest of this file is regenerated) -->
+**Keys.** Like the real API, the fake admits exactly the documented keys (`auth.mode = "allowlist"`
+in `fauxcall.toml`): `demo-key` (full access), `readonly-key` (GET only: writes get 403
+`read_only_key`) and `revoked-key` (always 403 `api_key_revoked`); anything else is 401
+`invalid_api_key`, no key is 401 `missing_api_key`. The WebSocket feed takes the key in
+`?api_key=` (the header is ignored there, as on the real API).
+
+**What is covered.** All 20 REST endpoints of the OpenAPI document plus the WebSocket quote feed
+`/v1/ws/quotes` that only the API's description mentions. Parity with the real API: 100 %
+overall and 100 % on calls that don't repeat a recording (168 of 230), 65 scenarios with writes
+(`data/reports/parity.md`). The last fix (the `Allow` header on 405s outside `/v1`) came after
+that run, and the per-endpoint write budget had no room for another, so the full suite was re-run
+without real writes: 100 % over 66 scenarios, 118 of 169 calls independent
+(`data/reports/parity-readonly-final.md`).
+
+**Known differences, and why**
+
+- **429 body.** Rate limiting is emulated as documented (30 requests per key per 10 s fixed
+  window, counting every `/v1` call including unknown routes, `X-RateLimit-*` headers,
+  `Retry-After`), but the real 429 body was never recorded: probing a rate limit needs your
+  explicit approval, and the answers file approves writes only. Its `code`/`message` are a guess
+  in the documented error shape.
+- **Calendars.** Weekdays and the exchanges' published sessions (with Tokyo's and Hong Kong's lunch
+  breaks). Recording happened on a Thursday night (UTC), so weekends and holidays could not be
+  observed: the fake treats every weekday as a trading day and weekends as closed, unverified.
+- **Search synonyms.** Scores follow rules reverse-engineered from 180 recorded queries (exact on
+  all of them); sector synonyms are the ~40 observed. A synonym the real API knows but no
+  recording tried scores 0 in the fake.
+- **Trade walks.** `GET /v1/stream/trades` replays each symbol's recorded 50-event walk (prices
+  and sizes) with live timestamps; parity compares the values too and they match today. If the
+  real walk is seeded by the date, values will differ on other days.
+- **Write methods on read-only paths** (`POST /healthz`, `POST /v1/exchanges`,
+  `PATCH /v1/tickers/{symbol}`, `POST /v1/watchlists/{id}`, …) answer 405 `method_not_allowed`
+  with the path's `Allow` header (empty at `/openapi.json`; under `/v1` after the key check and
+  with rate-limit headers), the answer the real API gives `OPTIONS` and `HEAD` there. The real
+  answer to these write methods was never recorded: probing them needs your approval, which
+  covered the documented writes only.
+- **`/docs`** (the real Swagger UI page) is not served; `/openapi.json` is.
+- **WebSocket parity** is checked by comparing conversation transcripts in
+  `tests/e2e/test_streams.py` (7 of the 66 scenarios); the HTTP parity report does not count it.
+- **Not faked here:** the MCP server the API's description mentions at `/mcp` (a fake is either
+  REST or MCP). Build it as a separate fake: `fauxcall init http://127.0.0.1:9100/mcp --name refapi-mcp`.
+<!-- /fauxcall:notes -->

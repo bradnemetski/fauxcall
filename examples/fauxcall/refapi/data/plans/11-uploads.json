@@ -1,0 +1,782 @@
+{
+  "name": "11-uploads",
+  "created_at": "2026-10-14T20:45:00Z",
+  "calls": [
+    {
+      "id": "up-list-empty",
+      "endpoint": "GET /v1/uploads",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads"
+      }
+    },
+    {
+      "id": "up-ok-1",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "form": {
+          "label": "fauxcall-probe-1"
+        },
+        "files": [
+          {
+            "field": "file",
+            "filename": "positions.csv",
+            "content_type": "text/csv",
+            "text": "symbol,qty\nAAPL,10\nMSFT,5\n"
+          }
+        ]
+      },
+      "capture": {
+        "up1": "$.id"
+      },
+      "poll": {
+        "endpoint": "GET /v1/uploads/{id}",
+        "state_path": "$.status",
+        "terminal": [
+          "done",
+          "failed"
+        ],
+        "interval_ms": 500,
+        "timeout_s": 30,
+        "request": {
+          "method": "GET",
+          "path": "/v1/uploads/{{up1}}"
+        }
+      },
+      "cleanup": [
+        "up-del-1"
+      ]
+    },
+    {
+      "id": "up-get-1",
+      "endpoint": "GET /v1/uploads/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{up1}}"
+      }
+    },
+    {
+      "id": "up-content-1",
+      "endpoint": "GET /v1/uploads/{id}/content",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{up1}}/content"
+      }
+    },
+    {
+      "id": "up-ok-2",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "files": [
+          {
+            "field": "file",
+            "filename": "orders.json",
+            "content_type": "application/json",
+            "text": "{\"orders\": [{\"symbol\": \"7203.T\", \"qty\": 100}]}\n"
+          }
+        ]
+      },
+      "capture": {
+        "up2": "$.id"
+      },
+      "poll": {
+        "endpoint": "GET /v1/uploads/{id}",
+        "state_path": "$.status",
+        "terminal": [
+          "done",
+          "failed"
+        ],
+        "interval_ms": 500,
+        "timeout_s": 30,
+        "request": {
+          "method": "GET",
+          "path": "/v1/uploads/{{up2}}"
+        }
+      },
+      "cleanup": [
+        "up-cleanup-up2"
+      ]
+    },
+    {
+      "id": "up-content-2",
+      "endpoint": "GET /v1/uploads/{id}/content",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{up2}}/content"
+      }
+    },
+    {
+      "id": "up-ok-3",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "form": {
+          "label": "fauxcall-probe-3"
+        },
+        "files": [
+          {
+            "field": "file",
+            "filename": "pixel.png",
+            "content_type": "image/png",
+            "base64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
+          }
+        ]
+      },
+      "capture": {
+        "up3": "$.id"
+      },
+      "poll": {
+        "endpoint": "GET /v1/uploads/{id}",
+        "state_path": "$.status",
+        "terminal": [
+          "done",
+          "failed"
+        ],
+        "interval_ms": 500,
+        "timeout_s": 30,
+        "request": {
+          "method": "GET",
+          "path": "/v1/uploads/{{up3}}"
+        }
+      },
+      "cleanup": [
+        "up-cleanup-up3"
+      ]
+    },
+    {
+      "id": "up-content-3",
+      "endpoint": "GET /v1/uploads/{id}/content",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{up3}}/content"
+      }
+    },
+    {
+      "id": "up-corrupt",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "form": {
+          "label": "fauxcall-probe-corrupt"
+        },
+        "files": [
+          {
+            "field": "file",
+            "filename": "bad.csv",
+            "content_type": "text/csv",
+            "text": "symbol,qty\nCORRUPT,1\n"
+          }
+        ]
+      },
+      "capture": {
+        "upc": "$.id"
+      },
+      "poll": {
+        "endpoint": "GET /v1/uploads/{id}",
+        "state_path": "$.status",
+        "terminal": [
+          "done",
+          "failed"
+        ],
+        "interval_ms": 500,
+        "timeout_s": 30,
+        "request": {
+          "method": "GET",
+          "path": "/v1/uploads/{{upc}}"
+        }
+      },
+      "cleanup": [
+        "up-cleanup-upc"
+      ]
+    },
+    {
+      "id": "up-get-corrupt",
+      "endpoint": "GET /v1/uploads/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{upc}}"
+      }
+    },
+    {
+      "id": "up-content-corrupt",
+      "endpoint": "GET /v1/uploads/{id}/content",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{upc}}/content"
+      }
+    },
+    {
+      "id": "up-corrupt-lower",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "files": [
+          {
+            "field": "file",
+            "filename": "lower.txt",
+            "content_type": "text/plain",
+            "text": "this file is corrupt but lower case\n"
+          }
+        ]
+      },
+      "capture": {
+        "upcl": "$.id"
+      },
+      "poll": {
+        "endpoint": "GET /v1/uploads/{id}",
+        "state_path": "$.status",
+        "terminal": [
+          "done",
+          "failed"
+        ],
+        "interval_ms": 500,
+        "timeout_s": 30,
+        "request": {
+          "method": "GET",
+          "path": "/v1/uploads/{{upcl}}"
+        }
+      },
+      "cleanup": [
+        "up-cleanup-upcl"
+      ]
+    },
+    {
+      "id": "up-notready",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "form": {
+          "label": "fauxcall-probe-timing"
+        },
+        "files": [
+          {
+            "field": "file",
+            "filename": "timing.txt",
+            "content_type": "text/plain",
+            "text": "hello\n"
+          }
+        ]
+      },
+      "capture": {
+        "upn": "$.id"
+      },
+      "cleanup": [
+        "up-cleanup-upn"
+      ]
+    },
+    {
+      "id": "up-content-notready",
+      "endpoint": "GET /v1/uploads/{id}/content",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{upn}}/content"
+      }
+    },
+    {
+      "id": "up-time",
+      "endpoint": "GET /v1/uploads/{id}",
+      "purpose": "time_profile",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{upn}}"
+      },
+      "repeat": 10,
+      "interval_ms": 1000
+    },
+    {
+      "id": "up-content-after",
+      "endpoint": "GET /v1/uploads/{id}/content",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{upn}}/content"
+      }
+    },
+    {
+      "id": "up-list-all",
+      "endpoint": "GET /v1/uploads",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads"
+      }
+    },
+    {
+      "id": "up-empty-file",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "files": [
+          {
+            "field": "file",
+            "filename": "empty.txt",
+            "content_type": "text/plain",
+            "text": ""
+          }
+        ]
+      },
+      "capture": {
+        "upe": "$.id"
+      },
+      "poll": {
+        "endpoint": "GET /v1/uploads/{id}",
+        "state_path": "$.status",
+        "terminal": [
+          "done",
+          "failed"
+        ],
+        "interval_ms": 500,
+        "timeout_s": 30,
+        "request": {
+          "method": "GET",
+          "path": "/v1/uploads/{{upe}}"
+        }
+      },
+      "cleanup": [
+        "up-cleanup-upe"
+      ]
+    },
+    {
+      "id": "up-content-empty",
+      "endpoint": "GET /v1/uploads/{id}/content",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{upe}}/content"
+      }
+    },
+    {
+      "id": "up-label-empty",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "form": {
+          "label": ""
+        },
+        "files": [
+          {
+            "field": "file",
+            "filename": "l.txt",
+            "content_type": "text/plain",
+            "text": "x"
+          }
+        ]
+      },
+      "capture": {
+        "upl": "$.id"
+      },
+      "cleanup": [
+        "up-cleanup-upl"
+      ]
+    },
+    {
+      "id": "up-no-ctype",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "files": [
+          {
+            "field": "file",
+            "filename": "noctype.bin",
+            "base64": "AAECAw=="
+          }
+        ]
+      },
+      "capture": {
+        "upnc": "$.id"
+      },
+      "cleanup": [
+        "up-cleanup-upnc"
+      ]
+    },
+    {
+      "id": "up-exact-1mib",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "files": [
+          {
+            "field": "file",
+            "filename": "exact.bin",
+            "content_type": "application/octet-stream",
+            "path": "data/plans/files/exact-1mib.bin"
+          }
+        ]
+      },
+      "capture": {
+        "upx": "$.id"
+      },
+      "cleanup": [
+        "up-cleanup-upx"
+      ]
+    },
+    {
+      "id": "up-too-big",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "files": [
+          {
+            "field": "file",
+            "filename": "big.bin",
+            "content_type": "application/octet-stream",
+            "path": "data/plans/files/big-1mib-plus1.bin"
+          }
+        ]
+      },
+      "capture": {
+        "upbig": "$.id"
+      },
+      "cleanup": [
+        "up-cleanup-upbig"
+      ]
+    },
+    {
+      "id": "up-no-file",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "form": {
+          "label": "fauxcall-probe-nofile"
+        }
+      }
+    },
+    {
+      "id": "up-wrong-field",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "files": [
+          {
+            "field": "document",
+            "filename": "w.txt",
+            "content_type": "text/plain",
+            "text": "x"
+          }
+        ]
+      }
+    },
+    {
+      "id": "up-json-body",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "json_body": {
+          "file": "x"
+        }
+      }
+    },
+    {
+      "id": "up-no-body",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads"
+      }
+    },
+    {
+      "id": "up-readonly",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "auth",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "headers": {
+          "X-API-Key": "readonly-key"
+        },
+        "files": [
+          {
+            "field": "file",
+            "filename": "ro.txt",
+            "content_type": "text/plain",
+            "text": "x"
+          }
+        ],
+        "auth": "none"
+      }
+    },
+    {
+      "id": "up-get-unknown",
+      "endpoint": "GET /v1/uploads/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/3f2b8c1e-9a4d-4e6f-8b7a-1c2d3e4f5a6b"
+      }
+    },
+    {
+      "id": "up-get-malformed",
+      "endpoint": "GET /v1/uploads/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/abc"
+      }
+    },
+    {
+      "id": "up-content-unknown",
+      "endpoint": "GET /v1/uploads/{id}/content",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/3f2b8c1e-9a4d-4e6f-8b7a-1c2d3e4f5a6b/content"
+      }
+    },
+    {
+      "id": "up-del-early-create",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "files": [
+          {
+            "field": "file",
+            "filename": "early.txt",
+            "content_type": "text/plain",
+            "text": "early\n"
+          }
+        ]
+      },
+      "capture": {
+        "upd": "$.id"
+      },
+      "cleanup": [
+        "up-del-early"
+      ]
+    },
+    {
+      "id": "up-del-early",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "variation",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{upd}}"
+      }
+    },
+    {
+      "id": "up-get-deleted-early",
+      "endpoint": "GET /v1/uploads/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{upd}}"
+      }
+    },
+    {
+      "id": "up-del-readonly",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "auth",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{up1}}",
+        "headers": {
+          "X-API-Key": "readonly-key"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "up-del-1",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "variation",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{up1}}"
+      }
+    },
+    {
+      "id": "up-get-deleted",
+      "endpoint": "GET /v1/uploads/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{up1}}"
+      }
+    },
+    {
+      "id": "up-content-deleted",
+      "endpoint": "GET /v1/uploads/{id}/content",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads/{{up1}}/content"
+      }
+    },
+    {
+      "id": "up-del-twice",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{up1}}"
+      }
+    },
+    {
+      "id": "up-del-unknown",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/3f2b8c1e-9a4d-4e6f-8b7a-1c2d3e4f5a6b"
+      }
+    },
+    {
+      "id": "up-del-malformed",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/abc"
+      }
+    },
+    {
+      "id": "up-post-on-item",
+      "endpoint": "POST /v1/uploads/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads/{{up2}}",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "up-cleanup-up2",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{up2}}"
+      }
+    },
+    {
+      "id": "up-cleanup-up3",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{up3}}"
+      }
+    },
+    {
+      "id": "up-cleanup-upc",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{upc}}"
+      }
+    },
+    {
+      "id": "up-cleanup-upcl",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{upcl}}"
+      }
+    },
+    {
+      "id": "up-cleanup-upn",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{upn}}"
+      }
+    },
+    {
+      "id": "up-cleanup-upe",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{upe}}"
+      }
+    },
+    {
+      "id": "up-cleanup-upl",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{upl}}"
+      }
+    },
+    {
+      "id": "up-cleanup-upnc",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{upnc}}"
+      }
+    },
+    {
+      "id": "up-cleanup-upx",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{upx}}"
+      }
+    },
+    {
+      "id": "up-cleanup-upbig",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{upbig}}"
+      }
+    },
+    {
+      "id": "up-list-final",
+      "endpoint": "GET /v1/uploads",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads"
+      }
+    }
+  ]
+}

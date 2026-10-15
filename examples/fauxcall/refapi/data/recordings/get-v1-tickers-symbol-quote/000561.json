@@ -1,0 +1,90 @@
+{
+  "id": "000561",
+  "endpoint": "GET /v1/tickers/{symbol}/quote",
+  "plan_call": "qa-TTE.PA",
+  "started_at": "2026-10-15T00:52:14.386781Z",
+  "started_ns": 1792025534386781000,
+  "elapsed_ms": 35.311,
+  "ttfb_ms": 35.103,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/TTE.PA/quote",
+    "path": "/v1/tickers/TTE.PA/quote",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:13 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "114"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "14"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025537"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "TTE.PA",
+        "price": "58.92",
+        "currency": "EUR",
+        "market_state": "closed",
+        "as_of": "2026-10-14T15:30:00.000000Z"
+      },
+      "size": 114
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

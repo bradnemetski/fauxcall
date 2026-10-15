@@ -1,0 +1,108 @@
+{
+  "id": "000290",
+  "endpoint": "PATCH /v1/watchlists/{id}",
+  "purpose": "invalid",
+  "plan_call": "wl-patch-bad-id",
+  "started_at": "2026-10-15T00:44:37.132736Z",
+  "started_ns": 1792025077132736000,
+  "elapsed_ms": 55.518,
+  "ttfb_ms": 54.677,
+  "request": {
+    "method": "PATCH",
+    "url": "http://127.0.0.1:9100/v1/watchlists/abc",
+    "path": "/v1/watchlists/abc",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "27"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "name": "fauxcall-probe-x"
+      },
+      "size": 27
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:36 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "169"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "12"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025079"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'id': must be an integer.",
+          "request_id": "a5135dff-dac9-4bb0-a80d-05e2f432b18b",
+          "param": "id"
+        }
+      },
+      "size": 169
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "id": "000704",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "pagination",
+  "plan_call": "tl2-xnys-walk",
+  "started_at": "2026-10-15T00:53:26.924672Z",
+  "started_ns": 1792025606924672000,
+  "elapsed_ms": 45.853,
+  "ttfb_ms": 45.517,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?exchange=XNYS&limit=10",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "exchange",
+        "XNYS"
+      ],
+      [
+        "limit",
+        "10"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:26 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "1362"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "10"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025608"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "BA",
+            "name": "The Boeing Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Industrials",
+            "listed_on": "1962-01-02"
+          },
+          {
+            "symbol": "BAC",
+            "name": "Bank of America Corporation",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1973-09-04"
+          },
+          {
+            "symbol": "CAT",
+            "name": "Caterpillar Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Industrials",
+            "listed_on": "1929-12-02"
+          },
+          {
+            "symbol": "CVX",
+            "name": "Chevron Corporation",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Energy",
+            "listed_on": "1921-06-24"
+          },
+          {
+            "symbol": "DIS",
+            "name": "The Walt Disney Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "1957-11-12"
+          },
+          {
+            "symbol": "F",
+            "name": "Ford Motor Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Automotive",
+            "listed_on": "1956-03-07"
+          },
+          {
+            "symbol": "GM",
+            "name": "General Motors Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Automotive",
+            "listed_on": "2010-11-18"
+          },
+          {
+            "symbol": "GS",
+            "name": "The Goldman Sachs Group, Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1999-05-04"
+          },
+          {
+            "symbol": "JNJ",
+            "name": "Johnson & Johnson",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Healthcare",
+            "listed_on": "1944-09-25"
+          },
+          {
+            "symbol": "JPM",
+            "name": "JPMorgan Chase & Co.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1969-03-05"
+          }
+        ],
+        "next_cursor": "eyJhZnRlciI6IkpQTSJ9",
+        "total": 16
+      },
+      "size": 1362
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

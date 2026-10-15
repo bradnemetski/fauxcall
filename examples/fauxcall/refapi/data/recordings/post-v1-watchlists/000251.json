@@ -1,0 +1,108 @@
+{
+  "id": "000251",
+  "endpoint": "POST /v1/watchlists",
+  "purpose": "invalid",
+  "plan_call": "wl-create-int-name",
+  "started_at": "2026-10-15T00:44:17.535561Z",
+  "started_ns": 1792025057535561000,
+  "elapsed_ms": 36.238,
+  "ttfb_ms": 35.8,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/watchlists",
+    "path": "/v1/watchlists",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "12"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "name": 123
+      },
+      "size": 12
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:16 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "193"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "11"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025059"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'name': must be a string of 1 to 50 characters.",
+          "request_id": "2d5467cc-9b73-4a59-a054-4500d485cc13",
+          "param": "name"
+        }
+      },
+      "size": 193
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

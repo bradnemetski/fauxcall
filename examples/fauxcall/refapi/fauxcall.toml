@@ -2,14 +2,21 @@
 name = "refapi"
 port = 8702
 
-# Who the fake lets in, mirroring the real API: unknown keys are 401 invalid_api_key.
-# These are the API's documented demo keys (see the OpenAPI description), not private credentials;
-# "fauxcall-test" is the placeholder key the FauxCall test harness sends to the fake.
+# Exactly the keys the real API documents (OpenAPI info.description and ApiKeyAuth): any other key
+# gets 401 invalid_api_key. Test runs add the harness's own placeholder key (settings_for_tests).
 [auth]
 mode = "allowlist"
-users = [
-    { name = "demo", api_key = "demo-key" },
-    { name = "readonly", api_key = "readonly-key" },
-    { name = "revoked", api_key = "revoked-key", status = "denied" },
-    { name = "fauxcall-test", api_key = "fauxcall-test-key" },
-]
+
+[[auth.users]]
+name = "demo"
+api_key = "demo-key"          # documented: full access
+
+[[auth.users]]
+name = "readonly"
+api_key = "readonly-key"      # documented: GET only -> 403 read_only_key on writes
+scopes = ["read"]
+
+[[auth.users]]
+name = "revoked"
+api_key = "revoked-key"       # documented: always 403 api_key_revoked
+status = "denied"

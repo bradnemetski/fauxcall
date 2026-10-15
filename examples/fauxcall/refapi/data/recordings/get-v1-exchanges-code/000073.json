@@ -1,0 +1,97 @@
+{
+  "id": "000073",
+  "endpoint": "GET /v1/exchanges/{code}",
+  "purpose": "variation",
+  "plan_call": "exg-lower",
+  "started_at": "2026-10-15T00:40:35.173953Z",
+  "started_ns": 1792024835173953000,
+  "elapsed_ms": 56.397,
+  "ttfb_ms": 55.849,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/exchanges/xnys",
+    "path": "/v1/exchanges/xnys",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:40:34 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "154"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "18"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024840"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "code": "XNYS",
+        "name": "New York Stock Exchange",
+        "mic": "XNYS",
+        "timezone": "America/New_York",
+        "currency": "USD",
+        "sessions": [
+          {
+            "open": "09:30",
+            "close": "16:00"
+          }
+        ]
+      },
+      "size": 154
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

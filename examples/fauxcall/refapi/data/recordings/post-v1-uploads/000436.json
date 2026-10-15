@@ -1,0 +1,115 @@
+{
+  "id": "000436",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "edge",
+  "plan_call": "up-no-ctype",
+  "started_at": "2026-10-15T00:46:39.375708Z",
+  "started_ns": 1792025199375708000,
+  "elapsed_ms": 24.063,
+  "ttfb_ms": 23.525,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-length",
+        "191"
+      ],
+      [
+        "content-type",
+        "multipart/form-data; boundary=5e04797a0f394b71f2803ff0b41d1d2a"
+      ]
+    ],
+    "body": {
+      "kind": "multipart",
+      "content_type": "multipart/form-data; boundary=5e04797a0f394b71f2803ff0b41d1d2a",
+      "size": 191,
+      "parts": [
+        {
+          "name": "file",
+          "filename": "noctype.bin",
+          "content_type": "application/octet-stream",
+          "file": "000436.part0.bin",
+          "size": 4
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 202,
+    "reason": "Accepted",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:46:38 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "171"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "14"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025202"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": "3dac1f48-3473-485c-9eb2-22984f4b9e33",
+        "status": "queued",
+        "filename": "noctype.bin",
+        "size": 4,
+        "label": null,
+        "created_at": "2026-10-15T00:46:39.397744+00:00",
+        "progress": 0
+      },
+      "size": 171
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "id": "000285",
+  "endpoint": "PATCH /v1/watchlists/{id}",
+  "purpose": "invalid",
+  "plan_call": "wl-patch-null-symbols",
+  "started_at": "2026-10-15T00:44:34.616929Z",
+  "started_ns": 1792025074616929000,
+  "elapsed_ms": 52.357,
+  "ttfb_ms": 51.744,
+  "request": {
+    "method": "PATCH",
+    "url": "http://127.0.0.1:9100/v1/watchlists/1002",
+    "path": "/v1/watchlists/1002",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "16"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbols": null
+      },
+      "size": 16
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:34 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "188"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "17"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025079"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'symbols': must be an array of strings.",
+          "request_id": "7346ba8e-c56a-411e-864e-1f1bab3ec5e4",
+          "param": "symbols"
+        }
+      },
+      "size": 188
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

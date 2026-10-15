@@ -1,0 +1,91 @@
+{
+  "id": "000080",
+  "endpoint": "GET /v1/exchanges/{code}",
+  "purpose": "invalid",
+  "plan_call": "exg-dot",
+  "started_at": "2026-10-15T00:40:38.699570Z",
+  "started_ns": 1792024838699570000,
+  "elapsed_ms": 71.372,
+  "ttfb_ms": 70.759,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/exchanges/XNYS.US",
+    "path": "/v1/exchanges/XNYS.US",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:40:37 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "136"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "11"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024840"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "exchange_not_found",
+          "message": "No exchange with code 'XNYS.US'.",
+          "request_id": "b3a79b0f-2a16-4f5e-89b8-bdef8b29dbb6"
+        }
+      },
+      "size": 136
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

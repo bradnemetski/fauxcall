@@ -1,0 +1,136 @@
+{
+  "id": "000111",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "variation",
+  "plan_call": "tl-sec-Technology",
+  "started_at": "2026-10-15T00:41:57.353205Z",
+  "started_ns": 1792024917353205000,
+  "elapsed_ms": 51.363,
+  "ttfb_ms": 50.614,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?sector=Technology",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "sector",
+        "Technology"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:41:57 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "673"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "13"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024920"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "6758.T",
+            "name": "Sony Group Corporation",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Technology",
+            "listed_on": "1958-12-01"
+          },
+          {
+            "symbol": "AAPL",
+            "name": "Apple Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1980-12-12"
+          },
+          {
+            "symbol": "ADBE",
+            "name": "Adobe Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1986-08-20"
+          },
+          {
+            "symbol": "CSCO",
+            "name": "Cisco Systems, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1990-02-16"
+          },
+          {
+            "symbol": "MSFT",
+            "name": "Microsoft Corporation",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1986-03-13"
+          }
+        ],
+        "next_cursor": null,
+        "total": 5
+      },
+      "size": 673
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

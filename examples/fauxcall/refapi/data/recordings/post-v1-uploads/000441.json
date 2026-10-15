@@ -1,0 +1,108 @@
+{
+  "id": "000441",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "invalid",
+  "plan_call": "up-json-body",
+  "started_at": "2026-10-15T00:46:41.887667Z",
+  "started_ns": 1792025201887667000,
+  "elapsed_ms": 22.045,
+  "ttfb_ms": 21.742,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "12"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "file": "x"
+      },
+      "size": 12
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:46:41 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "152"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025212"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "missing_parameter",
+          "message": "Missing required parameter 'file'.",
+          "request_id": "d5597339-22ad-49a4-8d77-681c42e8b832",
+          "param": "file"
+        }
+      },
+      "size": 152
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

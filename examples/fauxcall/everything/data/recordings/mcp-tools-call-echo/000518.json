@@ -1,0 +1,120 @@
+{
+  "id": "000518",
+  "endpoint": "MCP tools/call:echo",
+  "purpose": "invalid",
+  "plan_call": "r2-echo-task-ttl-inf",
+  "started_at": "2026-10-15T04:51:23.471023Z",
+  "started_ns": 1792039883471023000,
+  "elapsed_ms": 10.827,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "tools/call",
+        "params": {
+          "name": "echo",
+          "arguments": {
+            "message": "x"
+          },
+          "task": {
+            "ttl": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "384"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 04:51:23 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "error": {
+          "code": -32603,
+          "message": "[\n  {\n    \"expected\": \"number\",\n    \"code\": \"invalid_type\",\n    \"received\": \"Infinity\",\n    \"path\": [\n      \"params\",\n      \"task\",\n      \"ttl\"\n    ],\n    \"message\": \"Invalid input: expected number, received Infinity\"\n  }\n]"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 10.51,
+      "kind": "sse",
+      "event": "message",
+      "id": "e6e1222d-3b7f-4e0f-abb6-b5c3131f7906",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":6,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"expected\\\": \\\"number\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"received\\\": \\\"Infinity\\\",\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"task\\\",\\n      \\\"ttl\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected number, received Infinity\\\"\\n  }\\n]\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

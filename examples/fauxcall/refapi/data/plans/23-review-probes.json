@@ -1,0 +1,25 @@
+{
+  "name": "23-review-probes",
+  "created_at": "2026-10-14T23:00:00Z",
+  "calls": [
+    {"id": "rt-v1-nokey", "endpoint": "GET /v1", "purpose": "edge", "request": {"method": "GET", "path": "/v1", "auth": "none"}},
+    {"id": "rt-v1-revoked", "endpoint": "GET /v1", "purpose": "edge", "request": {"method": "GET", "path": "/v1", "auth": "none", "headers": {"X-API-Key": "revoked-key"}}},
+    {"id": "rt-v1x-nokey", "endpoint": "GET /v1x", "purpose": "edge", "request": {"method": "GET", "path": "/v1x", "auth": "none"}},
+    {"id": "rt-options-nokey", "endpoint": "OPTIONS /v1/tickers", "purpose": "edge", "request": {"method": "OPTIONS", "path": "/v1/tickers", "auth": "none"}},
+    {"id": "rt-head-revoked", "endpoint": "HEAD /v1/exchanges", "purpose": "edge", "request": {"method": "HEAD", "path": "/v1/exchanges", "auth": "none", "headers": {"X-API-Key": "revoked-key"}}},
+    {"id": "rt-options-watchlists", "endpoint": "OPTIONS /v1/watchlists", "purpose": "edge", "request": {"method": "OPTIONS", "path": "/v1/watchlists"}},
+    {"id": "rt-options-watchlist", "endpoint": "OPTIONS /v1/watchlists/{id}", "purpose": "edge", "request": {"method": "OPTIONS", "path": "/v1/watchlists/1"}},
+    {"id": "rt-options-upload", "endpoint": "OPTIONS /v1/uploads/{id}", "purpose": "edge", "request": {"method": "OPTIONS", "path": "/v1/uploads/x"}},
+    {"id": "rt-unknown-query", "endpoint": "GET /v1/does-not-exist", "purpose": "edge", "request": {"method": "GET", "path": "/v1/does-not-exist", "query": [["x", "1"]]}},
+    {"id": "rt-ws-plain-get", "endpoint": "GET /v1/ws/quotes", "purpose": "edge", "request": {"method": "GET", "path": "/v1/ws/quotes"}},
+    {"id": "tl-limit-3.0", "endpoint": "GET /v1/tickers", "purpose": "edge", "request": {"method": "GET", "path": "/v1/tickers", "query": [["limit", "3.0"]]}},
+    {"id": "tr-count-2.0", "endpoint": "GET /v1/stream/trades", "purpose": "edge", "request": {"method": "GET", "path": "/v1/stream/trades", "query": [["symbol", "AAPL"], ["count", "2.0"]]}, "stream": {"kind": "sse", "duration_s": 2, "max_events": 5}},
+    {"id": "up-mp-no-boundary", "endpoint": "POST /v1/uploads", "purpose": "invalid", "request": {"method": "POST", "path": "/v1/uploads", "text_body": "file=x", "content_type": "multipart/form-data"}, "capture": {"upb": "$.id"}},
+    {"id": "up-mp-garbage", "endpoint": "POST /v1/uploads", "purpose": "invalid", "request": {"method": "POST", "path": "/v1/uploads", "text_body": "--zzz\r\nnot a part\r\n", "content_type": "multipart/form-data; boundary=zzz"}, "capture": {"upg": "$.id"}},
+    {"id": "up-odd-name", "endpoint": "POST /v1/uploads", "purpose": "edge", "request": {"method": "POST", "path": "/v1/uploads", "files": [{"field": "file", "filename": "résumé \"q\".txt", "content_type": "text/plain", "text": "x\n"}]}, "capture": {"upo": "$.id"},
+     "poll": {"endpoint": "GET /v1/uploads/{id}", "state_path": "$.status", "terminal": ["done", "failed"], "interval_ms": 1000, "timeout_s": 30, "request": {"method": "GET", "path": "/v1/uploads/{{upo}}"}}, "cleanup": ["up-odd-name-del"]},
+    {"id": "up-odd-name-content", "endpoint": "GET /v1/uploads/{id}/content", "purpose": "write_readback", "request": {"method": "GET", "path": "/v1/uploads/{{upo}}/content"}},
+    {"id": "up-odd-name-del", "endpoint": "DELETE /v1/uploads/{id}", "purpose": "cleanup", "request": {"method": "DELETE", "path": "/v1/uploads/{{upo}}"}},
+    {"id": "up-final", "endpoint": "GET /v1/uploads", "purpose": "write_readback", "request": {"method": "GET", "path": "/v1/uploads"}}
+  ]
+}

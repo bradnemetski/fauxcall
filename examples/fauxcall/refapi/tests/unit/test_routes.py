@@ -12,6 +12,7 @@ import re
 import httpx2
 from fastapi.routing import APIRoute, APIWebSocketRoute
 from fauxcall.config import FaultRule
+from fauxcall.testing.support import settings_for_tests
 from httpx2.websockets import ASGIWebSocketTransport, WebSocketDisconnect
 
 from fauxcall_refapi.app import build_app
@@ -23,7 +24,7 @@ _INJECTED = 599
 
 
 async def test_every_route_reaches_the_engine() -> None:
-    settings = Settings(fast=True, log_level="WARNING", faults=[FaultRule(status=_INJECTED)])
+    settings = settings_for_tests(Settings, faults=[FaultRule(status=_INJECTED)])
     async with (
         ASGIWebSocketTransport(app=build_app(settings)) as transport,
         httpx2.AsyncClient(transport=transport, base_url="http://fake.test") as client,

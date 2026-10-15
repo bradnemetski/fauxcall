@@ -1,0 +1,132 @@
+{
+  "id": "000331",
+  "endpoint": "MCP tools/call:trigger-url-elicitation",
+  "purpose": "variation",
+  "plan_call": "url-cancel",
+  "started_at": "2026-10-15T00:49:18.531531Z",
+  "started_ns": 1792025358531531000,
+  "elapsed_ms": 12.757,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-url-elicitation",
+          "arguments": {
+            "url": "https://example.org/verify?step=2"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:49:18 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "⚠️ User cancelled the URL elicitation (Elicitation ID: a1e647e6-9a58-4e8a-b1c1-a5965123f99e)."
+            },
+            {
+              "type": "text",
+              "text": "\nRaw result: {\n  \"action\": \"cancel\"\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 4
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.094,
+      "kind": "sse",
+      "event": "message",
+      "id": "0c3cf776-d49c-4a91-abb7-9fad2ce4b885",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"mode\":\"url\",\"url\":\"https://example.org/verify?step=2\",\"message\":\"Please open the link to complete this action.\",\"elicitationId\":\"a1e647e6-9a58-4e8a-b1c1-a5965123f99e\"},\"jsonrpc\":\"2.0\",\"id\":2}"
+    },
+    {
+      "t_ms": 12.469,
+      "kind": "sse",
+      "event": "message",
+      "id": "4b58c145-552a-483a-ae35-56bd23aa8d5b",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"⚠️ User cancelled the URL elicitation (Elicitation ID: a1e647e6-9a58-4e8a-b1c1-a5965123f99e).\"},{\"type\":\"text\",\"text\":\"\\nRaw result: {\\n  \\\"action\\\": \\\"cancel\\\"\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":4}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

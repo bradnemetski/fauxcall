@@ -1,0 +1,110 @@
+{
+  "id": "000671",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-104",
+  "started_at": "2026-10-15T00:53:10.127740Z",
+  "started_ns": 1792025590127740000,
+  "elapsed_ms": 42.529,
+  "ttfb_ms": 42.385,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=luxury+goods",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "luxury goods"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:09 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "244"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "23"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025598"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "luxury goods",
+        "results": [
+          {
+            "symbol": "9988.HK",
+            "name": "Alibaba Group Holding Limited",
+            "score": 0.25
+          },
+          {
+            "symbol": "AMZN",
+            "name": "Amazon.com, Inc.",
+            "score": 0.25
+          },
+          {
+            "symbol": "MC.PA",
+            "name": "LVMH Moët Hennessy Louis Vuitton SE",
+            "score": 0.25
+          }
+        ]
+      },
+      "size": 244
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

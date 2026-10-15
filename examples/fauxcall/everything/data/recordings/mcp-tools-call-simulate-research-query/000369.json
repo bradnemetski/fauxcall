@@ -1,0 +1,128 @@
+{
+  "id": "000369",
+  "endpoint": "MCP tools/call:simulate-research-query",
+  "purpose": "edge",
+  "plan_call": "plain-research-ambiguous",
+  "started_at": "2026-10-15T00:51:30.498478Z",
+  "started_ns": 1792025490498478000,
+  "elapsed_ms": 5.777,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tools/call",
+        "params": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "Python",
+            "ambiguous": true
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:51:30 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "task": {
+            "taskId": "ec2815a15433ef237e331f437ce863d6",
+            "status": "working",
+            "ttl": 300000,
+            "createdAt": "2026-10-15T00:51:30.502Z",
+            "lastUpdatedAt": "2026-10-15T00:51:30.502Z",
+            "pollInterval": 1000,
+            "statusMessage": "Gathering sources..."
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 4
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.55,
+      "kind": "sse",
+      "event": "message",
+      "id": "151eb6c6-1e79-4f3f-9476-02d20b129f4a",
+      "data": "{\"result\":{\"task\":{\"taskId\":\"ec2815a15433ef237e331f437ce863d6\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-15T00:51:30.502Z\",\"lastUpdatedAt\":\"2026-10-15T00:51:30.502Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"}},\"jsonrpc\":\"2.0\",\"id\":4}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,20 +1,20 @@
 {
   "id": "000228",
   "endpoint": "GET /v1/search",
-  "purpose": "variation",
-  "plan_call": "s-09",
-  "started_at": "2026-10-11T06:18:29.615633Z",
-  "started_ns": 1791699509615633000,
-  "elapsed_ms": 42.553,
-  "ttfb_ms": 42.42,
+  "purpose": "invalid",
+  "plan_call": "s-spaces",
+  "started_at": "2026-10-15T00:42:56.636035Z",
+  "started_ns": 1792024976636035000,
+  "elapsed_ms": 48.925,
+  "ttfb_ms": 48.257,
   "request": {
     "method": "GET",
-    "url": "http://127.0.0.1:9100/v1/search?q=auto",
+    "url": "http://127.0.0.1:9100/v1/search?q=+++",
     "path": "/v1/search",
     "query": [
       [
         "q",
-        "auto"
+        "   "
       ]
     ],
     "headers": [
@@ -36,7 +36,7 @@
       ],
       [
         "user-agent",
-        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
       ],
       [
         "x-api-key",
@@ -51,7 +51,7 @@
     "headers": [
       [
         "date",
-        "Sun, 11 Oct 2026 06:18:29 GMT"
+        "Thu, 15 Oct 2026 00:42:56 GMT"
       ],
       [
         "server",
@@ -59,7 +59,7 @@
       ],
       [
         "content-length",
-        "448"
+        "28"
       ],
       [
         "content-type",
@@ -71,57 +71,21 @@
       ],
       [
         "x-ratelimit-remaining",
-        "20"
+        "16"
       ],
       [
         "x-ratelimit-reset",
-        "1791699516"
+        "1792024981"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "application/json",
       "json": {
-        "query": "auto",
-        "results": [
-          {
-            "symbol": "RIVN",
-            "name": "Rivian Automotive, Inc.",
-            "score": 0.6
-          },
-          {
-            "symbol": "1211.HK",
-            "name": "BYD Company Limited",
-            "score": 0.5
-          },
-          {
-            "symbol": "7203.T",
-            "name": "Toyota Motor Corporation",
-            "score": 0.5
-          },
-          {
-            "symbol": "7267.T",
-            "name": "Honda Motor Co., Ltd.",
-            "score": 0.5
-          },
-          {
-            "symbol": "F",
-            "name": "Ford Motor Company",
-            "score": 0.5
-          },
-          {
-            "symbol": "GM",
-            "name": "General Motors Company",
-            "score": 0.5
-          },
-          {
-            "symbol": "TSLA",
-            "name": "Tesla, Inc.",
-            "score": 0.5
-          }
-        ]
+        "query": "   ",
+        "results": []
       },
-      "size": 448
+      "size": 28
     }
   },
   "redacted": [

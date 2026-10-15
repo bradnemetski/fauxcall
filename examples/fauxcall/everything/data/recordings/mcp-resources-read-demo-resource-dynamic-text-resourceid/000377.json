@@ -1,0 +1,119 @@
+{
+  "id": "000377",
+  "endpoint": "MCP resources/read:demo://resource/dynamic/text/{resourceId}",
+  "purpose": "edge",
+  "plan_call": "edge-text-plus",
+  "started_at": "2026-10-15T00:54:10.014865Z",
+  "started_ns": 1792025650014865000,
+  "elapsed_ms": 2.177,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/dynamic/text/+5"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "250"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:54:10 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "contents": [
+            {
+              "uri": "demo://resource/dynamic/text/+5",
+              "mimeType": "text/plain",
+              "text": "Resource 5: This is a plaintext resource created at 8:54:10 PM"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 5
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.072,
+      "kind": "sse",
+      "event": "message",
+      "id": "a871ceb4-29da-4abc-9b60-14e04e06f3cf",
+      "data": "{\"result\":{\"contents\":[{\"uri\":\"demo://resource/dynamic/text/+5\",\"mimeType\":\"text/plain\",\"text\":\"Resource 5: This is a plaintext resource created at 8:54:10 PM\"}]},\"jsonrpc\":\"2.0\",\"id\":5}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

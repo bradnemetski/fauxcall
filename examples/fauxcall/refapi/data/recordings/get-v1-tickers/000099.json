@@ -1,20 +1,20 @@
 {
   "id": "000099",
   "endpoint": "GET /v1/tickers",
-  "purpose": "auth",
-  "plan_call": "tk2-badkey",
-  "started_at": "2026-10-11T06:14:49.434336Z",
-  "started_ns": 1791699289434336000,
-  "elapsed_ms": 45.914,
-  "ttfb_ms": 45.569,
+  "purpose": "pagination",
+  "plan_call": "tl-all-100",
+  "started_at": "2026-10-15T00:41:51.324058Z",
+  "started_ns": 1792024911324058000,
+  "elapsed_ms": 52.798,
+  "ttfb_ms": 52.395,
   "request": {
     "method": "GET",
-    "url": "http://127.0.0.1:9100/v1/tickers?exchange=XXXX",
+    "url": "http://127.0.0.1:9100/v1/tickers?limit=100",
     "path": "/v1/tickers",
     "query": [
       [
-        "exchange",
-        "XXXX"
+        "limit",
+        "100"
       ]
     ],
     "headers": [
@@ -36,7 +36,7 @@
       ],
       [
         "user-agent",
-        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
       ],
       [
         "x-api-key",
@@ -45,13 +45,13 @@
     ]
   },
   "response": {
-    "status": 401,
-    "reason": "Unauthorized",
+    "status": 200,
+    "reason": "OK",
     "http_version": "HTTP/1.1",
     "headers": [
       [
         "date",
-        "Sun, 11 Oct 2026 06:14:48 GMT"
+        "Thu, 15 Oct 2026 00:41:51 GMT"
       ],
       [
         "server",
@@ -59,29 +59,517 @@
       ],
       [
         "content-length",
-        "117"
+        "7998"
       ],
       [
         "content-type",
         "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024920"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "application/json",
       "json": {
-        "error": {
-          "code": "invalid_api_key",
-          "message": "Invalid API key.",
-          "request_id": "6bbc36b7-f782-4d37-81ec-19c5b84b0c54"
-        }
+        "data": [
+          {
+            "symbol": "0005.HK",
+            "name": "HSBC Holdings plc",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Financials",
+            "listed_on": "1991-04-01"
+          },
+          {
+            "symbol": "0388.HK",
+            "name": "Hong Kong Exchanges and Clearing Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Financials",
+            "listed_on": "2000-06-27"
+          },
+          {
+            "symbol": "0700.HK",
+            "name": "Tencent Holdings Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Communication Services",
+            "listed_on": "2004-06-16"
+          },
+          {
+            "symbol": "0981.HK",
+            "name": "Semiconductor Manufacturing International",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Semiconductors",
+            "listed_on": "2004-03-18"
+          },
+          {
+            "symbol": "1211.HK",
+            "name": "BYD Company Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Automotive",
+            "listed_on": "2002-07-31"
+          },
+          {
+            "symbol": "6758.T",
+            "name": "Sony Group Corporation",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Technology",
+            "listed_on": "1958-12-01"
+          },
+          {
+            "symbol": "6861.T",
+            "name": "Keyence Corporation",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Industrials",
+            "listed_on": "1987-10-21"
+          },
+          {
+            "symbol": "7203.T",
+            "name": "Toyota Motor Corporation",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Automotive",
+            "listed_on": "1949-05-16"
+          },
+          {
+            "symbol": "7267.T",
+            "name": "Honda Motor Co., Ltd.",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Automotive",
+            "listed_on": "1957-12-01"
+          },
+          {
+            "symbol": "8035.T",
+            "name": "Tokyo Electron Limited",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Semiconductors",
+            "listed_on": "1980-10-01"
+          },
+          {
+            "symbol": "8306.T",
+            "name": "Mitsubishi UFJ Financial Group, Inc.",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Financials",
+            "listed_on": "2001-04-02"
+          },
+          {
+            "symbol": "9984.T",
+            "name": "SoftBank Group Corp.",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Communication Services",
+            "listed_on": "1994-07-22"
+          },
+          {
+            "symbol": "9988.HK",
+            "name": "Alibaba Group Holding Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Consumer Discretionary",
+            "listed_on": "2019-11-26"
+          },
+          {
+            "symbol": "AAPL",
+            "name": "Apple Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1980-12-12"
+          },
+          {
+            "symbol": "ADBE",
+            "name": "Adobe Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1986-08-20"
+          },
+          {
+            "symbol": "AIR.PA",
+            "name": "Airbus SE",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Industrials",
+            "listed_on": "2000-07-10"
+          },
+          {
+            "symbol": "AMD",
+            "name": "Advanced Micro Devices, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Semiconductors",
+            "listed_on": "1972-09-27"
+          },
+          {
+            "symbol": "AMGN",
+            "name": "Amgen Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Healthcare",
+            "listed_on": "1983-06-17"
+          },
+          {
+            "symbol": "AMZN",
+            "name": "Amazon.com, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Consumer Discretionary",
+            "listed_on": "1997-05-15"
+          },
+          {
+            "symbol": "AVGO",
+            "name": "Broadcom Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Semiconductors",
+            "listed_on": "2009-08-06"
+          },
+          {
+            "symbol": "AZN.L",
+            "name": "AstraZeneca PLC",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Healthcare",
+            "listed_on": "1999-04-06"
+          },
+          {
+            "symbol": "BA",
+            "name": "The Boeing Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Industrials",
+            "listed_on": "1962-01-02"
+          },
+          {
+            "symbol": "BAC",
+            "name": "Bank of America Corporation",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1973-09-04"
+          },
+          {
+            "symbol": "BARC.L",
+            "name": "Barclays PLC",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Financials",
+            "listed_on": "1985-05-01"
+          },
+          {
+            "symbol": "BNP.PA",
+            "name": "BNP Paribas SA",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Financials",
+            "listed_on": "1993-10-18"
+          },
+          {
+            "symbol": "BP.L",
+            "name": "BP p.l.c.",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Energy",
+            "listed_on": "1954-03-01"
+          },
+          {
+            "symbol": "CAT",
+            "name": "Caterpillar Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Industrials",
+            "listed_on": "1929-12-02"
+          },
+          {
+            "symbol": "COST",
+            "name": "Costco Wholesale Corporation",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Consumer Staples",
+            "listed_on": "1985-12-05"
+          },
+          {
+            "symbol": "CSCO",
+            "name": "Cisco Systems, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1990-02-16"
+          },
+          {
+            "symbol": "CVX",
+            "name": "Chevron Corporation",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Energy",
+            "listed_on": "1921-06-24"
+          },
+          {
+            "symbol": "DIS",
+            "name": "The Walt Disney Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "1957-11-12"
+          },
+          {
+            "symbol": "F",
+            "name": "Ford Motor Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Automotive",
+            "listed_on": "1956-03-07"
+          },
+          {
+            "symbol": "GM",
+            "name": "General Motors Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Automotive",
+            "listed_on": "2010-11-18"
+          },
+          {
+            "symbol": "GOOGL",
+            "name": "Alphabet Inc. Class A",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "2004-08-19"
+          },
+          {
+            "symbol": "GS",
+            "name": "The Goldman Sachs Group, Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1999-05-04"
+          },
+          {
+            "symbol": "HSBA.L",
+            "name": "HSBC Holdings plc",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Financials",
+            "listed_on": "1992-07-10"
+          },
+          {
+            "symbol": "INTC",
+            "name": "Intel Corporation",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Semiconductors",
+            "listed_on": "1971-10-13"
+          },
+          {
+            "symbol": "JNJ",
+            "name": "Johnson & Johnson",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Healthcare",
+            "listed_on": "1944-09-25"
+          },
+          {
+            "symbol": "JPM",
+            "name": "JPMorgan Chase & Co.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1969-03-05"
+          },
+          {
+            "symbol": "KO",
+            "name": "The Coca-Cola Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Consumer Staples",
+            "listed_on": "1919-09-05"
+          },
+          {
+            "symbol": "MC.PA",
+            "name": "LVMH Moët Hennessy Louis Vuitton SE",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Consumer Discretionary",
+            "listed_on": "1987-06-03"
+          },
+          {
+            "symbol": "META",
+            "name": "Meta Platforms, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "2012-05-18"
+          },
+          {
+            "symbol": "MSFT",
+            "name": "Microsoft Corporation",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1986-03-13"
+          },
+          {
+            "symbol": "NFLX",
+            "name": "Netflix, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "2002-05-23"
+          },
+          {
+            "symbol": "NVDA",
+            "name": "NVIDIA Corporation",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Semiconductors",
+            "listed_on": "1999-01-22"
+          },
+          {
+            "symbol": "PEP",
+            "name": "PepsiCo, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Consumer Staples",
+            "listed_on": "1972-06-01"
+          },
+          {
+            "symbol": "PFE",
+            "name": "Pfizer Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Healthcare",
+            "listed_on": "1944-01-03"
+          },
+          {
+            "symbol": "PYPL",
+            "name": "PayPal Holdings, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "2015-07-20"
+          },
+          {
+            "symbol": "QCOM",
+            "name": "QUALCOMM Incorporated",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Semiconductors",
+            "listed_on": "1991-12-13"
+          },
+          {
+            "symbol": "RIVN",
+            "name": "Rivian Automotive, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Automotive",
+            "listed_on": "2021-11-10"
+          },
+          {
+            "symbol": "RR.L",
+            "name": "Rolls-Royce Holdings plc",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Industrials",
+            "listed_on": "2011-05-23"
+          },
+          {
+            "symbol": "SAN.PA",
+            "name": "Sanofi",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Healthcare",
+            "listed_on": "1999-08-20"
+          },
+          {
+            "symbol": "SHEL.L",
+            "name": "Shell plc",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Energy",
+            "listed_on": "2005-07-20"
+          },
+          {
+            "symbol": "TSLA",
+            "name": "Tesla, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Automotive",
+            "listed_on": "2010-06-29"
+          },
+          {
+            "symbol": "TSM",
+            "name": "Taiwan Semiconductor Manufacturing Co., Ltd.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Semiconductors",
+            "listed_on": "1997-10-08"
+          },
+          {
+            "symbol": "TTE.PA",
+            "name": "TotalEnergies SE",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Energy",
+            "listed_on": "1973-10-25"
+          },
+          {
+            "symbol": "ULVR.L",
+            "name": "Unilever PLC",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Consumer Staples",
+            "listed_on": "1930-01-02"
+          },
+          {
+            "symbol": "V",
+            "name": "Visa Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "2008-03-19"
+          },
+          {
+            "symbol": "WFC",
+            "name": "Wells Fargo & Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Financials",
+            "listed_on": "1978-01-03"
+          },
+          {
+            "symbol": "XOM",
+            "name": "Exxon Mobil Corporation",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Energy",
+            "listed_on": "1920-03-31"
+          }
+        ],
+        "next_cursor": null,
+        "total": 60
       },
-      "size": 117
+      "size": 7998
     }
   },
-  "tags": [
-    "auth:invalid"
-  ],
   "redacted": [
     "request.header:x-api-key"
   ]

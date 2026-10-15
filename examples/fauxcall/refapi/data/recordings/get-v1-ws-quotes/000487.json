@@ -1,0 +1,100 @@
+{
+  "id": "000487",
+  "endpoint": "GET /v1/ws/quotes",
+  "purpose": "variation",
+  "plan_call": "ws-ping",
+  "started_at": "2026-10-15T00:47:46.268542Z",
+  "started_ns": 1792025266268542000,
+  "elapsed_ms": 2004.862,
+  "ttfb_ms": 6.357,
+  "request": {
+    "method": "GET",
+    "url": "ws://127.0.0.1:9100/v1/ws/quotes?api_key=[REDACTED]",
+    "path": "/v1/ws/quotes",
+    "query": [
+      [
+        "api_key",
+        "[REDACTED]"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "connection",
+        "upgrade"
+      ],
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "sec-websocket-key",
+        "QPWknhocMzvSdWlBzododg=="
+      ],
+      [
+        "sec-websocket-version",
+        "13"
+      ]
+    ]
+  },
+  "response": {
+    "status": 101,
+    "reason": "Switching Protocols",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "connection",
+        "Upgrade"
+      ],
+      [
+        "sec-websocket-accept",
+        "JTRIqeVIBp0iGQxA9x/3K+UeMpI="
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:47:45 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 6.527,
+      "kind": "ws_send",
+      "data": "{\"action\":\"ping\"}"
+    },
+    {
+      "t_ms": 7.296,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"pong\"}"
+    }
+  ],
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.query:api_key"
+  ]
+}

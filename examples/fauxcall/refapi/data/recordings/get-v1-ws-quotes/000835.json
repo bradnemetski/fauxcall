@@ -1,22 +1,16 @@
 {
   "id": "000835",
   "endpoint": "GET /v1/ws/quotes",
-  "purpose": "variation",
-  "plan_call": "ws-error-then-sub",
-  "started_at": "2026-10-11T10:40:13.039295Z",
-  "started_ns": 1791715213039295000,
-  "elapsed_ms": 1010.929,
-  "ttfb_ms": 2.34,
+  "purpose": "edge",
+  "plan_call": "rt-ws-plain-get",
+  "started_at": "2026-10-15T01:56:10.936104Z",
+  "started_ns": 1792029370936104000,
+  "elapsed_ms": 34.469,
+  "ttfb_ms": 34.031,
   "request": {
     "method": "GET",
-    "url": "ws://127.0.0.1:9100/v1/ws/quotes?api_key=[REDACTED]",
+    "url": "http://127.0.0.1:9100/v1/ws/quotes",
     "path": "/v1/ws/quotes",
-    "query": [
-      [
-        "api_key",
-        "[REDACTED]"
-      ]
-    ],
     "headers": [
       [
         "host",
@@ -31,115 +25,67 @@
         "gzip, deflate"
       ],
       [
-        "user-agent",
-        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
-      ],
-      [
         "connection",
-        "upgrade"
+        "keep-alive"
       ],
       [
-        "upgrade",
-        "websocket"
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
       ],
       [
-        "sec-websocket-key",
-        "WpouMoyDwOM+yIa0pTcIAA=="
-      ],
-      [
-        "sec-websocket-version",
-        "13"
+        "x-api-key",
+        "[REDACTED]"
       ]
     ]
   },
   "response": {
-    "status": 101,
-    "reason": "Switching Protocols",
+    "status": 404,
+    "reason": "Not Found",
     "http_version": "HTTP/1.1",
     "headers": [
       [
-        "upgrade",
-        "websocket"
-      ],
-      [
-        "connection",
-        "Upgrade"
-      ],
-      [
-        "sec-websocket-accept",
-        "OWIPdmJCGtOVwXPTdsbMADTb4iQ="
-      ],
-      [
         "date",
-        "Sun, 11 Oct 2026 10:40:12 GMT"
+        "Thu, 15 Oct 2026 01:56:10 GMT"
       ],
       [
         "server",
         "uvicorn"
+      ],
+      [
+        "content-length",
+        "130"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792029379"
       ]
-    ]
-  },
-  "stream": [
-    {
-      "t_ms": 2.347,
-      "kind": "ws_send",
-      "data": "nope"
-    },
-    {
-      "t_ms": 2.542,
-      "kind": "ws_send",
-      "data": "{\"action\":\"subscribe\",\"symbols\":[\"MSFT\"]}"
-    },
-    {
-      "t_ms": 2.863,
-      "kind": "ws_recv",
-      "data": "{\"type\":\"error\",\"message\":\"Invalid JSON.\"}"
-    },
-    {
-      "t_ms": 3.01,
-      "kind": "ws_recv",
-      "data": "{\"type\":\"subscribed\",\"symbols\":[\"MSFT\"]}"
-    },
-    {
-      "t_ms": 3.052,
-      "kind": "ws_recv",
-      "data": "{\"type\":\"quote\",\"symbol\":\"MSFT\",\"price\":\"415.26\",\"as_of\":\"2026-10-09T20:00:00.000000Z\"}"
-    },
-    {
-      "t_ms": 253.764,
-      "kind": "ws_recv",
-      "data": "{\"type\":\"quote\",\"symbol\":\"MSFT\",\"price\":\"415.26\",\"as_of\":\"2026-10-09T20:00:00.000000Z\"}"
-    },
-    {
-      "t_ms": 506.181,
-      "kind": "ws_recv",
-      "data": "{\"type\":\"quote\",\"symbol\":\"MSFT\",\"price\":\"415.26\",\"as_of\":\"2026-10-09T20:00:00.000000Z\"}"
-    },
-    {
-      "t_ms": 758.472,
-      "kind": "ws_recv",
-      "data": "{\"type\":\"quote\",\"symbol\":\"MSFT\",\"price\":\"415.26\",\"as_of\":\"2026-10-09T20:00:00.000000Z\"}"
-    },
-    {
-      "t_ms": 1010.336,
-      "kind": "ws_recv",
-      "data": "{\"type\":\"quote\",\"symbol\":\"MSFT\",\"price\":\"415.26\",\"as_of\":\"2026-10-09T20:00:00.000000Z\"}"
-    },
-    {
-      "t_ms": 1010.414,
-      "kind": "ws_recv",
-      "data": "{\"type\":\"done\"}"
-    },
-    {
-      "t_ms": 1010.522,
-      "kind": "ws_close",
-      "code": 1000
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "not_found",
+          "message": "No route matches GET /v1/ws/quotes.",
+          "request_id": "9d959dc7-84b3-4246-bf23-c678529a9f85"
+        }
+      },
+      "size": 130
     }
-  ],
-  "tags": [
-    "auth:none"
-  ],
+  },
   "redacted": [
-    "request.query:api_key"
+    "request.header:x-api-key"
   ]
 }

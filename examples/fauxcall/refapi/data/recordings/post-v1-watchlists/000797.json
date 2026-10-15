@@ -1,0 +1,104 @@
+{
+  "id": "000797",
+  "endpoint": "POST /v1/watchlists",
+  "purpose": "invalid",
+  "plan_call": "p-json-empty",
+  "started_at": "2026-10-15T01:16:13.864592Z",
+  "started_ns": 1792026973864592000,
+  "elapsed_ms": 51.036,
+  "ttfb_ms": 50.829,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/watchlists",
+    "path": "/v1/watchlists",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "content-length",
+        "0"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json",
+      "text": ""
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:16:13 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "133"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792026984"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_body",
+          "message": "Request body must be a JSON object.",
+          "request_id": "e6ae0585-cc3f-48f7-a657-6e558da5b7e1"
+        }
+      },
+      "size": 133
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

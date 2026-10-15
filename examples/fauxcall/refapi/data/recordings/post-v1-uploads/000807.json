@@ -1,0 +1,106 @@
+{
+  "id": "000807",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "invalid",
+  "plan_call": "p-up-file-as-text",
+  "started_at": "2026-10-15T01:16:18.881633Z",
+  "started_ns": 1792026978881633000,
+  "elapsed_ms": 20.801,
+  "ttfb_ms": 20.527,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-length",
+        "14"
+      ],
+      [
+        "content-type",
+        "application/x-www-form-urlencoded"
+      ]
+    ],
+    "body": {
+      "kind": "form",
+      "content_type": "application/x-www-form-urlencoded",
+      "text": "file=just+text",
+      "size": 14
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:16:18 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "169"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "19"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792026984"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'file': must be a file.",
+          "request_id": "ca676db6-1457-4966-8bcb-a39bfbd78e93",
+          "param": "file"
+        }
+      },
+      "size": 169
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "id": "000074",
+  "endpoint": "GET /v1/exchanges/{code}",
+  "purpose": "variation",
+  "plan_call": "exg-mixed",
+  "started_at": "2026-10-15T00:40:35.676412Z",
+  "started_ns": 1792024835676412000,
+  "elapsed_ms": 52.505,
+  "ttfb_ms": 51.824,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/exchanges/XnAs",
+    "path": "/v1/exchanges/XnAs",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:40:34 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "150"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "17"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024840"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "code": "XNAS",
+        "name": "Nasdaq Stock Market",
+        "mic": "XNAS",
+        "timezone": "America/New_York",
+        "currency": "USD",
+        "sessions": [
+          {
+            "open": "09:30",
+            "close": "16:00"
+          }
+        ]
+      },
+      "size": 150
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

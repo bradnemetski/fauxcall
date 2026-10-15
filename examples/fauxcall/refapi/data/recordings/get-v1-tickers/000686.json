@@ -1,0 +1,98 @@
+{
+  "id": "000686",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "invalid",
+  "plan_call": "tl2-cursor-no-after",
+  "started_at": "2026-10-15T00:53:17.888924Z",
+  "started_ns": 1792025597888924000,
+  "elapsed_ms": 49.089,
+  "ttfb_ms": 48.757,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?cursor=eyJ4IjoiQUFQTCJ9",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "cursor",
+        "eyJ4IjoiQUFQTCJ9"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:16 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "143"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025608"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_cursor",
+          "message": "Invalid or unknown cursor.",
+          "request_id": "da1fac72-dc86-4521-b14f-f9053dcd3a52",
+          "param": "cursor"
+        }
+      },
+      "size": 143
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "id": "000469",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "variation",
+  "plan_call": "tr-aapl-default-again",
+  "started_at": "2026-10-15T00:47:23.856143Z",
+  "started_ns": 1792025243856143000,
+  "elapsed_ms": 1870.411,
+  "ttfb_ms": 54.978,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=AAPL",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "AAPL"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:47:23 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025253"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 55.665,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.50\",\"size\":189,\"time\":\"2026-10-15T00:47:23.910Z\"}"
+    },
+    {
+      "t_ms": 254.846,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.50\",\"size\":321,\"time\":\"2026-10-15T00:47:24.109Z\"}"
+    },
+    {
+      "t_ms": 457.713,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.59\",\"size\":705,\"time\":\"2026-10-15T00:47:24.312Z\"}"
+    },
+    {
+      "t_ms": 658.822,
+      "kind": "sse",
+      "event": "trade",
+      "id": "4",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.70\",\"size\":528,\"time\":\"2026-10-15T00:47:24.513Z\"}"
+    },
+    {
+      "t_ms": 860.566,
+      "kind": "sse",
+      "event": "trade",
+      "id": "5",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.54\",\"size\":275,\"time\":\"2026-10-15T00:47:24.715Z\"}"
+    },
+    {
+      "t_ms": 1063.834,
+      "kind": "sse",
+      "event": "trade",
+      "id": "6",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.63\",\"size\":51,\"time\":\"2026-10-15T00:47:24.918Z\"}"
+    },
+    {
+      "t_ms": 1266.426,
+      "kind": "sse",
+      "event": "trade",
+      "id": "7",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.72\",\"size\":366,\"time\":\"2026-10-15T00:47:25.120Z\"}"
+    },
+    {
+      "t_ms": 1468.005,
+      "kind": "sse",
+      "event": "trade",
+      "id": "8",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.63\",\"size\":61,\"time\":\"2026-10-15T00:47:25.323Z\"}"
+    },
+    {
+      "t_ms": 1668.834,
+      "kind": "sse",
+      "event": "trade",
+      "id": "9",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.49\",\"size\":683,\"time\":\"2026-10-15T00:47:25.523Z\"}"
+    },
+    {
+      "t_ms": 1870.082,
+      "kind": "sse",
+      "event": "trade",
+      "id": "10",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.38\",\"size\":80,\"time\":\"2026-10-15T00:47:25.725Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

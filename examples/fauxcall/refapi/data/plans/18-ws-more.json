@@ -1,0 +1,404 @@
+{
+  "name": "18-ws-more",
+  "created_at": "2026-10-14T21:05:00Z",
+  "calls": [
+    {
+      "id": "ws2-dup",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 3,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "aapl",
+                "AAPL",
+                "msft"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws2-ints",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                1
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws2-mixed-types",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "AAPL",
+                1
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws2-ping-then-sub",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 3,
+        "frames": [
+          {
+            "json": {
+              "action": "ping"
+            }
+          },
+          {
+            "at_ms": 200,
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "7203.T"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws2-action-int",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": 5
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws2-action-upper",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "PING"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws2-unknown-lower",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "zzzz",
+                "yyyy"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws2-errors-then-sub",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 3,
+        "frames": [
+          {
+            "text": "nope"
+          },
+          {
+            "at_ms": 100,
+            "json": {
+              "action": "dance"
+            }
+          },
+          {
+            "at_ms": 200,
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "HSBA.L"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws2-six",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 3,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "AAPL",
+                "MSFT",
+                "7203.T",
+                "0005.HK",
+                "BP.L",
+                "MC.PA"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws2-extra-fields",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "ping",
+              "id": 7
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws2-empty-object",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {}
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws2-string-json",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "text": "\"ping\""
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws2-binary-then-ping",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "base64": "AAE="
+          },
+          {
+            "at_ms": 100,
+            "json": {
+              "action": "ping"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

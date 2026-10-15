@@ -1,0 +1,136 @@
+{
+  "id": "000107",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "variation",
+  "plan_call": "tl-ex-XPAR",
+  "started_at": "2026-10-15T00:41:55.343705Z",
+  "started_ns": 1792024915343705000,
+  "elapsed_ms": 48.057,
+  "ttfb_ms": 47.696,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?exchange=XPAR",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "exchange",
+        "XPAR"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:41:55 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "688"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "17"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024920"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "AIR.PA",
+            "name": "Airbus SE",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Industrials",
+            "listed_on": "2000-07-10"
+          },
+          {
+            "symbol": "BNP.PA",
+            "name": "BNP Paribas SA",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Financials",
+            "listed_on": "1993-10-18"
+          },
+          {
+            "symbol": "MC.PA",
+            "name": "LVMH Moët Hennessy Louis Vuitton SE",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Consumer Discretionary",
+            "listed_on": "1987-06-03"
+          },
+          {
+            "symbol": "SAN.PA",
+            "name": "Sanofi",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Healthcare",
+            "listed_on": "1999-08-20"
+          },
+          {
+            "symbol": "TTE.PA",
+            "name": "TotalEnergies SE",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Energy",
+            "listed_on": "1973-10-25"
+          }
+        ],
+        "next_cursor": null,
+        "total": 5
+      },
+      "size": 688
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

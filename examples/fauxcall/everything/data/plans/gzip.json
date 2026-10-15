@@ -1,312 +1,51 @@
 {
- "name": "gzip",
- "created_at": "2026-10-13T22:00:00Z",
- "calls": [
-  {
-   "id": "g-link",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "sample",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": "hello.txt.gz",
-      "data": "data:text/plain;base64,aGVsbG8gd29ybGQK"
-     }
-    }
-   }
-  },
-  {
-   "id": "g-read",
-   "endpoint": "MCP resources/read:demo://resource/session/hello.txt.gz",
-   "purpose": "write_readback",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "uri": "demo://resource/session/hello.txt.gz"
-    }
-   }
-  },
-  {
-   "id": "g-list",
-   "endpoint": "MCP resources/list",
-   "purpose": "write_readback",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {}
-   }
-  },
-  {
-   "id": "g-resource",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "variation",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": "notes.md.gz",
-      "data": "data:text/markdown;base64,IyBOb3RlcwoKLSBvbmUKLSB0d28K",
-      "outputType": "resource"
-     }
-    }
-   }
-  },
-  {
-   "id": "g-read-resource",
-   "endpoint": "MCP resources/read:demo://resource/session/notes.md.gz",
-   "purpose": "write_readback",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "uri": "demo://resource/session/notes.md.gz"
-    }
-   }
-  },
-  {
-   "id": "g-plain",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "variation",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": "plain.gz",
-      "data": "data:text/plain,hello%20plain%20world"
-     }
-    }
-   }
-  },
-  {
-   "id": "g-binary",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "variation",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": "bytes.bin.gz",
-      "data": "data:application/octet-stream;base64,AAECAwQFBgcICQoLDA0ODw==",
-      "outputType": "resource"
-     }
-    }
-   }
-  },
-  {
-   "id": "g-overwrite",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "variation",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": "hello.txt.gz",
-      "data": "data:text/plain;base64,c2Vjb25kIHZlcnNpb24K"
-     }
-    }
-   }
-  },
-  {
-   "id": "g-read-overwrite",
-   "endpoint": "MCP resources/read:demo://resource/session/hello.txt.gz",
-   "purpose": "write_readback",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "uri": "demo://resource/session/hello.txt.gz"
-    }
-   }
-  },
-  {
-   "id": "g-space",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "edge",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": "my file.txt.gz",
-      "data": "data:text/plain;base64,c3BhY2VkCg=="
-     }
-    }
-   }
-  },
-  {
-   "id": "g-read-space",
-   "endpoint": "MCP resources/read:demo://resource/session/my file.txt.gz",
-   "purpose": "write_readback",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "uri": "demo://resource/session/my file.txt.gz"
-    }
-   }
-  },
-  {
-   "id": "g-empty-data",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "edge",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": "empty.gz",
-      "data": "data:text/plain;base64,"
-     }
-    }
-   }
-  },
-  {
-   "id": "g-default",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "sample",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {}
-    }
-   }
-  },
-  {
-   "id": "g-read-default",
-   "endpoint": "MCP resources/read:demo://resource/session/README.md.gz",
-   "purpose": "write_readback",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "uri": "demo://resource/session/README.md.gz"
-    }
-   }
-  },
-  {
-   "id": "g-refused",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "invalid",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": "refused.gz",
-      "data": "http://127.0.0.1:1/fauxcall-probe.txt"
-     }
-    }
-   }
-  },
-  {
-   "id": "g-ftp",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "invalid",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": "x.gz",
-      "data": "ftp://example.com/file.txt"
-     }
-    }
-   }
-  },
-  {
-   "id": "g-file",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "invalid",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": "x.gz",
-      "data": "file:///nonexistent/fauxcall-probe.txt"
-     }
-    }
-   }
-  },
-  {
-   "id": "g-notaurl",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "invalid",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": "x.gz",
-      "data": "not a url"
-     }
-    }
-   }
-  },
-  {
-   "id": "g-badtype",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "invalid",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": "x.gz",
-      "data": "data:text/plain,abc",
-      "outputType": "zip"
-     }
-    }
-   }
-  },
-  {
-   "id": "g-name-number",
-   "endpoint": "MCP tools/call:gzip-file-as-resource",
-   "purpose": "invalid",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "gzip-file-as-resource",
-     "arguments": {
-      "name": 5,
-      "data": "data:text/plain,abc"
-     }
-    }
-   }
-  },
-  {
-   "id": "g-list-end",
-   "endpoint": "MCP resources/list",
-   "purpose": "write_readback",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {}
-   }
-  }
- ],
- "listen": true,
- "listen_after_seconds": 1
+  "name": "gzip",
+  "created_at": "2026-10-15T00:50:00Z",
+  "note": "gzip-file-as-resource: data URIs (base64, percent-encoded, empty), both output types, the session resource it registers (read back, listed, replaced), the default remote file (fetched once by the real server), and the failures: unsupported scheme, malformed URL, bad outputType, an unreachable host. Listens on the GET stream for list_changed notifications.",
+  "listen": true,
+  "listen_after_seconds": 1,
+  "calls": [
+    {"id": "gz-list-before", "endpoint": "MCP resources/list", "purpose": "write_readback",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {}}},
+    {"id": "gz-b64-resource", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "gzip-file-as-resource", "arguments": {"name": "hello.txt.gz", "data": "data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==", "outputType": "resource"}}}},
+    {"id": "gz-plain-link", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "gzip-file-as-resource", "arguments": {"name": "plain.gz", "data": "data:text/plain,hello%20world%0Asecond%20line"}}}},
+    {"id": "gz-read-plain", "endpoint": "MCP resources/read:demo://resource/session/plain.gz", "purpose": "write_readback",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"uri": "demo://resource/session/plain.gz"}}},
+    {"id": "gz-read-hello", "endpoint": "MCP resources/read:demo://resource/session/hello.txt.gz", "purpose": "write_readback",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"uri": "demo://resource/session/hello.txt.gz"}}},
+    {"id": "gz-list-after", "endpoint": "MCP resources/list", "purpose": "write_readback",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {}}},
+    {"id": "gz-replace", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "variation",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "gzip-file-as-resource", "arguments": {"name": "plain.gz", "data": "data:application/json,%7B%22a%22%3A1%7D", "outputType": "resourceLink"}}}},
+    {"id": "gz-read-replaced", "endpoint": "MCP resources/read:demo://resource/session/plain.gz", "purpose": "write_readback",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"uri": "demo://resource/session/plain.gz"}}},
+    {"id": "gz-list-replaced", "endpoint": "MCP resources/list", "purpose": "write_readback",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {}}},
+    {"id": "gz-binary", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "variation",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "gzip-file-as-resource", "arguments": {"name": "bytes.bin.gz", "data": "data:application/octet-stream;base64,AAECAwQFBgcICf8=", "outputType": "resource"}}}},
+    {"id": "gz-empty", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "edge",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "gzip-file-as-resource", "arguments": {"name": "empty.gz", "data": "data:,", "outputType": "resource"}}}},
+    {"id": "gz-longer", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "variation",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "gzip-file-as-resource", "arguments": {"name": "lorem.txt.gz", "data": "data:text/plain;base64,TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4gTG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4gTG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4K", "outputType": "resource"}}}},
+    {"id": "gz-default", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "gzip-file-as-resource", "arguments": {}}}},
+    {"id": "gz-read-default", "endpoint": "MCP resources/read:demo://resource/session/README.md.gz", "purpose": "write_readback",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"uri": "demo://resource/session/README.md.gz"}}},
+    {"id": "gz-read-missing", "endpoint": "MCP resources/read:demo://resource/session/nope.gz", "purpose": "invalid",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"uri": "demo://resource/session/nope.gz"}}},
+    {"id": "gz-ftp", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "invalid",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "gzip-file-as-resource", "arguments": {"name": "x.gz", "data": "ftp://example.com/file.txt"}}}},
+    {"id": "gz-not-url", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "invalid",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "gzip-file-as-resource", "arguments": {"name": "x.gz", "data": "not a url"}}}},
+    {"id": "gz-bad-output", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "invalid",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "gzip-file-as-resource", "arguments": {"name": "x.gz", "data": "data:,abc", "outputType": "zip"}}}},
+    {"id": "gz-unreachable", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "invalid",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "gzip-file-as-resource", "arguments": {"name": "x.gz", "data": "http://fauxcall-probe.invalid/file.txt"}}}},
+    {"id": "gz-name-number", "endpoint": "MCP tools/call:gzip-file-as-resource", "purpose": "invalid",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "gzip-file-as-resource", "arguments": {"name": 5, "data": "data:,abc"}}}},
+    {"id": "gz-list-end", "endpoint": "MCP resources/list", "purpose": "write_readback",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {}}}
+  ]
 }

@@ -1,26 +1,15 @@
 {
   "id": "000095",
   "endpoint": "GET /v1/tickers",
-  "purpose": "variation",
-  "plan_call": "tk2-sector-auto",
-  "started_at": "2026-10-11T06:14:47.427269Z",
-  "started_ns": 1791699287427269000,
-  "elapsed_ms": 47.659,
-  "ttfb_ms": 47.373,
+  "plan_call": "tl-default",
+  "started_at": "2026-10-15T00:41:49.314395Z",
+  "started_ns": 1792024909314395000,
+  "elapsed_ms": 52.439,
+  "ttfb_ms": 52.252,
   "request": {
     "method": "GET",
-    "url": "http://127.0.0.1:9100/v1/tickers?sector=Automotive&limit=4",
+    "url": "http://127.0.0.1:9100/v1/tickers",
     "path": "/v1/tickers",
-    "query": [
-      [
-        "sector",
-        "Automotive"
-      ],
-      [
-        "limit",
-        "4"
-      ]
-    ],
     "headers": [
       [
         "host",
@@ -40,7 +29,7 @@
       ],
       [
         "user-agent",
-        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
       ],
       [
         "x-api-key",
@@ -55,7 +44,7 @@
     "headers": [
       [
         "date",
-        "Sun, 11 Oct 2026 06:14:46 GMT"
+        "Thu, 15 Oct 2026 00:41:49 GMT"
       ],
       [
         "server",
@@ -63,7 +52,7 @@
       ],
       [
         "content-length",
-        "581"
+        "2789"
       ],
       [
         "content-type",
@@ -75,11 +64,11 @@
       ],
       [
         "x-ratelimit-remaining",
-        "10"
+        "29"
       ],
       [
         "x-ratelimit-reset",
-        "1791699288"
+        "1792024920"
       ]
     ],
     "body": {
@@ -88,12 +77,60 @@
       "json": {
         "data": [
           {
+            "symbol": "0005.HK",
+            "name": "HSBC Holdings plc",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Financials",
+            "listed_on": "1991-04-01"
+          },
+          {
+            "symbol": "0388.HK",
+            "name": "Hong Kong Exchanges and Clearing Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Financials",
+            "listed_on": "2000-06-27"
+          },
+          {
+            "symbol": "0700.HK",
+            "name": "Tencent Holdings Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Communication Services",
+            "listed_on": "2004-06-16"
+          },
+          {
+            "symbol": "0981.HK",
+            "name": "Semiconductor Manufacturing International",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Semiconductors",
+            "listed_on": "2004-03-18"
+          },
+          {
             "symbol": "1211.HK",
             "name": "BYD Company Limited",
             "exchange": "XHKG",
             "currency": "HKD",
             "sector": "Automotive",
             "listed_on": "2002-07-31"
+          },
+          {
+            "symbol": "6758.T",
+            "name": "Sony Group Corporation",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Technology",
+            "listed_on": "1958-12-01"
+          },
+          {
+            "symbol": "6861.T",
+            "name": "Keyence Corporation",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Industrials",
+            "listed_on": "1987-10-21"
           },
           {
             "symbol": "7203.T",
@@ -112,18 +149,98 @@
             "listed_on": "1957-12-01"
           },
           {
-            "symbol": "F",
-            "name": "Ford Motor Company",
-            "exchange": "XNYS",
+            "symbol": "8035.T",
+            "name": "Tokyo Electron Limited",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Semiconductors",
+            "listed_on": "1980-10-01"
+          },
+          {
+            "symbol": "8306.T",
+            "name": "Mitsubishi UFJ Financial Group, Inc.",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Financials",
+            "listed_on": "2001-04-02"
+          },
+          {
+            "symbol": "9984.T",
+            "name": "SoftBank Group Corp.",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Communication Services",
+            "listed_on": "1994-07-22"
+          },
+          {
+            "symbol": "9988.HK",
+            "name": "Alibaba Group Holding Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Consumer Discretionary",
+            "listed_on": "2019-11-26"
+          },
+          {
+            "symbol": "AAPL",
+            "name": "Apple Inc.",
+            "exchange": "XNAS",
             "currency": "USD",
-            "sector": "Automotive",
-            "listed_on": "1956-03-07"
+            "sector": "Technology",
+            "listed_on": "1980-12-12"
+          },
+          {
+            "symbol": "ADBE",
+            "name": "Adobe Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1986-08-20"
+          },
+          {
+            "symbol": "AIR.PA",
+            "name": "Airbus SE",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Industrials",
+            "listed_on": "2000-07-10"
+          },
+          {
+            "symbol": "AMD",
+            "name": "Advanced Micro Devices, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Semiconductors",
+            "listed_on": "1972-09-27"
+          },
+          {
+            "symbol": "AMGN",
+            "name": "Amgen Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Healthcare",
+            "listed_on": "1983-06-17"
+          },
+          {
+            "symbol": "AMZN",
+            "name": "Amazon.com, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Consumer Discretionary",
+            "listed_on": "1997-05-15"
+          },
+          {
+            "symbol": "AVGO",
+            "name": "Broadcom Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Semiconductors",
+            "listed_on": "2009-08-06"
           }
         ],
-        "next_cursor": "eyJhZnRlciI6IkYifQ",
-        "total": 7
+        "next_cursor": "eyJhZnRlciI6IkFWR08ifQ",
+        "total": 60
       },
-      "size": 581
+      "size": 2789
     }
   },
   "redacted": [

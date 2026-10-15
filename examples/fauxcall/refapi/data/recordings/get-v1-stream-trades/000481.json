@@ -1,0 +1,102 @@
+{
+  "id": "000481",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "invalid",
+  "plan_call": "tr-count-abc",
+  "started_at": "2026-10-15T00:47:41.854544Z",
+  "started_ns": 1792025261854544000,
+  "elapsed_ms": 54.449,
+  "ttfb_ms": 53.618,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=AAPL&count=abc",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "AAPL"
+      ],
+      [
+        "count",
+        "abc"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:47:41 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "192"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "20"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025267"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'count': must be an integer between 1 and 50.",
+          "request_id": "72fb3673-04da-4913-a694-8d9bfd00fd80",
+          "param": "count"
+        }
+      },
+      "size": 192
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

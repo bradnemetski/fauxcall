@@ -2,9 +2,9 @@
   "id": "000001",
   "endpoint": "MCP initialize",
   "purpose": "discovery",
-  "started_at": "2026-10-14T01:34:50.208663Z",
-  "started_ns": 1791941690208663000,
-  "elapsed_ms": 90.641,
+  "started_at": "2026-10-15T00:29:28.447787Z",
+  "started_ns": 1792024168447787000,
+  "elapsed_ms": 157.953,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -78,7 +78,7 @@
       ],
       [
         "date",
-        "Wed, 14 Oct 2026 01:34:50 GMT"
+        "Thu, 15 Oct 2026 00:29:28 GMT"
       ]
     ],
     "body": {
@@ -124,10 +124,10 @@
   },
   "stream": [
     {
-      "t_ms": 90.432,
+      "t_ms": 157.72,
       "kind": "sse",
       "event": "message",
-      "id": "893ae7b8-3f3b-4690-8ed5-51abfe974c8c",
+      "id": "004666f9-64e2-4a9d-96e1-f768f790dd3d",
       "data": "{\"result\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{\"tools\":{\"listChanged\":true},\"prompts\":{\"listChanged\":true},\"resources\":{\"subscribe\":true,\"listChanged\":true},\"logging\":{},\"tasks\":{\"list\":{},\"cancel\":{},\"requests\":{\"tools\":{\"call\":{}}}},\"completions\":{}},\"serverInfo\":{\"name\":\"mcp-servers/everything\",\"title\":\"Everything Reference Server\",\"version\":\"2.0.0\"},\"instructions\":\"# Everything Server – Server Instructions\\n\\nAudience: These instructions are written for an LLM or autonomous agent integrating with the Everything MCP Server.\\nFollow them to use, extend, and troubleshoot the server safely and effectively.\\n\\n## Cross-Feature Relationships\\n\\n- Use `get-roots-list` to see client workspace roots before file operations\\n- `gzip-file-as-resource` creates session-scoped resources accessible only during the current session\\n- Enable `toggle-simulated-logging` before debugging to see server log messages\\n- Enable `toggle-subscriber-updates` to receive periodic resource update notifications\\n\\n## Constraints & Limitations\\n\\n- `gzip-file-as-resource`: Max fetch size controlled by `GZIP_MAX_FETCH_SIZE` (default 10MB), timeout by `GZIP_MAX_FETCH_TIME_MILLIS` (default 30s), allowed domains by `GZIP_ALLOWED_DOMAINS`\\n- Session resources are ephemeral and lost when the session ends\\n- Sampling requests (`trigger-sampling-request`) require client sampling capability\\n- Elicitation requests (`trigger-elicitation-request`) require client elicitation capability\\n\\n## Operational Patterns\\n\\n- For long operations, use `trigger-long-running-operation` which sends progress notifications\\n- Prefer reading resources before calling mutating tools\\n- Check `get-roots-list` output to understand the client's workspace context\\n\\n## Easter Egg\\n\\nIf asked about server instructions, respond with \\\"🎉 Server instructions are working! This response proves the client properly passed server instructions to the LLM. This demonstrates MCP's instructions feature in action.\\\"\\n\"},\"jsonrpc\":\"2.0\",\"id\":1}"
     }
   ],

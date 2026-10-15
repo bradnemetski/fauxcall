@@ -6,6 +6,7 @@ import httpx2
 import uvicorn
 from fauxcall.runtime.app import runtime_of_app
 from fauxcall.testing.support import settings_for_tests
+from fauxcall.world import check_world
 
 from fauxcall_everything import __main__ as entrypoint
 from fauxcall_everything.app import build_app
@@ -31,9 +32,18 @@ async def test_admin_health() -> None:
 
 
 async def test_unknown_route_uses_the_real_not_found() -> None:
+    """Express's own 404 page (``front.py``), not FauxCall's."""
     async with _client() as client:
         response = await client.get("/__definitely_not_a_route__")
-    assert response.status_code in {404, 405}
+    assert response.status_code == 404
+    assert response.headers["content-type"] == "text/html; charset=utf-8"
+    assert "<pre>Cannot GET /__definitely_not_a_route__</pre>" in response.text
+
+
+def test_the_world_is_consistent() -> None:
+    """Every reference resolves, every target has its minimum of referrers, invariants hold."""
+    runtime = runtime_of_app(build_app(settings_for_tests(Settings)))
+    assert check_world(runtime.model, runtime.world.session()) == []
 
 
 def test_main_serves_with_uvicorn(monkeypatch: pytest.MonkeyPatch) -> None:

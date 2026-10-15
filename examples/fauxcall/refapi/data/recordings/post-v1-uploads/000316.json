@@ -1,0 +1,120 @@
+{
+  "id": "000316",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "variation",
+  "plan_call": "up-ok-1",
+  "started_at": "2026-10-15T00:45:30.707612Z",
+  "started_ns": 1792025130707612000,
+  "elapsed_ms": 25.503,
+  "ttfb_ms": 25.152,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-length",
+        "301"
+      ],
+      [
+        "content-type",
+        "multipart/form-data; boundary=b9026ce1213eef0c62ae6e28bd53b87e"
+      ]
+    ],
+    "body": {
+      "kind": "multipart",
+      "content_type": "multipart/form-data; boundary=b9026ce1213eef0c62ae6e28bd53b87e",
+      "size": 301,
+      "parts": [
+        {
+          "name": "label",
+          "text": "fauxcall-probe-1",
+          "size": 16
+        },
+        {
+          "name": "file",
+          "filename": "positions.csv",
+          "content_type": "text/csv",
+          "text": "symbol,qty\nAAPL,10\nMSFT,5\n",
+          "size": 26
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 202,
+    "reason": "Accepted",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:45:30 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "188"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025141"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": "37e19117-757d-4e2a-90ef-60cf588d93b0",
+        "status": "queued",
+        "filename": "positions.csv",
+        "size": 26,
+        "label": "fauxcall-probe-1",
+        "created_at": "2026-10-15T00:45:30.731627+00:00",
+        "progress": 0
+      },
+      "size": 188
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

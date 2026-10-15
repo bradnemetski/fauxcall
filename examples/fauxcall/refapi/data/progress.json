@@ -1,57 +1,66 @@
 {
   "fake": "refapi",
   "source": "http://127.0.0.1:9100/docs",
-  "started_at": "2026-10-11T06:02:32.532443Z",
-  "updated_at": "2026-10-11T11:32:58.281850Z",
+  "started_at": "2026-10-15T00:29:30.740079Z",
+  "updated_at": "2026-10-15T03:44:10.147734Z",
   "phases": {
     "discover": {
       "status": "done",
-      "started_at": "2026-10-11T06:02:32.532443Z",
-      "finished_at": "2026-10-11T06:02:32.532443Z"
+      "started_at": "2026-10-15T00:29:30.740079Z",
+      "finished_at": "2026-10-15T00:29:30.740079Z"
     },
     "gate": {
       "status": "done",
-      "finished_at": "2026-10-11T06:03:37.042728Z"
+      "finished_at": "2026-10-15T00:37:43.802418Z"
     },
     "record": {
       "status": "done",
-      "finished_at": "2026-10-11T06:39:16.429341Z"
+      "finished_at": "2026-10-15T01:15:30.336262Z"
     },
     "model": {
       "status": "done",
-      "finished_at": "2026-10-11T06:42:24.479029Z"
+      "finished_at": "2026-10-15T01:15:30.853509Z"
     },
     "world": {
       "status": "done",
-      "finished_at": "2026-10-11T06:49:01.362884Z"
+      "finished_at": "2026-10-15T01:15:31.395262Z"
     },
     "scaffold": {
       "status": "done",
-      "finished_at": "2026-10-11T06:49:01.872241Z"
+      "finished_at": "2026-10-15T01:15:31.971721Z"
     },
     "implement": {
       "status": "done",
-      "finished_at": "2026-10-11T06:56:38.495646Z"
+      "finished_at": "2026-10-15T01:15:32.550942Z"
     },
     "unit_tests": {
       "status": "done",
-      "finished_at": "2026-10-11T06:56:38.999394Z"
+      "finished_at": "2026-10-15T01:15:33.078332Z"
     },
     "e2e_tests": {
       "status": "done",
-      "finished_at": "2026-10-11T07:00:24.319418Z"
+      "started_at": "2026-10-15T01:31:02.039314Z",
+      "finished_at": "2026-10-15T01:34:12.331568Z"
     },
     "parity": {
       "status": "done",
-      "finished_at": "2026-10-11T11:12:36.649633Z"
+      "finished_at": "2026-10-15T02:06:04.156598Z",
+      "notes": [
+        "100% overall, 100% independent (166/221 calls), 64 scenarios, writes included",
+        "100% overall, 100% independent (168/230 calls), 65 scenarios incl. writes, after review fixes"
+      ]
     },
     "review": {
       "status": "done",
-      "finished_at": "2026-10-11T11:32:56.466908Z"
+      "started_at": "2026-10-15T01:34:40.971975Z",
+      "finished_at": "2026-10-15T02:05:44.515508Z",
+      "notes": [
+        "fauxcall:reviewer: 1 blocking + 5 important + 7 minor; all fixed or noted (429 body, weekend/holiday calendars unverifiable now)"
+      ]
     },
     "report": {
       "status": "done",
-      "finished_at": "2026-10-11T11:32:58.281489Z"
+      "finished_at": "2026-10-15T03:44:10.147213Z"
     }
   },
   "endpoints": [
@@ -63,7 +72,10 @@
         "modeled": "done",
         "implemented": "done",
         "tested": "done"
-      }
+      },
+      "notes": [
+        "generic replay"
+      ]
     },
     {
       "endpoint": "GET /v1/exchanges",
@@ -73,7 +85,10 @@
         "modeled": "done",
         "implemented": "done",
         "tested": "done"
-      }
+      },
+      "notes": [
+        "generic list"
+      ]
     },
     {
       "endpoint": "GET /v1/exchanges/{code}",
@@ -269,23 +284,24 @@
   "gate": {
     "credentials": "provided",
     "mutations": "approved",
-    "answered_at": "2026-10-11T06:03:37.042311Z"
+    "answered_at": "2026-10-15T00:37:43.800913Z"
   },
   "log": [
-    "2026-10-11 06:03 Headless gate from answers.json: creds provided, no Jev, writes approved for * (60/endpoint), scope all; MCP at /mcp out of scope. WS /v1/ws/quotes is documented only in the API description (not in OpenAPI).",
-    "2026-10-11 06:12 Approval '*'=60 was one shared budget; added per-endpoint approvals (60 each) per answers.json max_calls_per_endpoint. Routing: case-sensitive paths, trailing slash -> 404 not_found; unknown route needs auth first (401 before 404). Exchange 404 message upper-cases the code.",
-    "2026-10-11 06:12 healthz: no auth, ignores keys. readonly-key GETs fine; revoked -> 403 api_key_revoked; missing -> 401 missing_api_key; bad -> 401 invalid_api_key",
-    "2026-10-11 06:21 tickers: validation order limit>exchange>sector>cursor; limit parsed like python int (+5, 05, ' 5' ok; 2.5, '' -> 400); repeated params: last wins; cursor=b64url({after:SYM}) case-insensitive, padding/std-b64/extra keys tolerated, unknown symbol/null/int -> invalid_cursor; cursor after filtered-out symbol continues from its place; after last -> empty page; next_cursor null when no more.",
-    "2026-10-11 06:21 search: tokens=re [a-z0-9]+ of lower(q), no dedup; per-token max(symbol-root exact 1.0, symbol-root prefix len>=2 0.9, name-token exact 0.8, name-token prefix len>=3 0.6, sector token/synonym 0.5); score=mean rounded half-up 3dp; top10 by -score,symbol; q len 2..64 raw (untrimmed, echoed raw); repeated q last wins.",
-    "2026-10-11 06:21 quote: market closed all weekend (recorded Sun 2026-10-11); as_of = last session close per exchange-local sessions, 6 fraction digits Z. Open-state (now-1.5s) from docs only. time: utc 7 digits w/ 7th always 0, unix_ms consistent.",
-    "2026-10-11 06:39 uploads: queued 2s, processing 6s (progress=floor((t-2)/6*100)), done/failed at +8s; CORRUPT (case-sensitive) in bytes -> failed corrupt_file; empty label->null; last file part wins; content-disposition non-ascii->_; default ct octet-stream; ids uuid4 case-sensitive, no validation (abc->404). stream: per-symbol deterministic walk, shorter counts are prefixes; recorded all 60 symbols x50; 200ms spacing; time=now ms Z.",
-    "2026-10-11 06:56 Fake implemented: custom handlers for all /v1 endpoints except exchanges list; fallback router authenticates+rate-limits unknown /v1 routes and 405 (Allow). Unit: 570 tests, 99% coverage. Auth users in fauxcall.toml (allowlist: documented demo keys + harness placeholder).",
-    "2026-10-11 10:25 parity 99.98%: upload e2e polling now uses fixed checkpoints (4s, 9.5s after create) - open-ended 1s polling misaligned calls because real calls are rate-limit paced. Only remaining failure: SSE stream compared as raw text; events identical except per-event time=now (no field policy for SSE text).",
-    "2026-10-11 10:25 CLI issue: 'fauxcall verify' from the workspace root passes a workspace-relative tests path to pytest running in the fake dir -> collects 0 tests and reprints the stale report; run it from fauxcall/refapi.",
-    "2026-10-11 11:12 WS /v1/ws/quotes added (scope 'all'): recorded 000810-000845, handlers.ws_quotes; auth via ?api_key only, close 4401+reason; subscribe -> ack, 5 rounds/250ms, done, close 1000; errors keep socket open; not rate limited. 23 unit + 18 e2e scenarios (pass on real and fake).",
-    "2026-10-11 11:12 Review fixes: 429 message 'Rate limit exceeded: 30 requests per 10 seconds.' (observed by reviewer; recorder paces so not recorded); bare /v1 authenticates+rate-limits; e2e tightened (exact statuses, Allow, content-disposition, search, time, quote as_of vs exchange sessions, SSE exact walk).",
-    "2026-10-11 11:12 Parity 100% (182 scenarios). Quote as_of compared by calendar policy relative to response time (10 s tolerance); per-call policies cannot override model ones, so quote calls stay out of parametrized scenarios.",
-    "2026-10-11 11:12 Known gaps: framework rate limiter uses monotonic time, not the admin clock (frozen/advanced clock never resets the window); holidays unmodeled and market-open path verified only from docs (parity ran on a Sunday); /docs Swagger UI not served by the fake; fauxcall-test-key accepted by the fake (harness placeholder).",
-    "2026-10-11 11:32 Second review fixes: WS binary frames -> error (socket stays open); dict/list action echoed compact JSON; readonly writes under /v1 -> 403 before routing; HTTP GET /v1/ws/quotes -> 404. Parity 100% (188 scenarios), 818 unit/e2e tests, 99.5% coverage."
+    "2026-10-15 00:37 Gate (headless, answers.json): credentials provided (X-API-Key header, refused nowhere); no Jev; writes approved for all model write endpoints, 100 calls/endpoint (recording+parity). 9 method-not-allowed write probes on paths outside the model (POST /healthz, POST /v1/exchanges x2, DELETE /v1/exchanges/{code}, PUT /v1/watchlists, DELETE /v1/watchlists, PATCH /v1/tickers/{symbol}, POST /v1/watchlists/{id}, POST /v1/uploads/{id}) are NOT covered (answers.json '*' expands to model write endpoints only): skipped; 405 evidence taken from a safe OPTIONS probe; ask at the end.",
+    "2026-10-15 00:37 Scope: REST API (20 endpoints) + WebSocket /v1/ws/quotes (from info.description prose, imported via data/source/ws-quotes.openapi.json). The MCP server at /mcp (also in the prose) cannot share this REST fake (mcp introspect turns a fake into kind=mcp): out of scope here, propose a separate fake (fauxcall init http://127.0.0.1:9100/mcp --name refapi-mcp) in the final report.",
+    "2026-10-15 00:37 WS auth: /v1/ws/quotes ignores X-API-Key header; accepts the socket then closes 4401 'Missing api_key query parameter.' (000012). WS plans use the documented public readonly-key in the api_key query.",
+    "2026-10-15 00:54 auth: 401 missing_api_key (no/empty header; ?api_key ignored on REST), 401 invalid_api_key, 403 api_key_revoked (no ratelimit headers, before routing/validation), 403 read_only_key for readonly-key on POST/PUT/PATCH/DELETE (counted: has ratelimit headers). /v1/* auth before routing; non-/v1 unknown paths 404 without ratelimit headers; /healthz no auth.",
+    "2026-10-15 00:54 routing: case-sensitive paths, trailing slash -> 404 not_found 'No route matches GET <path>.'; wrong method -> 405 method_not_allowed + Allow header (HEAD: empty body). Repeated query params: last value wins everywhere.",
+    "2026-10-15 00:54 tickers list: validation order limit > exchange > sector > cursor; empty exchange/sector/cursor ignored, empty limit 400; limit parsed like Python int() ('05','+5',' 5' ok; '1e1' 400); cursor base64url {after:<symbol>} (padding/spacing tolerated, case-insensitive, after must be an existing symbol); next_cursor null when no more; total ignores cursor.",
+    "2026-10-15 00:54 search: computed scoring (symbol exact/base 1.0, symbol prefix 0.9, name token 0.8, name-token prefix 0.6 (min len 3?), sector token/synonym 0.5; multi-token = mean; top 10 by score desc then symbol). Needs handler + synonym table from recordings.",
+    "2026-10-15 00:54 watchlists: create 201 ids from 1001, symbols upper+dedupe, unknown_symbol 400 echoes raw value; PUT/PATCH: id check > body > existence; PATCH {} bumps updated_at; text/plain or form body -> invalid_body; charset json ok. on_missing=refuse (unknown_symbol).",
+    "2026-10-15 00:54 uploads: queued 2s, processing 6s (progress linear), terminal at +8s; failed iff file bytes contain 'CORRUPT'; content 409 not_ready (status in message), 413 >1MiB; malformed id -> 404; label ''->null.",
+    "2026-10-15 00:54 SSE trades: deterministic per symbol walk, count=N is prefix of count=50; time=now ms Z; 200ms apart; count validated before symbol; unknown symbol 400 echoes raw. WS quotes: 5 rounds ~250ms, then done + close 1000; errors keep socket open; auth failures close 4401 with reason.",
+    "2026-10-15 01:15 Implemented: 18 HTTP handlers + WS handler in handlers.py (exact match on all 180 recorded searches, all ticker pages, all recorded 4xx bodies). Unit: 612 passed, coverage 98.8%. Next: e2e scenarios + parity.",
+    "2026-10-15 01:31 Parity (no real writes): 100% overall, 100% independent (118/158 calls). Fixes found by parity: ids/ints parse like Pydantic lax ('7.0' -> 7), request_id random policy on all endpoints, HEAD bodies dropped, /v1/* unrouted requests authenticate first (app.py AuthBeforeRouting).",
+    "2026-10-15 01:34 Parity with real writes: 100% overall / 100% independent over 166 of 221 calls; all 26 endpoints+routes covered; real state verified empty afterwards (000824-000825). WS feed checked by transcript comparison in test_streams (not in the HTTP report).",
+    "2026-10-15 01:34 Review started: fauxcall:reviewer (offline) over model, recordings, handlers, tests, parity report.",
+    "2026-10-15 02:04 Review fixes: /openapi.json serves the REST spec (B1); malformed multipart -> 400 bad_request (I1); unrouted /v1 traffic: /v1 guarded, counted by rate limit, Allow header, journaled (I3); trade walks + WS as_of compared real vs fake (I5, N1); tests/notes fixed (N2-N5). Parity with writes: 100%/100% independent (168/230). Open: 429 body + weekend/holiday calendars (need approval / days).",
+    "2026-10-15 03:41 Final checks: re-ran full parity with writes on the pre-fix code: 100% / 100% independent (168/230), 65 scenarios, real state empty after (000858-000859). New read-only probes 000854-000857: outside /v1 a 405 sends Allow (GET at /healthz, empty at /openapi.json), no key check, no rate limit; the fake sent none -> fixed in app.py + test_wrong_methods_outside_v1 (parity: pass). 9 write-method routing probes never approved (not recorded)."
   ]
 }

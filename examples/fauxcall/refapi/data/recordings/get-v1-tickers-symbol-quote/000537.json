@@ -1,0 +1,90 @@
+{
+  "id": "000537",
+  "endpoint": "GET /v1/tickers/{symbol}/quote",
+  "plan_call": "qa-F",
+  "started_at": "2026-10-15T00:52:02.334180Z",
+  "started_ns": 1792025522334180000,
+  "elapsed_ms": 45.945,
+  "ttfb_ms": 45.539,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/F/quote",
+    "path": "/v1/tickers/F/quote",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:01 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "109"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "18"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025527"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "F",
+        "price": "10.58",
+        "currency": "USD",
+        "market_state": "closed",
+        "as_of": "2026-10-14T20:00:00.000000Z"
+      },
+      "size": 109
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

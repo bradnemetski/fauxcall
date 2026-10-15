@@ -1,0 +1,90 @@
+{
+  "id": "000521",
+  "endpoint": "GET /v1/tickers/{symbol}/quote",
+  "plan_call": "qa-AIR.PA",
+  "started_at": "2026-10-15T00:51:54.297031Z",
+  "started_ns": 1792025514297031000,
+  "elapsed_ms": 24.511,
+  "ttfb_ms": 24.072,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/AIR.PA/quote",
+    "path": "/v1/tickers/AIR.PA/quote",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:51:53 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "115"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "14"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025517"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "AIR.PA",
+        "price": "142.36",
+        "currency": "EUR",
+        "market_state": "closed",
+        "as_of": "2026-10-14T15:30:00.000000Z"
+      },
+      "size": 115
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

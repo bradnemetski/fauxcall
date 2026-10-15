@@ -1,0 +1,650 @@
+{
+  "name": "16-followups",
+  "created_at": "2026-10-14T21:05:00Z",
+  "calls": [
+    {
+      "id": "tl2-sec-ex-unknown",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XXXX"
+          ],
+          [
+            "sector",
+            "Crypto"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-sec-limit0",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "Crypto"
+          ],
+          [
+            "limit",
+            "0"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-sec-cursorbad",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "Crypto"
+          ],
+          [
+            "cursor",
+            "abc"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-limit0-cursorbad",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "0"
+          ],
+          [
+            "cursor",
+            "abc"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-ex-lower-unknown",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "xxxx"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-sec-lower-unknown",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "crypto"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-ex-space",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            " XNAS"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-cursor-lower-valid",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "cursor",
+            "eyJhZnRlciI6ImFhcGwifQ"
+          ],
+          [
+            "limit",
+            "2"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-cursor-padded",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "cursor",
+            "eyJhZnRlciI6IkFBUEwifQ=="
+          ],
+          [
+            "limit",
+            "2"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-cursor-no-after",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "cursor",
+            "eyJ4IjoiQUFQTCJ9"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-cursor-after-int",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "cursor",
+            "eyJhZnRlciI6MX0"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-cursor-spaced-json",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "cursor",
+            "eyJhZnRlciI6ICJBQVBMIn0"
+          ],
+          [
+            "limit",
+            "2"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-cursor-last",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "cursor",
+            "eyJhZnRlciI6IlhPTSJ9"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-cursor-between-filter",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XNAS"
+          ],
+          [
+            "cursor",
+            "eyJhZnRlciI6IkJBIn0"
+          ],
+          [
+            "limit",
+            "3"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-limit-60",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "60"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-limit-59",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "59"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-xpar-5",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XPAR"
+          ],
+          [
+            "limit",
+            "5"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-xpar-4",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XPAR"
+          ],
+          [
+            "limit",
+            "4"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-limit-05",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "05"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-limit-plus",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "+5"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-limit-space",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            " 5"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-limit-1e1",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "1e1"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-limit-repeat",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "2"
+          ],
+          [
+            "limit",
+            "3"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-sector-cs-lower",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "consumer staples"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-sector-cd",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "Consumer Discretionary"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-sector-energy",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "Energy"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-sector-ind",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "Industrials"
+          ],
+          [
+            "exchange",
+            "XNYS"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-xnys-walk",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "pagination",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XNYS"
+          ],
+          [
+            "limit",
+            "10"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl2-xnys-walk-2",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "pagination",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XNYS"
+          ],
+          [
+            "limit",
+            "10"
+          ],
+          [
+            "cursor",
+            "eyJhZnRlciI6IkpOSiJ9"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "exg2-unknown-lower",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/xxxx"
+      }
+    },
+    {
+      "id": "tg2-unknown-lower",
+      "endpoint": "GET /v1/tickers/{symbol}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers/zzzz"
+      }
+    },
+    {
+      "id": "tg2-all-lower-hk",
+      "endpoint": "GET /v1/tickers/{symbol}",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers/hsba.l"
+      }
+    },
+    {
+      "id": "wl2-get-leading-zeros-unknown",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/007"
+      }
+    },
+    {
+      "id": "wl2-get-plus",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/+5"
+      }
+    },
+    {
+      "id": "tr2-unknown-lower",
+      "endpoint": "GET /v1/stream/trades",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/stream/trades",
+        "query": [
+          [
+            "symbol",
+            "zzzz"
+          ]
+        ]
+      },
+      "stream": {
+        "kind": "sse",
+        "duration_s": 2,
+        "max_events": 5
+      }
+    },
+    {
+      "id": "tr2-count-repeat",
+      "endpoint": "GET /v1/stream/trades",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/stream/trades",
+        "query": [
+          [
+            "symbol",
+            "AAPL"
+          ],
+          [
+            "count",
+            "2"
+          ],
+          [
+            "count",
+            "3"
+          ]
+        ]
+      },
+      "stream": {
+        "kind": "sse",
+        "duration_s": 2,
+        "max_events": 5
+      }
+    },
+    {
+      "id": "tr2-symbol-repeat",
+      "endpoint": "GET /v1/stream/trades",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/stream/trades",
+        "query": [
+          [
+            "symbol",
+            "AAPL"
+          ],
+          [
+            "symbol",
+            "MSFT"
+          ],
+          [
+            "count",
+            "2"
+          ]
+        ]
+      },
+      "stream": {
+        "kind": "sse",
+        "duration_s": 2,
+        "max_events": 5
+      }
+    },
+    {
+      "id": "tr2-count-05",
+      "endpoint": "GET /v1/stream/trades",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/stream/trades",
+        "query": [
+          [
+            "symbol",
+            "MSFT"
+          ],
+          [
+            "count",
+            "02"
+          ]
+        ]
+      },
+      "stream": {
+        "kind": "sse",
+        "duration_s": 2,
+        "max_events": 5
+      }
+    }
+  ]
+}

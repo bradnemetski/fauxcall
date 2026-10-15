@@ -1,0 +1,144 @@
+{
+  "id": "000115",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "variation",
+  "plan_call": "tl-sec-Communication_Services",
+  "started_at": "2026-10-15T00:41:59.362659Z",
+  "started_ns": 1792024919362659000,
+  "elapsed_ms": 52.034,
+  "ttfb_ms": 51.342,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?sector=Communication+Services",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "sector",
+        "Communication Services"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:41:58 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "897"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024930"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "0700.HK",
+            "name": "Tencent Holdings Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Communication Services",
+            "listed_on": "2004-06-16"
+          },
+          {
+            "symbol": "9984.T",
+            "name": "SoftBank Group Corp.",
+            "exchange": "XTKS",
+            "currency": "JPY",
+            "sector": "Communication Services",
+            "listed_on": "1994-07-22"
+          },
+          {
+            "symbol": "DIS",
+            "name": "The Walt Disney Company",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "1957-11-12"
+          },
+          {
+            "symbol": "GOOGL",
+            "name": "Alphabet Inc. Class A",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "2004-08-19"
+          },
+          {
+            "symbol": "META",
+            "name": "Meta Platforms, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "2012-05-18"
+          },
+          {
+            "symbol": "NFLX",
+            "name": "Netflix, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "2002-05-23"
+          }
+        ],
+        "next_cursor": null,
+        "total": 6
+      },
+      "size": 897
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

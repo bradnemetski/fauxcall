@@ -1,0 +1,123 @@
+{
+  "id": "000110",
+  "endpoint": "MCP tools/call:get-resource-reference",
+  "purpose": "invalid",
+  "plan_call": "ref-id-fraction",
+  "started_at": "2026-10-15T00:37:10.000314Z",
+  "started_ns": 1792024630000314000,
+  "elapsed_ms": 8.604,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 18,
+        "method": "tools/call",
+        "params": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Text",
+            "resourceId": 1.5
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:37:10 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Invalid resourceId: 1.5. Must be a finite positive integer."
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 18
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.233,
+      "kind": "sse",
+      "event": "message",
+      "id": "b1d63505-e01b-40db-b349-20e4dfe17e6f",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Invalid resourceId: 1.5. Must be a finite positive integer.\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":18}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

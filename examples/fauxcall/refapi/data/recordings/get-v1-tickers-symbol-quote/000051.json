@@ -1,0 +1,90 @@
+{
+  "id": "000051",
+  "endpoint": "GET /v1/tickers/{symbol}/quote",
+  "plan_call": "q-9988.HK",
+  "started_at": "2026-10-15T00:39:03.051207Z",
+  "started_ns": 1792024743051207000,
+  "elapsed_ms": 64.795,
+  "ttfb_ms": 64.497,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/9988.HK/quote",
+    "path": "/v1/tickers/9988.HK/quote",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:39:02 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "115"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "23"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024751"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "9988.HK",
+        "price": "83.15",
+        "currency": "HKD",
+        "market_state": "closed",
+        "as_of": "2026-10-14T08:00:00.000000Z"
+      },
+      "size": 115
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

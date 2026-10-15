@@ -1,0 +1,91 @@
+{
+  "id": "000062",
+  "endpoint": "GET /v1/tickers/{symbol}/quote",
+  "purpose": "time_profile",
+  "plan_call": "q-time-closed",
+  "started_at": "2026-10-15T00:40:29.360040Z",
+  "started_ns": 1792024829360040000,
+  "elapsed_ms": 40.215,
+  "ttfb_ms": 39.907,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/AAPL/quote",
+    "path": "/v1/tickers/AAPL/quote",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:40:28 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "113"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024840"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "AAPL",
+        "price": "227.48",
+        "currency": "USD",
+        "market_state": "closed",
+        "as_of": "2026-10-14T20:00:00.000000Z"
+      },
+      "size": 113
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

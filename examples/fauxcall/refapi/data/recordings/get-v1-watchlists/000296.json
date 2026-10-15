@@ -1,0 +1,136 @@
+{
+  "id": "000296",
+  "endpoint": "GET /v1/watchlists",
+  "purpose": "write_readback",
+  "plan_call": "wl-list-all",
+  "started_at": "2026-10-15T00:44:59.257710Z",
+  "started_ns": 1792025099257710000,
+  "elapsed_ms": 52.913,
+  "ttfb_ms": 52.175,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/watchlists",
+    "path": "/v1/watchlists",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:58 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "902"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025109"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": [
+        {
+          "id": 1001,
+          "name": "fauxcall-probe-min-renamed",
+          "symbols": [
+            "NVDA",
+            "TSLA"
+          ],
+          "created_at": "2026-10-15T00:44:09.034Z",
+          "updated_at": "2026-10-15T00:44:26.118Z"
+        },
+        {
+          "id": 1002,
+          "name": "fauxcall-probe-full-renamed",
+          "symbols": [
+            "TSLA",
+            "0700.HK"
+          ],
+          "created_at": "2026-10-15T00:44:10.032Z",
+          "updated_at": "2026-10-15T00:44:36.171Z"
+        },
+        {
+          "id": 1003,
+          "name": "fauxcall-probe-empty",
+          "symbols": [],
+          "created_at": "2026-10-15T00:44:11.539Z",
+          "updated_at": "2026-10-15T00:44:11.539Z"
+        },
+        {
+          "id": 1004,
+          "name": "fauxcall-probe café ✓ 日本",
+          "symbols": [
+            "6758.T"
+          ],
+          "created_at": "2026-10-15T00:44:12.040Z",
+          "updated_at": "2026-10-15T00:44:12.040Z"
+        },
+        {
+          "id": 1005,
+          "name": "fauxcall-probe-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "symbols": [],
+          "created_at": "2026-10-15T00:44:12.542Z",
+          "updated_at": "2026-10-15T00:44:12.542Z"
+        },
+        {
+          "id": 1006,
+          "name": "fauxcall-probe-extra",
+          "symbols": [],
+          "created_at": "2026-10-15T00:44:14.042Z",
+          "updated_at": "2026-10-15T00:44:14.042Z"
+        }
+      ],
+      "size": 902
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "id": "000092",
+  "endpoint": "MCP tools/call:get-env",
+  "purpose": "edge",
+  "plan_call": "env-extra",
+  "started_at": "2026-10-15T00:35:56.291917Z",
+  "started_ns": 1792024556291917000,
+  "elapsed_ms": 5.697,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 23,
+        "method": "tools/call",
+        "params": {
+          "name": "get-env",
+          "arguments": {
+            "filter": "PATH"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:35:56 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"PATH\": \"/opt/homebrew/opt/node@22/bin:/usr/bin:/bin\",\n  \"HOME\": \"/nonexistent/home\",\n  \"PORT\": \"3101\",\n  \"__CF_USER_TEXT_ENCODING\": \"0x1F5:0x0:0x0\"\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 23
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.427,
+      "kind": "sse",
+      "event": "message",
+      "id": "f4ab78ff-0d9c-4071-a0e6-b5f90d58d046",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\n  \\\"PATH\\\": \\\"/opt/homebrew/opt/node@22/bin:/usr/bin:/bin\\\",\\n  \\\"HOME\\\": \\\"/nonexistent/home\\\",\\n  \\\"PORT\\\": \\\"3101\\\",\\n  \\\"__CF_USER_TEXT_ENCODING\\\": \\\"0x1F5:0x0:0x0\\\"\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":23}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

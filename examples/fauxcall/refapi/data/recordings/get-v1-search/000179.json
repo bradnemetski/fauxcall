@@ -1,0 +1,119 @@
+{
+  "id": "000179",
+  "endpoint": "GET /v1/search",
+  "plan_call": "s-19",
+  "started_at": "2026-10-15T00:42:32.019532Z",
+  "started_ns": 1792024952019532000,
+  "elapsed_ms": 45.495,
+  "ttfb_ms": 45.096,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=software",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "software"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:42:31 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "316"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024961"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "software",
+        "results": [
+          {
+            "symbol": "6758.T",
+            "name": "Sony Group Corporation",
+            "score": 0.5
+          },
+          {
+            "symbol": "AAPL",
+            "name": "Apple Inc.",
+            "score": 0.5
+          },
+          {
+            "symbol": "ADBE",
+            "name": "Adobe Inc.",
+            "score": 0.5
+          },
+          {
+            "symbol": "CSCO",
+            "name": "Cisco Systems, Inc.",
+            "score": 0.5
+          },
+          {
+            "symbol": "MSFT",
+            "name": "Microsoft Corporation",
+            "score": 0.5
+          }
+        ]
+      },
+      "size": 316
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

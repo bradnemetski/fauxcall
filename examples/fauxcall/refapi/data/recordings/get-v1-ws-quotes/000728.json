@@ -1,0 +1,145 @@
+{
+  "id": "000728",
+  "endpoint": "GET /v1/ws/quotes",
+  "purpose": "variation",
+  "plan_call": "ws2-ping-then-sub",
+  "started_at": "2026-10-15T00:53:43.173534Z",
+  "started_ns": 1792025623173534000,
+  "elapsed_ms": 1211.185,
+  "ttfb_ms": 1.932,
+  "request": {
+    "method": "GET",
+    "url": "ws://127.0.0.1:9100/v1/ws/quotes?api_key=[REDACTED]",
+    "path": "/v1/ws/quotes",
+    "query": [
+      [
+        "api_key",
+        "[REDACTED]"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "connection",
+        "upgrade"
+      ],
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "sec-websocket-key",
+        "Zde6aYFhlPxibgCsVAKMpQ=="
+      ],
+      [
+        "sec-websocket-version",
+        "13"
+      ]
+    ]
+  },
+  "response": {
+    "status": 101,
+    "reason": "Switching Protocols",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "connection",
+        "Upgrade"
+      ],
+      [
+        "sec-websocket-accept",
+        "EAjWel48TMab85nZGUsaGubZQNY="
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:42 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 1.993,
+      "kind": "ws_send",
+      "data": "{\"action\":\"ping\"}"
+    },
+    {
+      "t_ms": 2.378,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"pong\"}"
+    },
+    {
+      "t_ms": 200.435,
+      "kind": "ws_send",
+      "data": "{\"action\":\"subscribe\",\"symbols\":[\"7203.T\"]}"
+    },
+    {
+      "t_ms": 201.06,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"subscribed\",\"symbols\":[\"7203.T\"]}"
+    },
+    {
+      "t_ms": 201.194,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"7203.T\",\"price\":\"2741.50\",\"as_of\":\"2026-10-15T00:53:41.874356Z\"}"
+    },
+    {
+      "t_ms": 453.144,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"7203.T\",\"price\":\"2741.50\",\"as_of\":\"2026-10-15T00:53:42.126234Z\"}"
+    },
+    {
+      "t_ms": 705.85,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"7203.T\",\"price\":\"2741.50\",\"as_of\":\"2026-10-15T00:53:42.378903Z\"}"
+    },
+    {
+      "t_ms": 958.004,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"7203.T\",\"price\":\"2741.50\",\"as_of\":\"2026-10-15T00:53:42.631048Z\"}"
+    },
+    {
+      "t_ms": 1210.724,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"7203.T\",\"price\":\"2741.50\",\"as_of\":\"2026-10-15T00:53:42.883804Z\"}"
+    },
+    {
+      "t_ms": 1210.798,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"done\"}"
+    },
+    {
+      "t_ms": 1210.903,
+      "kind": "ws_close",
+      "code": 1000
+    }
+  ],
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.query:api_key"
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "id": "000433",
+  "endpoint": "MCP tools/call:trigger-sampling-request",
+  "purpose": "edge",
+  "plan_call": "cr-samp-num-stop",
+  "started_at": "2026-10-15T01:06:02.877285Z",
+  "started_ns": 1792026362877285000,
+  "elapsed_ms": 9.999,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "stop"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:06:02 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"model\"\n    ],\n    \"message\": \"Invalid input: expected string, received number\"\n  },\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"endTurn\",\n            \"stopSequence\",\n            \"maxTokens\"\n          ],\n          \"path\": [],\n          \"message\": \"Invalid option: expected one of \\\"endTurn\\\"|\\\"stopSequence\\\"|\\\"maxTokens\\\"\"\n        }\n      ],\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [],\n          \"message\": \"Invalid input: expected string, received number\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"stopReason\"\n    ],\n    \"message\": \"Invalid input\"\n  },\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"user\",\n      \"assistant\"\n    ],\n    \"path\": [\n      \"role\"\n    ],\n    \"message\": \"Invalid option: expected one of \\\"user\\\"|\\\"assistant\\\"\"\n  }\n]"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 4
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.468,
+      "kind": "sse",
+      "event": "message",
+      "id": "43f5872c-fe42-44df-b72a-831591e00d71",
+      "data": "{\"method\":\"sampling/createMessage\",\"params\":{\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"Resource trigger-sampling-request context: stop\"}}],\"systemPrompt\":\"You are a helpful test server.\",\"maxTokens\":100,\"temperature\":0.7},\"jsonrpc\":\"2.0\",\"id\":3}"
+    },
+    {
+      "t_ms": 9.68,
+      "kind": "sse",
+      "event": "message",
+      "id": "4d474484-a26a-4042-8e9c-ea80644f3004",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[\\n  {\\n    \\\"expected\\\": \\\"string\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"model\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected string, received number\\\"\\n  },\\n  {\\n    \\\"code\\\": \\\"invalid_union\\\",\\n    \\\"errors\\\": [\\n      [\\n        {\\n          \\\"code\\\": \\\"invalid_value\\\",\\n          \\\"values\\\": [\\n            \\\"endTurn\\\",\\n            \\\"stopSequence\\\",\\n            \\\"maxTokens\\\"\\n          ],\\n          \\\"path\\\": [],\\n          \\\"message\\\": \\\"Invalid option: expected one of \\\\\\\"endTurn\\\\\\\"|\\\\\\\"stopSequence\\\\\\\"|\\\\\\\"maxTokens\\\\\\\"\\\"\\n        }\\n      ],\\n      [\\n        {\\n          \\\"expected\\\": \\\"string\\\",\\n          \\\"code\\\": \\\"invalid_type\\\",\\n          \\\"path\\\": [],\\n          \\\"message\\\": \\\"Invalid input: expected string, received number\\\"\\n        }\\n      ]\\n    ],\\n    \\\"path\\\": [\\n      \\\"stopReason\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input\\\"\\n  },\\n  {\\n    \\\"code\\\": \\\"invalid_value\\\",\\n    \\\"values\\\": [\\n      \\\"user\\\",\\n      \\\"assistant\\\"\\n    ],\\n    \\\"path\\\": [\\n      \\\"role\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid option: expected one of \\\\\\\"user\\\\\\\"|\\\\\\\"assistant\\\\\\\"\\\"\\n  }\\n]\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":4}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

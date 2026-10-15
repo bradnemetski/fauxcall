@@ -1,0 +1,98 @@
+{
+  "id": "000711",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "invalid",
+  "plan_call": "tr2-unknown-lower",
+  "started_at": "2026-10-15T00:53:30.439599Z",
+  "started_ns": 1792025610439599000,
+  "elapsed_ms": 54.052,
+  "ttfb_ms": 53.584,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=zzzz",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "zzzz"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:30 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "139"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "23"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025618"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "unknown_symbol",
+          "message": "Unknown symbol 'zzzz'.",
+          "request_id": "b2260c8b-d0ca-497b-9197-2543ef0d57cd",
+          "param": "symbol"
+        }
+      },
+      "size": 139
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

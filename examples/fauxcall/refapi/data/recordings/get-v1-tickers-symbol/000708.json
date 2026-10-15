@@ -1,0 +1,92 @@
+{
+  "id": "000708",
+  "endpoint": "GET /v1/tickers/{symbol}",
+  "purpose": "variation",
+  "plan_call": "tg2-all-lower-hk",
+  "started_at": "2026-10-15T00:53:28.933142Z",
+  "started_ns": 1792025608933142000,
+  "elapsed_ms": 50.848,
+  "ttfb_ms": 50.037,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/hsba.l",
+    "path": "/v1/tickers/hsba.l",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:28 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "128"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "26"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025618"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "HSBA.L",
+        "name": "HSBC Holdings plc",
+        "exchange": "XLON",
+        "currency": "GBP",
+        "sector": "Financials",
+        "listed_on": "1992-07-10"
+      },
+      "size": 128
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

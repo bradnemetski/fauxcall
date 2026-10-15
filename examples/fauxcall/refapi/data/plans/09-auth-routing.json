@@ -1,0 +1,437 @@
+{
+  "name": "09-auth-routing",
+  "created_at": "2026-10-14T20:45:00Z",
+  "calls": [
+    {
+      "id": "auth-none",
+      "endpoint": "GET /v1/exchanges",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges",
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-invalid",
+      "endpoint": "GET /v1/exchanges",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges",
+        "auth": "invalid"
+      }
+    },
+    {
+      "id": "auth-empty",
+      "endpoint": "GET /v1/exchanges",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges",
+        "headers": {
+          "X-API-Key": ""
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-revoked",
+      "endpoint": "GET /v1/exchanges",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges",
+        "headers": {
+          "X-API-Key": "revoked-key"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-readonly",
+      "endpoint": "GET /v1/exchanges",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges",
+        "headers": {
+          "X-API-Key": "readonly-key"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-query-key",
+      "endpoint": "GET /v1/exchanges",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-bearer",
+      "endpoint": "GET /v1/exchanges",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges",
+        "headers": {
+          "Authorization": "Bearer readonly-key"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-none-get",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XXXX",
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-none-badparam",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "abc"
+          ]
+        ],
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-revoked-404",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XXXX",
+        "headers": {
+          "X-API-Key": "revoked-key"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-revoked-badparam",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "abc"
+          ]
+        ],
+        "headers": {
+          "X-API-Key": "revoked-key"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-readonly-404",
+      "endpoint": "GET /v1/exchanges/{code}",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XXXX",
+        "headers": {
+          "X-API-Key": "readonly-key"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-none-route",
+      "endpoint": "GET /v1/does-not-exist",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/does-not-exist",
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-revoked-route",
+      "endpoint": "GET /v1/does-not-exist",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/does-not-exist",
+        "headers": {
+          "X-API-Key": "revoked-key"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-none-time",
+      "endpoint": "GET /v1/time",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/time",
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-revoked-time",
+      "endpoint": "GET /v1/time",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/time",
+        "headers": {
+          "X-API-Key": "revoked-key"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-none-search",
+      "endpoint": "GET /v1/search",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/search",
+        "query": [
+          [
+            "q",
+            "apple"
+          ]
+        ],
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-none-post",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "auth",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe-noauth"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-revoked-post",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "auth",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "headers": {
+          "X-API-Key": "revoked-key"
+        },
+        "json_body": {
+          "name": "fauxcall-probe-revoked"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "auth-readonly-post-invalid",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "auth",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "headers": {
+          "X-API-Key": "readonly-key"
+        },
+        "json_body": {},
+        "auth": "none"
+      }
+    },
+    {
+      "id": "rt-slash",
+      "endpoint": "GET /v1/exchanges/",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/"
+      }
+    },
+    {
+      "id": "rt-slash-get",
+      "endpoint": "GET /v1/exchanges/XNYS/",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/exchanges/XNYS/"
+      }
+    },
+    {
+      "id": "rt-upper",
+      "endpoint": "GET /V1/EXCHANGES",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/V1/EXCHANGES"
+      }
+    },
+    {
+      "id": "rt-mixed",
+      "endpoint": "GET /v1/Exchanges",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/Exchanges"
+      }
+    },
+    {
+      "id": "rt-unknown",
+      "endpoint": "GET /v1/does-not-exist",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/does-not-exist"
+      }
+    },
+    {
+      "id": "rt-unknown-root",
+      "endpoint": "GET /does-not-exist",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/does-not-exist"
+      }
+    },
+    {
+      "id": "rt-v1",
+      "endpoint": "GET /v1",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1"
+      }
+    },
+    {
+      "id": "rt-root",
+      "endpoint": "GET /",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/"
+      }
+    },
+    {
+      "id": "rt-openapi",
+      "endpoint": "GET /openapi.json",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/openapi.json"
+      }
+    },
+    {
+      "id": "rt-quote-slash",
+      "endpoint": "GET /v1/tickers/AAPL/quote/",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers/AAPL/quote/"
+      }
+    },
+    {
+      "id": "rt-head",
+      "endpoint": "HEAD /v1/exchanges",
+      "purpose": "edge",
+      "request": {
+        "method": "HEAD",
+        "path": "/v1/exchanges"
+      }
+    },
+    {
+      "id": "rt-options",
+      "endpoint": "OPTIONS /v1/exchanges",
+      "purpose": "edge",
+      "request": {
+        "method": "OPTIONS",
+        "path": "/v1/exchanges"
+      }
+    },
+    {
+      "id": "rt-post-exchanges",
+      "endpoint": "POST /v1/exchanges",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/exchanges",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "rt-delete-exchange",
+      "endpoint": "DELETE /v1/exchanges/{code}",
+      "purpose": "edge",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/exchanges/XNYS"
+      }
+    },
+    {
+      "id": "rt-put-watchlists",
+      "endpoint": "PUT /v1/watchlists",
+      "purpose": "edge",
+      "request": {
+        "method": "PUT",
+        "path": "/v1/watchlists",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "rt-delete-watchlists",
+      "endpoint": "DELETE /v1/watchlists",
+      "purpose": "edge",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists"
+      }
+    },
+    {
+      "id": "rt-patch-ticker",
+      "endpoint": "PATCH /v1/tickers/{symbol}",
+      "purpose": "edge",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/tickers/AAPL",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "rt-none-post-exchanges",
+      "endpoint": "POST /v1/exchanges",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/exchanges",
+        "json_body": {},
+        "auth": "none"
+      }
+    }
+  ]
+}

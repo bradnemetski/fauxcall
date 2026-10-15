@@ -1,0 +1,98 @@
+{
+  "id": "000130",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "edge",
+  "plan_call": "tl-sec-space",
+  "started_at": "2026-10-15T00:42:06.895001Z",
+  "started_ns": 1792024926895001000,
+  "elapsed_ms": 49.988,
+  "ttfb_ms": 49.662,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?sector=+Technology+",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "sector",
+        " Technology "
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:42:06 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "150"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "14"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024930"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Unknown sector ' Technology '.",
+          "request_id": "40eb1eb6-fb4b-4dfd-9abd-b409f9f470d0",
+          "param": "sector"
+        }
+      },
+      "size": 150
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,308 @@
+{
+  "name": "20-order-probes",
+  "created_at": "2026-10-14T21:30:00Z",
+  "calls": [
+    {
+      "id": "p-json-empty",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "text_body": "",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-json-null",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "text_body": "null",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "p-json-noctype",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "text_body": "{\"name\": \"fauxcall-probe-noctype\"}",
+        "content_type": ""
+      },
+      "capture": {
+        "wln": "$.id"
+      },
+      "cleanup": [
+        "p-cleanup-wln"
+      ]
+    },
+    {
+      "id": "p-json-vnd",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "text_body": "{\"name\": \"fauxcall-probe-vnd\"}",
+        "content_type": "application/vnd.api+json"
+      },
+      "capture": {
+        "wlv": "$.id"
+      },
+      "cleanup": [
+        "p-cleanup-wlv"
+      ]
+    },
+    {
+      "id": "p-json-upper-ctype",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "text_body": "{\"name\": \"fauxcall-probe-upper\"}",
+        "content_type": "Application/JSON"
+      },
+      "capture": {
+        "wlu": "$.id"
+      },
+      "cleanup": [
+        "p-cleanup-wlu"
+      ]
+    },
+    {
+      "id": "p-patch-unknown-id-unknown-symbol",
+      "endpoint": "PATCH /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/watchlists/999999",
+        "json_body": {
+          "symbols": [
+            "ZZZZ"
+          ]
+        }
+      }
+    },
+    {
+      "id": "p-put-unknown-id-unknown-symbol",
+      "endpoint": "PUT /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/v1/watchlists/999999",
+        "json_body": {
+          "name": "fauxcall-probe-x",
+          "symbols": [
+            "ZZZZ"
+          ]
+        }
+      }
+    },
+    {
+      "id": "p-put-bad-name-missing-symbols",
+      "endpoint": "PUT /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/v1/watchlists/999999",
+        "json_body": {
+          "name": ""
+        }
+      }
+    },
+    {
+      "id": "p-create-name-whitespace",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "  ",
+          "symbols": [
+            "msft",
+            "msft"
+          ]
+        }
+      },
+      "capture": {
+        "wlw": "$.id"
+      },
+      "cleanup": [
+        "p-cleanup-wlw"
+      ]
+    },
+    {
+      "id": "p-up-create",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "files": [
+          {
+            "field": "file",
+            "filename": "case.txt",
+            "content_type": "text/plain",
+            "text": "case\n"
+          }
+        ]
+      },
+      "capture": {
+        "upid": "$.id"
+      },
+      "note": "cleaned up by plan 21 after an upper-case lookup of its id"
+    },
+    {
+      "id": "p-up-file-as-text",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "form": {
+          "file": "just text"
+        }
+      }
+    },
+    {
+      "id": "p-up-two-files",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "files": [
+          {
+            "field": "file",
+            "filename": "first.txt",
+            "content_type": "text/plain",
+            "text": "first\n"
+          },
+          {
+            "field": "file",
+            "filename": "second.txt",
+            "content_type": "text/plain",
+            "text": "second\n"
+          }
+        ]
+      },
+      "capture": {
+        "up2f": "$.id"
+      },
+      "cleanup": [
+        "p-cleanup-up2f"
+      ]
+    },
+    {
+      "id": "p-up-no-filename",
+      "endpoint": "POST /v1/uploads",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/uploads",
+        "files": [
+          {
+            "field": "file",
+            "filename": "",
+            "content_type": "text/plain",
+            "text": "nameless\n"
+          }
+        ]
+      },
+      "capture": {
+        "upnf": "$.id"
+      },
+      "cleanup": [
+        "p-cleanup-upnf"
+      ]
+    },
+    {
+      "id": "p-up-list",
+      "endpoint": "GET /v1/uploads",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads"
+      }
+    },
+    {
+      "id": "p-cleanup-wln",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wln}}"
+      }
+    },
+    {
+      "id": "p-cleanup-wlv",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wlv}}"
+      }
+    },
+    {
+      "id": "p-cleanup-wlu",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wlu}}"
+      }
+    },
+    {
+      "id": "p-cleanup-wlw",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wlw}}"
+      }
+    },
+    {
+      "id": "p-cleanup-up2f",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{up2f}}"
+      }
+    },
+    {
+      "id": "p-cleanup-upnf",
+      "endpoint": "DELETE /v1/uploads/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/uploads/{{upnf}}"
+      }
+    },
+    {
+      "id": "p-final-wl",
+      "endpoint": "GET /v1/watchlists",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists"
+      }
+    },
+    {
+      "id": "p-final-up",
+      "endpoint": "GET /v1/uploads",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/uploads"
+      }
+    }
+  ]
+}

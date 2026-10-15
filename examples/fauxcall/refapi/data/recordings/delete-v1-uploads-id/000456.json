@@ -1,0 +1,91 @@
+{
+  "id": "000456",
+  "endpoint": "DELETE /v1/uploads/{id}",
+  "purpose": "invalid",
+  "plan_call": "up-del-malformed",
+  "started_at": "2026-10-15T00:46:49.418090Z",
+  "started_ns": 1792025209418090000,
+  "elapsed_ms": 60.85,
+  "ttfb_ms": 60.575,
+  "request": {
+    "method": "DELETE",
+    "url": "http://127.0.0.1:9100/v1/uploads/abc",
+    "path": "/v1/uploads/abc",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:46:48 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "126"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "16"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025212"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "upload_not_found",
+          "message": "No upload with id 'abc'.",
+          "request_id": "d430e1e5-8956-401d-b5a6-f0eadbb7b529"
+        }
+      },
+      "size": 126
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

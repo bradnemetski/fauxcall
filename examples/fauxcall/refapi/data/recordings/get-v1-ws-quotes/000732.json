@@ -1,0 +1,155 @@
+{
+  "id": "000732",
+  "endpoint": "GET /v1/ws/quotes",
+  "purpose": "variation",
+  "plan_call": "ws2-errors-then-sub",
+  "started_at": "2026-10-15T00:53:50.400007Z",
+  "started_ns": 1792025630400007000,
+  "elapsed_ms": 1214.28,
+  "ttfb_ms": 1.641,
+  "request": {
+    "method": "GET",
+    "url": "ws://127.0.0.1:9100/v1/ws/quotes?api_key=[REDACTED]",
+    "path": "/v1/ws/quotes",
+    "query": [
+      [
+        "api_key",
+        "[REDACTED]"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "connection",
+        "upgrade"
+      ],
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "sec-websocket-key",
+        "eXW0j/+7p79s+ZrpolssIw=="
+      ],
+      [
+        "sec-websocket-version",
+        "13"
+      ]
+    ]
+  },
+  "response": {
+    "status": 101,
+    "reason": "Switching Protocols",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "connection",
+        "Upgrade"
+      ],
+      [
+        "sec-websocket-accept",
+        "zEj5QjC6Ig78mj+AKP/gUXj//c4="
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:49 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 1.698,
+      "kind": "ws_send",
+      "data": "nope"
+    },
+    {
+      "t_ms": 2.068,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"error\",\"message\":\"Invalid JSON.\"}"
+    },
+    {
+      "t_ms": 100.59,
+      "kind": "ws_send",
+      "data": "{\"action\":\"dance\"}"
+    },
+    {
+      "t_ms": 101.2,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"error\",\"message\":\"Unknown action: \\\"dance\\\".\"}"
+    },
+    {
+      "t_ms": 202.095,
+      "kind": "ws_send",
+      "data": "{\"action\":\"subscribe\",\"symbols\":[\"HSBA.L\"]}"
+    },
+    {
+      "t_ms": 202.683,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"subscribed\",\"symbols\":[\"HSBA.L\"]}"
+    },
+    {
+      "t_ms": 202.826,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"HSBA.L\",\"price\":\"7.08\",\"as_of\":\"2026-10-14T15:30:00.000000Z\"}"
+    },
+    {
+      "t_ms": 455.361,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"HSBA.L\",\"price\":\"7.08\",\"as_of\":\"2026-10-14T15:30:00.000000Z\"}"
+    },
+    {
+      "t_ms": 707.751,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"HSBA.L\",\"price\":\"7.08\",\"as_of\":\"2026-10-14T15:30:00.000000Z\"}"
+    },
+    {
+      "t_ms": 960.565,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"HSBA.L\",\"price\":\"7.08\",\"as_of\":\"2026-10-14T15:30:00.000000Z\"}"
+    },
+    {
+      "t_ms": 1213.438,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"HSBA.L\",\"price\":\"7.08\",\"as_of\":\"2026-10-14T15:30:00.000000Z\"}"
+    },
+    {
+      "t_ms": 1213.632,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"done\"}"
+    },
+    {
+      "t_ms": 1213.791,
+      "kind": "ws_close",
+      "code": 1000
+    }
+  ],
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.query:api_key"
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "id": "000684",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "edge",
+  "plan_call": "tl2-cursor-lower-valid",
+  "started_at": "2026-10-15T00:53:16.884800Z",
+  "started_ns": 1792025596884800000,
+  "elapsed_ms": 46.81,
+  "ttfb_ms": 46.553,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?cursor=eyJhZnRlciI6ImFhcGwifQ&limit=2",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "cursor",
+        "eyJhZnRlciI6ImFhcGwifQ"
+      ],
+      [
+        "limit",
+        "2"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:15 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "304"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "10"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025598"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "ADBE",
+            "name": "Adobe Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1986-08-20"
+          },
+          {
+            "symbol": "AIR.PA",
+            "name": "Airbus SE",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Industrials",
+            "listed_on": "2000-07-10"
+          }
+        ],
+        "next_cursor": "eyJhZnRlciI6IkFJUi5QQSJ9",
+        "total": 60
+      },
+      "size": 304
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "id": "000450",
+  "endpoint": "DELETE /v1/uploads/{id}",
+  "purpose": "auth",
+  "plan_call": "up-del-readonly",
+  "started_at": "2026-10-15T00:46:46.404392Z",
+  "started_ns": 1792025206404392000,
+  "elapsed_ms": 42.16,
+  "ttfb_ms": 41.97,
+  "request": {
+    "method": "DELETE",
+    "url": "http://127.0.0.1:9100/v1/uploads/37e19117-757d-4e2a-90ef-60cf588d93b0",
+    "path": "/v1/uploads/37e19117-757d-4e2a-90ef-60cf588d93b0",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 403,
+    "reason": "Forbidden",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:46:45 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "158"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025213"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "read_only_key",
+          "message": "This API key is read-only; DELETE requests are not allowed.",
+          "request_id": "ac46db1f-642b-48b1-bc12-68e375f71e7e"
+        }
+      },
+      "size": 158
+    }
+  },
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "id": "000582",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-015",
+  "started_at": "2026-10-15T00:52:25.460165Z",
+  "started_ns": 1792025545460165000,
+  "elapsed_ms": 48.216,
+  "ttfb_ms": 47.789,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=shell",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "shell"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:25 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "80"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "13"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025547"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "shell",
+        "results": [
+          {
+            "symbol": "SHEL.L",
+            "name": "Shell plc",
+            "score": 0.8
+          }
+        ]
+      },
+      "size": 80
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

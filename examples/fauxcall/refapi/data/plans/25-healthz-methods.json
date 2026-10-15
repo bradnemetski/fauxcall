@@ -1,0 +1,43 @@
+{
+  "name": "25-healthz-methods",
+  "created_at": "2026-10-15T03:40:00Z",
+  "calls": [
+    {
+      "id": "h-options",
+      "endpoint": "OPTIONS /healthz",
+      "purpose": "edge",
+      "request": {
+        "method": "OPTIONS",
+        "path": "/healthz"
+      }
+    },
+    {
+      "id": "h-head",
+      "endpoint": "HEAD /healthz",
+      "purpose": "edge",
+      "request": {
+        "method": "HEAD",
+        "path": "/healthz"
+      }
+    },
+    {
+      "id": "h-options-noauth",
+      "endpoint": "OPTIONS /healthz",
+      "purpose": "edge",
+      "request": {
+        "method": "OPTIONS",
+        "path": "/healthz",
+        "auth": "none"
+      }
+    },
+    {
+      "id": "oa-options",
+      "endpoint": "OPTIONS /openapi.json",
+      "purpose": "edge",
+      "request": {
+        "method": "OPTIONS",
+        "path": "/openapi.json"
+      }
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "id": "000386",
+  "endpoint": "GET /v1/uploads/{id}/content",
+  "purpose": "invalid",
+  "plan_call": "up-content-corrupt",
+  "started_at": "2026-10-15T00:46:08.072669Z",
+  "started_ns": 1792025168072669000,
+  "elapsed_ms": 69.759,
+  "ttfb_ms": 69.463,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/uploads/2ce772ae-7d48-45ef-b34f-7d5a486cebb8/content",
+    "path": "/v1/uploads/2ce772ae-7d48-45ef-b34f-7d5a486cebb8/content",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 409,
+    "reason": "Conflict",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:46:08 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "198"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "16"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025172"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "not_ready",
+          "message": "Upload '2ce772ae-7d48-45ef-b34f-7d5a486cebb8' is failed; content is available only when status is done.",
+          "request_id": "386a302d-2e1e-4a1f-a16f-75633040f643"
+        }
+      },
+      "size": 198
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

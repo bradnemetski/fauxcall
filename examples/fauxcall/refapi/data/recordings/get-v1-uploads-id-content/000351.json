@@ -1,0 +1,101 @@
+{
+  "id": "000351",
+  "endpoint": "GET /v1/uploads/{id}/content",
+  "purpose": "write_readback",
+  "plan_call": "up-content-2",
+  "started_at": "2026-10-15T00:45:49.367300Z",
+  "started_ns": 1792025149367300000,
+  "elapsed_ms": 58.584,
+  "ttfb_ms": 58.106,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/uploads/d5a2907f-2223-47b1-a143-fbda7a86468a/content",
+    "path": "/v1/uploads/d5a2907f-2223-47b1-a143-fbda7a86468a/content",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:45:48 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-disposition",
+        "attachment; filename=\"orders.json\""
+      ],
+      [
+        "content-length",
+        "47"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "12"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025151"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "orders": [
+          {
+            "symbol": "7203.T",
+            "qty": 100
+          }
+        ]
+      },
+      "style": {
+        "item_separator": ", ",
+        "key_separator": ": ",
+        "trailing_newline": true
+      },
+      "size": 47
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

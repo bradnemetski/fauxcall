@@ -1,0 +1,109 @@
+{
+  "id": "000714",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "edge",
+  "plan_call": "tr2-count-05",
+  "started_at": "2026-10-15T00:53:31.944380Z",
+  "started_ns": 1792025611944380000,
+  "elapsed_ms": 257.105,
+  "ttfb_ms": 55.932,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=MSFT&count=02",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "MSFT"
+      ],
+      [
+        "count",
+        "02"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:31 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "20"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025618"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 56.393,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.09\",\"size\":279,\"time\":\"2026-10-15T00:53:31.999Z\"}"
+    },
+    {
+      "t_ms": 256.904,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"MSFT\",\"price\":\"415.26\",\"size\":707,\"time\":\"2026-10-15T00:53:32.200Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

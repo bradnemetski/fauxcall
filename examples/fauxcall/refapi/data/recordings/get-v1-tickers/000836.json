@@ -1,0 +1,120 @@
+{
+  "id": "000836",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "edge",
+  "plan_call": "tl-limit-3.0",
+  "started_at": "2026-10-15T01:56:11.438089Z",
+  "started_ns": 1792029371438089000,
+  "elapsed_ms": 52.094,
+  "ttfb_ms": 51.832,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?limit=3.0",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "limit",
+        "3.0"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:56:11 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "496"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "24"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792029379"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "0005.HK",
+            "name": "HSBC Holdings plc",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Financials",
+            "listed_on": "1991-04-01"
+          },
+          {
+            "symbol": "0388.HK",
+            "name": "Hong Kong Exchanges and Clearing Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Financials",
+            "listed_on": "2000-06-27"
+          },
+          {
+            "symbol": "0700.HK",
+            "name": "Tencent Holdings Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Communication Services",
+            "listed_on": "2004-06-16"
+          }
+        ],
+        "next_cursor": "eyJhZnRlciI6IjA3MDAuSEsifQ",
+        "total": 60
+      },
+      "size": 496
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

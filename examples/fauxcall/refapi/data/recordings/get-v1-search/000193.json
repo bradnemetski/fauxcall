@@ -1,0 +1,100 @@
+{
+  "id": "000193",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s-33",
+  "started_at": "2026-10-15T00:42:39.052292Z",
+  "started_ns": 1792024959052292000,
+  "elapsed_ms": 49.154,
+  "ttfb_ms": 48.69,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=nvda",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "nvda"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:42:38 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "86"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "11"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024961"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "nvda",
+        "results": [
+          {
+            "symbol": "NVDA",
+            "name": "NVIDIA Corporation",
+            "score": 1.0
+          }
+        ]
+      },
+      "size": 86
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

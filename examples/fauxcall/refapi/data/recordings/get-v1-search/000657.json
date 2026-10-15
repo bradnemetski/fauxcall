@@ -1,0 +1,94 @@
+{
+  "id": "000657",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-090",
+  "started_at": "2026-10-15T00:53:03.104478Z",
+  "started_ns": 1792025583104478000,
+  "elapsed_ms": 45.887,
+  "ttfb_ms": 45.574,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=automobiles",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "automobiles"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:02 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "36"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "17"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025588"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "automobiles",
+        "results": []
+      },
+      "size": 36
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

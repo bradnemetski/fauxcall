@@ -1,0 +1,98 @@
+{
+ "name": "protocol-versions",
+ "created_at": "2026-10-15T03:40:00Z",
+ "note": "Version negotiation outside any session (auth none = a fresh POST without a session id; the server has no auth): versions introspection did not offer, the fallback for unsupported ones, and handshakes the SDK's InitializeRequestSchema refuses.",
+ "calls": [
+  {
+   "id": "pv-2024-10-07",
+   "endpoint": "MCP initialize",
+   "purpose": "edge",
+   "note": "a version the SDK supports but introspection never offered",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "auth": "none",
+    "json_body": {
+     "protocolVersion": "2024-10-07",
+     "capabilities": {},
+     "clientInfo": {
+      "name": "fauxcall-probe",
+      "version": "1.0.0"
+     }
+    }
+   }
+  },
+  {
+   "id": "pv-future",
+   "endpoint": "MCP initialize",
+   "purpose": "edge",
+   "note": "an unsupported version newer than any: the server's fallback (and whether it primes)",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "auth": "none",
+    "json_body": {
+     "protocolVersion": "2099-01-01",
+     "capabilities": {},
+     "clientInfo": {
+      "name": "fauxcall-probe",
+      "version": "1.0.0"
+     }
+    }
+   }
+  },
+  {
+   "id": "pv-past",
+   "endpoint": "MCP initialize",
+   "purpose": "edge",
+   "note": "an unsupported older version: the fallback, and no priming event?",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "auth": "none",
+    "json_body": {
+     "protocolVersion": "1999-01-01",
+     "capabilities": {},
+     "clientInfo": {
+      "name": "fauxcall-probe",
+      "version": "1.0.0"
+     }
+    }
+   }
+  },
+  {
+   "id": "pv-no-client-info",
+   "endpoint": "MCP initialize",
+   "purpose": "edge",
+   "note": "a handshake InitializeRequestSchema refuses: treated as a request before initialization",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "auth": "none",
+    "json_body": {
+     "protocolVersion": "2025-06-18",
+     "capabilities": {}
+    }
+   }
+  },
+  {
+   "id": "pv-version-number",
+   "endpoint": "MCP initialize",
+   "purpose": "edge",
+   "note": "a non-string protocolVersion",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "auth": "none",
+    "json_body": {
+     "protocolVersion": 20250618,
+     "capabilities": {},
+     "clientInfo": {
+      "name": "fauxcall-probe",
+      "version": "1.0.0"
+     }
+    }
+   }
+  }
+ ]
+}

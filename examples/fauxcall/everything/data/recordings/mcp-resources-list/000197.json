@@ -1,0 +1,154 @@
+{
+  "id": "000197",
+  "endpoint": "MCP resources/list",
+  "purpose": "write_readback",
+  "plan_call": "gz-list-before",
+  "started_at": "2026-10-15T00:44:19.711732Z",
+  "started_ns": 1792025059711732000,
+  "elapsed_ms": 9.257,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "resources/list",
+        "params": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "1349"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:19 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "resources": [
+            {
+              "uri": "demo://resource/static/document/architecture.md",
+              "name": "architecture.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: architecture.md"
+            },
+            {
+              "uri": "demo://resource/static/document/extension.md",
+              "name": "extension.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: extension.md"
+            },
+            {
+              "uri": "demo://resource/static/document/features.md",
+              "name": "features.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: features.md"
+            },
+            {
+              "uri": "demo://resource/static/document/how-it-works.md",
+              "name": "how-it-works.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: how-it-works.md"
+            },
+            {
+              "uri": "demo://resource/static/document/instructions.md",
+              "name": "instructions.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: instructions.md"
+            },
+            {
+              "uri": "demo://resource/static/document/startup.md",
+              "name": "startup.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: startup.md"
+            },
+            {
+              "uri": "demo://resource/static/document/structure.md",
+              "name": "structure.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: structure.md"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 2
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.939,
+      "kind": "sse",
+      "event": "message",
+      "id": "cad8f4a4-b29a-4908-8fd0-c8505aa4f080",
+      "data": "{\"result\":{\"resources\":[{\"uri\":\"demo://resource/static/document/architecture.md\",\"name\":\"architecture.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: architecture.md\"},{\"uri\":\"demo://resource/static/document/extension.md\",\"name\":\"extension.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: extension.md\"},{\"uri\":\"demo://resource/static/document/features.md\",\"name\":\"features.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: features.md\"},{\"uri\":\"demo://resource/static/document/how-it-works.md\",\"name\":\"how-it-works.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: how-it-works.md\"},{\"uri\":\"demo://resource/static/document/instructions.md\",\"name\":\"instructions.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: instructions.md\"},{\"uri\":\"demo://resource/static/document/startup.md\",\"name\":\"startup.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: startup.md\"},{\"uri\":\"demo://resource/static/document/structure.md\",\"name\":\"structure.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: structure.md\"}]},\"jsonrpc\":\"2.0\",\"id\":2}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

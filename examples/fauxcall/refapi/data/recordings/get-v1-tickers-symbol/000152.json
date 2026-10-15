@@ -1,0 +1,92 @@
+{
+  "id": "000152",
+  "endpoint": "GET /v1/tickers/{symbol}",
+  "purpose": "variation",
+  "plan_call": "tg-mixed",
+  "started_at": "2026-10-15T00:42:18.223564Z",
+  "started_ns": 1792024938223564000,
+  "elapsed_ms": 63.671,
+  "ttfb_ms": 62.943,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/Msft",
+    "path": "/v1/tickers/Msft",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:42:17 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "130"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "12"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024940"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "MSFT",
+        "name": "Microsoft Corporation",
+        "exchange": "XNAS",
+        "currency": "USD",
+        "sector": "Technology",
+        "listed_on": "1986-03-13"
+      },
+      "size": 130
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,11 +1,11 @@
 {
   "id": "000452",
   "endpoint": "MCP completion/complete",
-  "purpose": "edge",
-  "plan_call": "x-crid-12",
-  "started_at": "2026-10-14T01:51:37.861396Z",
-  "started_ns": 1791942697861396000,
-  "elapsed_ms": 20.664,
+  "purpose": "invalid",
+  "plan_call": "ps-complete-context-number",
+  "started_at": "2026-10-15T02:10:15.668318Z",
+  "started_ns": 1792030215668318000,
+  "elapsed_ms": 8.964,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,16 +33,21 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 9,
+        "id": 10,
         "method": "completion/complete",
         "params": {
           "ref": {
-            "type": "ref/resource",
-            "uri": "demo://resource/dynamic/text/{resourceId}"
+            "type": "ref/prompt",
+            "name": "completable-prompt"
           },
           "argument": {
-            "name": "resourceId",
-            "value": "12"
+            "name": "name",
+            "value": ""
+          },
+          "context": {
+            "arguments": {
+              "department": 5
+            }
           }
         }
       }
@@ -85,38 +90,33 @@
       ],
       [
         "content-length",
-        "156"
+        "382"
       ],
       [
         "date",
-        "Wed, 14 Oct 2026 01:51:37 GMT"
+        "Thu, 15 Oct 2026 02:10:15 GMT"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "text/event-stream",
       "json": {
-        "result": {
-          "completion": {
-            "values": [
-              "12"
-            ],
-            "total": 1,
-            "hasMore": false
-          }
-        },
         "jsonrpc": "2.0",
-        "id": 9
+        "id": 10,
+        "error": {
+          "code": -32603,
+          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"params\",\n      \"context\",\n      \"arguments\",\n      \"department\"\n    ],\n    \"message\": \"Invalid input: expected string, received number\"\n  }\n]"
+        }
       }
     }
   },
   "stream": [
     {
-      "t_ms": 20.045,
+      "t_ms": 8.599,
       "kind": "sse",
       "event": "message",
-      "id": "af7331b3-0ef0-4b4b-bf10-daf87da03033",
-      "data": "{\"result\":{\"completion\":{\"values\":[\"12\"],\"total\":1,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":9}"
+      "id": "8aacc69c-a52b-4ab9-a8f0-04e39a8a062a",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":10,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"expected\\\": \\\"string\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"context\\\",\\n      \\\"arguments\\\",\\n      \\\"department\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected string, received number\\\"\\n  }\\n]\"}}"
     }
   ],
   "redacted": [

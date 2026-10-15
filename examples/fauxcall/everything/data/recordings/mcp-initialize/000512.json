@@ -1,0 +1,93 @@
+{
+  "id": "000512",
+  "endpoint": "MCP initialize",
+  "purpose": "edge",
+  "plan_call": "pv-version-number",
+  "started_at": "2026-10-15T03:43:08.653175Z",
+  "started_ns": 1792035788653175000,
+  "elapsed_ms": 2.762,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 9000002,
+        "method": "initialize",
+        "params": {
+          "protocolVersion": 20250618,
+          "capabilities": {},
+          "clientInfo": {
+            "name": "fauxcall-probe",
+            "version": "1.0.0"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 400,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "99"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 03:43:08 GMT"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "keep-alive",
+        "timeout=5"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "error": {
+          "code": -32000,
+          "message": "Bad Request: Server not initialized"
+        },
+        "id": null
+      }
+    }
+  },
+  "tags": [
+    "auth:none"
+  ]
+}

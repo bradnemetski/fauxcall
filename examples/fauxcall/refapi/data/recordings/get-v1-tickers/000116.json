@@ -1,0 +1,136 @@
+{
+  "id": "000116",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "variation",
+  "plan_call": "tl-sec-Healthcare",
+  "started_at": "2026-10-15T00:41:59.864608Z",
+  "started_ns": 1792024919864608000,
+  "elapsed_ms": 49.135,
+  "ttfb_ms": 48.555,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?sector=Healthcare",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "sector",
+        "Healthcare"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:41:59 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "649"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024930"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "AMGN",
+            "name": "Amgen Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Healthcare",
+            "listed_on": "1983-06-17"
+          },
+          {
+            "symbol": "AZN.L",
+            "name": "AstraZeneca PLC",
+            "exchange": "XLON",
+            "currency": "GBP",
+            "sector": "Healthcare",
+            "listed_on": "1999-04-06"
+          },
+          {
+            "symbol": "JNJ",
+            "name": "Johnson & Johnson",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Healthcare",
+            "listed_on": "1944-09-25"
+          },
+          {
+            "symbol": "PFE",
+            "name": "Pfizer Inc.",
+            "exchange": "XNYS",
+            "currency": "USD",
+            "sector": "Healthcare",
+            "listed_on": "1944-01-03"
+          },
+          {
+            "symbol": "SAN.PA",
+            "name": "Sanofi",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Healthcare",
+            "listed_on": "1999-08-20"
+          }
+        ],
+        "next_cursor": null,
+        "total": 5
+      },
+      "size": 649
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

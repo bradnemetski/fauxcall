@@ -1,0 +1,91 @@
+{
+  "id": "000030",
+  "endpoint": "POST /v1/watchlists",
+  "purpose": "auth",
+  "plan_call": "auth-none-post",
+  "started_at": "2026-10-15T00:38:02.267997Z",
+  "started_ns": 1792024682267997000,
+  "elapsed_ms": 31.424,
+  "ttfb_ms": 31.111,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/watchlists",
+    "path": "/v1/watchlists",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "32"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "name": "fauxcall-probe-noauth"
+      },
+      "size": 32
+    }
+  },
+  "response": {
+    "status": 401,
+    "reason": "Unauthorized",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:38:01 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "150"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "missing_api_key",
+          "message": "Missing API key. Send it in the X-API-Key header.",
+          "request_id": "f41a5f01-71d9-467e-b3c7-a557212810af"
+        }
+      },
+      "size": 150
+    }
+  },
+  "tags": [
+    "auth:none"
+  ]
+}

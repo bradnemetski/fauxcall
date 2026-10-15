@@ -1,16 +1,24 @@
 {
   "openapi": "3.1.0",
-  "info": {"title": "refapi WebSocket quote feed (from the API description)", "version": "1.0"},
+  "info": {
+    "title": "FauxCall Reference Market API — WebSocket quote feed",
+    "version": "1.0.0",
+    "description": "Described only in the API's info.description prose: `WS /v1/ws/quotes?api_key=...` is a WebSocket quote feed (not representable in OpenAPI)."
+  },
   "servers": [{"url": "http://127.0.0.1:9100"}],
   "paths": {
     "/v1/ws/quotes": {
       "get": {
-        "operationId": "ws_quotes",
         "summary": "WebSocket quote feed",
-        "description": "WS /v1/ws/quotes?api_key=... is a WebSocket quote feed (documented only in the API description; protocol from recordings).",
+        "operationId": "ws_quotes",
         "tags": ["streaming"],
-        "parameters": [{"name": "api_key", "in": "query", "required": false, "schema": {"type": "string"}}],
-        "responses": {"101": {"description": "Switching Protocols"}}
+        "description": "WebSocket (upgrade on GET). Credentials in the `api_key` query parameter. The client sends JSON text messages `{\"action\": \"subscribe\", \"symbols\": [\"AAPL\"]}` or `{\"action\": \"ping\"}`; the server answers with `subscribed`, `quote`, `pong`, `error` and `done` messages.",
+        "parameters": [
+          {"name": "api_key", "in": "query", "required": true, "schema": {"type": "string"}, "description": "API key (same keys as X-API-Key)."}
+        ],
+        "responses": {
+          "101": {"description": "Switching Protocols (WebSocket)."}
+        }
       }
     }
   }

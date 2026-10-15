@@ -1,0 +1,122 @@
+{
+  "id": "000285",
+  "endpoint": "MCP tasks/result",
+  "plan_call": "rq-result-1",
+  "started_at": "2026-10-15T00:48:35.292223Z",
+  "started_ns": 1792025315292223000,
+  "elapsed_ms": 2.557,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 11,
+        "method": "tasks/result",
+        "params": {
+          "taskId": "5c99f5bfc59cd376b1fe0fc0a1d74a71"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:48:35 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "# Research Report: quantum computing\n\n## Research Parameters\n- **Topic**: quantum computing\n\n\n## Synthesis\nThis research query was processed through 4 stages:\n- Stage 1: Gathering sources ✓\n- Stage 2: Analyzing content ✓\n- Stage 3: Synthesizing findings ✓\n- Stage 4: Generating report ✓\n\n---\n\n## About This Demo (SEP-1686: Tasks)\n\nThis tool demonstrates MCP's task-based execution pattern for long-running operations:\n\n**Task Lifecycle Demonstrated:**\n1. `tools/call` with `task` parameter → Server returns `CreateTaskResult` (not the final result)\n2. Client polls `tasks/get` → Server returns current status and `statusMessage`\n3. Status progressed: `working` → `completed`\n4. Client calls `tasks/result` → Server returns this final result\n\n\n**Key Concepts:**\n- Tasks enable \"call now, fetch later\" patterns\n- `statusMessage` provides human-readable progress updates\n- Tasks have TTL (time-to-live) for automatic cleanup\n- `pollInterval` suggests how often to check status\n- Elicitation requests use `relatedTask` to queue via tasks/result (works on all transports)\n\n*This is a simulated research report from the Everything MCP Server.*\n"
+            }
+          ],
+          "_meta": {
+            "io.modelcontextprotocol/related-task": {
+              "taskId": "5c99f5bfc59cd376b1fe0fc0a1d74a71"
+            }
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 11
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.425,
+      "kind": "sse",
+      "event": "message",
+      "id": "75c9445a-b58e-461d-8c02-60739c10cd8a",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"# Research Report: quantum computing\\n\\n## Research Parameters\\n- **Topic**: quantum computing\\n\\n\\n## Synthesis\\nThis research query was processed through 4 stages:\\n- Stage 1: Gathering sources ✓\\n- Stage 2: Analyzing content ✓\\n- Stage 3: Synthesizing findings ✓\\n- Stage 4: Generating report ✓\\n\\n---\\n\\n## About This Demo (SEP-1686: Tasks)\\n\\nThis tool demonstrates MCP's task-based execution pattern for long-running operations:\\n\\n**Task Lifecycle Demonstrated:**\\n1. `tools/call` with `task` parameter → Server returns `CreateTaskResult` (not the final result)\\n2. Client polls `tasks/get` → Server returns current status and `statusMessage`\\n3. Status progressed: `working` → `completed`\\n4. Client calls `tasks/result` → Server returns this final result\\n\\n\\n**Key Concepts:**\\n- Tasks enable \\\"call now, fetch later\\\" patterns\\n- `statusMessage` provides human-readable progress updates\\n- Tasks have TTL (time-to-live) for automatic cleanup\\n- `pollInterval` suggests how often to check status\\n- Elicitation requests use `relatedTask` to queue via tasks/result (works on all transports)\\n\\n*This is a simulated research report from the Everything MCP Server.*\\n\"}],\"_meta\":{\"io.modelcontextprotocol/related-task\":{\"taskId\":\"5c99f5bfc59cd376b1fe0fc0a1d74a71\"}}},\"jsonrpc\":\"2.0\",\"id\":11}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

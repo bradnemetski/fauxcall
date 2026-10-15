@@ -1,0 +1,160 @@
+{
+  "id": "000725",
+  "endpoint": "GET /v1/ws/quotes",
+  "purpose": "variation",
+  "plan_call": "ws2-dup",
+  "started_at": "2026-10-15T00:53:38.113900Z",
+  "started_ns": 1792025618113900000,
+  "elapsed_ms": 1030.669,
+  "ttfb_ms": 20.285,
+  "request": {
+    "method": "GET",
+    "url": "ws://127.0.0.1:9100/v1/ws/quotes?api_key=[REDACTED]",
+    "path": "/v1/ws/quotes",
+    "query": [
+      [
+        "api_key",
+        "[REDACTED]"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "connection",
+        "upgrade"
+      ],
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "sec-websocket-key",
+        "rd6kQpt+kTI1IncIytaKeQ=="
+      ],
+      [
+        "sec-websocket-version",
+        "13"
+      ]
+    ]
+  },
+  "response": {
+    "status": 101,
+    "reason": "Switching Protocols",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "connection",
+        "Upgrade"
+      ],
+      [
+        "sec-websocket-accept",
+        "E61CaG2RimOML2ct1LpRydGnrZU="
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:37 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 20.357,
+      "kind": "ws_send",
+      "data": "{\"action\":\"subscribe\",\"symbols\":[\"aapl\",\"AAPL\",\"msft\"]}"
+    },
+    {
+      "t_ms": 20.842,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"subscribed\",\"symbols\":[\"AAPL\",\"MSFT\"]}"
+    },
+    {
+      "t_ms": 20.975,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"AAPL\",\"price\":\"227.48\",\"as_of\":\"2026-10-14T20:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 21.014,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"MSFT\",\"price\":\"415.26\",\"as_of\":\"2026-10-14T20:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 273.553,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"AAPL\",\"price\":\"227.48\",\"as_of\":\"2026-10-14T20:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 273.802,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"MSFT\",\"price\":\"415.26\",\"as_of\":\"2026-10-14T20:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 524.534,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"AAPL\",\"price\":\"227.48\",\"as_of\":\"2026-10-14T20:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 524.719,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"MSFT\",\"price\":\"415.26\",\"as_of\":\"2026-10-14T20:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 775.01,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"AAPL\",\"price\":\"227.48\",\"as_of\":\"2026-10-14T20:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 775.191,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"MSFT\",\"price\":\"415.26\",\"as_of\":\"2026-10-14T20:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 1028.068,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"AAPL\",\"price\":\"227.48\",\"as_of\":\"2026-10-14T20:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 1028.263,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"quote\",\"symbol\":\"MSFT\",\"price\":\"415.26\",\"as_of\":\"2026-10-14T20:00:00.000000Z\"}"
+    },
+    {
+      "t_ms": 1028.522,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"done\"}"
+    },
+    {
+      "t_ms": 1028.851,
+      "kind": "ws_close",
+      "code": 1000
+    }
+  ],
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.query:api_key"
+  ]
+}

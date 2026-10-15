@@ -1,0 +1,129 @@
+{
+  "id": "000171",
+  "endpoint": "GET /v1/search",
+  "plan_call": "s-11",
+  "started_at": "2026-10-15T00:42:28.003070Z",
+  "started_ns": 1792024948003070000,
+  "elapsed_ms": 43.23,
+  "ttfb_ms": 42.951,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=auto",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "auto"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:42:27 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "448"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "13"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024950"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "auto",
+        "results": [
+          {
+            "symbol": "RIVN",
+            "name": "Rivian Automotive, Inc.",
+            "score": 0.6
+          },
+          {
+            "symbol": "1211.HK",
+            "name": "BYD Company Limited",
+            "score": 0.5
+          },
+          {
+            "symbol": "7203.T",
+            "name": "Toyota Motor Corporation",
+            "score": 0.5
+          },
+          {
+            "symbol": "7267.T",
+            "name": "Honda Motor Co., Ltd.",
+            "score": 0.5
+          },
+          {
+            "symbol": "F",
+            "name": "Ford Motor Company",
+            "score": 0.5
+          },
+          {
+            "symbol": "GM",
+            "name": "General Motors Company",
+            "score": 0.5
+          },
+          {
+            "symbol": "TSLA",
+            "name": "Tesla, Inc.",
+            "score": 0.5
+          }
+        ]
+      },
+      "size": 448
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

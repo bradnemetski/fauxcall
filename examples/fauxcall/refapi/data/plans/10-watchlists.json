@@ -1,0 +1,973 @@
+{
+  "name": "10-watchlists",
+  "created_at": "2026-10-14T20:45:00Z",
+  "calls": [
+    {
+      "id": "wl-list-empty",
+      "endpoint": "GET /v1/watchlists",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists"
+      }
+    },
+    {
+      "id": "wl-create-min",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe-min"
+        }
+      },
+      "capture": {
+        "wl_min": "$.id"
+      },
+      "cleanup": [
+        "wl-del-min"
+      ]
+    },
+    {
+      "id": "wl-get-min",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/{{wl_min}}"
+      }
+    },
+    {
+      "id": "wl-create-full",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe-full",
+          "symbols": [
+            "msft",
+            "AAPL",
+            "aapl",
+            "7203.t",
+            "AIR.PA"
+          ]
+        }
+      },
+      "capture": {
+        "wl_full": "$.id"
+      },
+      "cleanup": [
+        "wl-cleanup-wl_full"
+      ]
+    },
+    {
+      "id": "wl-get-full",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/{{wl_full}}"
+      }
+    },
+    {
+      "id": "wl-list-two",
+      "endpoint": "GET /v1/watchlists",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists"
+      }
+    },
+    {
+      "id": "wl-create-empty-symbols",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe-empty",
+          "symbols": []
+        }
+      },
+      "capture": {
+        "wl_empty": "$.id"
+      },
+      "cleanup": [
+        "wl-cleanup-wl_empty"
+      ]
+    },
+    {
+      "id": "wl-create-unicode",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe caf\u00e9 \u2713 \u65e5\u672c",
+          "symbols": [
+            "6758.T"
+          ]
+        }
+      },
+      "capture": {
+        "wl_uni": "$.id"
+      },
+      "cleanup": [
+        "wl-cleanup-wl_uni"
+      ]
+    },
+    {
+      "id": "wl-create-name50",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        }
+      },
+      "capture": {
+        "wl_50": "$.id"
+      },
+      "cleanup": [
+        "wl-cleanup-wl_50"
+      ]
+    },
+    {
+      "id": "wl-create-ws-symbols",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe-ws",
+          "symbols": [
+            " aapl ",
+            "MSFT"
+          ]
+        }
+      },
+      "capture": {
+        "wl_ws": "$.id"
+      },
+      "cleanup": [
+        "wl-cleanup-wl_ws"
+      ]
+    },
+    {
+      "id": "wl-create-null-symbols",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe-nullsym",
+          "symbols": null
+        }
+      },
+      "capture": {
+        "wl_nullsym": "$.id"
+      },
+      "cleanup": [
+        "wl-cleanup-wl_nullsym"
+      ]
+    },
+    {
+      "id": "wl-create-unknown-field",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe-extra",
+          "foo": 1,
+          "id": 5
+        }
+      },
+      "capture": {
+        "wl_extra": "$.id"
+      },
+      "cleanup": [
+        "wl-cleanup-wl_extra"
+      ]
+    },
+    {
+      "id": "wl-create-unknown-symbol",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe-unk",
+          "symbols": [
+            "AAPL",
+            "ZZZZ"
+          ]
+        }
+      },
+      "capture": {
+        "wl_unk": "$.id"
+      },
+      "cleanup": [
+        "wl-cleanup-wl_unk"
+      ]
+    },
+    {
+      "id": "wl-create-missing-name",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "wl-create-missing-name-syms",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "symbols": [
+            "AAPL"
+          ]
+        }
+      }
+    },
+    {
+      "id": "wl-create-empty-name",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": ""
+        }
+      }
+    },
+    {
+      "id": "wl-create-name51",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        }
+      }
+    },
+    {
+      "id": "wl-create-null-name",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": null
+        }
+      }
+    },
+    {
+      "id": "wl-create-int-name",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": 123
+        }
+      }
+    },
+    {
+      "id": "wl-create-symbols-string",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe-x",
+          "symbols": "AAPL"
+        }
+      }
+    },
+    {
+      "id": "wl-create-symbols-ints",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "fauxcall-probe-x",
+          "symbols": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "id": "wl-create-array-body",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": []
+      }
+    },
+    {
+      "id": "wl-create-invalid-json",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "text_body": "{bad json",
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "wl-create-text-plain",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "text_body": "{\"name\": \"fauxcall-probe-tp\"}",
+        "content_type": "text/plain"
+      },
+      "capture": {
+        "wl_tp": "$.id"
+      },
+      "cleanup": [
+        "wl-cleanup-wl_tp"
+      ]
+    },
+    {
+      "id": "wl-create-no-body",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists"
+      }
+    },
+    {
+      "id": "wl-create-two-errors",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "",
+          "symbols": "x"
+        }
+      }
+    },
+    {
+      "id": "wl-create-unknown-symbol-and-bad-name",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "json_body": {
+          "name": "",
+          "symbols": [
+            "ZZZZ"
+          ]
+        }
+      }
+    },
+    {
+      "id": "wl-create-readonly",
+      "endpoint": "POST /v1/watchlists",
+      "purpose": "auth",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists",
+        "headers": {
+          "X-API-Key": "readonly-key"
+        },
+        "json_body": {
+          "name": "fauxcall-probe-ro"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "wl-get-unknown",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/999999"
+      }
+    },
+    {
+      "id": "wl-get-abc",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/abc"
+      }
+    },
+    {
+      "id": "wl-get-zero",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/0"
+      }
+    },
+    {
+      "id": "wl-get-neg",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/-1"
+      }
+    },
+    {
+      "id": "wl-get-float",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/1.5"
+      }
+    },
+    {
+      "id": "wl-get-huge",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/99999999999999999999"
+      }
+    },
+    {
+      "id": "wl-get-leading-zero",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/0{{wl_min}}"
+      }
+    },
+    {
+      "id": "wl-put",
+      "endpoint": "PUT /v1/watchlists/{id}",
+      "purpose": "variation",
+      "request": {
+        "method": "PUT",
+        "path": "/v1/watchlists/{{wl_min}}",
+        "json_body": {
+          "name": "fauxcall-probe-min-renamed",
+          "symbols": [
+            "nvda",
+            "NVDA",
+            "tsla"
+          ]
+        }
+      }
+    },
+    {
+      "id": "wl-put-readback",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/{{wl_min}}"
+      }
+    },
+    {
+      "id": "wl-put-missing-symbols",
+      "endpoint": "PUT /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/v1/watchlists/{{wl_min}}",
+        "json_body": {
+          "name": "fauxcall-probe-x"
+        }
+      }
+    },
+    {
+      "id": "wl-put-missing-name",
+      "endpoint": "PUT /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/v1/watchlists/{{wl_min}}",
+        "json_body": {
+          "symbols": []
+        }
+      }
+    },
+    {
+      "id": "wl-put-null-name",
+      "endpoint": "PUT /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/v1/watchlists/{{wl_min}}",
+        "json_body": {
+          "name": null,
+          "symbols": []
+        }
+      }
+    },
+    {
+      "id": "wl-put-unknown-symbol",
+      "endpoint": "PUT /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/v1/watchlists/{{wl_min}}",
+        "json_body": {
+          "name": "fauxcall-probe-x",
+          "symbols": [
+            "ZZZZ"
+          ]
+        }
+      }
+    },
+    {
+      "id": "wl-put-unknown-id",
+      "endpoint": "PUT /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/v1/watchlists/999999",
+        "json_body": {
+          "name": "fauxcall-probe-x",
+          "symbols": []
+        }
+      }
+    },
+    {
+      "id": "wl-put-unknown-id-bad-body",
+      "endpoint": "PUT /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/v1/watchlists/999999",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "wl-put-bad-id",
+      "endpoint": "PUT /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/v1/watchlists/abc",
+        "json_body": {
+          "name": "fauxcall-probe-x",
+          "symbols": []
+        }
+      }
+    },
+    {
+      "id": "wl-put-readback-2",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/{{wl_min}}"
+      }
+    },
+    {
+      "id": "wl-patch-name",
+      "endpoint": "PATCH /v1/watchlists/{id}",
+      "purpose": "variation",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/watchlists/{{wl_full}}",
+        "json_body": {
+          "name": "fauxcall-probe-full-renamed"
+        }
+      }
+    },
+    {
+      "id": "wl-patch-name-readback",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/{{wl_full}}"
+      }
+    },
+    {
+      "id": "wl-patch-symbols",
+      "endpoint": "PATCH /v1/watchlists/{id}",
+      "purpose": "variation",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/watchlists/{{wl_full}}",
+        "json_body": {
+          "symbols": [
+            "tsla",
+            "0700.hk"
+          ]
+        }
+      }
+    },
+    {
+      "id": "wl-patch-symbols-readback",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/{{wl_full}}"
+      }
+    },
+    {
+      "id": "wl-patch-empty",
+      "endpoint": "PATCH /v1/watchlists/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/watchlists/{{wl_full}}",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "wl-patch-empty-readback",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/{{wl_full}}"
+      }
+    },
+    {
+      "id": "wl-patch-null-name",
+      "endpoint": "PATCH /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/watchlists/{{wl_full}}",
+        "json_body": {
+          "name": null
+        }
+      }
+    },
+    {
+      "id": "wl-patch-null-symbols",
+      "endpoint": "PATCH /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/watchlists/{{wl_full}}",
+        "json_body": {
+          "symbols": null
+        }
+      }
+    },
+    {
+      "id": "wl-patch-empty-name",
+      "endpoint": "PATCH /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/watchlists/{{wl_full}}",
+        "json_body": {
+          "name": ""
+        }
+      }
+    },
+    {
+      "id": "wl-patch-unknown-symbol",
+      "endpoint": "PATCH /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/watchlists/{{wl_full}}",
+        "json_body": {
+          "symbols": [
+            "ZZZZ"
+          ]
+        }
+      }
+    },
+    {
+      "id": "wl-patch-unknown-field",
+      "endpoint": "PATCH /v1/watchlists/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/watchlists/{{wl_full}}",
+        "json_body": {
+          "foo": 1
+        }
+      }
+    },
+    {
+      "id": "wl-patch-unknown-id",
+      "endpoint": "PATCH /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/watchlists/999999",
+        "json_body": {
+          "name": "fauxcall-probe-x"
+        }
+      }
+    },
+    {
+      "id": "wl-patch-bad-id",
+      "endpoint": "PATCH /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/watchlists/abc",
+        "json_body": {
+          "name": "fauxcall-probe-x"
+        }
+      }
+    },
+    {
+      "id": "wl-patch-array-body",
+      "endpoint": "PATCH /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PATCH",
+        "path": "/v1/watchlists/{{wl_full}}",
+        "json_body": []
+      }
+    },
+    {
+      "id": "wl-patch-readback-final",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/{{wl_full}}"
+      }
+    },
+    {
+      "id": "wl-get-time",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "time_profile",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/{{wl_full}}"
+      },
+      "repeat": 3,
+      "interval_ms": 10000
+    },
+    {
+      "id": "wl-list-all",
+      "endpoint": "GET /v1/watchlists",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists"
+      }
+    },
+    {
+      "id": "wl-post-on-item",
+      "endpoint": "POST /v1/watchlists/{id}",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/v1/watchlists/{{wl_full}}",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "wl-del-readonly",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "auth",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wl_min}}",
+        "headers": {
+          "X-API-Key": "readonly-key"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "wl-del-min",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "variation",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wl_min}}"
+      }
+    },
+    {
+      "id": "wl-get-deleted",
+      "endpoint": "GET /v1/watchlists/{id}",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists/{{wl_min}}"
+      }
+    },
+    {
+      "id": "wl-del-twice",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wl_min}}"
+      }
+    },
+    {
+      "id": "wl-put-deleted",
+      "endpoint": "PUT /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "PUT",
+        "path": "/v1/watchlists/{{wl_min}}",
+        "json_body": {
+          "name": "fauxcall-probe-x",
+          "symbols": []
+        }
+      }
+    },
+    {
+      "id": "wl-del-unknown",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/999999"
+      }
+    },
+    {
+      "id": "wl-del-bad-id",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "invalid",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/abc"
+      }
+    },
+    {
+      "id": "wl-list-after-delete",
+      "endpoint": "GET /v1/watchlists",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists"
+      }
+    },
+    {
+      "id": "wl-cleanup-wl_full",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wl_full}}"
+      }
+    },
+    {
+      "id": "wl-cleanup-wl_empty",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wl_empty}}"
+      }
+    },
+    {
+      "id": "wl-cleanup-wl_uni",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wl_uni}}"
+      }
+    },
+    {
+      "id": "wl-cleanup-wl_50",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wl_50}}"
+      }
+    },
+    {
+      "id": "wl-cleanup-wl_ws",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wl_ws}}"
+      }
+    },
+    {
+      "id": "wl-cleanup-wl_nullsym",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wl_nullsym}}"
+      }
+    },
+    {
+      "id": "wl-cleanup-wl_extra",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wl_extra}}"
+      }
+    },
+    {
+      "id": "wl-cleanup-wl_unk",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wl_unk}}"
+      }
+    },
+    {
+      "id": "wl-cleanup-wl_tp",
+      "endpoint": "DELETE /v1/watchlists/{id}",
+      "purpose": "cleanup",
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/watchlists/{{wl_tp}}"
+      }
+    },
+    {
+      "id": "wl-list-final",
+      "endpoint": "GET /v1/watchlists",
+      "purpose": "write_readback",
+      "request": {
+        "method": "GET",
+        "path": "/v1/watchlists"
+      }
+    }
+  ]
+}

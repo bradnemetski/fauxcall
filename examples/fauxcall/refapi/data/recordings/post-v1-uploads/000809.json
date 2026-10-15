@@ -1,0 +1,114 @@
+{
+  "id": "000809",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "edge",
+  "plan_call": "p-up-no-filename",
+  "started_at": "2026-10-15T01:16:19.884608Z",
+  "started_ns": 1792026979884608000,
+  "elapsed_ms": 19.886,
+  "ttfb_ms": 19.579,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-length",
+        "158"
+      ],
+      [
+        "content-type",
+        "multipart/form-data; boundary=dbd4b2e16fc6fb02e61f4b82c8a831cc"
+      ]
+    ],
+    "body": {
+      "kind": "multipart",
+      "content_type": "multipart/form-data; boundary=dbd4b2e16fc6fb02e61f4b82c8a831cc",
+      "size": 158,
+      "parts": [
+        {
+          "name": "file",
+          "filename": "",
+          "content_type": "text/plain",
+          "text": "nameless\n",
+          "size": 9
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:16:19 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "169"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "17"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792026984"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'file': must be a file.",
+          "request_id": "007d226a-f42a-47d7-8c5a-5e302c28ad15",
+          "param": "file"
+        }
+      },
+      "size": 169
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

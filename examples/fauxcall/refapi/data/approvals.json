@@ -2,159 +2,59 @@
   "approvals": [
     {
       "scope": "endpoint",
-      "endpoint": "*",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe",
-      "approved_at": "2026-10-11T06:03:36.593651Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /healthz",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:43.451412Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/exchanges",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:43.952684Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/exchanges/{code}",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:44.445282Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/tickers",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:44.946366Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/tickers/{symbol}",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:45.476869Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/tickers/{symbol}/quote",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:46.024428Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/search",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:46.538269Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/time",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:47.040048Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/watchlists",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:47.555629Z"
-    },
-    {
-      "scope": "endpoint",
       "endpoint": "POST /v1/watchlists",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:48.058979Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/watchlists/{id}",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:48.561047Z"
+      "max_calls": 100,
+      "reason": "our own reference market-data API, running locally: writes change nothing outside this machine",
+      "approved_at": "2026-10-15T00:31:26.685370Z",
+      "approved_by": "answers.json"
     },
     {
       "scope": "endpoint",
       "endpoint": "PUT /v1/watchlists/{id}",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:49.055026Z"
+      "max_calls": 100,
+      "reason": "our own reference market-data API, running locally: writes change nothing outside this machine",
+      "approved_at": "2026-10-15T00:31:26.685680Z",
+      "approved_by": "answers.json"
     },
     {
       "scope": "endpoint",
       "endpoint": "PATCH /v1/watchlists/{id}",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:49.614510Z"
+      "max_calls": 100,
+      "reason": "our own reference market-data API, running locally: writes change nothing outside this machine",
+      "approved_at": "2026-10-15T00:31:26.685683Z",
+      "approved_by": "answers.json"
     },
     {
       "scope": "endpoint",
       "endpoint": "DELETE /v1/watchlists/{id}",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:50.110279Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/uploads",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:50.637042Z"
+      "max_calls": 100,
+      "reason": "our own reference market-data API, running locally: writes change nothing outside this machine",
+      "approved_at": "2026-10-15T00:31:26.685685Z",
+      "approved_by": "answers.json"
     },
     {
       "scope": "endpoint",
       "endpoint": "POST /v1/uploads",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:51.132554Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/uploads/{id}",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:51.629378Z"
+      "max_calls": 100,
+      "reason": "our own reference market-data API, running locally: writes change nothing outside this machine",
+      "approved_at": "2026-10-15T00:31:26.685687Z",
+      "approved_by": "answers.json"
     },
     {
       "scope": "endpoint",
       "endpoint": "DELETE /v1/uploads/{id}",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:52.162358Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/uploads/{id}/content",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:52.661367Z"
-    },
-    {
-      "scope": "endpoint",
-      "endpoint": "GET /v1/stream/trades",
-      "max_calls": 60,
-      "reason": "local test API with in-memory state that resets on restart; creating, changing and deleting data is safe (answers.json: max 60 per endpoint)",
-      "approved_at": "2026-10-11T06:11:53.161891Z"
+      "max_calls": 100,
+      "reason": "our own reference market-data API, running locally: writes change nothing outside this machine",
+      "approved_at": "2026-10-15T00:31:26.685689Z",
+      "approved_by": "answers.json"
     }
   ],
   "used": {
-    "endpoint:*:": 60,
-    "endpoint:POST /v1/uploads:": 19,
-    "endpoint:DELETE /v1/uploads/{id}:": 16,
-    "endpoint:GET /v1/uploads:": 1,
-    "endpoint:POST /v1/watchlists:": 8,
-    "endpoint:PUT /v1/watchlists/{id}:": 3,
-    "endpoint:DELETE /v1/watchlists/{id}:": 4
+    "endpoint:POST /v1/watchlists:": 85,
+    "endpoint:PUT /v1/watchlists/{id}:": 21,
+    "endpoint:PATCH /v1/watchlists/{id}:": 32,
+    "endpoint:DELETE /v1/watchlists/{id}:": 40,
+    "endpoint:POST /v1/uploads:": 49,
+    "endpoint:DELETE /v1/uploads/{id}:": 32
   }
 }

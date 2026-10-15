@@ -1,0 +1,94 @@
+{
+  "id": "000294",
+  "endpoint": "GET /v1/watchlists/{id}",
+  "purpose": "time_profile",
+  "plan_call": "wl-get-time",
+  "started_at": "2026-10-15T00:44:48.691023Z",
+  "started_ns": 1792025088691023000,
+  "elapsed_ms": 56.595,
+  "ttfb_ms": 56.25,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/watchlists/1002",
+    "path": "/v1/watchlists/1002",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:48 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "157"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025099"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 1002,
+        "name": "fauxcall-probe-full-renamed",
+        "symbols": [
+          "TSLA",
+          "0700.HK"
+        ],
+        "created_at": "2026-10-15T00:44:10.032Z",
+        "updated_at": "2026-10-15T00:44:36.171Z"
+      },
+      "size": 157
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,20 +1,20 @@
 {
   "id": "000225",
   "endpoint": "GET /v1/search",
-  "purpose": "variation",
-  "plan_call": "s-06",
-  "started_at": "2026-10-11T06:18:28.109491Z",
-  "started_ns": 1791699508109491000,
-  "elapsed_ms": 44.196,
-  "ttfb_ms": 43.968,
+  "purpose": "invalid",
+  "plan_call": "s-one",
+  "started_at": "2026-10-15T00:42:55.127270Z",
+  "started_ns": 1792024975127270000,
+  "elapsed_ms": 50.108,
+  "ttfb_ms": 49.569,
   "request": {
     "method": "GET",
-    "url": "http://127.0.0.1:9100/v1/search?q=banks",
+    "url": "http://127.0.0.1:9100/v1/search?q=a",
     "path": "/v1/search",
     "query": [
       [
         "q",
-        "banks"
+        "a"
       ]
     ],
     "headers": [
@@ -36,7 +36,7 @@
       ],
       [
         "user-agent",
-        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
       ],
       [
         "x-api-key",
@@ -45,13 +45,13 @@
     ]
   },
   "response": {
-    "status": 200,
-    "reason": "OK",
+    "status": 400,
+    "reason": "Bad Request",
     "http_version": "HTTP/1.1",
     "headers": [
       [
         "date",
-        "Sun, 11 Oct 2026 06:18:28 GMT"
+        "Thu, 15 Oct 2026 00:42:54 GMT"
       ],
       [
         "server",
@@ -59,7 +59,7 @@
       ],
       [
         "content-length",
-        "672"
+        "187"
       ],
       [
         "content-type",
@@ -71,72 +71,25 @@
       ],
       [
         "x-ratelimit-remaining",
-        "23"
+        "19"
       ],
       [
         "x-ratelimit-reset",
-        "1791699516"
+        "1792024981"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "application/json",
       "json": {
-        "query": "banks",
-        "results": [
-          {
-            "symbol": "0005.HK",
-            "name": "HSBC Holdings plc",
-            "score": 0.5
-          },
-          {
-            "symbol": "0388.HK",
-            "name": "Hong Kong Exchanges and Clearing Limited",
-            "score": 0.5
-          },
-          {
-            "symbol": "8306.T",
-            "name": "Mitsubishi UFJ Financial Group, Inc.",
-            "score": 0.5
-          },
-          {
-            "symbol": "BAC",
-            "name": "Bank of America Corporation",
-            "score": 0.5
-          },
-          {
-            "symbol": "BARC.L",
-            "name": "Barclays PLC",
-            "score": 0.5
-          },
-          {
-            "symbol": "BNP.PA",
-            "name": "BNP Paribas SA",
-            "score": 0.5
-          },
-          {
-            "symbol": "GS",
-            "name": "The Goldman Sachs Group, Inc.",
-            "score": 0.5
-          },
-          {
-            "symbol": "HSBA.L",
-            "name": "HSBC Holdings plc",
-            "score": 0.5
-          },
-          {
-            "symbol": "JPM",
-            "name": "JPMorgan Chase & Co.",
-            "score": 0.5
-          },
-          {
-            "symbol": "PYPL",
-            "name": "PayPal Holdings, Inc.",
-            "score": 0.5
-          }
-        ]
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'q': must be a string of 2 to 64 characters.",
+          "request_id": "3a02fee0-e294-4a7c-ae33-4ea1dc2ff175",
+          "param": "q"
+        }
       },
-      "size": 672
+      "size": 187
     }
   },
   "redacted": [

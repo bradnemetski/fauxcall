@@ -1,0 +1,116 @@
+{
+  "id": "000443",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "auth",
+  "plan_call": "up-readonly",
+  "started_at": "2026-10-15T00:46:42.893475Z",
+  "started_ns": 1792025202893475000,
+  "elapsed_ms": 21.388,
+  "ttfb_ms": 20.659,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-length",
+        "169"
+      ],
+      [
+        "content-type",
+        "multipart/form-data; boundary=033be94caf69521c9e7dbe25d052fe82"
+      ]
+    ],
+    "body": {
+      "kind": "multipart",
+      "content_type": "multipart/form-data; boundary=033be94caf69521c9e7dbe25d052fe82",
+      "size": 169,
+      "parts": [
+        {
+          "name": "file",
+          "filename": "ro.txt",
+          "content_type": "text/plain",
+          "text": "x",
+          "size": 1
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 403,
+    "reason": "Forbidden",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:46:42 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "156"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025213"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "read_only_key",
+          "message": "This API key is read-only; POST requests are not allowed.",
+          "request_id": "023ab045-ea55-4a8d-9319-606f995c520a"
+        }
+      },
+      "size": 156
+    }
+  },
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

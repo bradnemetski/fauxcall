@@ -1,0 +1,213 @@
+{
+ "name": "url-normalization",
+ "created_at": "2026-10-15T01:30:00Z",
+ "note": "resources/read URL normalization (scheme/host case, spaces, commas, dot segments, fragments, non-URLs) and protocol-level parameter refusals of other methods.",
+ "calls": [
+  {
+   "id": "norm-not-uri",
+   "endpoint": "MCP resources/read",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "not a uri"
+    }
+   }
+  },
+  {
+   "id": "norm-upper-scheme",
+   "endpoint": "MCP resources/read",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "DEMO://resource/static/document/features.md"
+    }
+   }
+  },
+  {
+   "id": "norm-upper-host",
+   "endpoint": "MCP resources/read",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://RESOURCE/static/document/features.md"
+    }
+   }
+  },
+  {
+   "id": "norm-https",
+   "endpoint": "MCP resources/read",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "https://Example.com"
+    }
+   }
+  },
+  {
+   "id": "norm-comma",
+   "endpoint": "MCP resources/read",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/1,2"
+    }
+   }
+  },
+  {
+   "id": "norm-space",
+   "endpoint": "MCP resources/read",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/ 5"
+    }
+   }
+  },
+  {
+   "id": "norm-dot-segment",
+   "endpoint": "MCP resources/read",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/../text/4"
+    }
+   }
+  },
+  {
+   "id": "norm-fragment",
+   "endpoint": "MCP resources/read",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/6#frag"
+    }
+   }
+  },
+  {
+   "id": "norm-upper-dynamic",
+   "endpoint": "MCP resources/read",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "DEMO://resource/dynamic/blob/3"
+    }
+   }
+  },
+  {
+   "id": "norm-unicode",
+   "endpoint": "MCP resources/read",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/é"
+    }
+   }
+  },
+  {
+   "id": "norm-static-trailing",
+   "endpoint": "MCP resources/read",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/static/document/features.md/"
+    }
+   }
+  },
+  {
+   "id": "norm-empty",
+   "endpoint": "MCP resources/read",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": ""
+    }
+   }
+  },
+  {
+   "id": "norm-number",
+   "endpoint": "MCP resources/read",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": 5
+    }
+   }
+  },
+  {
+   "id": "norm-complete-missing-arg",
+   "endpoint": "MCP completion/complete",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "ref": {
+      "type": "ref/prompt",
+      "name": "completable-prompt"
+     }
+    }
+   }
+  },
+  {
+   "id": "norm-prompt-args-null",
+   "endpoint": "MCP prompts/get:args-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "args-prompt",
+     "arguments": null
+    }
+   }
+  },
+  {
+   "id": "norm-prompt-no-name",
+   "endpoint": "MCP prompts/get",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "norm-subscribe-not-uri",
+   "endpoint": "MCP resources/subscribe",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "not a uri"
+    }
+   }
+  }
+ ]
+}

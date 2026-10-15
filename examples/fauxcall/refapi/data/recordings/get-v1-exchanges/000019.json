@@ -1,0 +1,82 @@
+{
+  "id": "000019",
+  "endpoint": "GET /v1/exchanges",
+  "purpose": "auth",
+  "plan_call": "auth-bearer",
+  "started_at": "2026-10-15T00:37:56.735654Z",
+  "started_ns": 1792024676735654000,
+  "elapsed_ms": 40.532,
+  "ttfb_ms": 39.802,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/exchanges",
+    "path": "/v1/exchanges",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "authorization",
+        "Bearer [REDACTED]"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 401,
+    "reason": "Unauthorized",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:37:56 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "150"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "missing_api_key",
+          "message": "Missing API key. Send it in the X-API-Key header.",
+          "request_id": "a29d4a4e-ba02-4ed1-9be9-cf09bb68dae5"
+        }
+      },
+      "size": 150
+    }
+  },
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.header:authorization"
+  ]
+}

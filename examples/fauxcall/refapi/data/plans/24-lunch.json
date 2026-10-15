@@ -1,0 +1,17 @@
+{
+  "name": "24-lunch",
+  "created_at": "2026-10-14T23:30:00Z",
+  "calls": [
+    {"id": "lunch-tks-7203", "endpoint": "GET /v1/tickers/{symbol}/quote", "purpose": "time_profile",
+     "request": {"method": "GET", "path": "/v1/tickers/7203.T/quote"}, "repeat": 3, "interval_ms": 10000,
+     "note": "Tokyo lunch break 11:30-12:30 JST (02:30-03:30Z): expect closed, as_of 02:30:00Z"},
+    {"id": "lunch-tks-6758", "endpoint": "GET /v1/tickers/{symbol}/quote", "purpose": "time_profile",
+     "request": {"method": "GET", "path": "/v1/tickers/6758.T/quote"}},
+    {"id": "lunch-hk-open", "endpoint": "GET /v1/tickers/{symbol}/quote", "purpose": "time_profile",
+     "request": {"method": "GET", "path": "/v1/tickers/0005.HK/quote"},
+     "note": "Hong Kong morning session 09:30-12:00 HKT (01:30-04:00Z): expect open"},
+    {"id": "lunch-ws", "endpoint": "GET /v1/ws/quotes", "purpose": "time_profile",
+     "request": {"method": "GET", "path": "/v1/ws/quotes", "auth": "none", "query": [["api_key", "readonly-key"]]},
+     "stream": {"kind": "websocket", "duration_s": 3, "frames": [{"json": {"action": "subscribe", "symbols": ["7203.T", "0005.HK"]}}]}}
+  ]
+}

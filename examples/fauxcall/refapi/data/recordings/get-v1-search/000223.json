@@ -1,21 +1,16 @@
 {
   "id": "000223",
   "endpoint": "GET /v1/search",
-  "plan_call": "s-04",
-  "started_at": "2026-10-11T06:18:27.105113Z",
-  "started_ns": 1791699507105113000,
-  "elapsed_ms": 43.419,
-  "ttfb_ms": 43.285,
+  "purpose": "invalid",
+  "plan_call": "s-missing",
+  "started_at": "2026-10-15T00:42:54.122013Z",
+  "started_ns": 1792024974122013000,
+  "elapsed_ms": 54.326,
+  "ttfb_ms": 54.017,
   "request": {
     "method": "GET",
-    "url": "http://127.0.0.1:9100/v1/search?q=technology",
+    "url": "http://127.0.0.1:9100/v1/search",
     "path": "/v1/search",
-    "query": [
-      [
-        "q",
-        "technology"
-      ]
-    ],
     "headers": [
       [
         "host",
@@ -35,7 +30,7 @@
       ],
       [
         "user-agent",
-        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
       ],
       [
         "x-api-key",
@@ -44,13 +39,13 @@
     ]
   },
   "response": {
-    "status": 200,
-    "reason": "OK",
+    "status": 400,
+    "reason": "Bad Request",
     "http_version": "HTTP/1.1",
     "headers": [
       [
         "date",
-        "Sun, 11 Oct 2026 06:18:27 GMT"
+        "Thu, 15 Oct 2026 00:42:53 GMT"
       ],
       [
         "server",
@@ -58,7 +53,7 @@
       ],
       [
         "content-length",
-        "318"
+        "146"
       ],
       [
         "content-type",
@@ -70,47 +65,25 @@
       ],
       [
         "x-ratelimit-remaining",
-        "25"
+        "21"
       ],
       [
         "x-ratelimit-reset",
-        "1791699516"
+        "1792024981"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "application/json",
       "json": {
-        "query": "technology",
-        "results": [
-          {
-            "symbol": "6758.T",
-            "name": "Sony Group Corporation",
-            "score": 0.5
-          },
-          {
-            "symbol": "AAPL",
-            "name": "Apple Inc.",
-            "score": 0.5
-          },
-          {
-            "symbol": "ADBE",
-            "name": "Adobe Inc.",
-            "score": 0.5
-          },
-          {
-            "symbol": "CSCO",
-            "name": "Cisco Systems, Inc.",
-            "score": 0.5
-          },
-          {
-            "symbol": "MSFT",
-            "name": "Microsoft Corporation",
-            "score": 0.5
-          }
-        ]
+        "error": {
+          "code": "missing_parameter",
+          "message": "Missing required parameter 'q'.",
+          "request_id": "953dedcd-56bf-4945-b3f2-d5979f5ccc23",
+          "param": "q"
+        }
       },
-      "size": 318
+      "size": 146
     }
   },
   "redacted": [

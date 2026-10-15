@@ -1,0 +1,98 @@
+{
+  "id": "000031",
+  "endpoint": "POST /v1/watchlists",
+  "purpose": "auth",
+  "plan_call": "auth-revoked-post",
+  "started_at": "2026-10-15T00:38:02.769717Z",
+  "started_ns": 1792024682769717000,
+  "elapsed_ms": 28.487,
+  "ttfb_ms": 27.924,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/watchlists",
+    "path": "/v1/watchlists",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "33"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "name": "fauxcall-probe-revoked"
+      },
+      "size": 33
+    }
+  },
+  "response": {
+    "status": 403,
+    "reason": "Forbidden",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:38:02 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "131"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "api_key_revoked",
+          "message": "This API key has been revoked.",
+          "request_id": "741bca07-1bef-4e7c-8163-157cfe5a6385"
+        }
+      },
+      "size": 131
+    }
+  },
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

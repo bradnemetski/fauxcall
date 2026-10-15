@@ -1,0 +1,136 @@
+{
+  "id": "000696",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "edge",
+  "plan_call": "tl2-limit-plus",
+  "started_at": "2026-10-15T00:53:22.907295Z",
+  "started_ns": 1792025602907295000,
+  "elapsed_ms": 46.812,
+  "ttfb_ms": 46.504,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?limit=%2B5",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "limit",
+        "+5"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:22 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "786"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "18"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025608"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "0005.HK",
+            "name": "HSBC Holdings plc",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Financials",
+            "listed_on": "1991-04-01"
+          },
+          {
+            "symbol": "0388.HK",
+            "name": "Hong Kong Exchanges and Clearing Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Financials",
+            "listed_on": "2000-06-27"
+          },
+          {
+            "symbol": "0700.HK",
+            "name": "Tencent Holdings Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Communication Services",
+            "listed_on": "2004-06-16"
+          },
+          {
+            "symbol": "0981.HK",
+            "name": "Semiconductor Manufacturing International",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Semiconductors",
+            "listed_on": "2004-03-18"
+          },
+          {
+            "symbol": "1211.HK",
+            "name": "BYD Company Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Automotive",
+            "listed_on": "2002-07-31"
+          }
+        ],
+        "next_cursor": "eyJhZnRlciI6IjEyMTEuSEsifQ",
+        "total": 60
+      },
+      "size": 786
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

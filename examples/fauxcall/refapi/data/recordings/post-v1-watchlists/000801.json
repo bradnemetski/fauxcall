@@ -1,0 +1,109 @@
+{
+  "id": "000801",
+  "endpoint": "POST /v1/watchlists",
+  "purpose": "edge",
+  "plan_call": "p-json-upper-ctype",
+  "started_at": "2026-10-15T01:16:15.874783Z",
+  "started_ns": 1792026975874783000,
+  "elapsed_ms": 31.288,
+  "ttfb_ms": 30.794,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/watchlists",
+    "path": "/v1/watchlists",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-type",
+        "Application/JSON"
+      ],
+      [
+        "content-length",
+        "32"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "Application/JSON",
+      "text": "{\"name\": \"fauxcall-probe-upper\"}",
+      "size": 32
+    }
+  },
+  "response": {
+    "status": 201,
+    "reason": "Created",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:16:15 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "134"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "location",
+        "/v1/watchlists/1009"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792026984"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 1009,
+        "name": "fauxcall-probe-upper",
+        "symbols": [],
+        "created_at": "2026-10-15T01:16:15.903Z",
+        "updated_at": "2026-10-15T01:16:15.903Z"
+      },
+      "size": 134
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

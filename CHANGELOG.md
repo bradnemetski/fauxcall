@@ -20,6 +20,10 @@ All notable changes to FauxCall are listed here. The format follows
   `ctx.refuse_missing(collection, record)` and `ctx.delete(collection, key)`.
 - Generated fakes test that their world is consistent, and every scenario on the in-process fake
   fails if its writes leave a dangling reference (where writes keep them) or break an invariant.
+- The `refapi` and `everything` examples are rebuilt with all of this: the Reference API's three
+  relations are decided both ways with recorded evidence (100%, independent 100% over 168 of 230
+  calls), and the Everything fake learned that its server adds capability tools only after
+  `notifications/initialized` (100%, independent 100% over 234 of 289 calls).
 - `fauxcall model check` lists each relation rule not decided yet; the skill decides them from
   reverse coverage, the domain and recorded write probes, and says why in `rules_evidence`.
 

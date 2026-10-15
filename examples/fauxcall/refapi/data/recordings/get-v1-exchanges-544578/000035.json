@@ -1,0 +1,79 @@
+{
+  "id": "000035",
+  "endpoint": "GET /V1/EXCHANGES",
+  "purpose": "edge",
+  "plan_call": "rt-upper",
+  "started_at": "2026-10-15T00:38:04.774159Z",
+  "started_ns": 1792024684774159000,
+  "elapsed_ms": 5.411,
+  "ttfb_ms": 4.92,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/V1/EXCHANGES",
+    "path": "/V1/EXCHANGES",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:38:04 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "130"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "not_found",
+          "message": "No route matches GET /V1/EXCHANGES.",
+          "request_id": "aedc4627-0b50-4752-a668-5041d296fbc2"
+        }
+      },
+      "size": 130
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

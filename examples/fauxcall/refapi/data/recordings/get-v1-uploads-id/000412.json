@@ -1,0 +1,94 @@
+{
+  "id": "000412",
+  "endpoint": "GET /v1/uploads/{id}",
+  "purpose": "time_profile",
+  "plan_call": "up-time",
+  "started_at": "2026-10-15T00:46:25.704191Z",
+  "started_ns": 1792025185704191000,
+  "elapsed_ms": 65.54,
+  "ttfb_ms": 65.236,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/uploads/0b74d4ed-e026-41bf-8597-8d236408e27f",
+    "path": "/v1/uploads/0b74d4ed-e026-41bf-8597-8d236408e27f",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:46:25 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "239"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025192"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": "0b74d4ed-e026-41bf-8597-8d236408e27f",
+        "status": "done",
+        "filename": "timing.txt",
+        "size": 6,
+        "label": "fauxcall-probe-timing",
+        "created_at": "2026-10-15T00:46:17.140952+00:00",
+        "progress": 100,
+        "completed_at": "2026-10-15T00:46:25.140952+00:00"
+      },
+      "size": 239
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

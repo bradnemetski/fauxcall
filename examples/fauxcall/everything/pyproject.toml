@@ -3,7 +3,7 @@ name = "fauxcall-everything"
 version = "0.1.0"
 description = "FauxCall fake of Everything Reference Server"
 requires-python = ">=3.12"
-dependencies = ["fauxcall"]
+dependencies = ["fauxcall", "ada-url>=1.15"]
 
 [project.scripts]
 fauxcall-everything = "fauxcall_everything.__main__:main"
@@ -42,7 +42,8 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101", "PLR2004", "D", "SLF001", "ARG001", "INP001", "ANN401", "FBT001"]
+"src/fauxcall_everything/constants.py" = ["E501", "Q003"]  # generated from recordings
+"tests/**" = ["E501", "S101", "PLR2004", "D", "SLF001", "ARG001", "INP001", "ANN401", "FBT001"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

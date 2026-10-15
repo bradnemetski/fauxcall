@@ -1,0 +1,88 @@
+{
+  "id": "000023",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "auth",
+  "plan_call": "auth-revoked-badparam",
+  "started_at": "2026-10-15T00:37:58.746017Z",
+  "started_ns": 1792024678746017000,
+  "elapsed_ms": 48.528,
+  "ttfb_ms": 48.173,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?limit=abc",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "limit",
+        "abc"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 403,
+    "reason": "Forbidden",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:37:58 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "131"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "api_key_revoked",
+          "message": "This API key has been revoked.",
+          "request_id": "eabcd213-ae3e-4c39-a039-79a56de8ed7e"
+        }
+      },
+      "size": 131
+    }
+  },
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

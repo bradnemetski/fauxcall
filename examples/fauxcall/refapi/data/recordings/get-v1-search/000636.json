@@ -1,0 +1,94 @@
+{
+  "id": "000636",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-069",
+  "started_at": "2026-10-15T00:52:52.562877Z",
+  "started_ns": 1792025572562877000,
+  "elapsed_ms": 47.559,
+  "ttfb_ms": 46.986,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=apparel",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "apparel"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:52 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "32"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "18"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025578"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "apparel",
+        "results": []
+      },
+      "size": 32
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "id": "000593",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-026",
+  "started_at": "2026-10-15T00:52:30.982974Z",
+  "started_ns": 1792025550982974000,
+  "elapsed_ms": 45.163,
+  "ttfb_ms": 44.857,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=class+a",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "class a"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:30 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "93"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "21"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025558"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "class a",
+        "results": [
+          {
+            "symbol": "GOOGL",
+            "name": "Alphabet Inc. Class A",
+            "score": 0.8
+          }
+        ]
+      },
+      "size": 93
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

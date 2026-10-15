@@ -1,0 +1,100 @@
+{
+  "id": "000568",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-001",
+  "started_at": "2026-10-15T00:52:18.432506Z",
+  "started_ns": 1792025538432506000,
+  "elapsed_ms": 42.783,
+  "ttfb_ms": 42.581,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=app",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "app"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:17 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "77"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "27"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025547"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "app",
+        "results": [
+          {
+            "symbol": "AAPL",
+            "name": "Apple Inc.",
+            "score": 0.6
+          }
+        ]
+      },
+      "size": 77
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

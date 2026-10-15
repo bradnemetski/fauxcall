@@ -1,23 +1,28 @@
-"""What the real server keeps per connected client (MCP session), and the assets it serves."""
+"""What the real server keeps per connected client (MCP session).
+
+The real server builds one ``McpServer`` per MCP session and keeps module-level maps keyed by the
+session id: session resources (gzip-file-as-resource), the client's logging level, whether
+simulated logging or resource updates run, the roots it reported, the URL-elicitation error-path
+markers and its tasks. Two maps are shared by every client: session resources by URI, and
+resource subscriptions (URI -> subscribed sessions, in the order URIs were first subscribed).
+FauxCall's ``ctx.state`` is per *evaluation* session (``X-Fauxcall-Session``), so each MCP session
+gets its own :class:`ClientState` inside it, and the shared maps are shared within it.
+"""
 
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
-from functools import cache
-from importlib import resources
-from typing import TYPE_CHECKING, Any, Final
-from zoneinfo import ZoneInfo
+from typing import TYPE_CHECKING, Final
 
 if TYPE_CHECKING:
     import asyncio
+    from collections.abc import Callable
 
-    from fauxcall.runtime import RequestContext
-    from fauxcall.types import JsonValue
+    from fauxcall.runtime import Channel, FakeRuntime, RequestContext
+    from fauxcall.types import JsonObject
 
-SERVER_ZONE: Final = ZoneInfo("America/New_York")
-"""The real server's local zone (its toLocaleTimeString() read 9:40 PM at 01:40Z in October)."""
+    from fauxcall_everything.tasks import ResearchTask
+
 LOG_LEVELS: Final = (
     "debug",
     "info",
@@ -28,11 +33,14 @@ LOG_LEVELS: Final = (
     "alert",
     "emergency",
 )
+_CLIENTS: Final = "clients"
+_OWNERS: Final = "session_resource_owners"
+_SUBSCRIBERS: Final = "subscribers"
 
 
 @dataclass(slots=True)
 class SessionResource:
-    """A file ``gzip-file-as-resource`` registered for one session."""
+    """A resource gzip-file-as-resource registered for this client."""
 
     uri: str
     name: str
@@ -41,83 +49,84 @@ class SessionResource:
 
 
 @dataclass(slots=True)
-class ResearchTask:
-    """A ``simulate-research-query`` task: its timeline on the fake clock."""
-
-    task_id: str
-    topic: str
-    ambiguous: bool
-    created_ns: int
-    answered_ns: int | None = None
-    """When the clarification arrived (ambiguous tasks only)."""
-    clarification: str | None = None
-    cancelled_ns: int | None = None
-    completed_ns: int | None = None
-    """Set once the result was handed out before the clock reached it (fast mode, frozen clock)."""
-    result_taken: bool = False
-
-
-@dataclass(slots=True)
-class McpSession:
-    """One connected client's state, as the real server keeps it."""
+class ClientState:
+    """Everything the real server remembers about one connected client."""
 
     resources: dict[str, SessionResource] = field(default_factory=dict)
-    logging_task: asyncio.Task[None] | None = None
-    updates_task: asyncio.Task[None] | None = None
+    """Session resources by their (raw) URI, in registration order."""
     log_level: str | None = None
-    roots: list[Any] | None = None
+    logging: asyncio.Task[None] | None = None
+    updates: asyncio.Task[None] | None = None
+    roots: list[JsonObject] | None = None
+    """The roots the client reported (``None``: never synced)."""
     roots_watch: bool = False
+    """Whether roots/list_changed is handled yet (the real server adds the handler at its sync)."""
+    url_markers: set[str] = field(default_factory=set)
     tasks: dict[str, ResearchTask] = field(default_factory=dict)
-    url_errors: set[str] = field(default_factory=set)
+
+    def logs(self, level: str) -> bool:
+        """Whether a log message of ``level`` reaches this client (its logging/setLevel)."""
+        if self.log_level is None:
+            return True
+        return LOG_LEVELS.index(level) >= LOG_LEVELS.index(self.log_level)
 
 
-def session_id(ctx: RequestContext) -> str:
-    """The client's ``Mcp-Session-Id`` (what the real server prints in its texts)."""
-    return ctx.mcp_session or ""
+def client_state(ctx: RequestContext) -> ClientState:
+    """The state of the client (MCP session) this request comes from."""
+    clients: dict[str, ClientState] = ctx.state.setdefault(_CLIENTS, {})
+    return clients.setdefault(ctx.mcp_session or "", ClientState())
 
 
-def mcp_session(ctx: RequestContext) -> McpSession:
-    """The state of the client making this request."""
-    sessions: dict[str, McpSession] = ctx.state.setdefault("mcp_sessions", {})
-    return sessions.setdefault(session_id(ctx), McpSession())
+def is_current(ctx: RequestContext, state: ClientState) -> Callable[[], bool]:
+    """Whether ``state`` is still this client's: a reset of the fake starts every client afresh.
+
+    Work left running in the background (simulated logging, resource updates, task status
+    pushes) checks it, so a reset also ends what a client had started, as a new session would.
+    """
+    runtime, session, client = ctx.runtime, ctx.session, ctx.mcp_session or ""
+
+    def current() -> bool:
+        clients = runtime.handler_state(session).get(_CLIENTS, {})
+        return bool(clients.get(client) is state)
+
+    return current
 
 
-def subscriptions(ctx: RequestContext) -> dict[str, set[str]]:
-    """Resource URI -> subscribed sessions, in the order URIs were first subscribed."""
-    found: dict[str, set[str]] = ctx.state.setdefault("subscriptions", {})
+def tasks_of(runtime: FakeRuntime, session: str, client: str) -> dict[str, ResearchTask]:
+    """A client's tasks, looked up outside a request (the front checks related tasks)."""
+    clients: dict[str, ClientState] = runtime.handler_state(session).get(_CLIENTS, {})
+    state = clients.get(client)
+    return state.tasks if state is not None else {}
+
+
+def resource_owners(ctx: RequestContext) -> dict[str, tuple[ClientState, Channel | None]]:
+    """Session resource URI -> the client that registered it last, and its channel.
+
+    The real server tracks session resources in one module-level map for every session, so a
+    second client registering the same name takes it away from the first one.
+    """
+    owners: dict[str, tuple[ClientState, Channel | None]] = ctx.state.setdefault(_OWNERS, {})
+    return owners
+
+
+def subscribers(ctx: RequestContext) -> dict[str, set[str]]:
+    """URI -> the MCP sessions subscribed to it, for every client (``resources/subscriptions.js``).
+
+    One map for all sessions, never shrinking: a URI keeps its place once anyone subscribed, so a
+    client's updates follow the order URIs were first subscribed by any client.
+    """
+    found: dict[str, set[str]] = ctx.state.setdefault(_SUBSCRIBERS, {})
     return found
 
 
-def resource_owners(ctx: RequestContext) -> dict[str, str]:
-    """Session resource URI -> the session that registered it last (the server's global map)."""
-    found: dict[str, str] = ctx.state.setdefault("resource_owners", {})
-    return found
-
-
-def local_time(now_ns: int) -> str:
-    """``new Date().toLocaleTimeString()`` on the real server (en-US, its zone)."""
-    moment = datetime.fromtimestamp(now_ns / 1e9, UTC).astimezone(SERVER_ZONE)
-    hour = moment.hour % 12 or 12
-    return f"{hour}:{moment:%M:%S} {'AM' if moment.hour < 12 else 'PM'}"  # noqa: PLR2004
-
-
-def iso_ms(ns: int) -> str:
-    """``new Date(ms).toISOString()``."""
-    seconds, millis = divmod(ns // 1_000_000, 1000)
-    moment = datetime.fromtimestamp(seconds, UTC)
-    return moment.strftime("%Y-%m-%dT%H:%M:%S.") + f"{millis:03d}Z"
-
-
-def log_allowed(session: McpSession, level: str) -> bool:
-    """The SDK sends a log message only at or above the level the client set."""
-    if session.log_level is None:
-        return True
-    return LOG_LEVELS.index(level) >= LOG_LEVELS.index(session.log_level)
-
-
-@cache
-def assets() -> dict[str, JsonValue]:
-    """Static content recorded from the real server (documents, image, environment, README)."""
-    text = resources.files("fauxcall_everything").joinpath("assets/recorded.json").read_text()
-    loaded: dict[str, JsonValue] = json.loads(text)
-    return loaded
+def log(
+    state: ClientState, channel: Channel | None, level: str, data: str, *, logger: str | None = None
+) -> None:
+    """``server.sendLoggingMessage``: a notifications/message on the client's GET stream."""
+    if channel is None or not state.logs(level):
+        return
+    params: JsonObject = {"level": level}
+    if logger is not None:
+        params["logger"] = logger
+    params["data"] = data
+    channel.push("notifications/message", params)

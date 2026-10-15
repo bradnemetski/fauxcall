@@ -1,0 +1,83 @@
+{
+  "id": "000857",
+  "endpoint": "OPTIONS /openapi.json",
+  "purpose": "edge",
+  "plan_call": "oa-options",
+  "started_at": "2026-10-15T03:36:09.898852Z",
+  "started_ns": 1792035369898852000,
+  "elapsed_ms": 4.387,
+  "ttfb_ms": 4.024,
+  "request": {
+    "method": "OPTIONS",
+    "url": "http://127.0.0.1:9100/openapi.json",
+    "path": "/openapi.json",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 405,
+    "reason": "Method Not Allowed",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 03:36:08 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "allow",
+        ""
+      ],
+      [
+        "content-length",
+        "152"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "method_not_allowed",
+          "message": "Method OPTIONS is not allowed for /openapi.json.",
+          "request_id": "df792017-4f8c-4f10-9bb6-4a6dc6c5036e"
+        }
+      },
+      "size": 152
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

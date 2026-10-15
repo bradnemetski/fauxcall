@@ -1,0 +1,125 @@
+{
+  "id": "000217",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s-57",
+  "started_at": "2026-10-15T00:42:51.106631Z",
+  "started_ns": 1792024971106631000,
+  "elapsed_ms": 48.113,
+  "ttfb_ms": 47.664,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=communication+services",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "communication services"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:42:50 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "412"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "27"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024981"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "communication services",
+        "results": [
+          {
+            "symbol": "0700.HK",
+            "name": "Tencent Holdings Limited",
+            "score": 0.5
+          },
+          {
+            "symbol": "9984.T",
+            "name": "SoftBank Group Corp.",
+            "score": 0.5
+          },
+          {
+            "symbol": "DIS",
+            "name": "The Walt Disney Company",
+            "score": 0.5
+          },
+          {
+            "symbol": "GOOGL",
+            "name": "Alphabet Inc. Class A",
+            "score": 0.5
+          },
+          {
+            "symbol": "META",
+            "name": "Meta Platforms, Inc.",
+            "score": 0.5
+          },
+          {
+            "symbol": "NFLX",
+            "name": "Netflix, Inc.",
+            "score": 0.5
+          }
+        ]
+      },
+      "size": 412
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

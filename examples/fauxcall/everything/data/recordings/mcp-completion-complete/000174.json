@@ -1,0 +1,126 @@
+{
+  "id": "000174",
+  "endpoint": "MCP completion/complete",
+  "purpose": "variation",
+  "plan_call": "complete-resource-type",
+  "started_at": "2026-10-15T00:39:37.958533Z",
+  "started_ns": 1792024777958533000,
+  "elapsed_ms": 10.726,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 28,
+        "method": "completion/complete",
+        "params": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "resource-prompt"
+          },
+          "argument": {
+            "name": "resourceType",
+            "value": "B"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "159"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:39:37 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "completion": {
+            "values": [
+              "Blob"
+            ],
+            "total": 1,
+            "hasMore": false
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 28
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 10.447,
+      "kind": "sse",
+      "event": "message",
+      "id": "167f907d-c960-4e98-a80b-0b0120d134ea",
+      "data": "{\"result\":{\"completion\":{\"values\":[\"Blob\"],\"total\":1,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":28}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

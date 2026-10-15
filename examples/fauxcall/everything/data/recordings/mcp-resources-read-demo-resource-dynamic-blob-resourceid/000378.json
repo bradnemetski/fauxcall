@@ -1,0 +1,119 @@
+{
+  "id": "000378",
+  "endpoint": "MCP resources/read:demo://resource/dynamic/blob/{resourceId}",
+  "purpose": "edge",
+  "plan_call": "edge-blob-huge",
+  "started_at": "2026-10-15T00:54:10.515519Z",
+  "started_ns": 1792025650515519000,
+  "elapsed_ms": 2.249,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/dynamic/blob/99999999999999999999"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "306"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:54:10 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "contents": [
+            {
+              "uri": "demo://resource/dynamic/blob/99999999999999999999",
+              "mimeType": "text/plain",
+              "blob": "UmVzb3VyY2UgMTAwMDAwMDAwMDAwMDAwMDAwMDAwOiBUaGlzIGlzIGEgYmFzZTY0IGJsb2IgY3JlYXRlZCBhdCA4OjU0OjEwIFBN"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 6
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.149,
+      "kind": "sse",
+      "event": "message",
+      "id": "7d77547c-9b29-4663-b4e6-1c9eab4b54a9",
+      "data": "{\"result\":{\"contents\":[{\"uri\":\"demo://resource/dynamic/blob/99999999999999999999\",\"mimeType\":\"text/plain\",\"blob\":\"UmVzb3VyY2UgMTAwMDAwMDAwMDAwMDAwMDAwMDAwOiBUaGlzIGlzIGEgYmFzZTY0IGJsb2IgY3JlYXRlZCBhdCA4OjU0OjEwIFBN\"}]},\"jsonrpc\":\"2.0\",\"id\":6}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

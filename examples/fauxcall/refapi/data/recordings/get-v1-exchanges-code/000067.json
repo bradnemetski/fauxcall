@@ -1,0 +1,100 @@
+{
+  "id": "000067",
+  "endpoint": "GET /v1/exchanges/{code}",
+  "plan_call": "exg-xhkg",
+  "started_at": "2026-10-15T00:40:32.161160Z",
+  "started_ns": 1792024832161160000,
+  "elapsed_ms": 42.089,
+  "ttfb_ms": 41.613,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/exchanges/XHKG",
+    "path": "/v1/exchanges/XHKG",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:40:31 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "186"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "24"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024840"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "code": "XHKG",
+        "name": "Hong Kong Stock Exchange",
+        "mic": "XHKG",
+        "timezone": "Asia/Hong_Kong",
+        "currency": "HKD",
+        "sessions": [
+          {
+            "open": "09:30",
+            "close": "12:00"
+          },
+          {
+            "open": "13:00",
+            "close": "16:00"
+          }
+        ]
+      },
+      "size": 186
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

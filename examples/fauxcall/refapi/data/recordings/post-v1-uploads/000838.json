@@ -1,0 +1,105 @@
+{
+  "id": "000838",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "invalid",
+  "plan_call": "up-mp-no-boundary",
+  "started_at": "2026-10-15T01:56:12.449533Z",
+  "started_ns": 1792029372449533000,
+  "elapsed_ms": 22.446,
+  "ttfb_ms": 21.825,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-type",
+        "multipart/form-data"
+      ],
+      [
+        "content-length",
+        "6"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "multipart/form-data",
+      "text": "file=x",
+      "size": 6
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:56:12 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "127"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "22"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792029379"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "bad_request",
+          "message": "Missing boundary in multipart.",
+          "request_id": "2847e567-8f92-4277-aa5f-9f918e007023"
+        }
+      },
+      "size": 127
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

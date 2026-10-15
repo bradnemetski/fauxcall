@@ -1,0 +1,799 @@
+{
+  "name": "03-tickers",
+  "created_at": "2026-10-14T20:45:00Z",
+  "calls": [
+    {
+      "id": "tl-default",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers"
+      }
+    },
+    {
+      "id": "tl-walk-1",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "pagination",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "20"
+          ]
+        ]
+      },
+      "capture": {
+        "c1": "$.next_cursor"
+      }
+    },
+    {
+      "id": "tl-walk-2",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "pagination",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "20"
+          ],
+          [
+            "cursor",
+            "{{c1}}"
+          ]
+        ]
+      },
+      "capture": {
+        "c2": "$.next_cursor"
+      }
+    },
+    {
+      "id": "tl-walk-3",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "pagination",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "20"
+          ],
+          [
+            "cursor",
+            "{{c2}}"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-all-100",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "pagination",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "100"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-walk7-1",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "pagination",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "7"
+          ]
+        ]
+      },
+      "capture": {
+        "d1": "$.next_cursor"
+      }
+    },
+    {
+      "id": "tl-walk7-2",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "pagination",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "7"
+          ],
+          [
+            "cursor",
+            "{{d1}}"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-limit-1",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "1"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-limit-100",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "100"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-XNAS",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XNAS"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-xnys",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "xnys"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-XLON",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XLON"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-XPAR",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XPAR"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-XTKS",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XTKS"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-XHKG",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XHKG"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-XnYs",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XnYs"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-sec-Technology",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "Technology"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-sec-technology",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "technology"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-sec-Financials",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "Financials"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-sec-Semiconductors",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "Semiconductors"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-sec-Communication_Services",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "Communication Services"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-sec-Healthcare",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "Healthcare"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-sec-AUTOMOTIVE",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "AUTOMOTIVE"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-sec",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XNAS"
+          ],
+          [
+            "sector",
+            "Technology"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-sec-empty",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XLON"
+          ],
+          [
+            "sector",
+            "Semiconductors"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-paged-1",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "pagination",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XNAS"
+          ],
+          [
+            "limit",
+            "5"
+          ]
+        ]
+      },
+      "capture": {
+        "e1": "$.next_cursor"
+      }
+    },
+    {
+      "id": "tl-ex-paged-2",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "pagination",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XNAS"
+          ],
+          [
+            "limit",
+            "5"
+          ],
+          [
+            "cursor",
+            "{{e1}}"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-cursor-other-filter",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XTKS"
+          ],
+          [
+            "cursor",
+            "eyJhZnRlciI6IkFBUEwifQ"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-cursor-aapl",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "cursor",
+            "eyJhZnRlciI6IkFBUEwifQ"
+          ],
+          [
+            "limit",
+            "3"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-repeat",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XNAS"
+          ],
+          [
+            "exchange",
+            "XTKS"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-empty",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-sec-empty",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-cursor-empty",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "cursor",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-limit-empty",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-unknown-param",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "foo",
+            "bar"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-sec-space",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            " Technology "
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-ex-unknown",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XXXX"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-sec-unknown",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "sector",
+            "Crypto"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-limit-0",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "0"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-limit-101",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "101"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-limit-neg",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "-1"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-limit-abc",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "abc"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-limit-float",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "1.5"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-cursor-garbage",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "cursor",
+            "abc"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-cursor-unknown",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "cursor",
+            "eyJhZnRlciI6IlpaWlpaIn0"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-cursor-lower",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "cursor",
+            "eyJhZnRlciI6Inp6eiJ9"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-cursor-badjson",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "cursor",
+            "bm90anNvbg"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-limit0-exunknown",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "limit",
+            "0"
+          ],
+          [
+            "exchange",
+            "XXXX"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tl-exunknown-cursorbad",
+      "endpoint": "GET /v1/tickers",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/tickers",
+        "query": [
+          [
+            "exchange",
+            "XXXX"
+          ],
+          [
+            "cursor",
+            "abc"
+          ]
+        ]
+      }
+    }
+  ]
+}

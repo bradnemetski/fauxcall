@@ -1,0 +1,91 @@
+{
+  "id": "000300",
+  "endpoint": "DELETE /v1/watchlists/{id}",
+  "purpose": "invalid",
+  "plan_call": "wl-del-twice",
+  "started_at": "2026-10-15T00:45:01.271315Z",
+  "started_ns": 1792025101271315000,
+  "elapsed_ms": 49.276,
+  "ttfb_ms": 48.962,
+  "request": {
+    "method": "DELETE",
+    "url": "http://127.0.0.1:9100/v1/watchlists/1001",
+    "path": "/v1/watchlists/1001",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:45:00 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "131"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025109"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "watchlist_not_found",
+          "message": "No watchlist with id 1001.",
+          "request_id": "aad626d1-067e-43b1-aa92-4ab7edd85000"
+        }
+      },
+      "size": 131
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

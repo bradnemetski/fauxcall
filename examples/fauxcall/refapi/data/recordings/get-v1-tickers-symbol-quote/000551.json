@@ -1,0 +1,90 @@
+{
+  "id": "000551",
+  "endpoint": "GET /v1/tickers/{symbol}/quote",
+  "plan_call": "qa-PEP",
+  "started_at": "2026-10-15T00:52:09.364064Z",
+  "started_ns": 1792025529364064000,
+  "elapsed_ms": 64.383,
+  "ttfb_ms": 64.038,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/PEP/quote",
+    "path": "/v1/tickers/PEP/quote",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:08 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "112"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "24"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025537"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "symbol": "PEP",
+        "price": "168.32",
+        "currency": "USD",
+        "market_state": "closed",
+        "as_of": "2026-10-14T20:00:00.000000Z"
+      },
+      "size": 112
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,90 +1,18 @@
 {
- "name": "roots",
- "created_at": "2026-10-13T22:00:00Z",
- "calls": [
-  {
-   "id": "roots-1",
-   "endpoint": "MCP tools/call:get-roots-list",
-   "purpose": "sample",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "get-roots-list",
-     "arguments": {}
-    }
-   },
-   "client_replies": {
-    "roots/list": {
-     "roots": [
-      {
-       "uri": "file:///workspace/project",
-       "name": "project"
-      },
-      {
-       "uri": "file:///workspace/docs"
-      }
-     ]
-    }
-   }
-  },
-  {
-   "id": "roots-2",
-   "endpoint": "MCP tools/call:get-roots-list",
-   "purpose": "variation",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "get-roots-list",
-     "arguments": {}
-    }
-   },
-   "client_replies": {
-    "roots/list": {
-     "roots": [
-      {
-       "uri": "file:///other",
-       "name": "other"
-      }
-     ]
-    }
-   }
-  },
-  {
-   "id": "roots-args",
-   "endpoint": "MCP tools/call:get-roots-list",
-   "purpose": "edge",
-   "request": {
-    "method": "POST",
-    "path": "/mcp",
-    "json_body": {
-     "name": "get-roots-list",
-     "arguments": {
-      "x": 1
-     }
-    }
-   },
-   "client_replies": {
-    "roots/list": {
-     "roots": [
-      {
-       "uri": "file:///workspace/project",
-       "name": "project"
-      },
-      {
-       "uri": "file:///workspace/docs"
-      }
-     ]
-    }
-   }
-  }
- ],
- "client_capabilities": {
-  "roots": {
-   "listChanged": true
-  }
- },
- "listen": true,
- "listen_after_seconds": 1
+  "name": "roots",
+  "created_at": "2026-10-15T00:55:00Z",
+  "note": "get-roots-list from a client declaring roots and holding its GET stream open: the server's roots/list requests (after initialize and from the tool), the 'Roots updated' log message, cached roots on a second call.",
+  "client_capabilities": {"roots": {"listChanged": true}},
+  "listen": true,
+  "listen_after_seconds": 2,
+  "calls": [
+    {"id": "roots-first", "endpoint": "MCP tools/call:get-roots-list", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-roots-list", "arguments": {}}},
+     "client_replies": {"roots/list": {"roots": [{"uri": "file:///workspace/project", "name": "project"}, {"uri": "file:///workspace/shared"}]}}},
+    {"id": "roots-cached", "endpoint": "MCP tools/call:get-roots-list", "purpose": "variation",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-roots-list", "arguments": {}}},
+     "client_replies": {"roots/list": {"roots": [{"uri": "file:///workspace/changed", "name": "changed"}]}}},
+    {"id": "roots-tools-list", "endpoint": "MCP tools/list", "purpose": "sample",
+     "request": {"method": "POST", "path": "/mcp", "json_body": {}}}
+  ]
 }

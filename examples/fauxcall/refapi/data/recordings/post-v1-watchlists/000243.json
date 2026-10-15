@@ -1,0 +1,109 @@
+{
+  "id": "000243",
+  "endpoint": "POST /v1/watchlists",
+  "purpose": "edge",
+  "plan_call": "wl-create-null-symbols",
+  "started_at": "2026-10-15T00:44:13.515182Z",
+  "started_ns": 1792025053515182000,
+  "elapsed_ms": 27.719,
+  "ttfb_ms": 27.55,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/watchlists",
+    "path": "/v1/watchlists",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "48"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "name": "fauxcall-probe-nullsym",
+        "symbols": null
+      },
+      "size": 48
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:12 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "188"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "19"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025059"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'symbols': must be an array of strings.",
+          "request_id": "e675b37a-81b7-4cc3-aaab-3afd5f906c73",
+          "param": "symbols"
+        }
+      },
+      "size": 188
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

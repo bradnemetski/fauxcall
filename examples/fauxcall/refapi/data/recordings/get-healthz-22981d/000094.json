@@ -1,0 +1,79 @@
+{
+  "id": "000094",
+  "endpoint": "GET /HEALTHZ",
+  "purpose": "edge",
+  "plan_call": "h-upper",
+  "started_at": "2026-10-15T00:41:34.046826Z",
+  "started_ns": 1792024894046826000,
+  "elapsed_ms": 5.006,
+  "ttfb_ms": 4.556,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/HEALTHZ",
+    "path": "/HEALTHZ",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:41:33 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "125"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "not_found",
+          "message": "No route matches GET /HEALTHZ.",
+          "request_id": "144cfe95-d068-4662-8bf7-733b1b328e81"
+        }
+      },
+      "size": 125
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

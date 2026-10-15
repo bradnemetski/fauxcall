@@ -1,0 +1,32 @@
+{
+  "name": "access",
+  "created_at": "2026-10-14T20:40:00Z",
+  "calls": [
+    {"id": "acc-healthz", "endpoint": "GET /healthz", "purpose": "sample",
+     "request": {"method": "GET", "path": "/healthz"}},
+    {"id": "acc-exchanges", "endpoint": "GET /v1/exchanges", "purpose": "sample",
+     "request": {"method": "GET", "path": "/v1/exchanges"}},
+    {"id": "acc-exchange", "endpoint": "GET /v1/exchanges/{code}", "purpose": "sample",
+     "request": {"method": "GET", "path": "/v1/exchanges/{code}", "path_params": {"code": "XNYS"}}},
+    {"id": "acc-tickers", "endpoint": "GET /v1/tickers", "purpose": "sample",
+     "request": {"method": "GET", "path": "/v1/tickers"}},
+    {"id": "acc-ticker", "endpoint": "GET /v1/tickers/{symbol}", "purpose": "sample",
+     "request": {"method": "GET", "path": "/v1/tickers/{symbol}", "path_params": {"symbol": "AAPL"}}},
+    {"id": "acc-quote", "endpoint": "GET /v1/tickers/{symbol}/quote", "purpose": "sample",
+     "request": {"method": "GET", "path": "/v1/tickers/{symbol}/quote", "path_params": {"symbol": "AAPL"}}},
+    {"id": "acc-search", "endpoint": "GET /v1/search", "purpose": "sample",
+     "request": {"method": "GET", "path": "/v1/search", "query": [["q", "apple"]]}},
+    {"id": "acc-time", "endpoint": "GET /v1/time", "purpose": "sample",
+     "request": {"method": "GET", "path": "/v1/time"}},
+    {"id": "acc-watchlists", "endpoint": "GET /v1/watchlists", "purpose": "sample",
+     "request": {"method": "GET", "path": "/v1/watchlists"}},
+    {"id": "acc-uploads", "endpoint": "GET /v1/uploads", "purpose": "sample",
+     "request": {"method": "GET", "path": "/v1/uploads"}},
+    {"id": "acc-trades", "endpoint": "GET /v1/stream/trades", "purpose": "sample",
+     "request": {"method": "GET", "path": "/v1/stream/trades", "query": [["symbol", "AAPL"], ["count", "3"]]},
+     "stream": {"kind": "sse", "duration_s": 5, "max_events": 10}},
+    {"id": "acc-ws", "endpoint": "GET /v1/ws/quotes", "purpose": "sample",
+     "request": {"method": "GET", "path": "/v1/ws/quotes"},
+     "stream": {"kind": "websocket", "duration_s": 3, "send": [{"action": "ping"}]}}
+  ]
+}

@@ -42,7 +42,6 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"scripts/**" = ["INP001"]
 "tests/**" = ["S101", "PLR2004", "D", "SLF001", "ARG001", "INP001", "ANN401", "FBT001"]
 
 [tool.ruff.lint.pydocstyle]
@@ -61,6 +60,10 @@ strict = true
 warn_unreachable = true
 plugins = ["pydantic.mypy"]
 files = ["src", "tests"]
+# Test folders are module roots, as pytest sees them: tests/unit/conftest.py no longer clashes
+# with tests/conftest.py, and e2e helpers import by name (`from market import …`).
+mypy_path = ["src", "tests/unit", "tests/e2e"]
+explicit_package_bases = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

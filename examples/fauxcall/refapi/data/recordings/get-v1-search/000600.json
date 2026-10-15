@@ -1,0 +1,145 @@
+{
+  "id": "000600",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-033",
+  "started_at": "2026-10-15T00:52:34.497229Z",
+  "started_ns": 1792025554497229000,
+  "elapsed_ms": 45.984,
+  "ttfb_ms": 45.644,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=inc+inc",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "inc inc"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:34 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "611"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "14"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025558"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "inc inc",
+        "results": [
+          {
+            "symbol": "8306.T",
+            "name": "Mitsubishi UFJ Financial Group, Inc.",
+            "score": 0.8
+          },
+          {
+            "symbol": "AAPL",
+            "name": "Apple Inc.",
+            "score": 0.8
+          },
+          {
+            "symbol": "ADBE",
+            "name": "Adobe Inc.",
+            "score": 0.8
+          },
+          {
+            "symbol": "AMD",
+            "name": "Advanced Micro Devices, Inc.",
+            "score": 0.8
+          },
+          {
+            "symbol": "AMGN",
+            "name": "Amgen Inc.",
+            "score": 0.8
+          },
+          {
+            "symbol": "AMZN",
+            "name": "Amazon.com, Inc.",
+            "score": 0.8
+          },
+          {
+            "symbol": "AVGO",
+            "name": "Broadcom Inc.",
+            "score": 0.8
+          },
+          {
+            "symbol": "CAT",
+            "name": "Caterpillar Inc.",
+            "score": 0.8
+          },
+          {
+            "symbol": "CSCO",
+            "name": "Cisco Systems, Inc.",
+            "score": 0.8
+          },
+          {
+            "symbol": "GOOGL",
+            "name": "Alphabet Inc. Class A",
+            "score": 0.8
+          }
+        ]
+      },
+      "size": 611
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "id": "000037",
+  "endpoint": "GET /v1/does-not-exist",
+  "purpose": "edge",
+  "plan_call": "rt-unknown",
+  "started_at": "2026-10-15T00:38:05.780023Z",
+  "started_ns": 1792024685780023000,
+  "elapsed_ms": 40.192,
+  "ttfb_ms": 39.667,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/does-not-exist",
+    "path": "/v1/does-not-exist",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:38:05 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "135"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "26"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024694"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "not_found",
+          "message": "No route matches GET /v1/does-not-exist.",
+          "request_id": "ae6f3568-de83-4898-8de7-f00a37c15d63"
+        }
+      },
+      "size": 135
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

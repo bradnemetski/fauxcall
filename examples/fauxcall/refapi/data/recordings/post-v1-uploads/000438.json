@@ -1,0 +1,113 @@
+{
+  "id": "000438",
+  "endpoint": "POST /v1/uploads",
+  "purpose": "invalid",
+  "plan_call": "up-too-big",
+  "started_at": "2026-10-15T00:46:40.381805Z",
+  "started_ns": 1792025200381805000,
+  "elapsed_ms": 36.729,
+  "ttfb_ms": 36.358,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-length",
+        "1048760"
+      ],
+      [
+        "content-type",
+        "multipart/form-data; boundary=c3f9a5e2951744f609d8d27a4cdaec6a"
+      ]
+    ],
+    "body": {
+      "kind": "multipart",
+      "content_type": "multipart/form-data; boundary=c3f9a5e2951744f609d8d27a4cdaec6a",
+      "size": 1048760,
+      "parts": [
+        {
+          "name": "file",
+          "filename": "big.bin",
+          "content_type": "application/octet-stream",
+          "file": "000438.part0.bin",
+          "size": 1048577
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 413,
+    "reason": "Request Entity Too Large",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:46:39 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "148"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "12"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025202"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "payload_too_large",
+          "message": "File exceeds the 1 MiB (1048576 bytes) limit.",
+          "request_id": "bf1122fb-f0fb-47f2-9641-a890382b0f63"
+        }
+      },
+      "size": 148
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

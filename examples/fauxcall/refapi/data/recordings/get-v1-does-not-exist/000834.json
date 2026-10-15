@@ -1,0 +1,97 @@
+{
+  "id": "000834",
+  "endpoint": "GET /v1/does-not-exist",
+  "purpose": "edge",
+  "plan_call": "rt-unknown-query",
+  "started_at": "2026-10-15T01:56:10.433519Z",
+  "started_ns": 1792029370433519000,
+  "elapsed_ms": 36.569,
+  "ttfb_ms": 36.366,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/does-not-exist?x=1",
+    "path": "/v1/does-not-exist",
+    "query": [
+      [
+        "x",
+        "1"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:56:10 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "135"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "26"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792029379"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "not_found",
+          "message": "No route matches GET /v1/does-not-exist.",
+          "request_id": "d2dabe3b-e685-477f-a5a7-b1001c9f90d8"
+        }
+      },
+      "size": 135
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "id": "000832",
+  "endpoint": "OPTIONS /v1/watchlists/{id}",
+  "purpose": "edge",
+  "plan_call": "rt-options-watchlist",
+  "started_at": "2026-10-15T01:56:09.429182Z",
+  "started_ns": 1792029369429182000,
+  "elapsed_ms": 26.717,
+  "ttfb_ms": 26.187,
+  "request": {
+    "method": "OPTIONS",
+    "url": "http://127.0.0.1:9100/v1/watchlists/1",
+    "path": "/v1/watchlists/1",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 405,
+    "reason": "Method Not Allowed",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:56:09 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "allow",
+        "GET, PUT, PATCH, DELETE"
+      ],
+      [
+        "content-length",
+        "155"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792029379"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "method_not_allowed",
+          "message": "Method OPTIONS is not allowed for /v1/watchlists/1.",
+          "request_id": "5a59d962-12f5-4f7d-806c-6e2ce573a140"
+        }
+      },
+      "size": 155
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

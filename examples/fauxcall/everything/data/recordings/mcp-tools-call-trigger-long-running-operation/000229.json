@@ -1,0 +1,138 @@
+{
+  "id": "000229",
+  "endpoint": "MCP tools/call:trigger-long-running-operation",
+  "purpose": "variation",
+  "plan_call": "lro-only-steps",
+  "started_at": "2026-10-15T00:44:49.818282Z",
+  "started_ns": 1792025089818282000,
+  "elapsed_ms": 10013.0,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 11,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "steps": 2
+          },
+          "_meta": {
+            "progressToken": "lro-os"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:49 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Long running operation completed. Duration: 10 seconds, Steps: 2."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 11
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5012.068,
+      "kind": "sse",
+      "event": "message",
+      "id": "4e31d64d-21bc-4bc2-818b-80571cdca5b4",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":1,\"total\":2,\"progressToken\":\"lro-os\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10012.57,
+      "kind": "sse",
+      "event": "message",
+      "id": "05713a49-2c5e-4d50-bb55-1d6ec84c976d",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":2,\"total\":2,\"progressToken\":\"lro-os\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10012.702,
+      "kind": "sse",
+      "event": "message",
+      "id": "65b554c5-e738-4831-81cb-55f6aebef966",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Long running operation completed. Duration: 10 seconds, Steps: 2.\"}]},\"jsonrpc\":\"2.0\",\"id\":11}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

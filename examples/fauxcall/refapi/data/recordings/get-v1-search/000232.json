@@ -2,19 +2,19 @@
   "id": "000232",
   "endpoint": "GET /v1/search",
   "purpose": "variation",
-  "plan_call": "s-13",
-  "started_at": "2026-10-11T06:18:31.622506Z",
-  "started_ns": 1791699511622506000,
-  "elapsed_ms": 42.697,
-  "ttfb_ms": 42.553,
+  "plan_call": "s-same-1",
+  "started_at": "2026-10-15T00:42:59.201802Z",
+  "started_ns": 1792024979201802000,
+  "elapsed_ms": 49.408,
+  "ttfb_ms": 48.806,
   "request": {
     "method": "GET",
-    "url": "http://127.0.0.1:9100/v1/search?q=oil",
+    "url": "http://127.0.0.1:9100/v1/search?q=tech",
     "path": "/v1/search",
     "query": [
       [
         "q",
-        "oil"
+        "tech"
       ]
     ],
     "headers": [
@@ -36,7 +36,7 @@
       ],
       [
         "user-agent",
-        "fauxcall/0.1.0 (+https://github.com/bradnemetski/fauxcall)"
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
       ],
       [
         "x-api-key",
@@ -51,7 +51,7 @@
     "headers": [
       [
         "date",
-        "Sun, 11 Oct 2026 06:18:31 GMT"
+        "Thu, 15 Oct 2026 00:42:58 GMT"
       ],
       [
         "server",
@@ -59,7 +59,7 @@
       ],
       [
         "content-length",
-        "305"
+        "312"
       ],
       [
         "content-type",
@@ -71,47 +71,47 @@
       ],
       [
         "x-ratelimit-remaining",
-        "16"
+        "12"
       ],
       [
         "x-ratelimit-reset",
-        "1791699516"
+        "1792024981"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "application/json",
       "json": {
-        "query": "oil",
+        "query": "tech",
         "results": [
           {
-            "symbol": "BP.L",
-            "name": "BP p.l.c.",
+            "symbol": "6758.T",
+            "name": "Sony Group Corporation",
             "score": 0.5
           },
           {
-            "symbol": "CVX",
-            "name": "Chevron Corporation",
+            "symbol": "AAPL",
+            "name": "Apple Inc.",
             "score": 0.5
           },
           {
-            "symbol": "SHEL.L",
-            "name": "Shell plc",
+            "symbol": "ADBE",
+            "name": "Adobe Inc.",
             "score": 0.5
           },
           {
-            "symbol": "TTE.PA",
-            "name": "TotalEnergies SE",
+            "symbol": "CSCO",
+            "name": "Cisco Systems, Inc.",
             "score": 0.5
           },
           {
-            "symbol": "XOM",
-            "name": "Exxon Mobil Corporation",
+            "symbol": "MSFT",
+            "name": "Microsoft Corporation",
             "score": 0.5
           }
         ]
       },
-      "size": 305
+      "size": 312
     }
   },
   "redacted": [

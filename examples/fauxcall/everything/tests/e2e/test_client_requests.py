@@ -1,167 +1,347 @@
-"""Tools that ask the client: sampling, elicitation (form and URL), roots, and their async forms.
-
-Each opens the session as a client with the needed capabilities and scripted replies.
-"""
+"""Tools that ask the client (sampling, elicitation, roots, client tasks), and who sees them."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
-from fauxcall.testing.client import CompareOptions
-from scenario_support import ALL_CAPABILITIES, texts
+import pytest
+from scenario_support import (
+    PLAIN_TOOLS,
+    TEXTS,
+    UUID,
+    dig,
+    task_times,
+    text,
+    texts,
+    tool_call,
+    varying,
+)
 
 if TYPE_CHECKING:
     from fauxcall.testing import McpClient
+    from fauxcall.types import JsonObject
 
-ASSISTANT: dict[str, Any] = {
+SAMPLED: JsonObject = {
     "role": "assistant",
+    "content": {"type": "text", "text": "Rivers carve the valley floor."},
     "model": "scenario-model",
-    "content": {"type": "text", "text": "A short answer."},
     "stopReason": "endTurn",
 }
 
 
-async def test_sampling_listing_and_answer(mcp: McpClient) -> None:
-    await mcp.open(capabilities={"sampling": {}}, replies={"sampling/createMessage": ASSISTANT})
-    listed: Any = await mcp.list_tools()
-    names = [tool["name"] for tool in listed["tools"]]
-    assert "trigger-sampling-request" in names
-    assert "trigger-sampling-request-async" not in names
-    result: Any = await mcp.call_tool(
-        "trigger-sampling-request", {"prompt": "Name three rivers", "maxTokens": 64}
+async def test_sampling(mcp: McpClient) -> None:
+    await mcp.open(capabilities={"sampling": {}}, replies={"sampling/createMessage": SAMPLED})
+    result = await mcp.call_tool(
+        "trigger-sampling-request", {"prompt": "Describe a river", "maxTokens": 64}
     )
-    assert texts(result)[0].startswith("LLM sampling result: \n{\n")
-
-
-async def test_sampling_answers_in_other_shapes(mcp: McpClient) -> None:
-    reply: dict[str, Any] = {
-        "content": {"type": "text", "text": "Unordered keys"},
-        "role": "assistant",
-        "model": "m-2",
-        "stopReason": "stopSequence",
-        "_meta": {"trace": "abc"},
-    }
-    await mcp.open(capabilities={"sampling": {}}, replies={"sampling/createMessage": reply})
-    await mcp.call_tool("trigger-sampling-request", {"prompt": "order?"})
-    mcp.answer_with({"sampling/createMessage": {"error": {"code": -32603, "message": "LLM down"}}})
-    refused: Any = await mcp.call_tool("trigger-sampling-request", {"prompt": "fail"})
-    assert refused["isError"] is True
-    mcp.answer_with({"sampling/createMessage": {"role": "user", "content": {}}})
-    await mcp.call_tool("trigger-sampling-request", {"prompt": "no model"})
-    await mcp.call_tool("trigger-sampling-request", {"prompt": 7})
-
-
-async def test_sampling_tool_hidden_without_capability(mcp: McpClient) -> None:
-    result: Any = await mcp.call_tool("trigger-sampling-request", {"prompt": "hello"})
-    assert result["isError"] is True
-    await mcp.call_tool("get-roots-list", {})
-
-
-async def test_form_elicitation(mcp: McpClient) -> None:
-    accepted: dict[str, Any] = {
-        "action": "accept",
-        "content": {
-            "name": "Katherine Johnson",
-            "check": True,
-            "email": "kj@example.org",
-            "birthdate": "1918-08-26",
-            "integer": 100,
-            "number": 999.5,
-            "untitledSingleSelectEnum": "Ross",
-        },
-    }
-    await mcp.open(capabilities={"elicitation": {}}, replies={"elicitation/create": accepted})
-    result: Any = await mcp.call_tool("trigger-elicitation-request", {})
-    assert texts(result)[0] == "✅ User provided the requested information!"
-    mcp.answer_with(
-        {"elicitation/create": {"action": "accept", "content": {"name": "", "check": False}}}
+    assert text(result) == (
+        "LLM sampling result: \n{\n"
+        '  "model": "scenario-model",\n'
+        '  "stopReason": "endTurn",\n'
+        '  "role": "assistant",\n'
+        '  "content": {\n'
+        '    "type": "text",\n'
+        '    "text": "Rivers carve the valley floor."\n'
+        "  }\n}"
     )
-    await mcp.call_tool("trigger-elicitation-request", {})
-    mcp.answer_with({"elicitation/create": {"action": "cancel", "content": {"name": "x"}}})
-    await mcp.call_tool("trigger-elicitation-request", {})
-    url_hidden: Any = await mcp.call_tool("trigger-url-elicitation", {"url": "https://x.org"})
-    assert url_hidden["isError"] is True
 
 
-async def test_url_elicitation_paths(mcp: McpClient) -> None:
+async def test_sampling_refused_by_the_client(mcp: McpClient) -> None:
     await mcp.open(
-        capabilities={"elicitation": {"form": {}, "url": {}}},
-        replies={"elicitation/create": {"action": "decline"}},
-    )
-    declined: Any = await mcp.call_tool(
-        "trigger-url-elicitation",
-        {"url": "https://example.org/connect", "message": "Link your account"},
-    )
-    assert texts(declined)[0].startswith("❌ User declined to open the URL (Elicitation ID: ")
-    exact = CompareOptions()  # the caller's id: the same on both sides
-    await mcp.call_tool(
-        "trigger-url-elicitation",
-        {"url": "https://example.org/a", "elicitationId": "scenario-id-7"},
-        compare=exact,
-    )
-    first: Any = await mcp.call_tool(
-        "trigger-url-elicitation",
-        {"url": "https://example.org/b", "errorPath": True, "elicitationId": "scenario-id-8"},
-    )
-    assert first["code"] == -32042  # the error path: URL elicitation required
-    assert first["data"]["elicitations"][0]["url"] == "https://modelcontextprotocol.io"
-    mcp.answer_with({"elicitation/create": {"action": "accept"}})
-    retried: Any = await mcp.call_tool(
-        "trigger-url-elicitation",
-        {"url": "https://example.org/b", "errorPath": True, "elicitationId": "scenario-id-8"},
-        compare=exact,
-    )
-    assert texts(retried)[0] == (
-        "✅ User completed the URL elicitation flow.\n"
-        "Elicitation ID: scenario-id-8\nURL: https://example.org/b"
-    )
-    await mcp.call_tool("trigger-url-elicitation", {"url": "relative/path"})
-
-
-async def test_async_sampling_through_a_client_task(mcp: McpClient) -> None:
-    task: dict[str, Any] = {
-        "task": {"taskId": "scenario-task-1", "status": "working", "pollInterval": 500}
-    }
-    replies: dict[str, Any] = {
-        "sampling/createMessage": task,
-        "tasks/get": {"taskId": "scenario-task-1", "status": "completed"},
-        "tasks/result": {
-            "role": "assistant",
-            "model": "async-model",
-            "content": {"type": "text", "text": "done"},
+        capabilities={"sampling": {}},
+        replies={
+            "sampling/createMessage": {"error": {"code": -32600, "message": "No model available"}}
         },
-    }
-    await mcp.open(capabilities=ALL_CAPABILITIES, replies=replies)
-    result: Any = await mcp.call_tool(
-        "trigger-sampling-request-async", {"prompt": "Long task", "maxTokens": 300}
     )
-    assert texts(result)[0].startswith("[COMPLETED] Async sampling completed!")
-    mcp.answer_with({"sampling/createMessage": {**ASSISTANT, "extra": "dropped"}})
-    synced: Any = await mcp.call_tool("trigger-sampling-request-async", {"prompt": "Quick"})
-    assert "extra" not in texts(synced)[0]
+    result = await mcp.call_tool("trigger-sampling-request", {"prompt": "Anything"})
+    assert dig(result, "isError") is True
+    assert text(result) == "MCP error -32600: No model available"
 
 
-async def test_async_elicitation_through_a_client_task(mcp: McpClient) -> None:
-    replies: dict[str, Any] = {
-        "elicitation/create": {"task": {"taskId": "scenario-task-2", "status": "working"}},
-        "tasks/get": {"status": "cancelled", "statusMessage": "User closed the dialog"},
-    }
-    await mcp.open(capabilities=ALL_CAPABILITIES, replies=replies)
-    cancelled: Any = await mcp.call_tool("trigger-elicitation-request-async", {})
-    assert texts(cancelled)[0].startswith("[CANCELLED] User closed the dialog")
-    mcp.answer_with(
+@pytest.mark.parametrize(
+    "reply",
+    [
+        {"role": "robot", "content": {"type": "text", "text": "x"}, "model": "m"},
+        {"role": "assistant", "content": {"type": "audio", "data": "AAAA"}, "model": "m"},
+        {"role": "assistant", "model": "m"},
+    ],
+)
+async def test_sampling_checks_the_reply(mcp: McpClient, reply: JsonObject) -> None:
+    await mcp.open(capabilities={"sampling": {}}, replies={"sampling/createMessage": reply})
+    result = await mcp.call_tool("trigger-sampling-request", {"prompt": "Check me"})
+    assert dig(result, "isError") is True
+    assert text(result).startswith("[\n  {\n")
+
+
+async def test_sampling_tool_arguments(mcp: McpClient) -> None:
+    await mcp.open(capabilities={"sampling": {}}, replies={"sampling/createMessage": SAMPLED})
+    result = await mcp.call_tool("trigger-sampling-request", {"maxTokens": 5})
+    assert text(result).endswith("Invalid input: expected string, received undefined at prompt")
+
+
+FORM_ANSWER: JsonObject = {
+    "action": "accept",
+    "content": {
+        "name": "Grace Hopper",
+        "check": True,
+        "email": "grace@example.org",
+        "birthdate": "1906-12-09",
+        "integer": 64,
+        "number": 0,
+        "untitledMultipleSelectEnum": ["Drums"],
+    },
+}
+
+
+async def test_form_elicitation_accepted(mcp: McpClient) -> None:
+    await mcp.open(capabilities={"elicitation": {}}, replies={"elicitation/create": FORM_ANSWER})
+    result = await mcp.call_tool("trigger-elicitation-request", {})
+    assert texts(result)[:2] == [
+        "✅ User provided the requested information!",
+        (
+            "User inputs:\n- Name: Grace Hopper\n- Agreed to terms: true\n- Email: grace@example.org\n"
+            "- Birthdate: 1906-12-09\n- Favorite Integer: 64\n- Favorite Number: 0"
+        ),
+    ]
+    assert texts(result)[2].startswith('\nRaw result: {\n  "action": "accept",')
+
+
+@pytest.mark.parametrize(
+    ("reply", "first"),
+    [
+        ({"action": "decline"}, "❌ User declined to provide the requested information."),
+        ({"action": "cancel"}, "⚠️ User cancelled the elicitation dialog."),
+        (
+            {"action": "accept", "content": {}},
+            "✅ User provided the requested information!",
+        ),  # {} is truthy
+    ],
+)
+async def test_form_elicitation_other_answers(
+    mcp: McpClient, reply: JsonObject, first: str
+) -> None:
+    await mcp.open(capabilities={"elicitation": {}}, replies={"elicitation/create": reply})
+    result = await mcp.call_tool("trigger-elicitation-request", {})
+    assert texts(result)[0] == first
+
+
+@pytest.mark.parametrize(
+    "reply",
+    [
+        {"action": "skip"},
+        {"action": "accept", "content": {"name": ["a", 1]}},
+        {"content": {"x": "y"}},
+    ],
+)
+async def test_form_elicitation_checks_the_reply(mcp: McpClient, reply: JsonObject) -> None:
+    await mcp.open(capabilities={"elicitation": {}}, replies={"elicitation/create": reply})
+    result = await mcp.call_tool("trigger-elicitation-request", {})
+    assert dig(result, "isError") is True
+
+
+URL_CAPABLE: JsonObject = {"elicitation": {"form": {}, "url": {}}}
+
+
+@pytest.mark.parametrize(
+    ("action", "expected"),
+    [
+        (
+            "accept",
+            "✅ User completed the URL elicitation flow.\nElicitation ID: scenario-1\nURL: https://auth.example.net/consent?client=7",
+        ),
+        ("decline", "❌ User declined to open the URL (Elicitation ID: scenario-1)."),
+        ("cancel", "⚠️ User cancelled the URL elicitation (Elicitation ID: scenario-1)."),
+    ],
+)
+async def test_url_elicitation(mcp: McpClient, action: str, expected: str) -> None:
+    await mcp.open(capabilities=URL_CAPABLE, replies={"elicitation/create": {"action": action}})
+    result = await mcp.call_tool(
+        "trigger-url-elicitation",
         {
-            "elicitation/create": {
-                "action": "accept",
-                "content": {"name": "Ana", "favoriteColor": "Purple"},
-            }
-        }
+            "url": "https://auth.example.net/consent?client=7",
+            "elicitationId": "scenario-1",
+            "message": "Approve",
+        },
     )
-    await mcp.call_tool("trigger-elicitation-request-async", {})
+    assert texts(result)[0] == expected
+
+
+async def test_url_elicitation_by_error_then_retry(mcp: McpClient) -> None:
+    await mcp.open(capabilities=URL_CAPABLE, replies={"elicitation/create": {"action": "accept"}})
+    arguments: JsonObject = {"url": "https://sso.example.com/start", "errorPath": True}
+    required = await mcp.call_tool(
+        "trigger-url-elicitation",
+        arguments,
+        compare=varying("$.data.elicitations[*].elicitationId"),
+    )
+    assert dig(required, "code") == -32042
+    assert (
+        dig(required, "message")
+        == "MCP error -32042: This request requires browser-based authorization."
+    )
+    prerequisite = dig(required, "data", "elicitations", 0)
+    assert dig(prerequisite, "url") == "https://modelcontextprotocol.io"
+    assert UUID.match(str(dig(prerequisite, "elicitationId")))
+    retried = await mcp.call_tool("trigger-url-elicitation", arguments, compare=TEXTS)
+    assert texts(retried)[0].startswith(
+        "✅ User completed the URL elicitation flow.\nElicitation ID: "
+    )
+    third = await mcp.call_tool(
+        "trigger-url-elicitation",
+        arguments,
+        compare=varying("$.data.elicitations[*].elicitationId"),
+    )
+    assert dig(third, "code") == -32042
+
+
+async def test_url_elicitation_needs_a_url(mcp: McpClient) -> None:
+    await mcp.open(capabilities=URL_CAPABLE)
+    result = await mcp.call_tool("trigger-url-elicitation", {"url": "sso dot example"})
+    assert text(result).endswith("Invalid URL at url")
+
+
+@pytest.mark.parametrize(
+    ("reply", "clarification"),
+    [
+        ({"action": "accept", "content": {"interpretation": "comedy"}}, "comedy"),
+        ({"action": "decline"}, "User declined - using default interpretation"),
+    ],
+)
+async def test_ambiguous_research_asks_through_tasks_result(
+    mcp: McpClient, reply: JsonObject, clarification: str
+) -> None:
+    await mcp.open(capabilities={"elicitation": {}}, replies={"elicitation/create": reply})
+    created = await tool_call(
+        mcp,
+        {
+            "name": "simulate-research-query",
+            "arguments": {"topic": "Python", "ambiguous": True},
+            "task": {},
+        },
+        compare=task_times("$.task"),
+    )
+    result = await mcp.request("tasks/result", {"taskId": dig(created, "task", "taskId")})
+    report = str(dig(result, "content", 0, "text"))
+    assert report.startswith(f"# Research Report: Python ({clarification})\n")
+    assert "`input_required` → `working` → `completed`" in report
 
 
 async def test_roots_without_a_get_stream(mcp: McpClient) -> None:
-    """The server asks for roots on the GET stream; this client has none open."""
-    await mcp.open(capabilities={"roots": {}}, replies={"roots/list": {"roots": []}})
-    result: Any = await mcp.call_tool("get-roots-list", {})
-    assert texts(result)[0].startswith("The client supports roots but no roots are currently")
+    """The server asks for roots outside the call; a client without a GET stream never hears it."""
+    await mcp.open(
+        capabilities={"roots": {"listChanged": True}},
+        replies={"roots/list": {"roots": [{"uri": "file:///repo", "name": "repo"}]}},
+    )
+    result = await mcp.call_tool("get-roots-list", {})
+    assert text(result).startswith(
+        "The client supports roots but no roots are currently configured."
+    )
+
+
+ASYNC_CAPABLE: JsonObject = {
+    "sampling": {},
+    "elicitation": {},
+    "tasks": {"requests": {"sampling": {"createMessage": {}}, "elicitation": {"create": {}}}},
+}
+
+
+async def test_async_sampling_answered_at_once(mcp: McpClient) -> None:
+    await mcp.open(capabilities=ASYNC_CAPABLE, replies={"sampling/createMessage": SAMPLED})
+    result = await mcp.call_tool("trigger-sampling-request-async", {"prompt": "Quick one"})
+    assert text(result).startswith(
+        '[SYNC] Client executed synchronously:\n{\n  "role": "assistant",'
+    )
+
+
+async def test_async_sampling_through_a_client_task(mcp: McpClient) -> None:
+    replies: JsonObject = {
+        "sampling/createMessage": {
+            "task": {"taskId": "ct-9", "status": "working", "pollInterval": 250}
+        },
+        "tasks/get": {"taskId": "ct-9", "status": "completed"},
+        "tasks/result": {
+            "model": "late-model",
+            "role": "assistant",
+            "content": {"type": "text", "text": "Done."},
+        },
+    }
+    await mcp.open(capabilities=ASYNC_CAPABLE, replies=replies)
+    result = await mcp.call_tool(
+        "trigger-sampling-request-async", {"prompt": "Slow one", "maxTokens": 9}
+    )
+    assert text(result).startswith(
+        '[COMPLETED] Async sampling completed!\n\n**Progress:**\nTask created: ct-9\nPoll 1: completed\n\n**Result:**\n{\n  "model": "late-model",'
+    )
+
+
+async def test_async_sampling_failed_client_task(mcp: McpClient) -> None:
+    replies: JsonObject = {
+        "sampling/createMessage": {"task": {"taskId": "ct-10", "status": "working"}},
+        "tasks/get": {"status": "failed", "statusMessage": "quota exceeded"},
+    }
+    await mcp.open(capabilities=ASYNC_CAPABLE, replies=replies)
+    result = await mcp.call_tool("trigger-sampling-request-async", {"prompt": "Doomed"})
+    assert (
+        text(result)
+        == "[FAILED] quota exceeded\n\nProgress:\nTask created: ct-10\nPoll 1: failed - quota exceeded"
+    )
+
+
+async def test_async_elicitation(mcp: McpClient) -> None:
+    replies: JsonObject = {
+        "elicitation/create": {"task": {"taskId": "ct-11", "status": "input_required"}},
+        "tasks/get": {"status": "completed", "statusMessage": "answered"},
+        "tasks/result": {"action": "accept", "content": {"name": "Lin", "favoriteColor": "Purple"}},
+    }
+    await mcp.open(capabilities=ASYNC_CAPABLE, replies=replies)
+    result = await mcp.call_tool("trigger-elicitation-request-async", {})
+    assert texts(result)[:2] == [
+        "[COMPLETED] User provided the requested information!",
+        "User inputs:\n- Name: Lin\n- Favorite Color: Purple",
+    ]
+    assert texts(result)[2].startswith(
+        "\nProgress:\nTask created: ct-11\nPoll 1: completed - answered\n\nRaw result: "
+    )
+
+
+async def test_async_elicitation_answered_at_once(mcp: McpClient) -> None:
+    await mcp.open(
+        capabilities=ASYNC_CAPABLE, replies={"elicitation/create": {"action": "decline"}}
+    )
+    result = await mcp.call_tool("trigger-elicitation-request-async", {})
+    assert text(result) == '[SYNC] Client executed synchronously:\n{\n  "action": "decline"\n}'
+
+
+@pytest.mark.parametrize(
+    ("capabilities", "extra"),
+    [
+        ({"sampling": {}}, ["trigger-sampling-request"]),
+        ({"elicitation": {}}, ["trigger-elicitation-request"]),
+        ({"elicitation": {"url": {}}}, ["trigger-elicitation-request", "trigger-url-elicitation"]),
+        ({"roots": {}}, ["get-roots-list"]),
+        (
+            {"sampling": {}, "tasks": {"requests": {"sampling": {"createMessage": {}}}}},
+            ["trigger-sampling-request", "trigger-sampling-request-async"],
+        ),
+        (
+            {"elicitation": {}, "tasks": {"requests": {"elicitation": {"create": {}}}}},
+            ["trigger-elicitation-request", "trigger-elicitation-request-async"],
+        ),
+        ({"tasks": {"requests": {"sampling": {"createMessage": {}}}}}, []),
+    ],
+)
+async def test_tools_offered_by_capability(
+    mcp: McpClient, capabilities: JsonObject, extra: list[str]
+) -> None:
+    await mcp.open(capabilities=capabilities)
+    listed = await mcp.list_tools()
+    names = [str(dig(t, "name")) for t in dig(listed, "tools")]  # type: ignore[union-attr]
+    assert [n for n in names if n not in PLAIN_TOOLS] == extra
+
+
+async def test_capability_tools_are_unknown_to_others(mcp: McpClient) -> None:
+    await mcp.open(capabilities={"sampling": {}})
+    hidden = await mcp.call_tool("trigger-elicitation-request", {})
+    assert text(hidden) == "MCP error -32602: Tool trigger-elicitation-request not found"
+    roots = await mcp.call_tool("get-roots-list", {})
+    assert text(roots) == "MCP error -32602: Tool get-roots-list not found"

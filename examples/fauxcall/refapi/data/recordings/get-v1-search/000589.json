@@ -1,0 +1,100 @@
+{
+  "id": "000589",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-022",
+  "started_at": "2026-10-15T00:52:28.975344Z",
+  "started_ns": 1792025548975344000,
+  "elapsed_ms": 44.329,
+  "ttfb_ms": 44.023,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=coca+cola",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "coca cola"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:28 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "92"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "25"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025558"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "coca cola",
+        "results": [
+          {
+            "symbol": "KO",
+            "name": "The Coca-Cola Company",
+            "score": 0.8
+          }
+        ]
+      },
+      "size": 92
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

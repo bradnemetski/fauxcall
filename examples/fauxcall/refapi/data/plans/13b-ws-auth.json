@@ -1,0 +1,18 @@
+{
+  "name": "13b-ws-auth",
+  "created_at": "2026-10-14T21:00:00Z",
+  "calls": [
+    {"id": "ws-bad-key", "endpoint": "GET /v1/ws/quotes", "purpose": "auth",
+     "request": {"method": "GET", "path": "/v1/ws/quotes", "auth": "none", "query": [["api_key", "not-a-key"]]},
+     "stream": {"kind": "websocket", "duration_s": 2, "frames": []}},
+    {"id": "ws-revoked", "endpoint": "GET /v1/ws/quotes", "purpose": "auth",
+     "request": {"method": "GET", "path": "/v1/ws/quotes", "auth": "none", "query": [["api_key", "revoked-key"]]},
+     "stream": {"kind": "websocket", "duration_s": 2, "frames": []}},
+    {"id": "ws-empty-key", "endpoint": "GET /v1/ws/quotes", "purpose": "auth",
+     "request": {"method": "GET", "path": "/v1/ws/quotes", "auth": "none", "query": [["api_key", ""]]},
+     "stream": {"kind": "websocket", "duration_s": 2, "frames": []}},
+    {"id": "ws-no-key-silent", "endpoint": "GET /v1/ws/quotes", "purpose": "auth",
+     "request": {"method": "GET", "path": "/v1/ws/quotes", "auth": "none"},
+     "stream": {"kind": "websocket", "duration_s": 2, "frames": []}}
+  ]
+}

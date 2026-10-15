@@ -1,0 +1,94 @@
+{
+  "id": "000350",
+  "endpoint": "MCP GET:stream",
+  "started_at": "2026-10-15T00:51:15.003989Z",
+  "started_ns": 1792025475003989000,
+  "elapsed_ms": 2022.107,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:51:15 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "content_type": "text/event-stream"
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 512.86,
+      "kind": "sse",
+      "event": "message",
+      "id": "742d8979-0a61-44b6-a467-00a366198895",
+      "data": "{\"method\":\"roots/list\",\"jsonrpc\":\"2.0\",\"id\":1}"
+    },
+    {
+      "t_ms": 516.988,
+      "kind": "sse",
+      "event": "message",
+      "id": "8211a33d-222b-4543-94a4-1d77211781cd",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"info\",\"logger\":\"everything-server\",\"data\":\"Roots updated: 0 root(s) received from client\"},\"jsonrpc\":\"2.0\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

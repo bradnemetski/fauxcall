@@ -1,0 +1,114 @@
+{
+  "id": "000379",
+  "endpoint": "MCP resources/read:demo://resource/dynamic/text/{resourceId}",
+  "purpose": "edge",
+  "plan_call": "edge-text-infinity",
+  "started_at": "2026-10-15T00:54:11.017579Z",
+  "started_ns": 1792025651017579000,
+  "elapsed_ms": 2.66,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/dynamic/text/Infinity"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "180"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:54:11 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "error": {
+          "code": -32603,
+          "message": "Unknown resource: demo://resource/dynamic/text/Infinity"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.523,
+      "kind": "sse",
+      "event": "message",
+      "id": "a5b3c7e7-16e5-4e60-aeb0-f60f87a3d9c1",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":7,\"error\":{\"code\":-32603,\"message\":\"Unknown resource: demo://resource/dynamic/text/Infinity\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

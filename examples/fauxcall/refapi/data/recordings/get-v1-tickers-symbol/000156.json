@@ -1,0 +1,91 @@
+{
+  "id": "000156",
+  "endpoint": "GET /v1/tickers/{symbol}",
+  "purpose": "invalid",
+  "plan_call": "tg-digits",
+  "started_at": "2026-10-15T00:42:20.232893Z",
+  "started_ns": 1792024940232893000,
+  "elapsed_ms": 27.992,
+  "ttfb_ms": 26.528,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers/12345",
+    "path": "/v1/tickers/12345",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:42:19 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "132"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024950"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "ticker_not_found",
+          "message": "No ticker with symbol '12345'.",
+          "request_id": "74231c89-afa8-4b5e-a0ab-2262cae45a95"
+        }
+      },
+      "size": 132
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

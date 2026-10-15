@@ -1,0 +1,96 @@
+{
+  "id": "000503",
+  "endpoint": "GET /v1/ws/quotes",
+  "purpose": "auth",
+  "plan_call": "ws-revoked",
+  "started_at": "2026-10-15T00:48:35.903965Z",
+  "started_ns": 1792025315903965000,
+  "elapsed_ms": 10.973,
+  "ttfb_ms": 8.255,
+  "request": {
+    "method": "GET",
+    "url": "ws://127.0.0.1:9100/v1/ws/quotes?api_key=[REDACTED]",
+    "path": "/v1/ws/quotes",
+    "query": [
+      [
+        "api_key",
+        "[REDACTED]"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "connection",
+        "upgrade"
+      ],
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "sec-websocket-key",
+        "+ECWjfSY4fnRGpy3MuIEGQ=="
+      ],
+      [
+        "sec-websocket-version",
+        "13"
+      ]
+    ]
+  },
+  "response": {
+    "status": 101,
+    "reason": "Switching Protocols",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "connection",
+        "Upgrade"
+      ],
+      [
+        "sec-websocket-accept",
+        "LuTgHfn6nHBYKOL5ik+KT+dhAJw="
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:48:35 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 10.415,
+      "kind": "ws_close",
+      "data": "This API key has been revoked.",
+      "code": 4401
+    }
+  ],
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.query:api_key"
+  ]
+}

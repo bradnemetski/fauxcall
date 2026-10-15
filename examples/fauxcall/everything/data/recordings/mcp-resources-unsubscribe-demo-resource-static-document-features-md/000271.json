@@ -1,0 +1,111 @@
+{
+  "id": "000271",
+  "endpoint": "MCP resources/unsubscribe:demo://resource/static/document/features.md",
+  "purpose": "variation",
+  "plan_call": "unsub-features",
+  "started_at": "2026-10-15T00:47:44.157477Z",
+  "started_ns": 1792025264157477000,
+  "elapsed_ms": 2.076,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 18,
+        "method": "resources/unsubscribe",
+        "params": {
+          "uri": "demo://resource/static/document/features.md"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:47:44 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {},
+        "jsonrpc": "2.0",
+        "id": 18
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 1.972,
+      "kind": "sse",
+      "event": "message",
+      "id": "e9ff1965-a17b-4977-aadc-63cd5936dc30",
+      "data": "{\"result\":{},\"jsonrpc\":\"2.0\",\"id\":18}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

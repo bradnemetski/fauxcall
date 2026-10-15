@@ -1,0 +1,105 @@
+{
+  "id": "000238",
+  "endpoint": "GET /v1/watchlists",
+  "purpose": "write_readback",
+  "plan_call": "wl-list-two",
+  "started_at": "2026-10-15T00:44:11.002971Z",
+  "started_ns": 1792025051002971000,
+  "elapsed_ms": 55.781,
+  "ttfb_ms": 55.24,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/watchlists",
+    "path": "/v1/watchlists",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:10 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "299"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "24"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025059"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": [
+        {
+          "id": 1001,
+          "name": "fauxcall-probe-min",
+          "symbols": [],
+          "created_at": "2026-10-15T00:44:09.034Z",
+          "updated_at": "2026-10-15T00:44:09.034Z"
+        },
+        {
+          "id": 1002,
+          "name": "fauxcall-probe-full",
+          "symbols": [
+            "MSFT",
+            "AAPL",
+            "7203.T",
+            "AIR.PA"
+          ],
+          "created_at": "2026-10-15T00:44:10.032Z",
+          "updated_at": "2026-10-15T00:44:10.032Z"
+        }
+      ],
+      "size": 299
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "id": "000473",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "variation",
+  "plan_call": "tr-lower",
+  "started_at": "2026-10-15T00:47:37.101458Z",
+  "started_ns": 1792025257101458000,
+  "elapsed_ms": 460.52,
+  "ttfb_ms": 54.778,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=aapl&count=3",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "aapl"
+      ],
+      [
+        "count",
+        "3"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:47:36 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025267"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 55.154,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.50\",\"size\":189,\"time\":\"2026-10-15T00:47:37.155Z\"}"
+    },
+    {
+      "t_ms": 256.541,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.50\",\"size\":321,\"time\":\"2026-10-15T00:47:37.356Z\"}"
+    },
+    {
+      "t_ms": 459.678,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"AAPL\",\"price\":\"227.59\",\"size\":705,\"time\":\"2026-10-15T00:47:37.559Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

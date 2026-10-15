@@ -1,0 +1,74 @@
+{
+  "id": "000855",
+  "endpoint": "HEAD /healthz",
+  "purpose": "edge",
+  "plan_call": "h-head",
+  "started_at": "2026-10-15T03:36:08.894264Z",
+  "started_ns": 1792035368894264000,
+  "elapsed_ms": 10.949,
+  "ttfb_ms": 10.387,
+  "request": {
+    "method": "HEAD",
+    "url": "http://127.0.0.1:9100/healthz",
+    "path": "/healthz",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 405,
+    "reason": "Method Not Allowed",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 03:36:08 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "allow",
+        "GET"
+      ],
+      [
+        "content-length",
+        "144"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "content_type": "application/json"
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

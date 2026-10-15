@@ -1,58 +1,59 @@
 {
   "fake": "everything",
   "source": "http://127.0.0.1:3101/mcp",
-  "started_at": "2026-10-14T01:34:50.201006Z",
-  "updated_at": "2026-10-14T02:55:26.524459Z",
+  "started_at": "2026-10-15T00:29:28.441753Z",
+  "updated_at": "2026-10-15T05:26:12.217815Z",
   "phases": {
     "discover": {
       "status": "done",
-      "started_at": "2026-10-14T01:34:50.201006Z",
-      "finished_at": "2026-10-14T01:34:50.201006Z"
+      "started_at": "2026-10-15T00:29:28.441753Z",
+      "finished_at": "2026-10-15T00:29:28.441753Z"
     },
     "gate": {
       "status": "done",
-      "finished_at": "2026-10-14T01:38:23.201961Z"
+      "finished_at": "2026-10-15T00:44:13.475682Z"
     },
     "record": {
       "status": "done",
-      "finished_at": "2026-10-14T01:52:42.449140Z"
+      "finished_at": "2026-10-15T00:54:57.167283Z"
     },
     "model": {
       "status": "done",
-      "finished_at": "2026-10-14T01:53:37.188992Z"
+      "finished_at": "2026-10-15T01:04:16.069450Z"
     },
     "world": {
-      "status": "done",
-      "finished_at": "2026-10-14T01:53:37.694528Z"
+      "status": "skipped",
+      "finished_at": "2026-10-15T01:04:17.075806Z"
     },
     "scaffold": {
       "status": "done",
-      "finished_at": "2026-10-14T02:09:28.626015Z"
+      "finished_at": "2026-10-15T01:21:42.525938Z"
     },
     "implement": {
       "status": "done",
-      "finished_at": "2026-10-14T02:09:29.380692Z"
+      "started_at": "2026-10-15T01:21:43.039367Z",
+      "finished_at": "2026-10-15T01:33:19.551867Z"
     },
     "unit_tests": {
       "status": "done",
-      "finished_at": "2026-10-14T02:09:30.029057Z"
+      "finished_at": "2026-10-15T01:33:20.070536Z"
     },
     "e2e_tests": {
       "status": "done",
-      "finished_at": "2026-10-14T02:35:35.802178Z"
+      "finished_at": "2026-10-15T05:26:05.620083Z"
     },
     "parity": {
       "status": "done",
-      "finished_at": "2026-10-14T02:35:36.346406Z"
+      "finished_at": "2026-10-15T05:26:06.142906Z"
     },
     "review": {
       "status": "done",
-      "started_at": "2026-10-14T02:35:37.459660Z",
-      "finished_at": "2026-10-14T02:55:25.282248Z"
+      "started_at": "2026-10-15T01:41:21.107681Z",
+      "finished_at": "2026-10-15T05:26:06.665055Z"
     },
     "report": {
       "status": "done",
-      "finished_at": "2026-10-14T02:55:26.524077Z"
+      "finished_at": "2026-10-15T05:26:12.217417Z"
     }
   },
   "endpoints": [
@@ -249,13 +250,24 @@
   ],
   "gate": {
     "mutations": "approved",
-    "answered_at": "2026-10-14T01:38:23.200961Z"
+    "answered_at": "2026-10-15T00:44:13.474878Z"
   },
   "log": [
-    "2026-10-14 01:38 Headless: answers.json approves MCP tools/call:* (60/tool, recording+parity). Access check: all 19 tools answer; get-env shows only PATH/HOME=/nonexistent/home/PORT/__CF_USER_TEXT_ENCODING (nothing private). simulate-research-query needs task augmentation.",
-    "2026-10-14 01:52 Recorded all 19 tools + resources/prompts/completions/logging/subscriptions/tasks. Real server source (npm package, read-only) used as docs. Plan: every tool computed (handlers), resources/prompts/completion/tasks via METHOD_HANDLERS.",
-    "2026-10-14 02:09 Implemented all tools + methods in handlers (tools.py, methods.py, research.py, jsfmt.py). Unit: 342 pass, 99% cov; test_recorded_sessions replays all 27 plans as recorded (ids/times normalized). Next: e2e scenarios + parity.",
-    "2026-10-14 02:35 Parity run 2: 100% overall, 100% independent (160 independent / 205 compared; 38 replayed, 7 shape-only). Run 1 found 2 gaps (Invalid URL on resources/read, zod content-union issue in sampling reply check) - recorded evidence and fixed. No credentials exist, so no refusal check applies.",
-    "2026-10-14 02:55 Review (fauxcall:reviewer) done: fixed version negotiation (SDK source), roots handshake (recorded 000497: initial request lost without stream), task TTL + tasks/list paging (recorded), URL trimming, comma template URIs, completion on session files, IPv6 hosts, Infinity, timer overflow, elicit null content; session replay now compares mid-call server messages (78). Parity run 3: 100%/100%. Remaining gaps documented in README notes."
+    "2026-10-15 00:44 Headless run: answers.json approves MCP tools/call:* at 60 calls/tool (recording+parity); no credentials, no Jev. Plans written for all 19 tools + resources/prompts/completions/tasks/logging/subscriptions.",
+    "2026-10-15 00:54 Recorded 19 plans (~400 exchanges): all tools incl. capability-gated ones (sampling, elicitation form+url, roots with/without GET stream, async task tools), resources (static, dynamic, session/gzip), prompts, completions, tasks lifecycle, logging/setLevel, subscriptions, edge probes. Async tools really require sampling+tasks.requests.sampling.createMessage / elicitation+tasks.requests.elicitation.create (000362, 000360).",
+    "2026-10-15 01:04 No REST collections: consistency is links/references resolving via resources/read (dynamic templates, gzip session resources) — enforced by handlers and e2e scenarios.",
+    "2026-10-15 01:21 Handlers written: all 19 tools computed (zod-exact validation, JS number spelling, WHATWG URLs via ada-url, Node-identical gzip), resources/prompts/completions/tasks/logging/subscriptions as METHOD_HANDLERS. Generic replay test excludes capability-gated tools (fresh sessions lack capabilities); dedicated tests to cover them.",
+    "2026-10-15 01:39 Known runtime gap: GET/DELETE /mcp with no Mcp-Session-Id — real 400 (source: streamableHttp.js), fake opens a stream / answers 200; FauxCall's transport model has no refusal for a missing session on GET/DELETE.",
+    "2026-10-15 01:41 Parity 2026-10-15: 100% compliance over 175 scenarios (350 runs), independent 100% over 180/229 calls; no skips. Unit: 330 tests incl. replay of all 23 recorded plan sessions (380 calls) — 99.2% coverage.",
+    "2026-10-15 04:06 Review fixes (resumed 2026-10-15): reviewer report recovered from the interrupted session; recorded protocol-schema, research-late, async-bad-replies (reviewer probes) and protocol-versions (initialize outside a session via auth:none: 2024-10-07 accepted, unsupported -> 2025-11-25, priming follows the version asked, malformed handshakes -> 400 Server not initialized).",
+    "2026-10-15 04:06 front.py (owned app.py middleware): Express+cors+SDK transport front — CORS headers and 204 preflight, Express 404 page, /mcp matched case-insensitively with optional slash, Express 400 for GET/DELETE without a session, transport refusals in the SDK's order (406/415/413/invalid JSON/batch>100/JSON-RPC schema/handshake rules/protocol header interpolated), SSE headers, SDK member order for pushed messages. Handler-level _meta check removed (front covers every message).",
+    "2026-10-15 04:06 Unit: replays now follow the recorded timeline (clock travel) and compare event-driven GET-stream pushes per source; progress events compared byte for byte; reset ends background loops; 2 runtime gaps (unknown tool + null args, numeric tool name) kept as strict expected differences. 470+ unit tests, 99% coverage.",
+    "2026-10-15 04:06 E2E tests used mcp.request('tools/call') for task-augmented simulate-research-query, bypassing the write budget: fixing with a helper that spends the approval exactly as call_tool does.",
+    "2026-10-15 04:17 Parity 2026-10-15 (after first-review fixes): 99.85% over 222 scenarios, independent 99.72% over 225/278 calls. Only failure: ping naming an unknown related task — the SDK answers -32602 'Task not found' (it looks related tasks up before any handler). Now modeled in the fake's handlers; runtime-answered methods (ping, listings) can't, documented.",
+    "2026-10-15 04:17 Subscriptions now one map across clients (resources/subscriptions.js): updates follow the order URIs were first subscribed by anyone. README/model notes rewritten; approvals left: gzip 26, research 34 (≈9-11 per parity run).",
+    "2026-10-15 05:23 Second review (2026-10-15): no blocking findings; first-review fixes confirmed. Recorded review2-probes (000514-000526): in-session initialize -> 200 zod issues, zod 'received' for ±Infinity, related-task lookup for ping/listings/unknown tools (unknown method stays Method not found).",
+    "2026-10-15 05:23 Fixed after review 2: front journals its own answers; session id on SSE answers; SDK priming rule and event/id field order (sse.py); DELETE ends GET streams (wakes the runtime's loop); in-session initialize refused by zod issues (match 000514-000517 byte for byte); related-task lookup in the front for all handled methods; lone surrogates via stand-ins (was a 500); invalid UTF-8 replaced (was 400); deep JSON -> 400 (was 500); tools/list_changed after initialized; README/model notes corrected (R1: a request naming an existing task is never answered on the real server).",
+    "2026-10-15 05:23 Served check: 233 e2e scenarios pass against the fake under uvicorn (fauxcall verify --fake-url), no errors in its log.",
+    "2026-10-15 05:26 Final parity 2026-10-15: 100% over 233 scenarios (466 runs), independent 100% over 234/289 calls; nothing uncovered, no skips. Approvals used: gzip 45/60, research 35/60, elicitation 37/60, url-elicitation 33/60, sampling 32/60."
   ]
 }

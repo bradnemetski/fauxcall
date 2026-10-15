@@ -1,0 +1,115 @@
+{
+  "id": "000268",
+  "endpoint": "PUT /v1/watchlists/{id}",
+  "purpose": "variation",
+  "plan_call": "wl-put",
+  "started_at": "2026-10-15T00:44:26.074602Z",
+  "started_ns": 1792025066074602000,
+  "elapsed_ms": 44.822,
+  "ttfb_ms": 44.697,
+  "request": {
+    "method": "PUT",
+    "url": "http://127.0.0.1:9100/v1/watchlists/1001",
+    "path": "/v1/watchlists/1001",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "70"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "name": "fauxcall-probe-min-renamed",
+        "symbols": [
+          "nvda",
+          "NVDA",
+          "tsla"
+        ]
+      },
+      "size": 70
+    }
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:25 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "153"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "15"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025069"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "id": 1001,
+        "name": "fauxcall-probe-min-renamed",
+        "symbols": [
+          "NVDA",
+          "TSLA"
+        ],
+        "created_at": "2026-10-15T00:44:09.034Z",
+        "updated_at": "2026-10-15T00:44:26.118Z"
+      },
+      "size": 153
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

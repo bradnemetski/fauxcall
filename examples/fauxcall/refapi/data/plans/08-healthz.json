@@ -1,0 +1,75 @@
+{
+  "name": "08-healthz",
+  "created_at": "2026-10-14T20:45:00Z",
+  "calls": [
+    {
+      "id": "h-1",
+      "endpoint": "GET /healthz",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/healthz"
+      }
+    },
+    {
+      "id": "h-noauth",
+      "endpoint": "GET /healthz",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/healthz",
+        "auth": "none"
+      }
+    },
+    {
+      "id": "h-badauth",
+      "endpoint": "GET /healthz",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/healthz",
+        "auth": "invalid"
+      }
+    },
+    {
+      "id": "h-revoked",
+      "endpoint": "GET /healthz",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/healthz",
+        "headers": {
+          "X-API-Key": "revoked-key"
+        },
+        "auth": "none"
+      }
+    },
+    {
+      "id": "h-slash",
+      "endpoint": "GET /healthz/",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/healthz/"
+      }
+    },
+    {
+      "id": "h-upper",
+      "endpoint": "GET /HEALTHZ",
+      "purpose": "edge",
+      "request": {
+        "method": "GET",
+        "path": "/HEALTHZ"
+      }
+    },
+    {
+      "id": "h-post",
+      "endpoint": "POST /healthz",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/healthz"
+      }
+    }
+  ]
+}

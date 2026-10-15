@@ -1,0 +1,110 @@
+{
+  "id": "000803",
+  "endpoint": "PUT /v1/watchlists/{id}",
+  "purpose": "invalid",
+  "plan_call": "p-put-unknown-id-unknown-symbol",
+  "started_at": "2026-10-15T01:16:16.874824Z",
+  "started_ns": 1792026976874824000,
+  "elapsed_ms": 59.569,
+  "ttfb_ms": 59.31,
+  "request": {
+    "method": "PUT",
+    "url": "http://127.0.0.1:9100/v1/watchlists/999999",
+    "path": "/v1/watchlists/999999",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "46"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "name": "fauxcall-probe-x",
+        "symbols": [
+          "ZZZZ"
+        ]
+      },
+      "size": 46
+    }
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:16:16 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "133"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "23"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792026984"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "watchlist_not_found",
+          "message": "No watchlist with id 999999.",
+          "request_id": "19d8a0f1-5c87-4857-ab3d-fbe551d3e5bc"
+        }
+      },
+      "size": 133
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

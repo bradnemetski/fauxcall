@@ -1,0 +1,102 @@
+{
+  "id": "000482",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "edge",
+  "plan_call": "tr-count-empty",
+  "started_at": "2026-10-15T00:47:42.356737Z",
+  "started_ns": 1792025262356737000,
+  "elapsed_ms": 55.95,
+  "ttfb_ms": 55.049,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=AAPL&count=",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "AAPL"
+      ],
+      [
+        "count",
+        ""
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:47:41 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "192"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "19"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025267"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'count': must be an integer between 1 and 50.",
+          "request_id": "3bae2982-8b70-4e0e-bd69-4fb6ad4266b1",
+          "param": "count"
+        }
+      },
+      "size": 192
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

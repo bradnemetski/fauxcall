@@ -2,10 +2,10 @@
   "score": 1.0,
   "independent_score": 1.0,
   "calls": {
-    "compared": 205,
-    "replayed": 38,
-    "shape_only": 7,
-    "independent": 160
+    "compared": 289,
+    "replayed": 55,
+    "shape_only": 0,
+    "independent": 234
   },
   "not_covered": [],
   "refusal_checked": null,
@@ -13,24 +13,89 @@
   "ok": true,
   "unmatched_scenarios": [],
   "endpoints": {
+    "GET /": {
+      "passed": 7.0,
+      "total": 7.0,
+      "score": 1.0
+    },
+    "GET /.well-known/oauth-protected-resource": {
+      "passed": 7.0,
+      "total": 7.0,
+      "score": 1.0
+    },
+    "GET /MCP": {
+      "passed": 12.0,
+      "total": 12.0,
+      "score": 1.0
+    },
+    "GET /Mcp/": {
+      "passed": 12.0,
+      "total": 12.0,
+      "score": 1.0
+    },
+    "GET /health": {
+      "passed": 7.0,
+      "total": 7.0,
+      "score": 1.0
+    },
+    "GET /mcp": {
+      "passed": 36.0,
+      "total": 36.0,
+      "score": 1.0
+    },
+    "GET /mcp/": {
+      "passed": 12.0,
+      "total": 12.0,
+      "score": 1.0
+    },
+    "GET /mcp//": {
+      "passed": 7.0,
+      "total": 7.0,
+      "score": 1.0
+    },
+    "GET /mcp/messages": {
+      "passed": 7.0,
+      "total": 7.0,
+      "score": 1.0
+    },
+    "GET /sse": {
+      "passed": 7.0,
+      "total": 7.0,
+      "score": 1.0
+    },
+    "HEAD /mcp": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "HEAD /nothing-here": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
     "MCP completion/complete": {
-      "passed": 212.0,
-      "total": 212.0,
+      "passed": 276.0,
+      "total": 276.0,
+      "score": 1.0
+    },
+    "MCP initialize": {
+      "passed": 22.0,
+      "total": 22.0,
       "score": 1.0
     },
     "MCP logging/setLevel": {
-      "passed": 58.0,
-      "total": 58.0,
+      "passed": 49.0,
+      "total": 49.0,
       "score": 1.0
     },
     "MCP ping": {
-      "passed": 9.0,
-      "total": 9.0,
+      "passed": 102.0,
+      "total": 102.0,
       "score": 1.0
     },
     "MCP prompts/get:args-prompt": {
-      "passed": 61.0,
-      "total": 61.0,
+      "passed": 70.0,
+      "total": 70.0,
       "score": 1.0
     },
     "MCP prompts/get:completable-prompt": {
@@ -38,14 +103,9 @@
       "total": 37.0,
       "score": 1.0
     },
-    "MCP prompts/get:missing-prompt": {
-      "passed": 11.0,
-      "total": 11.0,
-      "score": 1.0
-    },
     "MCP prompts/get:resource-prompt": {
-      "passed": 96.5,
-      "total": 96.5,
+      "passed": 74.5,
+      "total": 74.5,
       "score": 1.0
     },
     "MCP prompts/get:simple-prompt": {
@@ -53,74 +113,109 @@
       "total": 13.0,
       "score": 1.0
     },
-    "MCP prompts/list": {
-      "passed": 39.0,
-      "total": 39.0,
-      "score": 1.0
-    },
-    "MCP resources/list": {
-      "passed": 155.0,
-      "total": 155.0,
-      "score": 1.0
-    },
-    "MCP resources/read": {
+    "MCP prompts/get:weather-prompt": {
       "passed": 11.0,
       "total": 11.0,
       "score": 1.0
     },
-    "MCP resources/read:Demo://resource/dynamic/blob/9": {
+    "MCP prompts/list": {
+      "passed": 50.0,
+      "total": 50.0,
+      "score": 1.0
+    },
+    "MCP resources/delete": {
+      "passed": 11.0,
+      "total": 11.0,
+      "score": 1.0
+    },
+    "MCP resources/list": {
+      "passed": 82.0,
+      "total": 82.0,
+      "score": 1.0
+    },
+    "MCP resources/read": {
+      "passed": 22.0,
+      "total": 22.0,
+      "score": 1.0
+    },
+    "MCP resources/read://resource/x": {
+      "passed": 11.0,
+      "total": 11.0,
+      "score": 1.0
+    },
+    "MCP resources/read:DEMO://resource/dynamic/text/8": {
       "passed": 12.5,
       "total": 12.5,
       "score": 1.0
     },
-    "MCP resources/read:demo://resource/dynamic/blob/{resourceId}": {
-      "passed": 61.0,
-      "total": 61.0,
+    "MCP resources/read:DEMO://resource/static/document/architecture.md": {
+      "passed": 13.0,
+      "total": 13.0,
       "score": 1.0
     },
-    "MCP resources/read:demo://resource/dynamic/text/1/extra": {
+    "MCP resources/read:Demo://resource/static/document/how-it-works.md": {
+      "passed": 13.0,
+      "total": 13.0,
+      "score": 1.0
+    },
+    "MCP resources/read:HTTPS://Example.org": {
+      "passed": 11.0,
+      "total": 11.0,
+      "score": 1.0
+    },
+    "MCP resources/read:demo://resource/dynamic/blob/": {
+      "passed": 11.0,
+      "total": 11.0,
+      "score": 1.0
+    },
+    "MCP resources/read:demo://resource/dynamic/blob/{resourceId}": {
+      "passed": 122.0,
+      "total": 122.0,
+      "score": 1.0
+    },
+    "MCP resources/read:demo://resource/dynamic/text/../blob/4": {
+      "passed": 12.5,
+      "total": 12.5,
+      "score": 1.0
+    },
+    "MCP resources/read:demo://resource/dynamic/text/3/4": {
       "passed": 11.0,
       "total": 11.0,
       "score": 1.0
     },
     "MCP resources/read:demo://resource/dynamic/text/{resourceId}": {
-      "passed": 83.0,
-      "total": 83.0,
+      "passed": 155.0,
+      "total": 155.0,
       "score": 1.0
     },
-    "MCP resources/read:demo://resource/session/anything.gz": {
+    "MCP resources/read:demo://resource/session/README.md.gz": {
+      "passed": 12.5,
+      "total": 12.5,
+      "score": 1.0
+    },
+    "MCP resources/read:demo://resource/session/drafts.gz": {
       "passed": 11.0,
       "total": 11.0,
       "score": 1.0
     },
-    "MCP resources/read:demo://resource/session/report.csv.gz": {
-      "passed": 37.0,
-      "total": 37.0,
+    "MCP resources/read:demo://resource/session/notes.gz": {
+      "passed": 13.0,
+      "total": 13.0,
+      "score": 1.0
+    },
+    "MCP resources/read:demo://resource/session/weather.csv.gz": {
+      "passed": 13.0,
+      "total": 13.0,
+      "score": 1.0
+    },
+    "MCP resources/read:demo://resource/static/document/./extension.md": {
+      "passed": 13.0,
+      "total": 13.0,
       "score": 1.0
     },
     "MCP resources/read:demo://resource/static/document/README.md": {
-      "passed": 11.0,
-      "total": 11.0,
-      "score": 1.0
-    },
-    "MCP resources/read:demo://resource/static/document/architecture.md": {
-      "passed": 13.0,
-      "total": 13.0,
-      "score": 1.0
-    },
-    "MCP resources/read:demo://resource/static/document/extension.md": {
-      "passed": 13.0,
-      "total": 13.0,
-      "score": 1.0
-    },
-    "MCP resources/read:demo://resource/static/document/features.md": {
-      "passed": 13.0,
-      "total": 13.0,
-      "score": 1.0
-    },
-    "MCP resources/read:demo://resource/static/document/how-it-works.md": {
-      "passed": 13.0,
-      "total": 13.0,
+      "passed": 22.0,
+      "total": 22.0,
       "score": 1.0
     },
     "MCP resources/read:demo://resource/static/document/instructions.md": {
@@ -128,17 +223,7 @@
       "total": 13.0,
       "score": 1.0
     },
-    "MCP resources/read:demo://resource/static/document/startup.md": {
-      "passed": 13.0,
-      "total": 13.0,
-      "score": 1.0
-    },
-    "MCP resources/read:demo://resource/static/document/structure.md": {
-      "passed": 13.0,
-      "total": 13.0,
-      "score": 1.0
-    },
-    "MCP resources/read:file:///etc/passwd": {
+    "MCP resources/read:mailto:someone@example.com": {
       "passed": 11.0,
       "total": 11.0,
       "score": 1.0
@@ -149,63 +234,53 @@
       "score": 1.0
     },
     "MCP resources/subscribe": {
-      "passed": 18.0,
-      "total": 18.0,
+      "passed": 36.0,
+      "total": 36.0,
       "score": 1.0
     },
     "MCP resources/templates/list": {
-      "passed": 18.0,
-      "total": 18.0,
+      "passed": 29.0,
+      "total": 29.0,
       "score": 1.0
     },
     "MCP resources/unsubscribe": {
-      "passed": 20.0,
-      "total": 20.0,
+      "passed": 27.0,
+      "total": 27.0,
       "score": 1.0
     },
-    "MCP tasks/cancel": {
-      "passed": 25.5,
-      "total": 25.5,
-      "score": 1.0
-    },
-    "MCP tasks/get": {
-      "passed": 83.5,
-      "total": 83.5,
-      "score": 1.0
-    },
-    "MCP tasks/list": {
-      "passed": 25.5,
-      "total": 25.5,
-      "score": 1.0
-    },
-    "MCP tasks/result": {
-      "passed": 59.5,
-      "total": 59.5,
-      "score": 1.0
-    },
-    "MCP tools/call": {
+    "MCP resources/watch": {
       "passed": 11.0,
       "total": 11.0,
       "score": 1.0
     },
-    "MCP tools/call:Echo": {
-      "passed": 13.0,
-      "total": 13.0,
+    "MCP tasks/cancel": {
+      "passed": 48.5,
+      "total": 48.5,
       "score": 1.0
     },
-    "MCP tools/call:does-not-exist": {
-      "passed": 13.0,
-      "total": 13.0,
+    "MCP tasks/get": {
+      "passed": 84.0,
+      "total": 84.0,
+      "score": 1.0
+    },
+    "MCP tasks/list": {
+      "passed": 59.5,
+      "total": 59.5,
+      "score": 1.0
+    },
+    "MCP tasks/result": {
+      "passed": 95.5,
+      "total": 95.5,
       "score": 1.0
     },
     "MCP tools/call:echo": {
-      "passed": 135.0,
-      "total": 135.0,
+      "passed": 178.0,
+      "total": 178.0,
       "score": 1.0
     },
     "MCP tools/call:get-annotated-message": {
-      "passed": 100.0,
-      "total": 100.0,
+      "passed": 127.0,
+      "total": 127.0,
       "score": 1.0
     },
     "MCP tools/call:get-env": {
@@ -214,13 +289,13 @@
       "score": 1.0
     },
     "MCP tools/call:get-resource-links": {
-      "passed": 336.0,
-      "total": 336.0,
+      "passed": 280.0,
+      "total": 280.0,
       "score": 1.0
     },
     "MCP tools/call:get-resource-reference": {
-      "passed": 135.0,
-      "total": 135.0,
+      "passed": 122.0,
+      "total": 122.0,
       "score": 1.0
     },
     "MCP tools/call:get-roots-list": {
@@ -229,13 +304,13 @@
       "score": 1.0
     },
     "MCP tools/call:get-structured-content": {
-      "passed": 99.0,
-      "total": 99.0,
+      "passed": 58.0,
+      "total": 58.0,
       "score": 1.0
     },
     "MCP tools/call:get-sum": {
-      "passed": 172.0,
-      "total": 172.0,
+      "passed": 181.0,
+      "total": 181.0,
       "score": 1.0
     },
     "MCP tools/call:get-tiny-image": {
@@ -243,331 +318,1636 @@
       "total": 17.0,
       "score": 1.0
     },
+    "MCP tools/call:get-weather": {
+      "passed": 24.0,
+      "total": 24.0,
+      "score": 1.0
+    },
     "MCP tools/call:gzip-file-as-resource": {
-      "passed": 80.0,
-      "total": 80.0,
+      "passed": 148.0,
+      "total": 148.0,
       "score": 1.0
     },
     "MCP tools/call:simulate-research-query": {
-      "passed": 76.0,
-      "total": 76.0,
+      "passed": 128.0,
+      "total": 128.0,
       "score": 1.0
     },
     "MCP tools/call:toggle-simulated-logging": {
-      "passed": 18.0,
-      "total": 18.0,
-      "score": 1.0
-    },
-    "MCP tools/call:toggle-subscriber-updates": {
-      "passed": 18.0,
-      "total": 18.0,
-      "score": 1.0
-    },
-    "MCP tools/call:trigger-elicitation-request": {
       "passed": 46.0,
       "total": 46.0,
       "score": 1.0
     },
+    "MCP tools/call:toggle-subscriber-updates": {
+      "passed": 23.0,
+      "total": 23.0,
+      "score": 1.0
+    },
+    "MCP tools/call:trigger-elicitation-request": {
+      "passed": 112.0,
+      "total": 112.0,
+      "score": 1.0
+    },
     "MCP tools/call:trigger-elicitation-request-async": {
-      "passed": 24.0,
-      "total": 24.0,
+      "passed": 41.0,
+      "total": 41.0,
       "score": 1.0
     },
     "MCP tools/call:trigger-long-running-operation": {
-      "passed": 74.0,
-      "total": 74.0,
+      "passed": 61.0,
+      "total": 61.0,
       "score": 1.0
     },
     "MCP tools/call:trigger-sampling-request": {
-      "passed": 76.0,
-      "total": 76.0,
+      "passed": 77.0,
+      "total": 77.0,
       "score": 1.0
     },
     "MCP tools/call:trigger-sampling-request-async": {
-      "passed": 24.0,
-      "total": 24.0,
+      "passed": 62.0,
+      "total": 62.0,
       "score": 1.0
     },
     "MCP tools/call:trigger-url-elicitation": {
-      "passed": 64.0,
-      "total": 64.0,
+      "passed": 99.0,
+      "total": 99.0,
       "score": 1.0
     },
     "MCP tools/list": {
-      "passed": 420.0,
-      "total": 420.0,
+      "passed": 1691.0,
+      "total": 1691.0,
       "score": 1.0
     },
-    "MCP tools/unknown": {
-      "passed": 11.0,
-      "total": 11.0,
+    "OPTIONS /anything/else": {
+      "passed": 6.0,
+      "total": 6.0,
+      "score": 1.0
+    },
+    "OPTIONS /mcp": {
+      "passed": 12.0,
+      "total": 12.0,
       "score": 1.0
     }
   },
   "scenarios": {
-    "tests/e2e/test_basic_tools.py::test_tool_listing": [
+    "tests/e2e/test_client_requests.py::test_sampling": [
+      {
+        "call": "MCP tools/call:trigger-sampling-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_sampling_refused_by_the_client": [
+      {
+        "call": "MCP tools/call:trigger-sampling-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_sampling_checks_the_reply[reply0]": [
+      {
+        "call": "MCP tools/call:trigger-sampling-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_sampling_checks_the_reply[reply1]": [
+      {
+        "call": "MCP tools/call:trigger-sampling-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_sampling_checks_the_reply[reply2]": [
+      {
+        "call": "MCP tools/call:trigger-sampling-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_sampling_tool_arguments": [
+      {
+        "call": "MCP tools/call:trigger-sampling-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_form_elicitation_accepted": [
+      {
+        "call": "MCP tools/call:trigger-elicitation-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_form_elicitation_other_answers[reply0-\\u274c User declined to provide the requested information.]": [
+      {
+        "call": "MCP tools/call:trigger-elicitation-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_form_elicitation_other_answers[reply1-\\u26a0\\ufe0f User cancelled the elicitation dialog.]": [
+      {
+        "call": "MCP tools/call:trigger-elicitation-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_form_elicitation_other_answers[reply2-\\u2705 User provided the requested information!]": [
+      {
+        "call": "MCP tools/call:trigger-elicitation-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_form_elicitation_checks_the_reply[reply0]": [
+      {
+        "call": "MCP tools/call:trigger-elicitation-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_form_elicitation_checks_the_reply[reply1]": [
+      {
+        "call": "MCP tools/call:trigger-elicitation-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_form_elicitation_checks_the_reply[reply2]": [
+      {
+        "call": "MCP tools/call:trigger-elicitation-request",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_url_elicitation[accept-\\u2705 User completed the URL elicitation flow.\\nElicitation ID: scenario-1\\nURL: https://auth.example.net/consent?client=7]": [
+      {
+        "call": "MCP tools/call:trigger-url-elicitation",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_url_elicitation[decline-\\u274c User declined to open the URL (Elicitation ID: scenario-1).]": [
+      {
+        "call": "MCP tools/call:trigger-url-elicitation",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_url_elicitation[cancel-\\u26a0\\ufe0f User cancelled the URL elicitation (Elicitation ID: scenario-1).]": [
+      {
+        "call": "MCP tools/call:trigger-url-elicitation",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_url_elicitation_by_error_then_retry": [
+      {
+        "call": "MCP tools/call:trigger-url-elicitation",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:trigger-url-elicitation",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:trigger-url-elicitation",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_url_elicitation_needs_a_url": [
+      {
+        "call": "MCP tools/call:trigger-url-elicitation",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_ambiguous_research_asks_through_tasks_result[reply0-comedy]": [
+      {
+        "call": "MCP tools/call:simulate-research-query",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/result",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_ambiguous_research_asks_through_tasks_result[reply1-User declined - using default interpretation]": [
+      {
+        "call": "MCP tools/call:simulate-research-query",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/result",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_roots_without_a_get_stream": [
+      {
+        "call": "MCP tools/call:get-roots-list",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_async_sampling_answered_at_once": [
+      {
+        "call": "MCP tools/call:trigger-sampling-request-async",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_async_sampling_through_a_client_task": [
+      {
+        "call": "MCP tools/call:trigger-sampling-request-async",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_async_sampling_failed_client_task": [
+      {
+        "call": "MCP tools/call:trigger-sampling-request-async",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_async_elicitation": [
+      {
+        "call": "MCP tools/call:trigger-elicitation-request-async",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_async_elicitation_answered_at_once": [
+      {
+        "call": "MCP tools/call:trigger-elicitation-request-async",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_client_requests.py::test_tools_offered_by_capability[capabilities0-extra0]": [
       {
         "call": "MCP tools/list",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_echo_variations[Testing 1 2 3]": [
+    "tests/e2e/test_client_requests.py::test_tools_offered_by_capability[capabilities1-extra1]": [
       {
-        "call": "MCP tools/call:echo",
+        "call": "MCP tools/list",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_echo_variations[  spaced  ]": [
+    "tests/e2e/test_client_requests.py::test_tools_offered_by_capability[capabilities2-extra2]": [
       {
-        "call": "MCP tools/call:echo",
+        "call": "MCP tools/list",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_echo_variations[tabs\\tand\\nnewlines]": [
+    "tests/e2e/test_client_requests.py::test_tools_offered_by_capability[capabilities3-extra3]": [
       {
-        "call": "MCP tools/call:echo",
+        "call": "MCP tools/list",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_echo_variations[emoji \\U0001f680 \\xfcn\\xefc\\xf6d\\xe9]": [
+    "tests/e2e/test_client_requests.py::test_tools_offered_by_capability[capabilities4-extra4]": [
       {
-        "call": "MCP tools/call:echo",
+        "call": "MCP tools/list",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_echo_variations[{\"json\": true}]": [
+    "tests/e2e/test_client_requests.py::test_tools_offered_by_capability[capabilities5-extra5]": [
       {
-        "call": "MCP tools/call:echo",
+        "call": "MCP tools/list",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_echo_variations[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]": [
+    "tests/e2e/test_client_requests.py::test_tools_offered_by_capability[capabilities6-extra6]": [
       {
-        "call": "MCP tools/call:echo",
+        "call": "MCP tools/list",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_echo_refusals[arguments0]": [
+    "tests/e2e/test_client_requests.py::test_capability_tools_are_unknown_to_others": [
       {
-        "call": "MCP tools/call:echo",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_echo_refusals[arguments1]": [
-      {
-        "call": "MCP tools/call:echo",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_echo_refusals[arguments2]": [
-      {
-        "call": "MCP tools/call:echo",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_echo_refusals[arguments3]": [
-      {
-        "call": "MCP tools/call:echo",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_spells_numbers_like_javascript[7-8]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_spells_numbers_like_javascript[-3.25-1.125]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_spells_numbers_like_javascript[1e-08-2e-08]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_spells_numbers_like_javascript[0.7-0.1]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_spells_numbers_like_javascript[1e+16-1]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_spells_numbers_like_javascript[123.456--123.456]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_spells_numbers_like_javascript[5e-324-0]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_spells_numbers_like_javascript[1.7976931348623157e+308-1e+292]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_spells_numbers_like_javascript[42--0.0001]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_spells_numbers_like_javascript[99999999999-1]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_refusals[arguments0]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_refusals[arguments1]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_refusals[arguments2]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_sum_refusals[arguments3]": [
-      {
-        "call": "MCP tools/call:get-sum",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_annotated_messages[arguments0]": [
-      {
-        "call": "MCP tools/call:get-annotated-message",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_annotated_messages[arguments1]": [
-      {
-        "call": "MCP tools/call:get-annotated-message",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_annotated_messages[arguments2]": [
-      {
-        "call": "MCP tools/call:get-annotated-message",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_annotated_messages[arguments3]": [
-      {
-        "call": "MCP tools/call:get-annotated-message",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_annotated_messages[arguments4]": [
-      {
-        "call": "MCP tools/call:get-annotated-message",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_annotated_messages[arguments5]": [
-      {
-        "call": "MCP tools/call:get-annotated-message",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_structured_content[arguments0]": [
-      {
-        "call": "MCP tools/call:get-structured-content",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_structured_content[arguments1]": [
-      {
-        "call": "MCP tools/call:get-structured-content",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_structured_content[arguments2]": [
-      {
-        "call": "MCP tools/call:get-structured-content",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_structured_content[arguments3]": [
-      {
-        "call": "MCP tools/call:get-structured-content",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_structured_content_matches_its_text": [
-      {
-        "call": "MCP tools/call:get-structured-content",
+        "call": "MCP tools/call:trigger-elicitation-request",
         "score": 1.0,
         "failures": []
       },
       {
-        "call": "MCP tools/call:get-structured-content",
+        "call": "MCP tools/call:get-roots-list",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_task_must_be_an_object_with_a_numeric_ttl[False-path0-expected object, received boolean]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_task_must_be_an_object_with_a_numeric_ttl[later-path1-expected object, received string]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_task_must_be_an_object_with_a_numeric_ttl[task2-path2-expected object, received array]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_task_must_be_an_object_with_a_numeric_ttl[task3-path3-expected number, received null]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_task_must_be_an_object_with_a_numeric_ttl[task4-path4-expected number, received string]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_task_true_as_the_docs_say_is_refused": [
+      {
+        "call": "MCP tools/call:simulate-research-query",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_extra_task_members_pass_the_schema": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_meta_is_checked_by_the_transport[meta0-True]": [
+      {
+        "call": "MCP ping",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_meta_is_checked_by_the_transport[meta1-True]": [
+      {
+        "call": "MCP ping",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_meta_is_checked_by_the_transport[meta2-False]": [
+      {
+        "call": "MCP ping",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_meta_is_checked_by_the_transport[meta3-False]": [
+      {
+        "call": "MCP ping",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_meta_is_checked_by_the_transport[meta4-False]": [
+      {
+        "call": "MCP ping",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_meta_is_checked_by_the_transport[meta5-False]": [
+      {
+        "call": "MCP ping",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_meta_is_checked_by_the_transport[meta6-True]": [
+      {
+        "call": "MCP ping",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_meta_is_checked_by_the_transport[meta-False]": [
+      {
+        "call": "MCP ping",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_request_naming_an_unknown_task_is_refused[logging/setLevel-params0-t]": [
+      {
+        "call": "MCP logging/setLevel",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_request_naming_an_unknown_task_is_refused[ping-params1-00000000000000000000000000000000]": [
+      {
+        "call": "MCP ping",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_request_naming_an_unknown_task_is_refused[tools/list-params2-nope]": [
+      {
+        "call": "MCP tools/list",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_request_naming_an_unknown_task_is_refused[prompts/list-params3-x-1]": [
+      {
+        "call": "MCP prompts/list",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_request_naming_an_unknown_task_is_refused[resources/templates/list-params4-x-2]": [
+      {
+        "call": "MCP resources/templates/list",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_request_naming_an_unknown_task_is_refused[resources/read-params5-x-3]": [
+      {
+        "call": "MCP resources/read:demo://resource/static/document/README.md",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_request_naming_an_unknown_task_is_refused[tools/call-params6-x-4]": [
+      {
+        "call": "MCP tools/call:get-weather",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_an_unknown_method_naming_a_task_is_not_found": [
+      {
+        "call": "MCP resources/watch",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_an_initialize_inside_a_session_is_parsed_like_a_request[params0-paths0]": [
+      {
+        "call": "MCP initialize",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_an_initialize_inside_a_session_is_parsed_like_a_request[params1-paths1]": [
+      {
+        "call": "MCP initialize",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_an_infinite_ttl_is_named": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_tool_call_with_a_bad_progress_token": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_completion_requests_are_checked_before_the_prompt[params0-issues0]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_completion_requests_are_checked_before_the_prompt[params1-issues1]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_completion_requests_are_checked_before_the_prompt[params2-issues2]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_completion_requests_are_checked_before_the_prompt[params3-issues3]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_completion_requests_are_checked_before_the_prompt[params4-issues4]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_task_cursor_is_text[10]": [
+      {
+        "call": "MCP tasks/list",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_task_cursor_is_text[True]": [
+      {
+        "call": "MCP tasks/list",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_task_cursor_is_text[None]": [
+      {
+        "call": "MCP tasks/list",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_every_bad_prompt_argument_is_reported[arguments0-bad0]": [
+      {
+        "call": "MCP prompts/get:args-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_every_bad_prompt_argument_is_reported[arguments1-bad1]": [
+      {
+        "call": "MCP prompts/get:args-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_numbers_javascript_cannot_hold[arguments0-Invalid input: expected number, received Infinity at a]": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_numbers_javascript_cannot_hold[arguments1-Invalid input: expected number, received -Infinity at b]": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_a_clarification_that_is_not_text_fails_the_task": [
+      {
+        "call": "MCP tools/call:simulate-research-query",
         "score": 1.0,
         "failures": []
       },
+      {
+        "call": "MCP tasks/result",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/get",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_async_sampling_refuses_malformed_replies[replies0-paths0]": [
+      {
+        "call": "MCP tools/call:trigger-sampling-request-async",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_async_sampling_refuses_malformed_replies[replies1-paths1]": [
+      {
+        "call": "MCP tools/call:trigger-sampling-request-async",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_protocol.py::test_async_elicitation_refuses_a_poll_without_status": [
+      {
+        "call": "MCP tools/call:trigger-elicitation-request-async",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_listings": [
+      {
+        "call": "MCP resources/list",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/templates/list",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP prompts/list",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_instructions_document_is_the_server_instructions": [
+      {
+        "call": "MCP resources/read:demo://resource/static/document/instructions.md",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_static_documents_by_equivalent_uris[DEMO://resource/static/document/architecture.md]": [
+      {
+        "call": "MCP resources/read:DEMO://resource/static/document/architecture.md",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_static_documents_by_equivalent_uris[Demo://resource/static/document/how-it-works.md]": [
+      {
+        "call": "MCP resources/read:Demo://resource/static/document/how-it-works.md",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_static_documents_by_equivalent_uris[demo://resource/static/document/./extension.md]": [
+      {
+        "call": "MCP resources/read:demo://resource/static/document/./extension.md",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[demo://resource/dynamic/text/42-42]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/42",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[demo://resource/dynamic/blob/9-9]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/blob/9",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[demo://resource/dynamic/text/1e2-100]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/1e2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[demo://resource/dynamic/blob/0x1F-31]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/blob/0x1F",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[demo://resource/dynamic/text/0b101-5]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/0b101",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[demo://resource/dynamic/blob/3.0-3]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/blob/3.0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[DEMO://resource/dynamic/text/8-8]": [
+      {
+        "call": "MCP resources/read:DEMO://resource/dynamic/text/8",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[demo://resource/dynamic/text/../blob/4-4]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/../blob/4",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources_need_positive_integers[demo://resource/dynamic/text/0]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/0",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources_need_positive_integers[demo://resource/dynamic/blob/-5]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/blob/-5",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources_need_positive_integers[demo://resource/dynamic/text/seven]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/seven",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources_need_positive_integers[demo://resource/dynamic/text/2.5]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/2.5",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources_need_positive_integers[demo://resource/dynamic/blob/NaN]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/blob/NaN",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_dynamic_resources_need_positive_integers[demo://resource/dynamic/text/4?fresh=1]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/4?fresh=1",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_unknown_resources[demo://resource/dynamic/text/1,2-demo://resource/dynamic/text/1,2]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/1,2",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_unknown_resources[demo://resource/dynamic/blob/-demo://resource/dynamic/blob/]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/blob/",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_unknown_resources[demo://resource/dynamic/text/3/4-demo://resource/dynamic/text/3/4]": [
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/3/4",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_unknown_resources[demo://resource/static/document/README.md-demo://resource/static/document/README.md]": [
+      {
+        "call": "MCP resources/read:demo://resource/static/document/README.md",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_unknown_resources[HTTPS://Example.org-https://example.org/]": [
+      {
+        "call": "MCP resources/read:HTTPS://Example.org",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_unknown_resources[mailto:someone@example.com-mailto:someone@example.com]": [
+      {
+        "call": "MCP resources/read:mailto:someone@example.com",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_resources_need_urls[not a uri]": [
+      {
+        "call": "MCP resources/read:not a uri",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_resources_need_urls[]": [
+      {
+        "call": "MCP resources/read",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_resources_need_urls[//resource/x]": [
+      {
+        "call": "MCP resources/read://resource/x",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_resources_read_needs_a_uri": [
+      {
+        "call": "MCP resources/read",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_prompts[simple-prompt-arguments0-This is a simple prompt without arguments.]": [
+      {
+        "call": "MCP prompts/get:simple-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_prompts[args-prompt-arguments1-What's weather in Lisbon?]": [
+      {
+        "call": "MCP prompts/get:args-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_prompts[args-prompt-arguments2-What's weather in Springfield, Illinois?]": [
+      {
+        "call": "MCP prompts/get:args-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_prompts[completable-prompt-arguments3-Please promote Kim to the head of the Support team.]": [
+      {
+        "call": "MCP prompts/get:completable-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_prompts[completable-prompt-arguments4-Please promote Ada to the head of the Research team.]": [
+      {
+        "call": "MCP prompts/get:completable-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_resource_prompt_embeds_a_dynamic_resource[Text-8]": [
+      {
+        "call": "MCP prompts/get:resource-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_resource_prompt_embeds_a_dynamic_resource[Blob-21]": [
+      {
+        "call": "MCP prompts/get:resource-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_resource_prompt_embeds_a_dynamic_resource[Text-0x10]": [
+      {
+        "call": "MCP prompts/get:resource-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_prompt_refusals[args-prompt-arguments0--32602-MCP error -32602: Invalid arguments for prompt args-prompt: Invalid input: expected string, received undefined at city]": [
+      {
+        "call": "MCP prompts/get:args-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_prompt_refusals[completable-prompt-arguments1--32602-MCP error -32602: Invalid arguments for prompt completable-prompt: Invalid input: expected string, received undefined at department\\nInvalid input: expected string, received undefined at name]": [
+      {
+        "call": "MCP prompts/get:completable-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_prompt_refusals[resource-prompt-arguments2--32603-Invalid resourceType: Video. Must be Text or Blob.]": [
+      {
+        "call": "MCP prompts/get:resource-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_prompt_refusals[resource-prompt-arguments3--32603-Invalid resourceId: -3. Must be a finite positive integer.]": [
+      {
+        "call": "MCP prompts/get:resource-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_prompt_refusals[weather-prompt-arguments4--32602-MCP error -32602: Prompt weather-prompt not found]": [
+      {
+        "call": "MCP prompts/get:weather-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_prompt_arguments_must_be_strings": [
+      {
+        "call": "MCP prompts/get:args-prompt",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completions[params0-values0]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completions[params1-values1]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completions[params2-values2]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completions[params3-values3]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completions[params4-values4]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completions[params5-values5]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completions[params6-values6]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completions[params7-values7]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completions[params8-values8]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completions[params9-values9]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completions[params10-values10]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_nothing_to_complete[params0]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_nothing_to_complete[params1]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_nothing_to_complete[params2]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completion_refusals[params0-MCP error -32602: Prompt team-prompt not found]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completion_refusals[params1-MCP error -32602: Resource template demo://resource/{id} not found]": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_completion_protocol_refusals": [
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP completion/complete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_logging_levels[warning]": [
+      {
+        "call": "MCP logging/setLevel",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_logging_levels[critical]": [
+      {
+        "call": "MCP logging/setLevel",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_logging_levels[info]": [
+      {
+        "call": "MCP logging/setLevel",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_logging_level_refusal_and_ping": [
+      {
+        "call": "MCP logging/setLevel",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP ping",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_subscriptions_are_acknowledged[demo://resource/static/document/structure.md]": [
+      {
+        "call": "MCP resources/subscribe",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/unsubscribe",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_subscriptions_are_acknowledged[demo://resource/dynamic/blob/2]": [
+      {
+        "call": "MCP resources/subscribe",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/unsubscribe",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_subscriptions_are_acknowledged[anything at all]": [
+      {
+        "call": "MCP resources/subscribe",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/unsubscribe",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_tasks_methods_without_tasks": [
+      {
+        "call": "MCP tasks/list",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/get",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/result",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/cancel",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/get",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_resources_prompts.py::test_unknown_method": [
+      {
+        "call": "MCP resources/delete",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_gzip_a_data_url_into_a_resource": [
+      {
+        "call": "MCP tools/call:gzip-file-as-resource",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/read:demo://resource/session/weather.csv.gz",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_gzip_links_are_listed_and_replaced": [
+      {
+        "call": "MCP tools/call:gzip-file-as-resource",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:gzip-file-as-resource",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:gzip-file-as-resource",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/read:demo://resource/session/notes.gz",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/list",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/read:demo://resource/session/drafts.gz",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_gzip_of_the_default_remote_readme": [
+      {
+        "call": "MCP tools/call:gzip-file-as-resource",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/read:demo://resource/session/README.md.gz",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_gzip_refusals[arguments0-Error processing file ftp://example.org/a.txt: Unsupported URL protocol for ftp://example.org/a.txt. Only http, https, and data URLs are supported.]": [
+      {
+        "call": "MCP tools/call:gzip-file-as-resource",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_gzip_refusals[arguments1-Error processing file file:///etc/passwd: Unsupported URL protocol for file:///etc/passwd. Only http, https, and data URLs are supported.]": [
+      {
+        "call": "MCP tools/call:gzip-file-as-resource",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_gzip_refusals[arguments2-MCP error -32602: Input validation error: Invalid arguments for tool gzip-file-as-resource: Invalid URL at data]": [
+      {
+        "call": "MCP tools/call:gzip-file-as-resource",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_gzip_refusals[arguments3-MCP error -32602: Input validation error: Invalid arguments for tool gzip-file-as-resource: Invalid option: expected one of \"resourceLink\"|\"resource\" at outputType]": [
+      {
+        "call": "MCP tools/call:gzip-file-as-resource",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_gzip_refusals[arguments4-fetch failed]": [
+      {
+        "call": "MCP tools/call:gzip-file-as-resource",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_gzip_refusals[arguments5-fetch failed]": [
+      {
+        "call": "MCP tools/call:gzip-file-as-resource",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_simulated_logging_toggles": [
+      {
+        "call": "MCP tools/call:toggle-simulated-logging",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:toggle-simulated-logging",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:toggle-simulated-logging",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:toggle-simulated-logging",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_subscriber_updates_toggle": [
+      {
+        "call": "MCP resources/subscribe",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:toggle-subscriber-updates",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:toggle-subscriber-updates",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_research_task_lifecycle": [
+      {
+        "call": "MCP tools/call:simulate-research-query",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/get",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/result",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/get",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/list",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/cancel",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/result",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_research_task_cancelled": [
+      {
+        "call": "MCP tools/call:simulate-research-query",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/cancel",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/get",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/result",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/cancel",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_research_needs_a_task_and_a_topic": [
+      {
+        "call": "MCP tools/call:simulate-research-query",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:simulate-research-query",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_stateful.py::test_ambiguous_research_without_elicitation_is_not_asked": [
+      {
+        "call": "MCP tools/call:simulate-research-query",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tasks/result",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_a_plain_client_sees_thirteen_tools": [
+      {
+        "call": "MCP tools/list",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_echo[Parity check from FauxCall]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_echo[]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_echo[\\xfcn\\xefc\\xf8d\\xe9 \\u2713 \\U0001f680]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_echo[tabs\\tand\\nnew lines]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_echo[  padded  ]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_echo_refuses_bad_arguments[arguments0-Invalid input: expected string, received number at message]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_echo_refuses_bad_arguments[arguments1-Invalid input: expected string, received undefined at message]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_echo_refuses_bad_arguments[arguments2-Invalid input: expected string, received null at message]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_echo_refuses_bad_arguments[arguments3-Invalid input: expected string, received object at message]": [
+      {
+        "call": "MCP tools/call:echo",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_sum_spells_numbers_like_javascript[2-40-The sum of 2 and 40 is 42.]": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_sum_spells_numbers_like_javascript[-1.25-0.25-The sum of -1.25 and 0.25 is -1.]": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_sum_spells_numbers_like_javascript[1e-09-5e-10-The sum of 1e-9 and 5e-10 is 1.5000000000000002e-9.]": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_sum_spells_numbers_like_javascript[123.456-7-The sum of 123.456 and 7 is 130.45600000000002.]": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_sum_spells_numbers_like_javascript[1e+300-1e+300-The sum of 1e+300 and 1e+300 is 2e+300.]": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_sum_spells_numbers_like_javascript[9007199254740992-1-The sum of 9007199254740992 and 1 is 9007199254740992.]": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_sum_spells_numbers_like_javascript[0.7-0.1-The sum of 0.7 and 0.1 is 0.7999999999999999.]": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_sum_spells_numbers_like_javascript[5e+21-5e+21-The sum of 5e+21 and 5e+21 is 1e+22.]": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_sum_refuses_every_bad_argument_at_once": [
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:get-sum",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_annotated_messages[True-error]": [
+      {
+        "call": "MCP tools/call:get-annotated-message",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_annotated_messages[True-success]": [
+      {
+        "call": "MCP tools/call:get-annotated-message",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_annotated_messages[True-debug]": [
+      {
+        "call": "MCP tools/call:get-annotated-message",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_annotated_messages[False-error]": [
+      {
+        "call": "MCP tools/call:get-annotated-message",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_annotated_messages[False-success]": [
+      {
+        "call": "MCP tools/call:get-annotated-message",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_annotated_messages[False-debug]": [
+      {
+        "call": "MCP tools/call:get-annotated-message",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_annotated_message_refusals": [
+      {
+        "call": "MCP tools/call:get-annotated-message",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:get-annotated-message",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_structured_weather[Chicago]": [
       {
         "call": "MCP tools/call:get-structured-content",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_image_and_environment": [
+    "tests/e2e/test_tools.py::test_structured_weather[Los Angeles]": [
+      {
+        "call": "MCP tools/call:get-structured-content",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_structured_weather[New York]": [
+      {
+        "call": "MCP tools/call:get-structured-content",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_structured_weather_only_for_three_cities": [
+      {
+        "call": "MCP tools/call:get-structured-content",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_image_and_environment_ignore_arguments": [
       {
         "call": "MCP tools/call:get-tiny-image",
         "score": 1.0,
@@ -577,84 +1957,72 @@
         "call": "MCP tools/call:get-env",
         "score": 1.0,
         "failures": []
-      },
-      {
-        "call": "MCP tools/call:get-annotated-message",
-        "score": 1.0,
-        "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_links[3]": [
+    "tests/e2e/test_tools.py::test_resource_links[5]": [
       {
         "call": "MCP tools/call:get-resource-links",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_links[6]": [
+    "tests/e2e/test_tools.py::test_resource_links[7]": [
       {
         "call": "MCP tools/call:get-resource-links",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_links[8]": [
+    "tests/e2e/test_tools.py::test_resource_links[3.7]": [
       {
         "call": "MCP tools/call:get-resource-links",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_links[9]": [
+    "tests/e2e/test_tools.py::test_resource_links[10]": [
       {
         "call": "MCP tools/call:get-resource-links",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_links[1.5]": [
+    "tests/e2e/test_tools.py::test_resource_links_refusals[0]": [
       {
         "call": "MCP tools/call:get-resource-links",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_links[9.99]": [
+    "tests/e2e/test_tools.py::test_resource_links_refusals[15]": [
       {
         "call": "MCP tools/call:get-resource-links",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_links[10.5]": [
+    "tests/e2e/test_tools.py::test_resource_links_refusals[two]": [
       {
         "call": "MCP tools/call:get-resource-links",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_links[0.5]": [
+    "tests/e2e/test_tools.py::test_resource_links_refusals[-1]": [
       {
         "call": "MCP tools/call:get-resource-links",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_links[-10]": [
+    "tests/e2e/test_tools.py::test_resource_links_refusals[0.5]": [
       {
         "call": "MCP tools/call:get-resource-links",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_links[ten]": [
-      {
-        "call": "MCP tools/call:get-resource-links",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_resource_links_resolve": [
+    "tests/e2e/test_tools.py::test_every_link_resolves": [
       {
         "call": "MCP tools/call:get-resource-links",
         "score": 1.0,
@@ -679,933 +2047,256 @@
         "call": "MCP resources/read:demo://resource/dynamic/text/4",
         "score": 1.0,
         "failures": []
+      },
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/blob/5",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/6",
+        "score": 1.0,
+        "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_reference[arguments0]": [
+    "tests/e2e/test_tools.py::test_resource_reference_resolves[arguments0-demo://resource/dynamic/text/12]": [
+      {
+        "call": "MCP tools/call:get-resource-reference",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/12",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_resource_reference_resolves[arguments1-demo://resource/dynamic/blob/5]": [
+      {
+        "call": "MCP tools/call:get-resource-reference",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/blob/5",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_resource_reference_resolves[arguments2-demo://resource/dynamic/text/300]": [
+      {
+        "call": "MCP tools/call:get-resource-reference",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/text/300",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_resource_reference_resolves[arguments3-demo://resource/dynamic/blob/6]": [
+      {
+        "call": "MCP tools/call:get-resource-reference",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP resources/read:demo://resource/dynamic/blob/6",
+        "score": 1.0,
+        "failures": []
+      }
+    ],
+    "tests/e2e/test_tools.py::test_resource_reference_refuses_ids[0]": [
       {
         "call": "MCP tools/call:get-resource-reference",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_reference[arguments1]": [
+    "tests/e2e/test_tools.py::test_resource_reference_refuses_ids[-2]": [
       {
         "call": "MCP tools/call:get-resource-reference",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_reference[arguments2]": [
+    "tests/e2e/test_tools.py::test_resource_reference_refuses_ids[2.5]": [
       {
         "call": "MCP tools/call:get-resource-reference",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_reference[arguments3]": [
+    "tests/e2e/test_tools.py::test_resource_reference_refuses_types": [
       {
         "call": "MCP tools/call:get-resource-reference",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_reference[arguments4]": [
+    "tests/e2e/test_tools.py::test_unknown_tools_and_tasks_for_plain_tools": [
       {
-        "call": "MCP tools/call:get-resource-reference",
+        "call": "MCP tools/call:get-weather",
+        "score": 1.0,
+        "failures": []
+      },
+      {
+        "call": "MCP tools/call:get-sum",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_resource_reference[arguments5]": [
-      {
-        "call": "MCP tools/call:get-resource-reference",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_resource_reference[arguments6]": [
-      {
-        "call": "MCP tools/call:get-resource-reference",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_resource_reference[arguments7]": [
-      {
-        "call": "MCP tools/call:get-resource-reference",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_resource_reference[arguments8]": [
-      {
-        "call": "MCP tools/call:get-resource-reference",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_long_running_operation_with_a_progress_token": [
+    "tests/e2e/test_tools.py::test_long_running_operation[arguments0-Duration: 0.6 seconds, Steps: 3.]": [
       {
         "call": "MCP tools/call:trigger-long-running-operation",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_long_running_variations[arguments0]": [
+    "tests/e2e/test_tools.py::test_long_running_operation[arguments1-Duration: 0 seconds, Steps: 4.]": [
       {
         "call": "MCP tools/call:trigger-long-running-operation",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_long_running_variations[arguments1]": [
+    "tests/e2e/test_tools.py::test_long_running_operation[arguments2-Duration: 2 seconds, Steps: 0.]": [
       {
         "call": "MCP tools/call:trigger-long-running-operation",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_long_running_variations[arguments2]": [
+    "tests/e2e/test_tools.py::test_long_running_operation[arguments3-Duration: 0.3 seconds, Steps: 1.5.]": [
       {
         "call": "MCP tools/call:trigger-long-running-operation",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_long_running_variations[arguments3]": [
+    "tests/e2e/test_tools.py::test_long_running_operation_refusal": [
       {
         "call": "MCP tools/call:trigger-long-running-operation",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_long_running_variations[arguments4]": [
+    "tests/e2e/test_transport.py::test_stream_for_an_unknown_session[text/event-stream]": [
       {
-        "call": "MCP tools/call:trigger-long-running-operation",
+        "call": "GET /mcp",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_basic_tools.py::test_unknown_tool_and_malformed_calls": [
+    "tests/e2e/test_transport.py::test_stream_for_an_unknown_session[application/json]": [
       {
-        "call": "MCP tools/call:does-not-exist",
+        "call": "GET /mcp",
         "score": 1.0,
         "failures": []
-      },
-      {
-        "call": "MCP tools/call:Echo",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:echo",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_research_query_needs_a_task": [
-      {
-        "call": "MCP tools/call:simulate-research-query",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_basic_tools.py::test_ping_and_unknown_method": [
-      {
-        "call": "MCP ping",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/unknown",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tasks/list",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_client_requests.py::test_sampling_listing_and_answer": [
-      {
-        "call": "MCP tools/list",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-sampling-request",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_client_requests.py::test_sampling_answers_in_other_shapes": [
-      {
-        "call": "MCP tools/call:trigger-sampling-request",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-sampling-request",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-sampling-request",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-sampling-request",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_client_requests.py::test_sampling_tool_hidden_without_capability": [
-      {
-        "call": "MCP tools/call:trigger-sampling-request",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:get-roots-list",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_client_requests.py::test_form_elicitation": [
-      {
-        "call": "MCP tools/call:trigger-elicitation-request",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-elicitation-request",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-elicitation-request",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-url-elicitation",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_client_requests.py::test_url_elicitation_paths": [
-      {
-        "call": "MCP tools/call:trigger-url-elicitation",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-url-elicitation",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-url-elicitation",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-url-elicitation",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-url-elicitation",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_client_requests.py::test_async_sampling_through_a_client_task": [
-      {
-        "call": "MCP tools/call:trigger-sampling-request-async",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-sampling-request-async",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_client_requests.py::test_async_elicitation_through_a_client_task": [
-      {
-        "call": "MCP tools/call:trigger-elicitation-request-async",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:trigger-elicitation-request-async",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_client_requests.py::test_roots_without_a_get_stream": [
-      {
-        "call": "MCP tools/call:get-roots-list",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_listings": [
-      {
-        "call": "MCP resources/list",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP resources/templates/list",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP prompts/list",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_every_listed_document_reads": [
-      {
-        "call": "MCP resources/list",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP resources/read:demo://resource/static/document/architecture.md",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP resources/read:demo://resource/static/document/extension.md",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP resources/read:demo://resource/static/document/features.md",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP resources/read:demo://resource/static/document/how-it-works.md",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP resources/read:demo://resource/static/document/instructions.md",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP resources/read:demo://resource/static/document/startup.md",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP resources/read:demo://resource/static/document/structure.md",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[demo://resource/dynamic/text/77]": [
-      {
-        "call": "MCP resources/read:demo://resource/dynamic/text/77",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[demo://resource/dynamic/blob/77]": [
-      {
-        "call": "MCP resources/read:demo://resource/dynamic/blob/77",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[demo://resource/dynamic/text/2e1]": [
-      {
-        "call": "MCP resources/read:demo://resource/dynamic/text/2e1",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[demo://resource/dynamic/blob/0X1f]": [
-      {
-        "call": "MCP resources/read:demo://resource/dynamic/blob/0X1f",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_dynamic_resources[Demo://resource/dynamic/blob/9]": [
-      {
-        "call": "MCP resources/read:Demo://resource/dynamic/blob/9",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_unreadable_resources[demo://resource/dynamic/text/-7]": [
-      {
-        "call": "MCP resources/read:demo://resource/dynamic/text/-7",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_unreadable_resources[demo://resource/dynamic/blob/2.5]": [
-      {
-        "call": "MCP resources/read:demo://resource/dynamic/blob/2.5",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_unreadable_resources[demo://resource/dynamic/text/NaN]": [
-      {
-        "call": "MCP resources/read:demo://resource/dynamic/text/NaN",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_unreadable_resources[demo://resource/dynamic/text/Infinity]": [
-      {
-        "call": "MCP resources/read:demo://resource/dynamic/text/Infinity",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_unreadable_resources[demo://resource/dynamic/text/1/extra]": [
-      {
-        "call": "MCP resources/read:demo://resource/dynamic/text/1/extra",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_unreadable_resources[demo://resource/static/document/README.md]": [
-      {
-        "call": "MCP resources/read:demo://resource/static/document/README.md",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_unreadable_resources[demo://resource/session/anything.gz]": [
-      {
-        "call": "MCP resources/read:demo://resource/session/anything.gz",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_unreadable_resources[file:///etc/passwd]": [
-      {
-        "call": "MCP resources/read:file:///etc/passwd",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_unreadable_resources[not a uri]": [
-      {
-        "call": "MCP resources/read:not a uri",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_read_without_uri": [
-      {
-        "call": "MCP resources/read",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[simple-prompt-arguments0]": [
-      {
-        "call": "MCP prompts/get:simple-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[args-prompt-arguments1]": [
-      {
-        "call": "MCP prompts/get:args-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[args-prompt-arguments2]": [
-      {
-        "call": "MCP prompts/get:args-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[args-prompt-arguments3]": [
-      {
-        "call": "MCP prompts/get:args-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[args-prompt-arguments4]": [
-      {
-        "call": "MCP prompts/get:args-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[args-prompt-arguments5]": [
-      {
-        "call": "MCP prompts/get:args-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[completable-prompt-arguments6]": [
-      {
-        "call": "MCP prompts/get:completable-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[completable-prompt-arguments7]": [
-      {
-        "call": "MCP prompts/get:completable-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[completable-prompt-arguments8]": [
-      {
-        "call": "MCP prompts/get:completable-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[resource-prompt-arguments9]": [
-      {
-        "call": "MCP prompts/get:resource-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[resource-prompt-arguments10]": [
-      {
-        "call": "MCP prompts/get:resource-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[resource-prompt-arguments11]": [
-      {
-        "call": "MCP prompts/get:resource-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[resource-prompt-arguments12]": [
-      {
-        "call": "MCP prompts/get:resource-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_prompts[missing-prompt-arguments13]": [
-      {
-        "call": "MCP prompts/get:missing-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_resource_prompt_embeds_the_resource[Text-21]": [
-      {
-        "call": "MCP prompts/get:resource-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_resource_prompt_embeds_the_resource[Blob-8]": [
-      {
-        "call": "MCP prompts/get:resource-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_resource_prompt_embeds_the_resource[Text-2e0]": [
-      {
-        "call": "MCP prompts/get:resource-prompt",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params0]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params1]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params2]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params3]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params4]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params5]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params6]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params7]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params8]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params9]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params10]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params11]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params12]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params13]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params14]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params15]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
-      }
-    ],
-    "tests/e2e/test_resources_prompts.py::test_completions[params16]": [
-      {
-        "call": "MCP completion/complete",
-        "score": 1.0,
-        "failures": []
       }
     ],
-    "tests/e2e/test_resources_prompts.py::test_logging_levels[info]": [
+    "tests/e2e/test_transport.py::test_a_stream_needs_a_session_id": [
       {
-        "call": "MCP logging/setLevel",
+        "call": "GET /mcp",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_resources_prompts.py::test_logging_levels[warning]": [
+    "tests/e2e/test_transport.py::test_the_endpoint_ignores_case_and_a_trailing_slash[/MCP]": [
       {
-        "call": "MCP logging/setLevel",
+        "call": "GET /MCP",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_resources_prompts.py::test_logging_levels[critical]": [
+    "tests/e2e/test_transport.py::test_the_endpoint_ignores_case_and_a_trailing_slash[/mcp/]": [
       {
-        "call": "MCP logging/setLevel",
+        "call": "GET /mcp/",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_resources_prompts.py::test_logging_levels[alert]": [
+    "tests/e2e/test_transport.py::test_the_endpoint_ignores_case_and_a_trailing_slash[/Mcp/?probe=1]": [
       {
-        "call": "MCP logging/setLevel",
+        "call": "GET /Mcp/?probe=1",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_resources_prompts.py::test_logging_levels[Debug]": [
+    "tests/e2e/test_transport.py::test_a_head_takes_the_stream_route": [
       {
-        "call": "MCP logging/setLevel",
+        "call": "HEAD /mcp",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_resources_prompts.py::test_logging_levels[fatal]": [
+    "tests/e2e/test_transport.py::test_other_paths_get_the_express_404_page[GET-/]": [
       {
-        "call": "MCP logging/setLevel",
+        "call": "GET /",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_resources_prompts.py::test_subscriptions": [
-      {
-        "call": "MCP resources/subscribe",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP resources/subscribe",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP resources/unsubscribe",
-        "score": 1.0,
-        "failures": []
-      },
+    "tests/e2e/test_transport.py::test_other_paths_get_the_express_404_page[GET-/health]": [
       {
-        "call": "MCP resources/unsubscribe",
+        "call": "GET /health",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_sessions.py::test_gzip_cycle": [
-      {
-        "call": "MCP tools/call:gzip-file-as-resource",
-        "score": 1.0,
-        "failures": []
-      },
+    "tests/e2e/test_transport.py::test_other_paths_get_the_express_404_page[GET-/mcp/messages]": [
       {
-        "call": "MCP resources/read:demo://resource/session/report.csv.gz",
+        "call": "GET /mcp/messages",
         "score": 1.0,
         "failures": []
-      },
-      {
-        "call": "MCP resources/list",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:gzip-file-as-resource",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP resources/read:demo://resource/session/report.csv.gz",
-        "score": 1.0,
-        "failures": []
       }
     ],
-    "tests/e2e/test_sessions.py::test_gzip_refusals": [
-      {
-        "call": "MCP tools/call:gzip-file-as-resource",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:gzip-file-as-resource",
-        "score": 1.0,
-        "failures": []
-      },
+    "tests/e2e/test_transport.py::test_other_paths_get_the_express_404_page[GET-/mcp//]": [
       {
-        "call": "MCP tools/call:gzip-file-as-resource",
+        "call": "GET /mcp//",
         "score": 1.0,
         "failures": []
-      },
-      {
-        "call": "MCP tools/call:gzip-file-as-resource",
-        "score": 1.0,
-        "failures": []
       }
     ],
-    "tests/e2e/test_sessions.py::test_session_files_belong_to_their_session": [
+    "tests/e2e/test_transport.py::test_other_paths_get_the_express_404_page[GET-/.well-known/oauth-protected-resource]": [
       {
-        "call": "MCP resources/list",
+        "call": "GET /.well-known/oauth-protected-resource",
         "score": 1.0,
         "failures": []
-      },
-      {
-        "call": "MCP resources/read:demo://resource/session/report.csv.gz",
-        "score": 1.0,
-        "failures": []
       }
     ],
-    "tests/e2e/test_sessions.py::test_toggles_answer_on_and_off": [
-      {
-        "call": "MCP tools/call:toggle-simulated-logging",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:toggle-simulated-logging",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tools/call:toggle-subscriber-updates",
-        "score": 1.0,
-        "failures": []
-      },
+    "tests/e2e/test_transport.py::test_other_paths_get_the_express_404_page[GET-/sse]": [
       {
-        "call": "MCP tools/call:toggle-subscriber-updates",
+        "call": "GET /sse",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_sessions.py::test_research_task_lifecycle": [
-      {
-        "call": "MCP tools/call:simulate-research-query",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tasks/get",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tasks/get",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tasks/get",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tasks/get",
-        "score": 1.0,
-        "failures": []
-      },
+    "tests/e2e/test_transport.py::test_a_head_of_an_unknown_path": [
       {
-        "call": "MCP tasks/get",
+        "call": "HEAD /nothing-here",
         "score": 1.0,
         "failures": []
-      },
-      {
-        "call": "MCP tasks/result",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tasks/list",
-        "score": 1.0,
-        "failures": []
       }
     ],
-    "tests/e2e/test_sessions.py::test_research_result_waits_for_completion": [
-      {
-        "call": "MCP tools/call:simulate-research-query",
-        "score": 1.0,
-        "failures": []
-      },
+    "tests/e2e/test_transport.py::test_cors_preflight[/mcp]": [
       {
-        "call": "MCP tasks/result",
+        "call": "OPTIONS /mcp",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_sessions.py::test_research_with_clarification": [
-      {
-        "call": "MCP tools/call:simulate-research-query",
-        "score": 1.0,
-        "failures": []
-      },
+    "tests/e2e/test_transport.py::test_cors_preflight[/anything/else]": [
       {
-        "call": "MCP tasks/result",
+        "call": "OPTIONS /anything/else",
         "score": 1.0,
         "failures": []
       }
     ],
-    "tests/e2e/test_sessions.py::test_research_cancel_and_errors": [
-      {
-        "call": "MCP tools/call:simulate-research-query",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tasks/cancel",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tasks/cancel",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tasks/result",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tasks/get",
-        "score": 1.0,
-        "failures": []
-      },
-      {
-        "call": "MCP tasks/result",
-        "score": 1.0,
-        "failures": []
-      },
+    "tests/e2e/test_transport.py::test_a_preflight_without_requested_headers": [
       {
-        "call": "MCP tools/call:simulate-research-query",
+        "call": "OPTIONS /mcp",
         "score": 1.0,
         "failures": []
       }

@@ -1,0 +1,100 @@
+{
+  "id": "000587",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-020",
+  "started_at": "2026-10-15T00:52:27.970889Z",
+  "started_ns": 1792025547970889000,
+  "elapsed_ms": 42.362,
+  "ttfb_ms": 42.093,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=p.l.c",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "p.l.c"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:27 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "78"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "27"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025558"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "p.l.c",
+        "results": [
+          {
+            "symbol": "BP.L",
+            "name": "BP p.l.c.",
+            "score": 0.8
+          }
+        ]
+      },
+      "size": 78
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

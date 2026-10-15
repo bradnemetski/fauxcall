@@ -1,0 +1,105 @@
+{
+  "id": "000194",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s-34",
+  "started_at": "2026-10-15T00:42:39.552443Z",
+  "started_ns": 1792024959552443000,
+  "elapsed_ms": 43.062,
+  "ttfb_ms": 42.905,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=micro",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "micro"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:42:39 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "157"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "10"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024961"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "micro",
+        "results": [
+          {
+            "symbol": "AMD",
+            "name": "Advanced Micro Devices, Inc.",
+            "score": 0.8
+          },
+          {
+            "symbol": "MSFT",
+            "name": "Microsoft Corporation",
+            "score": 0.6
+          }
+        ]
+      },
+      "size": 157
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

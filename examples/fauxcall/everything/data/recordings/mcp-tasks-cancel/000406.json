@@ -1,0 +1,120 @@
+{
+  "id": "000406",
+  "endpoint": "MCP tasks/cancel",
+  "purpose": "variation",
+  "plan_call": "rl-cancel",
+  "started_at": "2026-10-15T00:58:35.458755Z",
+  "started_ns": 1792025915458755000,
+  "elapsed_ms": 5.08,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 10,
+        "method": "tasks/cancel",
+        "params": {
+          "taskId": "101c52e2404ec30a7cb4ce96515d9318"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:58:35 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "_meta": {},
+          "taskId": "101c52e2404ec30a7cb4ce96515d9318",
+          "status": "cancelled",
+          "ttl": 300000,
+          "createdAt": "2026-10-15T00:58:34.961Z",
+          "lastUpdatedAt": "2026-10-15T00:58:35.462Z",
+          "pollInterval": 1000,
+          "statusMessage": "Client cancelled task execution."
+        },
+        "jsonrpc": "2.0",
+        "id": 10
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.81,
+      "kind": "sse",
+      "event": "message",
+      "id": "bbf5f4f8-fab4-4b43-8fcb-dfe8b1610c8d",
+      "data": "{\"result\":{\"_meta\":{},\"taskId\":\"101c52e2404ec30a7cb4ce96515d9318\",\"status\":\"cancelled\",\"ttl\":300000,\"createdAt\":\"2026-10-15T00:58:34.961Z\",\"lastUpdatedAt\":\"2026-10-15T00:58:35.462Z\",\"pollInterval\":1000,\"statusMessage\":\"Client cancelled task execution.\"},\"jsonrpc\":\"2.0\",\"id\":10}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

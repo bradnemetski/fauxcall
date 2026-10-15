@@ -1,14 +1,15 @@
-"""Custom behavior of the refapi fake: yours to edit, ``fauxcall scaffold`` never overwrites it.
+"""Custom behavior of the FauxCall Reference Market API fake.
 
-Every rule here was observed in ``data/recordings`` (exchange ids in the comments) unless a comment
-says it comes from the documentation. All endpoints read and write the one consistent world
-(``ctx.world``), so a ticker's exchange exists, a watchlist only holds real symbols and an upload is
-visible to its status, list and content endpoints.
+The real API validates in a precise order with its own messages, matches codes and symbols
+case-insensitively and computes several answers (quotes from exchange calendars, search scores,
+upload states from elapsed time), so most ``/v1`` endpoints are implemented here on top of the
+world (``ctx.world``), the model's error templates (``ctx.error(..., template=...)``) and its
+calendars. Every rule below comes from a recording; the exchange ids in comments are evidence.
 
-Validation order follows the real server: its framework validates declared parameters first (in
-declaration order: missing, then type/range), then the application checks existence (unknown
-exchange, sector, cursor or symbol). Writes with the read-only key are rejected before anything
-else.
+The generic engine still does what surrounds every call: authentication (``X-API-Key``,
+read-only and revoked keys), the per-key rate limit and its headers, routing errors, latency.
+Validation helpers raise :class:`EarlyResponse` with the real API's error, which the runtime
+answers as is.
 """
 
 from __future__ import annotations
@@ -20,22 +21,25 @@ import re
 import uuid
 from datetime import UTC, datetime
 from decimal import ROUND_HALF_UP, Decimal
-from functools import cache
 from typing import TYPE_CHECKING, Final, cast
 
-from fastapi import APIRouter, Request, Response
-from fauxcall.runtime import runtime_of
+from fauxcall.runtime import EarlyResponse
+from pydantic import TypeAdapter, ValidationError
 from starlette.datastructures import UploadFile
+from starlette.exceptions import HTTPException
+from starlette.formparsers import MultiPartException
 from starlette.responses import StreamingResponse
+from starlette.websockets import WebSocketDisconnect
 
 if TYPE_CHECKING:
-    from collections.abc import AsyncIterator, Awaitable, Callable, Sequence
-    from pathlib import Path
+    from collections.abc import AsyncIterator, Awaitable, Callable
 
-    from fastapi import WebSocket
+    from fastapi import Response, WebSocket
+    from fauxcall.model.errors import ErrorCondition
+    from fauxcall.model.world import WorldRecord
     from fauxcall.runtime import RequestContext
     from fauxcall.types import JsonObject, JsonValue
-    from fauxcall.world.store import SessionWorld
+    from starlette.requests import Request
 
 HANDLERS: dict[str, Callable[[RequestContext], Awaitable[Response]]] = {}
 """Endpoint id -> custom HTTP handler."""
@@ -46,712 +50,746 @@ WEBSOCKET_HANDLERS: dict[str, Callable[[WebSocket, RequestContext], Awaitable[No
 TOOL_HANDLERS: dict[str, Callable[[RequestContext, JsonObject], Awaitable[JsonValue]]] = {}
 """MCP tool name -> custom tool handler (tools whose behavior is ``computed``)."""
 
+METHOD_HANDLERS: dict[str, Callable[[RequestContext, JsonObject], Awaitable[JsonValue]]] = {}
+"""MCP method -> custom handler of its params (``None``: the recordings answer)."""
+
 NS: Final = 1_000_000_000
-MS: Final = 1_000_000
-READ_ONLY_USER: Final = "readonly"
-"""Identity name of the ``readonly-key`` user (see ``fauxcall.toml``): GET only."""
+QUOTE_LAG_NS: Final = 1_500_000_000  # as_of = now - 1.5 s while open (000047-000058)
+MAX_UPLOAD: Final = 1_048_576  # 1 MiB accepted (000437), one byte more refused (000438)
+QUEUED_S: Final = 2.0  # upload states (000370-000384, 000405-000414)
+PROCESSING_S: Final = 6.0
+FIRST_TRADE_S: Final = 0.05  # SSE: first event ~55 ms after the request (000468)
+TRADE_SPACING_S: Final = 0.2  # then 200 ms apart
+WS_ROUNDS: Final = 5  # WebSocket: 5 rounds of quotes, ~252 ms apart (000485, 000733)
+WS_SPACING_S: Final = 0.25
+TRADES: Final = "GET /v1/stream/trades"
+FORM_TYPES: Final = ("multipart/form-data", "application/x-www-form-urlencoded")  # 000807
 
-# -- shared helpers ----------------------------------------------------------------------------
+
+# -- helpers --------------------------------------------------------------------------------------
 
 
-def api_error(
+def _fail(  # noqa: PLR0913 - mirrors ctx.error's keywords
     ctx: RequestContext,
-    status: int,
-    code: str,
-    message: str,
+    condition: ErrorCondition,
+    template: str,
     *,
     param: str | None = None,
-) -> Response:
-    """The real error envelope: ``{"error": {code, message, request_id[, param]}}``."""
-    error: dict[str, JsonValue] = {"code": code, "message": message, "request_id": _uuid4(ctx)}
-    if param is not None:
-        error["param"] = param
-    return ctx.respond({"error": error}, status=status)
-
-
-def _uuid4(ctx: RequestContext) -> str:
-    """A UUID4 from the request's seeded generator (reproducible per session and request)."""
-    return str(uuid.UUID(int=ctx.rng.getrandbits(128), version=4))
+    value: JsonValue = None,
+    values: dict[str, JsonValue] | None = None,
+) -> EarlyResponse:
+    """The real API's error for this request, to ``raise``."""
+    return EarlyResponse(
+        ctx.error(condition, template=template, param=param, value=value, values=values)
+    )
 
 
 def _last(ctx: RequestContext, name: str) -> str | None:
-    """The last value of a query parameter (the real API lets the last repetition win)."""
+    """A query parameter's last value: the real API reads repeated parameters that way (000124)."""
     values = ctx.request.query_params.getlist(name)
     return values[-1] if values else None
 
 
-_ZERO_FRACTION: Final = re.compile(r"(\s*[+-]?[0-9_]+)\.0*\s*")
+_INTEGER: Final = TypeAdapter(int)
 
 
-def lax_int(text: str) -> int | None:
-    """Parse an integer the way the real API's validator does, or ``None``.
+def _int(text: str) -> int | None:
+    """An integer as the real API's validation (Pydantic, lax) parses it.
 
-    Accepts surrounding whitespace, a sign, leading zeros, ``_`` separators and a zero fraction
-    (``" 5"``, ``"+5"``, ``"05"``, ``"1_001"``, ``"1001.0"``: 000087-000089, 000475, 000717);
-    rejects ``""``, ``"2.5"``, ``"1e3"``, ``"inf"`` (000064, 000065, 000713, 000714, 000718).
+    '05', '+5', ' 5' and '7.0' are integers (000695-000697; '7.0' -> id 7, seen in parity);
+    '1.5', '1e1' and '' are not (000137, 000698, 000128).
     """
-    zero = _ZERO_FRACTION.fullmatch(text)
-    candidate = zero.group(1) if zero else text
     try:
-        return int(candidate)
-    except ValueError:
+        return _INTEGER.validate_python(text)
+    except ValidationError:
         return None
 
 
-def iso_ms_z(ns: int) -> str:
-    """``2026-10-11T06:22:38.613Z`` (watchlists, trades)."""
-    moment = datetime.fromtimestamp(ns // NS, tz=UTC)
-    return f"{moment:%Y-%m-%dT%H:%M:%S}.{(ns % NS) // MS:03d}Z"
+def _bounded(ctx: RequestContext, name: str, default: int, upper: int, template: str) -> int:
+    """An optional integer query parameter between 1 and ``upper`` (else the template's 400)."""
+    raw = _last(ctx, name)
+    if raw is None:
+        return default
+    parsed = _int(raw)
+    if parsed is None or not 1 <= parsed <= upper:
+        raise _fail(ctx, "invalid_param", template, param=name, value=raw)
+    return parsed
 
 
-def iso_us_z(ns: int) -> str:
-    """``2026-10-09T20:00:00.000000Z`` (quote ``as_of``)."""
-    moment = datetime.fromtimestamp(ns // NS, tz=UTC)
-    return f"{moment:%Y-%m-%dT%H:%M:%S}.{(ns % NS) // 1000:06d}Z"
+def _iso_z(ns: int, digits: int) -> str:
+    """UTC instant as ``YYYY-MM-DDTHH:MM:SS.fff…Z`` (fraction truncated to ``digits``)."""
+    seconds, rest = divmod(ns, NS)
+    stamp = datetime.fromtimestamp(seconds, UTC).strftime("%Y-%m-%dT%H:%M:%S")
+    return f"{stamp}.{rest:09d}"[: len(stamp) + 1 + digits] + "Z"
 
 
-def python_isoformat(ns: int) -> str:
-    """Python ``datetime.isoformat()`` of a UTC instant (uploads: ``…:11.465149+00:00``)."""
-    moment = datetime.fromtimestamp(ns // NS, tz=UTC).replace(microsecond=(ns % NS) // 1000)
-    return moment.isoformat()
+def _isoformat(us: int) -> str:
+    """Python ``datetime.isoformat()`` of a UTC instant in microseconds (uploads' timestamps)."""
+    seconds, micros = divmod(us, 1_000_000)
+    return datetime.fromtimestamp(seconds, UTC).replace(microsecond=micros).isoformat()
 
 
-def parse_isoformat_ns(text: str) -> int:
-    """Inverse of :func:`python_isoformat` (microsecond precision)."""
+def _parse_isoformat_us(text: str) -> int:
     moment = datetime.fromisoformat(text)
-    seconds = int(moment.replace(microsecond=0).timestamp())
-    return seconds * NS + moment.microsecond * 1000
+    whole = int(moment.replace(microsecond=0).timestamp())
+    return whole * 1_000_000 + moment.microsecond
 
 
-def _record(world: SessionWorld, collection: str, key: JsonValue) -> JsonObject | None:
-    found = world.get(collection, key)
-    if found is None or not isinstance(found.record, dict):
-        return None
-    return found.record
+def _live_ns(ctx: RequestContext) -> int:
+    """The fake clock now (not the request's start), for events sent later in a stream."""
+    return ctx.runtime.clocks.for_session(ctx.session).now_ns()
 
 
-def _records(world: SessionWorld, collection: str) -> list[JsonObject]:
-    return [r.record for r in world.list(collection) if isinstance(r.record, dict)]
+def _plain(record: WorldRecord) -> JsonObject:
+    value = record.record
+    assert isinstance(value, dict)  # noqa: S101 - every collection holds objects
+    return dict(value)
 
 
-def _read_only(ctx: RequestContext) -> Response | None:
-    """403 ``read_only_key`` for writes with the read-only key (000465, 000499, 000501, 000675)."""
-    if ctx.identity is not None and ctx.identity.name == READ_ONLY_USER:
-        method = ctx.request.scope.get("method", "POST")
-        return api_error(
-            ctx,
-            403,
-            "read_only_key",
-            f"This API key is read-only; {method} requests are not allowed.",
-        )
-    return None
+def _find(ctx: RequestContext, collection: str, key: JsonValue) -> JsonObject | None:
+    record = ctx.world.get(collection, key)
+    return None if record is None else _plain(record)
 
 
-def _invalid(ctx: RequestContext, param: str, rule: str) -> Response:
-    return api_error(
-        ctx,
-        400,
-        "invalid_parameter",
-        f"Invalid value for parameter '{param}': {rule}.",
-        param=param,
-    )
+def _require(ctx: RequestContext, collection: str, key: str) -> JsonObject:
+    """A record that must exist (the relations keep quotes and tickers consistent)."""
+    record = _find(ctx, collection, key)
+    assert record is not None  # noqa: S101 - quote_ticker / ticker_exchange relations
+    return record
 
 
-def _missing(ctx: RequestContext, param: str) -> Response:
-    return api_error(
-        ctx, 400, "missing_parameter", f"Missing required parameter '{param}'.", param=param
-    )
+def _dumps(value: JsonValue) -> str:
+    """Compact JSON, as the real API writes it."""
+    return json.dumps(value, separators=(",", ":"), ensure_ascii=False)
 
 
-# -- exchanges ---------------------------------------------------------------------------------
+# -- exchanges and tickers ------------------------------------------------------------------------
 
 
 async def get_exchange(ctx: RequestContext) -> Response:
-    """One exchange, case-insensitive; 404 echoes the upper-cased code (000022-000027)."""
+    """One exchange; the code is case-insensitive and echoed upper-cased in the 404 (000706)."""
     code = (ctx.path_param("code") or "").upper()
-    record = _record(ctx.world, "exchanges", code)
+    record = ctx.world.get("exchanges", code)
     if record is None:
-        return api_error(ctx, 404, "exchange_not_found", f"No exchange with code '{code}'.")
-    return ctx.respond(record)
-
-
-# -- tickers -----------------------------------------------------------------------------------
-
-
-def _ticker(ctx: RequestContext, raw: str) -> JsonObject | None:
-    return _record(ctx.world, "tickers", raw.upper())
-
-
-def _ticker_not_found(ctx: RequestContext, symbol: str) -> Response:
-    return api_error(ctx, 404, "ticker_not_found", f"No ticker with symbol '{symbol}'.")
-
-
-def encode_cursor(symbol: str) -> str:
-    """Unpadded base64url of the compact JSON ``{"after":"<symbol>"}`` (000034-000039)."""
-    raw = json.dumps({"after": symbol}, separators=(",", ":")).encode()
-    return base64.urlsafe_b64encode(raw).decode().rstrip("=")
-
-
-def decode_cursor(token: str) -> str | None:
-    """The ``after`` symbol of a cursor, or ``None`` when it is malformed.
-
-    Padding, standard-alphabet base64, JSON whitespace and extra keys are tolerated
-    (000070, 000084-000086); ``after`` must be a string (000082, 000083, 000072).
-    """
-    padded = token + "=" * (-len(token) % 4)
-    try:
-        document = json.loads(base64.urlsafe_b64decode(padded))
-    except (binascii.Error, UnicodeDecodeError, ValueError):
-        return None
-    after = document.get("after") if isinstance(document, dict) else None
-    return after if isinstance(after, str) else None
-
-
-async def list_tickers(ctx: RequestContext) -> Response:
-    """Filtered, cursor-paginated tickers sorted by symbol (000031-000098)."""
-    limit = 20
-    limit_raw = _last(ctx, "limit")
-    if limit_raw is not None:
-        parsed = lax_int(limit_raw)
-        if parsed is None or not 1 <= parsed <= 100:  # noqa: PLR2004
-            return _invalid(ctx, "limit", "must be an integer between 1 and 100")
-        limit = parsed
-    tickers = sorted(_records(ctx.world, "tickers"), key=lambda t: str(t["symbol"]))
-    exchange = _last(ctx, "exchange")
-    if exchange:
-        if _record(ctx.world, "exchanges", exchange.upper()) is None:
-            return api_error(
-                ctx,
-                400,
-                "invalid_parameter",
-                f"Unknown exchange '{exchange}'.",
-                param="exchange",
-            )
-        tickers = [t for t in tickers if str(t["exchange"]) == exchange.upper()]
-    sector = _last(ctx, "sector")
-    if sector:
-        sectors = {str(t["sector"]).lower() for t in _records(ctx.world, "tickers")}
-        if sector.lower() not in sectors:
-            return api_error(
-                ctx, 400, "invalid_parameter", f"Unknown sector '{sector}'.", param="sector"
-            )
-        tickers = [t for t in tickers if str(t["sector"]).lower() == sector.lower()]
-    total = len(tickers)
-    cursor = _last(ctx, "cursor")
-    if cursor:
-        after = decode_cursor(cursor)
-        if after is None or _ticker(ctx, after) is None:
-            return api_error(
-                ctx, 400, "invalid_cursor", "Invalid or unknown cursor.", param="cursor"
-            )
-        # A symbol the filters exclude still marks a place in the sorted list (000080).
-        tickers = [t for t in tickers if str(t["symbol"]) > after.upper()]
-    page = tickers[:limit]
-    next_cursor = encode_cursor(str(page[-1]["symbol"])) if len(tickers) > limit else None
-    return ctx.respond({"data": list(page), "next_cursor": next_cursor, "total": total})
+        return ctx.error("not_found", template="exchange_not_found", value=code)
+    return ctx.respond(ctx.render_record(record))
 
 
 async def get_ticker(ctx: RequestContext) -> Response:
-    """One ticker, case-insensitive; any unknown symbol is a 404 (000100-000122)."""
-    raw = ctx.path_param("symbol") or ""
-    record = _ticker(ctx, raw)
+    """One ticker; the symbol is case-insensitive and echoed upper-cased in the 404 (000707)."""
+    symbol = (ctx.path_param("symbol") or "").upper()
+    record = ctx.world.get("tickers", symbol)
     if record is None:
-        return _ticker_not_found(ctx, raw.upper())
-    return ctx.respond(record)
+        return ctx.error("not_found", template="ticker_not_found", value=symbol)
+    return ctx.respond(ctx.render_record(record))
 
 
-# -- quotes ------------------------------------------------------------------------------------
+def _encode_cursor(symbol: str) -> str:
+    raw = json.dumps({"after": symbol}, separators=(",", ":")).encode()
+    return base64.urlsafe_b64encode(raw).rstrip(b"=").decode()
 
-QUOTE_LAG_NS: Final = 1_500_000_000
-"""While the market is open ``as_of`` is now - 1.5 s (QuoteOut.as_of documentation)."""
+
+def _decode_cursor(text: str) -> str | None:
+    """The cursor's ``after`` symbol; padding and JSON spacing are tolerated (000685, 000688)."""
+    try:
+        decoded = base64.urlsafe_b64decode((text + "=" * (-len(text) % 4)).encode("ascii"))
+        value = json.loads(decoded)
+    except (ValueError, binascii.Error, UnicodeError):
+        return None
+    after = value.get("after") if isinstance(value, dict) else None
+    return after if isinstance(after, str) else None
+
+
+def _cursor_symbol(ctx: RequestContext) -> str | None:
+    """The symbol to continue after: it must name a ticker, in any case (000139, 000684)."""
+    raw = _last(ctx, "cursor") or None  # an empty cursor is ignored (000127)
+    if raw is None:
+        return None
+    decoded = _decode_cursor(raw)
+    after = decoded.upper() if decoded is not None else None
+    if after is None or ctx.world.get("tickers", after) is None:
+        raise _fail(ctx, "invalid_param", "invalid_cursor", param="cursor")
+    return after
+
+
+async def list_tickers(ctx: RequestContext) -> Response:
+    """Tickers by symbol; checks limit > exchange > sector > cursor (000142, 000677-000680)."""
+    limit = _bounded(ctx, "limit", 20, 100, "invalid_limit")
+    exchange = _last(ctx, "exchange") or None  # empty filters are ignored (000125, 000126)
+    if exchange is not None and ctx.world.get("exchanges", exchange.upper()) is None:
+        raise _fail(ctx, "invalid_param", "unknown_exchange", param="exchange", value=exchange)
+    tickers = sorted(map(_plain, ctx.world.list("tickers")), key=lambda t: str(t["symbol"]))
+    sector = _last(ctx, "sector") or None
+    if sector is not None and sector.lower() not in {str(t["sector"]).lower() for t in tickers}:
+        raise _fail(ctx, "invalid_param", "unknown_sector", param="sector", value=sector)
+    after = _cursor_symbol(ctx)
+    matches = [
+        ticker
+        for ticker in tickers
+        if (exchange is None or ticker["exchange"] == exchange.upper())
+        and (sector is None or str(ticker["sector"]).lower() == sector.lower())
+    ]
+    rest = [ticker for ticker in matches if after is None or str(ticker["symbol"]) > after]
+    page = rest[:limit]
+    body: JsonObject = {
+        "data": list(page),
+        "next_cursor": _encode_cursor(str(page[-1]["symbol"])) if len(rest) > limit else None,
+        "total": len(matches),
+    }
+    return ctx.respond(body)
+
+
+# -- quotes ---------------------------------------------------------------------------------------
+
+
+def quote_state(ctx: RequestContext, exchange: str, now_ns: int) -> tuple[str, str]:
+    """``(market_state, as_of)``: now - 1.5 s while the exchange is open, else its last close."""
+    calendar = ctx.calendar(exchange)
+    if calendar.is_open(now_ns):
+        return "open", _iso_z(now_ns - QUOTE_LAG_NS, 6)
+    last_close = calendar.last_close(now_ns)
+    return "closed", _iso_z(last_close if last_close is not None else now_ns, 6)
 
 
 async def get_quote(ctx: RequestContext) -> Response:
-    """Static price; ``market_state``/``as_of`` follow the exchange's sessions (000127-000199)."""
-    raw = ctx.path_param("symbol") or ""
-    ticker = _ticker(ctx, raw)
-    if ticker is None:
-        return _ticker_not_found(ctx, raw.upper())
-    symbol = str(ticker["symbol"])
-    quote = _record(ctx.world, "quotes", symbol) or {}
-    state, as_of = market_state(ctx, ticker, ctx.now_ns)
-    return ctx.respond(
-        {
-            "symbol": symbol,
-            "price": quote.get("price"),
-            "currency": quote.get("currency", ticker["currency"]),
-            "market_state": state,
-            "as_of": iso_us_z(as_of),
-        }
-    )
+    """The ticker's static price; market_state/as_of follow its exchange's sessions."""
+    symbol = (ctx.path_param("symbol") or "").upper()
+    ticker, quote = _find(ctx, "tickers", symbol), _find(ctx, "quotes", symbol)
+    if ticker is None or quote is None:
+        return ctx.error("not_found", template="ticker_not_found", value=symbol)
+    state, as_of = quote_state(ctx, str(ticker["exchange"]), ctx.now_ns)
+    body: JsonObject = {
+        "symbol": symbol,
+        "price": quote["price"],
+        "currency": quote["currency"],
+        "market_state": state,
+        "as_of": as_of,
+    }
+    return ctx.respond(body)
 
 
-def market_state(ctx: RequestContext, ticker: JsonObject, now_ns: int) -> tuple[str, int]:
-    """``open``/``closed`` and the quote's ``as_of`` instant at ``now_ns`` (exchange sessions)."""
-    calendar = ctx.calendar(str(ticker["exchange"]))
-    if calendar.is_open(now_ns):
-        return "open", now_ns - QUOTE_LAG_NS
-    return "closed", calendar.last_close(now_ns) or now_ns
+# -- search ---------------------------------------------------------------------------------------
 
-
-def quote_currency_invariant(world: SessionWorld) -> list[str]:
-    """Every quote is priced in its ticker's currency."""
-    problems = []
-    for quote in _records(world, "quotes"):
-        ticker = _record(world, "tickers", quote["symbol"])
-        if ticker is not None and ticker["currency"] != quote["currency"]:
-            problems.append(f"{quote['symbol']}: {quote['currency']} != {ticker['currency']}")
-    return problems
-
-
-# -- time --------------------------------------------------------------------------------------
-
-
-async def server_time(ctx: RequestContext) -> Response:
-    """Now: 7 fraction digits, the last always 0, and ``unix_ms`` (000200-000214)."""
-    ns = ctx.now_ns
-    moment = datetime.fromtimestamp(ns // NS, tz=UTC)
-    micros = (ns % NS) // 1000
-    return ctx.respond(
-        {
-            "utc": f"{moment:%Y-%m-%dT%H:%M:%S}.{micros:06d}0Z",
-            "unix_ms": ns // MS,
-            "zone": "UTC",
-        }
-    )
-
-
-# -- search ------------------------------------------------------------------------------------
-
-SECTOR_SYNONYMS: Final[dict[str, frozenset[str]]] = {
-    # Every word observed to match a whole sector at score 0.5 (search, search-2 recordings),
-    # in addition to the sector name's own tokens.
-    "Technology": frozenset({"tech", "software", "cloud"}),
-    "Financials": frozenset({"bank", "banks", "banking", "finance", "fintech", "payments"}),
-    "Automotive": frozenset({"auto", "automaker", "car", "cars", "ev", "vehicle", "vehicles"}),
-    "Semiconductors": frozenset({"chip", "chips", "semiconductor", "semis"}),
-    "Energy": frozenset({"gas", "oil", "petroleum"}),
-    "Healthcare": frozenset({"biotech", "drug", "drugs", "medicine", "pharma"}),
-    "Communication Services": frozenset({"media", "social", "streaming", "telecom"}),
-    "Industrials": frozenset({"aerospace", "aircraft", "machinery"}),
-    "Consumer Discretionary": frozenset({"ecommerce", "luxury", "retail"}),
-    "Consumer Staples": frozenset({"beverage", "beverages", "food", "grocery"}),
-}
 _TOKEN: Final = re.compile(r"[a-z0-9]+")
-SYMBOL_EXACT: Final = Decimal("1.0")
-SYMBOL_PREFIX: Final = Decimal("0.9")
-NAME_EXACT: Final = Decimal("0.8")
-NAME_PREFIX: Final = Decimal("0.6")
-SECTOR: Final = Decimal("0.5")
+
+SYNONYMS: Final[dict[str, str]] = {
+    # Every entry was observed to score 0.5 on the whole sector (06-search, 15-search-2);
+    # words recorded with no sector match (e.g. 'financial', 'hardware', 'trucks') are absent.
+    "tech": "Technology",
+    "software": "Technology",
+    "cloud": "Technology",
+    "chip": "Semiconductors",
+    "chips": "Semiconductors",
+    "semis": "Semiconductors",
+    "chipmaker": "Semiconductors",
+    "semiconductor": "Semiconductors",
+    "car": "Automotive",
+    "cars": "Automotive",
+    "auto": "Automotive",
+    "autos": "Automotive",
+    "ev": "Automotive",
+    "vehicle": "Automotive",
+    "vehicles": "Automotive",
+    "bank": "Financials",
+    "banks": "Financials",
+    "banking": "Financials",
+    "finance": "Financials",
+    "payments": "Financials",
+    "fintech": "Financials",
+    "pharma": "Healthcare",
+    "biotech": "Healthcare",
+    "drugs": "Healthcare",
+    "medicine": "Healthcare",
+    "media": "Communication Services",
+    "telecom": "Communication Services",
+    "streaming": "Communication Services",
+    "social": "Communication Services",
+    "oil": "Energy",
+    "gas": "Energy",
+    "petroleum": "Energy",
+    "retail": "Consumer Discretionary",
+    "luxury": "Consumer Discretionary",
+    "ecommerce": "Consumer Discretionary",
+    "food": "Consumer Staples",
+    "beverages": "Consumer Staples",
+    "aerospace": "Industrials",
+    "machinery": "Industrials",
+}
+SYMBOL_EXACT: Final = Decimal("1.0")  # 'aapl', '0700' (base of 0700.HK), 'v ' (000162, 000202)
+SYMBOL_PREFIX: Final = Decimal("0.9")  # >= 2 chars: 'ai' -> AIR.PA, 'ts' -> TSLA/TSM (000221)
+NAME_TOKEN: Final = Decimal("0.8")  # 'apple', 'corp', 't' of 'Moët' (000188, 000203)
+NAME_PREFIX: Final = Decimal("0.6")  # >= 3 chars: 'app', 'micro', 'motor' -> Motors
+SECTOR: Final = Decimal("0.5")  # a token of the sector's name, or a synonym
+MIN_SYMBOL_PREFIX: Final = 2
+MIN_NAME_PREFIX: Final = 3
 MAX_RESULTS: Final = 10
 
 
 def tokens(text: str) -> list[str]:
-    """Lower-cased ASCII alphanumeric runs (``"Moët"`` -> ``["mo", "t"]``)."""
+    """Lower-case ASCII alphanumeric runs ('Moët' -> ['mo', 't'], 'p.l.c' -> ['p', 'l', 'c'])."""
     return _TOKEN.findall(text.lower())
 
 
-def token_score(token: str, ticker: JsonObject) -> Decimal:
-    """The best way one query token matches one ticker."""
-    root = str(ticker["symbol"]).split(".", 1)[0].lower()
-    if token == root:
-        return SYMBOL_EXACT
-    if len(token) >= 2 and root.startswith(token):  # noqa: PLR2004 - 'nv', 'ms' (search-2)
-        return SYMBOL_PREFIX
-    name = tokens(str(ticker["name"]))
-    if token in name:
-        return NAME_EXACT
-    if len(token) >= 3 and any(word.startswith(token) for word in name):  # noqa: PLR2004
-        return NAME_PREFIX
+def _token_score(token: str, ticker: JsonObject) -> Decimal:
+    base = str(ticker["symbol"]).split(".", maxsplit=1)[0].lower()
+    names = tokens(str(ticker["name"]))
     sector = str(ticker["sector"])
-    if token in tokens(sector) or token in SECTOR_SYNONYMS.get(sector, frozenset()):
+    if token == base:
+        return SYMBOL_EXACT
+    if len(token) >= MIN_SYMBOL_PREFIX and base.startswith(token):
+        return SYMBOL_PREFIX
+    if token in names:
+        return NAME_TOKEN
+    if len(token) >= MIN_NAME_PREFIX and any(name.startswith(token) for name in names):
+        return NAME_PREFIX
+    if token in tokens(sector) or SYNONYMS.get(token) == sector:
         return SECTOR
     return Decimal(0)
 
 
 def score(query: str, ticker: JsonObject) -> Decimal:
-    """Mean token score (repeated tokens count again), rounded half-up to 3 decimals."""
+    """Mean of the query tokens' best matches, rounded half-up to 3 decimals."""
     words = tokens(query)
     if not words:
         return Decimal(0)
-    total = sum((token_score(word, ticker) for word in words), Decimal(0))
+    total = sum((_token_score(word, ticker) for word in words), Decimal(0))
     return (total / len(words)).quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)
 
 
 async def search(ctx: RequestContext) -> Response:
-    """Top 10 tickers by score, then symbol (000219-000297, search-2, search-3)."""
+    """Top 10 tickers by score (desc) then symbol; q must be 2-64 characters (000223-000227)."""
     query = _last(ctx, "q")
     if query is None:
-        return _missing(ctx, "q")
-    if not 2 <= len(query) <= 64:  # noqa: PLR2004
-        return _invalid(ctx, "q", "must be a string of 2 to 64 characters")
-    scored = [(score(query, t), t) for t in _records(ctx.world, "tickers")]
-    hits = sorted(
-        ((s, t) for s, t in scored if s > 0), key=lambda pair: (-pair[0], str(pair[1]["symbol"]))
-    )
+        raise _fail(ctx, "missing_param", "missing_parameter", param="q")
+    if not 2 <= len(query) <= 64:  # noqa: PLR2004 - documented bounds
+        raise _fail(ctx, "invalid_param", "invalid_q", param="q", value=query)
+    hits = []
+    for ticker in map(_plain, ctx.world.list("tickers")):
+        value = score(query, ticker)
+        if value > 0:
+            hits.append((value, str(ticker["symbol"]), str(ticker["name"])))
+    hits.sort(key=lambda hit: (-hit[0], hit[1]))
     results: list[JsonValue] = [
-        {"symbol": t["symbol"], "name": t["name"], "score": float(s)} for s, t in hits[:MAX_RESULTS]
+        {"symbol": symbol, "name": name, "score": float(value)}
+        for value, symbol, name in hits[:MAX_RESULTS]
     ]
     return ctx.respond({"query": query, "results": results})
 
 
-# -- watchlists --------------------------------------------------------------------------------
-
-WATCHLIST_FIRST_ID: Final = 1001
-NAME_RULE: Final = "must be a string of 1 to 50 characters"
-SYMBOLS_RULE: Final = "must be an array of strings"
+# -- server time ----------------------------------------------------------------------------------
 
 
-def _watchlist_id(ctx: RequestContext) -> int | Response:
-    parsed = lax_int(ctx.path_param("id") or "")
+async def server_time(ctx: RequestContext) -> Response:
+    """The clock with microsecond precision written as 7 fraction digits (.NET style, 000081)."""
+    micros = ctx.now_ns // 1000
+    stamp = datetime.fromtimestamp(micros // 1_000_000, UTC).strftime("%Y-%m-%dT%H:%M:%S")
+    utc = f"{stamp}.{micros % 1_000_000:06d}0Z"
+    return ctx.respond({"utc": utc, "unix_ms": ctx.now_ns // 1_000_000, "zone": "UTC"})
+
+
+# -- watchlists -----------------------------------------------------------------------------------
+
+
+def _watchlist_id(ctx: RequestContext) -> int:
+    """The path id ('007' -> 7, '+5' -> 5, '7.0' -> 7; 'abc', '1.5' refused, 000262, 000265)."""
+    raw = ctx.path_param("id") or ""
+    parsed = _int(raw)
     if parsed is None:
-        return _invalid(ctx, "id", "must be an integer")
+        raise _fail(ctx, "invalid_param", "invalid_id", param="id", value=raw)
     return parsed
 
 
-def _json_object(ctx: RequestContext) -> JsonObject | Response:
-    """The request body as a JSON object (000461-000464, 000723)."""
-    if ctx.json_error:
-        return api_error(ctx, 400, "invalid_json", "Request body is not valid JSON.")
-    if not isinstance(ctx.json_body, dict):
-        return api_error(ctx, 400, "invalid_body", "Request body must be a JSON object.")
-    return ctx.json_body
+def _json_object(ctx: RequestContext) -> JsonObject:
+    """The body as a JSON object.
 
-
-def _name(ctx: RequestContext, body: JsonObject) -> str | Response:
-    value = body["name"]
-    if not isinstance(value, str) or not 1 <= len(value) <= 50:  # noqa: PLR2004
-        return _invalid(ctx, "name", NAME_RULE)
+    Any JSON media type (application/json, application/vnd.api+json, any case: 000800, 000801);
+    text/plain, forms, no type or an empty body are invalid_body (000256, 000720, 000797, 000799);
+    unparsable JSON is invalid_json (000255).
+    """
+    media = (ctx.header("content-type") or "").split(";")[0].strip().lower()
+    if "json" not in media or not ctx.body_bytes:
+        raise _fail(ctx, "invalid_body", "invalid_body")
+    try:
+        value = json.loads(ctx.body_bytes)
+    except (ValueError, UnicodeDecodeError):
+        raise _fail(ctx, "invalid_body", "invalid_json") from None
+    if not isinstance(value, dict):
+        raise _fail(ctx, "invalid_body", "invalid_body")
     return value
 
 
-def _symbols(ctx: RequestContext, body: JsonObject) -> list[str] | Response:
-    """Upper-cased, de-duplicated (first wins) known symbols (000445, 000448, 000468, 000469)."""
-    value = body["symbols"]
-    if not isinstance(value, list) or not all(isinstance(s, str) for s in value):
-        return _invalid(ctx, "symbols", SYMBOLS_RULE)
-    symbols: list[str] = []
-    for raw in value:
-        assert isinstance(raw, str)  # noqa: S101 - checked above (narrowing for mypy)
-        if _ticker(ctx, raw) is None:
-            return api_error(
-                ctx, 400, "unknown_symbol", f"Unknown symbol '{raw}'.", param="symbols"
-            )
-        if raw.upper() not in symbols:
-            symbols.append(raw.upper())
-    return symbols
+def _name(ctx: RequestContext, body: JsonObject) -> str:
+    """The required, 1-50 character name (missing: 000246; invalid: 000248-000251)."""
+    if "name" not in body:
+        raise _fail(ctx, "missing_param", "missing_parameter", param="name")
+    value = body["name"]
+    if not isinstance(value, str) or not 1 <= len(value) <= 50:  # noqa: PLR2004
+        raise _fail(ctx, "invalid_param", "invalid_name", param="name", value=value)
+    return value
 
 
-def _watchlist_fields(
-    ctx: RequestContext, body: JsonObject, *, required: tuple[str, ...]
-) -> JsonObject | Response:
-    """Validated ``name``/``symbols`` present in ``body`` (``required`` ones must be)."""
-    fields: JsonObject = {}
-    for field, check in (("name", _name), ("symbols", _symbols)):
-        if field not in body:
-            if field in required:
-                return _missing(ctx, field)
-            continue
-        value = check(ctx, body)
-        if isinstance(value, Response):
-            return value
-        fields[field] = cast("JsonValue", value)
-    return fields
+def _symbol_list(ctx: RequestContext, value: JsonValue) -> list[str]:
+    """An array of strings (null, a string or other items are refused, 000243, 000719)."""
+    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+        raise _fail(ctx, "invalid_param", "invalid_symbols", param="symbols")
+    return [str(item) for item in value]
 
 
-def _not_found_watchlist(ctx: RequestContext, key: int) -> Response:
-    return api_error(ctx, 404, "watchlist_not_found", f"No watchlist with id {key}.")
+def _canonical(ctx: RequestContext, symbols: list[str]) -> list[str]:
+    """Symbols upper-cased and de-duplicated in order; the first unknown one is refused."""
+    canonical: list[str] = []
+    for item in symbols:
+        if ctx.world.get("tickers", item.upper()) is None:  # raw value echoed (000242, 000718)
+            raise _fail(ctx, "missing_reference", "unknown_symbol", param="symbols", value=item)
+        if item.upper() not in canonical:
+            canonical.append(item.upper())
+    return canonical
+
+
+def _existing_watchlist(ctx: RequestContext, key: int) -> JsonObject:
+    record = _find(ctx, "watchlists", key)
+    if record is None:
+        raise _fail(ctx, "not_found", "watchlist_not_found", value=key)
+    return record
 
 
 async def list_watchlists(ctx: RequestContext) -> Response:
-    """Every watchlist, sorted by id (000442, 000447, 000500)."""
-    found = sorted(_records(ctx.world, "watchlists"), key=lambda w: int(str(w["id"])))
-    return ctx.respond(list(found))
+    """Every watchlist, by id (shared by all keys)."""
+    items: list[JsonValue] = [_plain(record) for record in ctx.world.list("watchlists")]
+    return ctx.respond(items)
 
 
 async def create_watchlist(ctx: RequestContext) -> Response:
-    """201 + Location; ids from 1001, never reused (000443-000469, 000506)."""
-    if (denied := _read_only(ctx)) is not None:
-        return denied
+    """201 with the stored record and a Location header; ids count up from 1001."""
     body = _json_object(ctx)
-    if isinstance(body, Response):
-        return body
-    fields = _watchlist_fields(ctx, body, required=("name",))
-    if isinstance(fields, Response):
-        return fields
-    key = ctx.runtime.next_counter(ctx.session, "watchlist_id", WATCHLIST_FIRST_ID, 1)
-    while ctx.world.get("watchlists", key) is not None:
-        key = ctx.runtime.next_counter(ctx.session, "watchlist_id", WATCHLIST_FIRST_ID, 1)
-    stamp = iso_ms_z(ctx.now_ns)
+    name = _name(ctx, body)
+    symbols = _canonical(ctx, _symbol_list(ctx, body["symbols"])) if "symbols" in body else []
+    now = _iso_z(ctx.now_ns, 3)
     record: JsonObject = {
-        "id": key,
-        "name": fields["name"],
-        "symbols": fields.get("symbols", []),
-        "created_at": stamp,
-        "updated_at": stamp,
+        "id": ctx.world.next_int_key("watchlists", start=1001),
+        "name": name,
+        "symbols": list(symbols),
+        "created_at": now,
+        "updated_at": now,
     }
+    if (refused := ctx.refuse_missing("watchlists", record)) is not None:
+        return refused
     ctx.world.insert("watchlists", record)
-    return ctx.respond(record, status=201, headers={"location": f"/v1/watchlists/{key}"})
+    return ctx.respond(record, headers={"location": f"/v1/watchlists/{record['id']}"})
 
 
 async def get_watchlist(ctx: RequestContext) -> Response:
-    """One watchlist (000444, 000470-000476)."""
-    key = _watchlist_id(ctx)
-    if isinstance(key, Response):
-        return key
-    record = _record(ctx.world, "watchlists", key)
-    return ctx.respond(record) if record is not None else _not_found_watchlist(ctx, key)
-
-
-async def _change_watchlist(ctx: RequestContext, *, required: tuple[str, ...]) -> Response:
-    """PUT/PATCH: read-only, id, body, then existence (000480-000498, 000719-000721)."""
-    if (denied := _read_only(ctx)) is not None:
-        return denied
-    key = _watchlist_id(ctx)
-    if isinstance(key, Response):
-        return key
-    body = _json_object(ctx)
-    if isinstance(body, Response):
-        return body
-    fields = _watchlist_fields(ctx, body, required=required)
-    if isinstance(fields, Response):
-        return fields
-    if _record(ctx.world, "watchlists", key) is None:
-        return _not_found_watchlist(ctx, key)
-    # updated_at moves on every successful change, even an empty PATCH (000493, 000498).
-    stored = ctx.world.update("watchlists", key, {**fields, "updated_at": iso_ms_z(ctx.now_ns)})
-    assert stored is not None  # noqa: S101 - existence checked above
-    return ctx.respond(stored.record)
+    """One watchlist."""
+    return ctx.respond(_existing_watchlist(ctx, _watchlist_id(ctx)))
 
 
 async def replace_watchlist(ctx: RequestContext) -> Response:
-    """PUT: both fields required."""
-    return await _change_watchlist(ctx, required=("name", "symbols"))
+    """Both fields required; checks: id > body > fields > existence > symbols (000275, 000803)."""
+    key = _watchlist_id(ctx)
+    body = _json_object(ctx)
+    name = _name(ctx, body)
+    if "symbols" not in body:
+        raise _fail(ctx, "missing_param", "missing_parameter", param="symbols")
+    requested = _symbol_list(ctx, body["symbols"])
+    record = _existing_watchlist(ctx, key)
+    symbols = _canonical(ctx, requested)
+    record.update({"name": name, "symbols": list(symbols), "updated_at": _iso_z(ctx.now_ns, 3)})
+    ctx.world.replace("watchlists", key, record)
+    return ctx.respond(record)
 
 
 async def update_watchlist(ctx: RequestContext) -> Response:
-    """PATCH: only the fields present (``symbols`` replaced, not appended)."""
-    return await _change_watchlist(ctx, required=())
+    """Only the fields present change; ``null`` is refused; ``{}`` still bumps updated_at."""
+    key = _watchlist_id(ctx)
+    body = _json_object(ctx)
+    changes: JsonObject = {}
+    if "name" in body:
+        changes["name"] = _name(ctx, body)
+    requested = _symbol_list(ctx, body["symbols"]) if "symbols" in body else None
+    record = _existing_watchlist(ctx, key)  # an unknown id beats an unknown symbol (000802)
+    if requested is not None:
+        changes["symbols"] = list(_canonical(ctx, requested))
+    record.update(changes)
+    record["updated_at"] = _iso_z(ctx.now_ns, 3)
+    ctx.world.replace("watchlists", key, record)
+    return ctx.respond(record)
 
 
 async def delete_watchlist(ctx: RequestContext) -> Response:
-    """204; deleting again is a 404 (000502-000505)."""
-    if (denied := _read_only(ctx)) is not None:
-        return denied
+    """204; a second delete is a 404 (000300)."""
     key = _watchlist_id(ctx)
-    if isinstance(key, Response):
-        return key
-    if not ctx.world.delete("watchlists", key):
-        return _not_found_watchlist(ctx, key)
+    _existing_watchlist(ctx, key)
+    if (refused := ctx.delete("watchlists", key)) is not None:
+        return refused
     return ctx.empty(204)
 
 
-# -- uploads -----------------------------------------------------------------------------------
-
-QUEUED_NS: Final = 2 * NS
-PROCESSING_NS: Final = 6 * NS
-MAX_UPLOAD_BYTES: Final = 1_048_576
-OUTCOME_FIELD: Final = "_outcome"
-"""Internal: the upload's terminal state, decided from its bytes at upload time (not served)."""
-_PUBLIC_ORDER: Final = (
-    "id",
-    "status",
-    "filename",
-    "size",
-    "label",
-    "created_at",
-    "progress",
-    "completed_at",
-    "error",
-)
+# -- uploads --------------------------------------------------------------------------------------
 
 
-def upload_view(record: JsonObject, now_ns: int) -> JsonObject:
-    """The upload as served at ``now_ns``: state derived from the time since creation.
-
-    queued for 2 s, processing for 6 s with ``progress`` = floor(elapsed / 6 s x 100), then the
-    terminal outcome with ``completed_at`` = created_at + 8 s (000516-000668).
-    """
-    created_ns = parse_isoformat_ns(str(record["created_at"]))
-    elapsed = now_ns - created_ns
-    view: JsonObject = {k: record[k] for k in _PUBLIC_ORDER[:6]}
-    if elapsed < QUEUED_NS:
-        view.update(status="queued", progress=0)
-    elif elapsed < QUEUED_NS + PROCESSING_NS:
-        view.update(status="processing", progress=(elapsed - QUEUED_NS) * 100 // PROCESSING_NS)
+def upload_view(ctx: RequestContext, record: WorldRecord) -> JsonObject:
+    """The upload as of the fake clock: queued 2 s, processing 6 s, then done or failed."""
+    upload = _plain(record)
+    created_us = _parse_isoformat_us(str(upload["created_at"]))
+    elapsed = (ctx.now_ns // 1000 - created_us) / 1_000_000
+    view: JsonObject = {key: upload[key] for key in ("id", "status", "filename", "size", "label")}
+    view["created_at"] = upload["created_at"]
+    if elapsed < QUEUED_S:
+        view["status"], view["progress"] = "queued", 0
+    elif elapsed < QUEUED_S + PROCESSING_S:
+        view["status"] = "processing"
+        view["progress"] = int((elapsed - QUEUED_S) / PROCESSING_S * 100)
     else:
-        outcome = str(record.get(OUTCOME_FIELD) or "done")
-        view.update(status=outcome, progress=100)
-        view["completed_at"] = python_isoformat(created_ns + QUEUED_NS + PROCESSING_NS)
-        if outcome == "failed":
+        blob = ctx.runtime.blob(ctx, "uploads", record.key)
+        failed = blob is not None and b"CORRUPT" in blob.content
+        view["status"], view["progress"] = ("failed" if failed else "done"), 100
+        view["completed_at"] = _isoformat(created_us + int((QUEUED_S + PROCESSING_S) * 1e6))
+        if failed:
             view["error"] = "corrupt_file"
-    return {k: view[k] for k in _PUBLIC_ORDER if k in view}
+    return view
 
 
-def _upload(ctx: RequestContext) -> tuple[str, JsonObject | None]:
-    key = ctx.path_param("id") or ""
-    return key, _record(ctx.world, "uploads", key)
+def _upload(ctx: RequestContext) -> WorldRecord:
+    """The upload named in the path: exact id match; malformed ids are not found (000445)."""
+    raw = ctx.path_param("id") or ""
+    record = ctx.world.get("uploads", raw)
+    if record is None:
+        raise _fail(ctx, "not_found", "upload_not_found", value=raw)
+    return record
 
 
-def _upload_not_found(ctx: RequestContext, key: str) -> Response:
-    return api_error(ctx, 404, "upload_not_found", f"No upload with id '{key}'.")
-
-
-def ascii_filename(name: str) -> str:
-    """Content-Disposition spelling: non-ASCII characters become ``_`` (000689)."""
-    return "".join(c if c.isascii() else "_" for c in name)
+async def _uploaded_file(ctx: RequestContext) -> tuple[UploadFile, str | None]:
+    """The multipart 'file' part and the optional 'label' ('' -> null, 000435)."""
+    media = (ctx.header("content-type") or "").lower()
+    if not media.startswith(FORM_TYPES):  # a JSON body or no body has no file (000441, 000442)
+        raise _fail(ctx, "missing_param", "missing_parameter", param="file")
+    try:
+        form = await cast("Request", ctx.request).form(max_part_size=MAX_UPLOAD * 2)
+    except (MultiPartException, HTTPException) as broken:  # 000838, 000839
+        message = getattr(broken, "message", None) or getattr(broken, "detail", "")
+        raise _fail(ctx, "invalid_body", "bad_request", value=str(message)) from None
+    field, label = form.get("file"), form.get("label")  # the last 'file' part wins (000808)
+    if field is None:
+        raise _fail(ctx, "missing_param", "missing_parameter", param="file")
+    if not isinstance(field, UploadFile) or not field.filename:  # text, no filename (000807/9)
+        raise _fail(ctx, "invalid_param", "invalid_file", param="file")
+    return field, (label if isinstance(label, str) and label else None)
 
 
 async def create_upload(ctx: RequestContext) -> Response:
-    """202 queued; processing outcome decided by the bytes (000516-000675, 000694-000698)."""
-    if (denied := _read_only(ctx)) is not None:
-        return denied
-    request = ctx.request
-    assert isinstance(request, Request)  # noqa: S101 - HTTP endpoint
-    form = await request.form()
-    parts = form.getlist("file")
-    if not parts:
-        return _missing(ctx, "file")
-    part = parts[-1]  # the last 'file' part wins (000695)
-    if not isinstance(part, UploadFile):
-        return _invalid(ctx, "file", "must be a file")
-    content = await part.read()
-    if len(content) > MAX_UPLOAD_BYTES:
-        return api_error(
-            ctx,
-            413,
-            "payload_too_large",
-            f"File exceeds the 1 MiB ({MAX_UPLOAD_BYTES} bytes) limit.",
-        )
-    labels = [v for v in form.getlist("label") if isinstance(v, str)]
-    content_type = part.content_type or "application/octet-stream"
-    key = _uuid4(ctx)
+    """202 queued; the processing outcome is decided by the bytes ('CORRUPT' fails)."""
+    upload, label = await _uploaded_file(ctx)
+    content = await upload.read()
+    if len(content) > MAX_UPLOAD:
+        raise _fail(ctx, "payload_too_large", "payload_too_large")
     record: JsonObject = {
-        "id": key,
+        "id": str(uuid.UUID(int=ctx.rng.getrandbits(128), version=4)),
         "status": "queued",
-        "filename": part.filename or "",
+        "filename": upload.filename or "",
         "size": len(content),
-        "label": labels[-1] if labels and labels[-1] else None,
-        "created_at": python_isoformat(ctx.now_ns),
+        "label": label,
+        "created_at": _isoformat(ctx.now_ns // 1000),
         "progress": 0,
-        # ASCII 'CORRUPT' anywhere in the bytes fails the job; case-sensitive (000536, 000620).
-        OUTCOME_FIELD: "failed" if b"CORRUPT" in content else "done",
     }
-    ctx.world.insert("uploads", record)
-    ctx.runtime.pending_blob(ctx, "file", content, content_type, part.filename)
-    ctx.runtime.commit_blob(ctx, "uploads", key)
-    return ctx.respond(upload_view(record, ctx.now_ns), status=202)
+    content_type = upload.content_type or "application/octet-stream"
+    ctx.runtime.pending_blob(ctx, "file", content, content_type, upload.filename)
+    stored = ctx.world.insert("uploads", record)
+    ctx.runtime.commit_blob(ctx, "uploads", stored.key)
+    return ctx.respond(upload_view(ctx, stored), status=202)
 
 
 async def list_uploads(ctx: RequestContext) -> Response:
-    """Every upload, newest first, each in its current state (000670, 000693)."""
-    found = _records(ctx.world, "uploads")
-    found.sort(key=lambda u: parse_isoformat_ns(str(u["created_at"])), reverse=True)
-    return ctx.respond([upload_view(u, ctx.now_ns) for u in found])
+    """Every upload, newest first, each in its current state."""
+    records = list(reversed(ctx.world.list("uploads")))
+    return ctx.respond([upload_view(ctx, record) for record in records])
 
 
 async def get_upload(ctx: RequestContext) -> Response:
-    """Current state; ids are matched exactly (000676-000678, 000692)."""
-    key, record = _upload(ctx)
-    if record is None:
-        return _upload_not_found(ctx, key)
-    return ctx.respond(upload_view(record, ctx.now_ns))
+    """An upload's current status, derived from the time since it was created."""
+    return ctx.respond(upload_view(ctx, _upload(ctx)))
 
 
 async def delete_upload(ctx: RequestContext) -> Response:
-    """204; the upload and its bytes are gone (000681-000686)."""
-    if (denied := _read_only(ctx)) is not None:
-        return denied
-    key, record = _upload(ctx)
-    if record is None:
-        return _upload_not_found(ctx, key)
-    ctx.world.delete("uploads", key)
-    ctx.runtime.drop_blob(ctx, "uploads", key)
+    """204 at any state (000448: deleted while queued)."""
+    record = _upload(ctx)
+    if (refused := ctx.delete("uploads", record.key)) is not None:
+        return refused
     return ctx.empty(204)
 
 
+def _ascii_filename(name: str) -> str:
+    """The filename as the real Content-Disposition spells it (000849).
+
+    Non-ASCII characters become '_' and double quotes '%22': 'résumé %22q%22.txt' is sent as
+    'r_sum_ %22q%22.txt'.
+    """
+    return "".join("_" if not char.isascii() else "%22" if char == '"' else char for char in name)
+
+
 async def download_upload(ctx: RequestContext) -> Response:
-    """The original bytes once done, else 409 not_ready (000518, 000533, 000552, 000689-000691)."""
-    key, record = _upload(ctx)
-    if record is None:
-        return _upload_not_found(ctx, key)
-    status = str(upload_view(record, ctx.now_ns)["status"])
-    if status != "done":
-        return api_error(
-            ctx,
-            409,
-            "not_ready",
-            f"Upload '{key}' is {status}; content is available only when status is done.",
-        )
-    blob = ctx.runtime.blob(ctx, "uploads", key)
+    """The original bytes once done; else 409 naming the current status (000386, 000404)."""
+    record = _upload(ctx)
+    view = upload_view(ctx, record)
+    if view["status"] != "done":
+        state: dict[str, JsonValue] = {"state": view["status"]}
+        raise _fail(ctx, "conflict", "not_ready", value=view["id"], values=state)
+    blob = ctx.runtime.blob(ctx, "uploads", record.key)
     content = blob.content if blob is not None else b""
-    content_type = (blob.content_type if blob else None) or "application/octet-stream"
-    disposition = f'attachment; filename="{ascii_filename(str(record["filename"]))}"'
+    content_type = (blob.content_type if blob is not None else None) or "application/octet-stream"
+    disposition = f'attachment; filename="{_ascii_filename(str(view["filename"]))}"'
     return ctx.respond_bytes(
-        content,
-        status=200,
-        content_type=content_type,
-        headers={"content-disposition": disposition},
+        content, content_type=content_type, headers={"content-disposition": disposition}
     )
 
 
-# -- trade stream ------------------------------------------------------------------------------
+# -- streams --------------------------------------------------------------------------------------
 
-TRADE_SPACING_S: Final = 0.2
-"""Events are 200 ms apart (documentation; ~202 ms observed in every session)."""
+_WALKS: dict[str, list[tuple[str, int]]] = {}
 
 
-@cache
-def trade_walks(data_dir: Path) -> dict[str, list[tuple[str, int]]]:
-    """Recorded walk of every symbol (``scripts/build_trade_walks.py``)."""
-    path = data_dir / "trade_walks.json"
-    if not path.exists():
-        return {}
-    raw = json.loads(path.read_text(encoding="utf-8"))
-    return {symbol: [(str(p), int(s)) for p, s in walk] for symbol, walk in raw.items()}
+def trade_walk(ctx: RequestContext, symbol: str) -> list[tuple[str, int]]:
+    """The symbol's deterministic walk (price, size), from its longest recorded stream."""
+    if not _WALKS:
+        for exchange in ctx.runtime.recordings.for_endpoint(TRADES):
+            requested = exchange.request.query_value("symbol")
+            events = [event for event in exchange.stream if event.kind == "sse" and event.data]
+            if not requested or not events:
+                continue
+            steps = []
+            for event in events:
+                data = json.loads(event.data or "{}")
+                steps.append((str(data["price"]), int(data["size"])))
+            key = requested.upper()
+            if len(steps) > len(_WALKS.get(key, [])):
+                _WALKS[key] = steps
+    return _WALKS.get(symbol, [])
 
 
 async def stream_trades(ctx: RequestContext) -> Response:
-    """SSE: ``count`` trade events (id 1..count) from the symbol's deterministic walk."""
-    symbol_raw = _last(ctx, "symbol")
-    if symbol_raw is None:
-        return _missing(ctx, "symbol")
-    count = 10
-    count_raw = _last(ctx, "count")
-    if count_raw is not None:
-        parsed = lax_int(count_raw)
-        if parsed is None or not 1 <= parsed <= 50:  # noqa: PLR2004
-            return _invalid(ctx, "count", "must be an integer between 1 and 50")
-        count = parsed
-    ticker = _ticker(ctx, symbol_raw)
-    if ticker is None:
-        return api_error(
-            ctx, 400, "unknown_symbol", f"Unknown symbol '{symbol_raw}'.", param="symbol"
-        )
-    symbol = str(ticker["symbol"])
-    walk = trade_walks(ctx.runtime.settings.data_dir).get(symbol, [])
-    if len(walk) < count:  # no recording this long: hold the quote price (never observed)
-        quote = _record(ctx.world, "quotes", symbol) or {}
-        walk = [*walk, *[(str(quote.get("price")), 100)] * (count - len(walk))]
-    clock = ctx.runtime.clocks.for_session(ctx.session)
+    """SSE: ``count`` trade events, 200 ms apart; count is checked before symbol (000483)."""
+    count = _bounded(ctx, "count", 10, 50, "invalid_count")
+    raw_symbol = _last(ctx, "symbol")
+    if raw_symbol is None:
+        raise _fail(ctx, "missing_param", "missing_parameter", param="symbol")
+    symbol = raw_symbol.upper()
+    if ctx.world.get("tickers", symbol) is None:  # raw value echoed (000711)
+        raise _fail(ctx, "invalid_param", "unknown_symbol", param="symbol", value=raw_symbol)
+    walk = trade_walk(ctx, symbol)[:count]
 
     async def events() -> AsyncIterator[bytes]:
-        for index, (price, size) in enumerate(walk[:count], start=1):
-            if index > 1:
-                await ctx.runtime.pause(TRADE_SPACING_S)
-            data = {
+        for index, (price, size) in enumerate(walk, start=1):
+            await ctx.pause(FIRST_TRADE_S if index == 1 else TRADE_SPACING_S)
+            trade: JsonObject = {
                 "symbol": symbol,
                 "price": price,
                 "size": size,
-                "time": iso_ms_z(clock.now_ns()),
+                "time": _iso_z(_live_ns(ctx), 3),
             }
-            payload = json.dumps(data, separators=(",", ":"), ensure_ascii=False)
-            yield f"id: {index}\nevent: trade\ndata: {payload}\n\n".encode()
+            yield f"event: trade\nid: {index}\ndata: {_dumps(trade)}\n\n".encode()
 
     headers = {"cache-control": "no-cache", **ctx.extra_headers}
     return StreamingResponse(
-        events(), status_code=200, media_type="text/event-stream; charset=utf-8", headers=headers
+        events(), media_type="text/event-stream; charset=utf-8", headers=headers
     )
+
+
+_WS_REFUSALS: Final = {
+    "missing": "Missing api_key query parameter.",
+    "invalid": "Invalid API key.",
+    "forbidden": "This API key has been revoked.",
+}
+
+
+async def _ws_error(websocket: WebSocket, message: str) -> None:
+    await websocket.send_text(_dumps({"type": "error", "message": message}))
+
+
+async def _ws_feed(websocket: WebSocket, ctx: RequestContext, symbols: list[str]) -> None:
+    """subscribed, 5 rounds of one quote per symbol, done, close 1000 (000486, 000733)."""
+    subscribed: list[JsonValue] = list(symbols)
+    await websocket.send_text(_dumps({"type": "subscribed", "symbols": subscribed}))
+    for round_index in range(WS_ROUNDS):
+        if round_index:
+            await ctx.pause(WS_SPACING_S)
+        now_ns = _live_ns(ctx)
+        for symbol in symbols:
+            exchange = str(_require(ctx, "tickers", symbol)["exchange"])
+            quote: JsonObject = {
+                "type": "quote",
+                "symbol": symbol,
+                "price": _require(ctx, "quotes", symbol)["price"],
+                "as_of": quote_state(ctx, exchange, now_ns)[1],
+            }
+            await websocket.send_text(_dumps(quote))
+    await websocket.send_text('{"type":"done"}')
+    await websocket.close(code=1000)
+
+
+def _ws_request(ctx: RequestContext, data: JsonValue) -> str | list[str] | None:
+    """One parsed client message: an error message, the symbols to stream, or ``None`` (ping)."""
+    if not isinstance(data, dict):
+        return "Messages must be JSON objects."
+    action = data.get("action")
+    if action == "ping":
+        return None
+    if action != "subscribe":
+        return f"Unknown action: {json.dumps(action)}."  # JSON spelling: "dance", 5, null
+    symbols = data.get("symbols")
+    if not (isinstance(symbols, list) and symbols and all(isinstance(s, str) for s in symbols)):
+        return "symbols must be a non-empty array of strings."
+    canonical: list[str] = []
+    for item in map(str, symbols):
+        if ctx.world.get("tickers", item.upper()) is None:
+            return f"Unknown symbol '{item}'."
+        if item.upper() not in canonical:
+            canonical.append(item.upper())
+    return canonical
+
+
+async def _ws_answer(websocket: WebSocket, ctx: RequestContext, text: str) -> bool:
+    """Answer one client message; ``True`` once the feed ran (the socket is then closed)."""
+    try:
+        data = json.loads(text)
+    except ValueError:
+        await _ws_error(websocket, "Invalid JSON.")
+        return False
+    request = _ws_request(ctx, data)
+    if request is None:
+        await websocket.send_text('{"type":"pong"}')
+        return False
+    if isinstance(request, str):
+        await _ws_error(websocket, request)
+        return False
+    await _ws_feed(websocket, ctx, request)
+    return True
+
+
+async def ws_quotes(websocket: WebSocket, ctx: RequestContext) -> None:
+    """Quote feed: api_key in the query; ping/subscribe; errors keep the socket open."""
+    api_key = websocket.query_params.get("api_key") or ""
+    outcome = ctx.runtime.auth.authenticate(
+        headers={"x-api-key": api_key} if api_key else {},
+        query={},
+        cookies={},
+        now_ns=ctx.now_ns,
+        required=True,
+    )
+    await websocket.accept()
+    if outcome.failure is not None:  # accepted, then closed with a reason (000501-000505)
+        reason = _WS_REFUSALS.get(outcome.failure, _WS_REFUSALS["invalid"])
+        await websocket.close(code=4401, reason=reason)
+        return
+    try:
+        while True:
+            message = await websocket.receive()
+            if message["type"] == "websocket.disconnect":
+                return
+            if message.get("bytes") is not None:
+                await _ws_error(websocket, "Binary messages are not supported.")
+            elif await _ws_answer(websocket, ctx, message.get("text") or ""):
+                return
+    except WebSocketDisconnect:
+        return
 
 
 HANDLERS.update(
@@ -773,189 +811,7 @@ HANDLERS.update(
         "GET /v1/uploads/{id}": get_upload,
         "DELETE /v1/uploads/{id}": delete_upload,
         "GET /v1/uploads/{id}/content": download_upload,
-        "GET /v1/stream/trades": stream_trades,
+        TRADES: stream_trades,
     }
 )
-
-# -- WebSocket quote feed ----------------------------------------------------------------------
-
-WS_ROUNDS: Final = 5
-"""A subscription streams 5 rounds of quotes, then ``done`` and close 1000 (000811, 000813)."""
-WS_SPACING_S: Final = 0.25
-"""Rounds are ~250 ms apart; the first round follows the ``subscribed`` ack at once."""
-WS_AUTH_CLOSE: Final = 4401
-WS_AUTH_REASONS: Final = {
-    "missing": "Missing api_key query parameter.",
-    "invalid": "Invalid API key.",
-    "forbidden": "This API key has been revoked.",
-}
-"""Close reasons on bad credentials (000827-000829, 000834). Only ``?api_key`` counts (000832)."""
-WS_BAD_SYMBOLS: Final = "symbols must be a non-empty array of strings."
-WS_BINARY: Final = "Binary messages are not supported."
-"""Any binary frame earns this error and the socket stays open (independent review, 2026-10-11)."""
-
-
-def ws_auth_failure(ctx: RequestContext, api_key: str | None) -> str | None:
-    """The close reason for this ``api_key`` query value, or ``None`` when it is accepted."""
-    if not api_key:  # absent or empty (000831)
-        return WS_AUTH_REASONS["missing"]
-    outcome = ctx.runtime.auth.authenticate(
-        headers={"x-api-key": api_key}, query={}, cookies={}, now_ns=ctx.now_ns, required=True
-    )
-    if outcome.failure is None:
-        return None
-    return WS_AUTH_REASONS.get(outcome.failure, WS_AUTH_REASONS["invalid"])
-
-
-def ws_subscription(ctx: RequestContext, text: str) -> list[JsonObject] | str:
-    """The tickers a client message subscribes to, or the error message it earns.
-
-    Checked in the real order: JSON (000824), an object (000825, 000843), ``action`` exactly
-    ``subscribe`` (shown JSON-encoded: 000822, 000823, 000838, 000842), ``symbols`` a non-empty
-    array of strings (000819-000821, 000837), then every symbol known, case-insensitively; the
-    first unknown one is reported as sent, in single quotes (000817, 000836, 000840, 000841).
-    Duplicates collapse.
-    """
-    try:
-        message = json.loads(text)
-    except ValueError:
-        return "Invalid JSON."
-    if not isinstance(message, dict):
-        return "Messages must be JSON objects."
-    action = message.get("action")
-    if action != "subscribe":
-        return f"Unknown action: {json.dumps(action, ensure_ascii=False, separators=(',', ':'))}."
-    symbols = message.get("symbols")
-    if not isinstance(symbols, list) or not symbols or not all(isinstance(s, str) for s in symbols):
-        return WS_BAD_SYMBOLS
-    tickers: dict[str, JsonObject] = {}
-    for raw in cast("list[str]", symbols):
-        ticker = _ticker(ctx, raw)
-        if ticker is None:
-            return f"Unknown symbol '{raw}'."
-        tickers.setdefault(str(ticker["symbol"]), ticker)
-    return list(tickers.values())
-
-
-def ws_quote(ctx: RequestContext, ticker: JsonObject, now_ns: int) -> JsonObject:
-    """One ``quote`` message: the REST quote's price and ``as_of`` at ``now_ns`` (000813)."""
-    symbol = str(ticker["symbol"])
-    quote = _record(ctx.world, "quotes", symbol) or {}
-    _, as_of = market_state(ctx, ticker, now_ns)
-    return {
-        "type": "quote",
-        "symbol": symbol,
-        "price": quote.get("price"),
-        "as_of": iso_us_z(as_of),
-    }
-
-
-async def _send(websocket: WebSocket, message: JsonObject) -> None:
-    await websocket.send_text(json.dumps(message, separators=(",", ":"), ensure_ascii=False))
-
-
-async def ws_quotes(websocket: WebSocket, ctx: RequestContext) -> None:
-    """``WS /v1/ws/quotes``: one subscription per connection, answered in message order.
-
-    Messages are handled one at a time; an error leaves the socket open (000835), a valid
-    subscription streams and then closes, so messages sent meanwhile are never answered (000826).
-    An idle socket stays open (000833: 20 s). Not counted against the rate limit (000812/000814).
-    """
-    from starlette.websockets import WebSocketDisconnect  # noqa: PLC0415 - runtime-only import
-
-    await websocket.accept()
-    reason = ws_auth_failure(ctx, websocket.query_params.get("api_key"))
-    if reason is not None:
-        await websocket.close(code=WS_AUTH_CLOSE, reason=reason)
-        return
-    clock = ctx.runtime.clocks.for_session(ctx.session)
-    try:
-        while True:
-            message = await websocket.receive()
-            if message["type"] == "websocket.disconnect":
-                return
-            text = message.get("text")
-            if text is None:  # a binary frame
-                await _send(websocket, {"type": "error", "message": WS_BINARY})
-                continue
-            subscription = ws_subscription(ctx, text)
-            if isinstance(subscription, str):
-                await _send(websocket, {"type": "error", "message": subscription})
-                continue
-            symbols: list[JsonValue] = [str(t["symbol"]) for t in subscription]
-            await _send(websocket, {"type": "subscribed", "symbols": symbols})
-            for round_index in range(WS_ROUNDS):
-                if round_index:
-                    await ctx.runtime.pause(WS_SPACING_S)
-                now_ns = clock.now_ns()
-                for ticker in subscription:
-                    await _send(websocket, ws_quote(ctx, ticker, now_ns))
-            await _send(websocket, {"type": "done"})
-            await websocket.close(code=1000)
-            return
-    except WebSocketDisconnect:
-        return
-
-
 WEBSOCKET_HANDLERS["GET /v1/ws/quotes"] = ws_quotes
-
-
-# -- routes no endpoint matches ----------------------------------------------------------------
-
-fallback_router = APIRouter()
-"""Catch-all for unknown routes and wrong methods (registered after the generated routes).
-
-Under ``/v1/`` the real server authenticates and rate-limits first, so a missing key is a 401 even
-on an unknown route (000013) and 404/405 answers carry the rate-limit headers (000010-000014).
-405s list the path's methods in ``Allow`` (000014: ``GET``; 000514: ``GET, POST``).
-"""
-
-_METHODS: Final = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
-_WRITE_METHODS: Final = frozenset({"POST", "PUT", "PATCH", "DELETE"})
-RATE_LIMITED_PROXY: Final = "GET /v1/exchanges"
-"""Any /v1 endpoint: unknown /v1 routes count against the same per-key limit."""
-
-
-def allowed_methods(templates: Sequence[tuple[str, str]], path: str) -> list[str]:
-    """Methods of every endpoint whose path template matches ``path`` (model order)."""
-    methods: list[str] = []
-    for method, template in templates:
-        pattern = re.sub(r"\\\{[^/]+?\\\}", "[^/]+", re.escape(template))
-        if re.fullmatch(pattern, path) and method not in methods:
-            methods.append(method)
-    return methods
-
-
-@fallback_router.api_route("/{rest:path}", methods=_METHODS, include_in_schema=False)
-async def not_routed(request: Request) -> Response:
-    """404 ``not_found`` / 405 ``method_not_allowed``, authenticated under ``/v1/``."""
-    runtime = runtime_of(request)
-    ctx = runtime.new_context(request, None)
-    path = request.url.path
-    if path == "/v1" or path.startswith("/v1/"):
-        outcome = runtime.auth.authenticate(
-            headers=dict(request.headers),
-            query=dict(request.query_params),
-            cookies=dict(request.cookies),
-            now_ns=ctx.now_ns,
-            required=True,
-        )
-        ctx.identity = outcome.identity
-        if outcome.failure is not None:
-            return runtime._auth_error(ctx, outcome.failure)  # noqa: SLF001
-        ctx.endpoint = runtime.model.endpoint(RATE_LIMITED_PROXY)  # same per-key limit
-        limited = runtime._rate_limit(ctx)  # noqa: SLF001
-        ctx.endpoint = None
-        if limited is not None:
-            return limited
-        if request.method in _WRITE_METHODS and (read_only := _read_only(ctx)) is not None:
-            return read_only  # the read-only check runs before routing (independent review)
-    templates = [(e.method, e.path) for e in runtime.model.endpoints if e.role != "websocket"]
-    methods = allowed_methods(templates, path)
-    if methods:
-        return ctx.error(
-            "method_not_allowed",
-            template=runtime.model.routing.method_not_allowed_template,
-            headers={"allow": ", ".join(methods)},
-        )
-    return ctx.error("unknown_route", template=runtime.model.routing.unknown_route_template)

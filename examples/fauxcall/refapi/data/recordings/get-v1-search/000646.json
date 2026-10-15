@@ -1,0 +1,94 @@
+{
+  "id": "000646",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-079",
+  "started_at": "2026-10-15T00:52:57.583181Z",
+  "started_ns": 1792025577583181000,
+  "elapsed_ms": 43.101,
+  "ttfb_ms": 42.813,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=computer",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "computer"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:56 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "33"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "28"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025588"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "computer",
+        "results": []
+      },
+      "size": 33
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

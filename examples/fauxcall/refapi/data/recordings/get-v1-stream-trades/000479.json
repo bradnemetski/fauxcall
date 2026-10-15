@@ -1,0 +1,102 @@
+{
+  "id": "000479",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "invalid",
+  "plan_call": "tr-count-0",
+  "started_at": "2026-10-15T00:47:40.849360Z",
+  "started_ns": 1792025260849360000,
+  "elapsed_ms": 56.189,
+  "ttfb_ms": 55.507,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=AAPL&count=0",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "AAPL"
+      ],
+      [
+        "count",
+        "0"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:47:40 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "192"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "22"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025267"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'count': must be an integer between 1 and 50.",
+          "request_id": "9ddf75d3-ee58-42f6-bf2f-f88a4b43539b",
+          "param": "count"
+        }
+      },
+      "size": 192
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

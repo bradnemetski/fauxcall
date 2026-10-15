@@ -1,0 +1,130 @@
+{
+  "id": "000475",
+  "endpoint": "GET /v1/stream/trades",
+  "purpose": "variation",
+  "plan_call": "tr-airpa",
+  "started_at": "2026-10-15T00:47:38.472816Z",
+  "started_ns": 1792025258472816000,
+  "elapsed_ms": 862.908,
+  "ttfb_ms": 55.22,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/stream/trades?symbol=AIR.PA&count=5",
+    "path": "/v1/stream/trades",
+    "query": [
+      [
+        "symbol",
+        "AIR.PA"
+      ],
+      [
+        "count",
+        "5"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:47:37 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "cache-control",
+        "no-cache"
+      ],
+      [
+        "content-type",
+        "text/event-stream; charset=utf-8"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "26"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025267"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 56.088,
+      "kind": "sse",
+      "event": "trade",
+      "id": "1",
+      "data": "{\"symbol\":\"AIR.PA\",\"price\":\"142.30\",\"size\":919,\"time\":\"2026-10-15T00:47:38.527Z\"}"
+    },
+    {
+      "t_ms": 256.233,
+      "kind": "sse",
+      "event": "trade",
+      "id": "2",
+      "data": "{\"symbol\":\"AIR.PA\",\"price\":\"142.39\",\"size\":70,\"time\":\"2026-10-15T00:47:38.727Z\"}"
+    },
+    {
+      "t_ms": 456.472,
+      "kind": "sse",
+      "event": "trade",
+      "id": "3",
+      "data": "{\"symbol\":\"AIR.PA\",\"price\":\"142.50\",\"size\":501,\"time\":\"2026-10-15T00:47:38.928Z\"}"
+    },
+    {
+      "t_ms": 658.984,
+      "kind": "sse",
+      "event": "trade",
+      "id": "4",
+      "data": "{\"symbol\":\"AIR.PA\",\"price\":\"142.46\",\"size\":168,\"time\":\"2026-10-15T00:47:39.130Z\"}"
+    },
+    {
+      "t_ms": 861.722,
+      "kind": "sse",
+      "event": "trade",
+      "id": "5",
+      "data": "{\"symbol\":\"AIR.PA\",\"price\":\"142.42\",\"size\":512,\"time\":\"2026-10-15T00:47:39.332Z\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "id": "000608",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-041",
+  "started_at": "2026-10-15T00:52:38.514796Z",
+  "started_ns": 1792025558514796000,
+  "elapsed_ms": 42.495,
+  "ttfb_ms": 42.364,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=consumer+discretionary",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "consumer discretionary"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:38 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "488"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "26"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025568"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "consumer discretionary",
+        "results": [
+          {
+            "symbol": "9988.HK",
+            "name": "Alibaba Group Holding Limited",
+            "score": 0.5
+          },
+          {
+            "symbol": "AMZN",
+            "name": "Amazon.com, Inc.",
+            "score": 0.5
+          },
+          {
+            "symbol": "MC.PA",
+            "name": "LVMH Moët Hennessy Louis Vuitton SE",
+            "score": 0.5
+          },
+          {
+            "symbol": "COST",
+            "name": "Costco Wholesale Corporation",
+            "score": 0.25
+          },
+          {
+            "symbol": "KO",
+            "name": "The Coca-Cola Company",
+            "score": 0.25
+          },
+          {
+            "symbol": "PEP",
+            "name": "PepsiCo, Inc.",
+            "score": 0.25
+          },
+          {
+            "symbol": "ULVR.L",
+            "name": "Unilever PLC",
+            "score": 0.25
+          }
+        ]
+      },
+      "size": 488
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

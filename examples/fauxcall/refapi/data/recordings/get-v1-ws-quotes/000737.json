@@ -1,0 +1,110 @@
+{
+  "id": "000737",
+  "endpoint": "GET /v1/ws/quotes",
+  "purpose": "invalid",
+  "plan_call": "ws2-binary-then-ping",
+  "started_at": "2026-10-15T00:53:58.649433Z",
+  "started_ns": 1792025638649433000,
+  "elapsed_ms": 2001.388,
+  "ttfb_ms": 1.855,
+  "request": {
+    "method": "GET",
+    "url": "ws://127.0.0.1:9100/v1/ws/quotes?api_key=[REDACTED]",
+    "path": "/v1/ws/quotes",
+    "query": [
+      [
+        "api_key",
+        "[REDACTED]"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "connection",
+        "upgrade"
+      ],
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "sec-websocket-key",
+        "14dzAeqVZlqSfC87hDzu2g=="
+      ],
+      [
+        "sec-websocket-version",
+        "13"
+      ]
+    ]
+  },
+  "response": {
+    "status": 101,
+    "reason": "Switching Protocols",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "upgrade",
+        "websocket"
+      ],
+      [
+        "connection",
+        "Upgrade"
+      ],
+      [
+        "sec-websocket-accept",
+        "kRTaejtX/BuxbsFTurFLCvQo35U="
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:57 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ]
+    ]
+  },
+  "stream": [
+    {
+      "t_ms": 1.93,
+      "kind": "ws_send",
+      "binary_file": "000737.ws0-sent.bin"
+    },
+    {
+      "t_ms": 2.382,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"error\",\"message\":\"Binary messages are not supported.\"}"
+    },
+    {
+      "t_ms": 102.056,
+      "kind": "ws_send",
+      "data": "{\"action\":\"ping\"}"
+    },
+    {
+      "t_ms": 102.668,
+      "kind": "ws_recv",
+      "data": "{\"type\":\"pong\"}"
+    }
+  ],
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.query:api_key"
+  ]
+}

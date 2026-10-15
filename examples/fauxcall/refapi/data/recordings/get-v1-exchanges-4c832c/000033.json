@@ -1,0 +1,91 @@
+{
+  "id": "000033",
+  "endpoint": "GET /v1/exchanges/",
+  "purpose": "edge",
+  "plan_call": "rt-slash",
+  "started_at": "2026-10-15T00:38:03.769426Z",
+  "started_ns": 1792024683769426000,
+  "elapsed_ms": 28.871,
+  "ttfb_ms": 28.402,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/exchanges/",
+    "path": "/v1/exchanges/",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "reason": "Not Found",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:38:03 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "131"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "29"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024694"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "not_found",
+          "message": "No route matches GET /v1/exchanges/.",
+          "request_id": "ad18175c-2e22-40b0-823b-c61dce478c06"
+        }
+      },
+      "size": 131
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

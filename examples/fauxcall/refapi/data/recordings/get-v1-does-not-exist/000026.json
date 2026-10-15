@@ -1,0 +1,82 @@
+{
+  "id": "000026",
+  "endpoint": "GET /v1/does-not-exist",
+  "purpose": "edge",
+  "plan_call": "auth-revoked-route",
+  "started_at": "2026-10-15T00:38:00.251526Z",
+  "started_ns": 1792024680251526000,
+  "elapsed_ms": 38.914,
+  "ttfb_ms": 38.204,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/does-not-exist",
+    "path": "/v1/does-not-exist",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 403,
+    "reason": "Forbidden",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:37:59 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "131"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "api_key_revoked",
+          "message": "This API key has been revoked.",
+          "request_id": "e1a0c3b5-3713-4978-8ab6-2b6bcb1c3819"
+        }
+      },
+      "size": 131
+    }
+  },
+  "tags": [
+    "auth:none"
+  ],
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

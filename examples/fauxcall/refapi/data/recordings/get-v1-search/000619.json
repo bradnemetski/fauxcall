@@ -1,0 +1,94 @@
+{
+  "id": "000619",
+  "endpoint": "GET /v1/search",
+  "purpose": "variation",
+  "plan_call": "s2-052",
+  "started_at": "2026-10-15T00:52:44.033146Z",
+  "started_ns": 1792025564033146000,
+  "elapsed_ms": 41.591,
+  "ttfb_ms": 41.408,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/search?q=medical",
+    "path": "/v1/search",
+    "query": [
+      [
+        "q",
+        "medical"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:52:43 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "32"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "15"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025568"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "query": "medical",
+        "results": []
+      },
+      "size": 32
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

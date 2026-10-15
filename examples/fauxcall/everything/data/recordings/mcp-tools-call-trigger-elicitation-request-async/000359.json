@@ -1,0 +1,133 @@
+{
+  "id": "000359",
+  "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+  "purpose": "variation",
+  "plan_call": "aelic-cancelled",
+  "started_at": "2026-10-15T00:51:23.746645Z",
+  "started_ns": 1792025483746645000,
+  "elapsed_ms": 1014.644,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 9,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:51:23 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[CANCELLED] No message\n\nProgress:\nTask created: client-task-5\nPoll 1: cancelled"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 9
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 3.836,
+      "kind": "sse",
+      "event": "message",
+      "id": "1a440734-2179-474d-aff5-c4e0d026d20c",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"task\":{\"ttl\":600000},\"message\":\"Please provide inputs for the following fields (async task demo):\",\"requestedSchema\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"Your Name\",\"type\":\"string\",\"description\":\"Your full name\"},\"favoriteColor\":{\"title\":\"Favorite Color\",\"type\":\"string\",\"description\":\"What is your favorite color?\",\"enum\":[\"Red\",\"Blue\",\"Green\",\"Yellow\",\"Purple\"]},\"agreeToTerms\":{\"title\":\"Terms Agreement\",\"type\":\"boolean\",\"description\":\"Do you agree to the terms and conditions?\"}},\"required\":[\"name\"]}},\"jsonrpc\":\"2.0\",\"id\":13}"
+    },
+    {
+      "t_ms": 1008.931,
+      "kind": "sse",
+      "event": "message",
+      "id": "698df5a0-9e37-4d19-96a6-72f2fdfbd4ee",
+      "data": "{\"method\":\"tasks/get\",\"params\":{\"taskId\":\"client-task-5\"},\"jsonrpc\":\"2.0\",\"id\":14}"
+    },
+    {
+      "t_ms": 1014.369,
+      "kind": "sse",
+      "event": "message",
+      "id": "999483a6-bc07-4c25-87f5-8d79a77e2820",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[CANCELLED] No message\\n\\nProgress:\\nTask created: client-task-5\\nPoll 1: cancelled\"}]},\"jsonrpc\":\"2.0\",\"id\":9}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

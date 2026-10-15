@@ -1,0 +1,41 @@
+{
+  "name": "07-time",
+  "created_at": "2026-10-14T20:45:00Z",
+  "calls": [
+    {
+      "id": "time-1",
+      "endpoint": "GET /v1/time",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/time"
+      }
+    },
+    {
+      "id": "time-profile",
+      "endpoint": "GET /v1/time",
+      "purpose": "time_profile",
+      "request": {
+        "method": "GET",
+        "path": "/v1/time"
+      },
+      "repeat": 6,
+      "interval_ms": 10000
+    },
+    {
+      "id": "time-param",
+      "endpoint": "GET /v1/time",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/time",
+        "query": [
+          [
+            "zone",
+            "Asia/Tokyo"
+          ]
+        ]
+      }
+    }
+  ]
+}

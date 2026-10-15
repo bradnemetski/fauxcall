@@ -1,0 +1,95 @@
+{
+  "id": "000044",
+  "endpoint": "OPTIONS /v1/exchanges",
+  "purpose": "edge",
+  "plan_call": "rt-options",
+  "started_at": "2026-10-15T00:38:09.294555Z",
+  "started_ns": 1792024689294555000,
+  "elapsed_ms": 61.378,
+  "ttfb_ms": 61.027,
+  "request": {
+    "method": "OPTIONS",
+    "url": "http://127.0.0.1:9100/v1/exchanges",
+    "path": "/v1/exchanges",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 405,
+    "reason": "Method Not Allowed",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:38:08 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "allow",
+        "GET"
+      ],
+      [
+        "content-length",
+        "152"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "22"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024694"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "method_not_allowed",
+          "message": "Method OPTIONS is not allowed for /v1/exchanges.",
+          "request_id": "69cf8450-563f-4335-93bb-a05d27d2a5f0"
+        }
+      },
+      "size": 152
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

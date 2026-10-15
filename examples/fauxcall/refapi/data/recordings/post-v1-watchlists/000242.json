@@ -1,0 +1,112 @@
+{
+  "id": "000242",
+  "endpoint": "POST /v1/watchlists",
+  "purpose": "edge",
+  "plan_call": "wl-create-ws-symbols",
+  "started_at": "2026-10-15T00:44:13.012449Z",
+  "started_ns": 1792025053012449000,
+  "elapsed_ms": 27.652,
+  "ttfb_ms": 27.519,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:9100/v1/watchlists",
+    "path": "/v1/watchlists",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "56"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "name": "fauxcall-probe-ws",
+        "symbols": [
+          " aapl ",
+          "MSFT"
+        ]
+      },
+      "size": 56
+    }
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:44:12 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "142"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "20"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025059"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "unknown_symbol",
+          "message": "Unknown symbol ' aapl '.",
+          "request_id": "b58e270b-4876-4e38-8478-62de6083e52f",
+          "param": "symbols"
+        }
+      },
+      "size": 142
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "id": "000810",
+  "endpoint": "GET /v1/uploads",
+  "purpose": "write_readback",
+  "plan_call": "p-up-list",
+  "started_at": "2026-10-15T01:16:20.379631Z",
+  "started_ns": 1792026980379631000,
+  "elapsed_ms": 60.822,
+  "ttfb_ms": 60.563,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/uploads",
+    "path": "/v1/uploads",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:16:19 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "345"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "16"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792026984"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": [
+        {
+          "id": "f141b04a-2155-47e4-bafc-4ce3baff8e3d",
+          "status": "queued",
+          "filename": "second.txt",
+          "size": 7,
+          "label": null,
+          "created_at": "2026-10-15T01:16:19.401442+00:00",
+          "progress": 0
+        },
+        {
+          "id": "57d7b294-1aed-40f7-908b-10d5b64b26b0",
+          "status": "processing",
+          "filename": "case.txt",
+          "size": 5,
+          "label": null,
+          "created_at": "2026-10-15T01:16:18.396161+00:00",
+          "progress": 0
+        }
+      ],
+      "size": 345
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "id": "000690",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "edge",
+  "plan_call": "tl2-cursor-between-filter",
+  "started_at": "2026-10-15T00:53:19.895895Z",
+  "started_ns": 1792025599895895000,
+  "elapsed_ms": 48.511,
+  "ttfb_ms": 48.151,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?exchange=XNAS&cursor=eyJhZnRlciI6IkJBIn0&limit=3",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "exchange",
+        "XNAS"
+      ],
+      [
+        "cursor",
+        "eyJhZnRlciI6IkJBIn0"
+      ],
+      [
+        "limit",
+        "3"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:18 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "478"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "24"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025608"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "COST",
+            "name": "Costco Wholesale Corporation",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Consumer Staples",
+            "listed_on": "1985-12-05"
+          },
+          {
+            "symbol": "CSCO",
+            "name": "Cisco Systems, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Technology",
+            "listed_on": "1990-02-16"
+          },
+          {
+            "symbol": "GOOGL",
+            "name": "Alphabet Inc. Class A",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Communication Services",
+            "listed_on": "2004-08-19"
+          }
+        ],
+        "next_cursor": "eyJhZnRlciI6IkdPT0dMIn0",
+        "total": 19
+      },
+      "size": 478
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

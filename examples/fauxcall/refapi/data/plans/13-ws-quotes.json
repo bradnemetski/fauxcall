@@ -1,0 +1,550 @@
+{
+  "name": "13-ws-quotes",
+  "created_at": "2026-10-14T20:45:00Z",
+  "calls": [
+    {
+      "id": "ws-sub-aapl",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "sample",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 8,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "AAPL"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-sub-multi",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 8,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "AAPL",
+                "7203.T",
+                "air.pa"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-ping",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "ping"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-connect-only",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 3,
+        "frames": []
+      }
+    },
+    {
+      "id": "ws-unknown-action",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "dance"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-malformed",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "text": "not json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-json-array",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": [
+              "subscribe"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-binary",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "base64": "AAE="
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-sub-unknown",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 3,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "ZZZZ"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-sub-mixed-unknown",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 6,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "AAPL",
+                "ZZZZ"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-sub-empty",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-sub-nosymbols",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-sub-string",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": "AAPL"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-no-action",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "invalid",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "symbols": [
+                "AAPL"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-ping-during",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 9,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "MSFT"
+              ]
+            }
+          },
+          {
+            "at_ms": 700,
+            "json": {
+              "action": "ping"
+            }
+          },
+          {
+            "at_ms": 7000,
+            "json": {
+              "action": "ping"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-sub-twice",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "variation",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "readonly-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 8,
+        "frames": [
+          {
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "AAPL"
+              ]
+            }
+          },
+          {
+            "at_ms": 300,
+            "json": {
+              "action": "subscribe",
+              "symbols": [
+                "MSFT"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-no-key",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "ping"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-bad-key",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "not-a-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "ping"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws-revoked",
+      "endpoint": "GET /v1/ws/quotes",
+      "purpose": "auth",
+      "request": {
+        "method": "GET",
+        "path": "/v1/ws/quotes",
+        "query": [
+          [
+            "api_key",
+            "revoked-key"
+          ]
+        ],
+        "auth": "none"
+      },
+      "stream": {
+        "kind": "websocket",
+        "duration_s": 2,
+        "frames": [
+          {
+            "json": {
+              "action": "ping"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "id": "000701",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "variation",
+  "plan_call": "tl2-sector-cd",
+  "started_at": "2026-10-15T00:53:25.419597Z",
+  "started_ns": 1792025605419597000,
+  "elapsed_ms": 47.935,
+  "ttfb_ms": 47.581,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?sector=Consumer+Discretionary",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "sector",
+        "Consumer Discretionary"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:53:25 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "490"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "13"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025608"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [
+          {
+            "symbol": "9988.HK",
+            "name": "Alibaba Group Holding Limited",
+            "exchange": "XHKG",
+            "currency": "HKD",
+            "sector": "Consumer Discretionary",
+            "listed_on": "2019-11-26"
+          },
+          {
+            "symbol": "AMZN",
+            "name": "Amazon.com, Inc.",
+            "exchange": "XNAS",
+            "currency": "USD",
+            "sector": "Consumer Discretionary",
+            "listed_on": "1997-05-15"
+          },
+          {
+            "symbol": "MC.PA",
+            "name": "LVMH Moët Hennessy Louis Vuitton SE",
+            "exchange": "XPAR",
+            "currency": "EUR",
+            "sector": "Consumer Discretionary",
+            "listed_on": "1987-06-03"
+          }
+        ],
+        "next_cursor": null,
+        "total": 3
+      },
+      "size": 490
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

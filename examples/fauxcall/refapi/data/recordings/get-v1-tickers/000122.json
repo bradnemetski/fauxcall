@@ -1,0 +1,99 @@
+{
+  "id": "000122",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "variation",
+  "plan_call": "tl-cursor-other-filter",
+  "started_at": "2026-10-15T00:42:02.878934Z",
+  "started_ns": 1792024922878934000,
+  "elapsed_ms": 45.147,
+  "ttfb_ms": 45.012,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?exchange=XTKS&cursor=eyJhZnRlciI6IkFBUEwifQ",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "exchange",
+        "XTKS"
+      ],
+      [
+        "cursor",
+        "eyJhZnRlciI6IkFBUEwifQ"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:42:02 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "40"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "22"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792024930"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "data": [],
+        "next_cursor": null,
+        "total": 7
+      },
+      "size": 40
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

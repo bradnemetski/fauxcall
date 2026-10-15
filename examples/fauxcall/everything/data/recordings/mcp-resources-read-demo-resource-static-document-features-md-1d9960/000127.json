@@ -1,0 +1,114 @@
+{
+  "id": "000127",
+  "endpoint": "MCP resources/read:demo://resource/static/document/Features.md",
+  "purpose": "edge",
+  "plan_call": "read-static-case",
+  "started_at": "2026-10-15T00:37:53.072436Z",
+  "started_ns": 1792024673072436000,
+  "elapsed_ms": 5.213,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 35,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/static/document/Features.md"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "206"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:37:53 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 35,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Resource demo://resource/static/document/Features.md not found"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.993,
+      "kind": "sse",
+      "event": "message",
+      "id": "e7402489-0e8e-482e-bc4f-68ee4c4a5e4b",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":35,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Resource demo://resource/static/document/Features.md not found\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

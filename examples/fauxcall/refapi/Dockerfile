@@ -1,5 +1,7 @@
-# Build from the workspace root so the shared uv.lock is available:
+# Build from the workspace root so the shared uv.lock is available (.dockerignore keeps every
+# .env out of the image; settings come from the environment at run time):
 #   docker build -f refapi/Dockerfile -t fauxcall-refapi .
+# It installs FauxCall from PyPI: a workspace that uses a local FauxCall checkout can't build images.
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy FAUXCALL_HOST=0.0.0.0

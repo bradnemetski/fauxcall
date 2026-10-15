@@ -1,0 +1,114 @@
+{
+  "id": "000415",
+  "endpoint": "MCP resources/read",
+  "purpose": "edge",
+  "plan_call": "norm-upper-host",
+  "started_at": "2026-10-15T01:02:22.765298Z",
+  "started_ns": 1792026142765298000,
+  "elapsed_ms": 9.875,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://RESOURCE/static/document/features.md"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "205"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 01:02:22 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Resource demo://RESOURCE/static/document/features.md not found"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 9.593,
+      "kind": "sse",
+      "event": "message",
+      "id": "29ffa48e-1121-4957-bca3-eb47c3b10ba3",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":4,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Resource demo://RESOURCE/static/document/features.md not found\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "id": "000021",
+  "endpoint": "GET /v1/tickers",
+  "purpose": "auth",
+  "plan_call": "auth-none-badparam",
+  "started_at": "2026-10-15T00:37:57.740495Z",
+  "started_ns": 1792024677740495000,
+  "elapsed_ms": 49.042,
+  "ttfb_ms": 47.595,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:9100/v1/tickers?limit=abc",
+    "path": "/v1/tickers",
+    "query": [
+      [
+        "limit",
+        "abc"
+      ]
+    ],
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ]
+    ]
+  },
+  "response": {
+    "status": 401,
+    "reason": "Unauthorized",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:37:57 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "150"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "missing_api_key",
+          "message": "Missing API key. Send it in the X-API-Key header.",
+          "request_id": "63fe6935-5d3a-412e-9189-3ca5b3528b58"
+        }
+      },
+      "size": 150
+    }
+  },
+  "tags": [
+    "auth:none"
+  ]
+}

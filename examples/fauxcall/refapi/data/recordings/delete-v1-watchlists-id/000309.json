@@ -1,0 +1,92 @@
+{
+  "id": "000309",
+  "endpoint": "DELETE /v1/watchlists/{id}",
+  "purpose": "cleanup",
+  "plan_call": "wl-cleanup-wl_ws",
+  "started_at": "2026-10-15T00:45:05.793899Z",
+  "started_ns": 1792025105793899000,
+  "elapsed_ms": 34.423,
+  "ttfb_ms": 33.87,
+  "request": {
+    "method": "DELETE",
+    "url": "http://127.0.0.1:9100/v1/watchlists/{{wl_ws}}",
+    "path": "/v1/watchlists/{{wl_ws}}",
+    "headers": [
+      [
+        "host",
+        "127.0.0.1:9100"
+      ],
+      [
+        "accept",
+        "*/*"
+      ],
+      [
+        "accept-encoding",
+        "gzip, deflate"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "user-agent",
+        "fauxcall/0.2.0 (+https://github.com/bradnemetski/fauxcall)"
+      ],
+      [
+        "x-api-key",
+        "[REDACTED]"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "http_version": "HTTP/1.1",
+    "headers": [
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:45:04 GMT"
+      ],
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-length",
+        "169"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "x-ratelimit-limit",
+        "30"
+      ],
+      [
+        "x-ratelimit-remaining",
+        "16"
+      ],
+      [
+        "x-ratelimit-reset",
+        "1792025109"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "error": {
+          "code": "invalid_parameter",
+          "message": "Invalid value for parameter 'id': must be an integer.",
+          "request_id": "8a5b9c4f-26d2-43ea-b0a0-49d959263bd4",
+          "param": "id"
+        }
+      },
+      "size": 169
+    }
+  },
+  "redacted": [
+    "request.header:x-api-key"
+  ]
+}

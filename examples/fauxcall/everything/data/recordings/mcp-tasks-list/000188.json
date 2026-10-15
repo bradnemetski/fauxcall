@@ -1,0 +1,111 @@
+{
+  "id": "000188",
+  "endpoint": "MCP tasks/list",
+  "plan_call": "tasks-list-empty",
+  "started_at": "2026-10-15T00:39:44.990944Z",
+  "started_ns": 1792024784990944000,
+  "elapsed_ms": 11.041,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 42,
+        "method": "tasks/list",
+        "params": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "122"
+      ],
+      [
+        "date",
+        "Thu, 15 Oct 2026 00:39:44 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "tasks": [],
+          "_meta": {}
+        },
+        "jsonrpc": "2.0",
+        "id": 42
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 10.78,
+      "kind": "sse",
+      "event": "message",
+      "id": "b3168e0f-01df-4792-8009-85065828a334",
+      "data": "{\"result\":{\"tasks\":[],\"_meta\":{}},\"jsonrpc\":\"2.0\",\"id\":42}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}
