@@ -10,6 +10,7 @@ its status endpoint. Each evaluation session gets its own copy-on-write view (`X
 - [Collections](#collections)
 - [Build, check, repeat](#build-check-repeat)
 - [Relations and closure](#relations-and-closure)
+- [Both directions, and what writes do](#both-directions-and-what-writes-do)
 - [Invariants and aggregates](#invariants-and-aggregates)
 - [Async jobs](#async-jobs)
 - [Expansion](#expansion)
@@ -70,6 +71,46 @@ calls for exactly those ids) and rebuild — never invent them, never delete the
 to make the check pass (the real API would still return them). `required: false` only when the real
 data genuinely contains dangling references (say so in `evidence`).
 
+## Both directions, and what writes do
+
+A relation is checked forward (every company's exchange exists) and, when you say so, in reverse
+(every exchange has a company). Three rules per relation say how the real API keeps it; each
+starts undecided (`null`), and `fauxcall model check` lists what is still undecided. Decide every
+one before scaffolding, and say why in `rules_evidence`.
+
+| rule | question | values |
+|---|---|---|
+| `min_per_target` | Must every target be referenced? | `1`: every author has a book, every exchange lists a company; `0`: a city needs no team — **unless it's a sports API**, where every city in it has a team |
+| `on_missing` | A write pointing at a target that doesn't exist? | `refuse` (the endpoint's `missing_reference` error case, e.g. a 404 "author not found") or `accept` (stored anyway) |
+| `on_delete` | Deleting a target that is still referenced? | `restrict` (the endpoint's `still_referenced` error case, e.g. 409), `cascade` (its referrers go too), `set_null` (references cleared; removed from lists), `ignore` (left dangling) |
+
+```json
+{"name": "book_author", "from_collection": "books", "from_field": "authorId", "to_collection": "authors",
+ "min_per_target": 1, "on_missing": "refuse", "on_delete": "restrict",
+ "evidence": "every book's authorId is in /authors (200 of 200)",
+ "rules_evidence": "all 48 recorded authors have books, and the docs list authors 'with their books'; POST /books with authorId 999 got 404 (000311); DELETE /authors/3 with books got 409 (000315)"}
+```
+
+**Evidence for the reverse.** `fauxcall world check` prints each relation both ways
+(`48 of 48 authors referenced (fewest referrers: 2)`); `analyze relations` shows the same for
+candidates (`reverse`, `unreferenced`). Full coverage in a sample can be chance, and gaps can be
+sampling: weigh it with what the domain says and the docs describe. In a sports API, a city exists
+because a team plays there; in a weather API, cities exist on their own.
+
+**Evidence for writes.** Record it, don't assume it: plan a create (or update) pointing at a target
+that doesn't exist, and a delete of a target that is still referenced, with cleanup (see
+[recording](recording.md#writes-read-backs-and-cleanup)). Then map the error cases:
+`{"when": "missing_reference", "template": "author_not_found"}` on the write endpoint,
+`{"when": "still_referenced", "template": "author_has_books"}` on the delete endpoint. Without a
+recorded error, the fake answers a generic 422 or 409, which won't match the real API.
+
+**What is checked when.** The world as built (and expanded) must satisfy both directions. After
+writes, a world can't always (an author created through the API has no books yet, on the real
+API too), so the fake's tests check, after every scenario, the references that writes keep (rules
+`refuse` and `restrict`/`cascade`/`set_null`) and the invariants; a handler that leaves a dangling
+reference or a duplicate fails the scenario. Custom handlers that write use `ctx.refuse_missing`
+and `ctx.delete` to follow the same rules (see [model](model.md#custom-handlers)).
+
 ## Invariants and aggregates
 
 ```json
@@ -120,5 +161,9 @@ relations kept valid, then frozen:
 ```bash
 fauxcall world expand <name> tickers
 ```
+
+Expansion keeps both directions: references are drawn from existing targets, and targets short of
+their `min_per_target` get the first new referrers (their field must be in `vary`). Expand targets
+before their referrers: new exchanges first, then new companies to list on them.
 
 Never expand to paper over missing evidence for records agents will look up by id.

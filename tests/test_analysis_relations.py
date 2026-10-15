@@ -58,9 +58,12 @@ def test_tickers_reference_exchanges() -> None:
         distinct_values=5,
         missing=["XTKS"],
         name_hint=True,
+        reverse_coverage=1.0,  # every exchange has a ticker
+        unreferenced=[],
     )
     reverse = find(candidates, "$.data[*].code", "$.data[*].exchangeId")
     assert reverse.coverage == 1.0
+    assert (reverse.reverse_coverage, reverse.unreferenced) == (0.8, ["XTKS"])
     assert reverse.name_hint is False
     assert candidates.index(reverse) > 0
 
@@ -232,14 +235,15 @@ def test_candidates_table() -> None:
     )
     lines = candidates_table(candidates).splitlines()
     assert lines[0] == (
-        "| from | field | to | key field | coverage | distinct | name hint | missing |"
+        "| from | field | to | key field | coverage | distinct | name hint | missing "
+        "| reverse | unreferenced |"
     )
-    assert lines[1] == "|---|---|---|---|---|---|---|---|"
+    assert lines[1] == "|---|---|---|---|---|---|---|---|---|---|"
     assert lines[2] == (
         "| GET /v1/tickers | `$.data[*].exchangeId` | GET /v1/exchanges | `$.data[*].code` "
-        "| 80% | 5 | yes | XTKS |"
+        "| 80% | 5 | yes | XTKS | 100% | - |"
     )
-    assert any(line.endswith("| 100% | 4 |  | - |") for line in lines[3:])
+    assert any(line.endswith("| 100% | 4 |  | - | 80% | XTKS |") for line in lines[3:])
     limited = candidates_table(candidates, limit=1).splitlines()
     assert len(limited) == 3
     assert candidates_table([]).count("\n") == 1

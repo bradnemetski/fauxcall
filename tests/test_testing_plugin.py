@@ -1147,3 +1147,77 @@ def test_scenarios_answer_the_server_mid_call_in_process(pytester: pytest.Pytest
     pytester.makeconftest(ASKING_CONFTEST)
     pytester.makepyfile(test_asking=ASKING_SCENARIOS)
     run(pytester).assert_outcomes(passed=4)
+
+
+CONSISTENT_CONFTEST = """
+import os
+
+import pytest
+from fastapi import FastAPI
+
+from _engine import harness, market_model
+from fauxcall.model import InvariantModel
+from fauxcall.testing import FakeUnderTest
+
+MODEL = market_model()
+MODEL.invariants.append(
+    InvariantModel(
+        name="unique_names",
+        kind="unique",
+        collection="watchlists",
+        field="name",
+        description="Watchlist names are unique",
+    )
+)
+
+
+@pytest.fixture(scope="session")
+def fauxcall_fake(tmp_path_factory):
+    if os.environ.get("PLAIN"):  # an app that isn't a FauxCall fake: nothing to check
+        return FakeUnderTest(app_factory=FastAPI, model=MODEL)
+    fake = harness(tmp_path_factory.mktemp("fake"), model=MODEL)
+    return FakeUnderTest(app_factory=lambda: fake.app, model=MODEL)
+"""
+
+CONSISTENT_SCENARIOS = """
+HEADERS = {"X-API-Key": "demo-key-123"}
+
+
+async def test_one_watchlist(api):
+    made = await api.post("/v1/watchlists", json={"name": "Tech"}, headers=HEADERS)
+    assert made.status_code == 201
+
+
+async def test_two_with_the_same_name(api):
+    for _ in range(2):  # the generic create accepts it: the world check doesn't
+        await api.post("/v1/watchlists", json={"name": "Tech"}, headers=HEADERS)
+
+
+async def test_only_reads(api):
+    await api.get("/v1/watchlists", headers=HEADERS)
+"""
+
+
+def test_scenarios_must_leave_the_world_consistent(pytester: pytest.Pytester) -> None:
+    pytester.makeini(INI)
+    pytester.makeconftest(CONSISTENT_CONFTEST)
+    pytester.makepyfile(test_consistent=CONSISTENT_SCENARIOS)
+    result = run(pytester)
+    result.assert_outcomes(passed=3, errors=1)  # failed at teardown, after its writes
+    result.stdout.fnmatch_lines(
+        [
+            "*the scenario left the fake's world inconsistent:*",
+            "*session 'default': invariant 'unique_names': watchlists*duplicates*",
+        ]
+    )
+    run(pytester, "--target=real", "-k", "only_reads").assert_outcomes(skipped=1)  # no real API
+
+
+def test_apps_that_arent_fakes_skip_the_world_check(
+    pytester: pytest.Pytester, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("PLAIN", "1")
+    pytester.makeini(INI)
+    pytester.makeconftest(CONSISTENT_CONFTEST)
+    pytester.makepyfile(test_consistent=CONSISTENT_SCENARIOS)
+    run(pytester, "-k", "only_reads").assert_outcomes(passed=1)

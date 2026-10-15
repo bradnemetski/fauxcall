@@ -330,6 +330,9 @@ async def handle_create(ctx: RequestContext) -> Response:
     if key is None:
         return ctx.error("invalid_body")
     _apply_defaults(ctx, record, write, key)
+    refused = ctx.refuse_missing(endpoint.collection, record)
+    if refused is not None:
+        return refused
     if write.persist:
         try:
             stored = ctx.world.insert(endpoint.collection, record, recorded_at=_now(ctx))
@@ -373,6 +376,9 @@ async def _modify(ctx: RequestContext, *, merge: bool) -> Response:
     if existing is not None:
         key = existing.key
     jsonpath.set_all(record, collection.key, lambda _old: key)
+    refused = ctx.refuse_missing(endpoint.collection, record)
+    if refused is not None:
+        return refused
     if not write.persist:
         merged = {
             **(existing.record if existing and isinstance(existing.record, dict) else {}),
@@ -408,8 +414,9 @@ async def handle_delete(ctx: RequestContext) -> Response:
             return ctx.error("not_found", param=endpoint.key_param, value=key)
         existing = WorldRecord(key=key, record={}, recorded_at=_now(ctx))
     elif write.persist:
-        ctx.world.delete(endpoint.collection, existing.key)
-        ctx.runtime.drop_blob(ctx, endpoint.collection, existing.key)
+        refused = ctx.delete(endpoint.collection, existing.key)  # as the relations say
+        if refused is not None:
+            return refused
     return _write_response(ctx, write, existing, sent=None)
 
 

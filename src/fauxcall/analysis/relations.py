@@ -46,6 +46,16 @@ class RelationCandidate(Model):
     distinct_values: int
     missing: list[RawJson] = Field(default_factory=list, description="Up to 5 unresolved values.")
     name_hint: bool = Field(description="The field name mentions the target (e.g. 'exchange').")
+    reverse_coverage: float = Field(
+        default=0.0,
+        description=(
+            "Share of the target's distinct keys that some record references: evidence for "
+            "min_per_target (1.0: every recorded exchange has a ticker)."
+        ),
+    )
+    unreferenced: list[RawJson] = Field(
+        default_factory=list, description="Up to 5 target keys nothing references."
+    )
 
 
 def _key_text(value: JsonValue) -> str | None:
@@ -186,6 +196,7 @@ def relation_candidates(groups: Mapping[str, Sequence[JsonValue]]) -> list[Relat
                     if coverage < MIN_COVERAGE:
                         continue
                     missing = sorted(referencing - targets)[:MAX_MISSING]
+                    unreferenced = sorted(targets - referencing)[:MAX_MISSING]
                     found.append(
                         RelationCandidate(
                             from_group=from_group,
@@ -196,6 +207,8 @@ def relation_candidates(groups: Mapping[str, Sequence[JsonValue]]) -> list[Relat
                             distinct_values=len(referencing),
                             missing=list(missing),
                             name_hint=_name_hint(field, to_group, to_field),
+                            reverse_coverage=round(len(covered) / len(targets), 3),
+                            unreferenced=list(unreferenced),
                         )
                     )
     found.sort(
@@ -205,16 +218,26 @@ def relation_candidates(groups: Mapping[str, Sequence[JsonValue]]) -> list[Relat
 
 
 def candidates_table(candidates: Sequence[RelationCandidate], *, limit: int = 40) -> str:
-    """Markdown table for the agent."""
+    """Markdown table for the agent.
+
+    *coverage* is the forward direction (references found among the targets), *reverse* the other
+    way (targets that something references): evidence for ``min_per_target``, to weigh with what
+    the domain says (every team has a city; a city needs a team only in a sports API).
+    """
     lines = [
-        "| from | field | to | key field | coverage | distinct | name hint | missing |",
-        "|---|---|---|---|---|---|---|---|",
+        (
+            "| from | field | to | key field | coverage | distinct | name hint | missing "
+            "| reverse | unreferenced |"
+        ),
+        "|---|---|---|---|---|---|---|---|---|---|",
     ]
     for item in candidates[:limit]:
         missing = ", ".join(str(m) for m in item.missing) or "-"
+        unreferenced = ", ".join(str(u) for u in item.unreferenced) or "-"
         hint = "yes" if item.name_hint else ""
         lines.append(
             f"| {item.from_group} | `{item.from_field}` | {item.to_group} | `{item.to_field}` | "
-            f"{item.coverage:.0%} | {item.distinct_values} | {hint} | {missing} |"
+            f"{item.coverage:.0%} | {item.distinct_values} | {hint} | {missing} "
+            f"| {item.reverse_coverage:.0%} | {unreferenced} |"
         )
     return "\n".join(lines)

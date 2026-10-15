@@ -25,6 +25,7 @@ from fauxcall.runtime.templating import (
     render_text,
 )
 from fauxcall.timefmt import TimeFormat
+from fauxcall.world.references import apply_delete, missing_references, plan_delete
 
 if TYPE_CHECKING:
     import asyncio
@@ -63,6 +64,8 @@ DEFAULT_STATUS: Final[dict[str, int]] = {
     "rate_limited": 429,
     "payload_too_large": 413,
     "unsupported_media_type": 415,
+    "missing_reference": 422,
+    "still_referenced": 409,
     "custom": 400,
 }
 _NOW_FORMATS: Final[dict[str, TimeFormat]] = {
@@ -429,6 +432,41 @@ class RequestContext:
             if case is not None:
                 return self.model.error_template(case.template)
         return next((t for t in self.model.errors if t.name == condition), None)
+
+    def refuse_missing(self, collection: str, record: JsonValue) -> Response | None:
+        """The real API's refusal of a write pointing at a target that doesn't exist, or ``None``.
+
+        For relations from ``collection`` whose ``on_missing`` is ``refuse``: the endpoint's
+        ``missing_reference`` error. Custom handlers call it before storing a record::
+
+            if (refused := ctx.refuse_missing("books", record)) is not None:
+                return refused
+        """
+        missing = missing_references(self.model, self.world, collection, record)
+        if not missing:
+            return None
+        relation, value = missing[0]
+        return self.error("missing_reference", param=relation.from_field, value=value)
+
+    def delete(self, collection: str, key: JsonValue) -> Response | None:
+        """Delete a record as the real API does; ``None`` once done, else the refusal.
+
+        Relations' ``on_delete`` apply: ``restrict`` refuses with the endpoint's
+        ``still_referenced`` error while records point here (nothing changes), ``cascade``
+        deletes them too, ``set_null`` clears their references. A record that doesn't exist is
+        left alone (answer the endpoint's ``not_found`` before calling this).
+        """
+        record = self.world.get(collection, key)
+        if record is None:
+            return None
+        plan = plan_delete(self.model, self.world, collection, record)
+        if plan.blocked_by is not None:
+            relation, _ = plan.blocked_by
+            return self.error("still_referenced", param=relation.from_field, value=key)
+        apply_delete(self.world, plan)
+        for deleted_from, deleted in plan.deletes:
+            self.runtime.drop_blob(self, deleted_from, deleted.key)
+        return None
 
     def error(
         self,

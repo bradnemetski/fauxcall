@@ -6,6 +6,28 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- **Relations hold in both directions.** `min_per_target` says every target must be referenced
+  (every author has a book; a city needs a team only in a sports API), and `world check` enforces
+  it. `world check` and `world build` print each relation both ways (references, dangling ones,
+  how many targets are referenced), and `analyze relations` shows the reverse coverage of
+  candidates. Expansion gives targets short of referrers the first new records.
+- **Writes keep references as the real API does.** `on_missing` refuses (or accepts) a write that
+  points at a target that doesn't exist, with the endpoint's `missing_reference` error case;
+  `on_delete` (restrict, cascade, set null, ignore) is now carried out, refusing with the
+  `still_referenced` error case. Custom handlers follow the same rules with
+  `ctx.refuse_missing(collection, record)` and `ctx.delete(collection, key)`.
+- Generated fakes test that their world is consistent, and every scenario on the in-process fake
+  fails if its writes leave a dangling reference (where writes keep them) or break an invariant.
+- `fauxcall model check` lists each relation rule not decided yet; the skill decides them from
+  reverse coverage, the domain and recorded write probes, and says why in `rules_evidence`.
+
+### Changed
+
+- A relation's `on_delete` starts undecided (`null`) instead of `ignore`; undecided rules behave
+  as before (writes are accepted, deletes leave references dangling).
+
 ### Fixed
 
 - Requests an MCP fake sends to the client (sampling, elicitation, roots) are numbered from 0 in

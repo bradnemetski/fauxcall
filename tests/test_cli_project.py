@@ -960,3 +960,20 @@ def test_module_entry_point_in_process(
         runpy.run_module("fauxcall", run_name="__main__", alter_sys=True)
     assert finished.value.code in {0, None}
     assert capsys.readouterr().out.strip() == __version__
+
+
+def test_model_check_lists_relation_rules_to_decide(ws: Workspace) -> None:
+    from fauxcall.model.world import CollectionModel, RelationModel  # noqa: PLC0415
+
+    model = rest_model()
+    model.collections = [CollectionModel(name="teams"), CollectionModel(name="cities")]
+    model.relations = [
+        RelationModel(
+            name="team_city", from_collection="teams", from_field="cityId", to_collection="cities"
+        )
+    ]
+    write_fake(ws, "shop", model)
+    output = invoke("model", "check", "shop").output  # undecided is not an error
+    assert "Decide from recorded probes and the domain" in output
+    assert "- relation 'team_city' (teams.cityId -> cities): min_per_target" in output
+    assert "model OK" in output

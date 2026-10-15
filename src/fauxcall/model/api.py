@@ -27,12 +27,15 @@ from fauxcall.model.world import (
     InvariantModel,
     RelationModel,
 )
+from fauxcall.types import HttpMethod
 
 MODEL_FORMAT_VERSION: Final = 1
 
 SourceKind = Literal["openapi", "swagger_ui", "redoc", "html_docs", "mcp"]
 
 
+_CHANGES: Final = frozenset({HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH})
+"""Methods that create or change records."""
 _STRATEGY_KEY_TYPES: Final[dict[str, frozenset[str]]] = {
     "increment": frozenset({"int"}),
     "random_int": frozenset({"int", "str"}),
@@ -158,6 +161,53 @@ class ApiModel(Model):
         ]
 
     # -- consistency ---------------------------------------------------------------------------
+
+    def writes_to(self, collection: str) -> bool:
+        """Whether some endpoint creates or changes records of ``collection``.
+
+        Generic write roles, and custom or computed endpoints on it that POST, PUT or PATCH.
+        """
+        return any(
+            e.collection == collection
+            and (
+                e.role in {"create", "replace", "update"}
+                or (e.role in {"custom", "computed"} and e.method in _CHANGES)
+            )
+            for e in self.endpoints
+        )
+
+    def deletes_from(self, collection: str) -> bool:
+        """Whether some endpoint deletes records of ``collection`` (generic, custom or computed)."""
+        return any(
+            e.collection == collection
+            and (
+                e.role == "delete"
+                or (e.role in {"custom", "computed"} and e.method == HttpMethod.DELETE)
+            )
+            for e in self.endpoints
+        )
+
+    def undecided(self) -> list[str]:
+        """Relation rules not decided yet (``null``): what to find out before the fake is done.
+
+        ``on_missing`` matters only when some endpoint writes the referencing collection, and
+        ``on_delete`` only when one deletes the target; the reverse minimum always does.
+        """
+        writes = {r.from_collection for r in self.relations if self.writes_to(r.from_collection)}
+        deletes = {r.to_collection for r in self.relations if self.deletes_from(r.to_collection)}
+        found: list[str] = []
+        for relation in self.relations:
+            where = (
+                f"relation {relation.name!r} ({relation.from_collection}.{relation.from_field} "
+                f"-> {relation.to_collection})"
+            )
+            if relation.on_missing is None and relation.from_collection in writes:
+                found.append(f"{where}: on_missing (refuse or accept a missing target?)")
+            if relation.on_delete is None and relation.to_collection in deletes:
+                found.append(f"{where}: on_delete (deleting a referenced target does what?)")
+            if relation.min_per_target is None:
+                found.append(f"{where}: min_per_target (must every target be referenced?)")
+        return found
 
     def problems(self) -> list[str]:
         """Cross-reference problems (dangling names, duplicates). Empty means consistent."""

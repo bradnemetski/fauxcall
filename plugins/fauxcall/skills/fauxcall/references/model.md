@@ -148,7 +148,8 @@ Placeholders: `{{uuid}}`, `{{uuid7}}`, `{{traceparent}}`, `{{hex:16}}`, `{{digit
 Attach templates per endpoint with `errors: [{"when": …, "template": …, "param": …}]` (conditions:
 `not_found`, `invalid_param`, `missing_param`, `invalid_body`, `unauthorized`, `forbidden`,
 `expired`, `insufficient_scope`, `conflict`, `method_not_allowed`, `unknown_route`,
-`rate_limited`, `payload_too_large`, `unsupported_media_type`, `custom`). A template **named** like a
+`rate_limited`, `payload_too_large`, `unsupported_media_type`, `missing_reference`,
+`still_referenced` (see [consistency](consistency.md#both-directions-and-what-writes-do)), `custom`). A template **named** like a
 condition (e.g. `not_found`) is the API-wide default for it.
 
 ## Auth, rate limits, routing, headers
@@ -239,3 +240,10 @@ Context helpers: `ctx.params` (validated), `ctx.json_body`, `ctx.path_param(name
 `ctx.respond_bytes(…)`, `ctx.empty(status)`, `ctx.error(condition, param=…, value=…)`,
 `ctx.identity`, `ctx.session`, `ctx.runtime.jev` (cached Jev). MCP tools use
 `TOOL_HANDLERS["name"] = async def tool(ctx, arguments) -> result_json`.
+
+Handlers that write keep references as the relations say, exactly like the generic roles: before
+storing, `if (refused := ctx.refuse_missing("books", record)) is not None: return refused` (the
+`missing_reference` error where `on_missing` is `refuse`); to delete, `ctx.delete("authors", key)`
+instead of `ctx.world.delete` (`None` once done, with cascades and cleared references, else the
+`still_referenced` refusal). After every scenario, the fake's tests fail on a dangling reference
+or a broken invariant.

@@ -11,6 +11,7 @@ from __future__ import annotations
 import contextlib
 import importlib
 import sys
+from collections import Counter
 from typing import TYPE_CHECKING
 
 from fauxcall.errors import WorldError
@@ -31,7 +32,11 @@ if TYPE_CHECKING:
 
 
 def check_world(
-    model: ApiModel, world: SessionWorld, *, import_paths: Sequence[Path] = ()
+    model: ApiModel,
+    world: SessionWorld,
+    *,
+    import_paths: Sequence[Path] = (),
+    after_writes: bool = False,
 ) -> list[str]:
     """Every relation and invariant violation in ``world``, as human-readable problems.
 
@@ -45,14 +50,22 @@ def check_world(
       are searched first, e.g. the fake's ``src`` folder, so a fake's own handlers module can
       hold its checks even when the CLI runs outside the fake's environment).
 
+    * The reverse, for relations with ``min_per_target``: every target record is referenced by at
+      least that many records.
+
+    ``after_writes`` checks a world that writes have changed (after a scenario): only the
+    references writes keep (:func:`kept_by_writes`), and no reverse minimums — a target created
+    through the API has no referrers yet, on the real API too.
+
     Problems are ordered: relations, then invariants (model order), then records (list order).
     """
     problems: list[str] = []
     for relation in model.relations:
-        if not relation.required:
-            continue
         try:
-            problems += _relation_problems(world, relation)
+            if relation.required and (not after_writes or kept_by_writes(model, relation)):
+                problems += _relation_problems(world, relation)
+            if relation.min_per_target and not after_writes:
+                problems += _reverse_problems(world, relation)
         except WorldError as exc:  # unknown collection or invalid path
             problems.append(f"relation {relation.name!r}: {exc}")
     for invariant in model.invariants:
@@ -61,6 +74,93 @@ def check_world(
         except WorldError as exc:
             problems.append(f"invariant {invariant.name!r}: {exc}")
     return problems
+
+
+def kept_by_writes(model: ApiModel, relation: RelationModel) -> bool:
+    """Whether writes keep every reference of ``relation`` resolving, as the real API does.
+
+    Writes to the referencing collection must refuse missing targets (or there are none), and
+    deleting a target must restrict, cascade or clear (or nothing deletes targets).
+    """
+    refuses = relation.on_missing == "refuse" or not model.writes_to(relation.from_collection)
+    guarded = relation.on_delete in {"restrict", "cascade", "set_null"}
+    guarded = guarded or not model.deletes_from(relation.to_collection)
+    return refuses and guarded
+
+
+def relation_summary(model: ApiModel, world: SessionWorld) -> list[str]:
+    """One line per relation: references, dangling ones, and how many targets are referenced.
+
+    The reverse coverage is evidence for ``min_per_target`` (``48 of 48 exchanges referenced``),
+    to weigh with domain knowledge: a sample can cover every target by chance.
+    """
+    lines: list[str] = []
+    for relation in model.relations:
+        try:
+            source = world.collection(relation.from_collection)
+            target = world.collection(relation.to_collection)
+            token, tokens_of = identities(target, relation.to_field)
+            counts = _referrer_counts(world, relation, token)
+            references = sum(counts.values())
+            exists, _ = target_matcher(world, target, relation.to_field)
+            dangling = sum(
+                1
+                for record in world.list(source.name, copy=False)
+                for _, value in iter_matches(record.record, parse_path(relation.from_field))
+                if value is not None and not exists(value)
+            )
+            per_target = [
+                max((counts[t] for t in tokens_of(r)), default=0)
+                for r in world.list(target.name, copy=False)
+            ]
+        except WorldError as exc:
+            lines.append(f"{relation.name}: {exc}")
+            continue
+        referenced = sum(1 for n in per_target if n)
+        fewest = min(per_target, default=0)
+        rule = "undecided" if relation.min_per_target is None else str(relation.min_per_target)
+        lines.append(
+            f"{relation.name}: {source.name}.{relation.from_field} -> {target.name}: "
+            f"{references} references, {dangling} dangling; {referenced} of {len(per_target)} "
+            f"{target.name} referenced (fewest referrers: {fewest}; min_per_target: {rule})"
+        )
+    return lines
+
+
+def uncovered_targets(
+    world: SessionWorld, relation: RelationModel, referrers: Sequence[WorldRecord]
+) -> list[JsonValue]:
+    """Target values still short of ``min_per_target`` referrers among ``referrers``.
+
+    Each value appears once per missing referrer, in the target collection's order, ready to be
+    handed to new referencing records (world expansion).
+    """
+    need = relation.min_per_target or 0
+    if not need:
+        return []
+    target = world.collection(relation.to_collection)
+    token, tokens_of = identities(target, relation.to_field)
+    field = parse_path(relation.from_field)
+    counts: Counter[str] = Counter()
+    for record in referrers:
+        counts.update(
+            {
+                t
+                for _, value in iter_matches(record.record, field)
+                if value is not None and (t := token(value)) is not None
+            }
+        )
+    segments = parse_path(relation.to_field or target.key)
+    by_key = segments == parse_path(target.key)
+    wanted: list[JsonValue] = []
+    for record in world.list(target.name, copy=False):
+        have = max((counts[t] for t in tokens_of(record)), default=0)
+        if have >= need:
+            continue
+        values = [record.key] if by_key else [v for _, v in iter_matches(record.record, segments)]
+        if values:
+            wanted += [copy_json(values[0])] * (need - have)
+    return wanted
 
 
 def resolve_relation_targets(model: ApiModel, world: SessionWorld) -> dict[str, list[JsonValue]]:
@@ -112,7 +212,7 @@ def _relation_problems(world: SessionWorld, relation: RelationModel) -> list[str
     source = world.collection(relation.from_collection)
     target = world.collection(relation.to_collection)
     field = parse_path(relation.from_field)
-    exists, where = _target_matcher(world, target, relation.to_field)
+    exists, where = target_matcher(world, target, relation.to_field)
     problems: list[str] = []
     for record in world.list(source.name, copy=False):
         for trail, value in iter_matches(record.record, field):
@@ -124,7 +224,69 @@ def _relation_problems(world: SessionWorld, relation: RelationModel) -> list[str
     return problems
 
 
-def _target_matcher(
+def identities(
+    target: CollectionModel, to_field: str | None
+) -> tuple[Callable[[JsonValue], str | None], Callable[[WorldRecord], list[str]]]:
+    """How references and target records compare: a reference's token, a target's tokens."""
+    segments = parse_path(to_field or target.key)
+    by_key = segments == parse_path(target.key)
+
+    def token(value: JsonValue) -> str | None:
+        if not by_key:
+            return canonical_dumps(value)
+        try:
+            return canonical_dumps(normalize_key(value, target.key_type))
+        except InvalidKeyError:
+            return None
+
+    def tokens_of(record: WorldRecord) -> list[str]:
+        if by_key:
+            return [t for t in (token(record.key),) if t is not None]
+        return [
+            canonical_dumps(value)
+            for _, value in iter_matches(record.record, segments)
+            if value is not None
+        ]
+
+    return token, tokens_of
+
+
+def _referrer_counts(
+    world: SessionWorld, relation: RelationModel, token: Callable[[JsonValue], str | None]
+) -> Counter[str]:
+    """How many referencing records point at each target token (a record counts once)."""
+    field = parse_path(relation.from_field)
+    counts: Counter[str] = Counter()
+    for record in world.list(relation.from_collection, copy=False):
+        counts.update(
+            {
+                t
+                for _, value in iter_matches(record.record, field)
+                if value is not None and (t := token(value)) is not None
+            }
+        )
+    return counts
+
+
+def _reverse_problems(world: SessionWorld, relation: RelationModel) -> list[str]:
+    source = world.collection(relation.from_collection)
+    target = world.collection(relation.to_collection)
+    token, tokens_of = identities(target, relation.to_field)
+    counts = _referrer_counts(world, relation, token)
+    need = relation.min_per_target or 0
+    problems: list[str] = []
+    for record in world.list(target.name, copy=False):
+        have = max((counts[t] for t in tokens_of(record)), default=0)
+        if have < need:
+            problems.append(
+                f"relation {relation.name!r} (reverse): {target.name}[{record.key!r}] is "
+                f"referenced by {have} {source.name} record(s), needs at least {need} "
+                f"(record its {source.name}, or expand {source.name} after {target.name})"
+            )
+    return problems
+
+
+def target_matcher(
     world: SessionWorld, target: CollectionModel, to_field: str | None
 ) -> tuple[Callable[[JsonValue], bool], str]:
     """A membership test for referenced values, and how to name the target in messages."""

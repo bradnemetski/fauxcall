@@ -46,8 +46,10 @@ Use the `fauxcall` command for every step (`uvx fauxcall` if `fauxcall` is not o
    and is resumed by invoking this skill again.
 6. **One endpoint at a time** through the endpoint loop, in dependency order.
 7. **Fix the model or the handlers, never a test's expectations** — unless the test is wrong.
-8. **Consistency is non-negotiable:** every reference between endpoints must resolve in the fake
-   (a ticker's exchange exists; an uploaded file appears in the upload status endpoint).
+8. **Consistency is non-negotiable, both ways:** every reference between endpoints must resolve in
+   the fake (a ticker's exchange exists; an uploaded file appears in the upload status endpoint),
+   every target that must be referenced is (every exchange lists tickers), and writes keep
+   references the way the real API does (refused, restricted, cascaded or cleared).
 9. **Ask only at the up-front gate** and for genuinely ambiguous real-world behavior. Batch questions.
    In a non-interactive environment, read answers from `fauxcall/<name>/answers.json`
    ([headless](references/headless.md)) — never wait for input that cannot come.
@@ -161,6 +163,10 @@ Follow [consistency](references/consistency.md) and [time](references/time.md):
 - Collections with `extract` paths → `fauxcall world build <name>`; repeat until it reports the world
   is consistent (record the missing referenced entities; never invent them).
 - `fauxcall analyze relations <name>` → confirm and add relations; `fauxcall world check <name>`.
+- For every relation decide both directions and what writes do (`min_per_target`, `on_missing`,
+  `on_delete`, with `rules_evidence`): from `world check`'s reverse coverage, the domain (cities
+  need teams only in a sports API) and recorded write probes (a write to a missing target, a delete
+  of a referenced one). `fauxcall model check <name>` must list nothing left to decide.
 - Calendars (market hours, holidays, publication times), job state machines, auth error templates,
   rate limits, routing quirks (probe case-sensitivity and trailing slashes), default headers.
 - World expansion only when the real API's totals exceed what was recorded.

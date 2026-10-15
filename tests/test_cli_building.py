@@ -336,3 +336,24 @@ def test_report_for_an_mcp_fake(ws: Workspace) -> None:
     text = invoke("report", "demo").output
     assert "- MCP tools: 1 · resources: 1 · prompts: 0" in text
     assert json.loads(json.dumps(text))
+
+
+def test_every_user_owns_an_item(ws: Workspace) -> None:
+    fake = record_shop(ws, owners=(10, 10))  # user 11 owns nothing
+    model = shop_model()
+    model.relations[0].min_per_target = 1
+    write_model(fake.model_path, model)
+    built = invoke("world", "build", "shop", code=1).output
+    assert "- item-owner: items.owner -> users: 2 references, 0 dangling; 1 of 2 users" in built
+    assert "users[11] is referenced by 0 items record(s), needs at least 1" in built
+    model.collections[0].expansion = ExpansionSpec(target_count=3)  # owners copied, not varied
+    write_model(fake.model_path, model)
+    copied = invoke("world", "expand", "shop", "items", code=1).output
+    assert "note: add 'owner' to expansion.vary" in copied
+    model.collections[0].expansion = ExpansionSpec(target_count=3, vary=["owner"])
+    write_model(fake.model_path, model)
+    covered = invoke("world", "expand", "shop", "items").output
+    assert covered.rstrip().endswith("world is consistent")  # the new item went to user 11
+    plain = shop_model(relations=[])
+    write_model(fake.model_path, plain)
+    assert "Relations" not in invoke("world", "check", "shop").output

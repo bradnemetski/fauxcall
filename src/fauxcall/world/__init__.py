@@ -8,7 +8,13 @@
 """
 
 from fauxcall.world.expand import expand_collection
-from fauxcall.world.invariants import check_world, resolve_relation_targets
+from fauxcall.world.invariants import (
+    check_world,
+    kept_by_writes,
+    relation_summary,
+    resolve_relation_targets,
+    uncovered_targets,
+)
 from fauxcall.world.io import (
     copy_json,
     copy_record,
@@ -46,10 +52,13 @@ __all__ = [
     "copy_json",
     "copy_record",
     "expand_collection",
+    "kept_by_writes",
     "load_collection",
     "normalize_key",
     "record_key",
     "records_from_values",
+    "relation_summary",
     "resolve_relation_targets",
     "save_collection",
+    "uncovered_targets",
 ]

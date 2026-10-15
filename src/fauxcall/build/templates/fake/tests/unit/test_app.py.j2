@@ -4,10 +4,9 @@ from typing import TYPE_CHECKING
 
 import httpx2
 import uvicorn
-{% if mcp %}
 from fauxcall.runtime.app import runtime_of_app
-{% endif %}
 from fauxcall.testing.support import settings_for_tests
+from fauxcall.world import check_world
 
 from {{ package }} import __main__ as entrypoint
 from {{ package }}.app import build_app
@@ -40,6 +39,12 @@ async def test_unknown_route_uses_the_real_not_found() -> None:
     async with _client() as client:
         response = await client.get("/__definitely_not_a_route__")
     assert response.status_code in {404, 405}
+
+
+def test_the_world_is_consistent() -> None:
+    """Every reference resolves, every target has its minimum of referrers, invariants hold."""
+    runtime = runtime_of_app(build_app(settings_for_tests(Settings)))
+    assert check_world(runtime.model, runtime.world.session()) == []
 
 
 def test_main_serves_with_uvicorn(monkeypatch: pytest.MonkeyPatch) -> None:

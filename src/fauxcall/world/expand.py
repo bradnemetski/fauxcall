@@ -41,6 +41,7 @@ def expand_collection(
     spec: ExpansionSpec,
     *,
     reference_values: Mapping[str, Sequence[JsonValue]] | None = None,
+    first_values: Mapping[str, Sequence[JsonValue]] | None = None,
 ) -> list[WorldRecord]:
     """The original records followed by synthetic ones, ``spec.target_count`` in total.
 
@@ -51,7 +52,8 @@ def expand_collection(
       existing key is a 2-6 letter code (tickers, exchange MICs), else ``"<template key>-<n>"``;
     * each ``spec.vary`` path re-sampled (seeded) from the values observed at that path across the
       originals — or from ``reference_values[path]`` when given (paths compare parsed, so
-      ``"$.exchange"`` matches ``"exchange"``);
+      ``"$.exchange"`` matches ``"exchange"``); ``first_values[path]`` are used up first, in
+      order (targets that still need referrers, so every exchange gets its companies);
     * ``synthetic=True``, the template's ``recorded_at`` and ``source="expansion:<template
       source or key>"``.
 
@@ -69,9 +71,11 @@ def expand_collection(
         raise WorldError(f"collection {collection.name!r}: cannot expand an empty collection")
     rng = random.Random(spec.seed)
     pools = _pools(originals, spec.vary, reference_values or {})
+    firsts = {parse_path(path): list(values) for path, values in (first_values or {}).items()}
+    queues = {path: firsts.get(parse_path(path), []) for path, _ in pools}
     keys = _KeyMaker(collection, originals, rng)
     synthetic = [
-        _clone(collection, originals[number % len(originals)], pools, keys, rng)
+        _clone(collection, originals[number % len(originals)], pools, keys, rng, queues)
         for number in range(missing)
     ]
     return [*originals, *synthetic]
@@ -102,6 +106,13 @@ def _pools(
     return pools
 
 
+def _given(value: JsonValue) -> Callable[[JsonValue], JsonValue]:
+    def give(_old: JsonValue) -> JsonValue:
+        return copy_json(value)
+
+    return give
+
+
 def _sampler(pool: Sequence[JsonValue], rng: random.Random) -> Callable[[JsonValue], JsonValue]:
     def sample(_old: JsonValue) -> JsonValue:
         return copy_json(rng.choice(pool))
@@ -115,10 +126,14 @@ def _clone(
     pools: Sequence[tuple[str, Sequence[JsonValue]]],
     keys: _KeyMaker,
     rng: random.Random,
+    queues: Mapping[str, list[JsonValue]],
 ) -> WorldRecord:
     payload = copy_json(template.record)
     for path, pool in pools:
-        if pool:
+        queue = queues.get(path)
+        if queue:
+            set_all(payload, path, _given(queue.pop(0)))
+        elif pool:
             set_all(payload, path, _sampler(pool, rng))
     key = keys.new_key(collection_key(collection, template.key))
     spelled = next(

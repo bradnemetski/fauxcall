@@ -20,7 +20,9 @@ Raise ``RpcError`` for a JSON-RPC error, ``EarlyResponse`` for an HTTP-level rep
 
 Useful helpers on the context: ``ctx.world`` (records), ``ctx.params`` (validated parameters),
 ``ctx.json_body``, ``ctx.now_ns`` / ``ctx.calendar(name)`` (time), ``ctx.respond`` / ``ctx.error``
-(real-API-shaped responses), ``ctx.render_record`` (applies field policies).
+(real-API-shaped responses), ``ctx.render_record`` (applies field policies). Handlers that write
+keep references as the model's relations say: ``ctx.refuse_missing(collection, record)`` before
+storing, and ``ctx.delete(collection, key)`` instead of ``ctx.world.delete``.
 """
 
 from __future__ import annotations

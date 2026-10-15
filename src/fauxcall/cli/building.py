@@ -23,8 +23,16 @@ from fauxcall.cli.common import (
 )
 from fauxcall.recording.store import RecordingStore
 from fauxcall.storage import atomic_write_text
-from fauxcall.world import World, check_world, expand_collection, resolve_relation_targets
+from fauxcall.world import (
+    World,
+    check_world,
+    expand_collection,
+    relation_summary,
+    resolve_relation_targets,
+    uncovered_targets,
+)
 from fauxcall.world.io import load_collection, save_collection
+from fauxcall.world.keys import parse_path
 
 if TYPE_CHECKING:
     from fauxcall.model.api import ApiModel
@@ -54,9 +62,12 @@ def world_build(name: str) -> None:
 
 def _report_problems(fake: FakeLayout) -> None:
     model = load_model(fake)
-    problems = check_world(
-        model, World(model, fake.data).session(), import_paths=[fake.root / "src"]
-    )
+    world = World(model, fake.data).session()
+    summary_lines = relation_summary(model, world)
+    if summary_lines:
+        echo("\nRelations (both directions):")
+        echo("\n".join(f"- {line}" for line in summary_lines))
+    problems = check_world(model, world, import_paths=[fake.root / "src"])
     if problems:
         echo("\nConsistency problems (record the missing entities, or fix relations):")
         echo("\n".join(f"- {problem}" for problem in problems[:100]))
@@ -88,7 +99,19 @@ def world_expand(name: str, collection: str) -> None:
         for r in model.relations
         if r.from_collection == collection
     }
-    expanded = expand_collection(spec, records, spec.expansion, reference_values=references)
+    session = World(model, fake.data).session()
+    firsts = {
+        r.from_field: uncovered_targets(session, r, records)
+        for r in model.relations
+        if r.from_collection == collection and r.min_per_target
+    }
+    varied = {parse_path(vary) for vary in spec.expansion.vary}
+    for field, wanted in firsts.items():
+        if wanted and parse_path(field) not in varied:
+            echo(f"note: add {field!r} to expansion.vary so new {collection} cover the targets")
+    expanded = expand_collection(
+        spec, records, spec.expansion, reference_values=references, first_values=firsts
+    )
     save_collection(path, expanded)
     echo(f"{collection}: {len(records)} recorded + {len(expanded) - len(records)} generated")
     _report_problems(fake)

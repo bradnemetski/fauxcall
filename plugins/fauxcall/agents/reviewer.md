@@ -25,7 +25,10 @@ Check and report (each finding: file/endpoint, evidence, why it matters to an ag
 2. **Time** — every timestamp field has a deliberate policy; formats match recordings exactly;
    market/publication calendars have correct sessions and holidays; nothing that should move is frozen.
 3. **Consistency** — every reference between endpoints is a relation and resolves in the world;
-   aggregates are computed, not replayed; write semantics match the read-back evidence.
+   each relation's reverse (`min_per_target`) and write rules (`on_missing`, `on_delete`) are
+   decided with evidence that fits the domain (a city needs a team only in a sports API), and
+   `fauxcall model check` lists nothing undecided; aggregates are computed, not replayed; write
+   semantics match the read-back evidence.
 4. **Signatures** — methods, paths, parameter names/locations/constraints and status codes equal the
    real API's (not FastAPI defaults); unknown-route and validation errors use the real bodies.
 5. **Tests** — scenarios cover happy paths, errors, consistency, time, pagination, jobs, auth, streams;

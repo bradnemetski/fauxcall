@@ -64,9 +64,14 @@ class CollectionModel(Model):
 
 
 class RelationModel(Model):
-    """A reference from one collection's field to another collection's key.
+    """A reference from one collection's field to another collection's key, in both directions.
 
-    Example: every ``tickers[].exchange`` must exist in ``exchanges[].code``.
+    Example: every ``tickers[].exchange`` must exist in ``exchanges[].code`` (forward), and every
+    exchange lists at least one ticker (``min_per_target: 1``, the reverse).
+
+    Three decisions say how the real API keeps it; ``null`` means not decided yet (the fake is
+    lenient, as if accepting, and ``fauxcall model check`` lists it). Decide each from recorded
+    probes and domain knowledge, and say why in ``rules_evidence``.
     """
 
     name: str
@@ -75,8 +80,35 @@ class RelationModel(Model):
     to_collection: str
     to_field: str | None = Field(default=None, description="Defaults to the target's key.")
     required: bool = Field(default=True, description="Every non-null reference must resolve.")
-    on_delete: Literal["ignore", "restrict", "cascade", "set_null"] = "ignore"
+    on_missing: Literal["refuse", "accept"] | None = Field(
+        default=None,
+        description=(
+            "A write that points at a target that doesn't exist: 'refuse' (the endpoint's "
+            "missing_reference error case) or 'accept' (the real API stores it anyway)."
+        ),
+    )
+    on_delete: Literal["ignore", "restrict", "cascade", "set_null"] | None = Field(
+        default=None,
+        description=(
+            "Deleting a target that is still referenced: 'restrict' (refused with the "
+            "endpoint's still_referenced error case), 'cascade' (its referrers are deleted too), "
+            "'set_null' (their references are cleared) or 'ignore' (they are left dangling)."
+        ),
+    )
+    min_per_target: int | None = Field(
+        default=None,
+        ge=0,
+        description=(
+            "The reverse: every target is referenced by at least this many records (1: every "
+            "exchange has a company; 0: cities need no team, unless it's a sports API). Holds "
+            "for the world as built and expanded; writes may break it, as on the real API."
+        ),
+    )
     evidence: str | None = Field(default=None, description="How the relation was established.")
+    rules_evidence: str | None = Field(
+        default=None,
+        description="Why on_missing, on_delete and min_per_target are what they are.",
+    )
 
 
 class InvariantModel(Model):

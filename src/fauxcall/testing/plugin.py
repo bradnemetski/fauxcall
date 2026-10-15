@@ -48,6 +48,7 @@ from fauxcall.testing.client import (
 from fauxcall.testing.compare import W_STATUS, Comparison, compare
 from fauxcall.testing.replays import recorded_keys
 from fauxcall.testing.report import ParityReport, endpoint_for, endpoint_matcher
+from fauxcall.world.invariants import check_world
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator, Callable, Iterator, Sequence
@@ -372,6 +373,38 @@ async def api(
     async with http:
         yield client
     _keep(request, target, fauxcall_log, fauxcall_fake)
+    _still_consistent(request.config, target, fauxcall_fake)
+
+
+def _still_consistent(config: pytest.Config, target: Target, fake: FakeUnderTest) -> None:
+    """After a scenario on the in-process fake: its writes left the world consistent.
+
+    Every session the scenario wrote to is checked like the built world, as far as writes keep
+    it (``check_world(after_writes=True)``): the references writes keep, and the invariants. A
+    handler that leaves a dangling reference or a duplicate fails the scenario.
+    """
+    model = fake.model
+    if target != "fake" or config.getoption("--fake-url") or model is None:
+        return
+    if not (model.relations or model.invariants):
+        return
+    app = config.stash.get(_APPS_KEY, {}).get(id(fake))
+    try:
+        world = runtime_of_app(app).world  # type: ignore[arg-type]
+    except AttributeError:  # not a FauxCall fake's app (or none was built)
+        return
+    problems = [
+        f"session {session!r}: {problem}"
+        for session in world.sessions()
+        if world.session(session).is_modified()
+        for problem in check_world(model, world.session(session), after_writes=True)
+    ]
+    if problems:
+        pytest.fail(
+            "the scenario left the fake's world inconsistent:\n"
+            + "\n".join(f"- {p}" for p in problems[:20]),
+            pytrace=False,
+        )
 
 
 @pytest_asyncio.fixture

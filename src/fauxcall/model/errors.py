@@ -34,6 +34,8 @@ ErrorCondition = Literal[
     "rate_limited",
     "payload_too_large",
     "unsupported_media_type",
+    "missing_reference",
+    "still_referenced",
     "custom",
 ]
 

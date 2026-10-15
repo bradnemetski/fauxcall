@@ -325,6 +325,12 @@ def model_check(name: str) -> None:
     if problems:
         echo("Problems:\n" + "\n".join(f"- {p}" for p in problems))
         raise typer.Exit(1)
+    undecided = model.undecided()
+    if undecided:
+        echo(
+            "Decide from recorded probes and the domain (see the skill's consistency step):\n"
+            + "\n".join(f"- {u}" for u in undecided)
+        )
     if model.mcp is not None:
         mcp = model.mcp
         echo(

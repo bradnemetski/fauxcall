@@ -98,6 +98,11 @@ recordings are evidence for errors and behavior, not data.
   ids are assigned. Some APIs echo writes without storing them — the fake must do the same.
 - Name created resources so they are recognizable (`fauxcall-probe-…`) and **always clean up**
   (list the cleanup call ids in `cleanup`; plan them right after the read-back).
+- **Relations under writes.** For each relation whose collections can be written, record what the
+  real API does with a write pointing at a target that doesn't exist (purpose `invalid`) and with a
+  delete of a target that is still referenced: create a target and a referrer, delete the target,
+  read the referrer back, then clean up whatever is left. These decide the relation's
+  `on_missing` and `on_delete` ([consistency](consistency.md#both-directions-and-what-writes-do)).
 - Shared public sandboxes (e.g. Petstore) change under your feet: other people's data appears and
   disappears. Record the state you need in one short run and model parity checks accordingly.
 
