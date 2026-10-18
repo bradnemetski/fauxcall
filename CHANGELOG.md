@@ -6,6 +6,11 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.3.1]
+
+MCP fakes enforce their server's size limits and refuse GET streams as it does; refusals of an
+unknown protocol version name the version the client sent.
+
 ### Added
 
 - MCP fakes enforce the server's limits on a body's size and a batch's length, with its real
@@ -328,7 +333,8 @@ The first release.
   outcomes, with cached answers and deterministic fallbacks.
 - Examples: fakes FauxCall built on its own while it was validated, from a single prompt each.
 
-[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/bradnemetski/fauxcall/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/bradnemetski/fauxcall/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/bradnemetski/fauxcall/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/bradnemetski/fauxcall/compare/v0.1.2...v0.1.3
