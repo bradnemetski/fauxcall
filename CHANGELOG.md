@@ -6,6 +6,18 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.3.0]
+
+Data that stays consistent in both directions, and MCP fakes that learn their server's HTTP
+layer. Relations now say whether every target must be referenced (every author has a book; a city
+needs a team only in a sports API) and what the real API does when a write would break a
+reference; the fake enforces both, custom handlers included, and every scenario checks it. MCP
+introspection learns the server's 404 pages, path matching, CORS, refusal order, SSE format and
+priming, and the fake handles cancellation and stream resumption, so a fake no longer needs a
+hand-written HTTP layer. Rebuild existing fakes to pick this up: their tests can now fail on a
+write that leaves the data inconsistent, and `fauxcall model check` lists the relation rules to
+decide.
+
 ### Added
 
 - **The MCP fake's HTTP layer is learned, not hand-written.** Introspection records the real
@@ -40,7 +52,7 @@ All notable changes to FauxCall are listed here. The format follows
 - The `refapi` and `everything` examples are rebuilt with all of this: the Reference API's three
   relations are decided both ways with recorded evidence (100%, independent 100% over 168 of 230
   calls), and the Everything fake learned that its server adds capability tools only after
-  `notifications/initialized` (100%, independent 100% over 234 of 289 calls).
+  `notifications/initialized` (100%, independent 100% over 181 of 238 calls).
 - `fauxcall model check` lists each relation rule not decided yet; the skill decides them from
   reverse coverage, the domain and recorded write probes, and says why in `rules_evidence`.
 
@@ -48,6 +60,8 @@ All notable changes to FauxCall are listed here. The format follows
 
 - A relation's `on_delete` starts undecided (`null`) instead of `ignore`; undecided rules behave
   as before (writes are accepted, deletes leave references dangling).
+- MCP introspection makes about a dozen more calls (the HTTP layer's probes, the listing before
+  `notifications/initialized`); the optional ones come last and stop when the budget runs out.
 
 ### Fixed
 
@@ -299,7 +313,8 @@ The first release.
   outcomes, with cached answers and deterministic fallbacks.
 - Examples: fakes FauxCall built on its own while it was validated, from a single prompt each.
 
-[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/bradnemetski/fauxcall/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/bradnemetski/fauxcall/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/bradnemetski/fauxcall/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/bradnemetski/fauxcall/compare/v0.1.1...v0.1.2
