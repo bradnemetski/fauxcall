@@ -117,6 +117,16 @@ class McpTransportModel(Model):
             "unknown_session, invalid_json, not_jsonrpc."
         ),
     )
+    max_body_bytes: int | None = Field(
+        default=None,
+        ge=1,
+        description="The largest POST body the server reads (refused: refusals.body_too_large).",
+    )
+    max_batch: int | None = Field(
+        default=None,
+        ge=1,
+        description="The most messages a batch may hold (refused: refusals.batch_too_large).",
+    )
     cors: RawJson = Field(
         default=None,
         description=(

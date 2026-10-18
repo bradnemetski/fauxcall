@@ -37,7 +37,7 @@ from fauxcall.runtime.journal import JournalEntry
 from fauxcall.runtime.matching import Candidate, match
 
 if TYPE_CHECKING:
-    from collections.abc import AsyncIterator, Awaitable, Callable, Sequence
+    from collections.abc import AsyncIterator, Awaitable, Callable, Mapping, Sequence
 
     from starlette.requests import Request
 
@@ -641,9 +641,10 @@ class McpFake:
         """Handle GET/POST/DELETE on the Streamable HTTP endpoint."""
         if request.method in {"GET", "DELETE"}:
             return self._get_or_delete(request)
-        messages = _messages(await request.body())
+        raw = await request.body()
+        messages = _messages(raw)
         _ASKING.set(_asked_version(request, messages))
-        refused = self._http_refusal(request, messages)
+        refused = self._http_refusal(request, messages, len(raw))
         if refused is not None:
             return refused
         if isinstance(messages, Response):
@@ -692,7 +693,7 @@ class McpFake:
         return self._reply(sent, headers, session)
 
     def _http_refusal(
-        self, request: Request, messages: list[JsonValue] | Response
+        self, request: Request, messages: list[JsonValue] | Response, size: int = 0
     ) -> Response | None:
         """The real server's HTTP-level refusal of this POST, if it would refuse it.
 
@@ -702,6 +703,7 @@ class McpFake:
         headers = request.headers
         accept = headers.get("accept", "")
         unparsed = isinstance(messages, Response)
+        limits = self.transport
         situations = {
             "accept": "text/event-stream" not in accept or "application/json" not in accept,
             "content_type": "application/json" not in headers.get("content-type", "").lower(),
@@ -715,22 +717,50 @@ class McpFake:
             and headers[self.transport.session_header] not in self._sessions,
             "invalid_json": unparsed,
             "not_jsonrpc": not unparsed and not all(_is_jsonrpc(m) for m in messages),  # type: ignore[union-attr]
+            "body_too_large": limits.max_body_bytes is not None and size > limits.max_body_bytes,
+            "batch_too_large": limits.max_batch is not None
+            and not unparsed
+            and len(messages) > limits.max_batch,  # type: ignore[arg-type]
         }
-        order = [*self.transport.refusal_order, *situations]
-        for situation in dict.fromkeys(order):
-            refused = self._refusal(situation) if situations.get(situation) else None
+        version = headers.get(protocol.PROTOCOL_HEADER)
+        for situation in _check_order(self.transport.refusal_order, situations):
+            refused = self._refusal(situation, version) if situations[situation] else None
             if refused is not None:
                 return refused
         return None
 
-    def _refusal(self, situation: str) -> Response | None:
-        """The real server's recorded HTTP refusal in ``situation``, if introspection saw one."""
+    def _get_refusal(self, request: Request, *, unknown: bool, second: bool) -> Response | None:
+        """The real server's refusal of a GET stream, checked in its order (as for POSTs)."""
+        version = request.headers.get(protocol.PROTOCOL_HEADER)
+        checks = {
+            "get_unknown_session": unknown,
+            "get_accept": "text/event-stream" not in request.headers.get("accept", ""),
+            "get_protocol_header": version is not None and not self._known_version(version),
+            "get_second_stream": second,
+        }
+        learned = [f"get_{name}" for name in self.transport.refusal_order]
+        for situation in dict.fromkeys([*(n for n in learned if n in checks), *checks]):
+            refused = self._refusal(situation, version) if checks[situation] else None
+            if refused is not None:
+                return refused
+        return None
+
+    def _known_version(self, version: str) -> bool:
+        return version in {*protocol.KNOWN_VERSIONS, *self.transport.protocol_versions}
+
+    def _refusal(self, situation: str, value: str | None = None) -> Response | None:
+        """The real server's recorded HTTP refusal in ``situation``, if introspection saw one.
+
+        ``{{value}}`` in the recorded body becomes ``value``: the protocol version the client
+        sent, where the real server names it.
+        """
         recorded = self.transport.refusals.get(situation)
         if not isinstance(recorded, dict):
             return None
         status = recorded.get("status")
+        body = str(recorded.get("body") or "").replace("{{value}}", value or "")
         return Response(
-            content=str(recorded.get("body") or "").encode(),
+            content=body.encode(),
             status_code=status if isinstance(status, int) else 400,
             media_type=str(recorded.get("content_type") or "text/plain"),
         )
@@ -830,14 +860,9 @@ class McpFake:
             return Response(status_code=status, headers=allow)
         last_event_id = request.headers.get("last-event-id", "")
         replay = bool(last_event_id) and self.transport.resumption == "session"
-        situation = (
-            "get_unknown_session"
-            if unknown
-            else "get_second_stream"
-            if session in self.streams and not replay
-            else None
+        refused = self._get_refusal(
+            request, unknown=unknown, second=session in self.streams and not replay
         )
-        refused = self._refusal(situation) if situation else None
         if refused is not None:
             return refused
         if replay:  # every later event of the session, then nothing more
@@ -1286,6 +1311,21 @@ def _asked_version(request: Request, messages: list[JsonValue] | Response) -> st
             asked = params.get("protocolVersion") if isinstance(params, dict) else None
             return asked if isinstance(asked, str) else None
     return request.headers.get(protocol.PROTOCOL_HEADER)
+
+
+def _check_order(learned: Sequence[str], situations: Mapping[str, bool]) -> list[str]:
+    """The order of a POST's checks: the learned one, then the rest.
+
+    Size limits go where the SDK checks them: the body's size before parsing it, a batch's
+    length after.
+    """
+    order = [name for name in dict.fromkeys([*learned, *situations]) if name in situations]
+    for limit in ("body_too_large", "batch_too_large"):
+        order.remove(limit)
+    parse = order.index("invalid_json")
+    order[parse:parse] = ["body_too_large"]
+    order.insert(parse + 2, "batch_too_large")
+    return order
 
 
 def _is_jsonrpc(message: JsonValue) -> bool:

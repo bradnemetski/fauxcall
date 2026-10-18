@@ -130,8 +130,9 @@ if a behavior can't be expressed, say so in the model's `notes`.
 | anything else (`tasks/*` …) | a handler or recording, else the real "method not found" |
 | a notification from the client (`notifications/roots/list_changed` …) | `202` at once; its `METHOD_HANDLERS` handler, if any, runs in the background |
 | a POST with the wrong `Accept` or `Content-Type`, an unknown `MCP-Protocol-Version`, or an unknown session id | the real HTTP refusal, recorded by introspection |
-| a GET or DELETE for an unknown session, or a second GET stream in a session | the real HTTP refusal, recorded by introspection |
-| a POST body that isn't JSON, or isn't JSON-RPC | the real refusal (`invalid_json`, `not_jsonrpc`); several broken rules at once answer in the real server's check order (`refusal_order`) |
+| a GET or DELETE for an unknown session, a second GET stream in a session, a GET without `Accept: text/event-stream` or with an unknown `MCP-Protocol-Version` | the real HTTP refusal, recorded by introspection |
+| a body or a batch over the server's limit | the real refusal (`max_body_bytes`, `max_batch`: introspection probes the SDKs' 4 MiB and 100 messages; set other limits from the server's docs) |
+| a POST body that isn't JSON, or isn't JSON-RPC | the real refusal (`invalid_json`, `not_jsonrpc`); several broken rules at once answer in the real server's check order (`refusal_order`). A refusal that names the protocol version the client sent is recorded with `{{value}}` in its place |
 | a path the server doesn't serve, another method on the MCP path | the real 404 page (`unknown_route`, `method_not_allowed` templates with `{{method}}` and `{{path}}`); the MCP path matched in any case or with a trailing slash when the real one is |
 | an `OPTIONS` preflight, any request with an `Origin` | the real CORS answer and headers (`transport.cors`) |
 | `notifications/cancelled` from the client | the call stops and its answer is never sent; its SSE stream stays open with keep-alives, as on SDK servers |

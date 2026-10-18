@@ -107,6 +107,12 @@ UNKNOWN_SESSION: Final = "fauxcall-unknown-session"
 UNKNOWN_ROUTE: Final = "/fauxcall-probe-unknown-route"
 """A path no server serves, to record its 404 page."""
 PROBE_ORIGIN: Final = "https://fauxcall.invalid"
+PROBE_VERSION: Final = "1999-01-01"
+"""A protocol version no server speaks, to record how it refuses one."""
+LIMIT_PROBE_ID: Final = 9_100_000
+SDK_MAX_BATCH: Final = 100
+SDK_MAX_BODY_BYTES: Final = 4 * 1024 * 1024
+"""The MCP TypeScript SDK's limits (Streamable HTTP), probed during introspection."""
 PROBE_REQUEST_HEADERS: Final = "content-type,mcp-session-id"
 """A session id no server issued, sent to learn how the server refuses it."""
 KEEP_ALIVE_PROBE_SECONDS: Final = 20.0
@@ -134,6 +140,11 @@ def _learn_from_stream(transport: McpTransportModel, watched: RpcCall) -> None:
     pushed = next((m for m in watched.messages if isinstance(m, dict) and "method" in m), None)
     if pushed is not None:  # what the server sends on its own, in its member order
         transport.message_member_order = list(pushed)
+
+
+def _rendered(refusal: JsonValue) -> str:
+    """A recorded refusal's body as the probe got it (its version back in place)."""
+    return str(_member(refusal, "body") or "").replace("{{value}}", PROBE_VERSION)
 
 
 def _member(value: JsonValue, key: str) -> JsonValue:
@@ -197,8 +208,13 @@ def _priming_since(asked: Mapping[str, bool]) -> str | None:
 
 
 def _refusal(call: RpcCall) -> JsonValue:
-    """A recorded HTTP refusal, as the fake repeats it."""
-    return {"status": call.status, "content_type": call.content_type, "body": call.body}
+    """A recorded HTTP refusal, as the fake repeats it.
+
+    The probe's protocol version becomes ``{{value}}``: the fake names the version the client
+    sent, as the real server does.
+    """
+    body = call.body.replace(PROBE_VERSION, "{{value}}")
+    return {"status": call.status, "content_type": call.content_type, "body": body}
 
 
 class _BudgetExhaustedError(RecordingError):
@@ -809,7 +825,7 @@ class McpRecorder:
         situations: dict[str, tuple[dict[str, str], bool]] = {
             "accept": ({"accept": "application/json"}, True),
             "content_type": ({"content-type": "text/plain"}, True),
-            "protocol_header": ({protocol.PROTOCOL_HEADER: "1999-01-01"}, True),
+            "protocol_header": ({protocol.PROTOCOL_HEADER: PROBE_VERSION}, True),
             "unknown_session": ({protocol.SESSION_HEADER: UNKNOWN_SESSION}, False),
         }
         refusals: dict[str, JsonValue] = {}
@@ -833,18 +849,7 @@ class McpRecorder:
         session, and the comment it writes to an idle stream (waited for, at most
         ``keep_alive_within`` seconds).
         """
-        if client.session_id is not None:
-            for http_method, situation in (
-                ("GET", "get_unknown_session"),
-                ("DELETE", "delete_unknown_session"),
-            ):
-                if http_method == "GET" and transport.get_stream != "sse":
-                    continue
-                await self._pace()
-                call = await client.probe_http(http_method, UNKNOWN_SESSION)
-                exchanges.append(self.save(call, method_endpoint(http_method, situation)))
-                if call.status >= _HTTP_ERROR:
-                    transport.refusals[situation] = _refusal(call)
+        await self._probe_session_refusals(client, transport, exchanges)
         if transport.get_stream != "sse":
             return
         await self._pace()
@@ -857,6 +862,34 @@ class McpRecorder:
         if comment is not None:
             exchanges.append(self.save(comment, method_endpoint("GET", "keep_alive")))
             _learn_from_stream(transport, comment)
+
+    async def _probe_session_refusals(
+        self, client: McpWireClient, transport: McpTransportModel, exchanges: list[str]
+    ) -> None:
+        """A GET and a DELETE for a session the server never issued, and GETs it refuses."""
+        if client.session_id is None:
+            return
+        for http_method, situation in (
+            ("GET", "get_unknown_session"),
+            ("DELETE", "delete_unknown_session"),
+        ):
+            if http_method == "GET" and transport.get_stream != "sse":
+                continue
+            await self._pace()
+            call = await client.probe_http(http_method, UNKNOWN_SESSION)
+            exchanges.append(self.save(call, method_endpoint(http_method, situation)))
+            if call.status >= _HTTP_ERROR:
+                transport.refusals[situation] = _refusal(call)
+        if transport.get_stream == "sse":
+            for situation, headers in (
+                ("get_accept", {"accept": "application/json"}),
+                ("get_protocol_header", {protocol.PROTOCOL_HEADER: PROBE_VERSION}),
+            ):
+                await self._pace()
+                call = await client.probe_http("GET", client.session_id, headers=headers)
+                exchanges.append(self.save(call, method_endpoint("GET", situation)))
+                if call.status >= _HTTP_ERROR:
+                    transport.refusals[situation] = _refusal(call)
 
     async def _probe_http_layer(
         self, client: McpWireClient, model: McpModel, exchanges: list[str]
@@ -951,6 +984,43 @@ class McpRecorder:
             if call.status >= _HTTP_ERROR:
                 transport.refusals[situation] = _refusal(call)
         transport.refusal_order = await self._probe_refusal_order(client, transport, exchanges)
+        await self._probe_limits(client, transport, exchanges)
+
+    async def _probe_limits(
+        self, client: McpWireClient, transport: McpTransportModel, exchanges: list[str]
+    ) -> None:
+        """The SDKs' default limits, where the server keeps them.
+
+        A batch of 100 messages (101 refused) and a 4 MiB body; other limits come from the
+        server's docs.
+        """
+        good = {"content-type": "application/json", "accept": "application/json, text/event-stream"}
+
+        async def send(content: bytes, situation: str) -> RpcCall:
+            await self._pace()
+            call = await client.probe_http("POST", client.session_id, headers=good, content=content)
+            exchanges.append(self.save(call, method_endpoint("ping", situation)))
+            return call
+
+        def batch(size: int) -> bytes:
+            pings: list[JsonValue] = [
+                protocol.request(LIMIT_PROBE_ID + i, "ping") for i in range(size)
+            ]
+            return jsonfmt.dumps(pings).encode()
+
+        over = await send(batch(SDK_MAX_BATCH + 1), "batch-over")
+        if (
+            over.status >= _HTTP_ERROR
+            and (await send(batch(SDK_MAX_BATCH), "batch")).status < _HTTP_ERROR
+        ):
+            transport.max_batch = SDK_MAX_BATCH
+            transport.refusals["batch_too_large"] = _refusal(over)
+        padding = "x" * SDK_MAX_BODY_BYTES
+        big = jsonfmt.dumps(protocol.request(LIMIT_PROBE_ID, "ping", {"_meta": {"pad": padding}}))
+        oversized = await send(big.encode(), "body-over")
+        if oversized.status >= _HTTP_ERROR:
+            transport.max_body_bytes = SDK_MAX_BODY_BYTES
+            transport.refusals["body_too_large"] = _refusal(oversized)
 
     async def _probe_refusal_order(
         self, client: McpWireClient, transport: McpTransportModel, exchanges: list[str]
@@ -963,7 +1033,7 @@ class McpRecorder:
             "unknown_session": ({protocol.SESSION_HEADER: UNKNOWN_SESSION}, None),
             "accept": ({"accept": "application/json"}, None),
             "content_type": ({"content-type": "text/plain"}, None),
-            "protocol_header": ({protocol.PROTOCOL_HEADER: "1999-01-01"}, None),
+            "protocol_header": ({protocol.PROTOCOL_HEADER: PROBE_VERSION}, None),
             "invalid_json": ({}, b"{"),
         }
         known = {k: v for k, v in transport.refusals.items() if k in breaks and isinstance(v, dict)}
@@ -987,7 +1057,7 @@ class McpRecorder:
                     situation
                     for situation in remaining
                     if (call.status, call.body)
-                    == (_member(known[situation], "status"), _member(known[situation], "body"))
+                    == (_member(known[situation], "status"), _rendered(known[situation]))
                 ),
                 None,
             )

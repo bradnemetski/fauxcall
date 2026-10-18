@@ -376,3 +376,41 @@ async def test_resuming_from_a_priming_event(tmp_path: Path) -> None:
             replayed = await lines_of(stream_lines, 5)
         assert "data: " in replayed  # the ping's priming event, replayed as it was
         await wire.close()
+
+
+async def test_refusals_name_the_version_sent_and_limits_apply(tmp_path: Path) -> None:
+    refusals: dict[str, JsonValue] = {
+        "protocol_header": {"status": 400, "content_type": "text/plain", "body": "no {{value}}"},
+        "get_accept": {"status": 406, "content_type": "text/plain", "body": "streams only"},
+        "get_protocol_header": {"status": 400, "content_type": "text/plain", "body": "{{value}}?"},
+        "invalid_json": {"status": 400, "content_type": "text/plain", "body": "parse error"},
+        "batch_too_large": {"status": 400, "content_type": "text/plain", "body": "batch"},
+        "body_too_large": {"status": 413, "content_type": "text/plain", "body": "too large"},
+    }
+    transport = McpTransportModel(
+        response_mode="json", get_stream="sse", refusals=refusals, max_batch=3, max_body_bytes=200
+    )
+    app, _ = mcp_app(tmp_path, mcp_model(transport=transport))
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize()
+        session = {"mcp-session-id": str(wire.session_id)}
+        odd = {**POST_HEADERS, **session, "mcp-protocol-version": "2000-02-02"}
+        refused = await http.post("/mcp", json=protocol.request(1, "ping"), headers=odd)
+        assert (refused.status_code, refused.text) == (400, "no 2000-02-02")  # the version sent
+        stream = {**session, "accept": "text/event-stream"}
+        bad_accept = await http.get("/mcp", headers={**session, "accept": "application/json"})
+        assert (bad_accept.status_code, bad_accept.text) == (406, "streams only")
+        bad_version = await http.get(
+            "/mcp", headers={**stream, "mcp-protocol-version": "2000-02-02"}
+        )
+        assert (bad_version.status_code, bad_version.text) == (400, "2000-02-02?")
+        headers = {**POST_HEADERS, **session}
+        big = await http.post("/mcp", content=b"{" * 300, headers=headers)
+        assert (big.status_code, big.text) == (413, "too large")  # before the JSON is read
+        pings: list[JsonValue] = [protocol.request(i, "ping") for i in range(4)]
+        batch = await http.post("/mcp", json=pings, headers=headers)
+        assert (batch.status_code, batch.text) == (400, "batch")
+        fits = await http.post("/mcp", json=pings[:3], headers=headers)
+        assert fits.status_code == 200
+        await wire.close()

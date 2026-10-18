@@ -284,6 +284,7 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         "MCP tools/list:unknown_session",
         *(["MCP GET:get_unknown_session"] if mode == "sse" else []),  # a GET only with a stream
         "MCP DELETE:delete_unknown_session",
+        *(["MCP GET:get_accept", "MCP GET:get_protocol_header"] if mode == "sse" else []),
         *(["MCP GET:second_stream"] if mode == "sse" else []),  # no keep-alive within 0.2 s
         "MCP GET /mcp:no_session",  # the HTTP layer outside MCP
         "MCP GET /fauxcall-probe-unknown-route:unknown_route",
@@ -294,6 +295,8 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         "MCP tools/list:invalid_json",
         "MCP tools/list:not_jsonrpc",
         *["MCP tools/list:refusal-order"] * ORDER_PROBES[mode],
+        "MCP ping:batch-over",  # accepted: no batch limit, so no second batch
+        "MCP ping:body-over",
         *["MCP tools/list:with-sampling"] * 2,  # two pages each
         *["MCP tools/list:with-elicitation"] * 2,
         *["MCP tools/list:with-elicitation.url"] * 2,
@@ -306,10 +309,10 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         "MCP initialize:version-2025-06-18",
         "MCP initialize:version-2025-11-25",
     ]
-    assert len(found.exchanges) == (45 if mode == "sse" else 43)
+    assert len(found.exchanges) == (49 if mode == "sse" else 45)
     # every request was paced: 2 rps -> 0.5 s apart (cleanup DELETEs included); each
     # capability probe: initialize, 2 pages, DELETE; watching the stream: it and a second one
-    assert clock.sleeps == [0.5] * (63 if mode == "sse" else 60)
+    assert clock.sleeps == [0.5] * (67 if mode == "sse" else 62)
     # A fake built from what was learned behaves the same on the wire.
     rebuilt = fake_model(transport=model.transport, page_size=model.tools_page_size)
     rebuilt.mcp = model.model_copy(update={"tools": rebuilt.mcp.tools if rebuilt.mcp else []})
@@ -633,13 +636,13 @@ async def test_version_probes_skip_refusals_and_stop_at_the_budget(tmp_path: Pat
         assert found.model.transport.issues_session is False
         assert found.model.transport.get_stream == "status"
         assert "missing_session" not in found.model.errors
-        # 31 calls of introspection (10, 2 per client capability probe, the listing before
-        # notifications/initialized and 8 of the HTTP layer), then one per
+        # 34 calls of introspection (10, 2 per client capability probe, the listing before
+        # notifications/initialized and 11 of the HTTP layer), then one per
         # probed version: the refused 2024-11-05, then 2025-03-26, and the budget is gone
-        tight = recorder(tmp_path / "b", http, "http://mock/mcp", rps=0, max_calls=33)
+        tight = recorder(tmp_path / "b", http, "http://mock/mcp", rps=0, max_calls=36)
         limited = await tight.introspect()
         assert limited.model.transport.protocol_versions == {"2025-03-26": "2025-03-26"}
-        assert tight.calls_made == 33
+        assert tight.calls_made == 36
         # A budget spent while probing capabilities leaves fewer probes, not a failed init
         tighter = recorder(tmp_path / "c", http, "http://mock/mcp", rps=0, max_calls=6)
         assert (await tighter.introspect()).model.transport.protocol_versions == {}
@@ -1342,8 +1345,13 @@ async def test_the_http_layer_round_trip(tmp_path: Path) -> None:
         "content_type": {"status": 415, "content_type": "text/plain", "body": "json only"},
         "invalid_json": {"status": 400, "content_type": "text/plain", "body": "parse error"},
         "not_jsonrpc": {"status": 400, "content_type": "text/plain", "body": "not json-rpc"},
+        "protocol_header": {"status": 400, "content_type": "text/plain", "body": "no {{value}}"},
+        "get_accept": {"status": 406, "content_type": "text/plain", "body": "event streams only"},
+        "get_protocol_header": {"status": 400, "content_type": "text/plain", "body": "{{value}}?"},
+        "batch_too_large": {"status": 400, "content_type": "text/plain", "body": "batch"},
+        "body_too_large": {"status": 413, "content_type": "text/plain", "body": "too large"},
     }
-    order = ["unknown_session", "accept", "content_type", "invalid_json"]
+    order = ["unknown_session", "accept", "content_type", "invalid_json", "protocol_header"]
     detailed = McpTransportModel(
         response_mode="sse",
         get_stream="sse",
@@ -1355,6 +1363,8 @@ async def test_the_http_layer_round_trip(tmp_path: Path) -> None:
         refusal_order=order,
         cors=cors,
         protocol_versions={v: v for v in protocol.KNOWN_VERSIONS},
+        max_batch=100,
+        max_body_bytes=4 * 1024 * 1024,
     )
     model = fake_model(transport=detailed)
     model.routing = RoutingModel(
@@ -1379,6 +1389,7 @@ async def test_the_http_layer_round_trip(tmp_path: Path) -> None:
         k: j(v)["body"] for k, v in refusals.items()
     }
     assert learned.refusal_order == order  # one request breaking every rule, then fewer
+    assert (learned.max_batch, learned.max_body_bytes) == (100, 4 * 1024 * 1024)
     assert learned.cors == cors
     assert found.routing is not None
     assert (found.routing.case_insensitive, found.routing.trailing_slash) == (True, "ignore")

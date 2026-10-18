@@ -6,6 +6,21 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- MCP fakes enforce the server's limits on a body's size and a batch's length, with its real
+  refusals (`max_body_bytes`, `max_batch`); introspection probes the SDKs' defaults (4 MiB, 100
+  messages).
+- They also refuse a GET stream without `Accept: text/event-stream` or with an unknown
+  `MCP-Protocol-Version`, as the real server does.
+
+### Fixed
+
+- A refusal of an unknown protocol version names the version the client sent; it named the one
+  introspection had probed with (`1999-01-01`).
+- GitHub releases carry the tag's release notes (the workflow didn't fetch the annotated tag, so
+  they showed the commit message).
+
 ## [0.3.0]
 
 Data that stays consistent in both directions, and MCP fakes that learn their server's HTTP
