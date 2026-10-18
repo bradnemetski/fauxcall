@@ -1,59 +1,61 @@
 {
   "fake": "everything",
   "source": "http://127.0.0.1:3101/mcp",
-  "started_at": "2026-10-15T00:29:28.441753Z",
-  "updated_at": "2026-10-15T05:26:12.217815Z",
+  "started_at": "2026-10-18T02:19:15.310901Z",
+  "updated_at": "2026-10-18T11:47:42.896348Z",
   "phases": {
     "discover": {
       "status": "done",
-      "started_at": "2026-10-15T00:29:28.441753Z",
-      "finished_at": "2026-10-15T00:29:28.441753Z"
+      "started_at": "2026-10-18T02:19:15.310901Z",
+      "finished_at": "2026-10-18T02:19:15.310901Z"
     },
     "gate": {
       "status": "done",
-      "finished_at": "2026-10-15T00:44:13.475682Z"
+      "finished_at": "2026-10-18T02:27:19.415363Z"
     },
     "record": {
       "status": "done",
-      "finished_at": "2026-10-15T00:54:57.167283Z"
+      "finished_at": "2026-10-18T02:43:38.057732Z"
     },
     "model": {
       "status": "done",
-      "finished_at": "2026-10-15T01:04:16.069450Z"
+      "finished_at": "2026-10-18T02:43:38.651693Z"
     },
     "world": {
-      "status": "skipped",
-      "finished_at": "2026-10-15T01:04:17.075806Z"
+      "status": "done",
+      "finished_at": "2026-10-18T02:43:39.335881Z",
+      "notes": [
+        "no collections: an MCP server whose only state is per session (gzip session resources, tasks, subscriptions, logging, roots cache); handlers keep it consistent (resources/list and resources/read show what gzip registered, tasks/list what tools/call created)"
+      ]
     },
     "scaffold": {
       "status": "done",
-      "finished_at": "2026-10-15T01:21:42.525938Z"
+      "finished_at": "2026-10-18T09:45:51.738546Z"
     },
     "implement": {
       "status": "done",
-      "started_at": "2026-10-15T01:21:43.039367Z",
-      "finished_at": "2026-10-15T01:33:19.551867Z"
+      "finished_at": "2026-10-18T10:20:04.335131Z"
     },
     "unit_tests": {
       "status": "done",
-      "finished_at": "2026-10-15T01:33:20.070536Z"
+      "finished_at": "2026-10-18T10:33:20.133080Z"
     },
     "e2e_tests": {
       "status": "done",
-      "finished_at": "2026-10-15T05:26:05.620083Z"
+      "finished_at": "2026-10-18T10:39:18.886544Z"
     },
     "parity": {
       "status": "done",
-      "finished_at": "2026-10-15T05:26:06.142906Z"
+      "finished_at": "2026-10-18T10:41:35.623939Z"
     },
     "review": {
       "status": "done",
-      "started_at": "2026-10-15T01:41:21.107681Z",
-      "finished_at": "2026-10-15T05:26:06.665055Z"
+      "started_at": "2026-10-18T10:43:10.142638Z",
+      "finished_at": "2026-10-18T11:47:06.403863Z"
     },
     "report": {
       "status": "done",
-      "finished_at": "2026-10-15T05:26:12.217417Z"
+      "finished_at": "2026-10-18T11:47:07.754429Z"
     }
   },
   "endpoints": [
@@ -250,24 +252,15 @@
   ],
   "gate": {
     "mutations": "approved",
-    "answered_at": "2026-10-15T00:44:13.474878Z"
+    "answered_at": "2026-10-18T02:27:19.414586Z"
   },
   "log": [
-    "2026-10-15 00:44 Headless run: answers.json approves MCP tools/call:* at 60 calls/tool (recording+parity); no credentials, no Jev. Plans written for all 19 tools + resources/prompts/completions/tasks/logging/subscriptions.",
-    "2026-10-15 00:54 Recorded 19 plans (~400 exchanges): all tools incl. capability-gated ones (sampling, elicitation form+url, roots with/without GET stream, async task tools), resources (static, dynamic, session/gzip), prompts, completions, tasks lifecycle, logging/setLevel, subscriptions, edge probes. Async tools really require sampling+tasks.requests.sampling.createMessage / elicitation+tasks.requests.elicitation.create (000362, 000360).",
-    "2026-10-15 01:04 No REST collections: consistency is links/references resolving via resources/read (dynamic templates, gzip session resources) — enforced by handlers and e2e scenarios.",
-    "2026-10-15 01:21 Handlers written: all 19 tools computed (zod-exact validation, JS number spelling, WHATWG URLs via ada-url, Node-identical gzip), resources/prompts/completions/tasks/logging/subscriptions as METHOD_HANDLERS. Generic replay test excludes capability-gated tools (fresh sessions lack capabilities); dedicated tests to cover them.",
-    "2026-10-15 01:39 Known runtime gap: GET/DELETE /mcp with no Mcp-Session-Id — real 400 (source: streamableHttp.js), fake opens a stream / answers 200; FauxCall's transport model has no refusal for a missing session on GET/DELETE.",
-    "2026-10-15 01:41 Parity 2026-10-15: 100% compliance over 175 scenarios (350 runs), independent 100% over 180/229 calls; no skips. Unit: 330 tests incl. replay of all 23 recorded plan sessions (380 calls) — 99.2% coverage.",
-    "2026-10-15 04:06 Review fixes (resumed 2026-10-15): reviewer report recovered from the interrupted session; recorded protocol-schema, research-late, async-bad-replies (reviewer probes) and protocol-versions (initialize outside a session via auth:none: 2024-10-07 accepted, unsupported -> 2025-11-25, priming follows the version asked, malformed handshakes -> 400 Server not initialized).",
-    "2026-10-15 04:06 front.py (owned app.py middleware): Express+cors+SDK transport front — CORS headers and 204 preflight, Express 404 page, /mcp matched case-insensitively with optional slash, Express 400 for GET/DELETE without a session, transport refusals in the SDK's order (406/415/413/invalid JSON/batch>100/JSON-RPC schema/handshake rules/protocol header interpolated), SSE headers, SDK member order for pushed messages. Handler-level _meta check removed (front covers every message).",
-    "2026-10-15 04:06 Unit: replays now follow the recorded timeline (clock travel) and compare event-driven GET-stream pushes per source; progress events compared byte for byte; reset ends background loops; 2 runtime gaps (unknown tool + null args, numeric tool name) kept as strict expected differences. 470+ unit tests, 99% coverage.",
-    "2026-10-15 04:06 E2E tests used mcp.request('tools/call') for task-augmented simulate-research-query, bypassing the write budget: fixing with a helper that spends the approval exactly as call_tool does.",
-    "2026-10-15 04:17 Parity 2026-10-15 (after first-review fixes): 99.85% over 222 scenarios, independent 99.72% over 225/278 calls. Only failure: ping naming an unknown related task — the SDK answers -32602 'Task not found' (it looks related tasks up before any handler). Now modeled in the fake's handlers; runtime-answered methods (ping, listings) can't, documented.",
-    "2026-10-15 04:17 Subscriptions now one map across clients (resources/subscriptions.js): updates follow the order URIs were first subscribed by anyone. README/model notes rewritten; approvals left: gzip 26, research 34 (≈9-11 per parity run).",
-    "2026-10-15 05:23 Second review (2026-10-15): no blocking findings; first-review fixes confirmed. Recorded review2-probes (000514-000526): in-session initialize -> 200 zod issues, zod 'received' for ±Infinity, related-task lookup for ping/listings/unknown tools (unknown method stays Method not found).",
-    "2026-10-15 05:23 Fixed after review 2: front journals its own answers; session id on SSE answers; SDK priming rule and event/id field order (sse.py); DELETE ends GET streams (wakes the runtime's loop); in-session initialize refused by zod issues (match 000514-000517 byte for byte); related-task lookup in the front for all handled methods; lone surrogates via stand-ins (was a 500); invalid UTF-8 replaced (was 400); deep JSON -> 400 (was 500); tools/list_changed after initialized; README/model notes corrected (R1: a request naming an existing task is never answered on the real server).",
-    "2026-10-15 05:23 Served check: 233 e2e scenarios pass against the fake under uvicorn (fauxcall verify --fake-url), no errors in its log.",
-    "2026-10-15 05:26 Final parity 2026-10-15: 100% over 233 scenarios (466 runs), independent 100% over 234/289 calls; nothing uncovered, no skips. Approvals used: gzip 45/60, research 35/60, elicitation 37/60, url-elicitation 33/60, sampling 32/60."
+    "2026-10-18 02:27 Gate from answers.json (headless): no credentials, no Jev, MCP tools/call:* approved at 60 calls per tool (recording+parity). 28 plans written in data/plans (generator: scripts/gen_plans.py). Server source read from the local node_modules of @modelcontextprotocol/server-everything 2026.8.31 as documentation.",
+    "2026-10-18 02:31 Read-only tools recorded+analyzed. Errors are SDK zod v4 messages ('Invalid input: expected X, received Y at path', 'Invalid option: expected one of \"a\"|\"b\"', 'Too small: expected number to be >=1'), joined by newline, wrapped 'MCP error -32602: Input validation error: Invalid arguments for tool T: ...' as isError results. Numbers are JS-formatted. Resource times: toLocaleTimeString en-US in America/New_York ('10:29:02 PM', plain space).",
+    "2026-10-18 02:43 Modeled: 17 tools computed (zod-style refusals in handlers, invalid_args=accept), get-env/get-tiny-image replay. Tool order = registration order; requires fixed from server source (async tools need tasks.requests.<method>); simulate-research-query requires [[]] (listed only after initialized). Transport: resumption=session, sse_streamed, message_member_order, timeout_cancel_reason.",
+    "2026-10-18 10:20 Implemented: all tools computed (get-env replayed) in src/fauxcall_everything/{tools,tasks,resources,validation,zod,js,state}.py; METHOD_HANDLERS for resources/*, prompts/get, completion/complete, logging/setLevel, tasks/*, notifications/initialized (tools/list_changed + roots sync), roots/list_changed; tools/call hook for task augmentation. tests/unit/test_plans.py replays all 30 plans value-for-value (masks uuids/times): all pass. Next: GET-stream unit tests, coverage, lint/mypy, e2e.",
+    "2026-10-18 10:33 Unit tests: 393 pass, 98.5% coverage (test_plans replays all 30 plans value-for-value; test_streams covers GET-stream pushes; test_tools/test_semantics edge cases). ruff+mypy clean. Next: e2e scenarios + parity.",
+    "2026-10-18 10:41 Parity (2 runs, --allow-real-writes): 100% overall, 100% independent (182/238 calls; 56 repeat recordings), 171 scenarios, nothing uncovered; no credentials so no refusal scenario. GET-stream pushes/progress/roots aren't compared by parity (client holds no GET stream; real roots request then waits 60s): covered by unit tests vs recordings.",
+    "2026-10-18 11:47 Review (fauxcall:reviewer): no blocking issues; fixed I1 (2024-10-07 supported, unsupported -> 2025-11-25, from source + recorded refusal text), I2 (session facts survive reset), I3 (refused roots/list answered at once, 000469), I4 (350 ms roots delay on wall clock), I5 (zod union/discriminator errors, async content required; 000473-000479), N1 URL hosts, N2 Infinity, N3 request issues/_meta 400 (000486-000489), N4 second initialized, N8 '; base64', N10 README latency. N11 contradicted by 000491 (timestamps can differ). Runtime-level gaps documented (GET header checks, refusal text, SDK size limits, resumed priming data, progress after cancel, SSE header timing). 4 review plans recorded. Parity run 3: 100% / independent 100%."
   ]
 }

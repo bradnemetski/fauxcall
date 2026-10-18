@@ -193,12 +193,16 @@ def test_method_of() -> None:
 
 
 def _check_round_trip(original: McpModel, again: McpModel) -> None:
-    assert again.transport == original.transport
+    first, second = original.transport.model_dump(), again.transport.model_dump()
+    assert {k: (first[k], second[k]) for k in first if first[k] != second[k]} == {}
     assert again.initialize_result == original.initialize_result
     assert [t.definition for t in again.tools] == [t.definition for t in original.tools]
     assert again.tools_page_size == original.tools_page_size
     assert again.errors == original.errors
     assert (again.resources, again.prompts) == (original.resources, original.prompts)
+
+
+ORDER_PROBES = {"json": 1, "sse": 1}  # two refusals here (unknown session, invalid JSON)
 
 
 @pytest.mark.parametrize("mode", ["json", "sse"])
@@ -281,6 +285,15 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         *(["MCP GET:get_unknown_session"] if mode == "sse" else []),  # a GET only with a stream
         "MCP DELETE:delete_unknown_session",
         *(["MCP GET:second_stream"] if mode == "sse" else []),  # no keep-alive within 0.2 s
+        "MCP GET /mcp:no_session",  # the HTTP layer outside MCP
+        "MCP GET /fauxcall-probe-unknown-route:unknown_route",
+        "MCP GET /MCP:upper_case",
+        "MCP GET /mcp/:trailing_slash",
+        "MCP PUT /mcp:method_not_allowed",
+        "MCP OPTIONS /mcp:cors_preflight",
+        "MCP tools/list:invalid_json",
+        "MCP tools/list:not_jsonrpc",
+        *["MCP tools/list:refusal-order"] * ORDER_PROBES[mode],
         *["MCP tools/list:with-sampling"] * 2,  # two pages each
         *["MCP tools/list:with-elicitation"] * 2,
         *["MCP tools/list:with-elicitation.url"] * 2,
@@ -293,10 +306,10 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         "MCP initialize:version-2025-06-18",
         "MCP initialize:version-2025-11-25",
     ]
-    assert len(found.exchanges) == (36 if mode == "sse" else 34)
+    assert len(found.exchanges) == (45 if mode == "sse" else 43)
     # every request was paced: 2 rps -> 0.5 s apart (cleanup DELETEs included); each
     # capability probe: initialize, 2 pages, DELETE; watching the stream: it and a second one
-    assert clock.sleeps == [0.5] * (54 if mode == "sse" else 51)
+    assert clock.sleeps == [0.5] * (63 if mode == "sse" else 60)
     # A fake built from what was learned behaves the same on the wire.
     rebuilt = fake_model(transport=model.transport, page_size=model.tools_page_size)
     rebuilt.mcp = model.model_copy(update={"tools": rebuilt.mcp.tools if rebuilt.mcp else []})
@@ -512,6 +525,17 @@ async def test_a_passing_streamable_http_failure_is_tried_again(tmp_path: Path) 
     assert found.model.transport.kind == "streamable_http"  # no fall back to SSE
 
 
+def _parsed(request: httpx2.Request) -> dict[str, Any] | httpx2.Response:
+    """A POST's JSON-RPC message, or a real server's refusal of a body that isn't one."""
+    try:
+        message = jsonfmt.loads(request.content)
+    except ValueError:
+        return httpx2.Response(400, text="Parse error")
+    if not isinstance(message, dict):
+        return httpx2.Response(400, text="Invalid Request")
+    return j(message)  # type: ignore[no-any-return]
+
+
 class Scripted:
     """A minimal Streamable HTTP server (JSON replies) whose quirks tests choose."""
 
@@ -532,11 +556,11 @@ class Scripted:
         self.report_version = report_version
 
     def __call__(self, request: httpx2.Request) -> httpx2.Response:
-        if request.method == "DELETE":
-            return httpx2.Response(200)
-        if request.method != "POST":
-            return httpx2.Response(405)
-        message = j(jsonfmt.loads(request.content))
+        if request.method != "POST":  # DELETE ends a session; nothing else is served
+            return httpx2.Response(200 if request.method == "DELETE" else 405)
+        message = _parsed(request)
+        if isinstance(message, httpx2.Response):
+            return message
         method = message.get("method")
         refused = self._refuse_credentials(request, message)
         if refused is not None:
@@ -609,13 +633,13 @@ async def test_version_probes_skip_refusals_and_stop_at_the_budget(tmp_path: Pat
         assert found.model.transport.issues_session is False
         assert found.model.transport.get_stream == "status"
         assert "missing_session" not in found.model.errors
-        # 23 calls of introspection (10, 2 per client capability probe, and the listing before
-        # notifications/initialized), then one per
+        # 31 calls of introspection (10, 2 per client capability probe, the listing before
+        # notifications/initialized and 8 of the HTTP layer), then one per
         # probed version: the refused 2024-11-05, then 2025-03-26, and the budget is gone
-        tight = recorder(tmp_path / "b", http, "http://mock/mcp", rps=0, max_calls=25)
+        tight = recorder(tmp_path / "b", http, "http://mock/mcp", rps=0, max_calls=33)
         limited = await tight.introspect()
         assert limited.model.transport.protocol_versions == {"2025-03-26": "2025-03-26"}
-        assert tight.calls_made == 25
+        assert tight.calls_made == 33
         # A budget spent while probing capabilities leaves fewer probes, not a failed init
         tighter = recorder(tmp_path / "c", http, "http://mock/mcp", rps=0, max_calls=6)
         assert (await tighter.introspect()).model.transport.protocol_versions == {}
@@ -1164,7 +1188,8 @@ async def test_transport_details_round_trip(tmp_path: Path) -> None:
         assert learned.priming_versions == ["2025-11-25"]
         assert learned.keep_alive == ": keepalive"
         assert learned.keep_alive_seconds == 0.1  # rounded, and never below 0.1 s
-        assert {k: (v["status"], v["body"]) for k, v in j(learned.refusals).items()} == {
+        got = {k: (v["status"], v["body"]) for k, v in j(learned.refusals).items()}
+        assert {k: got.get(k) for k in j(refusals)} == {
             k: (v["status"], v["body"]) for k, v in j(refusals).items()
         }  # (text content types gain a charset on the way, as on a real server)
         wire = McpWireClient("http://fake.test/mcp", http, protocol_version="2025-11-25")
@@ -1292,3 +1317,72 @@ async def test_tools_that_wait_for_initialized(tmp_path: Path) -> None:
             probe_versions=False
         )
     assert not found.model.capability_tools_after_initialized  # listed from the start
+
+
+async def test_the_http_layer_round_trip(tmp_path: Path) -> None:
+    from fauxcall.model import ErrorTemplate  # noqa: PLC0415
+    from fauxcall.model.api import RoutingModel  # noqa: PLC0415
+
+    page = "<pre>Cannot {{method}} {{path}}</pre>"
+    cors: JsonValue = {
+        "preflight": {
+            "status": 204,
+            "headers": [
+                ["access-control-allow-origin", "*"],
+                ["access-control-allow-methods", "GET,HEAD,PUT,PATCH,POST,DELETE"],
+                ["access-control-allow-headers", "{{request_headers}}"],
+            ],
+        },
+        "headers": [["access-control-allow-origin", "{{origin}}"]],
+        "headers_without_origin": [["access-control-allow-origin", "*"]],
+    }
+    refusals: dict[str, JsonValue] = {
+        "unknown_session": {"status": 404, "content_type": "text/plain", "body": "no session"},
+        "accept": {"status": 406, "content_type": "text/plain", "body": "accept"},
+        "content_type": {"status": 415, "content_type": "text/plain", "body": "json only"},
+        "invalid_json": {"status": 400, "content_type": "text/plain", "body": "parse error"},
+        "not_jsonrpc": {"status": 400, "content_type": "text/plain", "body": "not json-rpc"},
+    }
+    order = ["unknown_session", "accept", "content_type", "invalid_json"]
+    detailed = McpTransportModel(
+        response_mode="sse",
+        get_stream="sse",
+        sse_event_ids=True,
+        sse_field_order=["event", "id", "data"],
+        sse_streamed=True,
+        priming_since="2025-11-25",
+        refusals=refusals,
+        refusal_order=order,
+        cors=cors,
+        protocol_versions={v: v for v in protocol.KNOWN_VERSIONS},
+    )
+    model = fake_model(transport=detailed)
+    model.routing = RoutingModel(
+        case_insensitive=True,
+        trailing_slash="ignore",
+        unknown_route_template="unknown_route",
+        method_not_allowed_template="method_not_allowed",
+    )
+    model.errors += [
+        ErrorTemplate(name="unknown_route", status=404, content_type="text/html", body_text=page),
+        ErrorTemplate(
+            name="method_not_allowed", status=404, content_type="text/html", body_text=page
+        ),
+    ]
+    async with streaming_client(fake_app(tmp_path / "a", model)) as http:
+        found = await recorder(tmp_path, http, "http://fake.test/mcp", rps=0).introspect()
+    learned = found.model.transport
+    assert (learned.sse_field_order, learned.sse_event_name) == (["event", "id", "data"], "message")
+    assert learned.sse_streamed  # no Content-Length on SSE answers
+    assert learned.priming_since == "2025-11-25"  # by the version asked for
+    assert {k: j(learned.refusals).get(k, {}).get("body") for k in refusals} == {
+        k: j(v)["body"] for k, v in refusals.items()
+    }
+    assert learned.refusal_order == order  # one request breaking every rule, then fewer
+    assert learned.cors == cors
+    assert found.routing is not None
+    assert (found.routing.case_insensitive, found.routing.trailing_slash) == (True, "ignore")
+    assert [(t.name, t.status, t.body_text) for t in found.route_errors] == [
+        ("unknown_route", 404, page),
+        ("method_not_allowed", 404, page),
+    ]

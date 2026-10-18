@@ -1,0 +1,125 @@
+{
+  "id": "000126",
+  "endpoint": "MCP tools/call:get-structured-content",
+  "plan_call": "weather-ny",
+  "started_at": "2026-10-18T02:28:58.099852Z",
+  "started_ns": 1792290538099852000,
+  "elapsed_ms": 2.202,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {
+          "name": "get-structured-content",
+          "arguments": {
+            "location": "New York"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 18 Oct 2026 02:28:58 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"temperature\":33,\"conditions\":\"Cloudy\",\"humidity\":82}"
+            }
+          ],
+          "structuredContent": {
+            "temperature": 33,
+            "conditions": "Cloudy",
+            "humidity": 82
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 3
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.102,
+      "kind": "sse",
+      "event": "message",
+      "id": "ec5684c2-e6a0-4a06-953e-399840327af6",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"temperature\\\":33,\\\"conditions\\\":\\\"Cloudy\\\",\\\"humidity\\\":82}\"}],\"structuredContent\":{\"temperature\":33,\"conditions\":\"Cloudy\",\"humidity\":82}},\"jsonrpc\":\"2.0\",\"id\":3}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

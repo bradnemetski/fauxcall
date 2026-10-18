@@ -1,11 +1,10 @@
 {
   "id": "000066",
   "endpoint": "MCP tools/call:get-sum",
-  "purpose": "invalid",
-  "plan_call": "sum-missing-both",
-  "started_at": "2026-10-15T00:35:42.631307Z",
-  "started_ns": 1792024542631307000,
-  "elapsed_ms": 8.416,
+  "plan_call": "sum-ints",
+  "started_at": "2026-10-18T02:28:21.283941Z",
+  "started_ns": 1792290501283941000,
+  "elapsed_ms": 2.566,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,11 +32,14 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 16,
+        "id": 3,
         "method": "tools/call",
         "params": {
           "name": "get-sum",
-          "arguments": {}
+          "arguments": {
+            "a": 2,
+            "b": 3
+          }
         }
       }
     }
@@ -79,7 +81,7 @@
       ],
       [
         "date",
-        "Thu, 15 Oct 2026 00:35:42 GMT"
+        "Sun, 18 Oct 2026 02:28:21 GMT"
       ],
       [
         "transfer-encoding",
@@ -94,23 +96,22 @@
           "content": [
             {
               "type": "text",
-              "text": "MCP error -32602: Input validation error: Invalid arguments for tool get-sum: Invalid input: expected number, received undefined at a\nInvalid input: expected number, received undefined at b"
+              "text": "The sum of 2 and 3 is 5."
             }
-          ],
-          "isError": true
+          ]
         },
         "jsonrpc": "2.0",
-        "id": 16
+        "id": 3
       }
     }
   },
   "stream": [
     {
-      "t_ms": 8.141,
+      "t_ms": 2.44,
       "kind": "sse",
       "event": "message",
-      "id": "947b7497-9452-4c4c-9634-cabba733ad98",
-      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Input validation error: Invalid arguments for tool get-sum: Invalid input: expected number, received undefined at a\\nInvalid input: expected number, received undefined at b\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":16}"
+      "id": "3bce5027-8afd-4454-bbb9-3704b88d447d",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"The sum of 2 and 3 is 5.\"}]},\"jsonrpc\":\"2.0\",\"id\":3}"
     }
   ],
   "redacted": [

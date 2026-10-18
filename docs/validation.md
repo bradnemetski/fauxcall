@@ -49,7 +49,7 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
 | Swagger Petstore | **99.71%** | 96 (98.48% over 80 with real writes) | 19 | 370 | 361, 99% coverage | 1 | $15.21 |
 | FakeRESTApi | **100%** | 115 | 27 | 323 | 671, 99% coverage | 1 | $13.02 |
 | DeepWiki (MCP) | **100%** | 20 | 3 tools | 70 | 175, 98% coverage | 3 | over $8 |
-| Everything (MCP) | **100%** | 233 (independent: 100% over 234 of 289 calls) | 19 tools, 7 resources, 2 templates, 4 prompts | 526 | 747, 98% coverage | 2 | $87.93 |
+| Everything (MCP) | **100%** | 171 (independent: 100% over 181 of 238 calls) | 19 tools, 7 resources, 2 templates, 4 prompts | 497 | 569, 97% coverage | 2 | $58.72 |
 
 *Parity* is the weighted share of checks (status, shape, content type, values, lengths, headers) on which the fake answered
 like the real service, over end-to-end scenarios run against both. *Reported cost* is what Claude
@@ -183,6 +183,13 @@ Every problem a run hit became a fix in the tools or skills, never in the fake. 
   over 160 of 205 calls, nothing skipped. The eighth, the one in `examples/`, also learned that the
   server adds its capability tools only after `notifications/initialized`; its session ended at
   the usage limit during the review and a second one finished it from the saved progress.
+- **The HTTP layer, learned.** That eighth build also wrote 856 lines of its own HTTP layer in
+  front of FauxCall: CORS, Express's 404 page, the transport's refusals in their order, SSE
+  events written as the SDK writes them, cancellation and stream resumption. FauxCall now learns
+  or models all of it (introspection records the 404 page, path matching, CORS, body refusals
+  and the order of the checks, the SSE format and priming), and the ninth build, the one in
+  `examples/`, needed none: no middleware, just the learned settings. Its first session ended when
+  the network dropped, after the world phase; the second resumed from the saved progress.
 - **Consistency both ways.** Relations used to be checked one way only (every ticker's exchange
   exists), on the built data only: nothing said whether every exchange must list tickers, writes
   could leave references dangling, and the model's `on_delete` was never carried out. Relations

@@ -21,7 +21,6 @@ def main() -> None:
         port=settings.port,
         log_config=None,
         access_log=False,
-        server_header=False,  # the real server (Node) sends no Server header
     )
 
 

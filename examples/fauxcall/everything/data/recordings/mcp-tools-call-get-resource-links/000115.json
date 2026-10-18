@@ -1,0 +1,149 @@
+{
+  "id": "000115",
+  "endpoint": "MCP tools/call:get-resource-links",
+  "purpose": "variation",
+  "plan_call": "links-4",
+  "started_at": "2026-10-18T02:28:51.278397Z",
+  "started_ns": 1792290531278397000,
+  "elapsed_ms": 2.813,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "tools/call",
+        "params": {
+          "name": "get-resource-links",
+          "arguments": {
+            "count": 4
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 18 Oct 2026 02:28:51 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Here are 4 resource links to resources available in this server:"
+            },
+            {
+              "name": "Blob Resource 1",
+              "uri": "demo://resource/dynamic/blob/1",
+              "description": "Resource 1: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            },
+            {
+              "name": "Text Resource 2",
+              "uri": "demo://resource/dynamic/text/2",
+              "description": "Resource 2: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            },
+            {
+              "name": "Blob Resource 3",
+              "uri": "demo://resource/dynamic/blob/3",
+              "description": "Resource 3: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            },
+            {
+              "name": "Text Resource 4",
+              "uri": "demo://resource/dynamic/text/4",
+              "description": "Resource 4: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 6
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.653,
+      "kind": "sse",
+      "event": "message",
+      "id": "9c1d0b3d-a3da-4ec7-bc42-33ab96bae2c7",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Here are 4 resource links to resources available in this server:\"},{\"name\":\"Blob Resource 1\",\"uri\":\"demo://resource/dynamic/blob/1\",\"description\":\"Resource 1: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Text Resource 2\",\"uri\":\"demo://resource/dynamic/text/2\",\"description\":\"Resource 2: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Blob Resource 3\",\"uri\":\"demo://resource/dynamic/blob/3\",\"description\":\"Resource 3: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Text Resource 4\",\"uri\":\"demo://resource/dynamic/text/4\",\"description\":\"Resource 4: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"}]},\"jsonrpc\":\"2.0\",\"id\":6}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "id": "000030",
+  "endpoint": "MCP tools/list:refusal-order",
+  "purpose": "discovery",
+  "started_at": "2026-10-18T02:19:44.857835Z",
+  "started_ns": 1792289984857835000,
+  "elapsed_ms": 1.277,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "application/json"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "1999-01-01"
+      ],
+      [
+        "content-type",
+        "text/plain"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "content-length",
+        "95"
+      ],
+      [
+        "etag",
+        "W/\"5f-yGKrXbkLhApmVYswnToQyaFrApg\""
+      ],
+      [
+        "date",
+        "Sun, 18 Oct 2026 02:19:44 GMT"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "keep-alive",
+        "timeout=5"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json; charset=utf-8",
+      "text": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: No valid session ID provided\"}}"
+    }
+  },
+  "redacted": [
+    "request.header:mcp-session-id"
+  ]
+}

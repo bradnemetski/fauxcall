@@ -1,0 +1,621 @@
+{
+  "name": "completions",
+  "created_at": "2026-10-18T02:30:00Z",
+  "calls": [
+    {
+      "id": "dept-empty",
+      "endpoint": "MCP completion/complete",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "department",
+            "value": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "dept-e",
+      "endpoint": "MCP completion/complete",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "department",
+            "value": "E"
+          }
+        }
+      }
+    },
+    {
+      "id": "dept-s",
+      "endpoint": "MCP completion/complete",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "department",
+            "value": "S"
+          }
+        }
+      }
+    },
+    {
+      "id": "dept-mar",
+      "endpoint": "MCP completion/complete",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "department",
+            "value": "Mar"
+          }
+        }
+      }
+    },
+    {
+      "id": "dept-lower",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "department",
+            "value": "e"
+          }
+        }
+      }
+    },
+    {
+      "id": "dept-none",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "department",
+            "value": "x"
+          }
+        }
+      }
+    },
+    {
+      "id": "name-eng",
+      "endpoint": "MCP completion/complete",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "name",
+            "value": ""
+          },
+          "context": {
+            "arguments": {
+              "department": "Engineering"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "name-eng-b",
+      "endpoint": "MCP completion/complete",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "name",
+            "value": "B"
+          },
+          "context": {
+            "arguments": {
+              "department": "Engineering"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "name-sales",
+      "endpoint": "MCP completion/complete",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "name",
+            "value": ""
+          },
+          "context": {
+            "arguments": {
+              "department": "Sales"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "name-marketing-i",
+      "endpoint": "MCP completion/complete",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "name",
+            "value": "I"
+          },
+          "context": {
+            "arguments": {
+              "department": "Marketing"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "name-support",
+      "endpoint": "MCP completion/complete",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "name",
+            "value": ""
+          },
+          "context": {
+            "arguments": {
+              "department": "Support"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "name-no-context",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "name",
+            "value": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "name-unknown-dept",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "name",
+            "value": ""
+          },
+          "context": {
+            "arguments": {
+              "department": "Legal"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "rtype-empty",
+      "endpoint": "MCP completion/complete",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "resource-prompt"
+          },
+          "argument": {
+            "name": "resourceType",
+            "value": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "rtype-b",
+      "endpoint": "MCP completion/complete",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "resource-prompt"
+          },
+          "argument": {
+            "name": "resourceType",
+            "value": "B"
+          }
+        }
+      }
+    },
+    {
+      "id": "rtype-x",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "resource-prompt"
+          },
+          "argument": {
+            "name": "resourceType",
+            "value": "x"
+          }
+        }
+      }
+    },
+    {
+      "id": "rid-5",
+      "endpoint": "MCP completion/complete",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "resource-prompt"
+          },
+          "argument": {
+            "name": "resourceId",
+            "value": "5"
+          }
+        }
+      }
+    },
+    {
+      "id": "rid-abc",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "resource-prompt"
+          },
+          "argument": {
+            "name": "resourceId",
+            "value": "abc"
+          }
+        }
+      }
+    },
+    {
+      "id": "rid-0",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "resource-prompt"
+          },
+          "argument": {
+            "name": "resourceId",
+            "value": "0"
+          }
+        }
+      }
+    },
+    {
+      "id": "rid-empty",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "resource-prompt"
+          },
+          "argument": {
+            "name": "resourceId",
+            "value": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "args-city",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "args-prompt"
+          },
+          "argument": {
+            "name": "city",
+            "value": "Sea"
+          }
+        }
+      }
+    },
+    {
+      "id": "simple-arg",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "simple-prompt"
+          },
+          "argument": {
+            "name": "x",
+            "value": "a"
+          }
+        }
+      }
+    },
+    {
+      "id": "text-tpl-7",
+      "endpoint": "MCP completion/complete",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/resource",
+            "uri": "demo://resource/dynamic/text/{resourceId}"
+          },
+          "argument": {
+            "name": "resourceId",
+            "value": "7"
+          }
+        }
+      }
+    },
+    {
+      "id": "text-tpl-x",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/resource",
+            "uri": "demo://resource/dynamic/text/{resourceId}"
+          },
+          "argument": {
+            "name": "resourceId",
+            "value": "x"
+          }
+        }
+      }
+    },
+    {
+      "id": "blob-tpl-3",
+      "endpoint": "MCP completion/complete",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/resource",
+            "uri": "demo://resource/dynamic/blob/{resourceId}"
+          },
+          "argument": {
+            "name": "resourceId",
+            "value": "3"
+          }
+        }
+      }
+    },
+    {
+      "id": "text-tpl-other-arg",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/resource",
+            "uri": "demo://resource/dynamic/text/{resourceId}"
+          },
+          "argument": {
+            "name": "other",
+            "value": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "unknown-prompt",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "nope"
+          },
+          "argument": {
+            "name": "a",
+            "value": "b"
+          }
+        }
+      }
+    },
+    {
+      "id": "unknown-template",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/resource",
+            "uri": "demo://nope/{x}"
+          },
+          "argument": {
+            "name": "x",
+            "value": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "static-resource",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/resource",
+            "uri": "demo://resource/static/document/features.md"
+          },
+          "argument": {
+            "name": "x",
+            "value": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "complete-bad-ref",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/tool",
+            "name": "echo"
+          },
+          "argument": {
+            "name": "message",
+            "value": "h"
+          }
+        }
+      }
+    },
+    {
+      "id": "complete-missing-argument",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          }
+        }
+      }
+    }
+  ]
+}

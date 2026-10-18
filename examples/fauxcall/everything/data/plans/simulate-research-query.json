@@ -1,0 +1,272 @@
+{
+  "name": "simulate-research-query",
+  "created_at": "2026-10-18T02:30:00Z",
+  "calls": [
+    {
+      "id": "research-no-task",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "quantum computing"
+          }
+        }
+      },
+      "note": "taskSupport is required: a plain call is refused"
+    },
+    {
+      "id": "research-task",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "quantum computing"
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      },
+      "capture": {
+        "task1": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "research-get",
+      "endpoint": "MCP tasks/get",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task1}}"
+        }
+      },
+      "repeat": 6,
+      "interval_ms": 1000
+    },
+    {
+      "id": "research-result",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task1}}"
+        }
+      }
+    },
+    {
+      "id": "research-get-after",
+      "endpoint": "MCP tasks/get",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task1}}"
+        }
+      }
+    },
+    {
+      "id": "research-list",
+      "endpoint": "MCP tasks/list",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "research-task-2",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "history of the printing press"
+          },
+          "task": {
+            "ttl": 120000
+          }
+        }
+      },
+      "capture": {
+        "task2": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "research-result-blocking",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task2}}"
+        }
+      },
+      "note": "asked while the task still runs"
+    },
+    {
+      "id": "research-task-3",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "coral reefs",
+            "ambiguous": true
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      },
+      "capture": {
+        "task3": "$.result.task.taskId"
+      },
+      "note": "ambiguous without the elicitation capability: no clarification asked"
+    },
+    {
+      "id": "research-cancel",
+      "endpoint": "MCP tasks/cancel",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task3}}"
+        }
+      }
+    },
+    {
+      "id": "research-get-cancelled",
+      "endpoint": "MCP tasks/get",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task3}}"
+        }
+      }
+    },
+    {
+      "id": "research-result-cancelled",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task3}}"
+        }
+      }
+    },
+    {
+      "id": "research-cancel-again",
+      "endpoint": "MCP tasks/cancel",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task3}}"
+        }
+      }
+    },
+    {
+      "id": "research-list-end",
+      "endpoint": "MCP tasks/list",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "research-no-ttl",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "tides"
+          },
+          "task": {}
+        }
+      },
+      "capture": {
+        "task4": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "research-get-no-ttl",
+      "endpoint": "MCP tasks/get",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task4}}"
+        }
+      }
+    },
+    {
+      "id": "research-missing-topic",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {},
+          "task": {
+            "ttl": 60000
+          }
+        }
+      }
+    },
+    {
+      "id": "research-topic-number",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": 5
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      }
+    }
+  ],
+  "note": "task lifecycle: create, poll, result, list, cancel"
+}

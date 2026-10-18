@@ -45,6 +45,7 @@ from fauxcall.runtime.context import (
     RequestContext,
     request_rng,
 )
+from fauxcall.runtime.cors import CorsAnswers
 from fauxcall.runtime.faults import FaultInjector
 from fauxcall.runtime.handlers import ROLE_HANDLERS
 from fauxcall.runtime.jev import JevGateway
@@ -645,6 +646,9 @@ def create_app(
     app.add_exception_handler(StarletteHTTPException, http_error)
     app.add_exception_handler(RequestValidationError, validation_error)
     app.add_middleware(RoutingQuirks, model=runtime.model, admin_prefix=settings.admin_prefix)
+    mcp = runtime.model.mcp
+    if mcp is not None and mcp.transport.cors is not None:  # outermost: preflights on any path
+        app.add_middleware(CorsAnswers, cors=mcp.transport.cors, admin_prefix=settings.admin_prefix)
     return app
 
 

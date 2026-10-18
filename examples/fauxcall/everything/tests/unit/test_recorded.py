@@ -2,23 +2,14 @@
 
 Stateful endpoints (writes, jobs, downloads) are excluded here because a fresh fake does not hold
 the resources created while recording; cover them with scenarios in ``tests/e2e``.
-
-Tools the server lists only to clients declaring a capability (sampling, elicitation, roots) are
-excluded too: a replay opens a session without capabilities, where the real server would not
-have them either. ``test_client_requests.py`` replays them in sessions that declare them.
-
-A recording FauxCall's runtime answers before the fake's handlers can is expected to differ
-(strictly: the day it no longer does, the test says so). The README lists these differences.
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 import pytest
-from fauxcall.model.api import ApiModel
 from fauxcall.runtime.app import runtime_of_app
-from fauxcall.storage import read_model
 from fauxcall.testing.support import (
     RecordedCase,
     recorded_cases,
@@ -32,25 +23,31 @@ from fauxcall_everything.settings import Settings
 if TYPE_CHECKING:
     from fastapi import FastAPI
 
+CAPABLE_CLIENTS_ONLY: Final = frozenset(
+    {
+        "MCP tools/call:get-roots-list",
+        "MCP tools/call:trigger-sampling-request",
+        "MCP tools/call:trigger-sampling-request-async",
+        "MCP tools/call:trigger-elicitation-request",
+        "MCP tools/call:trigger-elicitation-request-async",
+        "MCP tools/call:trigger-url-elicitation",
+    }
+)
+"""Tools the server lists only to clients declaring sampling, elicitation or roots.
 
-def _gated_tools() -> frozenset[str]:
-    """Endpoint ids of the tools only capable clients see."""
-    model = read_model(Settings().data_dir / "model.json", ApiModel)
-    tools = model.mcp.tools if model.mcp is not None else []
-    return frozenset(f"MCP tools/call:{tool.name}" for tool in tools if any(tool.requires))
+A replay here opens a session without capabilities, where the real server (and the fake) says
+"Tool not found": their recordings, made as capable clients, are replayed in ``test_plans.py``
+with the recorded capabilities and client answers. The calls recorded without them stay here.
+"""
 
 
-CASES = recorded_cases(Settings().data_dir, exclude_endpoints=_gated_tools())
-RUNTIME_GAPS = {
-    "000455": "an unknown tool is refused before its arguments are checked (real: zod first)",
-}
+def _replayable(case: RecordedCase) -> bool:
+    return case.exchange.endpoint not in CAPABLE_CLIENTS_ONLY or (
+        case.exchange.plan_call or ""
+    ).startswith(("no-cap-", "roots-unprompted"))
 
 
-def _case(case: RecordedCase) -> object:
-    gap = RUNTIME_GAPS.get(case.exchange.id)
-    if gap is None:
-        return pytest.param(case, id=case.id)
-    return pytest.param(case, id=case.id, marks=pytest.mark.xfail(strict=True, reason=gap))
+CASES = [case for case in recorded_cases(Settings().data_dir) if _replayable(case)]
 
 
 @pytest.fixture(scope="module")
@@ -59,7 +56,7 @@ def app() -> FastAPI:
     return build_app(settings_for_tests(Settings))
 
 
-@pytest.mark.parametrize("case", [_case(case) for case in CASES])
+@pytest.mark.parametrize("case", CASES, ids=[case.id for case in CASES])
 async def test_recorded_request(app: FastAPI, case: RecordedCase) -> None:
     runtime_of_app(app).reset(journal=True)
     outcome = await replay_against(app, case)

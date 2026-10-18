@@ -1,0 +1,101 @@
+{
+  "id": "000471",
+  "endpoint": "MCP GET:stream",
+  "started_at": "2026-10-18T11:29:37.801059Z",
+  "started_ns": 1792322977801059000,
+  "elapsed_ms": 3024.629,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 18 Oct 2026 11:29:37 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "content_type": "text/event-stream"
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 507.166,
+      "kind": "sse",
+      "event": "message",
+      "id": "0a1bed9a-2ec5-4aea-8fa6-4d2cfd659098",
+      "data": "{\"method\":\"roots/list\",\"jsonrpc\":\"2.0\",\"id\":1}"
+    },
+    {
+      "t_ms": 1006.578,
+      "kind": "sse",
+      "event": "message",
+      "id": "cf2bb7dc-ae97-4f99-9b2d-31575c992406",
+      "data": "{\"method\":\"roots/list\",\"jsonrpc\":\"2.0\",\"id\":2}"
+    },
+    {
+      "t_ms": 1012.474,
+      "kind": "sse",
+      "event": "message",
+      "id": "06237d7b-c1f1-4ced-b66d-e2d5fe20b8ec",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"info\",\"logger\":\"everything-server\",\"data\":\"Roots updated: 1 root(s) received from client\"},\"jsonrpc\":\"2.0\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -8,11 +8,31 @@
     "spec_url": "http://127.0.0.1:3101/mcp",
     "spec_file": "source/mcp.json",
     "title": "Everything Reference Server",
-    "fetched_at": "2026-10-15T00:29:28.441753Z"
+    "fetched_at": "2026-10-18T02:19:15.310901Z"
   },
   "real": {
     "base_url": "http://127.0.0.1:3101"
   },
+  "routing": {
+    "case_insensitive": true,
+    "trailing_slash": "ignore",
+    "unknown_route_template": "unknown_route",
+    "method_not_allowed_template": "method_not_allowed"
+  },
+  "errors": [
+    {
+      "name": "unknown_route",
+      "status": 404,
+      "content_type": "text/html; charset=utf-8",
+      "body_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot {{method}} {{path}}</pre>\n</body>\n</html>\n"
+    },
+    {
+      "name": "method_not_allowed",
+      "status": 404,
+      "content_type": "text/html; charset=utf-8",
+      "body_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot {{method}} {{path}}</pre>\n</body>\n</html>\n"
+    }
+  ],
   "mcp": {
     "transport": {
       "get_stream": "sse",
@@ -70,8 +90,87 @@
           "status": 409,
           "content_type": "application/json",
           "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Conflict: Only one SSE stream is allowed per session\"},\"id\":null}"
+        },
+        "invalid_json": {
+          "status": 400,
+          "content_type": "application/json",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"Parse error: Invalid JSON\"},\"id\":null}"
+        },
+        "not_jsonrpc": {
+          "status": 400,
+          "content_type": "application/json",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"Parse error: Invalid JSON-RPC message\"},\"id\":null}"
         }
       },
+      "sse_field_order": [
+        "event",
+        "id",
+        "data"
+      ],
+      "sse_streamed": true,
+      "priming_since": "2025-11-25",
+      "message_member_order": [
+        "method",
+        "params",
+        "jsonrpc",
+        "id"
+      ],
+      "refusal_order": [
+        "unknown_session",
+        "accept",
+        "content_type",
+        "invalid_json",
+        "protocol_header"
+      ],
+      "cors": {
+        "preflight": {
+          "status": 204,
+          "headers": [
+            [
+              "access-control-allow-origin",
+              "*"
+            ],
+            [
+              "access-control-allow-methods",
+              "GET,POST,DELETE"
+            ],
+            [
+              "vary",
+              "Access-Control-Request-Headers"
+            ],
+            [
+              "access-control-allow-headers",
+              "{{request_headers}}"
+            ],
+            [
+              "access-control-expose-headers",
+              "mcp-session-id,last-event-id,mcp-protocol-version"
+            ]
+          ]
+        },
+        "headers": [
+          [
+            "access-control-allow-origin",
+            "*"
+          ],
+          [
+            "access-control-expose-headers",
+            "mcp-session-id,last-event-id,mcp-protocol-version"
+          ]
+        ],
+        "headers_without_origin": [
+          [
+            "access-control-allow-origin",
+            "*"
+          ],
+          [
+            "access-control-expose-headers",
+            "mcp-session-id,last-event-id,mcp-protocol-version"
+          ]
+        ]
+      },
+      "resumption": "session",
+      "timeout_cancel_reason": "McpError: MCP error -32001: Request timed out",
       "keep_alive": ": keepalive",
       "reinitialize_status": 400
     },
@@ -140,33 +239,31 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            3.045,
-            3.14,
-            3.412,
-            4.613,
-            5.663,
-            7.488,
-            8.82,
-            11.49,
-            12.472
+            3.026,
+            3.405,
+            3.454,
+            3.775,
+            4.014,
+            4.35,
+            4.774,
+            5.393,
+            5.565,
+            5.922,
+            6.412
           ],
           "error_samples_ms": [
-            2.195,
-            2.258,
-            2.263,
-            3.172,
-            3.668,
-            4.152,
-            4.489,
-            4.971,
-            6.186,
-            8.368,
-            8.576,
-            10.493
+            2.416,
+            4.191,
+            4.99,
+            5.074,
+            5.159,
+            5.238,
+            5.277,
+            8.137
           ],
-          "p50_ms": 5.663,
-          "p90_ms": 11.6864,
-          "p99_ms": 12.39344
+          "p50_ms": 4.35,
+          "p90_ms": 5.922,
+          "p99_ms": 6.363
         }
       },
       {
@@ -211,22 +308,23 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            6.258,
-            6.896,
-            7.001,
-            8.532,
-            13.118,
-            14.515
+            2.171,
+            2.309,
+            2.657,
+            2.685,
+            2.813,
+            3.234,
+            3.491
           ],
           "error_samples_ms": [
-            5.516,
-            5.804,
-            8.013,
-            9.242
+            2.486,
+            2.494,
+            2.737,
+            2.903
           ],
-          "p50_ms": 7.766500000000001,
-          "p90_ms": 13.816500000000001,
-          "p99_ms": 14.445149999999998
+          "p50_ms": 2.685,
+          "p90_ms": 3.3368,
+          "p99_ms": 3.47558
         }
       },
       {
@@ -249,15 +347,17 @@
             "taskSupport": "forbidden"
           }
         },
-        "behavior": "match",
+        "behavior": "replay",
         "latency": {
           "samples_ms": [
-            5.697,
-            10.179
+            2.927,
+            3.491,
+            3.586,
+            6.531
           ],
-          "p50_ms": 7.938,
-          "p90_ms": 9.7308,
-          "p99_ms": 10.13418
+          "p50_ms": 3.5385000000000004,
+          "p90_ms": 5.6475,
+          "p99_ms": 6.4426499999999995
         }
       },
       {
@@ -292,23 +392,25 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.305,
-            8.435,
-            9.099,
-            10.08,
-            11.387,
-            70.02
+            2.614,
+            2.647,
+            2.667,
+            2.813,
+            3.054,
+            3.891,
+            10.947,
+            39.994
           ],
           "error_samples_ms": [
-            2.764,
-            3.668,
-            5.22,
-            10.591,
-            11.381
+            2.13,
+            2.193,
+            2.283,
+            2.653,
+            2.748
           ],
-          "p50_ms": 9.589500000000001,
-          "p90_ms": 40.7035,
-          "p99_ms": 67.08835
+          "p50_ms": 2.9335000000000004,
+          "p90_ms": 19.661099999999998,
+          "p99_ms": 37.96071
         }
       },
       {
@@ -349,30 +451,32 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.589,
-            2.701,
-            2.747,
-            3.856,
-            4.723,
-            5.841,
-            7.291,
-            8.267,
-            8.687,
-            8.751,
-            11.189,
-            12.23
+            2.35,
+            2.836,
+            3.031,
+            3.093,
+            3.446,
+            3.465,
+            4.636,
+            4.906,
+            5.947,
+            6.496,
+            9.222,
+            9.659,
+            15.002
           ],
           "error_samples_ms": [
-            8.407,
-            8.604,
-            8.931,
-            10.383,
-            10.956,
-            11.61
+            2.432,
+            2.804,
+            3.134,
+            3.232,
+            4.649,
+            5.381,
+            5.383
           ],
-          "p50_ms": 6.566,
-          "p90_ms": 10.9452,
-          "p99_ms": 12.11549
+          "p50_ms": 4.636,
+          "p90_ms": 9.5716,
+          "p99_ms": 14.360840000000003
         }
       },
       {
@@ -436,19 +540,20 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            4.987,
-            11.572,
-            11.716
+            2.195,
+            2.202,
+            2.533,
+            2.536
           ],
           "error_samples_ms": [
-            5.712,
-            7.949,
-            7.956,
-            9.745
+            2.042,
+            2.16,
+            2.203,
+            3.717
           ],
-          "p50_ms": 11.571999999999997,
-          "p90_ms": 11.6872,
-          "p99_ms": 11.713119999999998
+          "p50_ms": 2.3675,
+          "p90_ms": 2.5351,
+          "p99_ms": 2.53591
         }
       },
       {
@@ -488,33 +593,36 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.196,
-            2.303,
-            3.105,
-            5.913,
-            6.201,
-            6.829,
-            7.096,
-            7.414,
-            7.808,
-            8.075,
-            8.241,
-            8.509,
-            8.99,
-            9.595,
-            10.363,
-            10.616
+            2.052,
+            2.101,
+            2.12,
+            2.158,
+            2.186,
+            2.212,
+            2.346,
+            2.358,
+            2.556,
+            2.566,
+            2.689,
+            2.849,
+            2.884,
+            3.382,
+            3.841,
+            3.882,
+            4.169,
+            9.177
           ],
           "error_samples_ms": [
-            2.785,
-            7.449,
-            7.661,
-            8.416,
-            9.145
+            2.245,
+            2.299,
+            2.325,
+            2.486,
+            5.652,
+            16.371
           ],
-          "p50_ms": 7.610999999999999,
-          "p90_ms": 9.979000000000001,
-          "p99_ms": 10.578050000000001
+          "p50_ms": 2.5609999999999995,
+          "p90_ms": 3.9681,
+          "p99_ms": 8.325639999999998
         }
       },
       {
@@ -537,16 +645,16 @@
             "taskSupport": "forbidden"
           }
         },
-        "behavior": "match",
+        "behavior": "computed",
         "latency": {
           "samples_ms": [
-            3.111,
-            6.765,
-            7.355
+            2.626,
+            3.825,
+            4.0
           ],
-          "p50_ms": 6.765,
-          "p90_ms": 7.237,
-          "p99_ms": 7.3432
+          "p50_ms": 3.825,
+          "p90_ms": 3.965,
+          "p99_ms": 3.9964999999999997
         }
       },
       {
@@ -594,22 +702,23 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            3.338,
-            5.834,
-            6.127,
-            6.607,
-            6.704,
-            17.718
+            3.178,
+            3.758,
+            4.286,
+            4.335,
+            5.007,
+            8.228
           ],
           "error_samples_ms": [
-            5.547,
-            5.991,
-            6.637,
-            6.675
+            4.16,
+            4.218,
+            4.443,
+            4.639,
+            5.595
           ],
-          "p50_ms": 6.367,
-          "p90_ms": 12.210999999999999,
-          "p99_ms": 17.1673
+          "p50_ms": 4.335,
+          "p90_ms": 8.228,
+          "p99_ms": 8.228
         }
       },
       {
@@ -636,14 +745,14 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.632,
-            6.106,
-            6.649,
-            7.584
+            2.314,
+            2.398,
+            2.935,
+            5.103
           ],
-          "p50_ms": 6.3775,
-          "p90_ms": 7.3035000000000005,
-          "p99_ms": 7.555949999999999
+          "p50_ms": 2.6664999999999996,
+          "p90_ms": 4.4526,
+          "p99_ms": 5.03796
         }
       },
       {
@@ -670,13 +779,14 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.576,
-            6.022,
-            8.09
+            2.778,
+            3.166,
+            3.421,
+            3.991
           ],
-          "p50_ms": 6.022,
-          "p90_ms": 7.676400000000001,
-          "p99_ms": 8.048639999999999
+          "p50_ms": 3.2935,
+          "p90_ms": 3.82,
+          "p99_ms": 3.9739
         }
       },
       {
@@ -714,18 +824,17 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            4.731,
-            9.263,
-            9.477,
-            10.414
+            4.655,
+            6.733,
+            7.197
           ],
           "error_samples_ms": [
-            5.156,
-            6.672
+            5.133,
+            6.691
           ],
-          "p50_ms": 9.370000000000001,
-          "p90_ms": 10.1329,
-          "p99_ms": 10.38589
+          "p50_ms": 6.733,
+          "p90_ms": 7.197,
+          "p99_ms": 7.197
         }
       },
       {
@@ -752,18 +861,16 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            9.172,
-            9.33,
-            14.676,
-            17.163
+            1.73,
+            5.337,
+            5.684
           ],
           "error_samples_ms": [
-            3.424,
-            11.235
+            4.917
           ],
-          "p50_ms": 12.003,
-          "p90_ms": 16.416900000000002,
-          "p99_ms": 17.08839
+          "p50_ms": 5.337,
+          "p90_ms": 5.6146,
+          "p99_ms": 5.67706
         },
         "requires": [
           [
@@ -795,27 +902,22 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            5.348,
-            8.743,
-            9.363,
-            9.56,
-            12.186,
-            13.244
+            5.826,
+            9.094,
+            9.647,
+            11.624
           ],
           "error_samples_ms": [
-            5.818,
-            14.404
+            2.951,
+            4.558
           ],
-          "p50_ms": 9.4615,
-          "p90_ms": 12.715,
-          "p99_ms": 13.1911
+          "p50_ms": 9.3705,
+          "p90_ms": 11.0309,
+          "p99_ms": 11.56469
         },
         "requires": [
           [
             "elicitation"
-          ],
-          [
-            "elicitation.url"
           ]
         ]
       },
@@ -866,24 +968,21 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            6.525,
             9.511,
-            10.015,
-            10.452,
-            12.757
+            9.548,
+            10.093,
+            11.922
           ],
           "error_samples_ms": [
-            2.09,
-            3.89,
-            4.838,
-            5.308,
-            5.433,
-            5.595,
-            8.562
+            1.911,
+            2.158,
+            2.226,
+            2.416,
+            6.264
           ],
-          "p50_ms": 10.015,
-          "p90_ms": 11.835,
-          "p99_ms": 12.6648
+          "p50_ms": 9.8205,
+          "p90_ms": 11.373300000000002,
+          "p99_ms": 11.86713
         },
         "requires": [
           [
@@ -928,23 +1027,20 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            4.764,
-            4.772,
-            4.92,
-            5.369,
-            6.019,
-            6.71
+            7.35,
+            7.91
           ],
           "error_samples_ms": [
-            1.829,
-            2.184,
-            3.714,
-            4.908,
-            5.182
+            5.328,
+            5.664,
+            6.251,
+            8.694,
+            9.634,
+            9.793
           ],
-          "p50_ms": 5.144500000000001,
-          "p90_ms": 6.3645000000000005,
-          "p99_ms": 6.6754500000000005
+          "p50_ms": 7.63,
+          "p90_ms": 7.854,
+          "p99_ms": 7.904400000000001
         },
         "requires": [
           [
@@ -989,21 +1085,23 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            3.952,
-            4.156,
-            4.46,
-            5.107,
-            5.46,
-            5.777,
-            15.152
+            2.242,
+            2.366,
+            2.517,
+            2.61,
+            3.676,
+            4.042,
+            5.093,
+            9.791
           ],
           "error_samples_ms": [
-            2.428,
-            5.668
+            2.492,
+            2.961,
+            3.462
           ],
-          "p50_ms": 5.107,
-          "p90_ms": 9.527,
-          "p99_ms": 14.589500000000001
+          "p50_ms": 3.1430000000000002,
+          "p90_ms": 6.5024,
+          "p99_ms": 9.46214
         },
         "requires": [
           []
@@ -1046,14 +1144,15 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            13.195
+            11.471
           ],
           "error_samples_ms": [
-            3.128
+            2.2,
+            3.971
           ],
-          "p50_ms": 13.195,
-          "p90_ms": 13.195,
-          "p99_ms": 13.195
+          "p50_ms": 11.471,
+          "p90_ms": 11.471,
+          "p99_ms": 11.471
         },
         "requires": [
           [
@@ -1086,14 +1185,14 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            13.001
+            11.221
           ],
           "error_samples_ms": [
-            5.657
+            5.715
           ],
-          "p50_ms": 13.001,
-          "p90_ms": 13.001,
-          "p99_ms": 13.001
+          "p50_ms": 11.221,
+          "p90_ms": 11.221,
+          "p99_ms": 11.221
         },
         "requires": [
           [
@@ -1293,15 +1392,13 @@
     "arguments_probe_tool": "echo"
   },
   "notes": [
-    "Evidence: 526 recorded exchanges (introspection and 28 plans), every tool, resource, template, prompt, completion, task method, logging level and subscription. Where a behavior could not be recorded it follows the published source of @modelcontextprotocol/server-everything 2026.8.31 (MCP TypeScript SDK 1.32.1, zod 4.6.6): the 60 s timeout of a task's queued clarification, the 10-minute elicitation timeouts, the 600-poll limit of the async elicitation tool, task expiry 300 s after they end, gzip's 10 MB limit, Node's setTimeout clamping in trigger-long-running-operation.",
-    "Every tool is computed (handlers.py): zod-v4 worded argument refusals, JavaScript number spelling and Number() parsing, WHATWG URL parsing (ada-url, as Node), byte-identical gzip (zlib level 6, OS byte 19 as on the recorded macOS host).",
-    "Dynamic resources are stamped with the local time as the recorded server printed it: en-US toLocaleTimeString in America/New_York (its process had no TZ), whatever zone the fake runs in.",
-    "gzip-file-as-resource never reaches the network: data: URLs are processed locally; the default README URL serves the file the real server fetched while recording (000210); any other http(s) URL answers 'fetch failed', as the real server does when a fetch fails.",
-    "Like the real server, get-roots-list and the post-initialize sync ask for roots on the client's GET stream; a client without one waits the SDK's 60 s and is told no roots are configured.",
-    "Session resources taken over by another client (same name) are modeled within one evaluation session (X-Fauxcall-Session), as the real server's process-wide map does across all its clients.",
-    "Recorded after the review: protocol-schema, async-bad-replies and research-late (reviewer probes: malformed task/_meta, completion argument/context, task cursor, two bad prompt arguments, an integer too large for a double, malformed async-tool replies, a non-string clarification failing its task, a clarification delivered after its 60 s timeout and ignored), and protocol-versions (initialize outside a session: 2024-10-07 is supported, unsupported versions get 2025-11-25 and a priming event only when the asked version is >= 2025-11-25, handshakes InitializeRequestSchema refuses get 400 'Server not initialized').",
-    "Recorded after the second review (review2-probes): an initialize inside a session is a request its handler refuses with zod issues in the schema's field order (000514-000517); zod names an infinite number in a 'received' member (000518-000519); every method the server handles looks a related task up first ('Task not found', 000520-000523, 000525), an unknown method stays 'Method not found' (000524).",
-    "The HTTP front (front.py, express.py, sse.py: an ASGI middleware in the fake's own app.py) reproduces Express 5.3, cors 2.8.6 and the SDK transport from their published source and the recorded headers and refusals: CORS and 204 preflights, Express's 404 page, the /mcp route's matching and session refusals, the transport's checks in order, SSE events and headers as the SDK writes them (priming by the asked version, the session id), the related-task lookup and in-session initialize refusal for single-message POSTs, DELETE ending GET streams, lone UTF-16 surrogates carried through stand-ins (surrogates.py), and journal entries for its own answers. Raw POST bodies (over 4 MiB, invalid JSON, batches) were not recorded: that would need approved raw POST /mcp probes.",
-    "Known differences: (1) tools/call params FauxCall's runtime checks before the handlers: a non-string name gets the recorded 'received undefined' refusal; non-object arguments the answer recorded for that exact value, else 'received array'; an unknown tool is refused before its arguments or task are checked. (2) A request naming an existing related task is answered (real: queued for the task, then dropped: never answered); in a batch, runtime-answered methods skip the lookup. (3) Last-Event-ID resumption: the fake replays the matching stream only, answers 409 while another GET stream is open, and keeps pushing (real: replays every later event of the session, never 409, pushes nothing more). (4) notifications/cancelled is ignored; none is sent when the fake's own requests time out. (5) A queued research clarification gets its JSON-RPC id when delivered. (6) Simulated logging, resource updates and task status pushes run on wall-clock time; task states follow the fake's clock. (7) No network: only data: URLs and the recorded default README are gzipped. (8) JSON nested deeper than ~1000 levels is refused as invalid."
+    "Source of truth: recordings of @modelcontextprotocol/server-everything 2026.8.31 (SDK 1.32.1) on 2026-10-18; behaviors not recorded follow the server's and SDK's source (node_modules), as listed below.",
+    "From source, not recorded: cross-session removal of a gzip session resource re-registered by another session; tasks/list pages of 10 with the last task id as cursor; task expiry after ttl (300000 ms, restarted on completion); a queued clarification unanswered for 60 s falls back to 'technical (default - elicitation unavailable)'; a non-text clarification fails the task with 'TypeError: state.clarification.includes is not a function'; one notifications/tools/list_changed per capability-dependent tool at notifications/initialized.",
+    "No network: gzip-file-as-resource fetches data: URLs itself, serves the recorded README for its default URL, and answers 'fetch failed' for any other http(s) URL (the real server's answer when the network fails).",
+    "Roots: without an open GET stream the real server's roots/list is lost and times out after 60 s; the fake fails at once and waits the minute only when not in fast mode.",
+    "Wall clock: research stages (1 s), tasks/result polling (1 s), task TTLs and the 5 s logging/update simulations run in real time even in fast mode, as clients observe them through tasks/get and the GET stream.",
+    "zod error JSON for unusual client answers (beyond the recorded sampling/elicitation refusals) follows zod v4's issue shapes; URL normalization follows WHATWG for the URL shapes this server meets.",
+    "Protocol versions (from source, not probed: introspection offers only the four known versions and a plan can't re-initialize): 2024-10-07 is supported (the recorded protocol-header refusal lists it), and an unsupported version is answered with the latest, 2025-11-25 (SDK server/index.js, LATEST_PROTOCOL_VERSION). FauxCall's runtime repeats the recorded protocol-header refusal verbatim (it names 1999-01-01, the version introspection sent) and does not check Accept or MCP-Protocol-Version on GET.",
+    "Review probes recorded 2026-10-18 (plans review-*): a refused roots/list is answered at once without a log (000469); zod union refusals list every alternative and the content discriminator names its options (000473-000479); IPv6 and short IPv4 URLs pass z.url(), 999.1.1.1 does not (000481-000483); 'data:...; base64,' decodes (000484); a malformed _meta.progressToken is refused at the HTTP level with the not_jsonrpc refusal (000486); request issues are listed in schema order (000487-000489); an unfetched clarification times out after 60 s and is still delivered by a later tasks/result (000491-000500)."
   ]
 }

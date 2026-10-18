@@ -1,43 +1,373 @@
 {
   "name": "get-sum",
-  "created_at": "2026-10-15T00:40:00Z",
-  "note": "get-sum: integers, decimals, negatives, JS number formatting (exponents, float error, overflow) and schema violations.",
+  "created_at": "2026-10-18T02:30:00Z",
   "calls": [
-    {"id": "sum-1-2", "endpoint": "MCP tools/call:get-sum", "purpose": "sample",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 1, "b": 2}}}},
-    {"id": "sum-neg", "endpoint": "MCP tools/call:get-sum", "purpose": "sample",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": -5, "b": 3.5}}}},
-    {"id": "sum-zero", "endpoint": "MCP tools/call:get-sum", "purpose": "edge",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 0, "b": 0}}}},
-    {"id": "sum-float-error", "endpoint": "MCP tools/call:get-sum", "purpose": "edge",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 0.1, "b": 0.2}}}},
-    {"id": "sum-floats-whole", "endpoint": "MCP tools/call:get-sum", "purpose": "edge",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 1.5, "b": 2.5}}}},
-    {"id": "sum-written-float", "endpoint": "MCP tools/call:get-sum", "purpose": "edge",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 3.0, "b": 4.0}}}},
-    {"id": "sum-big", "endpoint": "MCP tools/call:get-sum", "purpose": "edge",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 1e21, "b": 1}}}},
-    {"id": "sum-overflow", "endpoint": "MCP tools/call:get-sum", "purpose": "edge",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 1e308, "b": 1e308}}}},
-    {"id": "sum-tiny", "endpoint": "MCP tools/call:get-sum", "purpose": "edge",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 1e-7, "b": 2e-7}}}},
-    {"id": "sum-precision", "endpoint": "MCP tools/call:get-sum", "purpose": "edge",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 9007199254740993, "b": 0}}}},
-    {"id": "sum-neg-zero", "endpoint": "MCP tools/call:get-sum", "purpose": "edge",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": -0.0, "b": -0.0}}}},
-    {"id": "sum-large-ints", "endpoint": "MCP tools/call:get-sum", "purpose": "variation",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 123456789, "b": 987654321}}}},
-    {"id": "sum-decimals", "endpoint": "MCP tools/call:get-sum", "purpose": "variation",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 19.99, "b": 5.01}}}},
-    {"id": "sum-missing-b", "endpoint": "MCP tools/call:get-sum", "purpose": "invalid",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 1}}}},
-    {"id": "sum-missing-both", "endpoint": "MCP tools/call:get-sum", "purpose": "invalid",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {}}}},
-    {"id": "sum-strings", "endpoint": "MCP tools/call:get-sum", "purpose": "invalid",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": "1", "b": "2"}}}},
-    {"id": "sum-null-a", "endpoint": "MCP tools/call:get-sum", "purpose": "invalid",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": null, "b": 2}}}},
-    {"id": "sum-bool-b", "endpoint": "MCP tools/call:get-sum", "purpose": "invalid",
-     "request": {"method": "POST", "path": "/mcp", "json_body": {"name": "get-sum", "arguments": {"a": 1, "b": false}}}}
+    {
+      "id": "sum-ints",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 2,
+            "b": 3
+          }
+        }
+      },
+      "repeat": 2,
+      "interval_ms": 1000
+    },
+    {
+      "id": "sum-decimals",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 1.5,
+            "b": 2.25
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-negative",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": -7,
+            "b": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-zero",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 0,
+            "b": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-float-error",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 0.1,
+            "b": 0.2
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-big-exp",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 1e+21,
+            "b": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-large",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 123456789,
+            "b": 987654321
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-neg-frac",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": -0.5,
+            "b": -0.25
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-tiny",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 1e-07,
+            "b": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-max-safe",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 9007199254740991,
+            "b": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-cancel",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 100,
+            "b": -100
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-pi-e",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 3.14159,
+            "b": 2.71828
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-huge",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 1e+300,
+            "b": 1e+300
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-overflow",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 1.7976931348623157e+308,
+            "b": 1.7976931348623157e+308
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-neg-zero",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": -0.0,
+            "b": -0.0
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-float-int",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 5.0,
+            "b": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-missing-b",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-missing-both",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "sum-string",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": "1",
+            "b": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-null",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": null,
+            "b": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-bool",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": true,
+            "b": false
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-both-strings",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": "x",
+            "b": "y"
+          }
+        }
+      }
+    },
+    {
+      "id": "sum-extra",
+      "endpoint": "MCP tools/call:get-sum",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 1,
+            "b": 2,
+            "c": 3
+          }
+        }
+      }
+    }
   ]
 }

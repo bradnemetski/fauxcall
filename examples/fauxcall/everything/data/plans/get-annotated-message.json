@@ -1,0 +1,174 @@
+{
+  "name": "get-annotated-message",
+  "created_at": "2026-10-18T02:30:00Z",
+  "calls": [
+    {
+      "id": "ann-error",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": "error"
+          }
+        }
+      }
+    },
+    {
+      "id": "ann-success",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": "success"
+          }
+        }
+      }
+    },
+    {
+      "id": "ann-debug",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": "debug"
+          }
+        }
+      }
+    },
+    {
+      "id": "ann-error-img",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": "error",
+            "includeImage": true
+          }
+        }
+      }
+    },
+    {
+      "id": "ann-success-img",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": "success",
+            "includeImage": true
+          }
+        }
+      }
+    },
+    {
+      "id": "ann-debug-img",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": "debug",
+            "includeImage": true
+          }
+        }
+      }
+    },
+    {
+      "id": "ann-success-noimg",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": "success",
+            "includeImage": false
+          }
+        }
+      }
+    },
+    {
+      "id": "ann-bad-type",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": "info"
+          }
+        }
+      }
+    },
+    {
+      "id": "ann-missing",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "ann-bad-image",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": "debug",
+            "includeImage": "yes"
+          }
+        }
+      }
+    },
+    {
+      "id": "ann-number-type",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": 1
+          }
+        }
+      }
+    }
+  ]
+}

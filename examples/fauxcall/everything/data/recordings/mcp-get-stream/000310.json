@@ -1,0 +1,129 @@
+{
+  "id": "000310",
+  "endpoint": "MCP GET:stream",
+  "started_at": "2026-10-18T02:34:42.270003Z",
+  "started_ns": 1792290882270003000,
+  "elapsed_ms": 36044.279,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 18 Oct 2026 02:34:42 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "content_type": "text/event-stream"
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 527.502,
+      "kind": "sse",
+      "event": "message",
+      "id": "37c518d6-890f-4b09-aa56-d880ff41f9bf",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"error\",\"data\":\"Error-level message - SessionId e94e42ef-5adc-4a3e-a040-8253284f0061\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 5516.228,
+      "kind": "sse",
+      "event": "message",
+      "id": "170dbc45-bd19-4698-8409-09531fe934a2",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"critical\",\"data\":\"Critical-level message - SessionId e94e42ef-5adc-4a3e-a040-8253284f0061\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10518.611,
+      "kind": "sse",
+      "event": "message",
+      "id": "bd33079e-ec60-49b7-bdac-8033d5e2082b",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"alert\",\"data\":\"Alert level-message - SessionId e94e42ef-5adc-4a3e-a040-8253284f0061\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 15518.998,
+      "kind": "sse",
+      "event": "message",
+      "id": "4387fa2f-2552-4d42-a046-0c9301a5d31f",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"emergency\",\"data\":\"Emergency-level message - SessionId e94e42ef-5adc-4a3e-a040-8253284f0061\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 20520.282,
+      "kind": "sse",
+      "event": "message",
+      "id": "a431eedc-1157-40cd-a1de-ce46ec144f1a",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"critical\",\"data\":\"Critical-level message - SessionId e94e42ef-5adc-4a3e-a040-8253284f0061\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 25521.499,
+      "kind": "sse",
+      "event": "message",
+      "id": "5fa9ba1b-8f7c-440b-b3cc-7f98be5cbfd3",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"error\",\"data\":\"Error-level message - SessionId e94e42ef-5adc-4a3e-a040-8253284f0061\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 32536.872,
+      "kind": "sse",
+      "event": "message",
+      "id": "a20cd763-743c-4155-99ef-0403f0a4017c",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"critical\",\"data\":\"Critical-level message - SessionId e94e42ef-5adc-4a3e-a040-8253284f0061\"},\"jsonrpc\":\"2.0\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

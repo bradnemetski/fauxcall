@@ -1,0 +1,127 @@
+{
+  "id": "000381",
+  "endpoint": "MCP tools/call:trigger-elicitation-request",
+  "purpose": "invalid",
+  "plan_call": "elicit-error",
+  "started_at": "2026-10-18T02:36:48.791009Z",
+  "started_ns": 1792291008791009000,
+  "elapsed_ms": 4.558,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 18 Oct 2026 02:36:48 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "MCP error -32600: Elicitation not supported"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 6
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.733,
+      "kind": "sse",
+      "event": "message",
+      "id": "8b766790-1bba-4acb-87c3-7930c3fddc76",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"message\":\"Please provide inputs for the following fields:\",\"requestedSchema\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"String\",\"type\":\"string\",\"description\":\"Your full, legal name\"},\"check\":{\"title\":\"Boolean\",\"type\":\"boolean\",\"description\":\"Agree to the terms and conditions\"},\"firstLine\":{\"title\":\"String with default\",\"type\":\"string\",\"description\":\"Favorite first line of a story\",\"default\":\"It was a dark and stormy night.\"},\"email\":{\"title\":\"String with email format\",\"type\":\"string\",\"format\":\"email\",\"description\":\"Your email address (will be verified, and never shared with anyone else)\"},\"homepage\":{\"type\":\"string\",\"format\":\"uri\",\"title\":\"String with uri format\",\"description\":\"Portfolio / personal website\"},\"birthdate\":{\"title\":\"String with date format\",\"type\":\"string\",\"format\":\"date\",\"description\":\"Your date of birth\"},\"integer\":{\"title\":\"Integer\",\"type\":\"integer\",\"description\":\"Your favorite integer (do not give us your phone number, pin, or other sensitive info)\",\"minimum\":1,\"maximum\":100,\"default\":42},\"number\":{\"title\":\"Number in range 1-1000\",\"type\":\"number\",\"description\":\"Favorite number (there are no wrong answers)\",\"minimum\":0,\"maximum\":1000,\"default\":3.14},\"untitledSingleSelectEnum\":{\"type\":\"string\",\"title\":\"Untitled Single Select Enum\",\"description\":\"Choose your favorite friend\",\"enum\":[\"Monica\",\"Rachel\",\"Joey\",\"Chandler\",\"Ross\",\"Phoebe\"],\"default\":\"Monica\"},\"untitledMultipleSelectEnum\":{\"type\":\"array\",\"title\":\"Untitled Multiple Select Enum\",\"description\":\"Choose your favorite instruments\",\"minItems\":1,\"maxItems\":3,\"items\":{\"type\":\"string\",\"enum\":[\"Guitar\",\"Piano\",\"Violin\",\"Drums\",\"Bass\"]},\"default\":[\"Guitar\"]},\"titledSingleSelectEnum\":{\"type\":\"string\",\"title\":\"Titled Single Select Enum\",\"description\":\"Choose your favorite hero\",\"oneOf\":[{\"const\":\"hero-1\",\"title\":\"Superman\"},{\"const\":\"hero-2\",\"title\":\"Green Lantern\"},{\"const\":\"hero-3\",\"title\":\"Wonder Woman\"}],\"default\":\"hero-1\"},\"titledMultipleSelectEnum\":{\"type\":\"array\",\"title\":\"Titled Multiple Select Enum\",\"description\":\"Choose your favorite types of fish\",\"minItems\":1,\"maxItems\":3,\"items\":{\"anyOf\":[{\"const\":\"fish-1\",\"title\":\"Tuna\"},{\"const\":\"fish-2\",\"title\":\"Salmon\"},{\"const\":\"fish-3\",\"title\":\"Trout\"}]},\"default\":[\"fish-1\"]},\"legacyTitledEnum\":{\"type\":\"string\",\"title\":\"Legacy Titled Single Select Enum\",\"description\":\"Choose your favorite type of pet\",\"enum\":[\"pet-1\",\"pet-2\",\"pet-3\",\"pet-4\",\"pet-5\"],\"enumNames\":[\"Cats\",\"Dogs\",\"Birds\",\"Fish\",\"Reptiles\"],\"default\":\"pet-1\"}},\"required\":[\"name\"]}},\"jsonrpc\":\"2.0\",\"id\":4}"
+    },
+    {
+      "t_ms": 4.44,
+      "kind": "sse",
+      "event": "message",
+      "id": "eb73f357-0f76-4889-8d69-59d361814edf",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32600: Elicitation not supported\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":6}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -131,12 +131,24 @@ if a behavior can't be expressed, say so in the model's `notes`.
 | a notification from the client (`notifications/roots/list_changed` …) | `202` at once; its `METHOD_HANDLERS` handler, if any, runs in the background |
 | a POST with the wrong `Accept` or `Content-Type`, an unknown `MCP-Protocol-Version`, or an unknown session id | the real HTTP refusal, recorded by introspection |
 | a GET or DELETE for an unknown session, or a second GET stream in a session | the real HTTP refusal, recorded by introspection |
+| a POST body that isn't JSON, or isn't JSON-RPC | the real refusal (`invalid_json`, `not_jsonrpc`); several broken rules at once answer in the real server's check order (`refusal_order`) |
+| a path the server doesn't serve, another method on the MCP path | the real 404 page (`unknown_route`, `method_not_allowed` templates with `{{method}}` and `{{path}}`); the MCP path matched in any case or with a trailing slash when the real one is |
+| an `OPTIONS` preflight, any request with an `Origin` | the real CORS answer and headers (`transport.cors`) |
+| `notifications/cancelled` from the client | the call stops and its answer is never sent; its SSE stream stays open with keep-alives, as on SDK servers |
+| a DELETE of a session with an open GET stream | the stream ends |
 
 The wire itself follows the recordings too: response members in the real server's order, session
 and SSE event ids shaped like the real ones (UUIDs or hex), the empty priming event that newer
 protocol versions open SSE answers with (for the versions that sent one), and the real
 keep-alive comment (`: keepalive` …) at the real interval, on an idle GET stream and on a long
 call's stream. Introspection waits up to 20 seconds on the GET stream to learn the keep-alive.
+SSE events are written in the real field order (`sse_field_order`: `event, id, data` on the
+TypeScript SDK) and event name, and without a `Content-Length` when the real server streams even
+complete answers (`sse_streamed`). Servers that prime by the version the client asked for
+(`priming_since`, learned from the version probes) open an answer with a priming event when the
+handshake's version, else the request's `MCP-Protocol-Version` header, sorts at or after it.
+Messages the server sends on its own use `message_member_order` (learned when it pushes during
+introspection; otherwise set it from a recording, e.g. `["method", "params", "jsonrpc", "id"]`).
 
 `METHOD_HANDLERS` (in `handlers.py`) maps any method to `async (ctx, params) -> result`; return
 `None` to let the recordings answer (compute dynamic resources, replay the static ones). Both kinds
@@ -176,7 +188,18 @@ stream gets no answer, and the recording shows only its timeout.
 **Reconnecting.** A server that numbers its SSE events (`sse_event_ids`) keeps what it sends, and
 a client that reconnects with `Last-Event-ID` gets the rest of that stream, including pushes sent
 while no stream was open; the fake does the same (`ctx.push` returns `False` then, but the message
-is kept). A server without event ids drops them, and so does its fake.
+is kept). A server without event ids drops them, and so does its fake. Some event stores replay
+the whole session instead (`resumption: "session"`, the TypeScript SDK's in-memory store): every
+later event on any stream, priming events included, never refused as a second stream, and
+nothing more afterwards. Introspection can't tell these apart; set it from the server's source or
+docs.
+
+**Timeouts and cancellation.** When a request the fake sent the client times out, SDK servers
+tell the client with `notifications/cancelled`; set `transport.timeout_cancel_reason` to the
+reason the real server writes (the TypeScript SDK: `"McpError: MCP error -32001: Request timed
+out"`) and the fake sends it too. A `METHOD_HANDLERS["tools/call"]` handler runs before FauxCall's
+own checks of a tool call (a name that isn't a string, arguments that aren't an object, an unknown
+tool): return a result to answer as the real server does, `None` to leave the call to FauxCall.
 
 Tools some servers list only to clients that support sampling, elicitation (form or URL), roots or
 tasks are found by introspection (one session per capability, then one declaring them all) and

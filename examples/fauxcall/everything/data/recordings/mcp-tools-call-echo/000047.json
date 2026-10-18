@@ -1,11 +1,10 @@
 {
   "id": "000047",
   "endpoint": "MCP tools/call:echo",
-  "purpose": "invalid",
-  "plan_call": "echo-bool",
-  "started_at": "2026-10-15T00:35:32.473733Z",
-  "started_ns": 1792024532473733000,
-  "elapsed_ms": 10.493,
+  "plan_call": "echo-hello",
+  "started_at": "2026-10-18T02:27:27.198999Z",
+  "started_ns": 1792290447198999000,
+  "elapsed_ms": 5.922,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,12 +32,12 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 15,
+        "id": 3,
         "method": "tools/call",
         "params": {
           "name": "echo",
           "arguments": {
-            "message": true
+            "message": "hello"
           }
         }
       }
@@ -81,7 +80,7 @@
       ],
       [
         "date",
-        "Thu, 15 Oct 2026 00:35:32 GMT"
+        "Sun, 18 Oct 2026 02:27:27 GMT"
       ],
       [
         "transfer-encoding",
@@ -96,23 +95,22 @@
           "content": [
             {
               "type": "text",
-              "text": "MCP error -32602: Input validation error: Invalid arguments for tool echo: Invalid input: expected string, received boolean at message"
+              "text": "Echo: hello"
             }
-          ],
-          "isError": true
+          ]
         },
         "jsonrpc": "2.0",
-        "id": 15
+        "id": 3
       }
     }
   },
   "stream": [
     {
-      "t_ms": 10.112,
+      "t_ms": 5.677,
       "kind": "sse",
       "event": "message",
-      "id": "5852cc15-def3-4faf-9fe0-3ac0a1b10c0e",
-      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Input validation error: Invalid arguments for tool echo: Invalid input: expected string, received boolean at message\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":15}"
+      "id": "e6ff94ac-0452-4b62-9fca-a8a0d595310b",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Echo: hello\"}]},\"jsonrpc\":\"2.0\",\"id\":3}"
     }
   ],
   "redacted": [

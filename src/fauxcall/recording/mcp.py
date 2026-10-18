@@ -27,6 +27,7 @@ from fauxcall.errors import CredentialsRefusedError, HttpStatusError, RecordingE
 from fauxcall.logs import get_logger
 from fauxcall.mcpwire import protocol
 from fauxcall.mcpwire.client import McpWireClient, RpcCall, Transport, replier
+from fauxcall.model.api import RoutingModel
 from fauxcall.model.auth import AuthModel, AuthScheme, OAuthModel
 from fauxcall.model.errors import ErrorTemplate
 from fauxcall.model.mcp import (
@@ -103,6 +104,10 @@ def _merge(into: JsonObject, extra: JsonObject) -> None:
 MISSING_SESSION_PROBE_ID: Final = 9_000_001
 REFUSAL_PROBE_ID: Final = 9_000_003
 UNKNOWN_SESSION: Final = "fauxcall-unknown-session"
+UNKNOWN_ROUTE: Final = "/fauxcall-probe-unknown-route"
+"""A path no server serves, to record its 404 page."""
+PROBE_ORIGIN: Final = "https://fauxcall.invalid"
+PROBE_REQUEST_HEADERS: Final = "content-type,mcp-session-id"
 """A session id no server issued, sent to learn how the server refuses it."""
 KEEP_ALIVE_PROBE_SECONDS: Final = 20.0
 """How long introspection waits for an idle stream's keep-alive (the SDKs send one every 15 s)."""
@@ -110,6 +115,7 @@ AUTH_PROBE_ID: Final = 9_000_002
 _HTTP_OK: Final = 200
 _HTTP_NOT_ALLOWED: Final = 405
 _HTTP_ERROR: Final = 400
+_HTTP_REDIRECT: Final = 300
 _TARGET_PARAM: Final = {
     "tools/call": "name",
     "prompts/get": "name",
@@ -118,6 +124,76 @@ _TARGET_PARAM: Final = {
     "resources/unsubscribe": "uri",
 }
 """Methods whose endpoint id names their target (``MCP tools/call:<name>``): the param it fills."""
+
+
+def _learn_from_stream(transport: McpTransportModel, watched: RpcCall) -> None:
+    """The keep-alive of an idle GET stream, and the member order of what the server pushed."""
+    if watched.body.startswith(":"):
+        transport.keep_alive = watched.body
+        transport.keep_alive_seconds = max(round(watched.elapsed_ms / 1000, 1), 0.1)
+    pushed = next((m for m in watched.messages if isinstance(m, dict) and "method" in m), None)
+    if pushed is not None:  # what the server sends on its own, in its member order
+        transport.message_member_order = list(pushed)
+
+
+def _member(value: JsonValue, key: str) -> JsonValue:
+    return value.get(key) if isinstance(value, dict) else None
+
+
+def _route_template(name: str, call: RpcCall, method: str, path: str) -> ErrorTemplate:
+    """The server's answer to a route it doesn't serve, with the path and method as placeholders."""
+    text = call.body.replace(f"{method} {path}", "{{method}} {{path}}").replace(path, "{{path}}")
+    body_json: JsonValue = None
+    with contextlib.suppress(ValueError):
+        body_json = jsonfmt.loads(text) if text.lstrip().startswith(("{", "[")) else None
+    return ErrorTemplate(
+        name=name,
+        status=call.status,
+        content_type=call.content_type,
+        body_json=body_json,
+        body_text=None if body_json is not None else text,
+        examples=[],
+    )
+
+
+def _cors_headers(call: RpcCall) -> list[list[str]]:
+    """The CORS headers of an answer, with the probe's origin and requested headers generalized."""
+    found: list[list[str]] = []
+    for name, value in call.response_headers:
+        lowered = name.lower()
+        if not lowered.startswith("access-control-") and lowered != "vary":
+            continue
+        general = value.replace(PROBE_ORIGIN, "{{origin}}")
+        found.append([lowered, general.replace(PROBE_REQUEST_HEADERS, "{{request_headers}}")])
+    return found
+
+
+def _sse_format(body: str) -> tuple[list[str], str | None]:
+    """The field order and event name of the first SSE event carrying data."""
+    for block in body.replace("\r\n", "\n").split("\n\n"):
+        lines = [line for line in block.split("\n") if line and not line.startswith(":")]
+        fields = [line.split(":", 1)[0] for line in lines]
+        data = [line.split(":", 1)[1].strip() for line in lines if line.startswith("data:")]
+        if not data or not any(data):
+            continue
+        order = list(dict.fromkeys(f for f in fields if f in {"id", "event", "data"}))
+        name = next(
+            (line.split(":", 1)[1].strip() for line in lines if line.startswith("event:")), None
+        )
+        return order, name
+    return [], None
+
+
+def _priming_since(asked: Mapping[str, bool]) -> str | None:
+    """The lowest version whose handshake primed, for servers that compare versions.
+
+    ``None`` unless every version from it up primed and none below it did.
+    """
+    primed = [version for version, did in asked.items() if did]
+    if not primed:
+        return None
+    lowest = min(primed)
+    return lowest if all(did == (version >= lowest) for version, did in asked.items()) else None
 
 
 def _refusal(call: RpcCall) -> JsonValue:
@@ -229,6 +305,9 @@ class McpIntrospection:
     """How the server authenticates, learned by calling it without the credentials."""
     auth_error: ErrorTemplate | None = None
     """Its answer to a call without credentials (the ``unauthorized`` template)."""
+    routing: RoutingModel | None = None
+    """How its HTTP layer matches paths and answers unknown ones (with ``route_errors``)."""
+    route_errors: list[ErrorTemplate] = field(default_factory=list)
 
 
 class McpRecorder:
@@ -264,6 +343,7 @@ class McpRecorder:
         self.calls_made = 0
         self._last: float | None = None
         self.keep_alive_within = KEEP_ALIVE_PROBE_SECONDS
+        self._routing: tuple[RoutingModel, list[ErrorTemplate]] | None = None
 
     # -- plumbing ----------------------------------------------------------------------------------
 
@@ -454,6 +534,8 @@ class McpRecorder:
                 with contextlib.suppress(_BudgetExhaustedError):
                     model.transport.refusals = await self._probe_refusals(client, exchanges)
                     await self._probe_streams(client, model.transport, exchanges)
+                with contextlib.suppress(_BudgetExhaustedError, httpx2.HTTPError):
+                    self._routing = await self._probe_http_layer(client, model, exchanges)
                 await self._capability_tools(model, exchanges)
         finally:
             status = await self._close(client)
@@ -461,11 +543,15 @@ class McpRecorder:
             model.transport.delete_status = status
         if probe_versions and model.transport.kind == "streamable_http":
             primed = model.transport.priming_versions
-            model.transport.protocol_versions = await self._probe_versions(exchanges, primed)
+            asked: dict[str, bool] = {}
+            model.transport.protocol_versions = await self._probe_versions(exchanges, primed, asked)
             model.transport.priming_versions = sorted(set(primed))
+            model.transport.priming_since = _priming_since(asked)
         counts = (len(model.tools), len(model.resources), len(model.prompts))
         notes = ["{} tools, {} resources, {} prompts".format(*counts)]
         found = McpIntrospection(model=model, exchanges=exchanges, notes=notes)
+        if self._routing is not None:
+            found.routing, found.route_errors = self._routing
         if self.headers and model.transport.kind == "streamable_http":
             await self._probe_auth(found)
         return found
@@ -679,6 +765,11 @@ class McpRecorder:
         )
         if _primes(init) and client.negotiated_version:
             transport.priming_versions = [client.negotiated_version]
+        if response_mode == "sse" and not legacy:
+            fields, name = _sse_format(init.body)
+            if fields:
+                transport.sse_field_order, transport.sse_event_name = fields, name
+            transport.sse_streamed = init.header("content-length") is None
         if content_type:
             if response_mode == "sse":
                 transport.content_type_sse = content_type
@@ -765,8 +856,146 @@ class McpRecorder:
                 transport.refusals["get_second_stream"] = _refusal(second)
         if comment is not None:
             exchanges.append(self.save(comment, method_endpoint("GET", "keep_alive")))
-            transport.keep_alive = comment.body
-            transport.keep_alive_seconds = max(round(comment.elapsed_ms / 1000, 1), 0.1)
+            _learn_from_stream(transport, comment)
+
+    async def _probe_http_layer(
+        self, client: McpWireClient, model: McpModel, exchanges: list[str]
+    ) -> tuple[RoutingModel, list[ErrorTemplate]] | None:
+        """How the server's HTTP layer answers outside MCP itself.
+
+        A path it doesn't serve (its 404 page, with the path and method as placeholders), the MCP
+        path in upper case and with a trailing slash, another method on it, a CORS preflight and
+        the CORS headers of ordinary answers, bodies that aren't JSON or JSON-RPC, and the order
+        in which it checks a POST. Returns the routing and its error templates.
+        """
+        transport = model.transport
+        path = transport.path
+
+        async def probe(
+            method: str,
+            at: str | None,
+            situation: str,
+            headers: Mapping[str, str] | None = None,
+        ) -> RpcCall:
+            await self._pace()
+            call = await client.probe_http(method, None, path=at, headers=headers)
+            exchanges.append(self.save(call, method_endpoint(f"{method} {at or path}", situation)))
+            return call
+
+        plain = await probe("GET", None, "no_session")
+        unknown = await probe(
+            "GET", UNKNOWN_ROUTE, "unknown_route", headers={"origin": PROBE_ORIGIN}
+        )
+        routing = RoutingModel()
+        errors: list[ErrorTemplate] = []
+        if unknown.status >= _HTTP_ERROR:
+            errors.append(_route_template("unknown_route", unknown, "GET", UNKNOWN_ROUTE))
+            routing.unknown_route_template = "unknown_route"
+
+        def like_mcp(call: RpcCall) -> bool:
+            return (call.status, call.body) == (plain.status, plain.body)
+
+        if path.upper() != path:
+            routing.case_insensitive = like_mcp(await probe("GET", path.upper(), "upper_case"))
+        slashed = await probe("GET", path.rstrip("/") + "/", "trailing_slash")
+        routing.trailing_slash = (
+            "ignore"
+            if like_mcp(slashed)
+            else "redirect"
+            if _HTTP_REDIRECT <= slashed.status < _HTTP_ERROR
+            else "strict"
+        )
+        other = await probe("PUT", None, "method_not_allowed")
+        if other.status >= _HTTP_ERROR:
+            errors.append(_route_template("method_not_allowed", other, "PUT", path))
+            routing.method_not_allowed_template = "method_not_allowed"
+        transport.cors = await self._probe_cors(probe, plain, unknown)
+        await self._probe_bodies(client, transport, exchanges)
+        return routing, errors
+
+    async def _probe_cors(
+        self,
+        probe: Callable[..., Awaitable[RpcCall]],
+        plain: RpcCall,
+        unknown: RpcCall,
+    ) -> JsonValue:
+        """CORS as the server answers it, or ``None`` when it sends no CORS headers."""
+        preflight = await probe(
+            "OPTIONS",
+            None,
+            "cors_preflight",
+            headers={
+                "origin": PROBE_ORIGIN,
+                "access-control-request-method": "POST",
+                "access-control-request-headers": PROBE_REQUEST_HEADERS,
+            },
+        )
+        found = {
+            "preflight": {"status": preflight.status, "headers": _cors_headers(preflight)},
+            "headers": _cors_headers(unknown),
+            "headers_without_origin": _cors_headers(plain),
+        }
+        if not any(found["preflight"]["headers"]) and not found["headers"]:  # type: ignore[index]
+            return None
+        return found  # type: ignore[return-value]
+
+    async def _probe_bodies(
+        self, client: McpWireClient, transport: McpTransportModel, exchanges: list[str]
+    ) -> None:
+        """Bodies the server refuses before MCP (not JSON, not JSON-RPC), and its check order."""
+        good = {"content-type": "application/json", "accept": "application/json, text/event-stream"}
+        for situation, body in (("invalid_json", b"{"), ("not_jsonrpc", b'{"fauxcall": "probe"}')):
+            await self._pace()
+            call = await client.probe_http("POST", client.session_id, headers=good, content=body)
+            exchanges.append(self.save(call, method_endpoint("tools/list", situation)))
+            if call.status >= _HTTP_ERROR:
+                transport.refusals[situation] = _refusal(call)
+        transport.refusal_order = await self._probe_refusal_order(client, transport, exchanges)
+
+    async def _probe_refusal_order(
+        self, client: McpWireClient, transport: McpTransportModel, exchanges: list[str]
+    ) -> list[str]:
+        """Which refusal wins when a POST breaks several rules.
+
+        Break them all, see which answers, stop breaking that one, and repeat.
+        """
+        breaks = {
+            "unknown_session": ({protocol.SESSION_HEADER: UNKNOWN_SESSION}, None),
+            "accept": ({"accept": "application/json"}, None),
+            "content_type": ({"content-type": "text/plain"}, None),
+            "protocol_header": ({protocol.PROTOCOL_HEADER: "1999-01-01"}, None),
+            "invalid_json": ({}, b"{"),
+        }
+        known = {k: v for k, v in transport.refusals.items() if k in breaks and isinstance(v, dict)}
+        remaining = list(known)
+        order: list[str] = []
+        while len(remaining) > 1:
+            headers = {
+                "content-type": "application/json",
+                "accept": "application/json, text/event-stream",
+            }
+            body = jsonfmt.dumps(protocol.request(REFUSAL_PROBE_ID, "tools/list")).encode()
+            for situation in remaining:
+                extra, raw = breaks[situation]
+                headers |= extra
+                body = raw if raw is not None else body
+            await self._pace()
+            call = await client.probe_http("POST", client.session_id, headers=headers, content=body)
+            exchanges.append(self.save(call, method_endpoint("tools/list", "refusal-order")))
+            winner = next(
+                (
+                    situation
+                    for situation in remaining
+                    if (call.status, call.body)
+                    == (_member(known[situation], "status"), _member(known[situation], "body"))
+                ),
+                None,
+            )
+            if winner is None:
+                break  # an answer none of them gives alone: order unknown from here
+            order.append(winner)
+            remaining.remove(winner)
+        return [*order, *remaining] if order else []
 
     async def _probe_errors(
         self, client: McpWireClient, capabilities: JsonObject, exchanges: list[str]
@@ -837,11 +1066,15 @@ class McpRecorder:
             model.transport.reinitialize_status = again.status
 
     async def _probe_versions(
-        self, exchanges: list[str], primed: list[str] | None = None
+        self,
+        exchanges: list[str],
+        primed: list[str] | None = None,
+        asked: dict[str, bool] | None = None,
     ) -> dict[str, str]:
         """Which protocol version the server answers to each known version it is offered.
 
-        Versions whose handshake opened with a priming event are added to ``primed``.
+        Versions whose handshake opened with a priming event are added to ``primed``; ``asked``
+        maps each version offered to whether its handshake primed.
         """
         mapping: dict[str, str] = {}
         for version in protocol.KNOWN_VERSIONS:
@@ -862,6 +1095,8 @@ class McpRecorder:
                     mapping[version] = client.negotiated_version
                     if _primes(call) and primed is not None:
                         primed.append(client.negotiated_version)
+                    if asked is not None:
+                        asked[version] = _primes(call)
             finally:
                 await self._close(client)
         return mapping

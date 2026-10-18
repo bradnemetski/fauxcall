@@ -1,0 +1,89 @@
+{
+  "name": "simulate-research-query-listen",
+  "created_at": "2026-10-18T02:30:00Z",
+  "listen": true,
+  "listen_after_seconds": 3,
+  "calls": [
+    {
+      "id": "listen-task",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "volcanoes"
+          },
+          "task": {
+            "ttl": 30000
+          }
+        }
+      },
+      "capture": {
+        "task1": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "listen-result",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task1}}"
+        }
+      }
+    },
+    {
+      "id": "listen-task-cancel",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "glaciers"
+          },
+          "task": {
+            "ttl": 30000
+          }
+        }
+      },
+      "capture": {
+        "task2": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "listen-cancel",
+      "endpoint": "MCP tasks/cancel",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task2}}"
+        }
+      }
+    },
+    {
+      "id": "listen-get-cancelled",
+      "endpoint": "MCP tasks/get",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{task2}}"
+        }
+      },
+      "repeat": 2,
+      "interval_ms": 1500
+    }
+  ],
+  "note": "task status notifications for a client without elicitation; does cancelling notify?"
+}

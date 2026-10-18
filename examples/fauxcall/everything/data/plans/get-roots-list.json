@@ -1,0 +1,58 @@
+{
+  "name": "get-roots-list",
+  "created_at": "2026-10-18T02:30:00Z",
+  "client_capabilities": {
+    "roots": {
+      "listChanged": true
+    }
+  },
+  "listen": true,
+  "listen_after_seconds": 1,
+  "calls": [
+    {
+      "id": "roots-list",
+      "endpoint": "MCP tools/call:get-roots-list",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-roots-list",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "roots/list": {
+          "roots": [
+            {
+              "uri": "file:///home/fauxcall/project",
+              "name": "Project"
+            },
+            {
+              "uri": "file:///tmp/scratch"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "roots-cached",
+      "endpoint": "MCP tools/call:get-roots-list",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-roots-list",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "roots/list": {
+          "roots": []
+        }
+      },
+      "note": "roots are cached per session after the first answer"
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "name": "trigger-long-running-operation",
+  "created_at": "2026-10-18T02:30:00Z",
+  "calls": [
+    {
+      "id": "long-2s-4",
+      "endpoint": "MCP tools/call:trigger-long-running-operation",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": 2,
+            "steps": 4
+          },
+          "_meta": {
+            "progressToken": "fauxcall-progress-1"
+          }
+        }
+      }
+    },
+    {
+      "id": "long-1s-1",
+      "endpoint": "MCP tools/call:trigger-long-running-operation",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": 1,
+            "steps": 1
+          },
+          "_meta": {
+            "progressToken": 7
+          }
+        }
+      }
+    },
+    {
+      "id": "long-3s-3",
+      "endpoint": "MCP tools/call:trigger-long-running-operation",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": 3,
+            "steps": 3
+          },
+          "_meta": {
+            "progressToken": "fauxcall-progress-3"
+          }
+        }
+      }
+    },
+    {
+      "id": "long-default",
+      "endpoint": "MCP tools/call:trigger-long-running-operation",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-long-running-operation",
+          "arguments": {},
+          "_meta": {
+            "progressToken": "fauxcall-progress-default"
+          }
+        }
+      }
+    },
+    {
+      "id": "long-no-token",
+      "endpoint": "MCP tools/call:trigger-long-running-operation",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": 1,
+            "steps": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "long-zero-duration",
+      "endpoint": "MCP tools/call:trigger-long-running-operation",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": 0,
+            "steps": 3
+          },
+          "_meta": {
+            "progressToken": "fauxcall-progress-zero"
+          }
+        }
+      }
+    },
+    {
+      "id": "long-zero-steps",
+      "endpoint": "MCP tools/call:trigger-long-running-operation",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": 1,
+            "steps": 0
+          },
+          "_meta": {
+            "progressToken": "fauxcall-progress-nosteps"
+          }
+        }
+      }
+    },
+    {
+      "id": "long-frac-steps",
+      "endpoint": "MCP tools/call:trigger-long-running-operation",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": 1.5,
+            "steps": 2.5
+          },
+          "_meta": {
+            "progressToken": "fauxcall-progress-frac"
+          }
+        }
+      }
+    },
+    {
+      "id": "long-negative",
+      "endpoint": "MCP tools/call:trigger-long-running-operation",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": -1,
+            "steps": 2
+          },
+          "_meta": {
+            "progressToken": "fauxcall-progress-neg"
+          }
+        }
+      }
+    },
+    {
+      "id": "long-bad-duration",
+      "endpoint": "MCP tools/call:trigger-long-running-operation",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": "fast"
+          }
+        }
+      }
+    },
+    {
+      "id": "long-null-steps",
+      "endpoint": "MCP tools/call:trigger-long-running-operation",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": 1,
+            "steps": null
+          }
+        }
+      }
+    }
+  ]
+}

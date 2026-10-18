@@ -1,0 +1,114 @@
+{
+  "id": "000185",
+  "endpoint": "MCP resources/read:demo://resource/dynamic/text/abc",
+  "purpose": "invalid",
+  "plan_call": "text-abc",
+  "started_at": "2026-10-18T02:33:08.977537Z",
+  "started_ns": 1792290788977537000,
+  "elapsed_ms": 4.513,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 20,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/dynamic/text/abc"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "176"
+      ],
+      [
+        "date",
+        "Sun, 18 Oct 2026 02:33:08 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 20,
+        "error": {
+          "code": -32603,
+          "message": "Unknown resource: demo://resource/dynamic/text/abc"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.268,
+      "kind": "sse",
+      "event": "message",
+      "id": "721abef3-b36e-43f1-bb72-26c270661eb7",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":20,\"error\":{\"code\":-32603,\"message\":\"Unknown resource: demo://resource/dynamic/text/abc\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

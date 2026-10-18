@@ -20,7 +20,8 @@ import secrets
 import time
 import uuid
 from collections import deque
-from typing import TYPE_CHECKING, Final
+from contextvars import ContextVar
+from typing import TYPE_CHECKING, Any, Final
 
 import jsonschema
 from starlette.responses import Response, StreamingResponse
@@ -54,6 +55,10 @@ log = get_logger(__name__)
 
 TOOLS_CALL: Final = "tools/call"
 CLIENT_TIMEOUT_SECONDS: Final = 60.0
+type _Answer = tuple[list[JsonValue], JsonObject]
+"""A call's notifications (unless streamed) and its reply."""
+_ASKING: ContextVar[str | None] = ContextVar("fauxcall_asked_version", default=None)
+"""The protocol version the client asked for in the POST being answered."""
 GET_STREAM: Final = "get"
 """The stream key of the client's GET stream (each SSE answer gets its own)."""
 KEPT_EVENTS: Final = 1000
@@ -133,6 +138,13 @@ class Channel:
             async with asyncio.timeout(within):
                 answer = await waiting
         except TimeoutError as error:
+            reason = self._fake.transport.timeout_cancel_reason
+            if reason is not None:  # tell the client to stop, as the SDK's servers do
+                send(
+                    _notification(
+                        "notifications/cancelled", {"requestId": request_id, "reason": reason}
+                    )
+                )
             raise ClientError(protocol.REQUEST_TIMEOUT, "Request timed out") from error
         finally:
             self._fake.awaiting.pop(key, None)
@@ -227,6 +239,8 @@ class McpFake:
         self._sessions: dict[str, str] = {}
         self._capabilities: dict[str, JsonObject] = {}
         self._initialized: set[str] = set()
+        self._open_streams: dict[str, list[asyncio.Queue[JsonValue]]] = {}
+        """MCP session -> its open GET streams, oldest first (``streams`` holds the newest)."""
         """MCP sessions whose client sent ``notifications/initialized``."""
         self._sent: dict[str, deque[tuple[str, str, JsonValue]]] = {}
         """MCP session -> the numbered events sent to it: (stream, event id, message)."""
@@ -236,6 +250,8 @@ class McpFake:
         """MCP session -> its open GET stream (messages pushed outside any call)."""
         self.background: dict[str, set[asyncio.Task[None]]] = {}
         self.awaiting: dict[tuple[str, str], asyncio.Future[JsonObject]] = {}
+        self.in_flight: dict[tuple[str, str], asyncio.Task[Any]] = {}
+        """(MCP session, request id) -> the call answering it, for the client's cancellations."""
         """(MCP session, request id) -> the server's request waiting for the client's answer."""
         self.request_ids: dict[str, itertools.count[int]] = {}
         """MCP session -> the numbers of the requests the server sends that client."""
@@ -351,7 +367,9 @@ class McpFake:
             case "tools/list" | "resources/list" | "resources/templates/list" | "prompts/list":
                 return await self._dispatch_listing(ctx, request_id, method, params)
             case "tools/call":
-                return await self._call_tool(ctx, request_id, params)
+                hook = self.method_handlers.get("tools/call")  # checks the fake does itself
+                answer = await self._handled(request_id, hook(ctx, params)) if hook else None
+                return answer or await self._call_tool(ctx, request_id, params)
             case _:
                 return await self._other_method(ctx, request_id, method, params)
 
@@ -603,11 +621,13 @@ class McpFake:
         if self.transport.response_mode == "sse":
             stream = secrets.token_hex(4)
             priming = self._priming(session, stream)  # first, as it goes out first
-            events = b"".join(self._event(m, session, stream) for m in messages)
+            events = priming + b"".join(self._event(m, session, stream) for m in messages)
+            if self.transport.sse_streamed:  # no Content-Length, as the real server sends it
+                return StreamingResponse(
+                    iter([events]), media_type=self.transport.content_type_sse, headers=headers
+                )
             return Response(
-                content=priming + events,
-                media_type=self.transport.content_type_sse,
-                headers=headers,
+                content=events, media_type=self.transport.content_type_sse, headers=headers
             )
         ordered = [self._ordered(m) for m in messages]
         payload: JsonValue = ordered[0] if len(ordered) == 1 else ordered
@@ -621,10 +641,11 @@ class McpFake:
         """Handle GET/POST/DELETE on the Streamable HTTP endpoint."""
         if request.method in {"GET", "DELETE"}:
             return self._get_or_delete(request)
-        refused = self._http_refusal(request)
+        messages = _messages(await request.body())
+        _ASKING.set(_asked_version(request, messages))
+        refused = self._http_refusal(request, messages)
         if refused is not None:
             return refused
-        messages = _messages(await request.body())
         if isinstance(messages, Response):
             return messages
         headers, refused = self._session_of(request, messages)
@@ -640,25 +661,50 @@ class McpFake:
         requests = [m for m in messages if protocol.is_request(m) and isinstance(m, dict)]
         if not requests:
             return Response(status_code=202)
-        streaming = self.transport.response_mode == "sse"
         try:
-            if streaming and len(requests) == 1:
+            if self.transport.response_mode == "sse" and len(requests) == 1:
                 return await self._answer_streaming(request, requests[0], headers, session)
-            sent: list[JsonValue] = []
-            for message in requests:
-                notes, reply = await self._answer(request, message)
-                sent += [*notes, reply] if streaming else [reply]
+            return await self._answer_all(request, requests, headers, session)
         except EarlyResponse as early:  # a tool answered the whole HTTP request
             return early.response
+
+    async def _answer_all(
+        self, request: Request, requests: list[JsonObject], headers: dict[str, str], session: str
+    ) -> Response:
+        """Several requests (or JSON answers): every reply in one response.
+
+        A call the client cancels gets no answer; when all are cancelled, nothing is answered
+        at all, as on the real server.
+        """
+        streaming = self.transport.response_mode == "sse"
+        sent: list[JsonValue] = []
+        for message in requests:
+            task = self._track(session, message, self._answer(request, message))
+            try:
+                notes, reply = await task
+            except asyncio.CancelledError:
+                if _cancelling():  # pragma: no cover - the server cancels this request itself
+                    raise
+                continue  # the client cancelled that call
+            sent += [*notes, reply] if streaming else [reply]
+        if not sent:
+            return await self._held_open(request)
         return self._reply(sent, headers, session)
 
-    def _http_refusal(self, request: Request) -> Response | None:
-        """The real server's HTTP-level refusal of this POST, if it would refuse it."""
+    def _http_refusal(
+        self, request: Request, messages: list[JsonValue] | Response
+    ) -> Response | None:
+        """The real server's HTTP-level refusal of this POST, if it would refuse it.
+
+        Its checks run in the order it makes them (``refusal_order``, learned by introspection):
+        the first that applies and was recorded answers.
+        """
         headers = request.headers
         accept = headers.get("accept", "")
+        unparsed = isinstance(messages, Response)
         situations = {
             "accept": "text/event-stream" not in accept or "application/json" not in accept,
-            "content_type": "application/json" not in headers.get("content-type", ""),
+            "content_type": "application/json" not in headers.get("content-type", "").lower(),
             "protocol_header": headers.get(protocol.PROTOCOL_HEADER, "")
             not in {
                 "",
@@ -667,9 +713,12 @@ class McpFake:
             },
             "unknown_session": bool(headers.get(self.transport.session_header))
             and headers[self.transport.session_header] not in self._sessions,
+            "invalid_json": unparsed,
+            "not_jsonrpc": not unparsed and not all(_is_jsonrpc(m) for m in messages),  # type: ignore[union-attr]
         }
-        for situation, applies in situations.items():
-            refused = self._refusal(situation) if applies else None
+        order = [*self.transport.refusal_order, *situations]
+        for situation in dict.fromkeys(order):
+            refused = self._refusal(situation) if situations.get(situation) else None
             if refused is not None:
                 return refused
         return None
@@ -687,9 +736,10 @@ class McpFake:
         )
 
     def _ordered(self, message: JsonValue) -> JsonValue:
-        """A response with its members in the order the real server writes them."""
-        order = self.transport.member_order
-        if not order or not isinstance(message, dict) or "method" in message:
+        """A message with its members in the order the real server writes them."""
+        own = isinstance(message, dict) and "method" in message
+        order = self.transport.message_member_order if own else self.transport.member_order
+        if not order or not isinstance(message, dict):
             return message
         rank = {name: index for index, name in enumerate(order)}
         return dict(sorted(message.items(), key=lambda item: rank.get(item[0], len(rank))))
@@ -712,12 +762,25 @@ class McpFake:
         if numbered and session:
             self._kept(session).append((stream, event_id, message))
         return protocol.sse_event(
-            self._ordered(message), event_id=event_id if numbered else None
+            self._ordered(message),
+            event_id=event_id if numbered else None,
+            fields=self.transport.sse_field_order,
+            event=self.transport.sse_event_name,
         ).encode()
 
     def _priming(self, session: str, stream: str) -> bytes:
-        """The empty event newer protocol versions open SSE answers with, when the server does."""
-        if self._versions.get(session) not in self.transport.priming_versions:
+        """The empty event newer protocol versions open SSE answers with, when the server does.
+
+        Servers that compare versions (``priming_since``) prime by the version the client asked
+        for: the handshake's, else the request's ``MCP-Protocol-Version`` header (none: no
+        priming); others by the version the session negotiated.
+        """
+        since = self.transport.priming_since
+        if since is not None:
+            asked = _ASKING.get()
+            if asked is None or asked < since:
+                return b""
+        elif self._versions.get(session) not in self.transport.priming_versions:
             return b""
         event_id = self._new_id(self.transport.event_id_format, 8)
         if session:
@@ -765,18 +828,26 @@ class McpFake:
             status = self.transport.get_status
             allow = {"allow": "POST, DELETE"} if status == 405 else {}  # noqa: PLR2004
             return Response(status_code=status, headers=allow)
+        last_event_id = request.headers.get("last-event-id", "")
+        replay = bool(last_event_id) and self.transport.resumption == "session"
         situation = (
             "get_unknown_session"
             if unknown
             else "get_second_stream"
-            if session in self.streams
+            if session in self.streams and not replay
             else None
         )
         refused = self._refusal(situation) if situation else None
         if refused is not None:
             return refused
+        if replay:  # every later event of the session, then nothing more
+            return StreamingResponse(
+                self._replayed(session or "", last_event_id),
+                media_type=self.transport.content_type_sse,
+            )
         queue: asyncio.Queue[JsonValue] = asyncio.Queue()
         self.streams[session or ""] = queue  # open from now: a second GET is refused at once
+        self._open_streams.setdefault(session or "", []).append(queue)
         missed = self._after(session or "", request.headers.get("last-event-id", ""))
         return StreamingResponse(
             self._server_stream(session or "", queue, missed),
@@ -803,6 +874,12 @@ class McpFake:
                 continue
             if message.get("method") == "notifications/initialized":
                 self._initialized.add(self._session_in(request))
+            if message.get("method") == "notifications/cancelled":
+                params = message.get("params")
+                cancelled = params.get("requestId") if isinstance(params, dict) else None
+                call = self.in_flight.get((self._session_in(request), str(cancelled)))
+                if call is not None:  # the call stops; its answer is never sent
+                    call.cancel()
             handler = self.method_handlers.get(str(message.get("method")))
             if handler is None:
                 continue
@@ -812,8 +889,21 @@ class McpFake:
             assert ctx.channel is not None  # noqa: S101 - _context always gives one
             ctx.channel.background(_quietly(work))
 
+    def _closed(self, session: str, queue: asyncio.Queue[JsonValue]) -> None:
+        """A GET stream ended: pushes go to the session's newest stream still open, if any."""
+        still_open = [q for q in self._open_streams.get(session, []) if q is not queue]
+        if still_open:
+            self._open_streams[session] = still_open
+            self.streams[session] = still_open[-1]
+        else:
+            self._open_streams.pop(session, None)
+            if self.streams.get(session) is queue:
+                del self.streams[session]
+
     def _end(self, session: str) -> None:
-        """A client ended its session: forget it and stop what it left running."""
+        """A client ended its session: forget it, end its GET stream, stop what it left running."""
+        for stream in self._open_streams.pop(session, []):
+            stream.put_nowait(None)  # the stream's end
         self._sessions.pop(session, None)
         self._capabilities.pop(session, None)
         self._sent.pop(session, None)
@@ -847,20 +937,26 @@ class McpFake:
         """
         for event_id, message in missed:  # with their ids: the client may reconnect again
             yield self._event(message, event_id=event_id)
+        waiting: set[asyncio.Future[Any]] = set()
         try:
             while True:
                 getter = asyncio.ensure_future(queue.get())
                 idle = asyncio.ensure_future(self._idle())
-                await asyncio.wait({getter, idle}, return_when=asyncio.FIRST_COMPLETED)
+                waiting = {getter, idle}
+                await asyncio.wait(waiting, return_when=asyncio.FIRST_COMPLETED)
                 if getter.done():
                     idle.cancel()
-                    yield self._event(getter.result(), session, GET_STREAM)
+                    message = getter.result()
+                    if message is None:  # the session ended (a DELETE): so does its stream
+                        return
+                    yield self._event(message, session, GET_STREAM)
                 else:
                     getter.cancel()
                     yield self._keep_alive()
         finally:
-            if self.streams.get(session) is queue:
-                del self.streams[session]
+            for pending in waiting:  # a client that hangs up leaves nothing running
+                pending.cancel()
+            self._closed(session, queue)
 
     def _session_of(
         self, request: Request, messages: Sequence[JsonValue]
@@ -918,11 +1014,16 @@ class McpFake:
         refusal) still goes out as one plain response.
         """
         queue: asyncio.Queue[JsonValue] = asyncio.Queue()
-        task = asyncio.create_task(self._answer(request, message, on_notify=queue.put_nowait))
+        task = self._track(session, message, self._answer(request, message, queue.put_nowait))
         waiting = asyncio.create_task(queue.get())
         idle = asyncio.create_task(self._idle())
         await asyncio.wait({task, waiting, idle}, return_when=asyncio.FIRST_COMPLETED)
         idle.cancel()
+        if task.cancelled():  # the client cancelled it: no answer, the stream stays open
+            waiting.cancel()
+            return StreamingResponse(
+                self._kept_open(), media_type=self.transport.content_type_sse, headers=headers
+            )
         if task.done():
             early = [waiting.result()] if waiting.done() else []
             waiting.cancel()
@@ -936,33 +1037,88 @@ class McpFake:
             waiting.cancel()
             opening = self._keep_alive()
 
-        async def events() -> AsyncIterator[bytes]:
-            try:
-                yield priming + opening
-                while True:
-                    getter = asyncio.create_task(queue.get())
-                    idle = asyncio.create_task(self._idle())
-                    await asyncio.wait({task, getter, idle}, return_when=asyncio.FIRST_COMPLETED)
-                    idle.cancel()
-                    if getter.done():
-                        yield self._event(getter.result(), session, stream)
-                        continue
-                    getter.cancel()
-                    if task.done():
-                        break
-                    yield self._keep_alive()
-                try:  # every notification was streamed: a finished task left none behind
-                    _, reply = task.result()
-                except EarlyResponse:  # too late for an HTTP status: the stream has started
-                    reply = protocol.error(message.get("id"), protocol.INTERNAL_ERROR, "refused")
-                yield self._event(reply, session, stream)
-            finally:
-                if not task.done():  # pragma: no cover - the client left mid-stream
-                    task.cancel()
-
+        events = self._call_events(task, queue, message, session, stream, priming + opening)
         return StreamingResponse(
-            events(), media_type=self.transport.content_type_sse, headers=headers
+            events, media_type=self.transport.content_type_sse, headers=headers
         )
+
+    async def _call_events(
+        self,
+        task: asyncio.Task[_Answer],
+        queue: asyncio.Queue[JsonValue],
+        message: JsonObject,
+        session: str,
+        stream: str,
+        opening: bytes,
+    ) -> AsyncIterator[bytes]:
+        """A call's SSE stream once it has opened: notifications as they come, then the answer."""
+        pending: set[asyncio.Future[Any]] = set()
+        try:
+            yield opening
+            while True:
+                getter = asyncio.create_task(queue.get())
+                idle = asyncio.create_task(self._idle())
+                pending = {getter, idle}
+                await asyncio.wait({task, *pending}, return_when=asyncio.FIRST_COMPLETED)
+                idle.cancel()
+                if getter.done():
+                    yield self._event(getter.result(), session, stream)
+                    continue
+                getter.cancel()
+                if task.done():
+                    break
+                yield self._keep_alive()
+            if task.cancelled():  # the client cancelled it: nothing more but keep-alives
+                async for comment in self._kept_open():
+                    yield comment
+            try:  # every notification was streamed: a finished task left none behind
+                _, reply = task.result()
+            except EarlyResponse:  # too late for an HTTP status: the stream has started
+                reply = protocol.error(message.get("id"), protocol.INTERNAL_ERROR, "refused")
+            yield self._event(reply, session, stream)
+        finally:
+            for leftover in pending:  # a client that hangs up leaves nothing running
+                leftover.cancel()
+            if not task.done():  # pragma: no cover - the client left mid-stream
+                task.cancel()
+
+    def _track(
+        self, session: str, message: JsonObject, work: Awaitable[_Answer]
+    ) -> asyncio.Task[_Answer]:
+        """Run the call answering ``message``, where the client's cancellation can reach it."""
+        task = asyncio.ensure_future(work)
+        key = (session, str(message.get("id")))
+        self.in_flight[key] = task
+        task.add_done_callback(lambda _done: self.in_flight.pop(key, None))
+        return task
+
+    async def _replayed(self, session: str, last_event_id: str) -> AsyncIterator[bytes]:
+        """A resumed GET where resumption covers the whole session.
+
+        Every event the session got after ``last_event_id``, on any stream, priming events
+        included; then only keep-alives.
+        """
+        kept = list(self._sent.get(session, ()))
+        found = next((i for i, (_, eid, _) in enumerate(kept) if eid == last_event_id), None)
+        for _, event_id, message in kept[found + 1 :] if found is not None else []:
+            if message is None:
+                yield f"id: {event_id}\ndata: \n\n".encode()
+            else:
+                yield self._event(message, event_id=event_id)
+        async for comment in self._kept_open():
+            yield comment
+
+    async def _kept_open(self) -> AsyncIterator[bytes]:
+        """A stream whose answer was cancelled: only keep-alives, until the client hangs up."""
+        while True:
+            await self._idle()
+            yield self._keep_alive()
+
+    async def _held_open(self, request: Request) -> Response:
+        """No answer at all, until the client gives up waiting (a cancelled JSON-mode call)."""
+        while True:
+            if (await request.receive())["type"] == "http.disconnect":
+                return Response(status_code=204)  # nobody reads it
 
     def _offered(self, tool: McpToolModel, ctx: RequestContext) -> bool:
         """Whether this client may see and call ``tool`` now.
@@ -1120,6 +1276,33 @@ class McpFake:
                     return early.response
                 await queue.put(protocol.sse_event(reply))
         return Response(content=b"Accepted", status_code=202)
+
+
+def _asked_version(request: Request, messages: list[JsonValue] | Response) -> str | None:
+    """The protocol version the client asked for: the handshake's, else the request's header."""
+    for message in messages if isinstance(messages, list) else []:
+        if isinstance(message, dict) and message.get("method") == "initialize":
+            params = message.get("params")
+            asked = params.get("protocolVersion") if isinstance(params, dict) else None
+            return asked if isinstance(asked, str) else None
+    return request.headers.get(protocol.PROTOCOL_HEADER)
+
+
+def _is_jsonrpc(message: JsonValue) -> bool:
+    """Whether a message is JSON-RPC 2.0: a request, a notification or a response."""
+    if not isinstance(message, dict) or message.get("jsonrpc") != "2.0":
+        return False
+    return "method" in message or "result" in message or "error" in message
+
+
+def _cancelling() -> bool:
+    """Whether the running task itself is being cancelled (not a task it awaited)."""
+    current = asyncio.current_task()
+    return current is not None and current.cancelling() > 0
+
+
+def _notification(method: str, params: JsonValue) -> JsonObject:
+    return {"jsonrpc": "2.0", "method": method, "params": params}
 
 
 def _addressed(recorded: JsonObject, request_id: JsonValue) -> JsonValue:

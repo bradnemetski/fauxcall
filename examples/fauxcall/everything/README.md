@@ -64,70 +64,56 @@ Tools: 19 · resources: 7 · prompts: 4.
 ## Known limitations and notes
 
 <!-- fauxcall:notes (kept by `fauxcall scaffold`; the rest of this file is regenerated) -->
-### How faithful it is, and where it differs
+Built from @modelcontextprotocol/server-everything 2026.8.31 (TypeScript SDK 1.32.1), recorded on
+2026-10-18 (34 recording plans, 497 exchanges). Every tool except `get-env` is computed
+(`src/fauxcall_everything/`); `tests/unit/test_plans.py` replays every plan in one session and
+matches the recorded answers value for value. Parity with the real server: 100% (independent
+100%).
 
-Every one of the 19 tools, the 7 documents, both resource templates, the 4 prompts, completions,
-`logging/setLevel`, subscriptions and the task methods are reproduced from recordings of the real
-server (`@modelcontextprotocol/server-everything` 2026.8.31). Its answers are computed, not just
-replayed: argument refusals are worded like zod's, numbers are spelled like JavaScript's
-(`0.30000000000000004`, `1e+21`, `received Infinity`), URIs are parsed the WHATWG way (as Node
-does), gzip output is byte-identical, and tasks (including a report that fails), toggles, session
-resources, subscriptions (one map for every client, as on the real server) and URL-elicitation
-retries keep their state. Tools that ask the client (sampling, elicitation, roots, client tasks)
-do so mid-call, check the client's replies with the server's schemas, and are listed only to
-clients that declare the capability; registering them after `notifications/initialized` sends
-`notifications/tools/list_changed`, as on the real server.
+What differs from the real server, and why:
 
-The HTTP front is the real one too (`src/fauxcall_everything/front.py`, `express.py`, `sse.py`,
-from the recordings and the published source of Express 5.3, cors 2.8.6 and the SDK's Streamable
-HTTP transport): CORS headers and `OPTIONS` preflights (browser clients such as MCP Inspector
-connect directly), Express's HTML 404 page, `/mcp` matched in any case and with a trailing slash,
-and the transport's refusals in its order (no session, `Accept`, `Content-Type`, a body over
-4 MiB, invalid JSON, batches over 100, messages its JSON-RPC schema rejects such as a fractional
-progress token, handshake rules, unsupported `MCP-Protocol-Version` headers named in the answer).
-SSE answers are written as the SDK writes them (field and member order, the session id, the
-priming event by the version the client asked for), a request naming a task the client doesn't
-have is refused before it runs, an `initialize` inside a session is refused by its schema, and a
-DELETE ends the session's GET stream. Protocol versions negotiate as recorded: 2024-10-07 to
-2025-11-25, anything else gets 2025-11-25. Everything the front answers itself is in the journal
-(`/__fauxcall/journal`) like the rest.
-
-Known differences:
-
-- **No network.** `gzip-file-as-resource` processes `data:` URLs locally and serves the default
-  README (as fetched while recording); any other `http(s)` URL answers `fetch failed`, as the real
-  server does when a fetch fails. The real server would fetch it, and gzip whatever came back,
-  an HTTP 404 page included.
-- **Local time.** Dynamic resources are stamped `h:mm:ss AM/PM` in America/New_York, the recorded
-  server's zone, on the fake's clock.
-- **`tools/call` parameters FauxCall's runtime checks before the fake's handlers**: a `name` that
-  isn't a string gets the recorded refusal of a missing one (`received undefined`, real: the
-  actual type); non-object `arguments` get the answer recorded for exactly that value (`echo`:
-  `null`, `[]`, `"hello"`, `5`; `get-sum`: `"x"`), any other value the recorded refusal of an
-  array (`received array`); an unknown tool is refused as unknown before its `arguments` or
-  `task` are checked (real: zod's refusal, or "Invalid task creation result", first).
-- **A request naming an existing related task** (`_meta["io.modelcontextprotocol/related-task"]`)
-  is answered as usual; the real server queues that answer for the task and then drops it
-  (`tasks/result` delivers queued answers only to the server's own requests), so the request is
-  never answered. Inside a batch, the methods FauxCall's runtime answers itself (`ping`, the
-  listings) don't look the task up at all.
-- **Resuming a GET stream** (`Last-Event-ID`): the real server replays every later event of every
-  stream of the session (priming events included), never refuses it as a second stream, and
-  sends nothing more on it; the fake replays the matching stream's events, answers 409 while
-  another GET stream is open, and keeps pushing on it.
-- **Cancellation**: a client's `notifications/cancelled` is ignored (the real server stops that
-  call's progress notifications, drops its answer and leaves the POST stream open), and the fake
-  sends none when its own requests to the client time out.
-- **Wire details**: a queued research clarification gets its JSON-RPC id when delivered (real: when
-  queued); SSE answers carry a `Content-Length` when complete (real: Node chooses). JSON nested
-  deeper than about 1,000 levels is refused as invalid (real: parsed).
-- **Timers**: simulated logging, resource updates and task status pushes run on wall-clock time,
-  while task states follow the fake's clock (`/__fauxcall/clock`). `POST /__fauxcall/reset`
-  starts every client afresh and ends what they left running.
-- **Not recorded, from the published source**: the transport's refusals of raw POST bodies (over
-  4 MiB, invalid JSON, batches, two handshakes in one batch), DELETE closing streams and stream
-  resumption could not be recorded without approving raw `POST /mcp` probes or holding streams
-  open; GET, HEAD and OPTIONS behavior is checked against the real server by the parity suite.
-- Roots are requested on the client's GET stream, as by the real server: a client without one waits
-  60 s (the SDK's timeout) and is told no roots are configured, exactly like the real server.
+- **No network.** `gzip-file-as-resource` reads `data:` URLs itself; for its default URL (the
+  servers repository README on GitHub) it serves the README recorded on 2026-10-18 (after the
+  recorded 132 ms); any other `http(s)` URL answers `fetch failed`, as the real server does when
+  the network fails. The real server would fetch it (and the README changes upstream).
+- **`get-env`** replays the recorded environment of the real process, including its
+  `PORT=3101`, whatever port the fake listens on.
+- **Roots.** The real server asks for roots on the client's GET stream, 350 ms after
+  `notifications/initialized` (on the wall clock, also in the fake's fast mode). With no GET
+  stream open its request is lost and `get-roots-list` answers after the SDK's 60 s timeout; the
+  fake fails the request at once and waits out the minute only when not in fast mode. A client
+  that refuses the request gets the "no roots configured" answer at once, on both.
+- **Wall-clock behavior.** Research task stages (1 s each), `tasks/result` polling (1 s), task
+  TTLs (5 min), the 60 s wait for a clarification and the simulated log messages and resource
+  updates (every 5 s) run on the wall clock, as on the real server, even in fast mode; moving the
+  fake's clock changes timestamps, not these timers. `trigger-long-running-operation` and the
+  async tools' 1 s polls take real time unless fast. Times of day are the real host's:
+  America/New_York, en-US (`10:29:02 PM`).
+- **Random values** (simulated log levels, generated elicitation ids, task ids, session ids) are
+  random on both sides, so they differ run to run.
+- **From the source, not recorded** (implemented as the server and SDK code do it): a gzip resource
+  registered under a name another session used removes it from that session; `tasks/list` pages of
+  ten; task expiry after its TTL; a number or boolean clarification fails the research task
+  (`state.clarification.includes is not a function`); one `notifications/tools/list_changed` per
+  capability-dependent tool at the first `notifications/initialized` (kept for resumption; a
+  client's first GET stream doesn't see them), and nothing at a second one; a protocol version the
+  server doesn't support is answered with the latest, `2025-11-25` (`2024-10-07` is supported).
+- **Transport gaps of FauxCall's runtime** (not changeable from this fake): the
+  `MCP-Protocol-Version` refusal repeats the recorded text, which names `1999-01-01` whatever
+  was sent; GET requests aren't checked for `Accept` or `MCP-Protocol-Version` (the real server
+  answers 406 and 400); the SDK's limits (4 MiB bodies → 413, batches over 100 messages, one
+  `initialize` per batch) aren't enforced; resumed streams replay priming events with empty data
+  (the SDK writes `data: {}`); after a client cancels `trigger-long-running-operation` the real
+  server keeps sending progress on the open stream, the fake only keep-alives; a POST's SSE
+  headers go out with the first event (or after 15 s), not at once.
+- **Approximations.** URLs are parsed like WHATWG `new URL()` for http(s), data and the server's
+  `demo:` URIs, including IPv6 and IPv4 number forms (`127.1`) and percent-encoded or IDNA hosts
+  (IDNA 2003 rather than UTS 46); zod's error JSON is reproduced for the shapes recorded
+  (unions list every alternative; the content discriminator names its options) and follows zod
+  v4's source beyond them.
+- **Not compared by parity:** what the server sends outside a call's answer (GET-stream log
+  messages, resource updates, list changes, task status, roots requests) and progress
+  notifications. `tests/unit/test_streams.py` checks them against what the recorded GET streams
+  show (000294, 000310, 000323, 000332, 000367, 000394, 000471, 000500); the cross-session
+  removal, roots changes, clarification timeout and TTL expiry there follow the source.
 <!-- /fauxcall:notes -->

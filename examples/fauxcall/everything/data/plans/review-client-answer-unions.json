@@ -1,0 +1,176 @@
+{
+  "name": "review-client-answer-unions",
+  "created_at": "2026-10-18T08:00:00Z",
+  "client_capabilities": {
+    "sampling": {},
+    "elicitation": {},
+    "tasks": {
+      "requests": {
+        "sampling": {
+          "createMessage": {}
+        },
+        "elicitation": {
+          "create": {}
+        }
+      }
+    }
+  },
+  "note": "review I5: zod messages for client answers that break union schemas",
+  "calls": [
+    {
+      "id": "sample-bad-type",
+      "endpoint": "MCP tools/call:trigger-sampling-request",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "x"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "model": "m",
+          "role": "assistant",
+          "content": {
+            "type": "video"
+          }
+        }
+      }
+    },
+    {
+      "id": "sample-stop-number",
+      "endpoint": "MCP tools/call:trigger-sampling-request",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "x"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "model": "m",
+          "role": "assistant",
+          "stopReason": 5,
+          "content": {
+            "type": "text",
+            "text": "x"
+          }
+        }
+      }
+    },
+    {
+      "id": "sample-bad-role",
+      "endpoint": "MCP tools/call:trigger-sampling-request",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "x"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "model": "m",
+          "role": "bot",
+          "content": {
+            "type": "text",
+            "text": "x"
+          }
+        }
+      }
+    },
+    {
+      "id": "elicit-nested",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "accept",
+          "content": {
+            "name": {
+              "first": "Ada"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "elicit-bad-action",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "maybe"
+        }
+      }
+    },
+    {
+      "id": "async-sample-no-content",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "x"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "role": "assistant",
+          "model": "m"
+        }
+      }
+    },
+    {
+      "id": "async-elicit-neither",
+      "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "nope": true
+        }
+      }
+    }
+  ]
+}

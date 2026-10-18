@@ -93,10 +93,12 @@ _SIMPLE_ESCAPES: Final = {
 _HTML_CHARS: Final = frozenset("<>&'")
 _FIRST_PRINTABLE: Final = 0x20
 _MAX_BMP: Final = 0xFFFF
+_SURROGATES: Final = (0xD800, 0xDFFF)
 
 
 def _needs_escape_pattern(style: JsonStyle) -> re.Pattern[str]:
-    chars = r'"\\\x00-\x1f'
+    # lone surrogates are always escaped, as JSON.stringify does: they can't be encoded as UTF-8
+    chars = r'"\\\x00-\x1f\ud800-\udfff'
     if style.escape_slash:
         chars += "/"
     if style.escape_html:
@@ -130,7 +132,12 @@ class _Encoder:
             return _SIMPLE_ESCAPES[char]
         if char == "/":
             return "\\/"
-        if char in _HTML_CHARS or ord(char) < _FIRST_PRINTABLE or self.style.ensure_ascii:
+        if (
+            char in _HTML_CHARS
+            or ord(char) < _FIRST_PRINTABLE
+            or self.style.ensure_ascii
+            or _SURROGATES[0] <= ord(char) <= _SURROGATES[1]
+        ):
             return _unicode_escape(ord(char), upper=self.style.upper_hex)
         return char  # pragma: no cover - the pattern only matches characters handled above
 

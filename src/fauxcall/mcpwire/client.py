@@ -12,7 +12,7 @@ import itertools
 import time
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Final, Literal
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit
 
 import httpx2
 
@@ -358,15 +358,31 @@ class McpWireClient:
             headers[protocol.SESSION_HEADER] = session
         return self._version_header(headers)
 
-    async def probe_http(self, http_method: str, session: str | None) -> RpcCall:
-        """A GET or DELETE with ``session`` as its session id.
+    async def probe_http(
+        self,
+        http_method: str,
+        session: str | None,
+        *,
+        path: str | None = None,
+        headers: Mapping[str, str] | None = None,
+        content: bytes | None = None,
+    ) -> RpcCall:
+        """A request with ``session`` as its session id (a GET or DELETE unless told otherwise).
 
-        A refusal is read whole; a stream the server opens is closed at once.
+        ``path`` replaces the endpoint's path on the same server, ``headers`` are added (or
+        replace the defaults) and ``content`` is the raw body. A refusal is read whole; a stream
+        the server opens is closed at once.
         """
-        headers = self._stream_headers(session)
+        sent = {**self._stream_headers(session), **(headers or {})}
+        url = self.url
+        if path is not None:
+            parts = urlsplit(self.url)
+            url = f"{parts.scheme}://{parts.netloc}{path}"
         started_ns = time.time_ns()
         started = time.perf_counter()
-        async with self.http.stream(http_method, self.url, headers=headers, timeout=10.0) as answer:
+        async with self.http.stream(
+            http_method, url, headers=sent, content=content, timeout=10.0
+        ) as answer:
             content_type = answer.headers.get("content-type")
             body = "" if _is_event_stream(content_type) else (await answer.aread()).decode()
         messages = _parse_lenient(body, content_type, answer.status_code)
@@ -374,7 +390,7 @@ class McpWireClient:
             method=http_method,
             sent=None,
             status=answer.status_code,
-            request_headers=list(headers.items()),
+            request_headers=list(sent.items()),
             response_headers=list(answer.headers.multi_items()),
             content_type=content_type,
             body=body,
@@ -391,7 +407,8 @@ class McpWireClient:
         The second GET is for the same session, sent while the first stream is open.
 
         The comment comes back as a call whose body is that line and whose time is how long the
-        stream stayed idle before it (``None``: none within ``within`` seconds, or no stream).
+        stream stayed idle before it, with any events the server sent before it (``None``:
+        nothing within ``within`` seconds, or no stream).
         """
         headers = self._stream_headers(self.session_id)
         started_ns = time.time_ns()
@@ -404,15 +421,21 @@ class McpWireClient:
             if stream.status_code != 200 or not _is_event_stream(content_type):  # noqa: PLR2004
                 return None, None
             second = await self.probe_http("GET", self.session_id) if self.session_id else None
+            decoder = protocol.SseDecoder()
+            events: list[tuple[float, str, str, str | None]] = []
             with contextlib.suppress(TimeoutError):
                 async with asyncio.timeout(within):
                     async for line in stream.aiter_lines():
                         if line.startswith(":"):
                             comment = line
                             break
+                        stamp = (time.perf_counter() - started) * 1000
+                        events += [
+                            (stamp, e.event, e.data, e.id) for e in decoder.feed(line + "\n")
+                        ]
             elapsed = (time.perf_counter() - started) * 1000
             response_headers = list(stream.headers.multi_items())
-        if comment is None:
+        if comment is None and not events:
             return None, second
         return RpcCall(
             method="GET",
@@ -421,11 +444,12 @@ class McpWireClient:
             request_headers=list(headers.items()),
             response_headers=response_headers,
             content_type=content_type,
-            body=comment,
-            messages=[],
+            body=comment or "",
+            messages=[m for _, _, data, _ in events for m in _json_or_nothing(data)],
             response=None,
             started_ns=started_ns,
             elapsed_ms=elapsed,
+            sse_events=events,
             http_method="GET",
         ), second
 

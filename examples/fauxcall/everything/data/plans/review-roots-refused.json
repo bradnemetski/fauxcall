@@ -1,0 +1,56 @@
+{
+  "name": "review-roots-refused",
+  "created_at": "2026-10-18T08:00:00Z",
+  "client_capabilities": {
+    "roots": {}
+  },
+  "listen": true,
+  "listen_after_seconds": 2,
+  "note": "review I3: a client refusing roots/list (the initial sync and the tool's own request)",
+  "calls": [
+    {
+      "id": "roots-refused",
+      "endpoint": "MCP tools/call:get-roots-list",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-roots-list",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "roots/list": {
+          "error": {
+            "code": -32601,
+            "message": "Method not found"
+          }
+        }
+      }
+    },
+    {
+      "id": "roots-after-refusal",
+      "endpoint": "MCP tools/call:get-roots-list",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-roots-list",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "roots/list": {
+          "roots": [
+            {
+              "uri": "file:///late",
+              "name": "Late"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

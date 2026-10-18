@@ -1,0 +1,76 @@
+{
+  "id": "000431",
+  "endpoint": "MCP GET:get_unknown_session",
+  "purpose": "discovery",
+  "started_at": "2026-10-18T02:38:37.306707Z",
+  "started_ns": 1792291117306707000,
+  "elapsed_ms": 2.194,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "content-type",
+        "application/json; charset=utf-8"
+      ],
+      [
+        "content-length",
+        "95"
+      ],
+      [
+        "etag",
+        "W/\"5f-yGKrXbkLhApmVYswnToQyaFrApg\""
+      ],
+      [
+        "date",
+        "Sun, 18 Oct 2026 02:38:37 GMT"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "keep-alive",
+        "timeout=5"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "application/json; charset=utf-8",
+      "text": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: No valid session ID provided\"}}"
+    }
+  },
+  "redacted": [
+    "request.header:mcp-session-id"
+  ]
+}

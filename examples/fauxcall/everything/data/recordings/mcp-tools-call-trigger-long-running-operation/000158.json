@@ -1,0 +1,157 @@
+{
+  "id": "000158",
+  "endpoint": "MCP tools/call:trigger-long-running-operation",
+  "purpose": "variation",
+  "plan_call": "long-default",
+  "started_at": "2026-10-18T02:30:18.238446Z",
+  "started_ns": 1792290618238446000,
+  "elapsed_ms": 10009.486,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-long-running-operation",
+          "arguments": {},
+          "_meta": {
+            "progressToken": "fauxcall-progress-default"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 18 Oct 2026 02:30:18 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Long running operation completed. Duration: 10 seconds, Steps: 5."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 5
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2003.693,
+      "kind": "sse",
+      "event": "message",
+      "id": "ca576bc2-80f7-47c8-ae2c-c36abaf790ad",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":1,\"total\":5,\"progressToken\":\"fauxcall-progress-default\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 4005.127,
+      "kind": "sse",
+      "event": "message",
+      "id": "1b8ea8f6-44ae-43a2-adaa-0f3b77dd97b9",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":2,\"total\":5,\"progressToken\":\"fauxcall-progress-default\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 6005.267,
+      "kind": "sse",
+      "event": "message",
+      "id": "7915fa8e-6ada-4bf4-a7ec-2ba4115cab95",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":3,\"total\":5,\"progressToken\":\"fauxcall-progress-default\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 8009.086,
+      "kind": "sse",
+      "event": "message",
+      "id": "f04448d3-a7d6-49fc-993f-05c7b027b8a0",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":4,\"total\":5,\"progressToken\":\"fauxcall-progress-default\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10009.221,
+      "kind": "sse",
+      "event": "message",
+      "id": "0adb8d60-1672-4b4f-a897-fac6e79c2c0d",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":5,\"total\":5,\"progressToken\":\"fauxcall-progress-default\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10009.301,
+      "kind": "sse",
+      "event": "message",
+      "id": "5c11e870-ae99-42c6-b7e1-845d913ad0d0",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Long running operation completed. Duration: 10 seconds, Steps: 5.\"}]},\"jsonrpc\":\"2.0\",\"id\":5}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

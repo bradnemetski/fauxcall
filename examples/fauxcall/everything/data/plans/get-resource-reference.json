@@ -1,0 +1,260 @@
+{
+  "name": "get-resource-reference",
+  "created_at": "2026-10-18T02:30:00Z",
+  "calls": [
+    {
+      "id": "ref-default",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "ref-text-1",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "time_profile",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Text",
+            "resourceId": 1
+          }
+        }
+      },
+      "repeat": 4,
+      "interval_ms": 15000
+    },
+    {
+      "id": "ref-blob-1",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "time_profile",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Blob",
+            "resourceId": 1
+          }
+        }
+      },
+      "repeat": 2,
+      "interval_ms": 15000
+    },
+    {
+      "id": "ref-text-2",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Text",
+            "resourceId": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "ref-blob-3",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Blob",
+            "resourceId": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "ref-text-100",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Text",
+            "resourceId": 100
+          }
+        }
+      }
+    },
+    {
+      "id": "ref-blob-999",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Blob",
+            "resourceId": 999
+          }
+        }
+      }
+    },
+    {
+      "id": "ref-only-blob",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Blob"
+          }
+        }
+      }
+    },
+    {
+      "id": "ref-only-id",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceId": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "ref-id-0",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Text",
+            "resourceId": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "ref-id-neg",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Blob",
+            "resourceId": -3
+          }
+        }
+      }
+    },
+    {
+      "id": "ref-id-frac",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Text",
+            "resourceId": 1.5
+          }
+        }
+      }
+    },
+    {
+      "id": "ref-id-string",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Text",
+            "resourceId": "2"
+          }
+        }
+      }
+    },
+    {
+      "id": "ref-type-image",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Image",
+            "resourceId": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "ref-type-lower",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "text",
+            "resourceId": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "ref-type-null",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": null
+          }
+        }
+      }
+    }
+  ]
+}

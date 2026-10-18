@@ -1,0 +1,48 @@
+{
+  "name": "get-env",
+  "created_at": "2026-10-18T02:30:00Z",
+  "calls": [
+    {
+      "id": "env-1",
+      "endpoint": "MCP tools/call:get-env",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-env",
+          "arguments": {}
+        }
+      },
+      "repeat": 2,
+      "interval_ms": 2000
+    },
+    {
+      "id": "env-no-args",
+      "endpoint": "MCP tools/call:get-env",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-env"
+        }
+      }
+    },
+    {
+      "id": "env-extra",
+      "endpoint": "MCP tools/call:get-env",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-env",
+          "arguments": {
+            "foo": "bar"
+          }
+        }
+      }
+    }
+  ]
+}

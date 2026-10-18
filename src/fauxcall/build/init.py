@@ -466,7 +466,11 @@ async def _init_mcp(
         ),
         real=RealTarget(base_url=origin(endpoint)),
         auth=introspection.auth,
-        errors=[introspection.auth_error] if introspection.auth_error else [],
+        errors=[
+            *([introspection.auth_error] if introspection.auth_error else []),
+            *introspection.route_errors,
+        ],
+        routing=introspection.routing or RoutingModel(),
         mcp=mcp,
     )
     write_json(

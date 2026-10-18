@@ -1,0 +1,118 @@
+{
+  "id": "000172",
+  "endpoint": "MCP resources/read:demo://resource/static/document/how-it-works.md",
+  "plan_call": "static-how-it-works",
+  "started_at": "2026-10-18T02:32:04.430083Z",
+  "started_ns": 1792290724430083000,
+  "elapsed_ms": 6.027,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/static/document/how-it-works.md"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "3028"
+      ],
+      [
+        "date",
+        "Sun, 18 Oct 2026 02:32:04 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "contents": [
+            {
+              "uri": "demo://resource/static/document/how-it-works.md",
+              "mimeType": "text/markdown",
+              "text": "# Everything Server - How It Works\n\n**[Architecture](architecture.md)\n| [Project Structure](structure.md)\n| [Startup Process](startup.md)\n| [Server Features](features.md)\n| [Extension Points](extension.md)\n| How It Works**\n\n# Conditional Tool Registration\n\n### Module: `server/index.ts`\n\n- Some tools require client support for the capability they demonstrate. These are:\n  - `get-roots-list`\n  - `trigger-elicitation-request`\n  - `trigger-sampling-request`\n- Client capabilities aren't known until after initilization handshake is complete.\n- Most tools are registered immediately during the Server Factory execution, prior to client connection.\n- To defer registration of these commands until client capabilities are known, a `registerConditionalTools(server)` function is invoked from an `onintitialized` handler.\n\n## Resource Subscriptions\n\n### Module: `resources/subscriptions.ts`\n\n- Tracks subscribers per URI: `Map<uri, Set<sessionId>>`.\n- Installs handlers via `setSubscriptionHandlers(server)` to process subscribe/unsubscribe requests and keep the map updated.\n- Updates are started/stopped on demand by the `toggle-subscriber-updates` tool, which calls `beginSimulatedResourceUpdates(server, sessionId)` and `stopSimulatedResourceUpdates(sessionId)`.\n- `cleanup(sessionId?)` calls `stopSimulatedResourceUpdates(sessionId)` to clear intervals and remove session‑scoped state.\n\n## Session‑scoped Resources\n\n### Module: `resources/session.ts`\n\n- `getSessionResourceURI(name: string)`: Builds a session resource URI: `demo://resource/session/<name>`.\n- `registerSessionResource(server, resource, type, payload)`: Registers a resource with the given `uri`, `name`, and `mimeType`, returning a `resource_link`. The content is served from memory for the life of the session only. Supports `type: \"text\" | \"blob\"` and returns data in the corresponding field.\n- Intended usage: tools can create and expose per-session artifacts without persisting them. For example, `tools/gzip-file-as-resource.ts` compresses fetched content, registers it as a session resource with `mimeType: application/gzip`, and returns either a `resource_link` or an inline `resource` based on `outputType`.\n\n## Simulated Logging\n\n### Module: `server/logging.ts`\n\n- Periodically sends randomized log messages at different levels. Messages can include the session ID for clarity during demos.\n- Started/stopped on demand via the `toggle-simulated-logging` tool, which calls `beginSimulatedLogging(server, sessionId?)` and `stopSimulatedLogging(sessionId?)`. Note that transport disconnect triggers `cleanup()` which also stops any active intervals.\n- Uses `server.sendLoggingMessage({ level, data }, sessionId?)` so that the client’s configured minimum logging level is respected by the SDK.\n"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 7
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.867,
+      "kind": "sse",
+      "event": "message",
+      "id": "e4f099f9-a644-4df7-81f3-d2beb0a0fbd6",
+      "data": "{\"result\":{\"contents\":[{\"uri\":\"demo://resource/static/document/how-it-works.md\",\"mimeType\":\"text/markdown\",\"text\":\"# Everything Server - How It Works\\n\\n**[Architecture](architecture.md)\\n| [Project Structure](structure.md)\\n| [Startup Process](startup.md)\\n| [Server Features](features.md)\\n| [Extension Points](extension.md)\\n| How It Works**\\n\\n# Conditional Tool Registration\\n\\n### Module: `server/index.ts`\\n\\n- Some tools require client support for the capability they demonstrate. These are:\\n  - `get-roots-list`\\n  - `trigger-elicitation-request`\\n  - `trigger-sampling-request`\\n- Client capabilities aren't known until after initilization handshake is complete.\\n- Most tools are registered immediately during the Server Factory execution, prior to client connection.\\n- To defer registration of these commands until client capabilities are known, a `registerConditionalTools(server)` function is invoked from an `onintitialized` handler.\\n\\n## Resource Subscriptions\\n\\n### Module: `resources/subscriptions.ts`\\n\\n- Tracks subscribers per URI: `Map<uri, Set<sessionId>>`.\\n- Installs handlers via `setSubscriptionHandlers(server)` to process subscribe/unsubscribe requests and keep the map updated.\\n- Updates are started/stopped on demand by the `toggle-subscriber-updates` tool, which calls `beginSimulatedResourceUpdates(server, sessionId)` and `stopSimulatedResourceUpdates(sessionId)`.\\n- `cleanup(sessionId?)` calls `stopSimulatedResourceUpdates(sessionId)` to clear intervals and remove session‑scoped state.\\n\\n## Session‑scoped Resources\\n\\n### Module: `resources/session.ts`\\n\\n- `getSessionResourceURI(name: string)`: Builds a session resource URI: `demo://resource/session/<name>`.\\n- `registerSessionResource(server, resource, type, payload)`: Registers a resource with the given `uri`, `name`, and `mimeType`, returning a `resource_link`. The content is served from memory for the life of the session only. Supports `type: \\\"text\\\" | \\\"blob\\\"` and returns data in the corresponding field.\\n- Intended usage: tools can create and expose per-session artifacts without persisting them. For example, `tools/gzip-file-as-resource.ts` compresses fetched content, registers it as a session resource with `mimeType: application/gzip`, and returns either a `resource_link` or an inline `resource` based on `outputType`.\\n\\n## Simulated Logging\\n\\n### Module: `server/logging.ts`\\n\\n- Periodically sends randomized log messages at different levels. Messages can include the session ID for clarity during demos.\\n- Started/stopped on demand via the `toggle-simulated-logging` tool, which calls `beginSimulatedLogging(server, sessionId?)` and `stopSimulatedLogging(sessionId?)`. Note that transport disconnect triggers `cleanup()` which also stops any active intervals.\\n- Uses `server.sendLoggingMessage({ level, data }, sessionId?)` so that the client’s configured minimum logging level is respected by the SDK.\\n\"}]},\"jsonrpc\":\"2.0\",\"id\":7}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "name": "get-structured-content",
+  "created_at": "2026-10-18T02:30:00Z",
+  "calls": [
+    {
+      "id": "weather-ny",
+      "endpoint": "MCP tools/call:get-structured-content",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-structured-content",
+          "arguments": {
+            "location": "New York"
+          }
+        }
+      },
+      "repeat": 2,
+      "interval_ms": 1000
+    },
+    {
+      "id": "weather-chicago",
+      "endpoint": "MCP tools/call:get-structured-content",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-structured-content",
+          "arguments": {
+            "location": "Chicago"
+          }
+        }
+      }
+    },
+    {
+      "id": "weather-la",
+      "endpoint": "MCP tools/call:get-structured-content",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-structured-content",
+          "arguments": {
+            "location": "Los Angeles"
+          }
+        }
+      }
+    },
+    {
+      "id": "weather-boston",
+      "endpoint": "MCP tools/call:get-structured-content",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-structured-content",
+          "arguments": {
+            "location": "Boston"
+          }
+        }
+      }
+    },
+    {
+      "id": "weather-lower",
+      "endpoint": "MCP tools/call:get-structured-content",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-structured-content",
+          "arguments": {
+            "location": "new york"
+          }
+        }
+      }
+    },
+    {
+      "id": "weather-missing",
+      "endpoint": "MCP tools/call:get-structured-content",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-structured-content",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "weather-number",
+      "endpoint": "MCP tools/call:get-structured-content",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-structured-content",
+          "arguments": {
+            "location": 7
+          }
+        }
+      }
+    }
+  ]
+}

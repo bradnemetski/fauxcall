@@ -1,0 +1,77 @@
+{
+  "id": "000436",
+  "endpoint": "MCP GET /fauxcall-probe-unknown-route:unknown_route",
+  "purpose": "discovery",
+  "started_at": "2026-10-18T02:38:54.327141Z",
+  "started_ns": 1792291134327141000,
+  "elapsed_ms": 3.512,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ],
+      [
+        "origin",
+        "https://fauxcall.invalid"
+      ]
+    ]
+  },
+  "response": {
+    "status": 404,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "content-security-policy",
+        "default-src 'none'"
+      ],
+      [
+        "x-content-type-options",
+        "nosniff"
+      ],
+      [
+        "content-type",
+        "text/html; charset=utf-8"
+      ],
+      [
+        "content-length",
+        "167"
+      ],
+      [
+        "date",
+        "Sun, 18 Oct 2026 02:38:54 GMT"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "keep-alive",
+        "timeout=5"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/html; charset=utf-8",
+      "text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /fauxcall-probe-unknown-route</pre>\n</body>\n</html>\n"
+    }
+  }
+}

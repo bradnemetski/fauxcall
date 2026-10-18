@@ -1,0 +1,150 @@
+{
+  "name": "trigger-sampling-request",
+  "created_at": "2026-10-18T02:30:00Z",
+  "client_capabilities": {
+    "sampling": {}
+  },
+  "calls": [
+    {
+      "id": "sample-hello",
+      "endpoint": "MCP tools/call:trigger-sampling-request",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "Say hello in French"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "role": "assistant",
+          "content": {
+            "type": "text",
+            "text": "Bonjour !"
+          },
+          "model": "fauxcall-test-model",
+          "stopReason": "endTurn"
+        }
+      }
+    },
+    {
+      "id": "sample-max",
+      "endpoint": "MCP tools/call:trigger-sampling-request",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "Write a haiku about rain",
+            "maxTokens": 50
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "role": "assistant",
+          "content": {
+            "type": "text",
+            "text": "Soft rain on the roof\nwhispers"
+          },
+          "model": "fauxcall-haiku",
+          "stopReason": "maxTokens"
+        }
+      }
+    },
+    {
+      "id": "sample-refused",
+      "endpoint": "MCP tools/call:trigger-sampling-request",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "Anything"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "error": {
+            "code": -1,
+            "message": "User rejected sampling request"
+          }
+        }
+      }
+    },
+    {
+      "id": "sample-bad-reply",
+      "endpoint": "MCP tools/call:trigger-sampling-request",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "Bad reply"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "role": "assistant"
+        }
+      }
+    },
+    {
+      "id": "sample-no-reply-handler",
+      "endpoint": "MCP tools/call:trigger-sampling-request",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "nobody answers"
+          }
+        }
+      },
+      "note": "the client answers Method not found"
+    },
+    {
+      "id": "sample-missing-prompt",
+      "endpoint": "MCP tools/call:trigger-sampling-request",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "sample-bad-max",
+      "endpoint": "MCP tools/call:trigger-sampling-request",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "x",
+            "maxTokens": "many"
+          }
+        }
+      }
+    }
+  ]
+}

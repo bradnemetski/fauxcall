@@ -1,18 +1,11 @@
-"""simulate-research-query's tasks (SEP-1686), on the fake's clock.
+"""MCP tasks: the SDK's in-memory task store, ``simulate-research-query`` and ``tasks/*``.
 
-The real tool creates a task (ttl 300000 ms whatever the client asks, poll interval 1000 ms) and
-works through four stages of one second each (plus ~3 ms of bookkeeping per stage, as recorded):
-``Gathering sources...`` -> ``Analyzing content...`` -> ``Synthesizing findings...`` ->
-``Generating report...`` -> completed. An ambiguous query from a client that can elicit stops at
-the third stage in ``input_required`` and queues an ``elicitation/create`` that only
-``tasks/result`` delivers; the answer resumes the task, which completes two stages later. A
-queued question times out after the SDK's 60 s and the task goes on with a default reading.
-
-The SDK's ``tasks/result`` checks the task once a second from the moment it is called and
-answers at the first check that finds it terminal (recordings 000289, 000322, 000324, 000399,
-000404); every status change is pushed to the client's GET stream as
-``notifications/tasks/status`` (000411), except a cancellation, which the SDK makes in its store
-directly. A task is forgotten 300 s after it ends (or after it was created, if it never ends).
+Each client's server has its own store. A research task runs in the background on the wall
+clock, like the real one (``Gathering sources`` -> ``Analyzing content`` -> ``Synthesizing
+findings`` -> ``Generating report``, one second each), and every status change is pushed to the
+client's GET stream as ``notifications/tasks/status``. An ambiguous topic from a client that can
+elicit asks for a clarification: the request waits in the task's queue until the client calls
+``tasks/result``, which delivers it on its own stream, as the SDK's task message queue does.
 """
 
 from __future__ import annotations
@@ -20,202 +13,199 @@ from __future__ import annotations
 import asyncio
 import contextlib
 import secrets
+import time
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Final
 
-from fauxcall.clock import ns_to_datetime
 from fauxcall.runtime import ClientError, RpcError
 
-from fauxcall_everything.jsvalues import template, truthy
-from fauxcall_everything.zodish import INTERNAL_ERROR, INVALID_PARAMS, elicit_result
+from fauxcall_everything import js, requests, zod
+from fauxcall_everything.state import server_of, session_of
+from fauxcall_everything.validation import elicit_result
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Awaitable
 
     from fauxcall.runtime import Channel, RequestContext
     from fauxcall.types import JsonObject, JsonValue
 
+    from fauxcall_everything.state import McpSession, Server
+
+TERMINAL: Final = frozenset({"completed", "failed", "cancelled"})
+RELATED_TASK: Final = "io.modelcontextprotocol/related-task"
+RESEARCH_TTL_MS: Final = 300_000
+POLL_INTERVAL_MS: Final = 1000
+LIST_PAGE_SIZE: Final = 10
+REQUEST_TIMEOUT_S: Final = 60.0
+"""The SDK's default request timeout: a clarification nobody fetches gives up after a minute."""
 STAGES: Final = (
     "Gathering sources",
     "Analyzing content",
     "Synthesizing findings",
     "Generating report",
 )
-STAGE_NS: Final = 1_003_000_000
-TICK_NS: Final = 1_000_000_000
-TTL_MS: Final = 300_000
-POLL_INTERVAL_MS: Final = 1000
-ELICITATION_TIMEOUT_NS: Final = 60_000_000_000
-RELATED_TASK: Final = "io.modelcontextprotocol/related-task"
-CANCELLED_MESSAGE: Final = "Client cancelled task execution."
-UNAVAILABLE: Final = "technical (default - elicitation unavailable)"
-REPORT_FAILURE: Final = "TypeError: state.clarification.includes is not a function"
-"""How the report fails for a clarification that is neither text nor a list (000505)."""
-TERMINAL: Final = frozenset({"completed", "failed", "cancelled"})
+STAGE_SECONDS: Final = 1.0
+TICK: float = 1.0
+"""Seconds per second of the real server's task timers (stages, polling): tests shrink it."""
+DEFAULT_CLARIFICATION: Final = "technical (default - elicitation unavailable)"
+_DELIVERIES: Final[set[asyncio.Future[None]]] = set()
+"""Queued requests on their way to the client (kept so they aren't garbage-collected)."""
 
 
-@dataclass(frozen=True, slots=True)
-class Status:
-    """One status the task goes through."""
+class TaskError(Exception):
+    """The store refused a status change (gone, or already terminal)."""
 
-    at_ns: int
-    status: str
-    message: str
+
+class ClarificationTypeError(TypeError):
+    """``state.clarification.includes is not a function``: a clarification that isn't text."""
 
 
 @dataclass(slots=True)
-class ResearchTask:
-    """One task of simulate-research-query."""
+class QueuedRequest:
+    """A request to the client waiting for ``tasks/result`` to deliver it."""
+
+    method: str
+    params: JsonObject
+    answer: asyncio.Future[JsonValue]
+
+
+@dataclass(slots=True)
+class Task:
+    """One task, as the store keeps it."""
 
     task_id: str
+    ttl: int | None
+    created_at: str
+    last_updated_at: str
+    status: str = "working"
+    poll_interval: int = POLL_INTERVAL_MS
+    status_message: str | None = None
+    result: JsonObject | None = None
+    expires_at: float | None = None
+    queue: list[QueuedRequest] = field(default_factory=list)
+
+    def as_json(self) -> JsonObject:
+        """The task object (members in the order the store creates them)."""
+        body: JsonObject = {
+            "taskId": self.task_id,
+            "status": self.status,
+            "ttl": self.ttl,
+            "createdAt": self.created_at,
+            "lastUpdatedAt": self.last_updated_at,
+            "pollInterval": self.poll_interval,
+        }
+        if self.status_message is not None:
+            body["statusMessage"] = self.status_message
+        return body
+
+
+@dataclass(slots=True)
+class TaskStore:
+    """``InMemoryTaskStore`` for one client: tasks expire ``ttl`` after creation or completion."""
+
+    server: Server
+    session: McpSession
+    tasks: dict[str, Task] = field(default_factory=dict)
+
+    def create(self, ttl: int | None) -> Task:
+        """A new working task."""
+        now = js.iso_ms(
+            self.server.runtime.clocks.for_session(self.server.fauxcall_session).now_ns()
+        )
+        task = Task(secrets.token_hex(16), ttl, now, now)
+        if ttl:
+            task.expires_at = time.monotonic() + ttl / 1000
+        self.tasks[task.task_id] = task
+        return task
+
+    def get(self, task_id: str) -> Task | None:
+        """A task that still exists."""
+        task = self.tasks.get(task_id)
+        if task is not None and task.expires_at is not None and time.monotonic() >= task.expires_at:
+            del self.tasks[task_id]
+            return None
+        return task
+
+    def visible(self) -> list[Task]:
+        """Every task that still exists, oldest first."""
+        return [task for task_id in list(self.tasks) if (task := self.get(task_id)) is not None]
+
+    def _touch(self, task: Task) -> None:
+        clock = self.server.runtime.clocks.for_session(self.server.fauxcall_session)
+        task.last_updated_at = js.iso_ms(clock.now_ns())
+        if task.status in TERMINAL and task.ttl:
+            task.expires_at = time.monotonic() + task.ttl / 1000
+
+    def set_status(self, task: Task, status: str, message: str | None = None) -> None:
+        """``updateTaskStatus`` without a notification (``tasks/cancel`` does that)."""
+        if task.status in TERMINAL:
+            raise TaskError(task.task_id)
+        task.status = status
+        if message:
+            task.status_message = message
+        self._touch(task)
+
+    def update(self, channel: Channel, task: Task, status: str, message: str | None = None) -> None:
+        """The request task store's ``updateTaskStatus``: the change, then its notification."""
+        if self.get(task.task_id) is None:
+            raise TaskError(task.task_id)
+        self.set_status(task, status, message)
+        channel.push("notifications/tasks/status", task.as_json())
+
+    def complete(self, channel: Channel, task: Task, result: JsonObject) -> None:
+        """``storeTaskResult``: the result, the terminal status, and the notification."""
+        if self.get(task.task_id) is None or task.status in TERMINAL:
+            raise TaskError(task.task_id)
+        task.result = result
+        task.status = "completed"
+        self._touch(task)
+        channel.push("notifications/tasks/status", task.as_json())
+
+    async def ask(self, task: Task, method: str, params: JsonObject) -> JsonValue:
+        """Queue a request for the client (``relatedTask``) and wait for its answer."""
+        answer: asyncio.Future[JsonValue] = asyncio.get_running_loop().create_future()
+        related: JsonObject = {**params, "_meta": {RELATED_TASK: {"taskId": task.task_id}}}
+        task.queue.append(QueuedRequest(method, related, answer))
+        try:
+            async with asyncio.timeout(REQUEST_TIMEOUT_S * TICK):
+                return await asyncio.shield(answer)
+        except TimeoutError as error:
+            raise ClientError(-32001, "Request timed out") from error
+
+
+def store_of(ctx: RequestContext) -> TaskStore:
+    """The calling client's task store."""
+    session = session_of(ctx)
+    if session.tasks is None:
+        session.tasks = TaskStore(server_of(ctx), session)
+    return session.tasks
+
+
+# -- simulate-research-query -----------------------------------------------------------------------
+
+
+RESEARCH_SCHEMA: Final = zod.ToolSchema(
+    "simulate-research-query",
+    {
+        "topic": zod.Field(zod.string()),
+        "ambiguous": zod.Field(zod.boolean(), default=False),
+    },
+)
+
+
+@dataclass(slots=True)
+class Research:
+    """``researchStates``: one research task's progress."""
+
     topic: str
     ambiguous: bool
-    """Asked ambiguous by a client that can elicit: the task will need a clarification."""
-    created_ns: int
-    clarification: str | None = None
-    resumed_ns: int | None = None
-    cancelled_ns: int | None = None
-    asked: bool = False
-    """The clarification question went out (through tasks/result)."""
-    fails: bool = False
-    """The clarification makes the report throw (a number or boolean): the task fails."""
-    answered: asyncio.Event = field(default_factory=asyncio.Event)
-    horizon_ns: int = 0
-    """The latest moment a tasks/result has seen (in fast mode it runs ahead of the clock)."""
-
-    @staticmethod
-    def new(topic: str, *, ambiguous: bool, now_ns: int) -> ResearchTask:
-        """A task created now, with an id like the SDK's (16 random bytes, hex)."""
-        return ResearchTask(secrets.token_hex(16), topic, ambiguous, now_ns)
-
-    @property
-    def asks_at_ns(self) -> int:
-        """When an ambiguous task stops for its clarification."""
-        return self.created_ns + 2 * STAGE_NS
-
-    def time(self, now_ns: int) -> int:
-        """The moment to judge the task at: now, or later if a tasks/result already saw later."""
-        return max(now_ns, self.horizon_ns)
-
-    def settle(self, now_ns: int) -> None:
-        """Let a clarification nobody answered time out, as the SDK's request does."""
-        if self.ambiguous and self.resumed_ns is None:
-            deadline = self.asks_at_ns + ELICITATION_TIMEOUT_NS
-            if now_ns >= deadline:
-                self.resume(UNAVAILABLE, deadline)
-
-    def resume(self, clarification: str, at_ns: int, *, fails: bool = False) -> None:
-        """The clarification arrived: the task works on."""
-        self.clarification = clarification
-        self.fails = fails
-        self.resumed_ns = at_ns
-        self.answered.set()
-
-    def statuses(self) -> list[Status]:
-        """Every status known so far, in order (the pushes the real server sends)."""
-        start = self.created_ns
-        found = [Status(start + i * STAGE_NS, "working", f"{STAGES[i]}...") for i in range(3)]
-        if not self.ambiguous:
-            found.append(Status(start + 3 * STAGE_NS, "working", f"{STAGES[3]}..."))
-            found.append(Status(start + 4 * STAGE_NS, "completed", f"{STAGES[3]}..."))
-        else:
-            asking = (
-                f'Found multiple interpretations for "{self.topic}". Requesting clarification...'
-            )
-            found += [Status(self.asks_at_ns, "input_required", asking)] * 2
-            if self.resumed_ns is not None:
-                resumed = self.resumed_ns
-                found.append(
-                    Status(
-                        resumed,
-                        "working",
-                        f'Continuing with interpretation: "{self.clarification}"...',
-                    )
-                )
-                found.append(Status(resumed + STAGE_NS, "working", f"{STAGES[3]}..."))
-                if self.fails:
-                    found.append(Status(resumed + 2 * STAGE_NS, "failed", REPORT_FAILURE))
-                else:
-                    found.append(Status(resumed + 2 * STAGE_NS, "completed", f"{STAGES[3]}..."))
-        if self.cancelled_ns is not None:
-            found = [s for s in found if s.at_ns < self.cancelled_ns]
-        return found
-
-    def at(self, now_ns: int) -> Status:
-        """The task's status at ``now_ns``."""
-        if self.cancelled_ns is not None and now_ns >= self.cancelled_ns:
-            return Status(self.cancelled_ns, "cancelled", CANCELLED_MESSAGE)
-        statuses = self.statuses()
-        known = [s for s in statuses if s.at_ns <= now_ns]
-        return known[-1] if known else statuses[0]
-
-    def ended_ns(self) -> int | None:
-        """When the task became terminal (``None``: not yet known)."""
-        if self.cancelled_ns is not None:
-            return self.cancelled_ns
-        last = self.statuses()[-1]
-        return last.at_ns if last.status in TERMINAL else None
-
-    def gone(self, now_ns: int) -> bool:
-        """Whether the store forgot the task (its TTL ran out)."""
-        ttl = TTL_MS * 1_000_000
-        ended = self.ended_ns()
-        expires = (
-            ended + ttl
-            if ended is not None and ended <= self.created_ns + ttl
-            else self.created_ns + ttl
-        )
-        return now_ns >= expires
-
-    def to_json(self, status: Status) -> JsonObject:
-        """The task as tasks/get, tasks/list and status notifications show it."""
-        return {
-            "taskId": self.task_id,
-            "status": status.status,
-            "ttl": TTL_MS,
-            "createdAt": iso_ms(self.created_ns),
-            "lastUpdatedAt": iso_ms(status.at_ns),
-            "pollInterval": POLL_INTERVAL_MS,
-            "statusMessage": status.message,
-        }
-
-    def report(self) -> JsonObject:
-        """The task's result (tasks/result), with its related-task metadata."""
-        return {
-            "content": [{"type": "text", "text": research_report(self.topic, self.clarification)}],
-            "_meta": {RELATED_TASK: {"taskId": self.task_id}},
-        }
-
-    def question(self) -> JsonObject:
-        """The elicitation/create the task queues for its clarification."""
-        return {
-            "message": (
-                f'The research query "{self.topic}" could have multiple interpretations. '
-                "Please clarify what you're looking for:"
-            ),
-            "requestedSchema": {
-                "type": "object",
-                "properties": {
-                    "interpretation": {
-                        "type": "string",
-                        "title": "Clarification",
-                        "description": "Which interpretation of the topic do you mean?",
-                        "oneOf": interpretations(self.topic),
-                    }
-                },
-                "required": ["interpretation"],
-            },
-            "_meta": {RELATED_TASK: {"taskId": self.task_id}},
-        }
-
-
-def iso_ms(ns: int) -> str:
-    """``new Date().toISOString()``."""
-    return ns_to_datetime(ns).isoformat(timespec="milliseconds").replace("+00:00", "Z")
+    stage: int = 0
+    completed: bool = False
+    clarification: JsonValue = None
 
 
 def interpretations(topic: str) -> list[JsonValue]:
-    """The readings the server offers for an ambiguous topic."""
+    """``getInterpretationsForTopic``."""
     if "python" in topic.lower():
         return [
             {"const": "programming", "title": "Python programming language"},
@@ -229,32 +219,39 @@ def interpretations(topic: str) -> list[JsonValue]:
     ]
 
 
-def research_report(topic: str, clarification: str | None) -> str:
-    """The report simulate-research-query produces (generateResearchReport)."""
-    titled = f"{topic} ({clarification})" if clarification else topic
-    clarified = f"- **Clarification**: {clarification}" if clarification else ""
+def report(state: Research) -> JsonObject:
+    """``generateResearchReport`` (raises ``TypeError`` where the real one does)."""
+    clarification = state.clarification
+    clarified = js.js_truthy(clarification)
+    if clarified and not isinstance(clarification, str | list):
+        raise ClarificationTypeError("state.clarification.includes is not a function")
+    shown = js.js_string(clarification) if clarified else ""
+    topic = f"{state.topic} ({shown})" if clarified else state.topic
     stages = "\n".join(f"- Stage {i + 1}: {stage} ✓" for i, stage in enumerate(STAGES))
-    progressed = "`input_required` → `working` → " if clarification else ""
+    progressed = "`input_required` → `working` → " if clarified else ""
     flow = ""
-    if clarification:
-        outcome = (
+    if clarified:
+        unavailable = (
+            "unavailable" in clarification if isinstance(clarification, str | list) else False
+        )
+        ending = (
             "**Note:** Elicitation failed and a default interpretation was used."
-            if "unavailable" in clarification
-            else f'After receiving clarification ("{clarification}"), '
-            "the task resumed processing and completed."
+            if unavailable
+            else f'After receiving clarification ("{shown}"), the task resumed processing and '
+            "completed."
         )
         flow = (
             "**Elicitation Flow:**\n"
             "When the query was ambiguous, the server sent an `elicitation/create` request\n"
-            "to the client. "
-            "The task status changed to `input_required` while awaiting user input.\n"
-            f"{outcome}\n"
+            "to the client. The task status changed to `input_required` while awaiting user "
+            "input.\n"
+            f"{ending}\n"
         )
-    return (
-        f"# Research Report: {titled}\n\n"
+    text = (
+        f"# Research Report: {topic}\n\n"
         "## Research Parameters\n"
-        f"- **Topic**: {topic}\n"
-        f"{clarified}\n\n"
+        f"- **Topic**: {state.topic}\n"
+        f"{f'- **Clarification**: {shown}' if clarified else ''}\n\n"
         "## Synthesis\n"
         f"This research query was processed through {len(STAGES)} stages:\n"
         f"{stages}\n\n"
@@ -262,8 +259,8 @@ def research_report(topic: str, clarification: str | None) -> str:
         "## About This Demo (SEP-1686: Tasks)\n\n"
         "This tool demonstrates MCP's task-based execution pattern for long-running operations:\n\n"
         "**Task Lifecycle Demonstrated:**\n"
-        "1. `tools/call` with `task` parameter → "
-        "Server returns `CreateTaskResult` (not the final result)\n"
+        "1. `tools/call` with `task` parameter → Server returns `CreateTaskResult` "
+        "(not the final result)\n"
         "2. Client polls `tasks/get` → Server returns current status and `statusMessage`\n"
         f"3. Status progressed: `working` → {progressed}`completed`\n"
         "4. Client calls `tasks/result` → Server returns this final result\n\n"
@@ -277,131 +274,206 @@ def research_report(topic: str, clarification: str | None) -> str:
         "(works on all transports)\n\n"
         "*This is a simulated research report from the Everything MCP Server.*\n"
     )
+    return {"content": [{"type": "text", "text": text}]}
 
 
-def clarification_of(reply: JsonValue) -> tuple[str, bool]:
-    """How the task reads the client's answer: (clarification, whether the report will fail).
+def start_research(ctx: RequestContext, arguments: JsonObject) -> JsonObject:
+    """``createTask``: the task (already ``Gathering sources...``), its research started."""
+    parsed, refusal = RESEARCH_SCHEMA.parse(arguments)
+    if refusal is not None:  # a tool error is no CreateTaskResult
+        raise RpcError(-32602, invalid_task_result())
+    store = store_of(ctx)
+    task = store.create(RESEARCH_TTL_MS)
+    supports_elicitation = "elicitation" in ctx.client_capabilities
+    state = Research(str(parsed["topic"]), bool(parsed["ambiguous"]) and supports_elicitation)
+    assert ctx.channel is not None  # noqa: S101 - every MCP call has one
+    store.update(ctx.channel, task, "working", f"{STAGES[0]}...")
 
-    The report calls ``clarification.includes(...)``: a number or a boolean has no such method.
-    """
-    parsed, issues = elicit_result(reply)
-    if issues:
-        return UNAVAILABLE, False
-    content = parsed.get("content")
-    if parsed.get("action") == "accept" and truthy(content):
-        chosen = content.get("interpretation") if isinstance(content, dict) else None
-        if not truthy(chosen):
-            return "User accepted without selection", False
-        return template(chosen), not isinstance(chosen, str | list)
-    if parsed.get("action") == "decline":
-        return "User declined - using default interpretation", False
-    return "User cancelled - using default interpretation", False
+    async def research(channel: Channel) -> None:
+        with contextlib.suppress(TaskError):  # cancelled meanwhile: the real one fails silently
+            await _research(store, task, state, channel)
 
-
-async def push_statuses(
-    task: ResearchTask,
-    clock: Callable[[], int],
-    channel: Channel,
-    current: Callable[[], bool] = lambda: True,
-) -> None:
-    """Push each status change to the client's GET stream as it happens (background work).
-
-    ``current`` turns false when a reset of the fake forgot the task: the pushes stop.
-    """
-    sent = 0
-    while current():
-        now = clock()
-        task.settle(now)
-        statuses = task.statuses()
-        while sent < len(statuses) and statuses[sent].at_ns <= now:
-            channel.push("notifications/tasks/status", task.to_json(statuses[sent]))
-            sent += 1
-        if task.cancelled_ns is not None and now >= task.cancelled_ns:
-            return
-        upcoming = [s.at_ns for s in statuses[sent:]]
-        if task.cancelled_ns is not None:  # cancelled ahead of the clock: stop there
-            upcoming.append(task.cancelled_ns)
-        if upcoming:
-            await channel.pause(max(min(upcoming) - now, 1_000_000) / 1e9)
-            continue
-        if statuses[-1].status in TERMINAL:
-            return
-        # waiting for the clarification: until it arrives or the question times out
-        deadline = task.asks_at_ns + ELICITATION_TIMEOUT_NS
-        try:
-            async with asyncio.timeout(max(deadline - now, 1_000_000) / 1e9):
-                await task.answered.wait()
-        except TimeoutError:
-            continue
+    ctx.background(research)
+    return {"task": task.as_json()}
 
 
-async def task_result(ctx: RequestContext, task: ResearchTask) -> JsonObject:
-    """tasks/result: deliver the queued question, then answer once the task is terminal."""
-    started = ctx.now_ns
-    tick = 0
-    while True:
-        at = started + tick * TICK_NS
-        task.settle(at)
-        if task.gone(at):
-            raise RpcError(INVALID_PARAMS, f"MCP error -32602: Task not found: {task.task_id}")
-        status = task.at(at)
-        if (
-            task.ambiguous
-            and not task.asked
-            and at >= task.asks_at_ns
-            and task.cancelled_ns is None
-        ):
-            task.asked = True
-            if task.resumed_ns is None:
-                await _ask(ctx, task, at)
-            else:  # the question timed out but stayed queued: delivered, its answer ignored
-                with contextlib.suppress(ClientError):
-                    await ctx.ask_client("elicitation/create", task.question(), within=0.001)
-            continue
-        task.horizon_ns = max(task.horizon_ns, at)
-        if status.status in {"cancelled", "failed"}:
-            raise RpcError(INTERNAL_ERROR, f"Task {task.task_id} has no result stored")
-        if status.status == "completed":
-            return task.report()
-        await _wait_for_tick(ctx, started + (tick + 1) * TICK_NS)
-        tick += 1
-
-
-async def _ask(ctx: RequestContext, task: ResearchTask, at_ns: int) -> None:
-    """Send the clarification question on the tasks/result stream; resume with the answer."""
-    deadline = task.asks_at_ns + ELICITATION_TIMEOUT_NS
+async def _research(store: TaskStore, task: Task, state: Research, channel: Channel) -> None:
+    """``runResearchProcess`` after its first status update."""
     try:
-        reply = await ctx.ask_client(
-            "elicitation/create", task.question(), within=(deadline - at_ns) / 1e9
+        for index in range(len(STAGES)):
+            state.stage = index
+            if state.completed or not store.server.alive():
+                return
+            if index > 0:
+                store.update(channel, task, "working", f"{STAGES[index]}...")
+            if index == 2 and state.ambiguous and not js.js_truthy(state.clarification):  # noqa: PLR2004 - the synthesis stage
+                await _clarify(store, task, state, channel)
+            await channel.pause(STAGE_SECONDS * TICK)
+        state.completed = True
+        result = report(state)
+    except ClarificationTypeError as error:  # the real report breaks on non-text clarifications
+        with contextlib.suppress(TaskError):
+            store.update(channel, task, "failed", f"TypeError: {error}")
+        return
+    store.complete(channel, task, result)
+
+
+async def _clarify(store: TaskStore, task: Task, state: Research, channel: Channel) -> None:
+    """Ask the client which interpretation it means (``input_required`` meanwhile)."""
+    store.update(
+        channel,
+        task,
+        "input_required",
+        f'Found multiple interpretations for "{state.topic}". Requesting clarification...',
+    )
+    try:
+        store.update(channel, task, "input_required")  # sendRequest marks the task again
+        params: JsonObject = {
+            "message": f'The research query "{state.topic}" could have multiple interpretations. '
+            "Please clarify what you're looking for:",
+            "requestedSchema": {
+                "type": "object",
+                "properties": {
+                    "interpretation": {
+                        "type": "string",
+                        "title": "Clarification",
+                        "description": "Which interpretation of the topic do you mean?",
+                        "oneOf": interpretations(state.topic),
+                    }
+                },
+                "required": ["interpretation"],
+            },
+        }
+        answer = await store.ask(task, "elicitation/create", params)
+        result = elicit_result(answer)
+        content = result.get("content")
+        if result.get("action") == "accept" and js.js_truthy(content):
+            chosen = content.get("interpretation") if isinstance(content, dict) else None
+            state.clarification = (
+                chosen if js.js_truthy(chosen) else "User accepted without selection"
+            )
+        elif result.get("action") == "decline":
+            state.clarification = "User declined - using default interpretation"
+        else:
+            state.clarification = "User cancelled - using default interpretation"
+    except (ClientError, RpcError, TaskError, ValueError):
+        state.clarification = DEFAULT_CLARIFICATION
+    store.update(
+        channel,
+        task,
+        "working",
+        f'Continuing with interpretation: "{js.js_string(state.clarification)}"...',
+    )
+
+
+def invalid_task_result() -> str:
+    """The refusal of a task-augmented call whose tool answered without a task."""
+    issue = zod.wrong_type("object", zod.MISSING, ["task"])
+    return f"MCP error -32602: Invalid task creation result: {zod.issues_text([issue])}"
+
+
+# -- tasks/* ---------------------------------------------------------------------------------------
+
+
+def _task_id(ctx: RequestContext, params: JsonObject) -> str:
+    missing = requests.params_issue(ctx)
+    requests.refuse([missing] if missing is not None else [])
+    task_id = params.get("taskId", zod.MISSING)
+    if not isinstance(task_id, str):
+        raise RpcError(
+            -32603, zod.issues_text([zod.wrong_type("string", task_id, ["params", "taskId"])])
         )
-        clarification, fails = clarification_of(reply)
-    except ClientError:
-        clarification, fails = UNAVAILABLE, False
-    now = ctx.runtime.clocks.for_session(ctx.session).now_ns()
-    task.resume(clarification, max(now, at_ns) + 1_000_000, fails=fails)
+    return task_id
 
 
-async def _wait_for_tick(ctx: RequestContext, tick_ns: int) -> None:
-    """Sleep until the next check of the task (skipped in fast mode, as every ctx.pause is)."""
-    now = ctx.runtime.clocks.for_session(ctx.session).now_ns()
-    await ctx.pause(max(0.0, (tick_ns - now) / 1e9))
+async def tasks_get(ctx: RequestContext, params: JsonObject) -> JsonValue:
+    """``tasks/get``: the task, or ``Failed to retrieve task: Task not found``."""
+    task = store_of(ctx).get(_task_id(ctx, params))
+    if task is None:
+        raise RpcError(-32602, "MCP error -32602: Failed to retrieve task: Task not found")
+    return task.as_json()
 
 
-def page(tasks: list[ResearchTask], cursor: JsonValue, now_ns: int) -> JsonObject:
-    """tasks/list: ten per page, the cursor being the last task id of the previous page."""
-    alive = [t for t in tasks if not t.gone(t.time(now_ns))]
-    ids = [t.task_id for t in alive]
+async def tasks_list(ctx: RequestContext, params: JsonObject) -> JsonValue:
+    """``tasks/list``: ten tasks a page, the cursor being the last task id of a page."""
+    cursor = params.get("cursor", zod.MISSING)
+    if cursor is not zod.MISSING and not isinstance(cursor, str):
+        raise RpcError(
+            -32603, zod.issues_text([zod.wrong_type("string", cursor, ["params", "cursor"])])
+        )
+    tasks = store_of(ctx).visible()
     start = 0
-    if cursor:
+    if isinstance(cursor, str) and cursor:
+        ids = [task.task_id for task in tasks]
         if cursor not in ids:
             raise RpcError(
-                INVALID_PARAMS,
-                f"MCP error -32602: Failed to list tasks: Invalid cursor: {template(cursor)}",
+                -32602, f"MCP error -32602: Failed to list tasks: Invalid cursor: {cursor}"
             )
-        start = ids.index(str(cursor)) + 1
-    chosen = alive[start : start + 10]
-    result: JsonObject = {"tasks": [t.to_json(t.at(t.time(now_ns))) for t in chosen]}
-    if start + 10 < len(alive):
-        result["nextCursor"] = chosen[-1].task_id
-    result["_meta"] = {}
+        start = ids.index(cursor) + 1
+    page = tasks[start : start + LIST_PAGE_SIZE]
+    body: JsonObject = {"tasks": [task.as_json() for task in page]}
+    if start + LIST_PAGE_SIZE < len(tasks):
+        body["nextCursor"] = page[-1].task_id
+    body["_meta"] = {}
+    return body
+
+
+async def tasks_cancel(ctx: RequestContext, params: JsonObject) -> JsonValue:
+    """``tasks/cancel``: the cancelled task; terminal tasks can't be cancelled."""
+    task_id = _task_id(ctx, params)
+    store = store_of(ctx)
+    task = store.get(task_id)
+    if task is None:
+        raise RpcError(-32602, f"MCP error -32602: Task not found: {task_id}")
+    if task.status in TERMINAL:
+        raise RpcError(
+            -32602, f"MCP error -32602: Cannot cancel task in terminal status: {task.status}"
+        )
+    store.set_status(task, "cancelled", "Client cancelled task execution.")
+    task.queue.clear()
+    return {"_meta": {}, **task.as_json()}
+
+
+async def tasks_result(ctx: RequestContext, params: JsonObject) -> JsonValue:
+    """``tasks/result``: deliver what the task queued for the client, block until it ends."""
+    task_id = _task_id(ctx, params)
+    store = store_of(ctx)
+    while True:
+        task = store.get(task_id)
+        if task is None:
+            raise RpcError(-32602, f"MCP error -32602: Task not found: {task_id}")
+        while task.queue:
+            queued = task.queue.pop(0)
+            delivery = asyncio.ensure_future(
+                _deliver(ctx.ask_client(queued.method, queued.params), queued)
+            )
+            _DELIVERIES.add(delivery)
+            delivery.add_done_callback(_DELIVERIES.discard)
+        task = store.get(task_id)
+        if task is None:
+            raise RpcError(-32602, f"MCP error -32602: Task not found: {task_id}")
+        if task.status in TERMINAL:
+            break
+        await asyncio.sleep(task.poll_interval / 1000 * TICK)  # the SDK polls, it doesn't wait
+    if task.result is None:
+        raise RpcError(-32603, f"Task {task_id} has no result stored")
+    task.queue.clear()
+    result: JsonObject = dict(task.result)
+    meta = result.get("_meta")
+    result["_meta"] = {
+        **(meta if isinstance(meta, dict) else {}),
+        RELATED_TASK: {"taskId": task_id},
+    }
     return result
+
+
+async def _deliver(asking: Awaitable[JsonValue], queued: QueuedRequest) -> None:
+    """Hand the client's answer (or refusal) to the request waiting for it."""
+    try:
+        answer = await asking
+    except ClientError as error:
+        if not queued.answer.done():
+            queued.answer.set_exception(error)
+        return
+    if not queued.answer.done():
+        queued.answer.set_result(answer)

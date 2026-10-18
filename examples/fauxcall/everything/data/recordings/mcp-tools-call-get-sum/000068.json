@@ -1,11 +1,11 @@
 {
   "id": "000068",
   "endpoint": "MCP tools/call:get-sum",
-  "purpose": "invalid",
-  "plan_call": "sum-null-a",
-  "started_at": "2026-10-15T00:35:43.634647Z",
-  "started_ns": 1792024543634647000,
-  "elapsed_ms": 2.785,
+  "purpose": "variation",
+  "plan_call": "sum-negative",
+  "started_at": "2026-10-18T02:28:22.286044Z",
+  "started_ns": 1792290502286044000,
+  "elapsed_ms": 2.212,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,13 +33,13 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 18,
+        "id": 5,
         "method": "tools/call",
         "params": {
           "name": "get-sum",
           "arguments": {
-            "a": null,
-            "b": 2
+            "a": -7,
+            "b": 4
           }
         }
       }
@@ -82,7 +82,7 @@
       ],
       [
         "date",
-        "Thu, 15 Oct 2026 00:35:43 GMT"
+        "Sun, 18 Oct 2026 02:28:22 GMT"
       ],
       [
         "transfer-encoding",
@@ -97,23 +97,22 @@
           "content": [
             {
               "type": "text",
-              "text": "MCP error -32602: Input validation error: Invalid arguments for tool get-sum: Invalid input: expected number, received null at a"
+              "text": "The sum of -7 and 4 is -3."
             }
-          ],
-          "isError": true
+          ]
         },
         "jsonrpc": "2.0",
-        "id": 18
+        "id": 5
       }
     }
   },
   "stream": [
     {
-      "t_ms": 2.653,
+      "t_ms": 2.109,
       "kind": "sse",
       "event": "message",
-      "id": "4206cabf-f640-457c-9192-7728fbe9ab18",
-      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Input validation error: Invalid arguments for tool get-sum: Invalid input: expected number, received null at a\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":18}"
+      "id": "640292df-f10a-4a06-a75d-a28c3b501a73",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"The sum of -7 and 4 is -3.\"}]},\"jsonrpc\":\"2.0\",\"id\":5}"
     }
   ],
   "redacted": [

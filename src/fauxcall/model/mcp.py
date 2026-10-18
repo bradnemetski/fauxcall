@@ -86,6 +86,62 @@ class McpTransportModel(Model):
             "get_second_stream, delete_unknown_session): {status, content_type, body}."
         ),
     )
+    sse_field_order: list[str] = Field(
+        default_factory=lambda: ["id", "event", "data"],
+        description="The order of an SSE event's fields as the server writes them.",
+    )
+    sse_event_name: str | None = Field(
+        default="message", description="The event name of its SSE messages (null: none)."
+    )
+    sse_streamed: bool = Field(
+        default=False,
+        description="SSE answers are sent without a Content-Length (chunked), even when complete.",
+    )
+    priming_since: str | None = Field(
+        default=None,
+        description=(
+            "SSE answers open with a priming event when the protocol version the client asked "
+            "for (the handshake's, else the request's MCP-Protocol-Version header) sorts at or "
+            "after this one; null: priming_versions decides by the negotiated version."
+        ),
+    )
+    message_member_order: list[str] = Field(
+        default_factory=list,
+        description="Member order of messages the server sends on its own (method, params …).",
+    )
+    refusal_order: list[str] = Field(
+        default_factory=list,
+        description=(
+            "The order in which the server checks a POST (the refusals' situations): the first "
+            "that applies answers. Empty: accept, content_type, protocol_header, "
+            "unknown_session, invalid_json, not_jsonrpc."
+        ),
+    )
+    cors: RawJson = Field(
+        default=None,
+        description=(
+            "CORS as the server answers it: {preflight: {status, headers}, headers, "
+            "headers_without_origin}; header values may hold {{origin}} and "
+            "{{request_headers}} (null: no CORS)."
+        ),
+    )
+    resumption: Literal["stream", "session"] = Field(
+        default="stream",
+        description=(
+            "A GET with Last-Event-ID: 'stream' replays the rest of that event's stream and "
+            "stays the client's stream; 'session' replays every later event of the session "
+            "(priming events included), is never refused as a second stream and gets nothing "
+            "more (the TypeScript SDK's in-memory event store)."
+        ),
+    )
+    timeout_cancel_reason: str | None = Field(
+        default=None,
+        description=(
+            "When a request the server sent the client times out, it tells the client with "
+            "notifications/cancelled carrying this reason (the TypeScript SDK: 'McpError: MCP "
+            "error -32001: Request timed out'); null: it sends nothing."
+        ),
+    )
     keep_alive: str = Field(
         default=": keep-alive",
         description="The comment line the server writes to keep an idle SSE stream open.",

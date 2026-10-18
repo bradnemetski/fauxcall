@@ -647,6 +647,14 @@ def mcp_introspect(name: str) -> None:
                 )
         model.mcp = introspection.model
         model.kind = "mcp"
+        if introspection.routing is not None:  # the HTTP layer, as learned again
+            spec_paths = model.routing.spec_paths
+            model.routing = introspection.routing.model_copy(update={"spec_paths": spec_paths})
+            names = {t.name for t in introspection.route_errors}
+            model.errors = [
+                *(t for t in model.errors if t.name not in names),
+                *introspection.route_errors,
+            ]
         save_model(fake, model)
         progress = load_progress(fake)
         for tool in introspection.model.tools:

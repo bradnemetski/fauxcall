@@ -544,6 +544,9 @@ class McpClient:
         The logged observation has status 200 for a result and 500 for an error (or no answer),
         or the HTTP status when the server refused the request itself (a ``401``, a ``403`` …).
         """
+        if method == "tools/call":  # however it is sent, a tool call is a possible write
+            name = params.get("name") if isinstance(params, dict) else None
+            self._may_write(str(name) if name is not None else "")
         await self._ensure()
         path = mcp_call_path(method, params)
         key = mcp_key(method, params)
@@ -587,18 +590,26 @@ class McpClient:
         compare: CompareOptions | None = None,
     ) -> JsonValue:
         """``tools/call``; tools that may modify state skip real runs without permission."""
-        if self.target == "real" and self.mutating(name):
-            if not self.allow_writes:
-                pytest.skip(f"tool {name!r} may modify state: needs --allow-real-writes")
-            refused = self.budget.spend("POST", f"tools/call:{name}") if self.budget else None
-            if refused is not None:
-                pytest.skip(f"real write refused: {refused}")
         params: JsonValue = {"name": name, "arguments": dict(arguments or {})}
         if compare is None and self.varies(name):
             compare = CompareOptions(values=False, lengths=False)
         return await self.request(
             "tools/call", params, label=label or f"tools/call:{name}", compare=compare
         )
+
+    def _may_write(self, name: str) -> None:
+        """Skip the scenario if calling tool ``name`` on the real side isn't allowed.
+
+        A tool that may modify state needs ``--allow-real-writes`` and spends the approved
+        budget, however the scenario sends the call (``call_tool`` or ``request``).
+        """
+        if self.target != "real" or not self.mutating(name):
+            return
+        if not self.allow_writes:
+            pytest.skip(f"tool {name!r} may modify state: needs --allow-real-writes")
+        refused = self.budget.spend("POST", f"tools/call:{name}") if self.budget else None
+        if refused is not None:
+            pytest.skip(f"real write refused: {refused}")
 
     async def close(self) -> None:
         """End the MCP session."""

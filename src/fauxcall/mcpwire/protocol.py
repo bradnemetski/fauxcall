@@ -18,6 +18,8 @@ from typing import TYPE_CHECKING, Final
 from fauxcall import jsonfmt
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from fauxcall.types import JsonObject, JsonValue
 
 PARSE_ERROR: Final = -32700
@@ -229,11 +231,18 @@ def messages_from_body(body: str, content_type: str | None) -> list[JsonValue]:
     return list(parsed) if isinstance(parsed, list) else [parsed]
 
 
-def sse_event(message: JsonValue, *, event_id: str | None = None) -> str:
-    """One SSE ``message`` event carrying a JSON-RPC message."""
-    lines = []
-    if event_id is not None:
-        lines.append(f"id: {event_id}")
-    lines.append("event: message")
-    lines.append(f"data: {jsonfmt.dumps(message)}")
+def sse_event(
+    message: JsonValue,
+    *,
+    event_id: str | None = None,
+    fields: Sequence[str] = ("id", "event", "data"),
+    event: str | None = "message",
+) -> str:
+    """One SSE event carrying a JSON-RPC message, its fields in ``fields`` order.
+
+    ``event`` names it (``None``: no ``event`` field); without ``event_id`` there is no ``id``.
+    """
+    values = {"id": event_id, "event": event, "data": jsonfmt.dumps(message)}
+    order = [*fields, *(name for name in ("id", "event", "data") if name not in fields)]
+    lines = [f"{name}: {values[name]}" for name in order if values.get(name) is not None]
     return "\n".join(lines) + "\n\n"

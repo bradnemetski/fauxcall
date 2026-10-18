@@ -8,6 +8,23 @@ All notable changes to FauxCall are listed here. The format follows
 
 ### Added
 
+- **The MCP fake's HTTP layer is learned, not hand-written.** Introspection records the real
+  404 page and method-not-allowed page, whether the MCP path matches in any case or with a
+  trailing slash, CORS (preflight and headers), the refusals of bodies that aren't JSON or
+  JSON-RPC, and the order in which the server checks a POST; the fake repeats each. A build of the
+  Everything fake had written 856 lines of its own HTTP layer for these; the rebuilt example in
+  `examples/everything` needs none (100%, independent 100% over 181 of 238 calls).
+- Introspection also learns how SSE events are written (field order, event name, streamed or
+  with a length), priming by the protocol version the client asked for, and the member order of
+  messages the server sends on its own.
+- **Cancellation, both ways.** A client's `notifications/cancelled` stops the call and drops its
+  answer, as SDK servers do; with `timeout_cancel_reason`, the fake tells the client when its own
+  request timed out.
+- `resumption: "session"` replays a whole session to a client that reconnects, as the TypeScript
+  SDK's event store does.
+- `METHOD_HANDLERS["tools/call"]` runs before FauxCall's own checks of a tool call, so a fake can
+  answer odd names and arguments the way the real server does.
+
 - **Relations hold in both directions.** `min_per_target` says every target must be referenced
   (every author has a book; a city needs a team only in a sports API), and `world check` enforces
   it. `world check` and `world build` print each relation both ways (references, dangling ones,
@@ -34,6 +51,12 @@ All notable changes to FauxCall are listed here. The format follows
 
 ### Fixed
 
+- Lone UTF-16 surrogates in an answer no longer crash the fake; they are escaped, as
+  `JSON.stringify` writes them.
+- A DELETE ends the session's open GET stream; a client that hangs up leaves no task behind; a
+  second GET stream no longer cuts the first one off from pushes when it closes.
+- `Content-Type: Application/JSON` (any case) is JSON.
+- In scenarios, `mcp.request("tools/call", …)` spends the write budget like `call_tool`.
 - Requests an MCP fake sends to the client (sampling, elicitation, roots) are numbered from 0 in
   each session, as the MCP SDKs number them; they were strings (`fauxcall-1`).
 - A recorded refusal that the real server sent with a `null` id (a second `initialize`) keeps
