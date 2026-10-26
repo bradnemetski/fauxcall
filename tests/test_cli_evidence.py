@@ -1555,3 +1555,53 @@ def test_analyze_endpoint_with_streams_and_text_bodies(ws: Workspace) -> None:
     assert model.json_style == shop_model().json_style
     assert [v.status for v in model.endpoint("GET /v1/echo").responses] == [200]
     assert "| from | field |" in invoke("analyze", "relations", "shop").output
+
+
+def test_analyze_stream(ws: Workspace) -> None:
+    from fauxcall.model.recording import StreamEvent  # noqa: PLC0415
+
+    model = ApiModel(
+        name="pusher",
+        title="Pusher",
+        kind="mcp",
+        source=SourceInfo(kind="mcp", url="http://mcp.test/mcp", fetched_at=datetime.now(UTC)),
+        real=RealTarget(base_url="http://mcp.test"),
+        mcp=McpModel(),
+    )
+    fake = make_fake(ws, model)
+    assert "Nothing recorded" in invoke("analyze", "stream", "pusher").output
+    store = RecordingStore(fake.recordings)
+    pushed = [
+        '{"method":"notifications/message","params":{"level":"info"},"jsonrpc":"2.0"}',
+        "",  # a priming event
+        "not json",
+        '{"method":"roots/list","jsonrpc":"2.0","id":0}',
+        '{"method":"notifications/message","params":{"level":"debug"},"jsonrpc":"2.0"}',
+        '{"jsonrpc":"2.0","result":{}}',
+    ]
+    store.save(
+        Exchange(
+            id=store.next_id(),
+            endpoint="MCP GET:stream",
+            started_at=datetime(2026, 1, 5, tzinfo=UTC),
+            started_ns=0,
+            request=CapturedRequest(method=HttpMethod.GET, url="http://mcp.test/mcp", path="/mcp"),
+            response=CapturedResponse(status=200),
+            stream=[
+                StreamEvent(t_ms=float(i), kind="sse", event="message", data=data)
+                for i, data in enumerate(pushed)
+            ],
+        )
+    )
+    shown = invoke("analyze", "stream", "pusher").output
+    assert "| `notifications/message` | 2 | notification |" in shown
+    assert "| `roots/list` | 1 | request (the client answers) |" in shown
+    assert "Member order: method, params, jsonrpc" in shown
+    assert "--apply" in shown
+    invoke("analyze", "stream", "pusher", "--apply")
+    learned = read_model(fake.model_path, ApiModel).mcp
+    assert learned is not None
+    assert learned.server_messages == ["notifications/message", "roots/list"]
+    assert learned.transport.message_member_order == ["method", "params", "jsonrpc"]
+    rest = make_fake(ws)
+    assert "is not an MCP fake" in invoke("analyze", "stream", rest.name, code=1).output

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 from contextlib import asynccontextmanager
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
 import httpx2
@@ -503,3 +504,23 @@ async def test_listening_when_the_stream_never_opens() -> None:
         wire = McpWireClient("http://x/mcp", http)
         await wire.listen()  # returns once the attempt is over
         assert await wire.stop_listening() is None
+
+
+async def test_waiting_for_the_stream_needs_listening() -> None:
+    from fauxcall.analysis.stream import stream_report  # noqa: PLC0415
+    from fauxcall.errors import RecordingError  # noqa: PLC0415
+    from fauxcall.model.recording import CapturedRequest, Exchange  # noqa: PLC0415
+    from fauxcall.types import HttpMethod  # noqa: PLC0415
+
+    async with httpx2.AsyncClient() as http:
+        wire = McpWireClient("http://x/mcp", http)
+        with pytest.raises(RecordingError, match="listen"):
+            await wire.heard(lambda _m: True, count=1, within=0.01, taken=set())
+    call = Exchange(
+        id="000001",
+        endpoint="MCP tools/call:echo",  # not a stream: skipped
+        started_at=datetime(2026, 1, 5, tzinfo=UTC),
+        started_ns=0,
+        request=CapturedRequest(method=HttpMethod.POST, url="http://x/mcp", path="/mcp"),
+    )
+    assert not stream_report([call]).counts

@@ -1,10 +1,11 @@
 {
   "id": "000128",
   "endpoint": "MCP tools/call:get-structured-content",
-  "plan_call": "weather-la",
-  "started_at": "2026-10-18T02:28:59.101628Z",
-  "started_ns": 1792290539101628000,
-  "elapsed_ms": 2.195,
+  "purpose": "invalid",
+  "plan_call": "structured-boston",
+  "started_at": "2026-10-25T21:13:36.342770Z",
+  "started_ns": 1792962816342770000,
+  "elapsed_ms": 8.731,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -37,7 +38,7 @@
         "params": {
           "name": "get-structured-content",
           "arguments": {
-            "location": "Los Angeles"
+            "location": "Boston"
           }
         }
       }
@@ -80,7 +81,7 @@
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:28:59 GMT"
+        "Sun, 25 Oct 2026 21:13:36 GMT"
       ],
       [
         "transfer-encoding",
@@ -95,14 +96,10 @@
           "content": [
             {
               "type": "text",
-              "text": "{\"temperature\":73,\"conditions\":\"Sunny / Clear\",\"humidity\":48}"
+              "text": "MCP error -32602: Input validation error: Invalid arguments for tool get-structured-content: Invalid option: expected one of \"New York\"|\"Chicago\"|\"Los Angeles\" at location"
             }
           ],
-          "structuredContent": {
-            "temperature": 73,
-            "conditions": "Sunny / Clear",
-            "humidity": 48
-          }
+          "isError": true
         },
         "jsonrpc": "2.0",
         "id": 5
@@ -111,11 +108,11 @@
   },
   "stream": [
     {
-      "t_ms": 2.08,
+      "t_ms": 8.383,
       "kind": "sse",
       "event": "message",
-      "id": "d4ff0e36-72c8-4c9e-9bbd-d9e08fb314e2",
-      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"temperature\\\":73,\\\"conditions\\\":\\\"Sunny / Clear\\\",\\\"humidity\\\":48}\"}],\"structuredContent\":{\"temperature\":73,\"conditions\":\"Sunny / Clear\",\"humidity\":48}},\"jsonrpc\":\"2.0\",\"id\":5}"
+      "id": "903c2f5a-04ef-42bd-a2a9-4c7f5b50462f",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Input validation error: Invalid arguments for tool get-structured-content: Invalid option: expected one of \\\"New York\\\"|\\\"Chicago\\\"|\\\"Los Angeles\\\" at location\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":5}"
     }
   ],
   "redacted": [

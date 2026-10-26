@@ -55,6 +55,10 @@ class RpcCall:
     sse_events: list[tuple[float, str, str, str | None]] = field(default_factory=list)
     """``(ms since the request started, event, data, id)`` for every SSE event received."""
     http_method: str = "POST"
+    path: str | None = None
+    """The path requested, when not the endpoint's own (a probe of another route)."""
+    raw: bytes | None = None
+    """A body sent as it is rather than as JSON-RPC (a probe of malformed input)."""
 
     def header(self, name: str) -> str | None:
         """A response header (case-insensitive)."""
@@ -108,6 +112,8 @@ class _Listening:
     response_headers: list[tuple[str, str]] = field(default_factory=list)
     body: str = ""
     events: list[tuple[float, str, str, str | None]] = field(default_factory=list)
+    arrived: asyncio.Event = field(default_factory=asyncio.Event)
+    """Set whenever an event arrives (cleared by whoever waits for the next one)."""
     started: float = field(default_factory=time.perf_counter)
     started_ns: int = field(default_factory=time.time_ns)
 
@@ -399,6 +405,8 @@ class McpWireClient:
             started_ns=started_ns,
             elapsed_ms=(time.perf_counter() - started) * 1000,
             http_method=http_method,
+            path=path,
+            raw=content,
         )
 
     async def watch_stream(self, within: float) -> tuple[RpcCall | None, RpcCall | None]:
@@ -500,9 +508,44 @@ class McpWireClient:
                     stamp = (time.perf_counter() - listening.started) * 1000
                     for event in decoder.feed(text):
                         listening.events.append((stamp, event.event, event.data, event.id))
+                        listening.arrived.set()
                         await self._answer_server(event.data)
         finally:
             listening.opened.set()
+
+    async def heard(
+        self,
+        wanted: Callable[[JsonValue], bool],
+        *,
+        count: int,
+        within: float,
+        taken: set[int],
+    ) -> list[tuple[int, JsonValue]]:
+        """Wait until ``count`` messages the server sent on the stream are ``wanted``.
+
+        Messages whose position is in ``taken`` are skipped (already handed out); returns
+        ``(position, message)`` pairs, fewer than ``count`` when ``within`` seconds pass first.
+        Needs :meth:`listen`.
+        """
+        listening = self._listening
+        if listening is None:
+            raise RecordingError("listen() before waiting for what the server sends")
+        found: list[tuple[int, JsonValue]] = []
+        with contextlib.suppress(TimeoutError):
+            async with asyncio.timeout(within):
+                while True:
+                    listening.arrived.clear()  # before looking: nothing arriving is missed
+                    found = [
+                        (position, message)
+                        for position, (_, _, data, _) in enumerate(listening.events)
+                        if position not in taken
+                        for message in _json_or_nothing(data)
+                        if wanted(message)
+                    ][:count]
+                    if len(found) >= count:
+                        break
+                    await listening.arrived.wait()
+        return found
 
     async def stop_listening(self) -> RpcCall | None:
         """Close the GET stream :meth:`listen` opened; what the server sent there, as one call."""

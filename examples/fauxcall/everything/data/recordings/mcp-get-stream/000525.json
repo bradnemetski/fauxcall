@@ -1,0 +1,115 @@
+{
+  "id": "000525",
+  "endpoint": "MCP GET:stream",
+  "started_at": "2026-10-25T23:09:55.728257Z",
+  "started_ns": 1792969795728257000,
+  "elapsed_ms": 6960.183,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 23:09:55 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "content_type": "text/event-stream"
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 520.573,
+      "kind": "sse",
+      "event": "message",
+      "id": "f66ef98c-74aa-4f27-94a2-08d7ab267805",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"7b041a67f0b4487ce52d175db02d36f6\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:09:56.247Z\",\"lastUpdatedAt\":\"2026-10-25T23:09:56.247Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 1524.035,
+      "kind": "sse",
+      "event": "message",
+      "id": "fde18a29-d42e-4ee9-968f-1e71315fdd75",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"7b041a67f0b4487ce52d175db02d36f6\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:09:56.247Z\",\"lastUpdatedAt\":\"2026-10-25T23:09:57.250Z\",\"pollInterval\":1000,\"statusMessage\":\"Analyzing content...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 2525.549,
+      "kind": "sse",
+      "event": "message",
+      "id": "f18be84f-1911-4da4-a2a3-3823fc5a4084",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"7b041a67f0b4487ce52d175db02d36f6\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:09:56.247Z\",\"lastUpdatedAt\":\"2026-10-25T23:09:58.252Z\",\"pollInterval\":1000,\"statusMessage\":\"Synthesizing findings...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 2525.749,
+      "kind": "sse",
+      "event": "message",
+      "id": "206d0e95-d4f4-478c-9008-a7ff16505130",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"7b041a67f0b4487ce52d175db02d36f6\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:09:56.247Z\",\"lastUpdatedAt\":\"2026-10-25T23:09:58.252Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"python\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 2525.888,
+      "kind": "sse",
+      "event": "message",
+      "id": "7abb1739-4c60-42b0-8855-5a9afb631013",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"7b041a67f0b4487ce52d175db02d36f6\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:09:56.247Z\",\"lastUpdatedAt\":\"2026-10-25T23:09:58.252Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"python\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

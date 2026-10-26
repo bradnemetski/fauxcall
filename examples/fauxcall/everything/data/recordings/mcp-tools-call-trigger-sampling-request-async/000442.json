@@ -1,0 +1,136 @@
+{
+  "id": "000442",
+  "endpoint": "MCP tools/call:trigger-sampling-request-async",
+  "purpose": "variation",
+  "plan_call": "sa-task-failed",
+  "started_at": "2026-10-25T21:27:31.582822Z",
+  "started_ns": 1792963651582822000,
+  "elapsed_ms": 1016.8,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "Fail please",
+            "maxTokens": 10
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:27:31 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[FAILED] model overloaded\n\nProgress:\nTask created: client-task-2\nPoll 1: failed - model overloaded"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 3
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 3.76,
+      "kind": "sse",
+      "event": "message",
+      "id": "8b743108-0a11-4903-ae0d-471249074463",
+      "data": "{\"method\":\"sampling/createMessage\",\"params\":{\"task\":{\"ttl\":300000},\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"Resource trigger-sampling-request-async context: Fail please\"}}],\"systemPrompt\":\"You are a helpful test server.\",\"maxTokens\":10,\"temperature\":0.7},\"jsonrpc\":\"2.0\",\"id\":3}"
+    },
+    {
+      "t_ms": 1010.633,
+      "kind": "sse",
+      "event": "message",
+      "id": "d345558f-d797-4d6a-83a5-422d2ff04f0b",
+      "data": "{\"method\":\"tasks/get\",\"params\":{\"taskId\":\"client-task-2\"},\"jsonrpc\":\"2.0\",\"id\":4}"
+    },
+    {
+      "t_ms": 1016.52,
+      "kind": "sse",
+      "event": "message",
+      "id": "1bff919a-a51c-4dbe-b6a7-0883f52a4ed5",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[FAILED] model overloaded\\n\\nProgress:\\nTask created: client-task-2\\nPoll 1: failed - model overloaded\"}]},\"jsonrpc\":\"2.0\",\"id\":3}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

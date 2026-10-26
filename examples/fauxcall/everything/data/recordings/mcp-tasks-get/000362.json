@@ -1,11 +1,11 @@
 {
   "id": "000362",
   "endpoint": "MCP tasks/get",
-  "purpose": "job_poll",
-  "plan_call": "research-ambiguous-get",
-  "started_at": "2026-10-18T02:36:30.438557Z",
-  "started_ns": 1792290990438557000,
-  "elapsed_ms": 6.139,
+  "purpose": "invalid",
+  "plan_call": "task-get-missing",
+  "started_at": "2026-10-25T21:22:38.096443Z",
+  "started_ns": 1792963358096443000,
+  "elapsed_ms": 7.483,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,11 +33,9 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 6,
+        "id": 23,
         "method": "tasks/get",
-        "params": {
-          "taskId": "a7c9c588ab3a93e4a27519df7b9efc78"
-        }
+        "params": {}
       }
     }
   },
@@ -78,38 +76,33 @@
       ],
       [
         "content-length",
-        "377"
+        "339"
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:36:30 GMT"
+        "Sun, 25 Oct 2026 21:22:38 GMT"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "text/event-stream",
       "json": {
-        "result": {
-          "taskId": "a7c9c588ab3a93e4a27519df7b9efc78",
-          "status": "input_required",
-          "ttl": 300000,
-          "createdAt": "2026-10-18T02:36:26.910Z",
-          "lastUpdatedAt": "2026-10-18T02:36:28.915Z",
-          "pollInterval": 1000,
-          "statusMessage": "Found multiple interpretations for \"Python\". Requesting clarification..."
-        },
         "jsonrpc": "2.0",
-        "id": 6
+        "id": 23,
+        "error": {
+          "code": -32603,
+          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"params\",\n      \"taskId\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+        }
       }
     }
   },
   "stream": [
     {
-      "t_ms": 5.972,
+      "t_ms": 7.205,
       "kind": "sse",
       "event": "message",
-      "id": "fb4b610d-f7e1-4f8e-bdc1-f97a5574fce3",
-      "data": "{\"result\":{\"taskId\":\"a7c9c588ab3a93e4a27519df7b9efc78\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-18T02:36:26.910Z\",\"lastUpdatedAt\":\"2026-10-18T02:36:28.915Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"Python\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\",\"id\":6}"
+      "id": "8510551c-c26a-4655-9128-f2f05fd01ac7",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":23,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"expected\\\": \\\"string\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"taskId\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n  }\\n]\"}}"
     }
   ],
   "redacted": [

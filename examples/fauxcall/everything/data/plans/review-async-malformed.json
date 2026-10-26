@@ -1,0 +1,141 @@
+{
+  "name": "review-async-malformed",
+  "created_at": "2026-10-25T23:30:00Z",
+  "client_capabilities": {
+    "sampling": {},
+    "elicitation": {},
+    "tasks": {
+      "requests": {
+        "sampling": {
+          "createMessage": {}
+        },
+        "elicitation": {
+          "create": {}
+        }
+      }
+    }
+  },
+  "calls": [
+    {
+      "id": "sa-neither",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "x"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "foo": 1
+        }
+      }
+    },
+    {
+      "id": "ea-neither",
+      "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "foo": 1
+        }
+      }
+    },
+    {
+      "id": "sa-poll-status-number",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "x"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "task": {
+            "taskId": "rv-1",
+            "status": "working"
+          }
+        },
+        "tasks/get": {
+          "status": 5
+        }
+      }
+    },
+    {
+      "id": "sa-poll-message-number",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "x"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "task": {
+            "taskId": "rv-2",
+            "status": "working"
+          }
+        },
+        "tasks/get": {
+          "status": "completed",
+          "statusMessage": 7
+        },
+        "tasks/result": {
+          "role": "assistant",
+          "model": "m",
+          "content": {
+            "type": "text",
+            "text": "t"
+          }
+        }
+      }
+    },
+    {
+      "id": "sa-sync-null-content",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "x"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "role": "assistant",
+          "model": "m",
+          "content": null
+        }
+      }
+    }
+  ]
+}

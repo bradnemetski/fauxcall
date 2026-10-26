@@ -1,0 +1,114 @@
+{
+  "id": "000523",
+  "endpoint": "MCP tasks/result",
+  "purpose": "job_poll",
+  "plan_call": "rq-cw-result",
+  "started_at": "2026-10-25T23:10:00.168003Z",
+  "started_ns": 1792969800168003000,
+  "elapsed_ms": 5.367,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "tasks/result",
+        "params": {
+          "taskId": "7b041a67f0b4487ce52d175db02d36f6"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 23:10:00 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "error": {
+          "code": -32603,
+          "message": "Task 7b041a67f0b4487ce52d175db02d36f6 has no result stored"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.202,
+      "kind": "sse",
+      "event": "message",
+      "id": "0009a484-3f53-494f-8c5e-f2146aa0bb15",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":7,\"error\":{\"code\":-32603,\"message\":\"Task 7b041a67f0b4487ce52d175db02d36f6 has no result stored\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,11 +1,11 @@
 {
   "id": "000252",
   "endpoint": "MCP completion/complete",
-  "purpose": "invalid",
-  "plan_call": "complete-missing-argument",
-  "started_at": "2026-10-18T02:33:44.117455Z",
-  "started_ns": 1792290824117455000,
-  "elapsed_ms": 4.99,
+  "purpose": "edge",
+  "plan_call": "complete-dept-lower",
+  "started_at": "2026-10-25T21:17:44.427863Z",
+  "started_ns": 1792963064427863000,
+  "elapsed_ms": 7.382,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,12 +33,16 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 32,
+        "id": 6,
         "method": "completion/complete",
         "params": {
           "ref": {
             "type": "ref/prompt",
             "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "department",
+            "value": "eng"
           }
         }
       }
@@ -81,33 +85,36 @@
       ],
       [
         "content-length",
-        "341"
+        "152"
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:33:44 GMT"
+        "Sun, 25 Oct 2026 21:17:44 GMT"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "text/event-stream",
       "json": {
+        "result": {
+          "completion": {
+            "values": [],
+            "total": 0,
+            "hasMore": false
+          }
+        },
         "jsonrpc": "2.0",
-        "id": 32,
-        "error": {
-          "code": -32603,
-          "message": "[\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"params\",\n      \"argument\"\n    ],\n    \"message\": \"Invalid input: expected object, received undefined\"\n  }\n]"
-        }
+        "id": 6
       }
     }
   },
   "stream": [
     {
-      "t_ms": 4.671,
+      "t_ms": 7.09,
       "kind": "sse",
       "event": "message",
-      "id": "af1ca2ce-170a-4a93-bece-71775bb7e81e",
-      "data": "{\"jsonrpc\":\"2.0\",\"id\":32,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"expected\\\": \\\"object\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"argument\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected object, received undefined\\\"\\n  }\\n]\"}}"
+      "id": "bc097c06-e586-4d54-803e-77826671582a",
+      "data": "{\"result\":{\"completion\":{\"values\":[],\"total\":0,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":6}"
     }
   ],
   "redacted": [

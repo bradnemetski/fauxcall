@@ -1,0 +1,81 @@
+{
+  "name": "tasks-elicit-accept",
+  "created_at": "2026-10-25T21:25:00Z",
+  "client_capabilities": {
+    "elicitation": {
+      "form": {}
+    }
+  },
+  "listen": true,
+  "listen_after_seconds": 1,
+  "calls": [
+    {
+      "id": "research-python",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "Python",
+            "ambiguous": true
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      },
+      "capture": {
+        "tp": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "elicit-get-poll",
+      "endpoint": "MCP tasks/get",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{tp}}"
+        }
+      },
+      "repeat": 4,
+      "interval_ms": 1000
+    },
+    {
+      "id": "elicit-result",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{tp}}"
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "accept",
+          "content": {
+            "interpretation": "snake"
+          }
+        }
+      }
+    },
+    {
+      "id": "elicit-get-done",
+      "endpoint": "MCP tasks/get",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{tp}}"
+        }
+      }
+    }
+  ]
+}

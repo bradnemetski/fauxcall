@@ -133,7 +133,7 @@ class ParityReport:
         }
 
     def not_covered(self, model: ApiModel | None) -> list[str]:
-        """Endpoints, tools and MCP listings no scenario compared."""
+        """Endpoints, tools, MCP listings and server messages no scenario compared."""
         if model is None:
             return []
         expected = [e.id for e in model.endpoints if e.role != "websocket"]
@@ -144,6 +144,7 @@ class ParityReport:
             if model.mcp.prompts:
                 expected.append("MCP prompts/list")
             expected += [f"MCP tools/call:{tool.name}" for tool in model.mcp.tools]
+            expected += [f"MCP stream:{method}" for method in model.mcp.server_messages]
         covered = set(self.by_endpoint(model))
         return [endpoint for endpoint in expected if endpoint not in covered]
 

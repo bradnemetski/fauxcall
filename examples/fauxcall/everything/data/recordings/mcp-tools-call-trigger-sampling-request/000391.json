@@ -1,0 +1,129 @@
+{
+  "id": "000391",
+  "endpoint": "MCP tools/call:trigger-sampling-request",
+  "purpose": "variation",
+  "plan_call": "sampling-max-tokens",
+  "started_at": "2026-10-25T21:24:52.391541Z",
+  "started_ns": 1792963492391541000,
+  "elapsed_ms": 8.202,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "Write a haiku about autumn",
+            "maxTokens": 50
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:24:52 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "LLM sampling result: \n{\n  \"model\": \"claude-test\",\n  \"stopReason\": \"maxTokens\",\n  \"role\": \"assistant\",\n  \"content\": {\n    \"type\": \"text\",\n    \"text\": \"Leaves drift slowly down\\nCrimson whispers on cold wind\\nThe year exhales soft\"\n  }\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 3
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.252,
+      "kind": "sse",
+      "event": "message",
+      "id": "91561335-6221-43af-ac74-95c06684e51c",
+      "data": "{\"method\":\"sampling/createMessage\",\"params\":{\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"Resource trigger-sampling-request context: Write a haiku about autumn\"}}],\"systemPrompt\":\"You are a helpful test server.\",\"maxTokens\":50,\"temperature\":0.7},\"jsonrpc\":\"2.0\",\"id\":1}"
+    },
+    {
+      "t_ms": 8.006,
+      "kind": "sse",
+      "event": "message",
+      "id": "94cd13dc-ef36-4417-8b84-7bc3c431cda3",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"LLM sampling result: \\n{\\n  \\\"model\\\": \\\"claude-test\\\",\\n  \\\"stopReason\\\": \\\"maxTokens\\\",\\n  \\\"role\\\": \\\"assistant\\\",\\n  \\\"content\\\": {\\n    \\\"type\\\": \\\"text\\\",\\n    \\\"text\\\": \\\"Leaves drift slowly down\\\\nCrimson whispers on cold wind\\\\nThe year exhales soft\\\"\\n  }\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":3}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

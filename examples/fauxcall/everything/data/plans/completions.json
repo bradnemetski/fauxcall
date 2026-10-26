@@ -1,9 +1,9 @@
 {
   "name": "completions",
-  "created_at": "2026-10-18T02:30:00Z",
+  "created_at": "2026-10-25T21:20:00Z",
   "calls": [
     {
-      "id": "dept-empty",
+      "id": "complete-dept-empty",
       "endpoint": "MCP completion/complete",
       "purpose": "sample",
       "request": {
@@ -22,7 +22,7 @@
       }
     },
     {
-      "id": "dept-e",
+      "id": "complete-dept-e",
       "endpoint": "MCP completion/complete",
       "purpose": "variation",
       "request": {
@@ -41,7 +41,7 @@
       }
     },
     {
-      "id": "dept-s",
+      "id": "complete-dept-s",
       "endpoint": "MCP completion/complete",
       "purpose": "variation",
       "request": {
@@ -60,45 +60,7 @@
       }
     },
     {
-      "id": "dept-mar",
-      "endpoint": "MCP completion/complete",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "ref": {
-            "type": "ref/prompt",
-            "name": "completable-prompt"
-          },
-          "argument": {
-            "name": "department",
-            "value": "Mar"
-          }
-        }
-      }
-    },
-    {
-      "id": "dept-lower",
-      "endpoint": "MCP completion/complete",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "ref": {
-            "type": "ref/prompt",
-            "name": "completable-prompt"
-          },
-          "argument": {
-            "name": "department",
-            "value": "e"
-          }
-        }
-      }
-    },
-    {
-      "id": "dept-none",
+      "id": "complete-dept-none",
       "endpoint": "MCP completion/complete",
       "purpose": "edge",
       "request": {
@@ -117,7 +79,26 @@
       }
     },
     {
-      "id": "name-eng",
+      "id": "complete-dept-lower",
+      "endpoint": "MCP completion/complete",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "department",
+            "value": "eng"
+          }
+        }
+      }
+    },
+    {
+      "id": "complete-name-eng",
       "endpoint": "MCP completion/complete",
       "purpose": "sample",
       "request": {
@@ -141,7 +122,7 @@
       }
     },
     {
-      "id": "name-eng-b",
+      "id": "complete-name-eng-b",
       "endpoint": "MCP completion/complete",
       "purpose": "variation",
       "request": {
@@ -165,55 +146,7 @@
       }
     },
     {
-      "id": "name-sales",
-      "endpoint": "MCP completion/complete",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "ref": {
-            "type": "ref/prompt",
-            "name": "completable-prompt"
-          },
-          "argument": {
-            "name": "name",
-            "value": ""
-          },
-          "context": {
-            "arguments": {
-              "department": "Sales"
-            }
-          }
-        }
-      }
-    },
-    {
-      "id": "name-marketing-i",
-      "endpoint": "MCP completion/complete",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "ref": {
-            "type": "ref/prompt",
-            "name": "completable-prompt"
-          },
-          "argument": {
-            "name": "name",
-            "value": "I"
-          },
-          "context": {
-            "arguments": {
-              "department": "Marketing"
-            }
-          }
-        }
-      }
-    },
-    {
-      "id": "name-support",
+      "id": "complete-name-support",
       "endpoint": "MCP completion/complete",
       "purpose": "variation",
       "request": {
@@ -237,7 +170,31 @@
       }
     },
     {
-      "id": "name-no-context",
+      "id": "complete-name-marketing-i",
+      "endpoint": "MCP completion/complete",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "name",
+            "value": "I"
+          },
+          "context": {
+            "arguments": {
+              "department": "Marketing"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "complete-name-no-dept",
       "endpoint": "MCP completion/complete",
       "purpose": "edge",
       "request": {
@@ -250,13 +207,13 @@
           },
           "argument": {
             "name": "name",
-            "value": ""
+            "value": "A"
           }
         }
       }
     },
     {
-      "id": "name-unknown-dept",
+      "id": "complete-name-bad-dept",
       "endpoint": "MCP completion/complete",
       "purpose": "edge",
       "request": {
@@ -280,7 +237,7 @@
       }
     },
     {
-      "id": "rtype-empty",
+      "id": "complete-restype-empty",
       "endpoint": "MCP completion/complete",
       "purpose": "sample",
       "request": {
@@ -299,7 +256,7 @@
       }
     },
     {
-      "id": "rtype-b",
+      "id": "complete-restype-b",
       "endpoint": "MCP completion/complete",
       "purpose": "variation",
       "request": {
@@ -318,28 +275,9 @@
       }
     },
     {
-      "id": "rtype-x",
+      "id": "complete-resid-5",
       "endpoint": "MCP completion/complete",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "ref": {
-            "type": "ref/prompt",
-            "name": "resource-prompt"
-          },
-          "argument": {
-            "name": "resourceType",
-            "value": "x"
-          }
-        }
-      }
-    },
-    {
-      "id": "rid-5",
-      "endpoint": "MCP completion/complete",
-      "purpose": "variation",
+      "purpose": "sample",
       "request": {
         "method": "POST",
         "path": "/mcp",
@@ -356,7 +294,7 @@
       }
     },
     {
-      "id": "rid-abc",
+      "id": "complete-resid-abc",
       "endpoint": "MCP completion/complete",
       "purpose": "edge",
       "request": {
@@ -375,7 +313,7 @@
       }
     },
     {
-      "id": "rid-0",
+      "id": "complete-resid-0",
       "endpoint": "MCP completion/complete",
       "purpose": "edge",
       "request": {
@@ -394,26 +332,7 @@
       }
     },
     {
-      "id": "rid-empty",
-      "endpoint": "MCP completion/complete",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "ref": {
-            "type": "ref/prompt",
-            "name": "resource-prompt"
-          },
-          "argument": {
-            "name": "resourceId",
-            "value": ""
-          }
-        }
-      }
-    },
-    {
-      "id": "args-city",
+      "id": "complete-args-city",
       "endpoint": "MCP completion/complete",
       "purpose": "edge",
       "request": {
@@ -426,13 +345,13 @@
           },
           "argument": {
             "name": "city",
-            "value": "Sea"
+            "value": "Den"
           }
         }
       }
     },
     {
-      "id": "simple-arg",
+      "id": "complete-unknown-arg",
       "endpoint": "MCP completion/complete",
       "purpose": "edge",
       "request": {
@@ -441,17 +360,17 @@
         "json_body": {
           "ref": {
             "type": "ref/prompt",
-            "name": "simple-prompt"
+            "name": "completable-prompt"
           },
           "argument": {
-            "name": "x",
-            "value": "a"
+            "name": "nope",
+            "value": "x"
           }
         }
       }
     },
     {
-      "id": "text-tpl-7",
+      "id": "complete-tmpl-text",
       "endpoint": "MCP completion/complete",
       "purpose": "sample",
       "request": {
@@ -464,34 +383,15 @@
           },
           "argument": {
             "name": "resourceId",
-            "value": "7"
+            "value": "12"
           }
         }
       }
     },
     {
-      "id": "text-tpl-x",
+      "id": "complete-tmpl-blob",
       "endpoint": "MCP completion/complete",
       "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "ref": {
-            "type": "ref/resource",
-            "uri": "demo://resource/dynamic/text/{resourceId}"
-          },
-          "argument": {
-            "name": "resourceId",
-            "value": "x"
-          }
-        }
-      }
-    },
-    {
-      "id": "blob-tpl-3",
-      "endpoint": "MCP completion/complete",
-      "purpose": "variation",
       "request": {
         "method": "POST",
         "path": "/mcp",
@@ -502,13 +402,13 @@
           },
           "argument": {
             "name": "resourceId",
-            "value": "3"
+            "value": "x"
           }
         }
       }
     },
     {
-      "id": "text-tpl-other-arg",
+      "id": "complete-tmpl-blob-empty",
       "endpoint": "MCP completion/complete",
       "purpose": "edge",
       "request": {
@@ -517,55 +417,17 @@
         "json_body": {
           "ref": {
             "type": "ref/resource",
-            "uri": "demo://resource/dynamic/text/{resourceId}"
+            "uri": "demo://resource/dynamic/blob/{resourceId}"
           },
           "argument": {
-            "name": "other",
-            "value": "1"
+            "name": "resourceId",
+            "value": ""
           }
         }
       }
     },
     {
-      "id": "unknown-prompt",
-      "endpoint": "MCP completion/complete",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "ref": {
-            "type": "ref/prompt",
-            "name": "nope"
-          },
-          "argument": {
-            "name": "a",
-            "value": "b"
-          }
-        }
-      }
-    },
-    {
-      "id": "unknown-template",
-      "endpoint": "MCP completion/complete",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "ref": {
-            "type": "ref/resource",
-            "uri": "demo://nope/{x}"
-          },
-          "argument": {
-            "name": "x",
-            "value": "1"
-          }
-        }
-      }
-    },
-    {
-      "id": "static-resource",
+      "id": "complete-static-uri",
       "endpoint": "MCP completion/complete",
       "purpose": "edge",
       "request": {
@@ -578,6 +440,44 @@
           },
           "argument": {
             "name": "x",
+            "value": "a"
+          }
+        }
+      }
+    },
+    {
+      "id": "complete-unknown-prompt",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "no-such-prompt"
+          },
+          "argument": {
+            "name": "a",
+            "value": "b"
+          }
+        }
+      }
+    },
+    {
+      "id": "complete-unknown-template",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/resource",
+            "uri": "demo://nothing/{id}"
+          },
+          "argument": {
+            "name": "id",
             "value": "1"
           }
         }
@@ -603,7 +503,7 @@
       }
     },
     {
-      "id": "complete-missing-argument",
+      "id": "complete-no-argument",
       "endpoint": "MCP completion/complete",
       "purpose": "invalid",
       "request": {

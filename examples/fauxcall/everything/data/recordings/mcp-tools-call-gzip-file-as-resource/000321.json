@@ -1,0 +1,125 @@
+{
+  "id": "000321",
+  "endpoint": "MCP tools/call:gzip-file-as-resource",
+  "purpose": "edge",
+  "plan_call": "gzip-overwrite",
+  "started_at": "2026-10-25T21:21:16.394879Z",
+  "started_ns": 1792963276394879000,
+  "elapsed_ms": 6.5,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 10,
+        "method": "tools/call",
+        "params": {
+          "name": "gzip-file-as-resource",
+          "arguments": {
+            "name": "greeting.txt.gz",
+            "data": "data:text/plain;base64,U2Vjb25kIHZlcnNpb24=",
+            "outputType": "resourceLink"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:21:16 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "name": "greeting.txt.gz",
+              "uri": "demo://resource/session/greeting.txt.gz",
+              "mimeType": "application/gzip",
+              "type": "resource_link"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 10
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.244,
+      "kind": "sse",
+      "event": "message",
+      "id": "7e6bdfe8-f727-4f54-917e-3d232750ff99",
+      "data": "{\"result\":{\"content\":[{\"name\":\"greeting.txt.gz\",\"uri\":\"demo://resource/session/greeting.txt.gz\",\"mimeType\":\"application/gzip\",\"type\":\"resource_link\"}]},\"jsonrpc\":\"2.0\",\"id\":10}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

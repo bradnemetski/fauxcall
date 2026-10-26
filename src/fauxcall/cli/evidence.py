@@ -1202,6 +1202,43 @@ def analyze_access(name: str) -> None:
     )
 
 
+@analyze_app.command("stream")
+@clean_errors
+def analyze_stream(
+    name: str,
+    apply: Annotated[
+        bool, typer.Option("--apply", help="Set server_messages and message_member_order.")
+    ] = False,
+) -> None:
+    """What the MCP server sends on its own, from the recordings of the client's GET stream.
+
+    Plans with ``"listen": true`` record it. Parity expects a scenario to compare each kind
+    (``await mcp.heard("notifications/message")``).
+    """
+    from fauxcall.analysis.stream import stream_report  # noqa: PLC0415
+
+    fake = layout(name)
+    model = load_model(fake)
+    if model.mcp is None:
+        raise fail(f"{name} is not an MCP fake")
+    report = stream_report(e for _, e in RecordingStore(fake.recordings).iter_exchanges())
+    if not report.counts:
+        echo('Nothing recorded on the client\'s GET stream: record a plan with "listen": true.')
+        return
+    echo("| method | times | kind |\n|---|---|---|")
+    for method in report.methods:
+        kind = "request (the client answers)" if method in report.requests else "notification"
+        echo(f"| `{method}` | {report.counts[method]} | {kind} |")
+    echo(f"\nMember order: {', '.join(report.member_order)}")
+    if not apply:
+        echo("Run again with --apply to set server_messages and message_member_order.")
+        return
+    model.mcp.server_messages = sorted(report.counts)
+    model.mcp.transport.message_member_order = report.member_order
+    save_model(fake, model)
+    echo("Applied: parity now expects a scenario to compare each of these.")
+
+
 @analyze_app.command("errors")
 @clean_errors
 def analyze_errors(

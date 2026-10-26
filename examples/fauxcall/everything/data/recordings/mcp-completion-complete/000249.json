@@ -1,11 +1,11 @@
 {
   "id": "000249",
   "endpoint": "MCP completion/complete",
-  "purpose": "invalid",
-  "plan_call": "unknown-template",
-  "started_at": "2026-10-18T02:33:42.614378Z",
-  "started_ns": 1792290822614378000,
-  "elapsed_ms": 4.578,
+  "purpose": "variation",
+  "plan_call": "complete-dept-e",
+  "started_at": "2026-10-25T21:17:42.921114Z",
+  "started_ns": 1792963062921114000,
+  "elapsed_ms": 9.307,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,16 +33,16 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 29,
+        "id": 3,
         "method": "completion/complete",
         "params": {
           "ref": {
-            "type": "ref/resource",
-            "uri": "demo://nope/{x}"
+            "type": "ref/prompt",
+            "name": "completable-prompt"
           },
           "argument": {
-            "name": "x",
-            "value": "1"
+            "name": "department",
+            "value": "E"
           }
         }
       }
@@ -85,33 +85,38 @@
       ],
       [
         "content-length",
-        "187"
+        "165"
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:33:42 GMT"
+        "Sun, 25 Oct 2026 21:17:42 GMT"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "text/event-stream",
       "json": {
+        "result": {
+          "completion": {
+            "values": [
+              "Engineering"
+            ],
+            "total": 1,
+            "hasMore": false
+          }
+        },
         "jsonrpc": "2.0",
-        "id": 29,
-        "error": {
-          "code": -32602,
-          "message": "MCP error -32602: Resource template demo://nope/{x} not found"
-        }
+        "id": 3
       }
     }
   },
   "stream": [
     {
-      "t_ms": 4.37,
+      "t_ms": 8.961,
       "kind": "sse",
       "event": "message",
-      "id": "440c56b3-daba-4897-80ae-8ea88375fbdd",
-      "data": "{\"jsonrpc\":\"2.0\",\"id\":29,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Resource template demo://nope/{x} not found\"}}"
+      "id": "edb8e637-3ee9-4bba-adf5-723b451ec6ae",
+      "data": "{\"result\":{\"completion\":{\"values\":[\"Engineering\"],\"total\":1,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":3}"
     }
   ],
   "redacted": [

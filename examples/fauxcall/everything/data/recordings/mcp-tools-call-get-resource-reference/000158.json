@@ -1,0 +1,133 @@
+{
+  "id": "000158",
+  "endpoint": "MCP tools/call:get-resource-reference",
+  "plan_call": "ref-blob-1",
+  "started_at": "2026-10-25T21:14:54.334140Z",
+  "started_ns": 1792962894334140000,
+  "elapsed_ms": 9.385,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Blob",
+            "resourceId": 1
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:14:54 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Returning resource reference for Resource 1:"
+            },
+            {
+              "type": "resource",
+              "resource": {
+                "uri": "demo://resource/dynamic/blob/1",
+                "mimeType": "text/plain",
+                "blob": "UmVzb3VyY2UgMTogVGhpcyBpcyBhIGJhc2U2NCBibG9iIGNyZWF0ZWQgYXQgNToxNDo1NCBQTQ=="
+              }
+            },
+            {
+              "type": "text",
+              "text": "You can access this resource using the URI: demo://resource/dynamic/blob/1"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 3
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 9.048,
+      "kind": "sse",
+      "event": "message",
+      "id": "872de0d9-68a9-4d1b-b2d5-9cfd4a54f596",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Returning resource reference for Resource 1:\"},{\"type\":\"resource\",\"resource\":{\"uri\":\"demo://resource/dynamic/blob/1\",\"mimeType\":\"text/plain\",\"blob\":\"UmVzb3VyY2UgMTogVGhpcyBpcyBhIGJhc2U2NCBibG9iIGNyZWF0ZWQgYXQgNToxNDo1NCBQTQ==\"}},{\"type\":\"text\",\"text\":\"You can access this resource using the URI: demo://resource/dynamic/blob/1\"}]},\"jsonrpc\":\"2.0\",\"id\":3}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

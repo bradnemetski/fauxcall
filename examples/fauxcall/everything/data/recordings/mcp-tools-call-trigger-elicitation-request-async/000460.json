@@ -1,0 +1,120 @@
+{
+  "id": "000460",
+  "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+  "purpose": "invalid",
+  "plan_call": "nocap-elicitation-async",
+  "started_at": "2026-10-25T21:27:45.168452Z",
+  "started_ns": 1792963665168452000,
+  "elapsed_ms": 12.051,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "218"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:27:45 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "MCP error -32602: Tool trigger-elicitation-request-async not found"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 7
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 11.74,
+      "kind": "sse",
+      "event": "message",
+      "id": "39dcd443-322a-4f03-95e0-bbf9d3ffde88",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Tool trigger-elicitation-request-async not found\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":7}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

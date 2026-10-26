@@ -1,0 +1,35 @@
+{
+  "name": "roots-no-stream",
+  "created_at": "2026-10-25T21:30:00Z",
+  "client_capabilities": {
+    "roots": {}
+  },
+  "calls": [
+    {
+      "id": "roots-no-stream",
+      "endpoint": "MCP tools/call:get-roots-list",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-roots-list",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "roots/list": {
+          "roots": [
+            {
+              "uri": "file:///home/user/projects/alpha",
+              "name": "alpha"
+            },
+            {
+              "uri": "file:///tmp/scratch"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

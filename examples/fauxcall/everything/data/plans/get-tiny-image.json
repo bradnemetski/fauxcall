@@ -1,9 +1,9 @@
 {
   "name": "get-tiny-image",
-  "created_at": "2026-10-18T02:30:00Z",
+  "created_at": "2026-10-25T21:15:00Z",
   "calls": [
     {
-      "id": "img-1",
+      "id": "image-1",
       "endpoint": "MCP tools/call:get-tiny-image",
       "purpose": "sample",
       "request": {
@@ -13,12 +13,23 @@
           "name": "get-tiny-image",
           "arguments": {}
         }
-      },
-      "repeat": 2,
-      "interval_ms": 1000
+      }
     },
     {
-      "id": "img-extra",
+      "id": "image-2",
+      "endpoint": "MCP tools/call:get-tiny-image",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-tiny-image",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "image-extra",
       "endpoint": "MCP tools/call:get-tiny-image",
       "purpose": "edge",
       "request": {

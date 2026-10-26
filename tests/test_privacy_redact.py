@@ -84,6 +84,12 @@ def test_secret_names(name: str) -> None:
         "X-RateLimit-Remaining-Tokens",
         "x-ratelimit-limit-tokens",
         "Access-Control-Allow-Credentials",
+        "maxTokens",  # MCP sampling, and language-model APIs: counts of tokens
+        "max_tokens",
+        "prompt_tokens",
+        "completion_tokens",
+        "total_tokens",
+        "token_count",
     ],
 )
 def test_public_names_describe_credentials_without_holding_them(name: str) -> None:

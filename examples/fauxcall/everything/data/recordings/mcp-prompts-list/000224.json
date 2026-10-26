@@ -1,0 +1,166 @@
+{
+  "id": "000224",
+  "endpoint": "MCP prompts/list",
+  "plan_call": "prompts-list",
+  "started_at": "2026-10-25T21:17:29.541532Z",
+  "started_ns": 1792963049541532000,
+  "elapsed_ms": 3.788,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "prompts/list",
+        "params": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "1070"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:17:29 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "prompts": [
+            {
+              "name": "simple-prompt",
+              "title": "Simple Prompt",
+              "description": "A prompt with no arguments"
+            },
+            {
+              "name": "args-prompt",
+              "title": "Arguments Prompt",
+              "description": "A prompt with two arguments, one required and one optional",
+              "arguments": [
+                {
+                  "name": "city",
+                  "description": "Name of the city",
+                  "required": true
+                },
+                {
+                  "name": "state",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "completable-prompt",
+              "title": "Team Management",
+              "description": "First argument choice narrows values for second argument.",
+              "arguments": [
+                {
+                  "name": "department",
+                  "description": "Choose the department.",
+                  "required": true
+                },
+                {
+                  "name": "name",
+                  "description": "Choose a team member to lead the selected department.",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "name": "resource-prompt",
+              "title": "Resource Prompt",
+              "description": "A prompt that includes an embedded resource reference",
+              "arguments": [
+                {
+                  "name": "resourceType",
+                  "description": "Type of resource to fetch",
+                  "required": true
+                },
+                {
+                  "name": "resourceId",
+                  "description": "ID of the text resource to fetch",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 2
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 3.58,
+      "kind": "sse",
+      "event": "message",
+      "id": "f62ffb21-6647-45c1-9abb-08c2304dbad5",
+      "data": "{\"result\":{\"prompts\":[{\"name\":\"simple-prompt\",\"title\":\"Simple Prompt\",\"description\":\"A prompt with no arguments\"},{\"name\":\"args-prompt\",\"title\":\"Arguments Prompt\",\"description\":\"A prompt with two arguments, one required and one optional\",\"arguments\":[{\"name\":\"city\",\"description\":\"Name of the city\",\"required\":true},{\"name\":\"state\",\"required\":false}]},{\"name\":\"completable-prompt\",\"title\":\"Team Management\",\"description\":\"First argument choice narrows values for second argument.\",\"arguments\":[{\"name\":\"department\",\"description\":\"Choose the department.\",\"required\":true},{\"name\":\"name\",\"description\":\"Choose a team member to lead the selected department.\",\"required\":true}]},{\"name\":\"resource-prompt\",\"title\":\"Resource Prompt\",\"description\":\"A prompt that includes an embedded resource reference\",\"arguments\":[{\"name\":\"resourceType\",\"description\":\"Type of resource to fetch\",\"required\":true},{\"name\":\"resourceId\",\"description\":\"ID of the text resource to fetch\",\"required\":true}]}]},\"jsonrpc\":\"2.0\",\"id\":2}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

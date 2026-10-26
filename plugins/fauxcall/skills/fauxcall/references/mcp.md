@@ -168,6 +168,14 @@ ignored, and a crash is only logged. Take the real time between them
 with `await ctx.pause(seconds)`: skipped in fast mode (tests), and noted in `runtime.pauses` either
 way, so a test checks the timing by reading it (never by replacing FauxCall's private sleep).
 
+**Time is the fake's clock.** `ctx.pause` and `channel.pause` wait on the session's clock: real
+time while nobody moves it, and advancing it (`POST /__fauxcall/clock {"op": "advance",
+"seconds": 30}`) ends every wait whose time has come, so tests and agents fast-forward through
+periodic pushes, task stages and timeouts. A frozen clock holds them. Requests to the client
+(`ctx.ask_client(..., within=60)`) time out on it too, and work with neither a context nor a
+channel waits with `runtime.wait(session, seconds)`. `channel.pause` is not skipped in fast mode (a periodic loop would spin); never time background work with
+`asyncio.sleep`, which the clock can't move.
+
 **Requests to the client.** A handler can ask the client, mid-call, as real servers do:
 `await ctx.ask_client("sampling/createMessage", {...})` (or `elicitation/create`, `roots/list`)
 sends the request on the call's SSE stream (else the client's GET stream) and returns the
@@ -252,6 +260,29 @@ capabilities); `mcp.answer_with(replies)` changes the answers mid-scenario. By d
 answers the server's requests with "Method not found", like a client without those capabilities.
 This works in-process and against a served fake alike: never reach into `mcp.wire` or skip such
 scenarios in-process.
+
+**What the server sends on its own.** Parity compares it too:
+
+```python
+async def test_simulated_logging(mcp: McpClient) -> None:
+    await mcp.listen()  # the client's GET stream
+    await mcp.call_tool("toggle-simulated-logging")
+    logs = await mcp.heard("notifications/message", count=2, within=12)
+    assert all(m["params"]["level"] for m in logs)
+
+
+async def test_progress(mcp: McpClient) -> None:
+    await mcp.call_tool(
+        "trigger-long-running-operation", {"duration": 1, "steps": 3}, progress=True
+    )
+```
+
+`heard` waits for that many messages of that method (any method with `None`), hands each out
+once, and compares them by method, shape and count (`values=True` compares values too; live
+values like random log levels differ). `progress=True` asks for progress notifications and
+compares them; `notifications=True` compares what a call sent without asking. After recording
+plans with `"listen": true`, `fauxcall analyze stream <name> --apply` sets `server_messages` (and
+`message_member_order`), and the parity report lists every one no scenario heard.
 
 Also run the official SDK against the fake once (the generated unit tests do) — real MCP clients must
 connect without noticing anything.

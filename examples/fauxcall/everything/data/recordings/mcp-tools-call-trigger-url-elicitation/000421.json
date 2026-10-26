@@ -1,0 +1,134 @@
+{
+  "id": "000421",
+  "endpoint": "MCP tools/call:trigger-url-elicitation",
+  "purpose": "edge",
+  "plan_call": "url-error-path-id-retry",
+  "started_at": "2026-10-25T21:25:08.878215Z",
+  "started_ns": 1792963508878215000,
+  "elapsed_ms": 10.827,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 10,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-url-elicitation",
+          "arguments": {
+            "url": "https://example.com/needs-auth",
+            "errorPath": true,
+            "elicitationId": "eid-7"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:25:08 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "❌ User declined to open the URL (Elicitation ID: eid-7)."
+            },
+            {
+              "type": "text",
+              "text": "\nRaw result: {\n  \"action\": \"decline\"\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 10
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.805,
+      "kind": "sse",
+      "event": "message",
+      "id": "9b311283-d5f3-4499-86d8-d6c6b0a9b77b",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"mode\":\"url\",\"url\":\"https://example.com/needs-auth\",\"message\":\"Please open the link to complete this action.\",\"elicitationId\":\"eid-7\"},\"jsonrpc\":\"2.0\",\"id\":5}"
+    },
+    {
+      "t_ms": 10.563,
+      "kind": "sse",
+      "event": "message",
+      "id": "ef078037-6000-49cc-9d32-f306fba4b340",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"❌ User declined to open the URL (Elicitation ID: eid-7).\"},{\"type\":\"text\",\"text\":\"\\nRaw result: {\\n  \\\"action\\\": \\\"decline\\\"\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":10}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

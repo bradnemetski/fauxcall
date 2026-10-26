@@ -1,9 +1,9 @@
 {
   "name": "resources",
-  "created_at": "2026-10-18T02:30:00Z",
+  "created_at": "2026-10-25T21:20:00Z",
   "calls": [
     {
-      "id": "list-1",
+      "id": "resources-list",
       "endpoint": "MCP resources/list",
       "purpose": "sample",
       "request": {
@@ -13,7 +13,19 @@
       }
     },
     {
-      "id": "templates-1",
+      "id": "resources-list-cursor",
+      "endpoint": "MCP resources/list",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "cursor": "bogus-cursor"
+        }
+      }
+    },
+    {
+      "id": "templates-list",
       "endpoint": "MCP resources/templates/list",
       "purpose": "sample",
       "request": {
@@ -23,7 +35,7 @@
       }
     },
     {
-      "id": "static-architecture",
+      "id": "read-architecture",
       "endpoint": "MCP resources/read:demo://resource/static/document/architecture.md",
       "purpose": "sample",
       "request": {
@@ -35,7 +47,7 @@
       }
     },
     {
-      "id": "static-extension",
+      "id": "read-extension",
       "endpoint": "MCP resources/read:demo://resource/static/document/extension.md",
       "purpose": "sample",
       "request": {
@@ -47,7 +59,7 @@
       }
     },
     {
-      "id": "static-features",
+      "id": "read-features",
       "endpoint": "MCP resources/read:demo://resource/static/document/features.md",
       "purpose": "sample",
       "request": {
@@ -59,7 +71,7 @@
       }
     },
     {
-      "id": "static-how-it-works",
+      "id": "read-how-it-works",
       "endpoint": "MCP resources/read:demo://resource/static/document/how-it-works.md",
       "purpose": "sample",
       "request": {
@@ -71,7 +83,7 @@
       }
     },
     {
-      "id": "static-instructions",
+      "id": "read-instructions",
       "endpoint": "MCP resources/read:demo://resource/static/document/instructions.md",
       "purpose": "sample",
       "request": {
@@ -83,7 +95,7 @@
       }
     },
     {
-      "id": "static-startup",
+      "id": "read-startup",
       "endpoint": "MCP resources/read:demo://resource/static/document/startup.md",
       "purpose": "sample",
       "request": {
@@ -95,7 +107,7 @@
       }
     },
     {
-      "id": "static-structure",
+      "id": "read-structure",
       "endpoint": "MCP resources/read:demo://resource/static/document/structure.md",
       "purpose": "sample",
       "request": {
@@ -107,23 +119,21 @@
       }
     },
     {
-      "id": "text-1",
+      "id": "read-text-1",
       "endpoint": "MCP resources/read:demo://resource/dynamic/text/1",
-      "purpose": "time_profile",
+      "purpose": "sample",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
           "uri": "demo://resource/dynamic/text/1"
         }
-      },
-      "repeat": 4,
-      "interval_ms": 15000
+      }
     },
     {
-      "id": "text-2",
+      "id": "read-text-2",
       "endpoint": "MCP resources/read:demo://resource/dynamic/text/2",
-      "purpose": "variation",
+      "purpose": "sample",
       "request": {
         "method": "POST",
         "path": "/mcp",
@@ -133,57 +143,93 @@
       }
     },
     {
-      "id": "text-42",
-      "endpoint": "MCP resources/read:demo://resource/dynamic/text/42",
+      "id": "read-text-9",
+      "endpoint": "MCP resources/read:demo://resource/dynamic/text/9",
       "purpose": "variation",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
-          "uri": "demo://resource/dynamic/text/42"
+          "uri": "demo://resource/dynamic/text/9"
         }
       }
     },
     {
-      "id": "blob-1",
+      "id": "read-text-250",
+      "endpoint": "MCP resources/read:demo://resource/dynamic/text/250",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/250"
+        }
+      }
+    },
+    {
+      "id": "read-blob-1",
       "endpoint": "MCP resources/read:demo://resource/dynamic/blob/1",
-      "purpose": "time_profile",
+      "purpose": "sample",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
           "uri": "demo://resource/dynamic/blob/1"
         }
-      },
-      "repeat": 2,
-      "interval_ms": 15000
+      }
     },
     {
-      "id": "blob-7",
-      "endpoint": "MCP resources/read:demo://resource/dynamic/blob/7",
+      "id": "read-blob-2",
+      "endpoint": "MCP resources/read:demo://resource/dynamic/blob/2",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/blob/2"
+        }
+      }
+    },
+    {
+      "id": "read-blob-9",
+      "endpoint": "MCP resources/read:demo://resource/dynamic/blob/9",
       "purpose": "variation",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
-          "uri": "demo://resource/dynamic/blob/7"
+          "uri": "demo://resource/dynamic/blob/9"
         }
       }
     },
     {
-      "id": "text-abc",
-      "endpoint": "MCP resources/read:demo://resource/dynamic/text/abc",
-      "purpose": "invalid",
+      "id": "read-blob-250",
+      "endpoint": "MCP resources/read:demo://resource/dynamic/blob/250",
+      "purpose": "variation",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
-          "uri": "demo://resource/dynamic/text/abc"
+          "uri": "demo://resource/dynamic/blob/250"
         }
       }
     },
     {
-      "id": "text-0",
+      "id": "read-text-time",
+      "endpoint": "MCP resources/read:demo://resource/dynamic/text/5",
+      "purpose": "time_profile",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/5"
+        }
+      },
+      "repeat": 4,
+      "interval_ms": 11000
+    },
+    {
+      "id": "read-text-0",
       "endpoint": "MCP resources/read:demo://resource/dynamic/text/0",
       "purpose": "invalid",
       "request": {
@@ -195,43 +241,43 @@
       }
     },
     {
-      "id": "text-neg",
-      "endpoint": "MCP resources/read:demo://resource/dynamic/text/-1",
+      "id": "read-text-neg",
+      "endpoint": "MCP resources/read:demo://resource/dynamic/text/-3",
       "purpose": "invalid",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
-          "uri": "demo://resource/dynamic/text/-1"
+          "uri": "demo://resource/dynamic/text/-3"
         }
       }
     },
     {
-      "id": "text-frac",
-      "endpoint": "MCP resources/read:demo://resource/dynamic/text/1.5",
+      "id": "read-text-abc",
+      "endpoint": "MCP resources/read:demo://resource/dynamic/text/abc",
       "purpose": "invalid",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
-          "uri": "demo://resource/dynamic/text/1.5"
+          "uri": "demo://resource/dynamic/text/abc"
         }
       }
     },
     {
-      "id": "blob-xyz",
-      "endpoint": "MCP resources/read:demo://resource/dynamic/blob/xyz",
+      "id": "read-blob-frac",
+      "endpoint": "MCP resources/read:demo://resource/dynamic/blob/1.5",
       "purpose": "invalid",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
-          "uri": "demo://resource/dynamic/blob/xyz"
+          "uri": "demo://resource/dynamic/blob/1.5"
         }
       }
     },
     {
-      "id": "text-empty",
+      "id": "read-text-empty",
       "endpoint": "MCP resources/read:demo://resource/dynamic/text/",
       "purpose": "invalid",
       "request": {
@@ -243,38 +289,62 @@
       }
     },
     {
-      "id": "static-unknown",
-      "endpoint": "MCP resources/read:demo://resource/static/document/nope.md",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "uri": "demo://resource/static/document/nope.md"
-        }
-      }
-    },
-    {
-      "id": "static-encoded",
-      "endpoint": "MCP resources/read:demo://resource/static/document/features%2Emd",
+      "id": "read-text-leading-zero",
+      "endpoint": "MCP resources/read:demo://resource/dynamic/text/007",
       "purpose": "edge",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
-          "uri": "demo://resource/static/document/features%2Emd"
+          "uri": "demo://resource/dynamic/text/007"
         }
       }
     },
     {
-      "id": "session-unknown",
-      "endpoint": "MCP resources/read:demo://resource/session/never-made.gz",
+      "id": "read-text-exp",
+      "endpoint": "MCP resources/read:demo://resource/dynamic/text/1e2",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/1e2"
+        }
+      }
+    },
+    {
+      "id": "read-static-missing",
+      "endpoint": "MCP resources/read:demo://resource/static/document/missing.md",
       "purpose": "invalid",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
-          "uri": "demo://resource/session/never-made.gz"
+          "uri": "demo://resource/static/document/missing.md"
+        }
+      }
+    },
+    {
+      "id": "read-session-missing",
+      "endpoint": "MCP resources/read:demo://resource/session/nothing.gz",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/session/nothing.gz"
+        }
+      }
+    },
+    {
+      "id": "read-case",
+      "endpoint": "MCP resources/read:demo://resource/static/document/README.MD",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/static/document/README.MD"
         }
       }
     },
@@ -289,26 +359,26 @@
       }
     },
     {
-      "id": "list-cursor",
-      "endpoint": "MCP resources/list",
-      "purpose": "edge",
+      "id": "read-uri-number",
+      "endpoint": "MCP resources/read",
+      "purpose": "invalid",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
-          "cursor": "fauxcall-bogus-cursor"
+          "uri": 5
         }
       }
     },
     {
-      "id": "templates-cursor",
-      "endpoint": "MCP resources/templates/list",
-      "purpose": "edge",
+      "id": "read-not-a-uri",
+      "endpoint": "MCP resources/read:not a uri",
+      "purpose": "invalid",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
-          "cursor": "x"
+          "uri": "not a uri"
         }
       }
     }

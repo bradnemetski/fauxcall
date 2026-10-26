@@ -1,0 +1,122 @@
+{
+  "id": "000145",
+  "endpoint": "MCP tools/call:get-sum",
+  "purpose": "edge",
+  "plan_call": "sum-large-neg",
+  "started_at": "2026-10-25T21:13:45.596342Z",
+  "started_ns": 1792962825596342000,
+  "elapsed_ms": 8.534,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 14,
+        "method": "tools/call",
+        "params": {
+          "name": "get-sum",
+          "arguments": {
+            "a": -1e+300,
+            "b": -1e+300
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:13:45 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "The sum of -1e+300 and -1e+300 is -2e+300."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 14
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.288,
+      "kind": "sse",
+      "event": "message",
+      "id": "df33c09a-3ca0-4eb2-b475-69e26e2a068d",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"The sum of -1e+300 and -1e+300 is -2e+300.\"}]},\"jsonrpc\":\"2.0\",\"id\":14}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

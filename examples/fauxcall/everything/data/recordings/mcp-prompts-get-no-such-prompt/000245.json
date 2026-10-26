@@ -1,0 +1,114 @@
+{
+  "id": "000245",
+  "endpoint": "MCP prompts/get:no-such-prompt",
+  "purpose": "invalid",
+  "plan_call": "prompt-unknown",
+  "started_at": "2026-10-25T21:17:40.085813Z",
+  "started_ns": 1792963060085813000,
+  "elapsed_ms": 7.086,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 23,
+        "method": "prompts/get",
+        "params": {
+          "name": "no-such-prompt"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "175"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:17:40 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 23,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Prompt no-such-prompt not found"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.792,
+      "kind": "sse",
+      "event": "message",
+      "id": "f80f4bf7-1432-471b-998c-1630863f093d",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":23,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Prompt no-such-prompt not found\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

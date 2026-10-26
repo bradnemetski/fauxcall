@@ -1,244 +1,260 @@
-"""Resources, prompts and completions: documents, dynamic templates, arguments and completers."""
+"""Resources (documents, templates), subscriptions and log levels, prompts and completions."""
 
 from __future__ import annotations
 
-import base64
 from typing import TYPE_CHECKING, Any
 
 import pytest
-from policies import STAMPED_PROMPT, STAMPED_READ
+from everything_support import made_now
 
 if TYPE_CHECKING:
     from fauxcall.testing import McpClient
     from fauxcall.types import JsonObject
 
+DOCS = (
+    "architecture.md",
+    "extension.md",
+    "features.md",
+    "how-it-works.md",
+    "instructions.md",
+    "startup.md",
+    "structure.md",
+)
+NOW_TEXT = made_now("$.contents[0].text", "$.contents[0].blob")
 
-async def test_every_listed_document_reads_back(mcp: McpClient) -> None:
+
+async def test_every_listed_document_reads(mcp: McpClient) -> None:
     listing: Any = await mcp.request("resources/list", {})
+    assert isinstance(listing, dict)
     for resource in listing["resources"]:
         read: Any = await mcp.request("resources/read", {"uri": resource["uri"]})
-        content = read["contents"][0]
-        assert content["uri"] == resource["uri"]
-        assert content["mimeType"] == resource["mimeType"]
-        assert content["text"].startswith("# Everything Server")
+        assert isinstance(read, dict)
+        assert read["contents"][0]["mimeType"] == resource["mimeType"]
+    assert len(listing["resources"]) == len(DOCS)
 
 
-@pytest.mark.parametrize("resource_id", ["3", "17", "250", "07", "1e1"])
-async def test_dynamic_text_resources(mcp: McpClient, resource_id: str) -> None:
-    uri = f"demo://resource/dynamic/text/{resource_id}"
-    read: Any = await mcp.request("resources/read", {"uri": uri}, compare=STAMPED_READ)
+@pytest.mark.parametrize("kind", ["text", "blob"])
+@pytest.mark.parametrize("resource_id", ["3", "12", "77", "4096", "08", "2e1", "1.0"])
+async def test_dynamic_resources(mcp: McpClient, kind: str, resource_id: str) -> None:
+    uri = f"demo://resource/dynamic/{kind}/{resource_id}"
+    read: Any = await mcp.request("resources/read", {"uri": uri}, compare=NOW_TEXT)
+    assert isinstance(read, dict)
     assert read["contents"][0]["uri"] == uri
-    assert read["contents"][0]["text"].startswith("Resource ")
-
-
-@pytest.mark.parametrize("resource_id", ["2", "64", "999"])
-async def test_dynamic_blob_resources(mcp: McpClient, resource_id: str) -> None:
-    uri = f"demo://resource/dynamic/blob/{resource_id}"
-    read: Any = await mcp.request("resources/read", {"uri": uri}, compare=STAMPED_READ)
-    sentence = base64.b64decode(read["contents"][0]["blob"]).decode()
-    assert sentence.startswith(f"Resource {resource_id}: This is a base64 blob created at ")
 
 
 @pytest.mark.parametrize(
     "uri",
     [
-        "demo://resource/dynamic/text/zero",
-        "demo://resource/dynamic/text/-7",
+        "demo://resource/dynamic/text/0",
+        "demo://resource/dynamic/blob/-1",
+        "demo://resource/dynamic/text/two",
         "demo://resource/dynamic/blob/3.5",
-        "demo://resource/dynamic/blob/0",
+        "demo://resource/dynamic/text/Infinity",
+        "demo://resource/dynamic/text/",
         "demo://resource/dynamic/text/1/2",
-        "demo://resource/dynamic/blob/",
-        "demo://resource/static/document/README.md",
-        "demo://resource/static/document/features",
-        "demo://resource/session/anything.gz",
-        "demo://elsewhere/x",
-        "https://example.com/doc.md",
+        "demo://resource/static/document/missing.md",
+        "demo://resource/static/document/Features.md",
+        "demo://resource/session/never-made.gz",
+        "demo://elsewhere/thing",
+        "https://example.com/not-a-resource",
+        "no scheme here",
+        "demo://resource/static/document/a b.md",
     ],
 )
 async def test_unreadable_resources(mcp: McpClient, uri: str) -> None:
-    read: Any = await mcp.request("resources/read", {"uri": uri})
-    assert read["code"] in {-32602, -32603}
+    error: Any = await mcp.request("resources/read", {"uri": uri})
+    assert isinstance(error, dict)
+    assert error["code"] in {-32602, -32603}
 
 
-async def test_resource_read_refusals(mcp: McpClient) -> None:
-    missing: Any = await mcp.request("resources/read", {})
-    number: Any = await mcp.request("resources/read", {"uri": 42})
-    assert missing["code"] == number["code"] == -32603
+async def test_read_without_a_uri(mcp: McpClient) -> None:
+    await mcp.request("resources/read", {})
+    await mcp.request("resources/read", {"uri": 7})
+    await mcp.request("resources/read", {"uri": None})
+
+
+async def test_resource_links_resolve(mcp: McpClient) -> None:
+    links: Any = await mcp.call_tool("get-resource-links", {"count": 4})
+    assert isinstance(links, dict)
+    for block in links["content"][1:]:
+        read: Any = await mcp.request("resources/read", {"uri": block["uri"]}, compare=NOW_TEXT)
+        assert isinstance(read, dict)
+        assert read["contents"][0]["uri"] == block["uri"]
+
+
+async def test_subscribe_and_unsubscribe_are_acknowledged(mcp: McpClient) -> None:
+    await mcp.listen()
+    assert await mcp.request("resources/subscribe", {"uri": "demo://resource/dynamic/text/8"}) == {}
+    assert await mcp.request("resources/subscribe", {"uri": "demo://anything/at/all"}) == {}
+    await mcp.heard("notifications/message", count=2, within=5)
+    assert (
+        await mcp.request("resources/unsubscribe", {"uri": "demo://resource/dynamic/text/8"}) == {}
+    )
+    await mcp.heard("notifications/message", count=1, within=5)
+    await mcp.request("resources/subscribe", {})
+
+
+async def test_log_level_filters_acknowledgements(mcp: McpClient) -> None:
+    await mcp.listen()
+    assert await mcp.request("logging/setLevel", {"level": "notice"}) == {}
+    await mcp.request("resources/subscribe", {"uri": "demo://resource/dynamic/blob/5"})
+    assert await mcp.request("logging/setLevel", {"level": "info"}) == {}
+    await mcp.request("resources/subscribe", {"uri": "demo://resource/dynamic/blob/6"})
+    await mcp.heard("notifications/message", count=1, within=5)
+
+
+@pytest.mark.parametrize("level", ["debug", "warning", "emergency", "alert"])
+async def test_set_level(mcp: McpClient, level: str) -> None:
+    assert await mcp.request("logging/setLevel", {"level": level}) == {}
+
+
+async def test_set_level_refuses(mcp: McpClient) -> None:
+    await mcp.request("logging/setLevel", {"level": "trace"})
+    await mcp.request("logging/setLevel", {"level": "INFO"})
+    await mcp.request("logging/setLevel", {})
 
 
 @pytest.mark.parametrize(
-    ("name", "arguments", "text"),
+    ("name", "arguments"),
     [
-        ("simple-prompt", {}, "This is a simple prompt without arguments."),
-        ("simple-prompt", {"anything": "goes"}, "This is a simple prompt without arguments."),
-        ("args-prompt", {"city": "Lisbon"}, "What's weather in Lisbon?"),
-        ("args-prompt", {"city": "Portland", "state": "OR"}, "What's weather in Portland, OR?"),
-        ("args-prompt", {"city": "Nome", "state": ""}, "What's weather in Nome?"),
-        ("args-prompt", {"city": "Zürich", "extra": "x"}, "What's weather in Zürich?"),
-        (
-            "completable-prompt",
-            {"department": "Marketing", "name": "Iris"},
-            "Please promote Iris to the head of the Marketing team.",
-        ),
-        (
-            "completable-prompt",
-            {"department": "Legal", "name": "Nobody"},
-            "Please promote Nobody to the head of the Legal team.",
-        ),
+        ("simple-prompt", None),
+        ("simple-prompt", {"ignored": "yes"}),
+        ("args-prompt", {"city": "Lisbon"}),
+        ("args-prompt", {"city": "Springfield", "state": "Illinois"}),
+        ("args-prompt", {"city": "Nowhere", "state": ""}),
+        ("args-prompt", {"city": "", "state": "Utah"}),
+        ("completable-prompt", {"department": "Support", "name": "Kim"}),
+        ("completable-prompt", {"department": "Legal", "name": "Saul", "extra": "x"}),
     ],
 )
-async def test_prompts(mcp: McpClient, name: str, arguments: JsonObject, text: str) -> None:
-    prompt: Any = await mcp.request("prompts/get", {"name": name, "arguments": arguments})
-    assert prompt["messages"][0]["content"]["text"] == text
+async def test_prompts(mcp: McpClient, name: str, arguments: JsonObject | None) -> None:
+    params: JsonObject = {"name": name}
+    if arguments is not None:
+        params["arguments"] = arguments
+    result: Any = await mcp.request("prompts/get", params)
+    assert isinstance(result, dict)
+    assert result["messages"][0]["role"] == "user"
 
 
 @pytest.mark.parametrize(
     "arguments",
-    [
-        {"resourceType": "Text", "resourceId": "8"},
-        {"resourceType": "Blob", "resourceId": "21"},
-        {"resourceType": "Text", "resourceId": " 4 "},
-    ],
+    [{"resourceType": "Text", "resourceId": "9"}, {"resourceType": "Blob", "resourceId": "0x1A"}],
 )
 async def test_resource_prompt(mcp: McpClient, arguments: JsonObject) -> None:
-    prompt: Any = await mcp.request(
-        "prompts/get", {"name": "resource-prompt", "arguments": arguments}, compare=STAMPED_PROMPT
+    result: Any = await mcp.request(
+        "prompts/get",
+        {"name": "resource-prompt", "arguments": arguments},
+        compare=made_now(
+            "$.messages[1].content.resource.text", "$.messages[1].content.resource.blob"
+        ),
     )
-    assert prompt["messages"][1]["content"]["type"] == "resource"
+    assert isinstance(result, dict)
+    assert result["messages"][1]["content"]["type"] == "resource"
 
 
 @pytest.mark.parametrize(
-    ("name", "arguments", "code"),
+    ("name", "arguments"),
     [
-        ("args-prompt", {"state": "WA"}, -32602),
-        ("completable-prompt", {"name": "Bob"}, -32602),
-        ("resource-prompt", {"resourceId": "1"}, -32602),
-        ("resource-prompt", {"resourceType": "Video", "resourceId": "1"}, -32603),
-        ("resource-prompt", {"resourceType": "Blob", "resourceId": "-4"}, -32603),
-        ("resource-prompt", {"resourceType": "Text", "resourceId": "two"}, -32603),
-        ("args-prompt", {"city": True}, -32603),
-        ("no-such-prompt", {}, -32602),
+        ("args-prompt", {}),
+        ("args-prompt", {"state": "Maine"}),
+        ("args-prompt", {"city": 5}),
+        ("completable-prompt", {}),
+        ("completable-prompt", {"name": "Bob"}),
+        ("resource-prompt", {"resourceType": "Video", "resourceId": "1"}),
+        ("resource-prompt", {"resourceType": "Text", "resourceId": "-3"}),
+        ("resource-prompt", {"resourceType": "Blob", "resourceId": "one"}),
+        ("resource-prompt", {"resourceId": "2"}),
+        ("missing-prompt", {}),
     ],
 )
-async def test_prompt_refusals(mcp: McpClient, name: str, arguments: JsonObject, code: int) -> None:
-    refused: Any = await mcp.request("prompts/get", {"name": name, "arguments": arguments})
-    assert refused["code"] == code
+async def test_prompts_refuse(mcp: McpClient, name: str, arguments: JsonObject) -> None:
+    error: Any = await mcp.request("prompts/get", {"name": name, "arguments": arguments})
+    assert isinstance(error, dict)
+    assert "code" in error
 
 
-def ref_prompt(name: str) -> JsonObject:
-    return {"type": "ref/prompt", "name": name}
+async def test_prompt_without_a_name(mcp: McpClient) -> None:
+    await mcp.request("prompts/get", {})
+    await mcp.request("prompts/get", {"name": 3})
 
 
 @pytest.mark.parametrize(
-    ("params", "values"),
+    ("argument", "value", "context"),
     [
-        (
-            {
-                "ref": ref_prompt("completable-prompt"),
-                "argument": {"name": "department", "value": "Su"},
-            },
-            ["Support"],
-        ),
-        (
-            {
-                "ref": ref_prompt("completable-prompt"),
-                "argument": {"name": "department", "value": "En"},
-            },
-            ["Engineering"],
-        ),
-        (
-            {
-                "ref": ref_prompt("completable-prompt"),
-                "argument": {"name": "name", "value": "G"},
-                "context": {"arguments": {"department": "Marketing"}},
-            },
-            ["Grace"],
-        ),
-        (
-            {
-                "ref": ref_prompt("completable-prompt"),
-                "argument": {"name": "name", "value": "F"},
-                "context": {"arguments": {"department": "Sales"}},
-            },
-            ["Frank"],
-        ),
-        (
-            {
-                "ref": ref_prompt("completable-prompt"),
-                "argument": {"name": "name", "value": "a"},
-                "context": {"arguments": {"department": "Engineering"}},
-            },
-            [],
-        ),
-        (
-            {
-                "ref": ref_prompt("resource-prompt"),
-                "argument": {"name": "resourceType", "value": "T"},
-            },
-            ["Text"],
-        ),
-        (
-            {
-                "ref": ref_prompt("resource-prompt"),
-                "argument": {"name": "resourceId", "value": "12"},
-            },
-            ["12"],
-        ),
-        (
-            {
-                "ref": ref_prompt("resource-prompt"),
-                "argument": {"name": "resourceId", "value": "1.5"},
-            },
-            [],
-        ),
-        ({"ref": ref_prompt("args-prompt"), "argument": {"name": "state", "value": "W"}}, []),
-        (
-            {
-                "ref": {"type": "ref/resource", "uri": "demo://resource/dynamic/blob/{resourceId}"},
-                "argument": {"name": "resourceId", "value": "88"},
-            },
-            ["88"],
-        ),
-        (
-            {
-                "ref": {"type": "ref/resource", "uri": "demo://resource/dynamic/text/{resourceId}"},
-                "argument": {"name": "resourceId", "value": "-1"},
-            },
-            [],
-        ),
-        (
-            {
-                "ref": {
-                    "type": "ref/resource",
-                    "uri": "demo://resource/static/document/startup.md",
-                },
-                "argument": {"name": "anything", "value": ""},
-            },
-            [],
-        ),
+        ("department", "", None),
+        ("department", "M", None),
+        ("department", "Su", None),
+        ("department", "Z", None),
+        ("name", "", {"department": "Sales"}),
+        ("name", "F", {"department": "Sales"}),
+        ("name", "", {"department": "Marketing"}),
+        ("name", "C", {"department": "Engineering"}),
+        ("name", "", {"department": "Unknown"}),
+        ("name", "J", None),
+        ("unknown", "", None),
     ],
 )
-async def test_completions(mcp: McpClient, params: JsonObject, values: list[str]) -> None:
-    completed: Any = await mcp.request("completion/complete", params)
-    assert completed["completion"]["values"] == values
+async def test_complete_team_prompt(
+    mcp: McpClient, argument: str, value: str, context: JsonObject | None
+) -> None:
+    params: JsonObject = {
+        "ref": {"type": "ref/prompt", "name": "completable-prompt"},
+        "argument": {"name": argument, "value": value},
+    }
+    if context is not None:
+        params["context"] = {"arguments": context}
+    result: Any = await mcp.request("completion/complete", params)
+    assert isinstance(result, dict)
+    assert "values" in result["completion"]
 
 
 @pytest.mark.parametrize(
-    ("params", "code"),
+    ("ref", "argument", "value"),
     [
-        ({"ref": ref_prompt("missing"), "argument": {"name": "a", "value": ""}}, -32602),
+        ({"type": "ref/prompt", "name": "resource-prompt"}, "resourceType", "T"),
+        ({"type": "ref/prompt", "name": "resource-prompt"}, "resourceType", "x"),
+        ({"type": "ref/prompt", "name": "resource-prompt"}, "resourceId", "42"),
+        ({"type": "ref/prompt", "name": "resource-prompt"}, "resourceId", "4.2"),
+        ({"type": "ref/prompt", "name": "args-prompt"}, "city", "B"),
+        ({"type": "ref/prompt", "name": "simple-prompt"}, "x", ""),
         (
-            {
-                "ref": {"type": "ref/resource", "uri": "demo://x/{y}"},
-                "argument": {"name": "y", "value": ""},
-            },
-            -32602,
+            {"type": "ref/resource", "uri": "demo://resource/dynamic/text/{resourceId}"},
+            "resourceId",
+            "7",
         ),
-        ({"ref": {"type": "ref/prompt"}, "argument": {"name": "a", "value": ""}}, -32603),
-        ({"ref": ref_prompt("args-prompt"), "argument": {"name": "city"}}, -32603),
-        ({"argument": {"name": "a", "value": ""}}, -32603),
+        (
+            {"type": "ref/resource", "uri": "demo://resource/dynamic/blob/{resourceId}"},
+            "resourceId",
+            "-7",
+        ),
+        (
+            {"type": "ref/resource", "uri": "demo://resource/dynamic/blob/{resourceId}"},
+            "other",
+            "1",
+        ),
+        ({"type": "ref/resource", "uri": "demo://resource/static/document/startup.md"}, "a", "b"),
     ],
 )
-async def test_completion_refusals(mcp: McpClient, params: JsonObject, code: int) -> None:
-    refused: Any = await mcp.request("completion/complete", params)
-    assert refused["code"] == code
+async def test_completions(mcp: McpClient, ref: JsonObject, argument: str, value: str) -> None:
+    result: Any = await mcp.request(
+        "completion/complete", {"ref": ref, "argument": {"name": argument, "value": value}}
+    )
+    assert isinstance(result, dict)
+    assert "completion" in result
+
+
+async def test_completions_refuse(mcp: McpClient) -> None:
+    await mcp.request(
+        "completion/complete",
+        {"ref": {"type": "ref/prompt", "name": "nope"}, "argument": {"name": "a", "value": ""}},
+    )
+    await mcp.request(
+        "completion/complete",
+        {
+            "ref": {"type": "ref/resource", "uri": "demo://x/{y}"},
+            "argument": {"name": "y", "value": ""},
+        },
+    )
+    await mcp.request(
+        "completion/complete", {"ref": {"type": "ref/prompt", "name": "completable-prompt"}}
+    )

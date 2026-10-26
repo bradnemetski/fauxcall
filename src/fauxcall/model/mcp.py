@@ -254,6 +254,14 @@ class McpModel(Model):
         default_factory=dict,
         description="JSON-RPC error objects by situation: method_not_found, unknown_tool, …",
     )
+    server_messages: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Methods the server sends on its own on the client's GET stream (log messages, "
+            "resource updates, requests to the client): parity expects a scenario to compare "
+            "each (`fauxcall analyze stream --apply` learns them)."
+        ),
+    )
     capability_tools_after_initialized: bool = Field(
         default=False,
         description=(

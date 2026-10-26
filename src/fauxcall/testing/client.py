@@ -500,6 +500,10 @@ class McpClient:
         """Rate-limit pacing for the real side (``None``: as fast as possible)."""
         self._open = False
         self.answer_with({})  # like a client without sampling, roots …: "Method not found"
+        self._taken: set[int] = set()
+        """Positions of the stream's messages :meth:`heard` already handed out."""
+        self._heard_count = 0
+        self._progress_tokens = 0
 
     async def _ensure(self) -> None:
         if not self._open:
@@ -538,11 +542,14 @@ class McpClient:
         *,
         label: str | None = None,
         compare: CompareOptions | None = None,
+        notifications: bool = False,
     ) -> JsonValue:
         """Call a JSON-RPC method and return its ``result`` (or ``error``).
 
         The logged observation has status 200 for a result and 500 for an error (or no answer),
         or the HTTP status when the server refused the request itself (a ``401``, a ``403`` …).
+        With ``notifications``, what the server sent during the call (progress, log messages,
+        requests to the client) is compared too, by method, shape and count.
         """
         if method == "tools/call":  # however it is sent, a tool call is a possible write
             name = params.get("name") if isinstance(params, dict) else None
@@ -575,7 +582,81 @@ class McpClient:
         self.log.calls.append(
             LoggedCall(label or path, MCP_METHOD, path, observation, options, replay_key=key)
         )
+        if notifications:
+            sent: list[JsonValue] = [
+                m for m in call.messages if isinstance(m, dict) and "method" in m
+            ]
+            self._log_messages(f"{label or path}:notifications", f"{path}:notifications", sent)
         return payload
+
+    async def listen(self) -> None:
+        """Open the client's GET stream: what the server sends there is kept for :meth:`heard`.
+
+        The server's requests arriving there (``roots/list`` …) are answered as :meth:`open`
+        said.
+        """
+        await self._ensure()
+        await self.wire.listen()
+
+    async def heard(
+        self,
+        method: str | None = None,
+        *,
+        count: int = 1,
+        within: float = 10.0,
+        values: bool = False,
+        label: str | None = None,
+    ) -> list[JsonValue]:
+        """Wait for ``count`` messages of ``method`` on the client's stream, and compare them.
+
+        The messages the server sent on its own since :meth:`listen` (any method when
+        ``method`` is ``None``), oldest first; each is handed out once. Parity compares them by
+        method, shape and count, and values too with ``values`` (live values such as random log
+        levels differ between the sides). Fewer than ``count`` within ``within`` seconds fails
+        the comparison (status 504).
+        """
+
+        def wanted(message: JsonValue) -> bool:
+            return isinstance(message, dict) and (method is None or message.get("method") == method)
+
+        found = await self.wire.heard(wanted, count=count, within=within, taken=self._taken)
+        self._taken.update(position for position, _ in found)
+        messages = [message for _, message in found]
+        name = f"stream:{method or '*'}"
+        self._log_messages(
+            label or name, name, messages, values=values, complete=len(messages) >= count
+        )
+        return messages
+
+    def _log_messages(
+        self,
+        label: str,
+        path: str,
+        messages: list[JsonValue],
+        *,
+        values: bool = False,
+        complete: bool = True,
+    ) -> None:
+        """Log messages the server sent, for parity: one observation, a list of messages."""
+        observation = Observation(
+            status=200 if complete else 504,
+            headers={"content-type": "application/json"},
+            body=messages,
+            text=None,
+            at_ns=time.time_ns(),
+            stream=not values,
+        )
+        self._heard_count += 1  # a digest of its own: never collapsed as a repeated poll
+        self.log.calls.append(
+            LoggedCall(
+                label,
+                MCP_METHOD,
+                path,
+                observation,
+                CompareOptions(values=values),
+                request=f"{path}#{self._heard_count}",
+            )
+        )
 
     async def list_tools(self) -> JsonValue:
         """``tools/list``."""
@@ -588,13 +669,28 @@ class McpClient:
         *,
         label: str | None = None,
         compare: CompareOptions | None = None,
+        notifications: bool = False,
+        progress: bool = False,
     ) -> JsonValue:
-        """``tools/call``; tools that may modify state skip real runs without permission."""
-        params: JsonValue = {"name": name, "arguments": dict(arguments or {})}
+        """``tools/call``; tools that may modify state skip real runs without permission.
+
+        With ``notifications``, what the server sent during the call is compared too; with
+        ``progress``, the call asks for progress notifications (a ``progressToken``, the same on
+        both sides) and compares them.
+        """
+        params: JsonObject = {"name": name, "arguments": dict(arguments or {})}
+        if progress:
+            self._progress_tokens += 1
+            params["_meta"] = {"progressToken": f"fauxcall-progress-{self._progress_tokens}"}
+            notifications = True
         if compare is None and self.varies(name):
             compare = CompareOptions(values=False, lengths=False)
         return await self.request(
-            "tools/call", params, label=label or f"tools/call:{name}", compare=compare
+            "tools/call",
+            params,
+            label=label or f"tools/call:{name}",
+            compare=compare,
+            notifications=notifications,
         )
 
     def _may_write(self, name: str) -> None:

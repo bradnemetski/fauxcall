@@ -1,0 +1,100 @@
+{
+  "name": "capability-gating",
+  "created_at": "2026-10-25T21:30:00Z",
+  "calls": [
+    {
+      "id": "nocap-sampling",
+      "endpoint": "MCP tools/call:trigger-sampling-request",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "hi"
+          }
+        }
+      }
+    },
+    {
+      "id": "nocap-elicitation",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "nocap-url-elicitation",
+      "endpoint": "MCP tools/call:trigger-url-elicitation",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-url-elicitation",
+          "arguments": {
+            "url": "https://example.com/"
+          }
+        }
+      }
+    },
+    {
+      "id": "nocap-roots",
+      "endpoint": "MCP tools/call:get-roots-list",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-roots-list",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "nocap-sampling-async",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "hi"
+          }
+        }
+      }
+    },
+    {
+      "id": "nocap-elicitation-async",
+      "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "nocap-tools-list",
+      "endpoint": "MCP tools/list",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    }
+  ]
+}

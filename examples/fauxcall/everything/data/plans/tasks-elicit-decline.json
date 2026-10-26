@@ -1,0 +1,166 @@
+{
+  "name": "tasks-elicit-decline",
+  "created_at": "2026-10-25T21:25:00Z",
+  "client_capabilities": {
+    "elicitation": {
+      "form": {}
+    }
+  },
+  "listen": true,
+  "listen_after_seconds": 1,
+  "calls": [
+    {
+      "id": "research-volcano",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "volcanoes",
+            "ambiguous": true
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      },
+      "capture": {
+        "tv": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "decline-result",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{tv}}"
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "decline"
+        }
+      }
+    },
+    {
+      "id": "research-error-reply",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "jaguar",
+            "ambiguous": true
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      },
+      "capture": {
+        "tj": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "error-reply-result",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{tj}}"
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "error": {
+            "code": -32603,
+            "message": "Elicitation dialog failed"
+          }
+        }
+      }
+    },
+    {
+      "id": "research-cancel-reply",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "mercury",
+            "ambiguous": true
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      },
+      "capture": {
+        "tm": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "cancel-reply-result",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{tm}}"
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "cancel"
+        }
+      }
+    },
+    {
+      "id": "research-plain-elicit-cap",
+      "endpoint": "MCP tools/call:simulate-research-query",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "tides"
+          },
+          "task": {
+            "ttl": 60000
+          }
+        }
+      },
+      "capture": {
+        "tt": "$.result.task.taskId"
+      }
+    },
+    {
+      "id": "plain-result",
+      "endpoint": "MCP tasks/result",
+      "purpose": "job_poll",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "taskId": "{{tt}}"
+        }
+      }
+    }
+  ]
+}

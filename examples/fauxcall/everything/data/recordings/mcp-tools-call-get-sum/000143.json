@@ -1,0 +1,122 @@
+{
+  "id": "000143",
+  "endpoint": "MCP tools/call:get-sum",
+  "purpose": "edge",
+  "plan_call": "sum-exp",
+  "started_at": "2026-10-25T21:13:44.591844Z",
+  "started_ns": 1792962824591844000,
+  "elapsed_ms": 9.357,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 12,
+        "method": "tools/call",
+        "params": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 2.5e-10,
+            "b": 3.5e-10
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:13:44 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "The sum of 2.5e-10 and 3.5e-10 is 6e-10."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 12
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 9.04,
+      "kind": "sse",
+      "event": "message",
+      "id": "df1ad877-1f38-4ca5-a988-3c52d98df340",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"The sum of 2.5e-10 and 3.5e-10 is 6e-10.\"}]},\"jsonrpc\":\"2.0\",\"id\":12}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

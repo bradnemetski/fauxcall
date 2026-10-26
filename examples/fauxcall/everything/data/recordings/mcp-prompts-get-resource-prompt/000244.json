@@ -1,0 +1,117 @@
+{
+  "id": "000244",
+  "endpoint": "MCP prompts/get:resource-prompt",
+  "purpose": "invalid",
+  "plan_call": "prompt-resource-missing",
+  "started_at": "2026-10-25T21:17:39.583644Z",
+  "started_ns": 1792963059583644000,
+  "elapsed_ms": 7.38,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 22,
+        "method": "prompts/get",
+        "params": {
+          "name": "resource-prompt",
+          "arguments": {
+            "resourceType": "Text"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "254"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:17:39 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 22,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Invalid arguments for prompt resource-prompt: Invalid input: expected string, received undefined at resourceId"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 7.127,
+      "kind": "sse",
+      "event": "message",
+      "id": "b880691f-41da-44bf-b6d2-d4654a390096",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":22,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Invalid arguments for prompt resource-prompt: Invalid input: expected string, received undefined at resourceId\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

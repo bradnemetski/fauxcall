@@ -1,0 +1,118 @@
+{
+  "id": "000287",
+  "endpoint": "MCP tools/call:toggle-simulated-logging",
+  "plan_call": "logging-off",
+  "started_at": "2026-10-25T21:19:30.196005Z",
+  "started_ns": 1792963170196005000,
+  "elapsed_ms": 4.149,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "tools/call",
+        "params": {
+          "name": "toggle-simulated-logging",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:19:30 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Stopped simulated logging for session ed9d2136-cd97-4859-b6ac-638050541f7b"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 6
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 3.96,
+      "kind": "sse",
+      "event": "message",
+      "id": "59a786b2-c8d5-4f27-95af-0988b0929fc1",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Stopped simulated logging for session ed9d2136-cd97-4859-b6ac-638050541f7b\"}]},\"jsonrpc\":\"2.0\",\"id\":6}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

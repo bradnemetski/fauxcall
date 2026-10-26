@@ -1,11 +1,11 @@
 {
   "id": "000359",
   "endpoint": "MCP tasks/get",
-  "purpose": "job_poll",
-  "plan_call": "research-ambiguous-get",
-  "started_at": "2026-10-18T02:36:27.405411Z",
-  "started_ns": 1792290987405411000,
-  "elapsed_ms": 2.762,
+  "purpose": "invalid",
+  "plan_call": "task-get-unknown",
+  "started_at": "2026-10-25T21:22:36.590735Z",
+  "started_ns": 1792963356590735000,
+  "elapsed_ms": 7.819,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,10 +33,10 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 3,
+        "id": 20,
         "method": "tasks/get",
         "params": {
-          "taskId": "a7c9c588ab3a93e4a27519df7b9efc78"
+          "taskId": "00000000000000000000000000000000"
         }
       }
     }
@@ -78,38 +78,33 @@
       ],
       [
         "content-length",
-        "316"
+        "183"
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:36:27 GMT"
+        "Sun, 25 Oct 2026 21:22:36 GMT"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "text/event-stream",
       "json": {
-        "result": {
-          "taskId": "a7c9c588ab3a93e4a27519df7b9efc78",
-          "status": "working",
-          "ttl": 300000,
-          "createdAt": "2026-10-18T02:36:26.910Z",
-          "lastUpdatedAt": "2026-10-18T02:36:26.910Z",
-          "pollInterval": 1000,
-          "statusMessage": "Gathering sources..."
-        },
         "jsonrpc": "2.0",
-        "id": 3
+        "id": 20,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Failed to retrieve task: Task not found"
+        }
       }
     }
   },
   "stream": [
     {
-      "t_ms": 2.651,
+      "t_ms": 7.54,
       "kind": "sse",
       "event": "message",
-      "id": "5afeca43-991c-4be1-ac2d-a5d4dd42aa95",
-      "data": "{\"result\":{\"taskId\":\"a7c9c588ab3a93e4a27519df7b9efc78\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-18T02:36:26.910Z\",\"lastUpdatedAt\":\"2026-10-18T02:36:26.910Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"},\"jsonrpc\":\"2.0\",\"id\":3}"
+      "id": "01186943-7333-4f7b-9292-f691c8cc71e5",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":20,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Failed to retrieve task: Task not found\"}}"
     }
   ],
   "redacted": [

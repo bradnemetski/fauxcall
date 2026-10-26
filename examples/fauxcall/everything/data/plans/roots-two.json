@@ -1,0 +1,57 @@
+{
+  "name": "roots-two",
+  "created_at": "2026-10-25T21:30:00Z",
+  "client_capabilities": {
+    "roots": {
+      "listChanged": true
+    }
+  },
+  "listen": true,
+  "listen_after_seconds": 1,
+  "calls": [
+    {
+      "id": "roots-two-first",
+      "endpoint": "MCP tools/call:get-roots-list",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-roots-list",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "roots/list": {
+          "roots": [
+            {
+              "uri": "file:///home/user/projects/alpha",
+              "name": "alpha"
+            },
+            {
+              "uri": "file:///tmp/scratch"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "roots-two-cached",
+      "endpoint": "MCP tools/call:get-roots-list",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-roots-list",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "roots/list": {
+          "roots": []
+        }
+      }
+    }
+  ]
+}

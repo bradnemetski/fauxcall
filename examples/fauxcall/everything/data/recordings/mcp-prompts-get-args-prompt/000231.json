@@ -1,0 +1,125 @@
+{
+  "id": "000231",
+  "endpoint": "MCP prompts/get:args-prompt",
+  "purpose": "edge",
+  "plan_call": "prompt-args-extra",
+  "started_at": "2026-10-25T21:17:33.056055Z",
+  "started_ns": 1792963053056055000,
+  "elapsed_ms": 6.012,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 9,
+        "method": "prompts/get",
+        "params": {
+          "name": "args-prompt",
+          "arguments": {
+            "city": "Paris",
+            "country": "France"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:17:33 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "What's weather in Paris?"
+              }
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 9
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.753,
+      "kind": "sse",
+      "event": "message",
+      "id": "4072fef7-5d3f-4cba-8c92-e8ed0c137793",
+      "data": "{\"result\":{\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"What's weather in Paris?\"}}]},\"jsonrpc\":\"2.0\",\"id\":9}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

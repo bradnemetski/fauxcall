@@ -1,11 +1,11 @@
 {
   "id": "000410",
   "endpoint": "MCP tools/call:trigger-elicitation-request",
-  "purpose": "invalid",
-  "plan_call": "no-cap-elicitation",
-  "started_at": "2026-10-18T02:37:10.961249Z",
-  "started_ns": 1792291030961249000,
-  "elapsed_ms": 2.951,
+  "purpose": "edge",
+  "plan_call": "elicit-bad-action",
+  "started_at": "2026-10-25T21:25:02.652559Z",
+  "started_ns": 1792963502652559000,
+  "elapsed_ms": 12.723,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,7 +33,7 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 3,
+        "id": 10,
         "method": "tools/call",
         "params": {
           "name": "trigger-elicitation-request",
@@ -78,12 +78,12 @@
         "no"
       ],
       [
-        "content-length",
-        "212"
+        "date",
+        "Sun, 25 Oct 2026 21:25:02 GMT"
       ],
       [
-        "date",
-        "Sun, 18 Oct 2026 02:37:10 GMT"
+        "transfer-encoding",
+        "chunked"
       ]
     ],
     "body": {
@@ -94,23 +94,30 @@
           "content": [
             {
               "type": "text",
-              "text": "MCP error -32602: Tool trigger-elicitation-request not found"
+              "text": "[\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"accept\",\n      \"decline\",\n      \"cancel\"\n    ],\n    \"path\": [\n      \"action\"\n    ],\n    \"message\": \"Invalid option: expected one of \\\"accept\\\"|\\\"decline\\\"|\\\"cancel\\\"\"\n  }\n]"
             }
           ],
           "isError": true
         },
         "jsonrpc": "2.0",
-        "id": 3
+        "id": 10
       }
     }
   },
   "stream": [
     {
-      "t_ms": 2.796,
+      "t_ms": 8.746,
       "kind": "sse",
       "event": "message",
-      "id": "e6166e2b-c962-4668-804c-0c9ca556c148",
-      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Tool trigger-elicitation-request not found\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":3}"
+      "id": "74d55d86-6d4e-44a7-9815-2ce49daca0a6",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"message\":\"Please provide inputs for the following fields:\",\"requestedSchema\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"String\",\"type\":\"string\",\"description\":\"Your full, legal name\"},\"check\":{\"title\":\"Boolean\",\"type\":\"boolean\",\"description\":\"Agree to the terms and conditions\"},\"firstLine\":{\"title\":\"String with default\",\"type\":\"string\",\"description\":\"Favorite first line of a story\",\"default\":\"It was a dark and stormy night.\"},\"email\":{\"title\":\"String with email format\",\"type\":\"string\",\"format\":\"email\",\"description\":\"Your email address (will be verified, and never shared with anyone else)\"},\"homepage\":{\"type\":\"string\",\"format\":\"uri\",\"title\":\"String with uri format\",\"description\":\"Portfolio / personal website\"},\"birthdate\":{\"title\":\"String with date format\",\"type\":\"string\",\"format\":\"date\",\"description\":\"Your date of birth\"},\"integer\":{\"title\":\"Integer\",\"type\":\"integer\",\"description\":\"Your favorite integer (do not give us your phone number, pin, or other sensitive info)\",\"minimum\":1,\"maximum\":100,\"default\":42},\"number\":{\"title\":\"Number in range 1-1000\",\"type\":\"number\",\"description\":\"Favorite number (there are no wrong answers)\",\"minimum\":0,\"maximum\":1000,\"default\":3.14},\"untitledSingleSelectEnum\":{\"type\":\"string\",\"title\":\"Untitled Single Select Enum\",\"description\":\"Choose your favorite friend\",\"enum\":[\"Monica\",\"Rachel\",\"Joey\",\"Chandler\",\"Ross\",\"Phoebe\"],\"default\":\"Monica\"},\"untitledMultipleSelectEnum\":{\"type\":\"array\",\"title\":\"Untitled Multiple Select Enum\",\"description\":\"Choose your favorite instruments\",\"minItems\":1,\"maxItems\":3,\"items\":{\"type\":\"string\",\"enum\":[\"Guitar\",\"Piano\",\"Violin\",\"Drums\",\"Bass\"]},\"default\":[\"Guitar\"]},\"titledSingleSelectEnum\":{\"type\":\"string\",\"title\":\"Titled Single Select Enum\",\"description\":\"Choose your favorite hero\",\"oneOf\":[{\"const\":\"hero-1\",\"title\":\"Superman\"},{\"const\":\"hero-2\",\"title\":\"Green Lantern\"},{\"const\":\"hero-3\",\"title\":\"Wonder Woman\"}],\"default\":\"hero-1\"},\"titledMultipleSelectEnum\":{\"type\":\"array\",\"title\":\"Titled Multiple Select Enum\",\"description\":\"Choose your favorite types of fish\",\"minItems\":1,\"maxItems\":3,\"items\":{\"anyOf\":[{\"const\":\"fish-1\",\"title\":\"Tuna\"},{\"const\":\"fish-2\",\"title\":\"Salmon\"},{\"const\":\"fish-3\",\"title\":\"Trout\"}]},\"default\":[\"fish-1\"]},\"legacyTitledEnum\":{\"type\":\"string\",\"title\":\"Legacy Titled Single Select Enum\",\"description\":\"Choose your favorite type of pet\",\"enum\":[\"pet-1\",\"pet-2\",\"pet-3\",\"pet-4\",\"pet-5\"],\"enumNames\":[\"Cats\",\"Dogs\",\"Birds\",\"Fish\",\"Reptiles\"],\"default\":\"pet-1\"}},\"required\":[\"name\"]}},\"jsonrpc\":\"2.0\",\"id\":8}"
+    },
+    {
+      "t_ms": 12.474,
+      "kind": "sse",
+      "event": "message",
+      "id": "7cb54ff6-220f-4933-80f3-f7d92cfa677f",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[\\n  {\\n    \\\"code\\\": \\\"invalid_value\\\",\\n    \\\"values\\\": [\\n      \\\"accept\\\",\\n      \\\"decline\\\",\\n      \\\"cancel\\\"\\n    ],\\n    \\\"path\\\": [\\n      \\\"action\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid option: expected one of \\\\\\\"accept\\\\\\\"|\\\\\\\"decline\\\\\\\"|\\\\\\\"cancel\\\\\\\"\\\"\\n  }\\n]\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":10}"
     }
   ],
   "redacted": [

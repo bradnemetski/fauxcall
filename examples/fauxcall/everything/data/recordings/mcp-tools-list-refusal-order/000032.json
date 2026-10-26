@@ -2,9 +2,9 @@
   "id": "000032",
   "endpoint": "MCP tools/list:refusal-order",
   "purpose": "discovery",
-  "started_at": "2026-10-18T02:19:45.859048Z",
-  "started_ns": 1792289985859048000,
-  "elapsed_ms": 6.827,
+  "started_at": "2026-10-25T20:59:49.800893Z",
+  "started_ns": 1792961989800893000,
+  "elapsed_ms": 3.144,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -12,7 +12,7 @@
     "headers": [
       [
         "accept",
-        "application/json, text/event-stream"
+        "application/json"
       ],
       [
         "mcp-session-id",
@@ -29,7 +29,7 @@
     ]
   },
   "response": {
-    "status": 415,
+    "status": 400,
     "headers": [
       [
         "x-powered-by",
@@ -45,15 +45,19 @@
       ],
       [
         "content-type",
-        "application/json"
+        "application/json; charset=utf-8"
       ],
       [
         "content-length",
-        "125"
+        "95"
+      ],
+      [
+        "etag",
+        "W/\"5f-yGKrXbkLhApmVYswnToQyaFrApg\""
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:19:45 GMT"
+        "Sun, 25 Oct 2026 20:59:49 GMT"
       ],
       [
         "connection",
@@ -65,16 +69,9 @@
       ]
     ],
     "body": {
-      "kind": "json",
-      "content_type": "application/json",
-      "json": {
-        "jsonrpc": "2.0",
-        "error": {
-          "code": -32000,
-          "message": "Unsupported Media Type: Content-Type must be application/json"
-        },
-        "id": null
-      }
+      "kind": "text",
+      "content_type": "application/json; charset=utf-8",
+      "text": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: No valid session ID provided\"}}"
     }
   },
   "redacted": [

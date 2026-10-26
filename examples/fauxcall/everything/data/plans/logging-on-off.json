@@ -1,0 +1,80 @@
+{
+  "name": "logging-on-off",
+  "created_at": "2026-10-25T21:25:00Z",
+  "listen": true,
+  "listen_after_seconds": 7,
+  "calls": [
+    {
+      "id": "logging-on",
+      "endpoint": "MCP tools/call:toggle-simulated-logging",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "toggle-simulated-logging",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "logging-wait",
+      "endpoint": "MCP ping",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      },
+      "repeat": 3,
+      "interval_ms": 6000
+    },
+    {
+      "id": "logging-off",
+      "endpoint": "MCP tools/call:toggle-simulated-logging",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "toggle-simulated-logging",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "setlevel-bad",
+      "endpoint": "MCP logging/setLevel",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "level": "verbose"
+        }
+      }
+    },
+    {
+      "id": "setlevel-missing",
+      "endpoint": "MCP logging/setLevel",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "setlevel-warning",
+      "endpoint": "MCP logging/setLevel",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "level": "warning"
+        }
+      }
+    }
+  ]
+}

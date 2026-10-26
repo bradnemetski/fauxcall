@@ -1,0 +1,114 @@
+{
+  "id": "000358",
+  "endpoint": "MCP tasks/cancel",
+  "purpose": "invalid",
+  "plan_call": "task-cancel-completed",
+  "started_at": "2026-10-25T21:22:36.088440Z",
+  "started_ns": 1792963356088440000,
+  "elapsed_ms": 8.671,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 19,
+        "method": "tasks/cancel",
+        "params": {
+          "taskId": "13f372f71662cca1847f733d2651ab20"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "192"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:22:36 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 19,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Cannot cancel task in terminal status: completed"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.353,
+      "kind": "sse",
+      "event": "message",
+      "id": "895f2380-9892-4205-ae42-0f9efa8b87fb",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":19,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Cannot cancel task in terminal status: completed\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

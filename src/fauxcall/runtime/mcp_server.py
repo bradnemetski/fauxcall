@@ -104,8 +104,11 @@ class Channel:
         return True
 
     async def pause(self, seconds: float) -> None:
-        """Wait (the runtime's sleep, so tests can control it)."""
-        await self._fake.runtime.pause(seconds)
+        """Wait ``seconds`` on the session's clock (real time unless someone moves the clock).
+
+        Not skipped in fast mode: a periodic loop would spin; advance the clock instead.
+        """
+        await self._fake.runtime.wait(self.session or None, seconds)
 
     async def ask(
         self,
@@ -119,8 +122,8 @@ class Channel:
 
         ``send`` delivers it (the call's SSE stream); without one it goes on the GET stream.
         Returns the client's ``result``; raises :class:`ClientError` with its ``error``, or when
-        it can't be reached or doesn't answer ``within`` seconds (``-32001 Request timed
-        out``, as the SDKs say).
+        it can't be reached or doesn't answer ``within`` seconds on the session's clock (``-32001
+        Request timed out``, as the SDKs say): advancing the clock times it out at once.
         """
         # numbered from 0 in each session, as the MCP SDKs number a server's requests
         request_id = next(self._fake.request_ids.setdefault(self.session, itertools.count()))
@@ -133,11 +136,18 @@ class Channel:
         waiting: asyncio.Future[JsonObject] = asyncio.get_running_loop().create_future()
         key = (self.session, str(request_id))
         self._fake.awaiting[key] = waiting
+        timer = asyncio.ensure_future(
+            self._fake.runtime.wait(self.session or None, within, noted=False)
+        )
         try:
             send(message)
-            async with asyncio.timeout(within):
-                answer = await waiting
-        except TimeoutError as error:
+            racing: set[asyncio.Future[Any]] = {waiting, timer}
+            await asyncio.wait(racing, return_when=asyncio.FIRST_COMPLETED)
+        finally:
+            timer.cancel()
+            self._fake.awaiting.pop(key, None)
+        if not waiting.done():
+            waiting.cancel()
             reason = self._fake.transport.timeout_cancel_reason
             if reason is not None:  # tell the client to stop, as the SDK's servers do
                 send(
@@ -145,9 +155,8 @@ class Channel:
                         "notifications/cancelled", {"requestId": request_id, "reason": reason}
                     )
                 )
-            raise ClientError(protocol.REQUEST_TIMEOUT, "Request timed out") from error
-        finally:
-            self._fake.awaiting.pop(key, None)
+            raise ClientError(protocol.REQUEST_TIMEOUT, "Request timed out")
+        answer = waiting.result()
         failure = answer.get("error")
         if isinstance(failure, dict):
             raise ClientError(
@@ -846,11 +855,16 @@ class McpFake:
     def _get_or_delete(self, request: Request) -> Response:
         """A GET (the server's stream, or its refusal) or a DELETE (ends the session)."""
         session = request.headers.get(self.transport.session_header)
-        unknown = bool(session) and session not in self._sessions
+        # A server that issues and requires sessions refuses a GET or DELETE naming none, as it
+        # refuses one naming a session it doesn't know.
+        required = self.transport.requires_session and self.transport.issues_session
+        unknown = (bool(session) or required) and session not in self._sessions
         if request.method == "DELETE":
             refused = self._refusal("delete_unknown_session") if unknown else None
             if refused is not None:
                 return refused
+            if not session and required:
+                return self._missing_session()
             if session:
                 self._end(session)
             return Response(status_code=self.transport.delete_status)
@@ -865,6 +879,8 @@ class McpFake:
         )
         if refused is not None:
             return refused
+        if not session and required:
+            return self._missing_session()
         if replay:  # every later event of the session, then nothing more
             return StreamingResponse(
                 self._replayed(session or "", last_event_id),
@@ -1019,16 +1035,19 @@ class McpFake:
             and self.transport.issues_session
             and (not session or session not in self._sessions)
         ):
-            missing: JsonValue = self.model.errors.get("missing_session") or protocol.error(
-                None, protocol.INVALID_REQUEST, "Bad Request: No valid session ID provided"
-            )
-            refused = Response(
-                content=jsonfmt.dumps(missing).encode(),
-                status_code=self.transport.missing_session_status,
-                media_type="application/json",
-            )
-            return {}, refused
+            return {}, self._missing_session()
         return {}, None
+
+    def _missing_session(self) -> Response:
+        """The refusal of a request naming no session, where the real server requires one."""
+        missing: JsonValue = self.model.errors.get("missing_session") or protocol.error(
+            None, protocol.INVALID_REQUEST, "Bad Request: No valid session ID provided"
+        )
+        return Response(
+            content=jsonfmt.dumps(missing).encode(),
+            status_code=self.transport.missing_session_status,
+            media_type="application/json",
+        )
 
     async def _answer_streaming(
         self, request: Request, message: JsonObject, headers: dict[str, str], session: str = ""

@@ -89,6 +89,7 @@ def admin_router() -> APIRouter:  # noqa: C901, PLR0915 - a flat list of small e
         runtime = _runtime(request)
         target = body.session if body else None
         runtime.reset(target, journal=bool(body and body.journal))
+        runtime.clock_moved()  # clocks went back to their settings
         return {"reset": target or "all"}
 
     @router.get("/sessions")
@@ -126,6 +127,7 @@ def admin_router() -> APIRouter:  # noqa: C901, PLR0915 - a flat list of small e
                     clock.resume_real()
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
+        runtime.clock_moved()  # waits that are now due wake up
         return clock.state().model_dump(mode="json")
 
     @router.get("/journal")

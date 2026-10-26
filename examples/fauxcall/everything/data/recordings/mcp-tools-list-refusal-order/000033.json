@@ -2,9 +2,9 @@
   "id": "000033",
   "endpoint": "MCP tools/list:refusal-order",
   "purpose": "discovery",
-  "started_at": "2026-10-18T02:19:46.360052Z",
-  "started_ns": 1792289986360052000,
-  "elapsed_ms": 2.78,
+  "started_at": "2026-10-25T20:59:50.301961Z",
+  "started_ns": 1792961990301961000,
+  "elapsed_ms": 1.437,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -12,7 +12,7 @@
     "headers": [
       [
         "accept",
-        "application/json, text/event-stream"
+        "application/json"
       ],
       [
         "mcp-session-id",
@@ -24,12 +24,12 @@
       ],
       [
         "content-type",
-        "application/json"
+        "text/plain"
       ]
     ]
   },
   "response": {
-    "status": 400,
+    "status": 406,
     "headers": [
       [
         "x-powered-by",
@@ -49,11 +49,11 @@
       ],
       [
         "content-length",
-        "89"
+        "142"
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:19:46 GMT"
+        "Sun, 25 Oct 2026 20:59:50 GMT"
       ],
       [
         "connection",
@@ -70,8 +70,8 @@
       "json": {
         "jsonrpc": "2.0",
         "error": {
-          "code": -32700,
-          "message": "Parse error: Invalid JSON"
+          "code": -32000,
+          "message": "Not Acceptable: Client must accept both application/json and text/event-stream"
         },
         "id": null
       }

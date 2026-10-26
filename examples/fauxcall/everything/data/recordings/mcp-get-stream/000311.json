@@ -1,0 +1,101 @@
+{
+  "id": "000311",
+  "endpoint": "MCP GET:stream",
+  "started_at": "2026-10-25T21:20:03.900232Z",
+  "started_ns": 1792963203900232000,
+  "elapsed_ms": 10529.995,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:20:03 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "content_type": "text/event-stream"
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 1008.513,
+      "kind": "sse",
+      "event": "message",
+      "id": "d107e851-5f05-4ec2-96d2-7bf692756ab3",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"info\",\"data\":\"Received Subscribe Resource request for URI: demo://resource/dynamic/blob/2 from session 67e250d5-d487-4a45-aeef-e055ca1a8f08\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 5515.792,
+      "kind": "sse",
+      "event": "message",
+      "id": "84189f57-665a-42e4-b5c3-b2cdccaa0094",
+      "data": "{\"method\":\"notifications/resources/updated\",\"params\":{\"uri\":\"demo://resource/dynamic/blob/2\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10516.785,
+      "kind": "sse",
+      "event": "message",
+      "id": "95f08134-d655-4bd8-9e61-6e082368d11c",
+      "data": "{\"method\":\"notifications/resources/updated\",\"params\":{\"uri\":\"demo://resource/dynamic/blob/2\"},\"jsonrpc\":\"2.0\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

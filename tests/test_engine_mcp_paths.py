@@ -314,7 +314,7 @@ async def test_transport_edges(tmp_path: Path) -> None:
         broken = await http.post("/mcp", content=b"{", headers={"content-type": "application/json"})
         assert broken.status_code == 400
         assert broken.json()["error"]["code"] == protocol.PARSE_ERROR
-        assert (await http.delete("/mcp")).status_code == 200  # no session: nothing to end
+        assert (await http.delete("/mcp")).status_code == 400  # sessions required: none named
         wire = McpWireClient("http://fake.test/mcp", http)
         await wire.initialize()
         notified = await wire.notify("notifications/initialized")

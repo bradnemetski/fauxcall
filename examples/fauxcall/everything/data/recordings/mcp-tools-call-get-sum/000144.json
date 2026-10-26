@@ -1,0 +1,122 @@
+{
+  "id": "000144",
+  "endpoint": "MCP tools/call:get-sum",
+  "purpose": "edge",
+  "plan_call": "sum-whole-float",
+  "started_at": "2026-10-25T21:13:45.094091Z",
+  "started_ns": 1792962825094091000,
+  "elapsed_ms": 9.451,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 13,
+        "method": "tools/call",
+        "params": {
+          "name": "get-sum",
+          "arguments": {
+            "a": 2.0,
+            "b": 3.0
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:13:45 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "The sum of 2 and 3 is 5."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 13
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 9.143,
+      "kind": "sse",
+      "event": "message",
+      "id": "f028913e-8240-466d-be0b-e271e66e00e8",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"The sum of 2 and 3 is 5.\"}]},\"jsonrpc\":\"2.0\",\"id\":13}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

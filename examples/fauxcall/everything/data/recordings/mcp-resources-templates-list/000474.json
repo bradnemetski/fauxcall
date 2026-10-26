@@ -1,0 +1,126 @@
+{
+  "id": "000474",
+  "endpoint": "MCP resources/templates/list",
+  "purpose": "edge",
+  "plan_call": "templates-list-cursor",
+  "started_at": "2026-10-25T21:27:55.492359Z",
+  "started_ns": 1792963675492359000,
+  "elapsed_ms": 10.032,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "resources/templates/list",
+        "params": {
+          "cursor": "bogus"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "595"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:27:55 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "resourceTemplates": [
+            {
+              "name": "Dynamic Text Resource",
+              "uriTemplate": "demo://resource/dynamic/text/{resourceId}",
+              "mimeType": "text/plain",
+              "description": "Plaintext dynamic resource fabricated from the {resourceId} variable, which must be an integer."
+            },
+            {
+              "name": "Dynamic Blob Resource",
+              "uriTemplate": "demo://resource/dynamic/blob/{resourceId}",
+              "mimeType": "application/octet-stream",
+              "description": "Binary (base64) dynamic resource fabricated from the {resourceId} variable, which must be an integer."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 6
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 9.672,
+      "kind": "sse",
+      "event": "message",
+      "id": "5055d1e2-0445-4051-b31c-47d88f6ca3d5",
+      "data": "{\"result\":{\"resourceTemplates\":[{\"name\":\"Dynamic Text Resource\",\"uriTemplate\":\"demo://resource/dynamic/text/{resourceId}\",\"mimeType\":\"text/plain\",\"description\":\"Plaintext dynamic resource fabricated from the {resourceId} variable, which must be an integer.\"},{\"name\":\"Dynamic Blob Resource\",\"uriTemplate\":\"demo://resource/dynamic/blob/{resourceId}\",\"mimeType\":\"application/octet-stream\",\"description\":\"Binary (base64) dynamic resource fabricated from the {resourceId} variable, which must be an integer.\"}]},\"jsonrpc\":\"2.0\",\"id\":6}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

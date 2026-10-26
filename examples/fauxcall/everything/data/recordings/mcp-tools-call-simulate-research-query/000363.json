@@ -1,0 +1,127 @@
+{
+  "id": "000363",
+  "endpoint": "MCP tools/call:simulate-research-query",
+  "purpose": "variation",
+  "plan_call": "research-task-3",
+  "started_at": "2026-10-25T21:22:38.605996Z",
+  "started_ns": 1792963358605996000,
+  "elapsed_ms": 6.034,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 24,
+        "method": "tools/call",
+        "params": {
+          "name": "simulate-research-query",
+          "arguments": {
+            "topic": "Renaissance art"
+          },
+          "task": {
+            "ttl": 1000
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:22:38 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "task": {
+            "taskId": "a031af6d48c7509913a2d7797b4d9df0",
+            "status": "working",
+            "ttl": 300000,
+            "createdAt": "2026-10-25T21:22:38.610Z",
+            "lastUpdatedAt": "2026-10-25T21:22:38.610Z",
+            "pollInterval": 1000,
+            "statusMessage": "Gathering sources..."
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 24
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.83,
+      "kind": "sse",
+      "event": "message",
+      "id": "17ec1d61-c196-4c58-aba0-31a991a4e874",
+      "data": "{\"result\":{\"task\":{\"taskId\":\"a031af6d48c7509913a2d7797b4d9df0\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:22:38.610Z\",\"lastUpdatedAt\":\"2026-10-25T21:22:38.610Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"}},\"jsonrpc\":\"2.0\",\"id\":24}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "id": "000361",
+  "endpoint": "MCP tasks/cancel",
+  "purpose": "invalid",
+  "plan_call": "task-cancel-unknown",
+  "started_at": "2026-10-25T21:22:37.595129Z",
+  "started_ns": 1792963357595129000,
+  "elapsed_ms": 8.962,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 22,
+        "method": "tasks/cancel",
+        "params": {
+          "taskId": "nope"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "164"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:22:37 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 22,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Task not found: nope"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.709,
+      "kind": "sse",
+      "event": "message",
+      "id": "2921a72a-5f11-444a-98e4-105478de1f55",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":22,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Task not found: nope\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

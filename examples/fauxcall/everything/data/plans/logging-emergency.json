@@ -1,0 +1,33 @@
+{
+  "name": "logging-emergency",
+  "created_at": "2026-10-25T21:25:00Z",
+  "listen": true,
+  "listen_after_seconds": 16,
+  "calls": [
+    {
+      "id": "setlevel-emergency",
+      "endpoint": "MCP logging/setLevel",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "level": "emergency"
+        }
+      }
+    },
+    {
+      "id": "logging-on-emergency",
+      "endpoint": "MCP tools/call:toggle-simulated-logging",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "toggle-simulated-logging",
+          "arguments": {}
+        }
+      }
+    }
+  ]
+}

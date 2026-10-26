@@ -2,10 +2,10 @@
   "id": "000118",
   "endpoint": "MCP tools/call:get-resource-links",
   "purpose": "edge",
-  "plan_call": "links-2-5",
-  "started_at": "2026-10-18T02:28:52.781695Z",
-  "started_ns": 1792290532781695000,
-  "elapsed_ms": 3.891,
+  "plan_call": "links-no-arguments",
+  "started_at": "2026-10-25T21:13:30.639508Z",
+  "started_ns": 1792962810639508000,
+  "elapsed_ms": 6.396,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -36,10 +36,7 @@
         "id": 9,
         "method": "tools/call",
         "params": {
-          "name": "get-resource-links",
-          "arguments": {
-            "count": 2.5
-          }
+          "name": "get-resource-links"
         }
       }
     }
@@ -81,7 +78,7 @@
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:28:52 GMT"
+        "Sun, 25 Oct 2026 21:13:30 GMT"
       ],
       [
         "transfer-encoding",
@@ -96,7 +93,7 @@
           "content": [
             {
               "type": "text",
-              "text": "Here are 2.5 resource links to resources available in this server:"
+              "text": "Here are 3 resource links to resources available in this server:"
             },
             {
               "name": "Blob Resource 1",
@@ -111,6 +108,13 @@
               "description": "Resource 2: plaintext resource",
               "mimeType": "text/plain",
               "type": "resource_link"
+            },
+            {
+              "name": "Blob Resource 3",
+              "uri": "demo://resource/dynamic/blob/3",
+              "description": "Resource 3: plaintext resource",
+              "mimeType": "text/plain",
+              "type": "resource_link"
             }
           ]
         },
@@ -121,11 +125,11 @@
   },
   "stream": [
     {
-      "t_ms": 3.749,
+      "t_ms": 6.146,
       "kind": "sse",
       "event": "message",
-      "id": "767cc980-7fc8-4f66-9de0-ac97d7e036f9",
-      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Here are 2.5 resource links to resources available in this server:\"},{\"name\":\"Blob Resource 1\",\"uri\":\"demo://resource/dynamic/blob/1\",\"description\":\"Resource 1: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Text Resource 2\",\"uri\":\"demo://resource/dynamic/text/2\",\"description\":\"Resource 2: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"}]},\"jsonrpc\":\"2.0\",\"id\":9}"
+      "id": "a2b57542-7488-4e99-9432-941a9c6933a2",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Here are 3 resource links to resources available in this server:\"},{\"name\":\"Blob Resource 1\",\"uri\":\"demo://resource/dynamic/blob/1\",\"description\":\"Resource 1: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Text Resource 2\",\"uri\":\"demo://resource/dynamic/text/2\",\"description\":\"Resource 2: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"},{\"name\":\"Blob Resource 3\",\"uri\":\"demo://resource/dynamic/blob/3\",\"description\":\"Resource 3: plaintext resource\",\"mimeType\":\"text/plain\",\"type\":\"resource_link\"}]},\"jsonrpc\":\"2.0\",\"id\":9}"
     }
   ],
   "redacted": [

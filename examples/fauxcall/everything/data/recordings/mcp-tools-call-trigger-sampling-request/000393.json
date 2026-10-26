@@ -1,0 +1,128 @@
+{
+  "id": "000393",
+  "endpoint": "MCP tools/call:trigger-sampling-request",
+  "purpose": "edge",
+  "plan_call": "sampling-key-order",
+  "started_at": "2026-10-25T21:24:53.400117Z",
+  "started_ns": 1792963493400117000,
+  "elapsed_ms": 9.277,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-sampling-request",
+          "arguments": {
+            "prompt": "Order test"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:24:53 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "LLM sampling result: \n{\n  \"_meta\": {\n    \"trace\": \"abc\"\n  },\n  \"model\": \"m-1\",\n  \"stopReason\": \"endTurn\",\n  \"role\": \"assistant\",\n  \"content\": {\n    \"type\": \"text\",\n    \"text\": \"ordered\"\n  },\n  \"extra\": \"kept?\"\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 5
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.699,
+      "kind": "sse",
+      "event": "message",
+      "id": "77b1302d-89bc-4d70-8366-83283a7b2750",
+      "data": "{\"method\":\"sampling/createMessage\",\"params\":{\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"Resource trigger-sampling-request context: Order test\"}}],\"systemPrompt\":\"You are a helpful test server.\",\"maxTokens\":100,\"temperature\":0.7},\"jsonrpc\":\"2.0\",\"id\":3}"
+    },
+    {
+      "t_ms": 9.07,
+      "kind": "sse",
+      "event": "message",
+      "id": "7a0dc44d-cdd6-42ab-a87e-cceab2881c78",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"LLM sampling result: \\n{\\n  \\\"_meta\\\": {\\n    \\\"trace\\\": \\\"abc\\\"\\n  },\\n  \\\"model\\\": \\\"m-1\\\",\\n  \\\"stopReason\\\": \\\"endTurn\\\",\\n  \\\"role\\\": \\\"assistant\\\",\\n  \\\"content\\\": {\\n    \\\"type\\\": \\\"text\\\",\\n    \\\"text\\\": \\\"ordered\\\"\\n  },\\n  \\\"extra\\\": \\\"kept?\\\"\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":5}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

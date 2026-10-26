@@ -1,0 +1,118 @@
+{
+  "id": "000068",
+  "endpoint": "MCP tools/call:toggle-simulated-logging",
+  "plan_call": "access-toggle-logging",
+  "started_at": "2026-10-25T21:05:41.588992Z",
+  "started_ns": 1792962341588992000,
+  "elapsed_ms": 5.073,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 19,
+        "method": "tools/call",
+        "params": {
+          "name": "toggle-simulated-logging",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:05:41 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Started simulated, random-leveled logging for session dc2cdde5-8a86-4be3-b7c7-b33cf236e89f at a 5 second pace. Client's selected logging level will be respected. If an interval elapses and the message to be sent is below the selected level, it will not be sent. Thus at higher chosen logging levels, messages should arrive further apart. "
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 19
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.842,
+      "kind": "sse",
+      "event": "message",
+      "id": "9d8f50f8-982d-47b0-a261-53e37c8cb843",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Started simulated, random-leveled logging for session dc2cdde5-8a86-4be3-b7c7-b33cf236e89f at a 5 second pace. Client's selected logging level will be respected. If an interval elapses and the message to be sent is below the selected level, it will not be sent. Thus at higher chosen logging levels, messages should arrive further apart. \"}]},\"jsonrpc\":\"2.0\",\"id\":19}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

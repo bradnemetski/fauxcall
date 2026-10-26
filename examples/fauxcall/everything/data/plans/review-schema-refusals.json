@@ -1,0 +1,244 @@
+{
+  "name": "review-schema-refusals",
+  "created_at": "2026-10-25T23:30:00Z",
+  "calls": [
+    {
+      "id": "cc-context-string",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "department",
+            "value": "E"
+          },
+          "context": "x"
+        }
+      }
+    },
+    {
+      "id": "cc-context-number-arg",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "name",
+            "value": ""
+          },
+          "context": {
+            "arguments": {
+              "department": 5
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cc-prompt-no-name",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt"
+          },
+          "argument": {
+            "name": "department",
+            "value": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "cc-resource-no-uri",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/resource"
+          },
+          "argument": {
+            "name": "resourceId",
+            "value": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "cc-name-number",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": 5
+          },
+          "argument": {
+            "name": "department",
+            "value": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "cc-ref-string",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": "ref/prompt",
+          "argument": {
+            "name": "x",
+            "value": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "tasks-list-cursor-number",
+      "endpoint": "MCP tasks/list",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "cursor": 5
+        }
+      }
+    },
+    {
+      "id": "resources-list-cursor-number",
+      "endpoint": "MCP resources/list",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "cursor": 5
+        }
+      }
+    },
+    {
+      "id": "prompts-list-cursor-number",
+      "endpoint": "MCP prompts/list",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "cursor": 5
+        }
+      }
+    },
+    {
+      "id": "tools-list-cursor-number",
+      "endpoint": "MCP tools/list",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "cursor": 5
+        }
+      }
+    },
+    {
+      "id": "ping-related-task",
+      "endpoint": "MCP ping",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "_meta": {
+            "io.modelcontextprotocol/related-task": {
+              "taskId": "nope"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "echo-related-task",
+      "endpoint": "MCP tools/call:echo",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "echo",
+          "arguments": {
+            "message": "x"
+          },
+          "_meta": {
+            "io.modelcontextprotocol/related-task": {
+              "taskId": "nope"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "prompt-related-task",
+      "endpoint": "MCP prompts/get:simple-prompt",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "simple-prompt",
+          "_meta": {
+            "io.modelcontextprotocol/related-task": {
+              "taskId": "nope"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cc-prompt-name-null-context-args",
+      "endpoint": "MCP completion/complete",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "ref": {
+            "type": "ref/prompt",
+            "name": "completable-prompt"
+          },
+          "argument": {
+            "name": "department",
+            "value": ""
+          },
+          "context": {
+            "arguments": "x"
+          }
+        }
+      }
+    }
+  ]
+}

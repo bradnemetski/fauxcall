@@ -1,0 +1,125 @@
+{
+  "id": "000056",
+  "endpoint": "MCP tools/call:get-structured-content",
+  "plan_call": "access-structured",
+  "started_at": "2026-10-25T21:05:35.034970Z",
+  "started_ns": 1792962335034970000,
+  "elapsed_ms": 6.425,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "tools/call",
+        "params": {
+          "name": "get-structured-content",
+          "arguments": {
+            "location": "Chicago"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:05:35 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"temperature\":36,\"conditions\":\"Light rain / drizzle\",\"humidity\":82}"
+            }
+          ],
+          "structuredContent": {
+            "temperature": 36,
+            "conditions": "Light rain / drizzle",
+            "humidity": 82
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 7
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.21,
+      "kind": "sse",
+      "event": "message",
+      "id": "0d0a7575-5254-45e5-9420-fd9172ebf62d",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"temperature\\\":36,\\\"conditions\\\":\\\"Light rain / drizzle\\\",\\\"humidity\\\":82}\"}],\"structuredContent\":{\"temperature\":36,\"conditions\":\"Light rain / drizzle\",\"humidity\":82}},\"jsonrpc\":\"2.0\",\"id\":7}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

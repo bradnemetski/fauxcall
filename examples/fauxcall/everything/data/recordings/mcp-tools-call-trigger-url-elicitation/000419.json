@@ -1,0 +1,128 @@
+{
+  "id": "000419",
+  "endpoint": "MCP tools/call:trigger-url-elicitation",
+  "purpose": "edge",
+  "plan_call": "url-error-path-third",
+  "started_at": "2026-10-25T21:25:07.888801Z",
+  "started_ns": 1792963507888801000,
+  "elapsed_ms": 4.896,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 8,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-url-elicitation",
+          "arguments": {
+            "url": "https://example.com/needs-auth",
+            "errorPath": true
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:25:07 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 8,
+        "error": {
+          "code": -32042,
+          "message": "MCP error -32042: This request requires browser-based authorization.",
+          "data": {
+            "elicitations": [
+              {
+                "mode": "url",
+                "url": "https://modelcontextprotocol.io",
+                "message": "Open this link to satisfy the prerequisite, then retry the request.",
+                "elicitationId": "e7e759ce-197c-4cc3-83cc-598c4f4cb5d2"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.589,
+      "kind": "sse",
+      "event": "message",
+      "id": "f067fb85-a3bf-4204-a9ee-1006ceea403c",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":8,\"error\":{\"code\":-32042,\"message\":\"MCP error -32042: This request requires browser-based authorization.\",\"data\":{\"elicitations\":[{\"mode\":\"url\",\"url\":\"https://modelcontextprotocol.io\",\"message\":\"Open this link to satisfy the prerequisite, then retry the request.\",\"elicitationId\":\"e7e759ce-197c-4cc3-83cc-598c4f4cb5d2\"}]}}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

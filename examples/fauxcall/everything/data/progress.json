@@ -1,61 +1,58 @@
 {
   "fake": "everything",
   "source": "http://127.0.0.1:3101/mcp",
-  "started_at": "2026-10-18T02:19:15.310901Z",
-  "updated_at": "2026-10-18T11:47:42.896348Z",
+  "started_at": "2026-10-25T20:59:19.252067Z",
+  "updated_at": "2026-10-25T23:35:57.242873Z",
   "phases": {
     "discover": {
       "status": "done",
-      "started_at": "2026-10-18T02:19:15.310901Z",
-      "finished_at": "2026-10-18T02:19:15.310901Z"
+      "started_at": "2026-10-25T20:59:19.252067Z",
+      "finished_at": "2026-10-25T20:59:19.252067Z"
     },
     "gate": {
       "status": "done",
-      "finished_at": "2026-10-18T02:27:19.415363Z"
+      "finished_at": "2026-10-25T21:11:53.047358Z"
     },
     "record": {
       "status": "done",
-      "finished_at": "2026-10-18T02:43:38.057732Z"
+      "finished_at": "2026-10-25T21:34:06.077865Z"
     },
     "model": {
       "status": "done",
-      "finished_at": "2026-10-18T02:43:38.651693Z"
+      "finished_at": "2026-10-25T21:34:39.883478Z"
     },
     "world": {
       "status": "done",
-      "finished_at": "2026-10-18T02:43:39.335881Z",
-      "notes": [
-        "no collections: an MCP server whose only state is per session (gzip session resources, tasks, subscriptions, logging, roots cache); handlers keep it consistent (resources/list and resources/read show what gzip registered, tasks/list what tools/call created)"
-      ]
+      "finished_at": "2026-10-25T21:34:40.489103Z"
     },
     "scaffold": {
       "status": "done",
-      "finished_at": "2026-10-18T09:45:51.738546Z"
+      "finished_at": "2026-10-25T21:35:06.618562Z"
     },
     "implement": {
       "status": "done",
-      "finished_at": "2026-10-18T10:20:04.335131Z"
+      "finished_at": "2026-10-25T21:58:01.414641Z"
     },
     "unit_tests": {
       "status": "done",
-      "finished_at": "2026-10-18T10:33:20.133080Z"
+      "finished_at": "2026-10-25T22:29:20.538618Z"
     },
     "e2e_tests": {
       "status": "done",
-      "finished_at": "2026-10-18T10:39:18.886544Z"
+      "finished_at": "2026-10-25T22:29:21.131033Z"
     },
     "parity": {
       "status": "done",
-      "finished_at": "2026-10-18T10:41:35.623939Z"
+      "finished_at": "2026-10-25T22:31:21.941728Z"
     },
     "review": {
       "status": "done",
-      "started_at": "2026-10-18T10:43:10.142638Z",
-      "finished_at": "2026-10-18T11:47:06.403863Z"
+      "started_at": "2026-10-25T22:31:23.148282Z",
+      "finished_at": "2026-10-25T23:35:55.848248Z"
     },
     "report": {
       "status": "done",
-      "finished_at": "2026-10-18T11:47:07.754429Z"
+      "finished_at": "2026-10-25T23:35:57.242464Z"
     }
   },
   "endpoints": [
@@ -252,15 +249,21 @@
   ],
   "gate": {
     "mutations": "approved",
-    "answered_at": "2026-10-18T02:27:19.414586Z"
+    "answered_at": "2026-10-25T21:11:53.046060Z"
   },
   "log": [
-    "2026-10-18 02:27 Gate from answers.json (headless): no credentials, no Jev, MCP tools/call:* approved at 60 calls per tool (recording+parity). 28 plans written in data/plans (generator: scripts/gen_plans.py). Server source read from the local node_modules of @modelcontextprotocol/server-everything 2026.8.31 as documentation.",
-    "2026-10-18 02:31 Read-only tools recorded+analyzed. Errors are SDK zod v4 messages ('Invalid input: expected X, received Y at path', 'Invalid option: expected one of \"a\"|\"b\"', 'Too small: expected number to be >=1'), joined by newline, wrapped 'MCP error -32602: Input validation error: Invalid arguments for tool T: ...' as isError results. Numbers are JS-formatted. Resource times: toLocaleTimeString en-US in America/New_York ('10:29:02 PM', plain space).",
-    "2026-10-18 02:43 Modeled: 17 tools computed (zod-style refusals in handlers, invalid_args=accept), get-env/get-tiny-image replay. Tool order = registration order; requires fixed from server source (async tools need tasks.requests.<method>); simulate-research-query requires [[]] (listed only after initialized). Transport: resumption=session, sse_streamed, message_member_order, timeout_cancel_reason.",
-    "2026-10-18 10:20 Implemented: all tools computed (get-env replayed) in src/fauxcall_everything/{tools,tasks,resources,validation,zod,js,state}.py; METHOD_HANDLERS for resources/*, prompts/get, completion/complete, logging/setLevel, tasks/*, notifications/initialized (tools/list_changed + roots sync), roots/list_changed; tools/call hook for task augmentation. tests/unit/test_plans.py replays all 30 plans value-for-value (masks uuids/times): all pass. Next: GET-stream unit tests, coverage, lint/mypy, e2e.",
-    "2026-10-18 10:33 Unit tests: 393 pass, 98.5% coverage (test_plans replays all 30 plans value-for-value; test_streams covers GET-stream pushes; test_tools/test_semantics edge cases). ruff+mypy clean. Next: e2e scenarios + parity.",
-    "2026-10-18 10:41 Parity (2 runs, --allow-real-writes): 100% overall, 100% independent (182/238 calls; 56 repeat recordings), 171 scenarios, nothing uncovered; no credentials so no refusal scenario. GET-stream pushes/progress/roots aren't compared by parity (client holds no GET stream; real roots request then waits 60s): covered by unit tests vs recordings.",
-    "2026-10-18 11:47 Review (fauxcall:reviewer): no blocking issues; fixed I1 (2024-10-07 supported, unsupported -> 2025-11-25, from source + recorded refusal text), I2 (session facts survive reset), I3 (refused roots/list answered at once, 000469), I4 (350 ms roots delay on wall clock), I5 (zod union/discriminator errors, async content required; 000473-000479), N1 URL hosts, N2 Infinity, N3 request issues/_meta 400 (000486-000489), N4 second initialized, N8 '; base64', N10 README latency. N11 contradicted by 000491 (timestamps can differ). Runtime-level gaps documented (GET header checks, refusal text, SDK size limits, resumed priming data, progress after cancel, SSE header timing). 4 review plans recorded. Parity run 3: 100% / independent 100%."
+    "2026-10-25 21:11 Headless gate from answers.json: no credentials, no Jev, all MCP tools/call approved at 60 calls per tool (recording+parity). Plans for every tool/method are in data/plans; heaviest planned write use is gzip at 21/60.",
+    "2026-10-25 21:11 Repaired the dev venv at FAUXCALL_SOURCE (src/.venv lacked pyvenv.cfg, so fauxcall could not import); rebuilt with uv sync.",
+    "2026-10-25 21:34 Recorded ~490 exchanges: every tool (valid/invalid args, edge values), resources (static, dynamic templates, session gzip resources), prompts, completions, logging/setLevel, subscriptions, tasks (get/result/list/cancel, input_required elicitation), sampling/elicitation/roots client requests, capability gating, protocol probes.",
+    "2026-10-25 21:34 Model: all tools but get-env/get-tiny-image computed (zod-exact validation in handlers); requires fixed for async tools (sampling|elicitation + tasks.requests.*), simulate-research-query requires [[]] (only after initialized); tools reordered to registration order; resumption=session; timeout_cancel_reason from SDK.",
+    "2026-10-25 21:34 Privacy: maxTokens was redacted as secret-like; added allow_names, deleted and re-recorded the 5 affected exchanges (000039/45/400/463/466 -> 000486-000492).",
+    "2026-10-25 21:34 World: MCP fake has no collections; consistency (gzip session resources in resources/list+read, tasks in tasks/list+get, subscriptions->updates, resource links/prompt embeds -> dynamic templates) lives in handler session state.",
+    "2026-10-25 21:58 Handlers implemented (tools.py, resources.py, prompts.py, tasks.py, client_tools.py + jsfmt/zod/whatwg helpers). 250 recorded answers replay value-exact at recording time; 22 recorded sessions replay value-exact with recorded client answers. Unit coverage 81% so far (tasks/whatwg/jsfmt gaps).",
+    "2026-10-25 22:15 Parity #1 (read-only) 99.82% -> fixed session-less GET/DELETE (middleware) -> 100%. Parity #2 (with writes) 99.94% / independent 99.91%; fixed zod union error texts for malformed client answers and a random prerequisite elicitationId comparison (test policy).",
+    "2026-10-25 22:29 Quality gates pass: ruff, ruff format, mypy strict, 907 tests (unit+e2e on fake), coverage 98.08%. Stages/ticks now scheduled on absolute deadlines so clock jumps finish due work. Fixed WHATWG userinfo/IPv6 serialization found by unit tests.",
+    "2026-10-25 22:31 Parity #3 with real writes: 100% overall, 100% independent (233 of 347 calls), 227 scenarios x2, none skipped, nothing uncovered. No credential exists to refuse (the server takes none).",
+    "2026-10-25 23:26 Review (fauxcall:reviewer) found 11 issue groups; recorded its probes A-E (000494-000543) as evidence; fixed: protocol negotiation (2024-10-07, default 2025-11-25), non-blocking clarification delivery + queue-time timeout + stale delivery, tools/list_changed on initialize, shared gzip registry, message member order, session-less POST/HEAD/empty-session rules, completion/cursor/related-task schema refusals, roots no-log, exact async union errors. Remaining runtime differences in README. Parity #4: 100%/100% (243 independent calls).",
+    "2026-10-25 23:27 Official MCP Python SDK 2.3.0 client connected to the served fake (fauxcall up): initialize (2025-11-25), tools/list by capability, echo, get-sum, sampling round trip, resources/read, prompts/get, completion, structured content: all OK.",
+    "2026-10-25 23:35 Reviewer re-check: no regressions; fixed its 3 remaining low items (related-task lookup first, ClientCapabilitiesSchema check on initialize, stale relay not kept waiting), documented 2 (answers to requests tied to a live task, list_changed not in server_messages). Final parity (#5, real writes): 100% / 100% independent (243 of 352), 456 runs, none skipped. 950 tests, coverage 97.45%."
   ]
 }

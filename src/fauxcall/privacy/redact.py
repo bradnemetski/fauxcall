@@ -67,6 +67,11 @@ _PUBLIC_SUFFIX_RE: Final = re.compile(
 _PAGINATION_RE: Final = re.compile(
     r"(?:page|next|prev|previous|continuation|sync|resume|cursor|progress)_?token$"
 )
+_TOKEN_COUNT_RE: Final = re.compile(
+    r"(?:^|_)(?:max|min|total|input|output|prompt|completion|cached|reasoning)_?tokens?$"
+    r"|tokens?_(?:count|used|limit)$"
+)
+"""Counts of a language model's tokens (``maxTokens``, ``prompt_tokens``): numbers, not keys."""
 _PUBLIC_HEADER_RE: Final = re.compile(r"rate_?limit|^access_control_")
 _AUTH_HEADERS: Final = frozenset({"authorization", "proxy-authorization"})
 _COOKIE_HEADERS: Final = frozenset({"cookie", "cookie2"})
@@ -116,7 +121,8 @@ _FOLDED_COOKIES_RE: Final = re.compile(r"(,\s*)(?=[^;,=\s]+=)")
 def is_public_name(name: str) -> bool:
     """Whether a name is exempt from redaction by name (``token_type``, ``pageToken``).
 
-    These names describe credentials rather than hold them, so they stay readable even when
+    These names describe credentials rather than hold them, or count a model's tokens
+    (``maxTokens``), so they stay readable even when
     :func:`fauxcall.logs.is_secret_key` matches. The rules are suffix-based, so unrelated names
     such as ``Content-Type`` qualify too (harmlessly).
     """
@@ -124,6 +130,7 @@ def is_public_name(name: str) -> bool:
     return bool(
         _PUBLIC_SUFFIX_RE.search(normalized)
         or _PAGINATION_RE.search(normalized)
+        or _TOKEN_COUNT_RE.search(normalized)
         or _PUBLIC_HEADER_RE.search(normalized)
     )
 

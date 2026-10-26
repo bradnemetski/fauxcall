@@ -9,7 +9,7 @@ folder per fake, sharing a uv workspace.
 
 | Fake | Imitates | Built from | Endpoints | Recordings | Parity with the real API | Offline tests |
 |---|---|---|---|---|---|---|
-| [`everything`](fauxcall/everything/README.md) | The MCP project's [Everything](https://github.com/modelcontextprotocol/servers/tree/main/src/everything) reference server, which exercises the whole protocol | MCP server (Streamable HTTP) | 19 tools, 7 resources, 2 resource templates, 4 prompts | 497 | **100%** over 171 scenarios (independent: 100% over 181 of 238 calls) | 569, 97% coverage |
+| [`everything`](fauxcall/everything/README.md) | The MCP project's [Everything](https://github.com/modelcontextprotocol/servers/tree/main/src/everything) reference server, which exercises the whole protocol | MCP server (Streamable HTTP) | 19 tools, 7 resources, 2 resource templates, 4 prompts | 538 | **100%** over 228 scenarios (independent: 100% over 243 of 352 calls) | 962, 97% coverage |
 | [`fakerestapi`](fauxcall/fakerestapi/README.md) | [FakeRESTApi](https://fakerestapi.azurewebsites.net), a demo API that echoes writes without storing them | Swagger UI page | 27 | 323 | **100%** over 115 scenarios | 671, 99% coverage |
 | [`frankfurter`](fauxcall/frankfurter/README.md) | [Frankfurter](https://frankfurter.dev), ECB exchange rates | OpenAPI document | 9 | 219 | **100%** over 142 scenarios | 427, 99% coverage |
 | [`petstore`](fauxcall/petstore/README.md) | [Swagger Petstore v3](https://petstore3.swagger.io), a shared public sandbox | Swagger UI page | 19 | 370 | **99.71%** over 96 scenarios; 98.48% over 80 with real writes | 361, 99% coverage |
@@ -61,7 +61,7 @@ which an image build can't reach.
 ## What changed after they were built
 
 The fakes are snapshots: they were built with FauxCall as it was on 11 October 2026 (Everything on
-12 October), and FauxCall kept improving from what these runs revealed. So:
+25 October), and FauxCall kept improving from what these runs revealed. So:
 
 - **Their READMEs mention limits that FauxCall has since fixed.** The reference API's README says a
   429 can't be lifted by moving the fake's clock (an `advance` now lifts it), and that the fake

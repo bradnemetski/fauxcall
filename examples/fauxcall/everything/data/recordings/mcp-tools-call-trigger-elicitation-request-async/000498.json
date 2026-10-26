@@ -1,0 +1,127 @@
+{
+  "id": "000498",
+  "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+  "purpose": "edge",
+  "plan_call": "ea-neither",
+  "started_at": "2026-10-25T23:09:43.271218Z",
+  "started_ns": 1792969783271218000,
+  "elapsed_ms": 12.604,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 23:09:43 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"expected\": \"object\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"task\"\n          ],\n          \"message\": \"Invalid input: expected object, received undefined\"\n        }\n      ],\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"action\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ]\n    ],\n    \"path\": [],\n    \"message\": \"Invalid input\"\n  }\n]"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 3
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.284,
+      "kind": "sse",
+      "event": "message",
+      "id": "4ea07aa7-7b2d-4098-9d48-8c2bb71d3125",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"task\":{\"ttl\":600000},\"message\":\"Please provide inputs for the following fields (async task demo):\",\"requestedSchema\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"Your Name\",\"type\":\"string\",\"description\":\"Your full name\"},\"favoriteColor\":{\"title\":\"Favorite Color\",\"type\":\"string\",\"description\":\"What is your favorite color?\",\"enum\":[\"Red\",\"Blue\",\"Green\",\"Yellow\",\"Purple\"]},\"agreeToTerms\":{\"title\":\"Terms Agreement\",\"type\":\"boolean\",\"description\":\"Do you agree to the terms and conditions?\"}},\"required\":[\"name\"]}},\"jsonrpc\":\"2.0\",\"id\":1}"
+    },
+    {
+      "t_ms": 12.353,
+      "kind": "sse",
+      "event": "message",
+      "id": "940a821c-5a9b-4b4c-81dd-9fd0b36d9703",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[\\n  {\\n    \\\"code\\\": \\\"invalid_union\\\",\\n    \\\"errors\\\": [\\n      [\\n        {\\n          \\\"expected\\\": \\\"object\\\",\\n          \\\"code\\\": \\\"invalid_type\\\",\\n          \\\"path\\\": [\\n            \\\"task\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected object, received undefined\\\"\\n        }\\n      ],\\n      [\\n        {\\n          \\\"expected\\\": \\\"string\\\",\\n          \\\"code\\\": \\\"invalid_type\\\",\\n          \\\"path\\\": [\\n            \\\"action\\\"\\n          ],\\n          \\\"message\\\": \\\"Invalid input: expected string, received undefined\\\"\\n        }\\n      ]\\n    ],\\n    \\\"path\\\": [],\\n    \\\"message\\\": \\\"Invalid input\\\"\\n  }\\n]\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":3}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

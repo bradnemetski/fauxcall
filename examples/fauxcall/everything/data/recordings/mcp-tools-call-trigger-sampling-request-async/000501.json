@@ -1,0 +1,128 @@
+{
+  "id": "000501",
+  "endpoint": "MCP tools/call:trigger-sampling-request-async",
+  "purpose": "edge",
+  "plan_call": "sa-sync-null-content",
+  "started_at": "2026-10-25T23:09:45.817959Z",
+  "started_ns": 1792969785817959000,
+  "elapsed_ms": 7.785,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "x"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 23:09:45 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[SYNC] Client executed synchronously:\n{\n  \"role\": \"assistant\",\n  \"content\": null,\n  \"model\": \"m\"\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 6
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 3.784,
+      "kind": "sse",
+      "event": "message",
+      "id": "82b21632-0100-43a4-837c-c61588c2aa43",
+      "data": "{\"method\":\"sampling/createMessage\",\"params\":{\"task\":{\"ttl\":300000},\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"Resource trigger-sampling-request-async context: x\"}}],\"systemPrompt\":\"You are a helpful test server.\",\"maxTokens\":100,\"temperature\":0.7},\"jsonrpc\":\"2.0\",\"id\":6}"
+    },
+    {
+      "t_ms": 7.561,
+      "kind": "sse",
+      "event": "message",
+      "id": "aa3746c7-8eb3-4e3f-8935-c27441158ba1",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[SYNC] Client executed synchronously:\\n{\\n  \\\"role\\\": \\\"assistant\\\",\\n  \\\"content\\\": null,\\n  \\\"model\\\": \\\"m\\\"\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":6}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

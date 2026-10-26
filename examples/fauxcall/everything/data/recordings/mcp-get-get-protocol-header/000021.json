@@ -1,0 +1,79 @@
+{
+  "id": "000021",
+  "endpoint": "MCP GET:get_protocol_header",
+  "purpose": "discovery",
+  "started_at": "2026-10-25T20:59:29.781444Z",
+  "started_ns": 1792961969781444000,
+  "elapsed_ms": 3.321,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "1999-01-01"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "198"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 20:59:29 GMT"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "keep-alive",
+        "timeout=5"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "error": {
+          "code": -32000,
+          "message": "Bad Request: Unsupported protocol version: 1999-01-01 (supported versions: 2025-11-25, 2025-06-18, 2025-03-26, 2024-11-05, 2024-10-07)"
+        },
+        "id": null
+      }
+    }
+  },
+  "redacted": [
+    "request.header:mcp-session-id"
+  ]
+}

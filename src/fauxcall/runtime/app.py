@@ -25,7 +25,7 @@ from starlette.responses import FileResponse, Response, StreamingResponse
 
 from fauxcall import __version__
 from fauxcall.calendar import TradingCalendar
-from fauxcall.clock import ClockRegistry, ControlledClock, ns_to_datetime
+from fauxcall.clock import ClockRegistry, ControlledClock, ns_to_datetime, seconds_to_ns
 from fauxcall.config import FakeSettings
 from fauxcall.errors import FauxcallError
 from fauxcall.logs import (
@@ -140,6 +140,7 @@ class FakeRuntime:
         self.series = SeriesStore(data / "series", origin_ns=self.clocks.default.now_ns())
         self._sleep = sleep
         self.pauses: deque[float] = deque(maxlen=1000)
+        self._clock_watchers: set[asyncio.Future[None]] = set()
         """The latest pauses (seconds) emulated latency and handlers took: for tests to check."""
         self._counters: dict[tuple[str, str], int] = {}
         self._session_seq: dict[str, int] = {}
@@ -181,6 +182,45 @@ class FakeRuntime:
         """
         self.pauses.append(seconds)
         await self._sleep(seconds)
+
+    async def wait(self, session: str | None, seconds: float, *, noted: bool = True) -> None:
+        """Wait until ``seconds`` pass on the session's clock (the fake's time, not latency).
+
+        While nobody moves the clock that is real time (scaled with it); advancing the clock
+        wakes the wait at once once its time is due, and a frozen clock waits until it moves.
+        Background work and long handlers wait this way, so tests and agents can fast-forward
+        through them (``POST /__fauxcall/clock``). Noted in :attr:`pauses` unless ``noted`` is
+        false (a timeout, which ends the wait early when it isn't reached).
+        """
+        if noted:
+            self.pauses.append(seconds)
+        deadline = self.clocks.for_session(session).now_ns() + seconds_to_ns(seconds)
+        while True:
+            moved: asyncio.Future[None] = asyncio.get_running_loop().create_future()
+            self._clock_watchers.add(moved)  # before reading the clock: no change is missed
+            clock = self.clocks.for_session(session)
+            left_ns = deadline - clock.now_ns()
+            if left_ns <= 0:
+                self._clock_watchers.discard(moved)
+                return
+            waits: set[asyncio.Future[Any]] = {moved}
+            slept = None
+            if clock.rate > 0:  # the runtime's sleep takes the rest (real time, or a test's)
+                slept = asyncio.ensure_future(self._sleep(left_ns / 1e9 / clock.rate))
+                waits.add(slept)
+            await asyncio.wait(waits, return_when=asyncio.FIRST_COMPLETED)
+            for pending in waits:
+                pending.cancel()
+            self._clock_watchers.discard(moved)
+            if slept is not None and slept.done() and not slept.cancelled():
+                return  # the time has passed
+
+    def clock_moved(self) -> None:
+        """Someone moved a clock: waits whose time has come wake up."""
+        watchers, self._clock_watchers = self._clock_watchers, set()
+        for moved in watchers:  # each on its own loop: a runtime can outlive a test's loop
+            if not moved.done() and not moved.get_loop().is_closed():
+                moved.get_loop().call_soon_threadsafe(_settle, moved)
 
     def calendar(self, name: str) -> TradingCalendar:
         """A calendar by name."""
@@ -571,6 +611,12 @@ class FakeRuntime:
 
 
 # -- app factory -----------------------------------------------------------------------------
+
+
+def _settle(moved: asyncio.Future[None]) -> None:
+    """Wake a :meth:`FakeRuntime.wait` (on its own loop) unless it has already stopped."""
+    if not moved.done():
+        moved.set_result(None)
 
 
 def runtime_of(connection: HTTPConnection) -> FakeRuntime:

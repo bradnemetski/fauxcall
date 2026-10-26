@@ -1,11 +1,10 @@
 {
   "id": "000051",
   "endpoint": "MCP tools/call:echo",
-  "purpose": "edge",
-  "plan_call": "echo-empty",
-  "started_at": "2026-10-18T02:27:29.712686Z",
-  "started_ns": 1792290449712686000,
-  "elapsed_ms": 4.35,
+  "plan_call": "access-echo",
+  "started_at": "2026-10-25T21:05:32.524958Z",
+  "started_ns": 1792962332524958000,
+  "elapsed_ms": 7.664,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,12 +32,12 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 7,
+        "id": 2,
         "method": "tools/call",
         "params": {
           "name": "echo",
           "arguments": {
-            "message": ""
+            "message": "hello from fauxcall"
           }
         }
       }
@@ -81,7 +80,7 @@
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:27:29 GMT"
+        "Sun, 25 Oct 2026 21:05:32 GMT"
       ],
       [
         "transfer-encoding",
@@ -96,22 +95,22 @@
           "content": [
             {
               "type": "text",
-              "text": "Echo: "
+              "text": "Echo: hello from fauxcall"
             }
           ]
         },
         "jsonrpc": "2.0",
-        "id": 7
+        "id": 2
       }
     }
   },
   "stream": [
     {
-      "t_ms": 4.171,
+      "t_ms": 7.302,
       "kind": "sse",
       "event": "message",
-      "id": "95a67d79-89f6-4ce1-80b0-2d0751b110b4",
-      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Echo: \"}]},\"jsonrpc\":\"2.0\",\"id\":7}"
+      "id": "2a97aa4f-068f-4dd5-8578-99cce0652603",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Echo: hello from fauxcall\"}]},\"jsonrpc\":\"2.0\",\"id\":2}"
     }
   ],
   "redacted": [

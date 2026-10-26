@@ -2,10 +2,10 @@
   "id": "000130",
   "endpoint": "MCP tools/call:get-structured-content",
   "purpose": "invalid",
-  "plan_call": "weather-lower",
-  "started_at": "2026-10-18T02:29:00.103796Z",
-  "started_ns": 1792290540103796000,
-  "elapsed_ms": 2.203,
+  "plan_call": "structured-missing",
+  "started_at": "2026-10-25T21:13:37.347172Z",
+  "started_ns": 1792962817347172000,
+  "elapsed_ms": 8.1,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -37,9 +37,7 @@
         "method": "tools/call",
         "params": {
           "name": "get-structured-content",
-          "arguments": {
-            "location": "new york"
-          }
+          "arguments": {}
         }
       }
     }
@@ -81,7 +79,7 @@
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:29:00 GMT"
+        "Sun, 25 Oct 2026 21:13:37 GMT"
       ],
       [
         "transfer-encoding",
@@ -108,10 +106,10 @@
   },
   "stream": [
     {
-      "t_ms": 2.098,
+      "t_ms": 7.829,
       "kind": "sse",
       "event": "message",
-      "id": "9bd8206d-2108-40cd-b544-e741502cca92",
+      "id": "3d09e457-dc39-4646-91ae-3cf4f4c399cb",
       "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Input validation error: Invalid arguments for tool get-structured-content: Invalid option: expected one of \\\"New York\\\"|\\\"Chicago\\\"|\\\"Los Angeles\\\" at location\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":7}"
     }
   ],

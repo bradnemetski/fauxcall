@@ -1,0 +1,114 @@
+{
+  "id": "000288",
+  "endpoint": "MCP logging/setLevel",
+  "purpose": "invalid",
+  "plan_call": "setlevel-bad",
+  "started_at": "2026-10-25T21:19:30.690763Z",
+  "started_ns": 1792963170690763000,
+  "elapsed_ms": 8.909,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "logging/setLevel",
+        "params": {
+          "level": "verbose"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "588"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:19:30 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "error": {
+          "code": -32603,
+          "message": "[\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"debug\",\n      \"info\",\n      \"notice\",\n      \"warning\",\n      \"error\",\n      \"critical\",\n      \"alert\",\n      \"emergency\"\n    ],\n    \"path\": [\n      \"params\",\n      \"level\"\n    ],\n    \"message\": \"Invalid option: expected one of \\\"debug\\\"|\\\"info\\\"|\\\"notice\\\"|\\\"warning\\\"|\\\"error\\\"|\\\"critical\\\"|\\\"alert\\\"|\\\"emergency\\\"\"\n  }\n]"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 8.628,
+      "kind": "sse",
+      "event": "message",
+      "id": "af4729a2-1e43-4c3e-8aca-4ebb2fb8b1c9",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":7,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"code\\\": \\\"invalid_value\\\",\\n    \\\"values\\\": [\\n      \\\"debug\\\",\\n      \\\"info\\\",\\n      \\\"notice\\\",\\n      \\\"warning\\\",\\n      \\\"error\\\",\\n      \\\"critical\\\",\\n      \\\"alert\\\",\\n      \\\"emergency\\\"\\n    ],\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"level\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid option: expected one of \\\\\\\"debug\\\\\\\"|\\\\\\\"info\\\\\\\"|\\\\\\\"notice\\\\\\\"|\\\\\\\"warning\\\\\\\"|\\\\\\\"error\\\\\\\"|\\\\\\\"critical\\\\\\\"|\\\\\\\"alert\\\\\\\"|\\\\\\\"emergency\\\\\\\"\\\"\\n  }\\n]\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

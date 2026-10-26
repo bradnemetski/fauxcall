@@ -1,9 +1,9 @@
 {
   "name": "echo",
-  "created_at": "2026-10-18T02:30:00Z",
+  "created_at": "2026-10-25T21:15:00Z",
   "calls": [
     {
-      "id": "echo-hello",
+      "id": "echo-simple",
       "endpoint": "MCP tools/call:echo",
       "purpose": "sample",
       "request": {
@@ -12,12 +12,10 @@
         "json_body": {
           "name": "echo",
           "arguments": {
-            "message": "hello"
+            "message": "Hello, world!"
           }
         }
-      },
-      "repeat": 3,
-      "interval_ms": 1000
+      }
     },
     {
       "id": "echo-sentence",
@@ -29,7 +27,7 @@
         "json_body": {
           "name": "echo",
           "arguments": {
-            "message": "Hello, World! How are you today?"
+            "message": "The quick brown fox jumps over the lazy dog."
           }
         }
       }
@@ -44,7 +42,7 @@
         "json_body": {
           "name": "echo",
           "arguments": {
-            "message": "héllo wörld 🌍 — ünïcödé ✓"
+            "message": "Grüße aus Zürich — 你好 🌍"
           }
         }
       }
@@ -67,7 +65,7 @@
     {
       "id": "echo-multiline",
       "endpoint": "MCP tools/call:echo",
-      "purpose": "variation",
+      "purpose": "edge",
       "request": {
         "method": "POST",
         "path": "/mcp",
@@ -80,16 +78,31 @@
       }
     },
     {
-      "id": "echo-json",
+      "id": "echo-json-like",
       "endpoint": "MCP tools/call:echo",
-      "purpose": "variation",
+      "purpose": "edge",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
           "name": "echo",
           "arguments": {
-            "message": "{\"a\": 1, \"b\": [1, 2]}"
+            "message": "{\"a\": 1, \"b\": [true, null]}"
+          }
+        }
+      }
+    },
+    {
+      "id": "echo-spaces",
+      "endpoint": "MCP tools/call:echo",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "echo",
+          "arguments": {
+            "message": "   padded   "
           }
         }
       }
@@ -104,13 +117,13 @@
         "json_body": {
           "name": "echo",
           "arguments": {
-            "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+            "message": "lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet "
           }
         }
       }
     },
     {
-      "id": "echo-padded",
+      "id": "echo-extra-arg",
       "endpoint": "MCP tools/call:echo",
       "purpose": "edge",
       "request": {
@@ -119,23 +132,38 @@
         "json_body": {
           "name": "echo",
           "arguments": {
-            "message": "  padded  "
+            "message": "with extra",
+            "unused": 42
           }
         }
       }
     },
     {
-      "id": "echo-extra-field",
+      "id": "echo-repeat-1",
       "endpoint": "MCP tools/call:echo",
-      "purpose": "edge",
+      "purpose": "variation",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
           "name": "echo",
           "arguments": {
-            "message": "extra",
-            "extra": true
+            "message": "same input"
+          }
+        }
+      }
+    },
+    {
+      "id": "echo-repeat-2",
+      "endpoint": "MCP tools/call:echo",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "echo",
+          "arguments": {
+            "message": "same input"
           }
         }
       }
@@ -197,23 +225,6 @@
               "a",
               "b"
             ]
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-object",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": {
-              "text": "hi"
-            }
           }
         }
       }

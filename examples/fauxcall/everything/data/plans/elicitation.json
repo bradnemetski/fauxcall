@@ -1,0 +1,228 @@
+{
+  "name": "elicitation",
+  "created_at": "2026-10-25T21:30:00Z",
+  "client_capabilities": {
+    "elicitation": {}
+  },
+  "calls": [
+    {
+      "id": "elicit-accept-full",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "accept",
+          "content": {
+            "name": "Ada Lovelace",
+            "check": true,
+            "firstLine": "Call me Ishmael.",
+            "email": "ada@example.com",
+            "homepage": "https://example.com/ada",
+            "birthdate": "1815-12-10",
+            "integer": 7,
+            "number": 2.5,
+            "untitledSingleSelectEnum": "Ross",
+            "untitledMultipleSelectEnum": [
+              "Piano",
+              "Violin"
+            ],
+            "titledSingleSelectEnum": "hero-3",
+            "titledMultipleSelectEnum": [
+              "fish-2"
+            ],
+            "legacyTitledEnum": "pet-4"
+          }
+        }
+      }
+    },
+    {
+      "id": "elicit-accept-name",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "accept",
+          "content": {
+            "name": "Grace"
+          }
+        }
+      }
+    },
+    {
+      "id": "elicit-accept-false",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "accept",
+          "content": {
+            "name": "Linus",
+            "check": false,
+            "integer": 0,
+            "number": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "elicit-accept-color-pet",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "accept",
+          "content": {
+            "name": "Kim",
+            "color": "teal",
+            "petType": "cat"
+          }
+        }
+      }
+    },
+    {
+      "id": "elicit-accept-empty",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "accept"
+        }
+      }
+    },
+    {
+      "id": "elicit-decline",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "decline"
+        }
+      }
+    },
+    {
+      "id": "elicit-cancel",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "cancel"
+        }
+      }
+    },
+    {
+      "id": "elicit-error",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "error": {
+            "code": -32600,
+            "message": "Elicitation not supported right now"
+          }
+        }
+      }
+    },
+    {
+      "id": "elicit-bad-action",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "maybe"
+        }
+      }
+    },
+    {
+      "id": "elicit-extra-args",
+      "endpoint": "MCP tools/call:trigger-elicitation-request",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request",
+          "arguments": {
+            "unused": true
+          }
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "decline"
+        }
+      }
+    }
+  ]
+}

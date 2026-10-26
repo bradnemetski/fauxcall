@@ -1,0 +1,136 @@
+{
+  "id": "000543",
+  "endpoint": "MCP GET:stream",
+  "started_at": "2026-10-25T23:10:03.889758Z",
+  "started_ns": 1792969803889758000,
+  "elapsed_ms": 68719.018,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 23:10:03 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "content_type": "text/event-stream"
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 519.744,
+      "kind": "sse",
+      "event": "message",
+      "id": "26d860eb-88e1-431d-abaa-9f46101a8a8a",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"53347c8fdb5ea11a35e81d1ffce768b3\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:10:04.408Z\",\"lastUpdatedAt\":\"2026-10-25T23:10:04.408Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 1523.921,
+      "kind": "sse",
+      "event": "message",
+      "id": "935897a1-fcb9-4d8e-b21f-eea2e9c97a12",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"53347c8fdb5ea11a35e81d1ffce768b3\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:10:04.408Z\",\"lastUpdatedAt\":\"2026-10-25T23:10:05.411Z\",\"pollInterval\":1000,\"statusMessage\":\"Analyzing content...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 2526.643,
+      "kind": "sse",
+      "event": "message",
+      "id": "fa1eb236-2b55-41a6-a5f5-b47b68e22df6",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"53347c8fdb5ea11a35e81d1ffce768b3\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:10:04.408Z\",\"lastUpdatedAt\":\"2026-10-25T23:10:06.413Z\",\"pollInterval\":1000,\"statusMessage\":\"Synthesizing findings...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 2526.943,
+      "kind": "sse",
+      "event": "message",
+      "id": "2e027662-1f89-4f26-b02b-e8b959853051",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"53347c8fdb5ea11a35e81d1ffce768b3\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:10:04.408Z\",\"lastUpdatedAt\":\"2026-10-25T23:10:06.414Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"python\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 2527.03,
+      "kind": "sse",
+      "event": "message",
+      "id": "a20f576d-7ea7-4059-aad1-5e38e96bb805",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"53347c8fdb5ea11a35e81d1ffce768b3\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:10:04.408Z\",\"lastUpdatedAt\":\"2026-10-25T23:10:06.414Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"python\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 62531.932,
+      "kind": "sse",
+      "event": "message",
+      "id": "c27d9c45-912a-4581-ac4b-02a7750fe99c",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"53347c8fdb5ea11a35e81d1ffce768b3\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:10:04.408Z\",\"lastUpdatedAt\":\"2026-10-25T23:11:06.418Z\",\"pollInterval\":1000,\"statusMessage\":\"Continuing with interpretation: \\\"technical (default - elicitation unavailable)\\\"...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 63534.9,
+      "kind": "sse",
+      "event": "message",
+      "id": "89f1de01-b04e-44f0-b2eb-71b32d6cb0c4",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"53347c8fdb5ea11a35e81d1ffce768b3\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:10:04.408Z\",\"lastUpdatedAt\":\"2026-10-25T23:11:07.421Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 64538.123,
+      "kind": "sse",
+      "event": "message",
+      "id": "e9f892d6-a97c-47a7-b518-1e04800b5ee6",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"53347c8fdb5ea11a35e81d1ffce768b3\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:10:04.408Z\",\"lastUpdatedAt\":\"2026-10-25T23:11:08.425Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

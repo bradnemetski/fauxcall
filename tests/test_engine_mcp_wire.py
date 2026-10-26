@@ -13,7 +13,7 @@ from _mcp import live_server, mcp_app, mcp_model
 from fauxcall.mcpwire import protocol
 from fauxcall.mcpwire.client import McpWireClient
 from fauxcall.model.mcp import McpToolModel, McpTransportModel
-from fauxcall.runtime import ClientError, register_method, register_tool
+from fauxcall.runtime import Channel, ClientError, register_method, register_tool
 from fauxcall.testing.asgi import streaming_client
 
 if TYPE_CHECKING:
@@ -150,6 +150,32 @@ async def test_the_fake_cancels_its_own_requests_that_time_out(tmp_path: Path) -
         sent = [json.loads(data) for _, _, data, _ in answered.sse_events if data.strip()]
         cancelled = next(m for m in sent if m.get("method") == "notifications/cancelled")
         assert cancelled["params"] == {"requestId": sent[0]["id"], "reason": reason}
+        await wire.close()
+
+
+async def test_requests_to_the_client_time_out_on_the_fakes_clock(tmp_path: Path) -> None:
+    tools = [McpToolModel(definition=SLOW, behavior="computed")]
+    app, runtime = mcp_app(tmp_path, mcp_model(tools=tools))
+
+    async def ask(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        try:
+            await ctx.ask_client("roots/list", within=60)
+        except ClientError as error:
+            return {"content": [{"type": "text", "text": error.message}]}
+        return {"content": []}  # pragma: no cover - the client never answers
+
+    register_tool(app, "slow", ask)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)  # reads the request, never answers
+        await wire.initialize()
+        calling = asyncio.ensure_future(wire.call("tools/call", {"name": "slow", "arguments": {}}))
+        await asyncio.sleep(0.05)
+        moved = await http.post("/__fauxcall/clock", json={"op": "advance", "seconds": 60})
+        assert moved.status_code == 200
+        async with asyncio.timeout(5):  # at once, not after a real minute
+            answered = await calling
+        assert "Request timed out" in json.dumps(answered.response)
+        assert 60 not in runtime.pauses  # a timeout isn't a pause
         await wire.close()
 
 
@@ -414,3 +440,75 @@ async def test_refusals_name_the_version_sent_and_limits_apply(tmp_path: Path) -
         fits = await http.post("/mcp", json=pings[:3], headers=headers)
         assert fits.status_code == 200
         await wire.close()
+
+
+async def test_background_work_follows_the_fakes_clock(tmp_path: Path) -> None:
+    transport = McpTransportModel(response_mode="json", get_stream="sse")
+    tools = [McpToolModel(definition=SLOW, behavior="computed")]
+    app, runtime = mcp_app(tmp_path, mcp_model(transport=transport, tools=tools))
+    runtime.settings.fast = True  # background waits aren't skipped: they'd spin
+
+    async def later(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        async def work(channel: Channel) -> None:
+            await channel.pause(30)  # 30 s on the session's clock
+            channel.push("notifications/message", {"level": "info", "data": "half a minute"})
+
+        ctx.background(work)
+        return {"content": []}
+
+    register_tool(app, "slow", later)
+    async with streaming_client(app) as http:
+        wire = McpWireClient("http://fake.test/mcp", http)
+        await wire.initialize()
+        headers = {"mcp-session-id": str(wire.session_id), "accept": "text/event-stream"}
+        async with http.stream("GET", "/mcp", headers=headers) as stream:
+            stream_lines = stream.aiter_lines()
+            await wire.call("tools/call", {"name": "slow", "arguments": {}})
+            await asyncio.sleep(0.05)
+            moved = await http.post("/__fauxcall/clock", json={"op": "advance", "seconds": 30})
+            assert moved.status_code == 200
+            line = next(x for x in await lines_of(stream_lines, 2) if x.startswith("data:"))
+        assert "half a minute" in line  # at once, not after 30 real seconds
+        assert 30 in runtime.pauses
+        await wire.close()
+
+
+async def test_a_frozen_clock_holds_background_work(tmp_path: Path) -> None:
+    _app, runtime = mcp_app(tmp_path, mcp_model(transport=McpTransportModel(response_mode="json")))
+    runtime.clocks.default.freeze()
+    done = asyncio.Event()
+
+    async def wait_then_finish() -> None:
+        await runtime.wait(None, 0.01)
+        done.set()
+
+    waiting = asyncio.ensure_future(wait_then_finish())
+    await asyncio.sleep(0.1)
+    assert not done.is_set()  # the clock doesn't move: neither does the work
+    runtime.clocks.default.advance(1)
+    runtime.clock_moved()
+    async with asyncio.timeout(2):
+        await waiting
+    assert done.is_set()
+
+
+def test_waits_outlive_an_event_loop(tmp_path: Path) -> None:
+    _app, runtime = mcp_app(tmp_path, mcp_model(transport=McpTransportModel(response_mode="json")))
+    runtime.clocks.default.freeze()
+
+    async def advanced_wait() -> None:
+        waiting = asyncio.ensure_future(runtime.wait(None, 1))
+        await asyncio.sleep(0.01)
+        runtime.clocks.default.advance(1)
+        runtime.clock_moved()
+        async with asyncio.timeout(2):
+            await waiting
+
+    async def abandoned_wait() -> None:
+        waiting = asyncio.ensure_future(runtime.wait(None, 60))
+        await asyncio.sleep(0.01)
+        waiting.cancel()  # its watcher is left behind when this loop closes
+
+    asyncio.run(abandoned_wait())
+    asyncio.run(advanced_wait())  # each loop wakes its own waits; a closed one is skipped
+    runtime.clock_moved()

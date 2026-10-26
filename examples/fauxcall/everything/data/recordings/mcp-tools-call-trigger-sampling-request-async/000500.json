@@ -1,0 +1,136 @@
+{
+  "id": "000500",
+  "endpoint": "MCP tools/call:trigger-sampling-request-async",
+  "purpose": "edge",
+  "plan_call": "sa-poll-message-number",
+  "started_at": "2026-10-25T23:09:44.790774Z",
+  "started_ns": 1792969784790774000,
+  "elapsed_ms": 1014.839,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "x"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 23:09:44 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"statusMessage\"\n    ],\n    \"message\": \"Invalid input: expected string, received number\"\n  }\n]"
+            }
+          ],
+          "isError": true
+        },
+        "jsonrpc": "2.0",
+        "id": 5
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.937,
+      "kind": "sse",
+      "event": "message",
+      "id": "3a4298a1-4a5d-4904-ba8c-b31abb879ad1",
+      "data": "{\"method\":\"sampling/createMessage\",\"params\":{\"task\":{\"ttl\":300000},\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"Resource trigger-sampling-request-async context: x\"}}],\"systemPrompt\":\"You are a helpful test server.\",\"maxTokens\":100,\"temperature\":0.7},\"jsonrpc\":\"2.0\",\"id\":4}"
+    },
+    {
+      "t_ms": 1008.65,
+      "kind": "sse",
+      "event": "message",
+      "id": "310bef16-b632-44e8-8aa4-626ca109fed5",
+      "data": "{\"method\":\"tasks/get\",\"params\":{\"taskId\":\"rv-2\"},\"jsonrpc\":\"2.0\",\"id\":5}"
+    },
+    {
+      "t_ms": 1014.512,
+      "kind": "sse",
+      "event": "message",
+      "id": "2e18bb30-01c8-4055-8a62-aaeaa3ee794f",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[\\n  {\\n    \\\"expected\\\": \\\"string\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"statusMessage\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected string, received number\\\"\\n  }\\n]\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":5}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

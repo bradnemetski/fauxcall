@@ -1,0 +1,144 @@
+{
+  "id": "000450",
+  "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+  "purpose": "variation",
+  "plan_call": "ea-task-cancel-result",
+  "started_at": "2026-10-25T21:27:37.716994Z",
+  "started_ns": 1792963657716994000,
+  "elapsed_ms": 1019.618,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 11,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:27:37 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[CANCELLED] User cancelled the elicitation dialog."
+            },
+            {
+              "type": "text",
+              "text": "\nProgress:\nTask created: client-el-3\nPoll 1: completed\n\nRaw result: {\n  \"action\": \"cancel\"\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 11
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.163,
+      "kind": "sse",
+      "event": "message",
+      "id": "0b1a7252-336c-4546-98ef-7899b256e39a",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"task\":{\"ttl\":600000},\"message\":\"Please provide inputs for the following fields (async task demo):\",\"requestedSchema\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"Your Name\",\"type\":\"string\",\"description\":\"Your full name\"},\"favoriteColor\":{\"title\":\"Favorite Color\",\"type\":\"string\",\"description\":\"What is your favorite color?\",\"enum\":[\"Red\",\"Blue\",\"Green\",\"Yellow\",\"Purple\"]},\"agreeToTerms\":{\"title\":\"Terms Agreement\",\"type\":\"boolean\",\"description\":\"Do you agree to the terms and conditions?\"}},\"required\":[\"name\"]}},\"jsonrpc\":\"2.0\",\"id\":17}"
+    },
+    {
+      "t_ms": 1011.738,
+      "kind": "sse",
+      "event": "message",
+      "id": "ee6c3de4-07a4-401a-af5d-8b6775a3dea8",
+      "data": "{\"method\":\"tasks/get\",\"params\":{\"taskId\":\"client-el-3\"},\"jsonrpc\":\"2.0\",\"id\":18}"
+    },
+    {
+      "t_ms": 1017.435,
+      "kind": "sse",
+      "event": "message",
+      "id": "442b8674-0612-4b2f-b712-ff8e6bda6bd2",
+      "data": "{\"method\":\"tasks/result\",\"params\":{\"taskId\":\"client-el-3\"},\"jsonrpc\":\"2.0\",\"id\":19}"
+    },
+    {
+      "t_ms": 1019.368,
+      "kind": "sse",
+      "event": "message",
+      "id": "bec76740-1a1d-432e-bfed-05d5f248baad",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[CANCELLED] User cancelled the elicitation dialog.\"},{\"type\":\"text\",\"text\":\"\\nProgress:\\nTask created: client-el-3\\nPoll 1: completed\\n\\nRaw result: {\\n  \\\"action\\\": \\\"cancel\\\"\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":11}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "name": "get-resource-links",
-  "created_at": "2026-10-18T02:30:00Z",
+  "created_at": "2026-10-25T21:15:00Z",
   "calls": [
     {
       "id": "links-default",
@@ -31,21 +31,6 @@
       }
     },
     {
-      "id": "links-2",
-      "endpoint": "MCP tools/call:get-resource-links",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-resource-links",
-          "arguments": {
-            "count": 2
-          }
-        }
-      }
-    },
-    {
       "id": "links-3",
       "endpoint": "MCP tools/call:get-resource-links",
       "purpose": "variation",
@@ -61,7 +46,7 @@
       }
     },
     {
-      "id": "links-4",
+      "id": "links-5",
       "endpoint": "MCP tools/call:get-resource-links",
       "purpose": "variation",
       "request": {
@@ -70,7 +55,7 @@
         "json_body": {
           "name": "get-resource-links",
           "arguments": {
-            "count": 4
+            "count": 5
           }
         }
       }
@@ -106,7 +91,7 @@
       }
     },
     {
-      "id": "links-2-5",
+      "id": "links-fraction",
       "endpoint": "MCP tools/call:get-resource-links",
       "purpose": "edge",
       "request": {
@@ -117,6 +102,18 @@
           "arguments": {
             "count": 2.5
           }
+        }
+      }
+    },
+    {
+      "id": "links-no-arguments",
+      "endpoint": "MCP tools/call:get-resource-links",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-links"
         }
       }
     },
@@ -151,7 +148,7 @@
       }
     },
     {
-      "id": "links-neg",
+      "id": "links-negative",
       "endpoint": "MCP tools/call:get-resource-links",
       "purpose": "invalid",
       "request": {
@@ -160,7 +157,7 @@
         "json_body": {
           "name": "get-resource-links",
           "arguments": {
-            "count": -1
+            "count": -2
           }
         }
       }

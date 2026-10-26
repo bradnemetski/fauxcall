@@ -2,10 +2,10 @@
   "id": "000343",
   "endpoint": "MCP tasks/get",
   "purpose": "job_poll",
-  "plan_call": "research-get-after",
-  "started_at": "2026-10-18T02:36:14.718351Z",
-  "started_ns": 1792290974718351000,
-  "elapsed_ms": 2.428,
+  "plan_call": "task-get-1",
+  "started_at": "2026-10-25T21:22:26.503779Z",
+  "started_ns": 1792963346503779000,
+  "elapsed_ms": 8.724,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,10 +33,10 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 11,
+        "id": 4,
         "method": "tasks/get",
         "params": {
-          "taskId": "f5d668a0ef1ac2fb26c23a8eacc3d6ba"
+          "taskId": "13f372f71662cca1847f733d2651ab20"
         }
       }
     }
@@ -78,11 +78,11 @@
       ],
       [
         "content-length",
-        "319"
+        "316"
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:36:14 GMT"
+        "Sun, 25 Oct 2026 21:22:26 GMT"
       ]
     ],
     "body": {
@@ -90,26 +90,26 @@
       "content_type": "text/event-stream",
       "json": {
         "result": {
-          "taskId": "f5d668a0ef1ac2fb26c23a8eacc3d6ba",
-          "status": "completed",
+          "taskId": "13f372f71662cca1847f733d2651ab20",
+          "status": "working",
           "ttl": 300000,
-          "createdAt": "2026-10-18T02:36:08.191Z",
-          "lastUpdatedAt": "2026-10-18T02:36:12.197Z",
+          "createdAt": "2026-10-25T21:22:26.013Z",
+          "lastUpdatedAt": "2026-10-25T21:22:26.013Z",
           "pollInterval": 1000,
-          "statusMessage": "Generating report..."
+          "statusMessage": "Gathering sources..."
         },
         "jsonrpc": "2.0",
-        "id": 11
+        "id": 4
       }
     }
   },
   "stream": [
     {
-      "t_ms": 2.298,
+      "t_ms": 8.404,
       "kind": "sse",
       "event": "message",
-      "id": "0899d292-1e5f-44b0-8fa1-85895f27bc7b",
-      "data": "{\"result\":{\"taskId\":\"f5d668a0ef1ac2fb26c23a8eacc3d6ba\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-18T02:36:08.191Z\",\"lastUpdatedAt\":\"2026-10-18T02:36:12.197Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\",\"id\":11}"
+      "id": "e0833cec-0624-47d6-ba9b-3e7c24ef8a41",
+      "data": "{\"result\":{\"taskId\":\"13f372f71662cca1847f733d2651ab20\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:22:26.013Z\",\"lastUpdatedAt\":\"2026-10-25T21:22:26.013Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"},\"jsonrpc\":\"2.0\",\"id\":4}"
     }
   ],
   "redacted": [

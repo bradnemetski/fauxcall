@@ -53,7 +53,9 @@ async def test_list_then_get_every_item(api: ApiClient) -> None:
   (`try/finally`) or in a fixture.
 - MCP: the `mcp` fixture (`await mcp.call_tool("ask_question", {...})`, `await mcp.list_tools()`).
   For tools that ask the client (sampling, elicitation, roots), open the session first with
-  `await mcp.open(capabilities={...}, replies={method: result})`; see `mcp.md`.
+  `await mcp.open(capabilities={...}, replies={method: result})`; for what the server sends on
+  its own, `await mcp.listen()` then `await mcp.heard(method, count=…)`, and `progress=True` on
+  calls that report progress; see `mcp.md`.
 - `fauxcall verify <fake> --fake-url http://127.0.0.1:<port>` runs the scenarios against a fake
   that is already running (`fauxcall up`), e.g. to check it as clients will reach it.
 

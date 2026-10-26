@@ -1,0 +1,121 @@
+{
+  "id": "000271",
+  "endpoint": "MCP completion/complete",
+  "purpose": "invalid",
+  "plan_call": "complete-unknown-template",
+  "started_at": "2026-10-25T21:17:53.968854Z",
+  "started_ns": 1792963073968854000,
+  "elapsed_ms": 6.253,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 25,
+        "method": "completion/complete",
+        "params": {
+          "ref": {
+            "type": "ref/resource",
+            "uri": "demo://nothing/{id}"
+          },
+          "argument": {
+            "name": "id",
+            "value": "1"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "191"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:17:53 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 25,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Resource template demo://nothing/{id} not found"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.015,
+      "kind": "sse",
+      "event": "message",
+      "id": "459223f0-d369-4cb6-9dbd-4f127f7b4ad1",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":25,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Resource template demo://nothing/{id} not found\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

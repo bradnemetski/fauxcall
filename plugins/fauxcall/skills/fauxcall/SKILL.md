@@ -163,6 +163,8 @@ Follow [consistency](references/consistency.md) and [time](references/time.md):
 - Collections with `extract` paths → `fauxcall world build <name>`; repeat until it reports the world
   is consistent (record the missing referenced entities; never invent them).
 - `fauxcall analyze relations <name>` → confirm and add relations; `fauxcall world check <name>`.
+- MCP: after plans with `"listen": true`, `fauxcall analyze stream <name> --apply` records what
+  the server sends on its own; give each a scenario that `heard`s it.
 - For every relation decide both directions and what writes do (`min_per_target`, `on_missing`,
   `on_delete`, with `rules_evidence`): from `world check`'s reverse coverage, the domain (cities
   need teams only in a sports API) and recorded write probes (a write to a missing target, a delete

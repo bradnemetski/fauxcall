@@ -1,0 +1,133 @@
+{
+  "id": "000415",
+  "endpoint": "MCP tools/call:trigger-url-elicitation",
+  "purpose": "variation",
+  "plan_call": "url-decline",
+  "started_at": "2026-10-25T21:25:05.857288Z",
+  "started_ns": 1792963505857288000,
+  "elapsed_ms": 8.512,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-url-elicitation",
+          "arguments": {
+            "url": "https://example.com/pay",
+            "message": "Please confirm the payment in your browser."
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:25:05 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "❌ User declined to open the URL (Elicitation ID: 68e432cd-ec55-4192-9956-bb4cc12984ce)."
+            },
+            {
+              "type": "text",
+              "text": "\nRaw result: {\n  \"action\": \"decline\"\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 4
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.15,
+      "kind": "sse",
+      "event": "message",
+      "id": "c4bb59bd-5564-4638-9087-00b509dc83f3",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"mode\":\"url\",\"url\":\"https://example.com/pay\",\"message\":\"Please confirm the payment in your browser.\",\"elicitationId\":\"68e432cd-ec55-4192-9956-bb4cc12984ce\"},\"jsonrpc\":\"2.0\",\"id\":2}"
+    },
+    {
+      "t_ms": 8.27,
+      "kind": "sse",
+      "event": "message",
+      "id": "c6c6907e-e044-4c1a-b8c2-8715f1218a29",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"❌ User declined to open the URL (Elicitation ID: 68e432cd-ec55-4192-9956-bb4cc12984ce).\"},{\"type\":\"text\",\"text\":\"\\nRaw result: {\\n  \\\"action\\\": \\\"decline\\\"\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":4}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

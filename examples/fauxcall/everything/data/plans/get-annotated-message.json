@@ -1,9 +1,9 @@
 {
   "name": "get-annotated-message",
-  "created_at": "2026-10-18T02:30:00Z",
+  "created_at": "2026-10-25T21:15:00Z",
   "calls": [
     {
-      "id": "ann-error",
+      "id": "annotated-error",
       "endpoint": "MCP tools/call:get-annotated-message",
       "purpose": "sample",
       "request": {
@@ -18,7 +18,7 @@
       }
     },
     {
-      "id": "ann-success",
+      "id": "annotated-success",
       "endpoint": "MCP tools/call:get-annotated-message",
       "purpose": "sample",
       "request": {
@@ -33,7 +33,7 @@
       }
     },
     {
-      "id": "ann-debug",
+      "id": "annotated-debug",
       "endpoint": "MCP tools/call:get-annotated-message",
       "purpose": "sample",
       "request": {
@@ -48,7 +48,7 @@
       }
     },
     {
-      "id": "ann-error-img",
+      "id": "annotated-error-img",
       "endpoint": "MCP tools/call:get-annotated-message",
       "purpose": "variation",
       "request": {
@@ -64,7 +64,7 @@
       }
     },
     {
-      "id": "ann-success-img",
+      "id": "annotated-success-img",
       "endpoint": "MCP tools/call:get-annotated-message",
       "purpose": "variation",
       "request": {
@@ -80,7 +80,7 @@
       }
     },
     {
-      "id": "ann-debug-img",
+      "id": "annotated-debug-img",
       "endpoint": "MCP tools/call:get-annotated-message",
       "purpose": "variation",
       "request": {
@@ -96,7 +96,7 @@
       }
     },
     {
-      "id": "ann-success-noimg",
+      "id": "annotated-debug-noimg",
       "endpoint": "MCP tools/call:get-annotated-message",
       "purpose": "variation",
       "request": {
@@ -105,14 +105,14 @@
         "json_body": {
           "name": "get-annotated-message",
           "arguments": {
-            "messageType": "success",
+            "messageType": "debug",
             "includeImage": false
           }
         }
       }
     },
     {
-      "id": "ann-bad-type",
+      "id": "annotated-bad-enum",
       "endpoint": "MCP tools/call:get-annotated-message",
       "purpose": "invalid",
       "request": {
@@ -127,7 +127,22 @@
       }
     },
     {
-      "id": "ann-missing",
+      "id": "annotated-case",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": "Error"
+          }
+        }
+      }
+    },
+    {
+      "id": "annotated-missing",
       "endpoint": "MCP tools/call:get-annotated-message",
       "purpose": "invalid",
       "request": {
@@ -140,7 +155,7 @@
       }
     },
     {
-      "id": "ann-bad-image",
+      "id": "annotated-missing-with-image",
       "endpoint": "MCP tools/call:get-annotated-message",
       "purpose": "invalid",
       "request": {
@@ -149,14 +164,29 @@
         "json_body": {
           "name": "get-annotated-message",
           "arguments": {
-            "messageType": "debug",
+            "includeImage": true
+          }
+        }
+      }
+    },
+    {
+      "id": "annotated-bad-bool",
+      "endpoint": "MCP tools/call:get-annotated-message",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-annotated-message",
+          "arguments": {
+            "messageType": "success",
             "includeImage": "yes"
           }
         }
       }
     },
     {
-      "id": "ann-number-type",
+      "id": "annotated-two-bad",
       "endpoint": "MCP tools/call:get-annotated-message",
       "purpose": "invalid",
       "request": {
@@ -165,7 +195,8 @@
         "json_body": {
           "name": "get-annotated-message",
           "arguments": {
-            "messageType": 1
+            "messageType": 7,
+            "includeImage": "no"
           }
         }
       }

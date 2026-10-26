@@ -1,6 +1,6 @@
 {
   "name": "protocol",
-  "created_at": "2026-10-18T02:30:00Z",
+  "created_at": "2026-10-25T21:30:00Z",
   "calls": [
     {
       "id": "ping",
@@ -8,114 +8,21 @@
       "purpose": "sample",
       "request": {
         "method": "POST",
-        "path": "/mcp"
+        "path": "/mcp",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "ping-repeat",
+      "endpoint": "MCP ping",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
       },
       "repeat": 2,
       "interval_ms": 1000
-    },
-    {
-      "id": "set-level-debug",
-      "endpoint": "MCP logging/setLevel",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "level": "debug"
-        }
-      }
-    },
-    {
-      "id": "set-level-warning",
-      "endpoint": "MCP logging/setLevel",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "level": "warning"
-        }
-      }
-    },
-    {
-      "id": "set-level-emergency",
-      "endpoint": "MCP logging/setLevel",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "level": "emergency"
-        }
-      }
-    },
-    {
-      "id": "set-level-bad",
-      "endpoint": "MCP logging/setLevel",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "level": "verbose"
-        }
-      }
-    },
-    {
-      "id": "set-level-missing",
-      "endpoint": "MCP logging/setLevel",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {}
-      }
-    },
-    {
-      "id": "subscribe-text",
-      "endpoint": "MCP resources/subscribe",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "uri": "demo://resource/dynamic/text/1"
-        }
-      }
-    },
-    {
-      "id": "unsubscribe-text",
-      "endpoint": "MCP resources/unsubscribe",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "uri": "demo://resource/dynamic/text/1"
-        }
-      }
-    },
-    {
-      "id": "unsubscribe-never",
-      "endpoint": "MCP resources/unsubscribe",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "uri": "demo://resource/dynamic/text/99"
-        }
-      }
-    },
-    {
-      "id": "subscribe-missing",
-      "endpoint": "MCP resources/subscribe",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {}
-      }
     },
     {
       "id": "tools-list-cursor",
@@ -125,14 +32,26 @@
         "method": "POST",
         "path": "/mcp",
         "json_body": {
-          "cursor": "nope"
+          "cursor": "bogus-cursor"
+        }
+      }
+    },
+    {
+      "id": "templates-list-cursor",
+      "endpoint": "MCP resources/templates/list",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "cursor": "bogus"
         }
       }
     },
     {
       "id": "tasks-list-empty",
       "endpoint": "MCP tasks/list",
-      "purpose": "sample",
+      "purpose": "edge",
       "request": {
         "method": "POST",
         "path": "/mcp",
@@ -140,44 +59,8 @@
       }
     },
     {
-      "id": "tasks-get-unknown",
-      "endpoint": "MCP tasks/get",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "taskId": "fauxcall-no-such-task"
-        }
-      }
-    },
-    {
-      "id": "tasks-result-unknown",
-      "endpoint": "MCP tasks/result",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "taskId": "fauxcall-no-such-task"
-        }
-      }
-    },
-    {
-      "id": "tasks-cancel-unknown",
-      "endpoint": "MCP tasks/cancel",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "taskId": "fauxcall-no-such-task"
-        }
-      }
-    },
-    {
-      "id": "tasks-get-missing",
-      "endpoint": "MCP tasks/get",
+      "id": "unknown-method",
+      "endpoint": "MCP foo/bar",
       "purpose": "invalid",
       "request": {
         "method": "POST",
@@ -186,7 +69,56 @@
       }
     },
     {
-      "id": "echo-as-task",
+      "id": "sampling-from-client",
+      "endpoint": "MCP sampling/createMessage",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "messages": [],
+          "maxTokens": 1
+        }
+      }
+    },
+    {
+      "id": "roots-list-from-client",
+      "endpoint": "MCP roots/list",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    },
+    {
+      "id": "tool-call-unknown",
+      "endpoint": "MCP tools/call:does-not-exist",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "does-not-exist",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "tool-call-name-number",
+      "endpoint": "MCP tools/call",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": 5,
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "tool-call-args-string",
       "endpoint": "MCP tools/call:echo",
       "purpose": "invalid",
       "request": {
@@ -194,17 +126,12 @@
         "path": "/mcp",
         "json_body": {
           "name": "echo",
-          "arguments": {
-            "message": "task please"
-          },
-          "task": {
-            "ttl": 60000
-          }
+          "arguments": "message"
         }
       }
     },
     {
-      "id": "echo-meta",
+      "id": "tool-call-meta",
       "endpoint": "MCP tools/call:echo",
       "purpose": "edge",
       "request": {
@@ -213,39 +140,41 @@
         "json_body": {
           "name": "echo",
           "arguments": {
-            "message": "with meta"
+            "message": "meta"
           },
           "_meta": {
-            "progressToken": "p-echo"
+            "progressToken": "echo-progress"
           }
         }
       }
     },
     {
-      "id": "call-no-name",
-      "endpoint": "MCP tools/call",
-      "purpose": "invalid",
+      "id": "tool-call-task-forbidden",
+      "endpoint": "MCP tools/call:echo",
+      "purpose": "edge",
       "request": {
         "method": "POST",
         "path": "/mcp",
         "json_body": {
-          "arguments": {}
+          "name": "echo",
+          "arguments": {
+            "message": "as task"
+          },
+          "task": {
+            "ttl": 1000
+          }
         }
       }
     },
     {
-      "id": "roots-unprompted-tool",
-      "endpoint": "MCP tools/call:get-roots-list",
+      "id": "complete-empty-params",
+      "endpoint": "MCP completion/complete",
       "purpose": "invalid",
       "request": {
         "method": "POST",
         "path": "/mcp",
-        "json_body": {
-          "name": "get-roots-list",
-          "arguments": {}
-        }
-      },
-      "note": "not listed to a client without roots"
+        "json_body": {}
+      }
     }
   ]
 }

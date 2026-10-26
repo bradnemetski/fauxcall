@@ -1,0 +1,386 @@
+{
+  "name": "async",
+  "created_at": "2026-10-25T21:30:00Z",
+  "client_capabilities": {
+    "sampling": {},
+    "elicitation": {
+      "form": {}
+    },
+    "tasks": {
+      "requests": {
+        "sampling": {
+          "createMessage": {}
+        },
+        "elicitation": {
+          "create": {}
+        }
+      }
+    }
+  },
+  "calls": [
+    {
+      "id": "sa-task-completed",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "Summarize MCP"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "task": {
+            "taskId": "client-task-1",
+            "status": "working",
+            "pollInterval": 500
+          }
+        },
+        "tasks/get": {
+          "taskId": "client-task-1",
+          "status": "completed",
+          "statusMessage": "done"
+        },
+        "tasks/result": {
+          "role": "assistant",
+          "model": "claude-test",
+          "stopReason": "endTurn",
+          "content": {
+            "type": "text",
+            "text": "MCP connects models to tools."
+          }
+        }
+      }
+    },
+    {
+      "id": "sa-task-failed",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "Fail please",
+            "maxTokens": 10
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "task": {
+            "taskId": "client-task-2",
+            "status": "working",
+            "pollInterval": 500
+          }
+        },
+        "tasks/get": {
+          "taskId": "client-task-2",
+          "status": "failed",
+          "statusMessage": "model overloaded"
+        }
+      }
+    },
+    {
+      "id": "sa-task-cancelled",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "Cancel please"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "task": {
+            "taskId": "client-task-3",
+            "status": "working"
+          }
+        },
+        "tasks/get": {
+          "taskId": "client-task-3",
+          "status": "cancelled"
+        }
+      }
+    },
+    {
+      "id": "sa-sync",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "Sync please",
+            "maxTokens": 20
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "role": "assistant",
+          "model": "claude-test",
+          "stopReason": "endTurn",
+          "content": {
+            "type": "text",
+            "text": "synchronous answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "sa-task-done-immediately",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "Already done"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "task": {
+            "taskId": "client-task-4",
+            "status": "completed"
+          }
+        },
+        "tasks/result": {
+          "role": "assistant",
+          "model": "claude-test",
+          "stopReason": "endTurn",
+          "content": {
+            "type": "text",
+            "text": "instant"
+          }
+        }
+      }
+    },
+    {
+      "id": "sa-refused",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "No"
+          }
+        }
+      },
+      "client_replies": {
+        "sampling/createMessage": {
+          "error": {
+            "code": -1,
+            "message": "User rejected sampling request"
+          }
+        }
+      }
+    },
+    {
+      "id": "sa-missing-prompt",
+      "endpoint": "MCP tools/call:trigger-sampling-request-async",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "ea-task-accept",
+      "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "task": {
+            "taskId": "client-el-1",
+            "status": "working",
+            "pollInterval": 500
+          }
+        },
+        "tasks/get": {
+          "taskId": "client-el-1",
+          "status": "completed"
+        },
+        "tasks/result": {
+          "action": "accept",
+          "content": {
+            "name": "Jo",
+            "favoriteColor": "Green",
+            "agreeToTerms": true
+          }
+        }
+      }
+    },
+    {
+      "id": "ea-task-decline",
+      "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "task": {
+            "taskId": "client-el-2",
+            "status": "working",
+            "pollInterval": 500
+          }
+        },
+        "tasks/get": {
+          "taskId": "client-el-2",
+          "status": "completed",
+          "statusMessage": "user responded"
+        },
+        "tasks/result": {
+          "action": "decline"
+        }
+      }
+    },
+    {
+      "id": "ea-task-cancel-result",
+      "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "task": {
+            "taskId": "client-el-3",
+            "status": "working",
+            "pollInterval": 500
+          }
+        },
+        "tasks/get": {
+          "taskId": "client-el-3",
+          "status": "completed"
+        },
+        "tasks/result": {
+          "action": "cancel"
+        }
+      }
+    },
+    {
+      "id": "ea-task-failed",
+      "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "task": {
+            "taskId": "client-el-4",
+            "status": "working",
+            "pollInterval": 500
+          }
+        },
+        "tasks/get": {
+          "taskId": "client-el-4",
+          "status": "failed",
+          "statusMessage": "dialog crashed"
+        }
+      }
+    },
+    {
+      "id": "ea-sync-accept",
+      "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "action": "accept",
+          "content": {
+            "name": "Sam",
+            "agreeToTerms": false
+          }
+        }
+      }
+    },
+    {
+      "id": "ea-task-accept-partial",
+      "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      },
+      "client_replies": {
+        "elicitation/create": {
+          "task": {
+            "taskId": "client-el-5",
+            "status": "working",
+            "pollInterval": 500
+          }
+        },
+        "tasks/get": {
+          "taskId": "client-el-5",
+          "status": "completed"
+        },
+        "tasks/result": {
+          "action": "accept",
+          "content": {
+            "favoriteColor": "Red"
+          }
+        }
+      }
+    }
+  ]
+}

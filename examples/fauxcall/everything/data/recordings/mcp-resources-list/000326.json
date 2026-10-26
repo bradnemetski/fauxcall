@@ -1,0 +1,189 @@
+{
+  "id": "000326",
+  "endpoint": "MCP resources/list",
+  "purpose": "write_readback",
+  "plan_call": "gzip-list-final",
+  "started_at": "2026-10-25T21:21:18.899560Z",
+  "started_ns": 1792963278899560000,
+  "elapsed_ms": 7.765,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 15,
+        "method": "resources/list",
+        "params": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "2037"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:21:18 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "resources": [
+            {
+              "uri": "demo://resource/static/document/architecture.md",
+              "name": "architecture.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: architecture.md"
+            },
+            {
+              "uri": "demo://resource/static/document/extension.md",
+              "name": "extension.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: extension.md"
+            },
+            {
+              "uri": "demo://resource/static/document/features.md",
+              "name": "features.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: features.md"
+            },
+            {
+              "uri": "demo://resource/static/document/how-it-works.md",
+              "name": "how-it-works.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: how-it-works.md"
+            },
+            {
+              "uri": "demo://resource/static/document/instructions.md",
+              "name": "instructions.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: instructions.md"
+            },
+            {
+              "uri": "demo://resource/static/document/startup.md",
+              "name": "startup.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: startup.md"
+            },
+            {
+              "uri": "demo://resource/static/document/structure.md",
+              "name": "structure.md",
+              "mimeType": "text/markdown",
+              "description": "Static document file exposed from /docs: structure.md"
+            },
+            {
+              "uri": "demo://resource/session/percent.gz",
+              "name": "percent.gz",
+              "mimeType": "application/gzip"
+            },
+            {
+              "uri": "demo://resource/session/big.txt.gz",
+              "name": "big.txt.gz",
+              "mimeType": "application/gzip"
+            },
+            {
+              "uri": "demo://resource/session/data.json.gz",
+              "name": "data.json.gz",
+              "mimeType": "application/gzip"
+            },
+            {
+              "uri": "demo://resource/session/empty.gz",
+              "name": "empty.gz",
+              "mimeType": "application/gzip"
+            },
+            {
+              "uri": "demo://resource/session/greeting.txt.gz",
+              "name": "greeting.txt.gz",
+              "mimeType": "application/gzip"
+            },
+            {
+              "uri": "demo://resource/session/dir/My File.gz",
+              "name": "dir/My File.gz",
+              "mimeType": "application/gzip"
+            },
+            {
+              "uri": "demo://resource/session/README.md.gz",
+              "name": "README.md.gz",
+              "mimeType": "application/gzip"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 15
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 7.385,
+      "kind": "sse",
+      "event": "message",
+      "id": "140ae974-80e8-4917-9385-94f8059362fa",
+      "data": "{\"result\":{\"resources\":[{\"uri\":\"demo://resource/static/document/architecture.md\",\"name\":\"architecture.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: architecture.md\"},{\"uri\":\"demo://resource/static/document/extension.md\",\"name\":\"extension.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: extension.md\"},{\"uri\":\"demo://resource/static/document/features.md\",\"name\":\"features.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: features.md\"},{\"uri\":\"demo://resource/static/document/how-it-works.md\",\"name\":\"how-it-works.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: how-it-works.md\"},{\"uri\":\"demo://resource/static/document/instructions.md\",\"name\":\"instructions.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: instructions.md\"},{\"uri\":\"demo://resource/static/document/startup.md\",\"name\":\"startup.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: startup.md\"},{\"uri\":\"demo://resource/static/document/structure.md\",\"name\":\"structure.md\",\"mimeType\":\"text/markdown\",\"description\":\"Static document file exposed from /docs: structure.md\"},{\"uri\":\"demo://resource/session/percent.gz\",\"name\":\"percent.gz\",\"mimeType\":\"application/gzip\"},{\"uri\":\"demo://resource/session/big.txt.gz\",\"name\":\"big.txt.gz\",\"mimeType\":\"application/gzip\"},{\"uri\":\"demo://resource/session/data.json.gz\",\"name\":\"data.json.gz\",\"mimeType\":\"application/gzip\"},{\"uri\":\"demo://resource/session/empty.gz\",\"name\":\"empty.gz\",\"mimeType\":\"application/gzip\"},{\"uri\":\"demo://resource/session/greeting.txt.gz\",\"name\":\"greeting.txt.gz\",\"mimeType\":\"application/gzip\"},{\"uri\":\"demo://resource/session/dir/My File.gz\",\"name\":\"dir/My File.gz\",\"mimeType\":\"application/gzip\"},{\"uri\":\"demo://resource/session/README.md.gz\",\"name\":\"README.md.gz\",\"mimeType\":\"application/gzip\"}]},\"jsonrpc\":\"2.0\",\"id\":15}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -2,11 +2,16 @@
 
 Stateful endpoints (writes, jobs, downloads) are excluded here because a fresh fake does not hold
 the resources created while recording; cover them with scenarios in ``tests/e2e``.
+
+Tools the server lists only to clients declaring sampling, elicitation or roots are excluded too:
+a replay opens its session without capabilities and can't answer the server's requests, so the
+server (real and fake alike) would refuse the tool as unknown. ``test_client_tools.py`` replays
+them with the recorded capabilities and client answers.
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING
 
 import pytest
 from fauxcall.runtime.app import runtime_of_app
@@ -23,31 +28,18 @@ from fauxcall_everything.settings import Settings
 if TYPE_CHECKING:
     from fastapi import FastAPI
 
-CAPABLE_CLIENTS_ONLY: Final = frozenset(
-    {
-        "MCP tools/call:get-roots-list",
-        "MCP tools/call:trigger-sampling-request",
-        "MCP tools/call:trigger-sampling-request-async",
-        "MCP tools/call:trigger-elicitation-request",
-        "MCP tools/call:trigger-elicitation-request-async",
-        "MCP tools/call:trigger-url-elicitation",
-    }
+CAPABILITY_TOOLS = frozenset(
+    f"MCP tools/call:{tool}"
+    for tool in (
+        "get-roots-list",
+        "trigger-elicitation-request",
+        "trigger-url-elicitation",
+        "trigger-sampling-request",
+        "trigger-sampling-request-async",
+        "trigger-elicitation-request-async",
+    )
 )
-"""Tools the server lists only to clients declaring sampling, elicitation or roots.
-
-A replay here opens a session without capabilities, where the real server (and the fake) says
-"Tool not found": their recordings, made as capable clients, are replayed in ``test_plans.py``
-with the recorded capabilities and client answers. The calls recorded without them stay here.
-"""
-
-
-def _replayable(case: RecordedCase) -> bool:
-    return case.exchange.endpoint not in CAPABLE_CLIENTS_ONLY or (
-        case.exchange.plan_call or ""
-    ).startswith(("no-cap-", "roots-unprompted"))
-
-
-CASES = [case for case in recorded_cases(Settings().data_dir) if _replayable(case)]
+CASES = recorded_cases(Settings().data_dir, exclude_endpoints=CAPABILITY_TOOLS)
 
 
 @pytest.fixture(scope="module")

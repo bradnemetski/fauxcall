@@ -310,6 +310,12 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         "MCP initialize:version-2025-11-25",
     ]
     assert len(found.exchanges) == (49 if mode == "sse" else 45)
+    stored = {e.endpoint: e for _, e in RecordingStore(tmp_path / "recordings").iter_exchanges()}
+    assert stored["MCP GET /fauxcall-probe-unknown-route:unknown_route"].request.path == (
+        "/fauxcall-probe-unknown-route"  # where the probe went, not the MCP path
+    )
+    unparsed = stored["MCP tools/list:invalid_json"].request.body
+    assert (unparsed.kind, unparsed.text) == ("text", "{")  # the bytes sent, kept as sent
     # every request was paced: 2 rps -> 0.5 s apart (cleanup DELETEs included); each
     # capability probe: initialize, 2 pages, DELETE; watching the stream: it and a second one
     assert clock.sleeps == [0.5] * (67 if mode == "sse" else 62)
@@ -1206,6 +1212,10 @@ async def test_transport_details_round_trip(tmp_path: Path) -> None:
         for http_method, answer in (("GET", (404, "no GET")), ("DELETE", (404, "no DEL"))):
             stranger = await wire.probe_http(http_method, "never-issued")
             assert (stranger.status, stranger.body) == answer
+            nobody = await http.request(
+                http_method, "/mcp", headers={"accept": "text/event-stream"}
+            )
+            assert (nobody.status_code, nobody.text) == answer  # naming no session: the same
         first, second = await wire.watch_stream(0.5)
         assert first is not None
         assert first.body == ": keepalive"

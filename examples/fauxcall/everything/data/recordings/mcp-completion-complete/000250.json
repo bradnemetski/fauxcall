@@ -1,11 +1,11 @@
 {
   "id": "000250",
   "endpoint": "MCP completion/complete",
-  "purpose": "edge",
-  "plan_call": "static-resource",
-  "started_at": "2026-10-18T02:33:43.115700Z",
-  "started_ns": 1792290823115700000,
-  "elapsed_ms": 8.213,
+  "purpose": "variation",
+  "plan_call": "complete-dept-s",
+  "started_at": "2026-10-25T21:17:43.423314Z",
+  "started_ns": 1792963063423314000,
+  "elapsed_ms": 7.761,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,16 +33,16 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 30,
+        "id": 4,
         "method": "completion/complete",
         "params": {
           "ref": {
-            "type": "ref/resource",
-            "uri": "demo://resource/static/document/features.md"
+            "type": "ref/prompt",
+            "name": "completable-prompt"
           },
           "argument": {
-            "name": "x",
-            "value": "1"
+            "name": "department",
+            "value": "S"
           }
         }
       }
@@ -85,11 +85,11 @@
       ],
       [
         "content-length",
-        "143"
+        "169"
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:33:43 GMT"
+        "Sun, 25 Oct 2026 21:17:43 GMT"
       ]
     ],
     "body": {
@@ -98,22 +98,26 @@
       "json": {
         "result": {
           "completion": {
-            "values": [],
+            "values": [
+              "Sales",
+              "Support"
+            ],
+            "total": 2,
             "hasMore": false
           }
         },
         "jsonrpc": "2.0",
-        "id": 30
+        "id": 4
       }
     }
   },
   "stream": [
     {
-      "t_ms": 7.982,
+      "t_ms": 7.495,
       "kind": "sse",
       "event": "message",
-      "id": "7f478121-6cf4-4831-a3e9-f54d1917a9f8",
-      "data": "{\"result\":{\"completion\":{\"values\":[],\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":30}"
+      "id": "501d6b71-1314-46ad-90ed-a9defa5ded72",
+      "data": "{\"result\":{\"completion\":{\"values\":[\"Sales\",\"Support\"],\"total\":2,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":4}"
     }
   ],
   "redacted": [

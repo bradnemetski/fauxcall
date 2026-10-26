@@ -143,12 +143,14 @@ class RequestContext:
     async def pause(self, seconds: float) -> None:
         """Take as long as the real service would (a long job's steps …); skipped in fast mode.
 
-        It is noted in ``runtime.pauses`` either way, so tests can check the timing in fast mode.
+        The time is the session's clock: advancing it (``POST /__fauxcall/clock``) ends the
+        pause early. It is noted in ``runtime.pauses`` either way, so tests can check the timing
+        in fast mode.
         """
         if self.runtime.settings.fast:
             self.runtime.pauses.append(seconds)
             return
-        await self.runtime.pause(seconds)
+        await self.runtime.wait(self.session, seconds)
 
     def push(self, method: str, params: JsonValue = None) -> bool:
         """MCP: send this client a notification outside the call, on its open GET stream.

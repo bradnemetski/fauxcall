@@ -1,0 +1,283 @@
+{
+  "id": "000388",
+  "endpoint": "MCP GET:stream",
+  "started_at": "2026-10-25T21:22:58.856220Z",
+  "started_ns": 1792963378856220000,
+  "elapsed_ms": 22645.045,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:22:58 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "content_type": "text/event-stream"
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 515.169,
+      "kind": "sse",
+      "event": "message",
+      "id": "68b26e34-562e-4457-9371-a53ad5790123",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"bad3f268183a11760792ea1328beb639\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:22:59.370Z\",\"lastUpdatedAt\":\"2026-10-25T21:22:59.370Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 1522.783,
+      "kind": "sse",
+      "event": "message",
+      "id": "e89842af-6b52-4cae-8664-276a81de025b",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"bad3f268183a11760792ea1328beb639\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:22:59.370Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:00.374Z\",\"pollInterval\":1000,\"statusMessage\":\"Analyzing content...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 2527.278,
+      "kind": "sse",
+      "event": "message",
+      "id": "e4b602cd-1199-4b17-a67e-bf77ff3e2d4f",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"bad3f268183a11760792ea1328beb639\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:22:59.370Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:01.380Z\",\"pollInterval\":1000,\"statusMessage\":\"Synthesizing findings...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 2527.548,
+      "kind": "sse",
+      "event": "message",
+      "id": "3e474152-f2ff-4d48-8852-0311ccda8881",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"bad3f268183a11760792ea1328beb639\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:22:59.370Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:01.381Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"volcanoes\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 2527.625,
+      "kind": "sse",
+      "event": "message",
+      "id": "4a6301d7-1a5c-47e0-a127-cb5e41426051",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"bad3f268183a11760792ea1328beb639\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:22:59.370Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:01.381Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"volcanoes\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 3015.891,
+      "kind": "sse",
+      "event": "message",
+      "id": "3e6ec3fb-7b19-4c6b-a341-7d82c3d5a355",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"bad3f268183a11760792ea1328beb639\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:22:59.370Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:01.871Z\",\"pollInterval\":1000,\"statusMessage\":\"Continuing with interpretation: \\\"User declined - using default interpretation\\\"...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 4017.743,
+      "kind": "sse",
+      "event": "message",
+      "id": "30e7475f-772b-4624-a171-c8313ef6aaaf",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"bad3f268183a11760792ea1328beb639\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:22:59.370Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:02.871Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 5018.322,
+      "kind": "sse",
+      "event": "message",
+      "id": "ffb585e0-47d9-43a4-bb87-c92cbf2606f2",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"bad3f268183a11760792ea1328beb639\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:22:59.370Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:03.873Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 6040.241,
+      "kind": "sse",
+      "event": "message",
+      "id": "65519848-1fc6-4f7c-8e74-569f6dcbf8d5",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"e52ebbc3072f7e4565f55885d561abfa\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:04.895Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:04.895Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 7044.281,
+      "kind": "sse",
+      "event": "message",
+      "id": "419b8bf2-b273-403a-a549-70914603e5d6",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"e52ebbc3072f7e4565f55885d561abfa\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:04.895Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:05.898Z\",\"pollInterval\":1000,\"statusMessage\":\"Analyzing content...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 8047.017,
+      "kind": "sse",
+      "event": "message",
+      "id": "6a5b4490-8697-4a77-8e8f-222f53547010",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"e52ebbc3072f7e4565f55885d561abfa\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:04.895Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:06.900Z\",\"pollInterval\":1000,\"statusMessage\":\"Synthesizing findings...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 8047.172,
+      "kind": "sse",
+      "event": "message",
+      "id": "026d3e62-1d70-4d52-b944-b4435e9e091b",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"e52ebbc3072f7e4565f55885d561abfa\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:04.895Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:06.901Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"jaguar\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 8047.235,
+      "kind": "sse",
+      "event": "message",
+      "id": "9326124d-996a-4309-8831-2370ce3958ff",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"e52ebbc3072f7e4565f55885d561abfa\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:04.895Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:06.902Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"jaguar\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 8556.081,
+      "kind": "sse",
+      "event": "message",
+      "id": "c721b0d8-d263-4238-ae6b-7cc583350d93",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"e52ebbc3072f7e4565f55885d561abfa\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:04.895Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:07.411Z\",\"pollInterval\":1000,\"statusMessage\":\"Continuing with interpretation: \\\"technical (default - elicitation unavailable)\\\"...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 9558.242,
+      "kind": "sse",
+      "event": "message",
+      "id": "60d6af42-c6e1-44b7-868b-6aeea44e8dea",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"e52ebbc3072f7e4565f55885d561abfa\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:04.895Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:08.412Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10559.921,
+      "kind": "sse",
+      "event": "message",
+      "id": "d7afe269-1311-40f5-b3aa-dc65616bc7d4",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"e52ebbc3072f7e4565f55885d561abfa\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:04.895Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:09.415Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 11578.04,
+      "kind": "sse",
+      "event": "message",
+      "id": "c4060ab2-9c00-493d-adb6-690a269aac4d",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"4185d9243b6677980be07b6db64e9d7f\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:10.433Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:10.433Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 12580.933,
+      "kind": "sse",
+      "event": "message",
+      "id": "9814065d-7525-4268-9aad-ce5b2ceba8f3",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"4185d9243b6677980be07b6db64e9d7f\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:10.433Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:11.436Z\",\"pollInterval\":1000,\"statusMessage\":\"Analyzing content...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 13583.586,
+      "kind": "sse",
+      "event": "message",
+      "id": "eee4bcdf-572a-487e-b4fe-eaa0fcb8b233",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"4185d9243b6677980be07b6db64e9d7f\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:10.433Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:12.437Z\",\"pollInterval\":1000,\"statusMessage\":\"Synthesizing findings...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 13583.737,
+      "kind": "sse",
+      "event": "message",
+      "id": "244c50e3-fd26-457e-b822-c996baab9492",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"4185d9243b6677980be07b6db64e9d7f\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:10.433Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:12.438Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"mercury\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 13583.803,
+      "kind": "sse",
+      "event": "message",
+      "id": "ed4fd689-677b-4720-a59e-2dc7f4b34663",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"4185d9243b6677980be07b6db64e9d7f\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:10.433Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:12.438Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"mercury\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 14097.045,
+      "kind": "sse",
+      "event": "message",
+      "id": "81734f79-e4eb-4f66-b96b-184132f04654",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"4185d9243b6677980be07b6db64e9d7f\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:10.433Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:12.952Z\",\"pollInterval\":1000,\"statusMessage\":\"Continuing with interpretation: \\\"User cancelled - using default interpretation\\\"...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 15100.743,
+      "kind": "sse",
+      "event": "message",
+      "id": "649cf324-fc5c-45ec-88fc-8198d692e573",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"4185d9243b6677980be07b6db64e9d7f\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:10.433Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:13.954Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 16102.978,
+      "kind": "sse",
+      "event": "message",
+      "id": "906e2876-686c-45a4-9ba9-1a0282eec9db",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"4185d9243b6677980be07b6db64e9d7f\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:10.433Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:14.957Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 17118.484,
+      "kind": "sse",
+      "event": "message",
+      "id": "6a496ccd-a6c5-4a83-bc46-0a9d7db6b744",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"9cfcd048575edf5f0627ccc03639a3dc\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:15.973Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:15.973Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 18123.664,
+      "kind": "sse",
+      "event": "message",
+      "id": "0d37d316-2ad3-4bf8-b94f-4a437dfe2275",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"9cfcd048575edf5f0627ccc03639a3dc\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:15.973Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:16.976Z\",\"pollInterval\":1000,\"statusMessage\":\"Analyzing content...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 19124.681,
+      "kind": "sse",
+      "event": "message",
+      "id": "b1a42b59-cf88-498e-85d5-17300e57250b",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"9cfcd048575edf5f0627ccc03639a3dc\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:15.973Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:17.980Z\",\"pollInterval\":1000,\"statusMessage\":\"Synthesizing findings...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 20128.155,
+      "kind": "sse",
+      "event": "message",
+      "id": "e96c7479-ca75-4f81-884c-b39eaec97ad4",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"9cfcd048575edf5f0627ccc03639a3dc\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:15.973Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:18.982Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 21132.049,
+      "kind": "sse",
+      "event": "message",
+      "id": "dbda8b00-4767-46c0-87ea-e82864733872",
+      "data": "{\"method\":\"notifications/tasks/status\",\"params\":{\"taskId\":\"9cfcd048575edf5f0627ccc03639a3dc\",\"status\":\"completed\",\"ttl\":300000,\"createdAt\":\"2026-10-25T21:23:15.973Z\",\"lastUpdatedAt\":\"2026-10-25T21:23:19.986Z\",\"pollInterval\":1000,\"statusMessage\":\"Generating report...\"},\"jsonrpc\":\"2.0\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

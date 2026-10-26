@@ -6,6 +6,32 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- **Parity compares what an MCP server sends on its own.** Scenarios `await mcp.listen()` and
+  `await mcp.heard("notifications/message", count=2)`: log messages, resource updates,
+  `list_changed`, the server's requests to the client. `progress=True` (or `notifications=True`)
+  compares what a call sends while it runs. They compare by method, shape and count, values with
+  `values=True`.
+- `fauxcall analyze stream` shows what the server sent on the client's stream in the recordings;
+  `--apply` sets the model's `server_messages` and the member order, and the parity report lists
+  every server message no scenario compared.
+- **Background work follows the fake's clock.** `channel.pause` and `ctx.pause` wait on the
+  session's clock: advancing it through `/__fauxcall/clock` ends the waits that are due, so tests
+  and agents fast-forward through periodic pushes, task stages and timeouts; a frozen clock holds
+  them. Requests to the client time out on the same clock. Background waits aren't skipped in fast mode (a periodic loop would spin).
+- The Everything example was rebuilt with all of this: 100% parity over 228 scenarios, every
+  message the server sends on its own compared.
+
+### Fixed
+
+- An MCP fake whose server requires sessions refuses a GET or DELETE naming none, as it refuses
+  an unknown one; it opened a stream or answered 200.
+- Introspection records each probe of the HTTP layer at the path it asked for and with the body it
+  sent; the unknown-route probe was stored under the MCP path, and malformed bodies weren't kept.
+- Privacy keeps counts of a model's tokens (`maxTokens`, `prompt_tokens`) instead of redacting
+  them as credentials.
+
 ## [0.3.1]
 
 MCP fakes enforce their server's size limits and refuse GET streams as it does; refusals of an

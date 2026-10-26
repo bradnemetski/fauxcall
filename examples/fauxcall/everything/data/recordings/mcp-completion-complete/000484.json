@@ -1,0 +1,112 @@
+{
+  "id": "000484",
+  "endpoint": "MCP completion/complete",
+  "purpose": "invalid",
+  "plan_call": "complete-empty-params",
+  "started_at": "2026-10-25T21:28:00.516993Z",
+  "started_ns": 1792963680516993000,
+  "elapsed_ms": 7.72,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 16,
+        "method": "completion/complete",
+        "params": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "949"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:28:00 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 16,
+        "error": {
+          "code": -32603,
+          "message": "[\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"expected\": \"object\",\n          \"code\": \"invalid_type\",\n          \"path\": [],\n          \"message\": \"Invalid input: expected object, received undefined\"\n        }\n      ],\n      [\n        {\n          \"expected\": \"object\",\n          \"code\": \"invalid_type\",\n          \"path\": [],\n          \"message\": \"Invalid input: expected object, received undefined\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"params\",\n      \"ref\"\n    ],\n    \"message\": \"Invalid input\"\n  },\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"params\",\n      \"argument\"\n    ],\n    \"message\": \"Invalid input: expected object, received undefined\"\n  }\n]"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 7.395,
+      "kind": "sse",
+      "event": "message",
+      "id": "dcadc9ec-3476-44f8-b69a-1dfbf898fc64",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":16,\"error\":{\"code\":-32603,\"message\":\"[\\n  {\\n    \\\"code\\\": \\\"invalid_union\\\",\\n    \\\"errors\\\": [\\n      [\\n        {\\n          \\\"expected\\\": \\\"object\\\",\\n          \\\"code\\\": \\\"invalid_type\\\",\\n          \\\"path\\\": [],\\n          \\\"message\\\": \\\"Invalid input: expected object, received undefined\\\"\\n        }\\n      ],\\n      [\\n        {\\n          \\\"expected\\\": \\\"object\\\",\\n          \\\"code\\\": \\\"invalid_type\\\",\\n          \\\"path\\\": [],\\n          \\\"message\\\": \\\"Invalid input: expected object, received undefined\\\"\\n        }\\n      ]\\n    ],\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"ref\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input\\\"\\n  },\\n  {\\n    \\\"expected\\\": \\\"object\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"params\\\",\\n      \\\"argument\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected object, received undefined\\\"\\n  }\\n]\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "id": "000451",
+  "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+  "purpose": "variation",
+  "plan_call": "ea-task-failed",
+  "started_at": "2026-10-25T21:27:38.753506Z",
+  "started_ns": 1792963658753506000,
+  "elapsed_ms": 1015.044,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 12,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:27:38 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[FAILED] dialog crashed\n\nProgress:\nTask created: client-el-4\nPoll 1: failed - dialog crashed"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 12
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.843,
+      "kind": "sse",
+      "event": "message",
+      "id": "bc865251-d20b-47dd-af68-1b0782b01772",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"task\":{\"ttl\":600000},\"message\":\"Please provide inputs for the following fields (async task demo):\",\"requestedSchema\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"Your Name\",\"type\":\"string\",\"description\":\"Your full name\"},\"favoriteColor\":{\"title\":\"Favorite Color\",\"type\":\"string\",\"description\":\"What is your favorite color?\",\"enum\":[\"Red\",\"Blue\",\"Green\",\"Yellow\",\"Purple\"]},\"agreeToTerms\":{\"title\":\"Terms Agreement\",\"type\":\"boolean\",\"description\":\"Do you agree to the terms and conditions?\"}},\"required\":[\"name\"]}},\"jsonrpc\":\"2.0\",\"id\":20}"
+    },
+    {
+      "t_ms": 1009.293,
+      "kind": "sse",
+      "event": "message",
+      "id": "fbcb9239-4531-46ce-a74d-bb7be1a18664",
+      "data": "{\"method\":\"tasks/get\",\"params\":{\"taskId\":\"client-el-4\"},\"jsonrpc\":\"2.0\",\"id\":21}"
+    },
+    {
+      "t_ms": 1014.721,
+      "kind": "sse",
+      "event": "message",
+      "id": "4be3a933-d7df-4319-9026-127bb98028f9",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[FAILED] dialog crashed\\n\\nProgress:\\nTask created: client-el-4\\nPoll 1: failed - dialog crashed\"}]},\"jsonrpc\":\"2.0\",\"id\":12}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

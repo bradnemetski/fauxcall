@@ -1,9 +1,9 @@
 {
   "name": "get-resource-reference",
-  "created_at": "2026-10-18T02:30:00Z",
+  "created_at": "2026-10-25T21:15:00Z",
   "calls": [
     {
-      "id": "ref-default",
+      "id": "ref-text-1",
       "endpoint": "MCP tools/call:get-resource-reference",
       "purpose": "sample",
       "request": {
@@ -11,32 +11,17 @@
         "path": "/mcp",
         "json_body": {
           "name": "get-resource-reference",
-          "arguments": {}
-        }
-      }
-    },
-    {
-      "id": "ref-text-1",
-      "endpoint": "MCP tools/call:get-resource-reference",
-      "purpose": "time_profile",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-resource-reference",
           "arguments": {
             "resourceType": "Text",
             "resourceId": 1
           }
         }
-      },
-      "repeat": 4,
-      "interval_ms": 15000
+      }
     },
     {
       "id": "ref-blob-1",
       "endpoint": "MCP tools/call:get-resource-reference",
-      "purpose": "time_profile",
+      "purpose": "sample",
       "request": {
         "method": "POST",
         "path": "/mcp",
@@ -47,12 +32,10 @@
             "resourceId": 1
           }
         }
-      },
-      "repeat": 2,
-      "interval_ms": 15000
+      }
     },
     {
-      "id": "ref-text-2",
+      "id": "ref-text-7",
       "endpoint": "MCP tools/call:get-resource-reference",
       "purpose": "variation",
       "request": {
@@ -62,13 +45,13 @@
           "name": "get-resource-reference",
           "arguments": {
             "resourceType": "Text",
-            "resourceId": 2
+            "resourceId": 7
           }
         }
       }
     },
     {
-      "id": "ref-blob-3",
+      "id": "ref-blob-42",
       "endpoint": "MCP tools/call:get-resource-reference",
       "purpose": "variation",
       "request": {
@@ -78,13 +61,13 @@
           "name": "get-resource-reference",
           "arguments": {
             "resourceType": "Blob",
-            "resourceId": 3
+            "resourceId": 42
           }
         }
       }
     },
     {
-      "id": "ref-text-100",
+      "id": "ref-text-1000",
       "endpoint": "MCP tools/call:get-resource-reference",
       "purpose": "variation",
       "request": {
@@ -94,13 +77,13 @@
           "name": "get-resource-reference",
           "arguments": {
             "resourceType": "Text",
-            "resourceId": 100
+            "resourceId": 1000
           }
         }
       }
     },
     {
-      "id": "ref-blob-999",
+      "id": "ref-default",
       "endpoint": "MCP tools/call:get-resource-reference",
       "purpose": "variation",
       "request": {
@@ -108,10 +91,7 @@
         "path": "/mcp",
         "json_body": {
           "name": "get-resource-reference",
-          "arguments": {
-            "resourceType": "Blob",
-            "resourceId": 999
-          }
+          "arguments": {}
         }
       }
     },
@@ -140,10 +120,28 @@
         "json_body": {
           "name": "get-resource-reference",
           "arguments": {
-            "resourceId": 5
+            "resourceId": 3
           }
         }
       }
+    },
+    {
+      "id": "ref-time",
+      "endpoint": "MCP tools/call:get-resource-reference",
+      "purpose": "time_profile",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "get-resource-reference",
+          "arguments": {
+            "resourceType": "Text",
+            "resourceId": 2
+          }
+        }
+      },
+      "repeat": 4,
+      "interval_ms": 12000
     },
     {
       "id": "ref-id-0",
@@ -162,7 +160,7 @@
       }
     },
     {
-      "id": "ref-id-neg",
+      "id": "ref-id-negative",
       "endpoint": "MCP tools/call:get-resource-reference",
       "purpose": "invalid",
       "request": {
@@ -172,13 +170,13 @@
           "name": "get-resource-reference",
           "arguments": {
             "resourceType": "Blob",
-            "resourceId": -3
+            "resourceId": -4
           }
         }
       }
     },
     {
-      "id": "ref-id-frac",
+      "id": "ref-id-fraction",
       "endpoint": "MCP tools/call:get-resource-reference",
       "purpose": "invalid",
       "request": {
@@ -204,13 +202,13 @@
           "name": "get-resource-reference",
           "arguments": {
             "resourceType": "Text",
-            "resourceId": "2"
+            "resourceId": "5"
           }
         }
       }
     },
     {
-      "id": "ref-type-image",
+      "id": "ref-bad-type",
       "endpoint": "MCP tools/call:get-resource-reference",
       "purpose": "invalid",
       "request": {
@@ -237,21 +235,6 @@
           "arguments": {
             "resourceType": "text",
             "resourceId": 1
-          }
-        }
-      }
-    },
-    {
-      "id": "ref-type-null",
-      "endpoint": "MCP tools/call:get-resource-reference",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-resource-reference",
-          "arguments": {
-            "resourceType": null
           }
         }
       }

@@ -1,0 +1,118 @@
+{
+  "id": "000202",
+  "endpoint": "MCP resources/read:demo://resource/dynamic/blob/1",
+  "plan_call": "read-blob-1",
+  "started_at": "2026-10-25T21:16:46.068242Z",
+  "started_ns": 1792963006068242000,
+  "elapsed_ms": 11.377,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 16,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/dynamic/blob/1"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "264"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:16:46 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "contents": [
+            {
+              "uri": "demo://resource/dynamic/blob/1",
+              "mimeType": "text/plain",
+              "blob": "UmVzb3VyY2UgMTogVGhpcyBpcyBhIGJhc2U2NCBibG9iIGNyZWF0ZWQgYXQgNToxNjo0NiBQTQ=="
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 16
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 11.107,
+      "kind": "sse",
+      "event": "message",
+      "id": "88130477-e305-4bb7-b266-c03a1d80e8b3",
+      "data": "{\"result\":{\"contents\":[{\"uri\":\"demo://resource/dynamic/blob/1\",\"mimeType\":\"text/plain\",\"blob\":\"UmVzb3VyY2UgMTogVGhpcyBpcyBhIGJhc2U2NCBibG9iIGNyZWF0ZWQgYXQgNToxNjo0NiBQTQ==\"}]},\"jsonrpc\":\"2.0\",\"id\":16}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

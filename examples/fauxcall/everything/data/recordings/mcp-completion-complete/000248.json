@@ -1,11 +1,10 @@
 {
   "id": "000248",
   "endpoint": "MCP completion/complete",
-  "purpose": "invalid",
-  "plan_call": "unknown-prompt",
-  "started_at": "2026-10-18T02:33:42.113665Z",
-  "started_ns": 1792290822113665000,
-  "elapsed_ms": 8.524,
+  "plan_call": "complete-dept-empty",
+  "started_at": "2026-10-25T21:17:42.418926Z",
+  "started_ns": 1792963062418926000,
+  "elapsed_ms": 11.915,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,16 +32,16 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 28,
+        "id": 2,
         "method": "completion/complete",
         "params": {
           "ref": {
             "type": "ref/prompt",
-            "name": "nope"
+            "name": "completable-prompt"
           },
           "argument": {
-            "name": "a",
-            "value": "b"
+            "name": "department",
+            "value": ""
           }
         }
       }
@@ -85,33 +84,41 @@
       ],
       [
         "content-length",
-        "165"
+        "195"
       ],
       [
         "date",
-        "Sun, 18 Oct 2026 02:33:42 GMT"
+        "Sun, 25 Oct 2026 21:17:42 GMT"
       ]
     ],
     "body": {
       "kind": "json",
       "content_type": "text/event-stream",
       "json": {
+        "result": {
+          "completion": {
+            "values": [
+              "Engineering",
+              "Sales",
+              "Marketing",
+              "Support"
+            ],
+            "total": 4,
+            "hasMore": false
+          }
+        },
         "jsonrpc": "2.0",
-        "id": 28,
-        "error": {
-          "code": -32602,
-          "message": "MCP error -32602: Prompt nope not found"
-        }
+        "id": 2
       }
     }
   },
   "stream": [
     {
-      "t_ms": 8.273,
+      "t_ms": 11.609,
       "kind": "sse",
       "event": "message",
-      "id": "f6ad1453-7993-4f80-81ae-264706c948d8",
-      "data": "{\"jsonrpc\":\"2.0\",\"id\":28,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Prompt nope not found\"}}"
+      "id": "3348eb5d-469d-43ee-a211-70ce2a8e6213",
+      "data": "{\"result\":{\"completion\":{\"values\":[\"Engineering\",\"Sales\",\"Marketing\",\"Support\"],\"total\":4,\"hasMore\":false}},\"jsonrpc\":\"2.0\",\"id\":2}"
     }
   ],
   "redacted": [

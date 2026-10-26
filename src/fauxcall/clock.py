@@ -260,6 +260,11 @@ class ControlledClock:
         """The current mode."""
         return self._timeline.mode
 
+    @property
+    def rate(self) -> float:
+        """Clock seconds per base-clock second (0 when frozen)."""
+        return self._timeline.effective_rate
+
     def now_ns(self) -> int:
         """The clock's current time."""
         return self._timeline.at(self._base.now_ns())

@@ -1,0 +1,128 @@
+{
+  "name": "subscriptions",
+  "created_at": "2026-10-25T21:25:00Z",
+  "listen": true,
+  "listen_after_seconds": 6,
+  "calls": [
+    {
+      "id": "subscribe-text-1",
+      "endpoint": "MCP resources/subscribe",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/1"
+        }
+      }
+    },
+    {
+      "id": "subscribe-features",
+      "endpoint": "MCP resources/subscribe",
+      "purpose": "variation",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/static/document/features.md"
+        }
+      }
+    },
+    {
+      "id": "subs-on",
+      "endpoint": "MCP tools/call:toggle-subscriber-updates",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "toggle-subscriber-updates",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "subs-wait",
+      "endpoint": "MCP ping",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      },
+      "repeat": 2,
+      "interval_ms": 6000
+    },
+    {
+      "id": "unsubscribe-text-1",
+      "endpoint": "MCP resources/unsubscribe",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/text/1"
+        }
+      }
+    },
+    {
+      "id": "subs-wait-2",
+      "endpoint": "MCP ping",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      },
+      "repeat": 2,
+      "interval_ms": 5500
+    },
+    {
+      "id": "subs-off",
+      "endpoint": "MCP tools/call:toggle-subscriber-updates",
+      "purpose": "sample",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "name": "toggle-subscriber-updates",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "subscribe-unknown",
+      "endpoint": "MCP resources/subscribe",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://nothing/here"
+        }
+      }
+    },
+    {
+      "id": "unsubscribe-never",
+      "endpoint": "MCP resources/unsubscribe",
+      "purpose": "edge",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {
+          "uri": "demo://resource/dynamic/blob/9"
+        }
+      }
+    },
+    {
+      "id": "subscribe-no-uri",
+      "endpoint": "MCP resources/subscribe",
+      "purpose": "invalid",
+      "request": {
+        "method": "POST",
+        "path": "/mcp",
+        "json_body": {}
+      }
+    }
+  ]
+}

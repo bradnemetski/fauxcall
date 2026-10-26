@@ -1,0 +1,157 @@
+{
+  "id": "000178",
+  "endpoint": "MCP tools/call:trigger-long-running-operation",
+  "purpose": "variation",
+  "plan_call": "long-default",
+  "started_at": "2026-10-25T21:15:41.902949Z",
+  "started_ns": 1792962941902949000,
+  "elapsed_ms": 10021.608,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-long-running-operation",
+          "arguments": {},
+          "_meta": {
+            "progressToken": "progress-3"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:15:41 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Long running operation completed. Duration: 10 seconds, Steps: 5."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 4
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2009.071,
+      "kind": "sse",
+      "event": "message",
+      "id": "e55cd1d6-0302-48ef-a74b-140262729068",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":1,\"total\":5,\"progressToken\":\"progress-3\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 4012.637,
+      "kind": "sse",
+      "event": "message",
+      "id": "2e4fb195-20d1-44ac-aa03-b9c23c73451b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":2,\"total\":5,\"progressToken\":\"progress-3\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 6013.783,
+      "kind": "sse",
+      "event": "message",
+      "id": "f715416c-5c01-45d1-bd96-85237f379e53",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":3,\"total\":5,\"progressToken\":\"progress-3\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 8017.261,
+      "kind": "sse",
+      "event": "message",
+      "id": "32ac4662-7326-4af5-935b-7ec2f2ef54fc",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":4,\"total\":5,\"progressToken\":\"progress-3\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10020.763,
+      "kind": "sse",
+      "event": "message",
+      "id": "7aa11212-a785-4a2f-85f9-3b58d21b29e0",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":5,\"total\":5,\"progressToken\":\"progress-3\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10021.025,
+      "kind": "sse",
+      "event": "message",
+      "id": "89fdb6e5-0ee1-4477-854b-4f3fadc3aed5",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Long running operation completed. Duration: 10 seconds, Steps: 5.\"}]},\"jsonrpc\":\"2.0\",\"id\":4}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

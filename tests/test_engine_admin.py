@@ -14,6 +14,7 @@ from _engine import API_KEY, harness, j, market_model, with_endpoints
 from _mcp import asgi_client, live_server, mcp_app, mcp_model
 from fauxcall.config import AuthSettings, FakeSettings, IdentityConfig
 from fauxcall.mcpwire import protocol
+from fauxcall.mcpwire.client import McpWireClient
 from fauxcall.model import AuthModel, AuthScheme, CalendarModel, McpTransportModel
 from fauxcall.model.realism import LatencyProfile
 from fauxcall.runtime import app as app_module
@@ -163,7 +164,10 @@ async def test_idle_get_stream_sends_keep_alives(tmp_path: Path) -> None:
     )
     app, runtime = mcp_app(tmp_path, mcp_model(transport=transport))
     async with live_server(app) as base, httpx2.AsyncClient(base_url=base) as http:
-        async with http.stream("GET", "/mcp", headers={"accept": "text/event-stream"}) as stream:
+        wire = McpWireClient(f"{base}/mcp", http)
+        await wire.initialize()
+        headers = {"accept": "text/event-stream", protocol.SESSION_HEADER: wire.session_id or ""}
+        async with http.stream("GET", "/mcp", headers=headers) as stream:
             first = await anext(stream.aiter_bytes())
         assert first == b": keepalive\n\n"
         assert not runtime.pauses

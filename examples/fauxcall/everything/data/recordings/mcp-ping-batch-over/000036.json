@@ -1,0 +1,83 @@
+{
+  "id": "000036",
+  "endpoint": "MCP ping:batch-over",
+  "purpose": "discovery",
+  "started_at": "2026-10-25T20:59:51.805369Z",
+  "started_ns": 1792961991805369000,
+  "elapsed_ms": 2.504,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ]
+    ]
+  },
+  "response": {
+    "status": 400,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "content-length",
+        "115"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 20:59:51 GMT"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "keep-alive",
+        "timeout=5"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "error": {
+          "code": -32600,
+          "message": "Invalid Request: Batch must not exceed 100 messages"
+        },
+        "id": null
+      }
+    }
+  },
+  "redacted": [
+    "request.header:mcp-session-id"
+  ]
+}

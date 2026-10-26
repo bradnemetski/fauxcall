@@ -1,0 +1,148 @@
+{
+  "id": "000453",
+  "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+  "purpose": "edge",
+  "plan_call": "ea-task-accept-partial",
+  "started_at": "2026-10-25T21:27:40.285083Z",
+  "started_ns": 1792963660285083000,
+  "elapsed_ms": 1018.344,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 14,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:27:40 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[COMPLETED] User provided the requested information!"
+            },
+            {
+              "type": "text",
+              "text": "User inputs:\n- Favorite Color: Red"
+            },
+            {
+              "type": "text",
+              "text": "\nProgress:\nTask created: client-el-5\nPoll 1: completed\n\nRaw result: {\n  \"action\": \"accept\",\n  \"content\": {\n    \"favoriteColor\": \"Red\"\n  }\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 14
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 3.134,
+      "kind": "sse",
+      "event": "message",
+      "id": "40422aeb-9041-4343-b7c2-4061017387a4",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"task\":{\"ttl\":600000},\"message\":\"Please provide inputs for the following fields (async task demo):\",\"requestedSchema\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"Your Name\",\"type\":\"string\",\"description\":\"Your full name\"},\"favoriteColor\":{\"title\":\"Favorite Color\",\"type\":\"string\",\"description\":\"What is your favorite color?\",\"enum\":[\"Red\",\"Blue\",\"Green\",\"Yellow\",\"Purple\"]},\"agreeToTerms\":{\"title\":\"Terms Agreement\",\"type\":\"boolean\",\"description\":\"Do you agree to the terms and conditions?\"}},\"required\":[\"name\"]}},\"jsonrpc\":\"2.0\",\"id\":23}"
+    },
+    {
+      "t_ms": 1010.787,
+      "kind": "sse",
+      "event": "message",
+      "id": "d4a185fa-ba19-4bf7-9e85-7a662ff59160",
+      "data": "{\"method\":\"tasks/get\",\"params\":{\"taskId\":\"client-el-5\"},\"jsonrpc\":\"2.0\",\"id\":24}"
+    },
+    {
+      "t_ms": 1015.45,
+      "kind": "sse",
+      "event": "message",
+      "id": "e16f78bc-4d95-49f2-a73e-3ac18d7d863b",
+      "data": "{\"method\":\"tasks/result\",\"params\":{\"taskId\":\"client-el-5\"},\"jsonrpc\":\"2.0\",\"id\":25}"
+    },
+    {
+      "t_ms": 1018.009,
+      "kind": "sse",
+      "event": "message",
+      "id": "aab7edb3-67b8-467e-87e1-ff89a7918a1f",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[COMPLETED] User provided the requested information!\"},{\"type\":\"text\",\"text\":\"User inputs:\\n- Favorite Color: Red\"},{\"type\":\"text\",\"text\":\"\\nProgress:\\nTask created: client-el-5\\nPoll 1: completed\\n\\nRaw result: {\\n  \\\"action\\\": \\\"accept\\\",\\n  \\\"content\\\": {\\n    \\\"favoriteColor\\\": \\\"Red\\\"\\n  }\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":14}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

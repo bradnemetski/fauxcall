@@ -18,7 +18,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Final, Literal
-from urllib.parse import parse_qsl, urlsplit
+from urllib.parse import parse_qsl, urlsplit, urlunsplit
 
 import httpx2
 
@@ -427,9 +427,10 @@ class McpRecorder:
             )
             for i, (t, name, data, event_id) in enumerate(call.sse_events)
         ]
+        path = call.path or parts.path or "/"
         url, safe_path, _, query, headers, sent, notes = self.privacy.request(
-            url=self.url,
-            path=parts.path or "/",
+            url=urlunsplit(parts._replace(path=path)),
+            path=path,
             path_params={},
             query=parse_qsl(parts.query, keep_blank_values=True),
             headers=call.request_headers,
@@ -450,9 +451,7 @@ class McpRecorder:
                 path=safe_path,
                 query=query,
                 headers=headers,
-                body=Body(kind="json", content_type="application/json", json_value=sent)
-                if call.sent is not None
-                else Body(kind="empty"),
+                body=self._sent_body(call, sent, redacted, pseudonymized),
             ),
             response=CapturedResponse(status=call.status, headers=response_headers, body=body),
             stream=events,
@@ -463,6 +462,24 @@ class McpRecorder:
         exchange = scrub_exchange(exchange, self._secrets)
         self.store.save(exchange)
         return exchange.id
+
+    def _sent_body(
+        self, call: RpcCall, sent: JsonValue, redacted: list[str], pseudonymized: list[str]
+    ) -> Body:
+        """The request body as recorded: the JSON-RPC sent, or a probe's raw bytes."""
+        if call.sent is not None:
+            return Body(kind="json", content_type="application/json", json_value=sent)
+        if not call.raw:
+            return Body(kind="empty")
+        content_type = next(
+            (v for k, v in call.request_headers if k.lower() == "content-type"), None
+        )
+        text = call.raw.decode("utf-8", errors="replace")
+        return Body(
+            kind="text",
+            content_type=content_type,
+            text=private_text(self.privacy, text, "request", redacted, pseudonymized),
+        )
 
     # -- introspection -----------------------------------------------------------------------------
 

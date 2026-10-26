@@ -1,0 +1,150 @@
+{
+  "id": "000305",
+  "endpoint": "MCP GET:stream",
+  "started_at": "2026-10-25T21:19:40.023536Z",
+  "started_ns": 1792963180023536000,
+  "elapsed_ms": 22572.041,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:19:40 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "content_type": "text/event-stream"
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 510.549,
+      "kind": "sse",
+      "event": "message",
+      "id": "6b3ffd9c-4a69-4127-9e43-dccc559ded35",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"info\",\"data\":\"Received Subscribe Resource request for URI: demo://resource/dynamic/text/1 from session 0b34feaa-9571-49de-839c-6b562b3b2dfa\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 1011.1,
+      "kind": "sse",
+      "event": "message",
+      "id": "dfee2ad5-4a72-4cd6-af9f-1bc3c8d900f4",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"info\",\"data\":\"Received Subscribe Resource request for URI: demo://resource/static/document/features.md from session 0b34feaa-9571-49de-839c-6b562b3b2dfa\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 1520.402,
+      "kind": "sse",
+      "event": "message",
+      "id": "5673c387-d93f-46cd-85a2-65b68be86550",
+      "data": "{\"method\":\"notifications/resources/updated\",\"params\":{\"uri\":\"demo://resource/dynamic/text/1\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 1520.498,
+      "kind": "sse",
+      "event": "message",
+      "id": "e82a63ff-a993-4c1f-bd34-8c0f377cb90e",
+      "data": "{\"method\":\"notifications/resources/updated\",\"params\":{\"uri\":\"demo://resource/static/document/features.md\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 6523.944,
+      "kind": "sse",
+      "event": "message",
+      "id": "3018ca05-61ce-4ce1-9169-0952c5f85b8d",
+      "data": "{\"method\":\"notifications/resources/updated\",\"params\":{\"uri\":\"demo://resource/dynamic/text/1\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 6524.193,
+      "kind": "sse",
+      "event": "message",
+      "id": "97d41ce8-5be2-4e99-b557-0da5219fe3c9",
+      "data": "{\"method\":\"notifications/resources/updated\",\"params\":{\"uri\":\"demo://resource/static/document/features.md\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 8547.994,
+      "kind": "sse",
+      "event": "message",
+      "id": "93fd85b0-ae51-4137-9f9f-03a8c9c05da2",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"info\",\"data\":\"Received Unsubscribe Resource request: demo://resource/dynamic/text/1 from session 0b34feaa-9571-49de-839c-6b562b3b2dfa\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 11523.528,
+      "kind": "sse",
+      "event": "message",
+      "id": "5ff185f3-a766-4f5b-84e2-6c275c65c6ee",
+      "data": "{\"method\":\"notifications/resources/updated\",\"params\":{\"uri\":\"demo://resource/static/document/features.md\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 15555.118,
+      "kind": "sse",
+      "event": "message",
+      "id": "07fc25a6-d625-4f8e-8a17-3f8d862a87ba",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"info\",\"data\":\"Received Subscribe Resource request for URI: demo://nothing/here from session 0b34feaa-9571-49de-839c-6b562b3b2dfa\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 16061.438,
+      "kind": "sse",
+      "event": "message",
+      "id": "3f7e9c1c-6e89-4573-a14d-bc948cc01f7b",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"info\",\"data\":\"Received Unsubscribe Resource request: demo://resource/dynamic/blob/9 from session 0b34feaa-9571-49de-839c-6b562b3b2dfa\"},\"jsonrpc\":\"2.0\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

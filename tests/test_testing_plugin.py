@@ -1221,3 +1221,98 @@ def test_apps_that_arent_fakes_skip_the_world_check(
     pytester.makeconftest(CONSISTENT_CONFTEST)
     pytester.makepyfile(test_consistent=CONSISTENT_SCENARIOS)
     run(pytester, "-k", "only_reads").assert_outcomes(passed=1)
+
+
+PUSHING_CONFTEST = """
+from datetime import UTC, datetime
+from pathlib import Path
+
+import pytest
+
+from fauxcall.config import FakeSettings
+from fauxcall.model.api import ApiModel, RealTarget, SourceInfo
+from fauxcall.model.mcp import McpModel, McpToolModel, McpTransportModel
+from fauxcall.runtime import FakeRuntime, create_app, register_tool
+from fauxcall.testing import FakeUnderTest
+from fauxcall.testing.asgi import StreamingASGITransport
+
+HERE = Path(__file__).parent
+MODEL = ApiModel(
+    name="pushing",
+    title="Pushing",
+    kind="mcp",
+    source=SourceInfo(
+        kind="mcp", url="https://mcp.example.com/mcp", fetched_at=datetime(2026, 10, 10, tzinfo=UTC)
+    ),
+    real=RealTarget(base_url="https://mcp.example.com"),
+    mcp=McpModel(
+        initialize_result={
+            "protocolVersion": "2025-06-18",
+            "capabilities": {"tools": {}},
+            "serverInfo": {"name": "pushing", "version": "1.0.0"},
+        },
+        tools=[
+            McpToolModel(
+                definition={
+                    "name": "notify",
+                    "inputSchema": {"type": "object"},
+                    "annotations": {"readOnlyHint": True},
+                },
+                behavior="computed",
+            )
+        ],
+        transport=McpTransportModel(response_mode="sse", get_stream="sse"),
+        server_messages=["notifications/message", "notifications/resources/updated"],
+    ),
+)
+
+
+def pushing_app():
+    settings = FakeSettings(name="pushing", data_dir=HERE / "data", fast=True, log_level="WARNING")
+    app = create_app(settings, runtime=FakeRuntime(settings, MODEL), configure_logs=False)
+
+    async def notify(ctx, arguments):
+        ctx.notify("notifications/progress", {"progressToken": "t", "progress": 1})
+        ctx.push("notifications/message", {"level": "info", "data": "pushed"})
+        return {"content": []}
+
+    register_tool(app, "notify", notify)
+    return app
+
+
+@pytest.fixture(scope="session")
+def fauxcall_fake():
+    return FakeUnderTest(
+        app_factory=pushing_app,
+        model=MODEL,
+        reports_dir=HERE / "reports",
+        real_transport=StreamingASGITransport(pushing_app()),
+    )
+"""
+
+PUSHING_SCENARIOS = """
+async def test_what_the_server_sends(mcp):
+    await mcp.listen()
+    await mcp.call_tool("notify", progress=True)  # asks for progress, compares it
+    messages = await mcp.heard("notifications/message", within=2)
+    assert messages[0]["params"]["data"] == "pushed"
+
+
+async def test_nothing_arrives(mcp):
+    await mcp.listen()
+    assert await mcp.heard("notifications/never", within=0.05) == []
+"""
+
+
+def test_parity_compares_what_the_server_sends(pytester: pytest.Pytester) -> None:
+    pytester.makeini(INI)
+    pytester.makeconftest(PUSHING_CONFTEST)
+    pytester.makepyfile(test_pushing=PUSHING_SCENARIOS)
+    run(pytester, "--target=parity").assert_outcomes(passed=4)
+    data = report_json(pytester)
+    assert "MCP stream:notifications/message" in data["endpoints"]
+    assert "MCP tools/call:notify:notifications" in data["endpoints"]  # during the call
+    assert data["score"] == 1.0
+    uncovered = data["not_covered"]
+    assert "MCP stream:notifications/resources/updated" in uncovered  # no scenario heard one
+    assert "MCP stream:notifications/message" not in uncovered

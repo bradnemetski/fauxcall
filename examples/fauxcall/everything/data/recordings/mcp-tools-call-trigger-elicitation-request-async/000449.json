@@ -1,0 +1,144 @@
+{
+  "id": "000449",
+  "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+  "purpose": "variation",
+  "plan_call": "ea-task-decline",
+  "started_at": "2026-10-25T21:27:36.683356Z",
+  "started_ns": 1792963656683356000,
+  "elapsed_ms": 1020.844,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 10,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Sun, 25 Oct 2026 21:27:36 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[DECLINED] User declined to provide the requested information."
+            },
+            {
+              "type": "text",
+              "text": "\nProgress:\nTask created: client-el-2\nPoll 1: completed - user responded\n\nRaw result: {\n  \"action\": \"decline\"\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 10
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 3.903,
+      "kind": "sse",
+      "event": "message",
+      "id": "7d031702-0ed3-4ffd-b430-4018653952ea",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"task\":{\"ttl\":600000},\"message\":\"Please provide inputs for the following fields (async task demo):\",\"requestedSchema\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"Your Name\",\"type\":\"string\",\"description\":\"Your full name\"},\"favoriteColor\":{\"title\":\"Favorite Color\",\"type\":\"string\",\"description\":\"What is your favorite color?\",\"enum\":[\"Red\",\"Blue\",\"Green\",\"Yellow\",\"Purple\"]},\"agreeToTerms\":{\"title\":\"Terms Agreement\",\"type\":\"boolean\",\"description\":\"Do you agree to the terms and conditions?\"}},\"required\":[\"name\"]}},\"jsonrpc\":\"2.0\",\"id\":14}"
+    },
+    {
+      "t_ms": 1009.961,
+      "kind": "sse",
+      "event": "message",
+      "id": "7545831f-c0df-405f-9f96-7cda8e051ea0",
+      "data": "{\"method\":\"tasks/get\",\"params\":{\"taskId\":\"client-el-2\"},\"jsonrpc\":\"2.0\",\"id\":15}"
+    },
+    {
+      "t_ms": 1017.642,
+      "kind": "sse",
+      "event": "message",
+      "id": "ff2f87c4-64cc-402e-997a-90968c31fc10",
+      "data": "{\"method\":\"tasks/result\",\"params\":{\"taskId\":\"client-el-2\"},\"jsonrpc\":\"2.0\",\"id\":16}"
+    },
+    {
+      "t_ms": 1020.572,
+      "kind": "sse",
+      "event": "message",
+      "id": "8d33df9e-35b2-4721-9285-13b5cd8c9c48",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[DECLINED] User declined to provide the requested information.\"},{\"type\":\"text\",\"text\":\"\\nProgress:\\nTask created: client-el-2\\nPoll 1: completed - user responded\\n\\nRaw result: {\\n  \\\"action\\\": \\\"decline\\\"\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":10}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}
