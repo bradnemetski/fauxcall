@@ -152,6 +152,15 @@ class PlannedCall(Model):
             "'Method not found', like a client without that capability."
         ),
     )
+    cancel_after_ms: int | None = Field(
+        default=None,
+        ge=0,
+        description=(
+            "MCP: cancel the call (notifications/cancelled) this many ms after sending it, and "
+            "record what the server sends then (SDK servers: no answer). Follow it with calls "
+            "that show whether its work still finished (on_cancel)."
+        ),
+    )
     mutating: bool | None = Field(default=None, description="Defaults to 'not a safe method'.")
     tags: list[str] = Field(default_factory=list)
     note: str | None = None
@@ -171,6 +180,8 @@ class PlannedCall(Model):
             del stream["frames"]  # added later: absent when unused, so older approvals still match
         if not payload.get("client_replies"):
             payload.pop("client_replies", None)  # likewise
+        if payload.get("cancel_after_ms") is None:
+            payload.pop("cancel_after_ms", None)  # likewise
         return hashlib.sha256(jsonfmt.canonical_dumps(payload).encode()).hexdigest()[:16]
 
 

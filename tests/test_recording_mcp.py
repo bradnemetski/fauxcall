@@ -1166,6 +1166,42 @@ async def test_recordings_answer_the_servers_requests_as_the_plan_says(tmp_path:
     assert seen[0] == {"sampling": {}}  # the plan's capabilities were declared
 
 
+async def test_recordings_of_cancelled_calls_are_evidence_not_answers(tmp_path: Path) -> None:
+    import asyncio  # noqa: PLC0415
+
+    from _mcp import mcp_app, mcp_model  # noqa: PLC0415
+    from fauxcall.model.recording import CANCELLED  # noqa: PLC0415
+    from fauxcall.runtime import RequestContext, register_tool  # noqa: PLC0415
+    from fauxcall.runtime.recordings import RecordingIndex  # noqa: PLC0415
+
+    slow: JsonValue = {
+        "name": "slow",
+        "inputSchema": {"type": "object"},
+        "annotations": {"readOnlyHint": True},
+    }
+    model = mcp_model(tools=[McpToolModel(definition=slow, behavior="computed")])
+    app, _ = mcp_app(tmp_path / "server", model)
+
+    async def slowly(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        await asyncio.sleep(0.3)
+        return {"content": []}
+
+    register_tool(app, "slow", slowly)
+    the_plan = plan(
+        tool_call("slow", {}, id="cancelled", cancel_after_ms=50), tool_call("slow", {}, id="kept")
+    )
+    async with streaming_client(app) as http:
+        report = await recorder(tmp_path, http, "http://fake.test/mcp", rps=0).run(
+            the_plan, {"slow": slow}
+        )
+    assert [o.answers for o in report.outcomes] == [["no reply"], ["ok"]]
+    stored = {e.plan_call: e for _, e in RecordingStore(tmp_path / "recordings").iter_exchanges()}
+    assert stored["cancelled"].tags == [CANCELLED]
+    assert stored["kept"].tags == []
+    answers = RecordingIndex(tmp_path / "recordings").for_endpoint("MCP tools/call:slow")
+    assert [e.plan_call for e in answers] == ["kept"]  # the fake never answers with no answer
+
+
 async def test_transport_details_round_trip(tmp_path: Path) -> None:
     refusals: dict[str, JsonValue] = {
         "accept": {"status": 406, "content_type": "application/json", "body": '{"e":"accept"}'},

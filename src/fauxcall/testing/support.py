@@ -11,6 +11,7 @@ import httpx2
 from fauxcall import jsonfmt
 from fauxcall.errors import RecordingError
 from fauxcall.model.api import ApiModel
+from fauxcall.model.recording import CANCELLED
 from fauxcall.recording.store import RecordingStore
 from fauxcall.runtime.app import runtime_of_app
 from fauxcall.runtime.context import DEFAULT_SESSION
@@ -183,7 +184,11 @@ def recorded_cases(
     roles = {endpoint.id: endpoint.role for endpoint in model.endpoints}
     cases: list[RecordedCase] = []
     for _, exchange in RecordingStore(data_dir / "recordings").iter_exchanges():
-        if exchange.response is None or exchange.purpose not in purposes:
+        if (
+            exchange.response is None
+            or exchange.purpose not in purposes
+            or CANCELLED in exchange.tags
+        ):
             continue
         if exchange.endpoint in exclude_endpoints or roles.get(exchange.endpoint) in STATEFUL_ROLES:
             continue

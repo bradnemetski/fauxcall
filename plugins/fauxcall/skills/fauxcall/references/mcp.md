@@ -135,7 +135,7 @@ if a behavior can't be expressed, say so in the model's `notes`.
 | a POST body that isn't JSON, or isn't JSON-RPC | the real refusal (`invalid_json`, `not_jsonrpc`); several broken rules at once answer in the real server's check order (`refusal_order`). A refusal that names the protocol version the client sent is recorded with `{{value}}` in its place |
 | a path the server doesn't serve, another method on the MCP path | the real 404 page (`unknown_route`, `method_not_allowed` templates with `{{method}}` and `{{path}}`); the MCP path matched in any case or with a trailing slash when the real one is |
 | an `OPTIONS` preflight, any request with an `Origin` | the real CORS answer and headers (`transport.cors`) |
-| `notifications/cancelled` from the client | the call stops and its answer is never sent; its SSE stream stays open with keep-alives, as on SDK servers |
+| `notifications/cancelled` from the client | its answer is never sent and its SSE stream stays open with keep-alives, as on SDK servers; its work stops or runs to the end as `transport.on_cancel` says |
 | a DELETE of a session with an open GET stream | the stream ends |
 
 The wire itself follows the recordings too: response members in the real server's order, session
@@ -202,6 +202,28 @@ the whole session instead (`resumption: "session"`, the TypeScript SDK's in-memo
 later event on any stream, priming events included, never refused as a second stream, and
 nothing more afterwards. Introspection can't tell these apart; set it from the server's source or
 docs.
+
+**Cancelled calls.** Whether a call the client cancels still finishes its work differs by server:
+the Python SDK stops the handler, the TypeScript SDK lets it run to the end (writes included,
+progress and log messages still streamed, even after the client stops reading) and only drops
+the answer, unless the tool checks its abort signal. For a server with tools that may
+write, `fauxcall model check` lists `on_cancel` until it is decided. Record the evidence with a
+plan call that cancels itself, then one that shows the outcome:
+
+```json
+{"id": "cancelled-create", "endpoint": "MCP tools/call:create_item", "cancel_after_ms": 200,
+ "request": {"method": "POST", "path": "/mcp", "json_body": {"arguments": {"name": "probe"}}}},
+{"id": "after-cancel", "endpoint": "MCP tools/call:list_items",
+ "request": {"method": "POST", "path": "/mcp", "json_body": {"arguments": {}}}}
+```
+
+Pick a tool slow enough to still be running at the cancel (a cancel that comes after the answer
+proves nothing: the recording isn't tagged `cancelled`), and approve it as any write. Set
+`"on_cancel": "finish"` or `"stop"` with what the read shows. With `finish`, a handler runs on
+after the cancel: check `ctx.cancelled` where the real tool checks its signal. Recordings of
+cancelled calls are evidence only: the fake never answers with them. A scenario does the same
+with `await mcp.call_tool("create_item", {...}, cancel_after=0.2)` (logged as 204, no answer),
+then a call that shows the outcome.
 
 **Timeouts and cancellation.** When a request the fake sent the client times out, SDK servers
 tell the client with `notifications/cancelled`; set `transport.timeout_cancel_reason` to the

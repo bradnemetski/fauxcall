@@ -42,6 +42,7 @@ from fauxcall.model.plan import (
     RecordingPlan,
 )
 from fauxcall.model.realism import LatencyProfile
+from fauxcall.model.recording import CANCELLED
 from fauxcall.recording.mcp import McpRecorder, answer_of, needs_approval
 from fauxcall.recording.privacy_filter import PrivacyConfig, RecordingPrivacy
 from fauxcall.recording.recorder import RealTarget, Recorder, RunReport
@@ -914,7 +915,11 @@ def analyze_endpoint(
     if found is not None:
         _schema_report(found, by_status)
     # A stream's elapsed time is its length, not a latency; MCP answers sent as SSE are no stream.
-    timed = [e for e in exchanges if not e.stream or e.endpoint.startswith("MCP ")]
+    timed = [
+        e
+        for e in exchanges
+        if (not e.stream or e.endpoint.startswith("MCP ")) and CANCELLED not in e.tags
+    ]
     profile = LatencyProfile.from_samples(
         [e.elapsed_ms for e in timed if not _failed(e)],
         errors=[e.elapsed_ms for e in timed if _failed(e)],

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Final, Literal
 
 from pydantic import AwareDatetime, Field
 
@@ -100,6 +100,10 @@ class StreamEvent(Model):
     binary_file: str | None = None
     retry: int | None = None
     code: int | None = Field(default=None, description="WebSocket close code.")
+
+
+CANCELLED: Final = "cancelled"
+"""The tag of an MCP call the client cancelled: evidence of what that does, never an answer."""
 
 
 class Exchange(Model):

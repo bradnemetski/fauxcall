@@ -191,7 +191,8 @@ class ApiModel(Model):
         """Relation rules not decided yet (``null``): what to find out before the fake is done.
 
         ``on_missing`` matters only when some endpoint writes the referencing collection, and
-        ``on_delete`` only when one deletes the target; the reverse minimum always does.
+        ``on_delete`` only when one deletes the target; the reverse minimum always does. An MCP
+        server with tools that may write must say what a cancelled call does.
         """
         writes = {r.from_collection for r in self.relations if self.writes_to(r.from_collection)}
         deletes = {r.to_collection for r in self.relations if self.deletes_from(r.to_collection)}
@@ -207,6 +208,16 @@ class ApiModel(Model):
                 found.append(f"{where}: on_delete (deleting a referenced target does what?)")
             if relation.min_per_target is None:
                 found.append(f"{where}: min_per_target (must every target be referenced?)")
+        mcp = self.mcp
+        if (
+            mcp is not None
+            and mcp.transport.on_cancel is None
+            and any(not tool.read_only for tool in mcp.tools)
+        ):
+            found.append(
+                "mcp.transport.on_cancel (does a cancelled call's work stop, or finish with "
+                "only its answer dropped?)"
+            )
         return found
 
     def problems(self) -> list[str]:

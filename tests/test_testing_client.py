@@ -382,7 +382,7 @@ class _BrokenWire:
     async def initialize(self, *, capabilities: JsonValue = None) -> None:
         del capabilities
 
-    async def call(self, method: str, params: JsonValue = None) -> None:
+    async def call(self, method: str, params: JsonValue = None, **_options: object) -> None:
         del method, params
         raise httpx2.ReadTimeout("too slow")
 
@@ -393,7 +393,9 @@ class _BrokenWire:
 class _RefusingWire(_BrokenWire):
     """Answers every call with an HTTP 403 and no JSON-RPC message."""
 
-    async def call(self, method: str, params: JsonValue = None) -> RpcCall:  # type: ignore[override]
+    async def call(  # type: ignore[override]
+        self, method: str, params: JsonValue = None, **_options: object
+    ) -> RpcCall:
         return RpcCall(
             method=method,
             sent=params,

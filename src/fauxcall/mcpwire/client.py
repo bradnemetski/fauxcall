@@ -29,6 +29,9 @@ Transport = Literal["streamable_http", "sse"]
 
 MAX_PAGES: Final = 1000
 """Upper bound on pages followed by :meth:`McpWireClient.list_all`."""
+CANCEL_REASON: Final = "fauxcall: cancelled by the client"
+CANCEL_LINGER_SECONDS: Final = 1.0
+"""How long a cancelled call's stream is still read: SDK servers keep it open, unanswered."""
 
 _LEGACY_VERSION: Final = "2024-11-05"
 """The protocol revision that predates the ``MCP-Protocol-Version`` header."""
@@ -59,6 +62,8 @@ class RpcCall:
     """The path requested, when not the endpoint's own (a probe of another route)."""
     raw: bytes | None = None
     """A body sent as it is rather than as JSON-RPC (a probe of malformed input)."""
+    cancelled_after_ms: float | None = None
+    """When the client cancelled the request (``notifications/cancelled``), if it did."""
 
     def header(self, name: str) -> str | None:
         """A response header (case-insensitive)."""
@@ -141,6 +146,8 @@ class McpWireClient:
     ) -> None:
         self.url = url
         self.http = http
+        self.cancel_linger_s = CANCEL_LINGER_SECONDS
+        """How long a cancelled call's stream is still read."""
         self.headers = dict(headers or {})
         self.protocol_version = protocol_version
         self.transport: Transport = transport
@@ -202,13 +209,18 @@ class McpWireClient:
         *,
         include_session: bool = True,
         extra_headers: Mapping[str, str] | None = None,
+        cancel_after: float | None = None,
     ) -> RpcCall:
         """POST one JSON-RPC message (or batch) and collect the full response.
 
         An SSE response is read until the reply to ``message`` arrives (or the server ends the
-        stream); every event is kept with the time it arrived.
+        stream); every event is kept with the time it arrived. ``cancel_after``: that many
+        seconds in, the request is cancelled (``notifications/cancelled``) and what the server
+        sends is read for :attr:`cancel_linger_s` more (SDK servers send no answer).
         """
         if self.transport == "sse":
+            if cancel_after is not None:
+                raise RecordingError("cancelling a call needs the Streamable HTTP transport")
             return await self._post_sse(message)
         headers = {
             **self._request_headers(include_session=include_session),
@@ -220,6 +232,11 @@ class McpWireClient:
         started = time.perf_counter()
         events: list[tuple[float, str, str, str | None]] = []
         chunks: list[str] = []
+        canceller = (
+            asyncio.ensure_future(self._cancel(wanted, cancel_after))
+            if cancel_after is not None
+            else None
+        )
         async with self.http.stream(
             "POST",
             self.url,
@@ -230,17 +247,21 @@ class McpWireClient:
             content_type = response.headers.get("content-type")
             decoder = protocol.SseDecoder() if _is_event_stream(content_type) else None
             answered = False
-            async for text in response.aiter_text():
-                chunks.append(text)
-                if decoder is None:
-                    continue
-                stamp = (time.perf_counter() - started) * 1000
-                for event in decoder.feed(text):
-                    events.append((stamp, event.event, event.data, event.id))
-                    answered = answered or _answers(event, wanted)
-                    await self._answer_server(event.data)
-                if answered:
-                    break
+            with contextlib.suppress(TimeoutError):  # a cancelled call: read only so long
+                async with asyncio.timeout(
+                    None if cancel_after is None else cancel_after + self.cancel_linger_s
+                ):
+                    async for text in response.aiter_text():
+                        chunks.append(text)
+                        if decoder is None:
+                            continue
+                        stamp = (time.perf_counter() - started) * 1000
+                        for event in decoder.feed(text):
+                            events.append((stamp, event.event, event.data, event.id))
+                            answered = answered or _answers(event, wanted)
+                            await self._answer_server(event.data)
+                        if answered:
+                            break
             if decoder is not None and not answered:
                 stamp = (time.perf_counter() - started) * 1000
                 events += [
@@ -248,9 +269,11 @@ class McpWireClient:
                     for event in decoder.close(dispatch_incomplete=True)
                 ]
         elapsed = (time.perf_counter() - started) * 1000
+        cancelled_after_ms = _cancelled_when(canceller)
         body = "".join(chunks)
         messages = _parse_lenient(body, content_type, response.status_code)
         return RpcCall(
+            cancelled_after_ms=cancelled_after_ms,
             method=method,
             sent=message,
             status=response.status_code,
@@ -306,9 +329,22 @@ class McpWireClient:
             await self.notify("notifications/initialized")
         return call
 
-    async def call(self, method: str, params: JsonValue = None) -> RpcCall:
-        """Send a request and wait for its response."""
-        return await self.post(protocol.request(next(self._ids), method, params))
+    async def call(
+        self, method: str, params: JsonValue = None, *, cancel_after: float | None = None
+    ) -> RpcCall:
+        """Send a request and wait for its response (or cancel it ``cancel_after`` seconds in)."""
+        return await self.post(
+            protocol.request(next(self._ids), method, params), cancel_after=cancel_after
+        )
+
+    async def _cancel(self, request_id: JsonValue, after: float) -> float:
+        """Cancel request ``request_id`` ``after`` seconds from now; returns when, in ms."""
+        started = time.perf_counter()
+        await asyncio.sleep(after)
+        await self.notify(
+            "notifications/cancelled", {"requestId": request_id, "reason": CANCEL_REASON}
+        )
+        return round((time.perf_counter() - started) * 1000, 3)
 
     async def notify(self, method: str, params: JsonValue = None) -> RpcCall:
         """Send a notification."""
@@ -696,6 +732,16 @@ class McpWireClient:
             elapsed_ms=(time.perf_counter() - started) * 1000,
             sse_events=events,
         )
+
+
+def _cancelled_when(canceller: asyncio.Future[float] | None) -> float | None:
+    """When the call was cancelled (ms); ``None`` if it was answered before the time came."""
+    if canceller is None:
+        return None
+    if not canceller.done():
+        canceller.cancel()
+        return None
+    return canceller.result()
 
 
 def _answers(event: protocol.SseEvent, wanted: JsonValue) -> bool:

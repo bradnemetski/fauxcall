@@ -11,7 +11,7 @@ from collections import defaultdict
 from typing import TYPE_CHECKING
 
 from fauxcall.logs import get_logger
-from fauxcall.model.recording import Exchange
+from fauxcall.model.recording import CANCELLED, Exchange
 from fauxcall.storage import read_model
 
 if TYPE_CHECKING:
@@ -43,6 +43,8 @@ class RecordingIndex:
                     exchange = read_model(path, Exchange)
                 except (OSError, ValueError) as exc:  # unreadable, invalid JSON, invalid model
                     log.warning("recording_unreadable", path=str(path), error=str(exc)[:200])
+                    continue
+                if CANCELLED in exchange.tags:  # it holds no answer to give
                     continue
                 grouped[exchange.endpoint].append(exchange)
                 self._by_id[exchange.id] = exchange

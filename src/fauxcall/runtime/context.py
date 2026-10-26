@@ -152,6 +152,19 @@ class RequestContext:
             return
         await self.runtime.wait(self.session, seconds)
 
+    @property
+    def cancelled(self) -> bool:
+        """MCP: whether the client cancelled this call (``notifications/cancelled``).
+
+        Its answer is dropped either way. Where the real server finishes cancelled calls
+        (``on_cancel: finish``) the handler runs on; check this where the real tool checks its
+        abort signal, and stop there.
+        """
+        message = self.json_body
+        if self.channel is None or not isinstance(message, dict):
+            return False
+        return self.channel.was_cancelled(message.get("id"))
+
     def push(self, method: str, params: JsonValue = None) -> bool:
         """MCP: send this client a notification outside the call, on its open GET stream.
 

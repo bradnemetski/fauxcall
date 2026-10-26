@@ -39,6 +39,8 @@ if TYPE_CHECKING:
 Target = Literal["real", "fake"]
 _SAFE: Final = frozenset({"GET", "HEAD", "OPTIONS"})
 _HTTP_ERROR: Final = 400
+_UNANSWERED: Final = 204
+"""The status logged for a cancelled call that got no answer (as SDK servers send none)."""
 MCP_METHOD: Final = "MCP"
 """``LoggedCall.method`` of MCP calls; their ``path`` is the endpoint detail (``tools/call:x``)."""
 PLACEHOLDER_KEY: Final = "fauxcall-test-key"
@@ -543,13 +545,16 @@ class McpClient:
         label: str | None = None,
         compare: CompareOptions | None = None,
         notifications: bool = False,
+        cancel_after: float | None = None,
     ) -> JsonValue:
         """Call a JSON-RPC method and return its ``result`` (or ``error``).
 
         The logged observation has status 200 for a result and 500 for an error (or no answer),
         or the HTTP status when the server refused the request itself (a ``401``, a ``403`` …).
         With ``notifications``, what the server sent during the call (progress, log messages,
-        requests to the client) is compared too, by method, shape and count.
+        requests to the client) is compared too, by method, shape and count. ``cancel_after``
+        cancels the call that many seconds in (``notifications/cancelled``): the answer it
+        doesn't get is logged as status 204; follow it with calls showing what the work did.
         """
         if method == "tools/call":  # however it is sent, a tool call is a possible write
             name = params.get("name") if isinstance(params, dict) else None
@@ -562,7 +567,7 @@ class McpClient:
             await self.pace.wait_turn()
         started_ns = time.time_ns()
         try:
-            call = await self.wire.call(method, params)
+            call = await self.wire.call(method, params, cancel_after=cancel_after)
         except httpx2.HTTPError as exc:
             observation = Observation(None, {}, None, None, started_ns, error=type(exc).__name__)
             self.log.calls.append(
@@ -572,8 +577,15 @@ class McpClient:
         message = call.response if isinstance(call.response, dict) else {}
         payload = message.get("result", message.get("error"))
         refused = call.status >= _HTTP_ERROR
+        unanswered = not message and call.cancelled_after_ms is not None
         observation = Observation(
-            status=call.status if refused else 200 if "result" in message else 500,
+            status=call.status
+            if refused
+            else 200
+            if "result" in message
+            else _UNANSWERED
+            if unanswered
+            else 500,
             headers={"content-type": "application/json"},
             body=payload,
             text=None,
@@ -671,12 +683,13 @@ class McpClient:
         compare: CompareOptions | None = None,
         notifications: bool = False,
         progress: bool = False,
+        cancel_after: float | None = None,
     ) -> JsonValue:
         """``tools/call``; tools that may modify state skip real runs without permission.
 
         With ``notifications``, what the server sent during the call is compared too; with
         ``progress``, the call asks for progress notifications (a ``progressToken``, the same on
-        both sides) and compares them.
+        both sides) and compares them. ``cancel_after`` cancels it that many seconds in.
         """
         params: JsonObject = {"name": name, "arguments": dict(arguments or {})}
         if progress:
@@ -691,6 +704,7 @@ class McpClient:
             label=label or f"tools/call:{name}",
             compare=compare,
             notifications=notifications,
+            cancel_after=cancel_after,
         )
 
     def _may_write(self, name: str) -> None:

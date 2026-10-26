@@ -144,6 +144,16 @@ class McpTransportModel(Model):
             "more (the TypeScript SDK's in-memory event store)."
         ),
     )
+    on_cancel: Literal["stop", "finish"] | None = Field(
+        default=None,
+        description=(
+            "What a call the client cancels (notifications/cancelled) does: 'stop' (its work "
+            "ends where it is: the Python SDK) or 'finish' (its work runs to the end, writes "
+            "included, and only the answer is dropped: the TypeScript SDK, unless a tool checks "
+            "its abort signal: ctx.cancelled). Never answered either way. null: undecided "
+            "(stops); decide it from a recorded cancel of a writing tool."
+        ),
+    )
     timeout_cancel_reason: str | None = Field(
         default=None,
         description=(
@@ -203,6 +213,14 @@ class McpToolModel(Model):
             "'sampling']]``). Empty: every client sees it."
         ),
     )
+
+    @property
+    def read_only(self) -> bool:
+        """Whether the tool changes nothing (annotated ``readOnlyHint: true``, per the spec)."""
+        definition = self.definition if isinstance(self.definition, dict) else {}
+        annotations = definition.get("annotations")
+        return isinstance(annotations, dict) and annotations.get("readOnlyHint") is True
+
     varies: bool = Field(
         default=False,
         description=(

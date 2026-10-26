@@ -165,6 +165,8 @@ Follow [consistency](references/consistency.md) and [time](references/time.md):
 - `fauxcall analyze relations <name>` → confirm and add relations; `fauxcall world check <name>`.
 - MCP: after plans with `"listen": true`, `fauxcall analyze stream <name> --apply` records what
   the server sends on its own; give each a scenario that `heard`s it.
+- MCP with tools that write: decide `transport.on_cancel` from a recorded cancel (a plan call
+  with `cancel_after_ms`, then a read showing whether the write happened) and the server's SDK.
 - For every relation decide both directions and what writes do (`min_per_target`, `on_missing`,
   `on_delete`, with `rules_evidence`): from `world check`'s reverse coverage, the domain (cities
   need teams only in a sports API) and recorded write probes (a write to a missing target, a delete

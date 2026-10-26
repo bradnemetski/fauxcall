@@ -40,7 +40,14 @@ from fauxcall.model.mcp import (
     id_format,
 )
 from fauxcall.model.plan import Approval, Approvals
-from fauxcall.model.recording import Body, CapturedRequest, CapturedResponse, Exchange, StreamEvent
+from fauxcall.model.recording import (
+    CANCELLED,
+    Body,
+    CapturedRequest,
+    CapturedResponse,
+    Exchange,
+    StreamEvent,
+)
 from fauxcall.recording.recorder import (
     INVALID_CREDENTIAL,
     NOT_SENT,
@@ -1333,7 +1340,15 @@ class McpRecorder:
             client.on_request = replier(call.client_replies)
             try:
                 if call.request.auth == "default":
-                    rpc = await client.call(method, _params_for(call.endpoint, params))
+                    rpc = await client.call(
+                        method,
+                        _params_for(call.endpoint, params),
+                        cancel_after=None
+                        if call.cancel_after_ms is None
+                        else call.cancel_after_ms / 1000,
+                    )
+                    if rpc.cancelled_after_ms is not None:
+                        tags.append(CANCELLED)
                 else:
                     rpc = await self._auth_probe(client, call, method, params)
                     tags.append(f"auth:{call.request.auth}")

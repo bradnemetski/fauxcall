@@ -103,6 +103,10 @@ class Channel:
         stream.put_nowait(message)
         return True
 
+    def was_cancelled(self, request_id: JsonValue) -> bool:
+        """Whether the client cancelled its request ``request_id`` while it runs."""
+        return self._fake.was_cancelled(self.session, request_id)
+
     async def pause(self, seconds: float) -> None:
         """Wait ``seconds`` on the session's clock (real time unless someone moves the clock).
 
@@ -258,14 +262,15 @@ class McpFake:
         self.streams: dict[str, asyncio.Queue[JsonValue]] = {}
         """MCP session -> its open GET stream (messages pushed outside any call)."""
         self.background: dict[str, set[asyncio.Task[None]]] = {}
+        """MCP session -> work handlers left running after a call (``ctx.background``)."""
         self.awaiting: dict[tuple[str, str], asyncio.Future[JsonObject]] = {}
+        """(MCP session, request id) -> the server's request waiting for the client's answer."""
         self.in_flight: dict[tuple[str, str], asyncio.Task[Any]] = {}
         """(MCP session, request id) -> the call answering it, for the client's cancellations."""
-        """(MCP session, request id) -> the server's request waiting for the client's answer."""
+        self.cancelled: set[tuple[str, str]] = set()
+        """(MCP session, request id) of calls the client cancelled that are still running."""
         self.request_ids: dict[str, itertools.count[int]] = {}
         """MCP session -> the numbers of the requests the server sends that client."""
-        """MCP session -> work handlers left running after a call (``ctx.background``)."""
-        """MCP session -> the capabilities its client declared in ``initialize``."""
         self._sse_queues: dict[str, asyncio.Queue[str]] = {}
 
     # -- helpers ---------------------------------------------------------------------------------
@@ -918,9 +923,12 @@ class McpFake:
             if message.get("method") == "notifications/cancelled":
                 params = message.get("params")
                 cancelled = params.get("requestId") if isinstance(params, dict) else None
-                call = self.in_flight.get((self._session_in(request), str(cancelled)))
-                if call is not None:  # the call stops; its answer is never sent
-                    call.cancel()
+                key = (self._session_in(request), str(cancelled))
+                call = self.in_flight.get(key)
+                if call is not None:  # its answer is never sent; its work stops or finishes
+                    self.cancelled.add(key)
+                    if self.transport.on_cancel != "finish":
+                        call.cancel()
             handler = self.method_handlers.get(str(message.get("method")))
             if handler is None:
                 continue
@@ -1123,18 +1131,41 @@ class McpFake:
         finally:
             for leftover in pending:  # a client that hangs up leaves nothing running
                 leftover.cancel()
-            if not task.done():  # pragma: no cover - the client left mid-stream
-                task.cancel()
+            if not task.done() and self.transport.on_cancel != "finish":
+                task.cancel()  # the client left mid-stream (where work finishes, it runs on)
 
     def _track(
         self, session: str, message: JsonObject, work: Awaitable[_Answer]
     ) -> asyncio.Task[_Answer]:
-        """Run the call answering ``message``, where the client's cancellation can reach it."""
-        task = asyncio.ensure_future(work)
+        """Run the call answering ``message``, where the client's cancellation can reach it.
+
+        A cancelled call ends as a cancelled task: no answer. Its work stops at the cancel,
+        unless the real server finishes cancelled calls (``on_cancel: finish``): then it runs on,
+        its notifications still streamed, and only its answer is dropped.
+        """
         key = (session, str(message.get("id")))
+        if self.transport.on_cancel == "finish":
+            work = self._finishing(key, work)
+        task = asyncio.ensure_future(work)
         self.in_flight[key] = task
-        task.add_done_callback(lambda _done: self.in_flight.pop(key, None))
+
+        def forget(_done: asyncio.Future[_Answer]) -> None:
+            self.in_flight.pop(key, None)
+            self.cancelled.discard(key)
+
+        task.add_done_callback(forget)
         return task
+
+    async def _finishing(self, key: tuple[str, str], work: Awaitable[_Answer]) -> _Answer:
+        """``work`` run to its end; its answer dropped (a cancelled task) if it was cancelled."""
+        answer = await work  # a crashing handler's answer is an error: it never raises here
+        if key in self.cancelled:
+            raise asyncio.CancelledError
+        return answer
+
+    def was_cancelled(self, session: str, request_id: JsonValue) -> bool:
+        """Whether the client cancelled its request ``request_id`` (still running)."""
+        return (session, str(request_id)) in self.cancelled
 
     async def _replayed(self, session: str, last_event_id: str) -> AsyncIterator[bytes]:
         """A resumed GET where resumption covers the whole session.

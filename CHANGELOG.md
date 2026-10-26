@@ -20,6 +20,13 @@ All notable changes to FauxCall are listed here. The format follows
   session's clock: advancing it through `/__fauxcall/clock` ends the waits that are due, so tests
   and agents fast-forward through periodic pushes, task stages and timeouts; a frozen clock holds
   them. Requests to the client time out on the same clock. Background waits aren't skipped in fast mode (a periodic loop would spin).
+- **What a cancelled MCP call does, learned.** `transport.on_cancel` says whether a call the client
+  cancels stops (the Python SDK) or finishes its work, still streaming its progress, with only
+  the answer dropped (the TypeScript SDK, checked against the Everything server); handlers check `ctx.cancelled` where the real tool checks its abort signal.
+  Plan calls record a cancel (`cancel_after_ms`), scenarios compare one
+  (`call_tool(..., cancel_after=…)`), and `fauxcall model check` lists `on_cancel` as undecided
+  for servers with tools that may write. Recordings of cancelled calls are evidence only, never
+  replayed as answers.
 - The Everything example was rebuilt with all of this: 100% parity over 228 scenarios, every
   message the server sends on its own compared.
 
