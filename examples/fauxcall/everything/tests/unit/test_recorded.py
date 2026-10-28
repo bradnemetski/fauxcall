@@ -2,11 +2,6 @@
 
 Stateful endpoints (writes, jobs, downloads) are excluded here because a fresh fake does not hold
 the resources created while recording; cover them with scenarios in ``tests/e2e``.
-
-Tools the server lists only to clients declaring sampling, elicitation or roots are excluded too:
-a replay opens its session without capabilities and can't answer the server's requests, so the
-server (real and fake alike) would refuse the tool as unknown. ``test_client_tools.py`` replays
-them with the recorded capabilities and client answers.
 """
 
 from __future__ import annotations
@@ -28,18 +23,21 @@ from fauxcall_everything.settings import Settings
 if TYPE_CHECKING:
     from fastapi import FastAPI
 
-CAPABILITY_TOOLS = frozenset(
-    f"MCP tools/call:{tool}"
-    for tool in (
-        "get-roots-list",
-        "trigger-elicitation-request",
-        "trigger-url-elicitation",
-        "trigger-sampling-request",
-        "trigger-sampling-request-async",
-        "trigger-elicitation-request-async",
-    )
+INTERACTIVE: frozenset[str] = frozenset(
+    {
+        # these ask the client mid-call (sampling, elicitation, roots): a bare replay can't answer;
+        # tests/unit/test_interactive.py drives them with a client that does
+        "MCP tools/call:trigger-sampling-request",
+        "MCP tools/call:trigger-elicitation-request",
+        "MCP tools/call:trigger-url-elicitation",
+        "MCP tools/call:get-roots-list",
+        "MCP tools/call:trigger-sampling-request-async",
+        "MCP tools/call:trigger-elicitation-request-async",
+        # a session resource exists only after gzip-file-as-resource ran in the same session
+        "MCP resources/read:demo://resource/session/hello.txt.gz",
+    }
 )
-CASES = recorded_cases(Settings().data_dir, exclude_endpoints=CAPABILITY_TOOLS)
+CASES = recorded_cases(Settings().data_dir, exclude_endpoints=INTERACTIVE)
 
 
 @pytest.fixture(scope="module")

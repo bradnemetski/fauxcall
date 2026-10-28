@@ -1,10 +1,11 @@
 {
   "id": "000074",
   "endpoint": "MCP tools/call:echo",
-  "plan_call": "echo-simple",
-  "started_at": "2026-10-25T21:12:02.881858Z",
-  "started_ns": 1792962722881858000,
-  "elapsed_ms": 11.842,
+  "purpose": "invalid",
+  "plan_call": "echo-no-arguments",
+  "started_at": "2026-10-26T23:55:27.720628Z",
+  "started_ns": 1793058927720628000,
+  "elapsed_ms": 8.168,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -32,13 +33,10 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 2,
+        "id": 15,
         "method": "tools/call",
         "params": {
-          "name": "echo",
-          "arguments": {
-            "message": "Hello, world!"
-          }
+          "name": "echo"
         }
       }
     }
@@ -80,7 +78,7 @@
       ],
       [
         "date",
-        "Sun, 25 Oct 2026 21:12:02 GMT"
+        "Mon, 26 Oct 2026 23:55:27 GMT"
       ],
       [
         "transfer-encoding",
@@ -95,22 +93,23 @@
           "content": [
             {
               "type": "text",
-              "text": "Echo: Hello, world!"
+              "text": "MCP error -32602: Input validation error: Invalid arguments for tool echo: Invalid input: expected string, received undefined at message"
             }
-          ]
+          ],
+          "isError": true
         },
         "jsonrpc": "2.0",
-        "id": 2
+        "id": 15
       }
     }
   },
   "stream": [
     {
-      "t_ms": 11.548,
+      "t_ms": 7.847,
       "kind": "sse",
       "event": "message",
-      "id": "ae49f02a-6a02-4bf4-9221-168f09b6bdcf",
-      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Echo: Hello, world!\"}]},\"jsonrpc\":\"2.0\",\"id\":2}"
+      "id": "8e61dd3a-5b01-4963-86d3-57cffcbe134c",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Input validation error: Invalid arguments for tool echo: Invalid input: expected string, received undefined at message\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":15}"
     }
   ],
   "redacted": [

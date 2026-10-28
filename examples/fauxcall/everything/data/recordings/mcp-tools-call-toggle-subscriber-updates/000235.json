@@ -1,0 +1,119 @@
+{
+  "id": "000235",
+  "endpoint": "MCP tools/call:toggle-subscriber-updates",
+  "purpose": "variation",
+  "plan_call": "subs-off-again",
+  "started_at": "2026-10-27T00:02:05.887318Z",
+  "started_ns": 1793059325887318000,
+  "elapsed_ms": 5.297,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 29,
+        "method": "tools/call",
+        "params": {
+          "name": "toggle-subscriber-updates",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:02:05 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Stopped simulated resource updates for session 99886e0b-cd8f-4863-828f-a5327a1582e1"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 29
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.032,
+      "kind": "sse",
+      "event": "message",
+      "id": "7d0f2828-1d72-4fff-b35d-7bf65139378a",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Stopped simulated resource updates for session 99886e0b-cd8f-4863-828f-a5327a1582e1\"}]},\"jsonrpc\":\"2.0\",\"id\":29}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

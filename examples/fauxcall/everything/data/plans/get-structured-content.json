@@ -1,109 +1,125 @@
 {
-  "name": "get-structured-content",
-  "created_at": "2026-10-25T21:15:00Z",
-  "calls": [
-    {
-      "id": "structured-ny",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": "New York"
-          }
-        }
-      }
-    },
-    {
-      "id": "structured-chicago",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": "Chicago"
-          }
-        }
-      }
-    },
-    {
-      "id": "structured-la",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": "Los Angeles"
-          }
-        }
-      }
-    },
-    {
-      "id": "structured-boston",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": "Boston"
-          }
-        }
-      }
-    },
-    {
-      "id": "structured-lower",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": "chicago"
-          }
-        }
-      }
-    },
-    {
-      "id": "structured-missing",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {}
-        }
-      }
-    },
-    {
-      "id": "structured-number",
-      "endpoint": "MCP tools/call:get-structured-content",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-structured-content",
-          "arguments": {
-            "location": 3
-          }
-        }
-      }
+ "name": "get-structured-content",
+ "created_at": "2026-10-26T20:00:00Z",
+ "calls": [
+  {
+   "id": "weather-ny",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": "New York"
+     }
     }
-  ]
+   }
+  },
+  {
+   "id": "weather-chicago",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": "Chicago"
+     }
+    }
+   }
+  },
+  {
+   "id": "weather-la",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": "Los Angeles"
+     }
+    }
+   }
+  },
+  {
+   "id": "weather-unknown",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": "Boston"
+     }
+    }
+   }
+  },
+  {
+   "id": "weather-lower",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": "chicago"
+     }
+    }
+   }
+  },
+  {
+   "id": "weather-missing",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "weather-number",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": 7
+     }
+    }
+   }
+  },
+  {
+   "id": "weather-extra",
+   "endpoint": "MCP tools/call:get-structured-content",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-structured-content",
+     "arguments": {
+      "location": "Chicago",
+      "units": "F"
+     }
+    }
+   }
+  }
+ ]
 }

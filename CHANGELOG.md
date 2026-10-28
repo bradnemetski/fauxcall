@@ -27,8 +27,9 @@ All notable changes to FauxCall are listed here. The format follows
   (`call_tool(..., cancel_after=…)`), and `fauxcall model check` lists `on_cancel` as undecided
   for servers with tools that may write. Recordings of cancelled calls are evidence only, never
   replayed as answers.
-- The Everything example was rebuilt with all of this: 100% parity over 228 scenarios, every
-  message the server sends on its own compared.
+- The Everything example was rebuilt with all of this: 100% parity over 60 scenarios
+  (independent: 100% over 173 of 257 calls), every message the server sends on its own compared,
+  `on_cancel: finish` decided from a recorded cancel, and no middleware of its own.
 
 ### Fixed
 

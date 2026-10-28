@@ -1,337 +1,339 @@
 {
-  "name": "prompts",
-  "created_at": "2026-10-25T21:20:00Z",
-  "calls": [
-    {
-      "id": "prompts-list",
-      "endpoint": "MCP prompts/list",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {}
-      }
-    },
-    {
-      "id": "prompts-list-cursor",
-      "endpoint": "MCP prompts/list",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "cursor": "bogus-cursor"
-        }
-      }
-    },
-    {
-      "id": "prompt-simple",
-      "endpoint": "MCP prompts/get:simple-prompt",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "simple-prompt"
-        }
-      }
-    },
-    {
-      "id": "prompt-simple-args",
-      "endpoint": "MCP prompts/get:simple-prompt",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "simple-prompt",
-          "arguments": {
-            "extra": "x"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-args-city",
-      "endpoint": "MCP prompts/get:args-prompt",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "args-prompt",
-          "arguments": {
-            "city": "Denver"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-args-city-state",
-      "endpoint": "MCP prompts/get:args-prompt",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "args-prompt",
-          "arguments": {
-            "city": "Portland",
-            "state": "Oregon"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-args-empty-state",
-      "endpoint": "MCP prompts/get:args-prompt",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "args-prompt",
-          "arguments": {
-            "city": "Austin",
-            "state": ""
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-args-extra",
-      "endpoint": "MCP prompts/get:args-prompt",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "args-prompt",
-          "arguments": {
-            "city": "Paris",
-            "country": "France"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-args-missing",
-      "endpoint": "MCP prompts/get:args-prompt",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "args-prompt",
-          "arguments": {}
-        }
-      }
-    },
-    {
-      "id": "prompt-args-none",
-      "endpoint": "MCP prompts/get:args-prompt",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "args-prompt"
-        }
-      }
-    },
-    {
-      "id": "prompt-args-state-only",
-      "endpoint": "MCP prompts/get:args-prompt",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "args-prompt",
-          "arguments": {
-            "state": "Ohio"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-args-number",
-      "endpoint": "MCP prompts/get:args-prompt",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "args-prompt",
-          "arguments": {
-            "city": 12
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-completable",
-      "endpoint": "MCP prompts/get:completable-prompt",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "completable-prompt",
-          "arguments": {
-            "department": "Engineering",
-            "name": "Alice"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-completable-other",
-      "endpoint": "MCP prompts/get:completable-prompt",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "completable-prompt",
-          "arguments": {
-            "department": "Pirates",
-            "name": "Zed"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-completable-missing",
-      "endpoint": "MCP prompts/get:completable-prompt",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "completable-prompt",
-          "arguments": {
-            "department": "Sales"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-resource-text",
-      "endpoint": "MCP prompts/get:resource-prompt",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "resource-prompt",
-          "arguments": {
-            "resourceType": "Text",
-            "resourceId": "3"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-resource-blob",
-      "endpoint": "MCP prompts/get:resource-prompt",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "resource-prompt",
-          "arguments": {
-            "resourceType": "Blob",
-            "resourceId": "8"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-resource-bad-type",
-      "endpoint": "MCP prompts/get:resource-prompt",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "resource-prompt",
-          "arguments": {
-            "resourceType": "Image",
-            "resourceId": "1"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-resource-bad-id",
-      "endpoint": "MCP prompts/get:resource-prompt",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "resource-prompt",
-          "arguments": {
-            "resourceType": "Text",
-            "resourceId": "abc"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-resource-zero",
-      "endpoint": "MCP prompts/get:resource-prompt",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "resource-prompt",
-          "arguments": {
-            "resourceType": "Blob",
-            "resourceId": "0"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-resource-missing",
-      "endpoint": "MCP prompts/get:resource-prompt",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "resource-prompt",
-          "arguments": {
-            "resourceType": "Text"
-          }
-        }
-      }
-    },
-    {
-      "id": "prompt-unknown",
-      "endpoint": "MCP prompts/get:no-such-prompt",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "no-such-prompt"
-        }
-      }
-    },
-    {
-      "id": "prompt-no-name",
-      "endpoint": "MCP prompts/get",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {}
-      }
+ "name": "prompts",
+ "created_at": "2026-10-26T20:00:00Z",
+ "calls": [
+  {
+   "id": "prompts-list",
+   "endpoint": "MCP prompts/list",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "simple",
+   "endpoint": "MCP prompts/get:simple-prompt",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simple-prompt"
     }
-  ]
+   }
+  },
+  {
+   "id": "simple-extra",
+   "endpoint": "MCP prompts/get:simple-prompt",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simple-prompt",
+     "arguments": {
+      "unused": "x"
+     }
+    }
+   }
+  },
+  {
+   "id": "args-city",
+   "endpoint": "MCP prompts/get:args-prompt",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "args-prompt",
+     "arguments": {
+      "city": "Seattle"
+     }
+    }
+   }
+  },
+  {
+   "id": "args-city-state",
+   "endpoint": "MCP prompts/get:args-prompt",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "args-prompt",
+     "arguments": {
+      "city": "Portland",
+      "state": "Oregon"
+     }
+    }
+   }
+  },
+  {
+   "id": "args-empty-state",
+   "endpoint": "MCP prompts/get:args-prompt",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "args-prompt",
+     "arguments": {
+      "city": "Austin",
+      "state": ""
+     }
+    }
+   }
+  },
+  {
+   "id": "args-empty-city",
+   "endpoint": "MCP prompts/get:args-prompt",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "args-prompt",
+     "arguments": {
+      "city": ""
+     }
+    }
+   }
+  },
+  {
+   "id": "args-missing",
+   "endpoint": "MCP prompts/get:args-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "args-prompt",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "args-none",
+   "endpoint": "MCP prompts/get:args-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "args-prompt"
+    }
+   }
+  },
+  {
+   "id": "args-number",
+   "endpoint": "MCP prompts/get:args-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "args-prompt",
+     "arguments": {
+      "city": 5
+     }
+    }
+   }
+  },
+  {
+   "id": "team-eng",
+   "endpoint": "MCP prompts/get:completable-prompt",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "completable-prompt",
+     "arguments": {
+      "department": "Engineering",
+      "name": "Alice"
+     }
+    }
+   }
+  },
+  {
+   "id": "team-free",
+   "endpoint": "MCP prompts/get:completable-prompt",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "completable-prompt",
+     "arguments": {
+      "department": "Legal",
+      "name": "Zed"
+     }
+    }
+   }
+  },
+  {
+   "id": "team-missing-name",
+   "endpoint": "MCP prompts/get:completable-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "completable-prompt",
+     "arguments": {
+      "department": "Sales"
+     }
+    }
+   }
+  },
+  {
+   "id": "resource-text",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Text",
+      "resourceId": "1"
+     }
+    }
+   }
+  },
+  {
+   "id": "resource-blob",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Blob",
+      "resourceId": "2"
+     }
+    }
+   }
+  },
+  {
+   "id": "resource-text-big",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Text",
+      "resourceId": "250"
+     }
+    }
+   }
+  },
+  {
+   "id": "resource-bad-type",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Video",
+      "resourceId": "1"
+     }
+    }
+   }
+  },
+  {
+   "id": "resource-bad-id",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Text",
+      "resourceId": "abc"
+     }
+    }
+   }
+  },
+  {
+   "id": "resource-zero-id",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Blob",
+      "resourceId": "0"
+     }
+    }
+   }
+  },
+  {
+   "id": "resource-missing",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "unknown-prompt",
+   "endpoint": "MCP prompts/get:no-such-prompt",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "no-such-prompt"
+    }
+   }
+  },
+  {
+   "id": "prompts-get-missing-name",
+   "endpoint": "MCP prompts/get",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "resource-time",
+   "endpoint": "MCP prompts/get:resource-prompt",
+   "purpose": "time_profile",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "resource-prompt",
+     "arguments": {
+      "resourceType": "Text",
+      "resourceId": "3"
+     }
+    }
+   }
+  }
+ ]
 }

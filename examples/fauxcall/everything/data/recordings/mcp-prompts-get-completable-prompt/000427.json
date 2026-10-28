@@ -1,0 +1,117 @@
+{
+  "id": "000427",
+  "endpoint": "MCP prompts/get:completable-prompt",
+  "purpose": "invalid",
+  "plan_call": "team-missing-name",
+  "started_at": "2026-10-27T00:11:58.665505Z",
+  "started_ns": 1793059918665505000,
+  "elapsed_ms": 7.897,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 14,
+        "method": "prompts/get",
+        "params": {
+          "name": "completable-prompt",
+          "arguments": {
+            "department": "Sales"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "251"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:11:58 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 14,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Invalid arguments for prompt completable-prompt: Invalid input: expected string, received undefined at name"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 7.528,
+      "kind": "sse",
+      "event": "message",
+      "id": "49fa3628-1860-466b-89d6-ecc9bd1c8567",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":14,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Invalid arguments for prompt completable-prompt: Invalid input: expected string, received undefined at name\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "id": "000286",
+  "endpoint": "MCP tasks/result",
+  "purpose": "invalid",
+  "plan_call": "tasks-result-unknown",
+  "started_at": "2026-10-27T00:05:22.821365Z",
+  "started_ns": 1793059522821365000,
+  "elapsed_ms": 7.388,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 25,
+        "method": "tasks/result",
+        "params": {
+          "taskId": "fauxcall-probe-unknown-task"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "187"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:05:22 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 25,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Task not found: fauxcall-probe-unknown-task"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 7.019,
+      "kind": "sse",
+      "event": "message",
+      "id": "1bec1dd7-b662-46d9-9907-ff9f3cf818f8",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":25,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Task not found: fauxcall-probe-unknown-task\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

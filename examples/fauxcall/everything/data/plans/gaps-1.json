@@ -1,0 +1,147 @@
+{
+ "name": "gaps-1",
+ "created_at": "2026-10-26T20:00:00Z",
+ "listen": true,
+ "listen_after_seconds": 1,
+ "calls": [
+  {
+   "id": "gap-gzip-space",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "my file.gz",
+      "data": "data:text/plain,space%20name"
+     }
+    }
+   }
+  },
+  {
+   "id": "gap-read-space-raw",
+   "endpoint": "MCP resources/read:demo://resource/session/my file.gz",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/session/my file.gz"
+    }
+   }
+  },
+  {
+   "id": "gap-read-space-encoded",
+   "endpoint": "MCP resources/read:demo://resource/session/my%20file.gz",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/session/my%20file.gz"
+    }
+   }
+  },
+  {
+   "id": "gap-gzip-bad-base64",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "bad.gz",
+      "data": "data:text/plain;base64,@@@",
+      "outputType": "resource"
+     }
+    }
+   }
+  },
+  {
+   "id": "gap-gzip-bare-data",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "bare.gz",
+      "data": "data:,",
+      "outputType": "resource"
+     }
+    }
+   }
+  },
+  {
+   "id": "gap-gzip-http-refused",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "r.gz",
+      "data": "http://127.0.0.1:9/nothing"
+     }
+    }
+   }
+  },
+  {
+   "id": "gap-read-dot-segments",
+   "endpoint": "MCP resources/read:demo://resource/dynamic/text/../text/8",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/../text/8"
+    }
+   }
+  },
+  {
+   "id": "gap-read-not-a-uri",
+   "endpoint": "MCP resources/read:not a uri",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "not a uri"
+    }
+   }
+  },
+  {
+   "id": "gap-sampling-unlisted",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "hi"
+     }
+    }
+   }
+  },
+  {
+   "id": "gap-ping",
+   "endpoint": "MCP ping",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  }
+ ]
+}

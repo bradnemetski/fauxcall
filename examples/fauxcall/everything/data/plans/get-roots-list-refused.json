@@ -1,0 +1,55 @@
+{
+ "name": "get-roots-list-refused",
+ "created_at": "2026-10-26T20:00:00Z",
+ "client_capabilities": {
+  "roots": {}
+ },
+ "listen": true,
+ "listen_after_seconds": 2,
+ "calls": [
+  {
+   "id": "roots-refused",
+   "endpoint": "MCP tools/call:get-roots-list",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-roots-list",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "roots/list": {
+     "error": {
+      "code": -32601,
+      "message": "Method not found"
+     }
+    }
+   }
+  },
+  {
+   "id": "roots-after-refused",
+   "endpoint": "MCP tools/call:get-roots-list",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-roots-list",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "roots/list": {
+     "roots": [
+      {
+       "uri": "file:///ok",
+       "name": "OK"
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

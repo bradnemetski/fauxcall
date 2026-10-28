@@ -1,0 +1,49 @@
+{
+ "name": "review-b-task-param-unknown",
+ "created_at": "2026-10-26T20:00:00Z",
+ "listen": true,
+ "listen_after_seconds": 1,
+ "calls": [
+  {
+   "id": "task-unknown-tool",
+   "endpoint": "MCP tools/call:no-such-tool",
+   "purpose": "edge",
+   "mutating": false,
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "no-such-tool",
+     "arguments": {},
+     "task": {}
+    }
+   }
+  },
+  {
+   "id": "task-unoffered-tool",
+   "endpoint": "MCP tools/call:trigger-elicitation-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-elicitation-request",
+     "arguments": {},
+     "task": {}
+    }
+   }
+  },
+  {
+   "id": "tasks-list-numeric-cursor",
+   "endpoint": "MCP tasks/list",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "cursor": 5
+    }
+   }
+  }
+ ]
+}

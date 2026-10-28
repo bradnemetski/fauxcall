@@ -49,7 +49,7 @@ up front: credentials, whether a Jev key exists, and which writes to the real se
 | Swagger Petstore | **99.71%** | 96 (98.48% over 80 with real writes) | 19 | 370 | 361, 99% coverage | 1 | $15.21 |
 | FakeRESTApi | **100%** | 115 | 27 | 323 | 671, 99% coverage | 1 | $13.02 |
 | DeepWiki (MCP) | **100%** | 20 | 3 tools | 70 | 175, 98% coverage | 3 | over $8 |
-| Everything (MCP) | **100%** | 228 (independent: 100% over 243 of 352 calls) | 19 tools, 7 resources, 2 templates, 4 prompts | 538 | 962, 97% coverage | 1 | $64.53 |
+| Everything (MCP) | **100%** | 60 (independent: 100% over 173 of 257 calls) | 19 tools, 7 resources, 2 templates, 4 prompts | 545 | 396, 98% coverage | 1 | $43.51 |
 
 *Parity* is the weighted share of checks (status, shape, content type, values, lengths, headers) on which the fake answered
 like the real service, over end-to-end scenarios run against both. *Reported cost* is what Claude
@@ -193,13 +193,19 @@ Every problem a run hit became a fix in the tools or skills, never in the fake. 
   server's log messages and resource updates every 5 s, its `list_changed` notices, task status
   updates and roots request went unchecked, and the fakes' timers ran on the wall clock. Scenarios
   now `listen` and compare what arrives (`heard`), calls compare their progress and log messages,
-  and background work waits on the fake's clock. The tenth build, the one in `examples/`, compared
+  and background work waits on the fake's clock. The tenth build compared
   all five kinds of message on the stream and every call's progress, at 100%, in one session. It
   also found that a GET or DELETE naming no session got a stream or a 200 where the server refuses
   it, that waits on the clock broke when a test suite used more than one event loop, that probes
   were recorded without their path and body, and that privacy redacted `maxTokens` as a secret;
   all four are fixed. It still added a small middleware for POSTs sent before a session exists
   (the order the SDK checks them in).
+- **Cancelled calls.** The fakes stopped a call's work when the client cancelled it; the
+  Everything server finishes it, still streaming its progress, and drops only the answer.
+  FauxCall now learns which (`transport.on_cancel`). The eleventh build, the one in `examples/`,
+  decided `finish` from a recorded cancel without being told to, compares a cancel in parity, and
+  needed no middleware of its own: 100% over 60 scenarios (independent: 100% over 173 of 257
+  calls), in one session for $43.51.
 - **Consistency both ways.** Relations used to be checked one way only (every ticker's exchange
   exists), on the built data only: nothing said whether every exchange must list tickers, writes
   could leave references dangling, and the model's `on_delete` was never carried out. Relations

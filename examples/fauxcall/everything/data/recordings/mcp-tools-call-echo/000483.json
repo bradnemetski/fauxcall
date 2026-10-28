@@ -2,10 +2,10 @@
   "id": "000483",
   "endpoint": "MCP tools/call:echo",
   "purpose": "edge",
-  "plan_call": "tool-call-task-forbidden",
-  "started_at": "2026-10-25T21:28:00.014707Z",
-  "started_ns": 1792963680014707000,
-  "elapsed_ms": 8.597,
+  "plan_call": "task-echo",
+  "started_at": "2026-10-27T00:57:52.380484Z",
+  "started_ns": 1793062672380484000,
+  "elapsed_ms": 8.786,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,12 +33,12 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 15,
+        "id": 2,
         "method": "tools/call",
         "params": {
           "name": "echo",
           "arguments": {
-            "message": "as task"
+            "message": "as a task"
           },
           "task": {
             "ttl": 1000
@@ -84,7 +84,7 @@
       ],
       [
         "date",
-        "Sun, 25 Oct 2026 21:28:00 GMT"
+        "Tue, 27 Oct 2026 00:57:52 GMT"
       ],
       [
         "transfer-encoding",
@@ -96,7 +96,7 @@
       "content_type": "text/event-stream",
       "json": {
         "jsonrpc": "2.0",
-        "id": 15,
+        "id": 2,
         "error": {
           "code": -32602,
           "message": "MCP error -32602: Invalid task creation result: [\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"task\"\n    ],\n    \"message\": \"Invalid input: expected object, received undefined\"\n  }\n]"
@@ -106,11 +106,11 @@
   },
   "stream": [
     {
-      "t_ms": 8.316,
+      "t_ms": 8.447,
       "kind": "sse",
       "event": "message",
-      "id": "596dac74-d1de-4352-a3ea-10d916b052ff",
-      "data": "{\"jsonrpc\":\"2.0\",\"id\":15,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Invalid task creation result: [\\n  {\\n    \\\"expected\\\": \\\"object\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"task\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected object, received undefined\\\"\\n  }\\n]\"}}"
+      "id": "3697c6ab-b896-42ff-8157-c9977b097324",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":2,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Invalid task creation result: [\\n  {\\n    \\\"expected\\\": \\\"object\\\",\\n    \\\"code\\\": \\\"invalid_type\\\",\\n    \\\"path\\\": [\\n      \\\"task\\\"\\n    ],\\n    \\\"message\\\": \\\"Invalid input: expected object, received undefined\\\"\\n  }\\n]\"}}"
     }
   ],
   "redacted": [

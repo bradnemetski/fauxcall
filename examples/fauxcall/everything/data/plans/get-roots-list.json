@@ -1,0 +1,72 @@
+{
+ "name": "get-roots-list",
+ "created_at": "2026-10-26T20:00:00Z",
+ "client_capabilities": {
+  "roots": {
+   "listChanged": true
+  }
+ },
+ "listen": true,
+ "listen_after_seconds": 2,
+ "calls": [
+  {
+   "id": "roots-tools-list",
+   "endpoint": "MCP tools/list",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "roots-first",
+   "endpoint": "MCP tools/call:get-roots-list",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-roots-list",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "roots/list": {
+     "roots": [
+      {
+       "uri": "file:///home/user/project",
+       "name": "Project"
+      },
+      {
+       "uri": "file:///home/user/notes"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "roots-cached",
+   "endpoint": "MCP tools/call:get-roots-list",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-roots-list",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "roots/list": {
+     "roots": [
+      {
+       "uri": "file:///other",
+       "name": "Other"
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

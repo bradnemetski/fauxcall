@@ -1,260 +1,232 @@
 {
-  "name": "echo",
-  "created_at": "2026-10-25T21:15:00Z",
-  "calls": [
-    {
-      "id": "echo-simple",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": "Hello, world!"
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-sentence",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": "The quick brown fox jumps over the lazy dog."
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-unicode",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": "Grüße aus Zürich — 你好 🌍"
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-empty",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": ""
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-multiline",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": "line one\nline two\n\ttabbed"
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-json-like",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": "{\"a\": 1, \"b\": [true, null]}"
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-spaces",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": "   padded   "
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-long",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": "lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet "
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-extra-arg",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": "with extra",
-            "unused": 42
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-repeat-1",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": "same input"
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-repeat-2",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": "same input"
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-missing",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {}
-        }
-      }
-    },
-    {
-      "id": "echo-number",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": 42
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-null",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": null
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-array",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": [
-              "a",
-              "b"
-            ]
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-bool",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo",
-          "arguments": {
-            "message": true
-          }
-        }
-      }
-    },
-    {
-      "id": "echo-no-arguments",
-      "endpoint": "MCP tools/call:echo",
-      "purpose": "invalid",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "echo"
-        }
-      }
+ "name": "echo",
+ "created_at": "2026-10-26T20:00:00Z",
+ "calls": [
+  {
+   "id": "echo-hello",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": "Hello, world!"
+     }
     }
-  ]
+   }
+  },
+  {
+   "id": "echo-empty",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": ""
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-unicode",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": "h\u00e9llo w\u00f6rld \u2014 \u65e5\u672c\u8a9e \ud83c\udf89"
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-multiline",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": "line one\nline two\n\ttabbed"
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-json-chars",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": "{\"a\": [1, 2]} <tag> & 'quotes' \\ backslash"
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-long",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": "lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet "
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-spaces",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": "   padded   "
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-sentence",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": "What is the Model Context Protocol?"
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-extra-arg",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": "extra",
+      "unexpected": 42
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-missing",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "echo-number",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": 42
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-null",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": null
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-array",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": [
+       "a",
+       "b"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "echo-no-arguments",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo"
+    }
+   }
+  },
+  {
+   "id": "echo-repeat",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": "Hello, world!"
+     }
+    }
+   },
+   "repeat": 2,
+   "interval_ms": 1000
+  }
+ ]
 }

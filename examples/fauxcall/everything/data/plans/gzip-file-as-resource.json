@@ -1,0 +1,289 @@
+{
+ "name": "gzip-file-as-resource",
+ "created_at": "2026-10-26T20:00:00Z",
+ "listen": true,
+ "listen_after_seconds": 2,
+ "calls": [
+  {
+   "id": "gzip-hello-resource",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "hello.txt.gz",
+      "data": "data:text/plain;base64,SGVsbG8sIEZhdXhDYWxsIQ==",
+      "outputType": "resource"
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-hello-link",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "hello.txt.gz",
+      "data": "data:text/plain;base64,SGVsbG8sIEZhdXhDYWxsIQ=="
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-list-after-1",
+   "endpoint": "MCP resources/list",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "gzip-read-hello",
+   "endpoint": "MCP resources/read:demo://resource/session/hello.txt.gz",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/session/hello.txt.gz"
+    }
+   }
+  },
+  {
+   "id": "gzip-plain-data",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "plain.gz",
+      "data": "data:text/plain,Hello%20world%21",
+      "outputType": "resourceLink"
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-long",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "long.txt.gz",
+      "data": "data:text/plain;base64,VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gVGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4gCmxpbmUgMDogdmFsdWUgMApsaW5lIDE6IHZhbHVlIDEKbGluZSAyOiB2YWx1ZSA0CmxpbmUgMzogdmFsdWUgOQpsaW5lIDQ6IHZhbHVlIDE2CmxpbmUgNTogdmFsdWUgMjUKbGluZSA2OiB2YWx1ZSAzNgpsaW5lIDc6IHZhbHVlIDQ5CmxpbmUgODogdmFsdWUgNjQKbGluZSA5OiB2YWx1ZSA4MQpsaW5lIDEwOiB2YWx1ZSAxMDAKbGluZSAxMTogdmFsdWUgMTIxCmxpbmUgMTI6IHZhbHVlIDE0NApsaW5lIDEzOiB2YWx1ZSAxNjkKbGluZSAxNDogdmFsdWUgMTk2CmxpbmUgMTU6IHZhbHVlIDIyNQpsaW5lIDE2OiB2YWx1ZSAyNTYKbGluZSAxNzogdmFsdWUgMjg5CmxpbmUgMTg6IHZhbHVlIDMyNApsaW5lIDE5OiB2YWx1ZSAzNjEKbGluZSAyMDogdmFsdWUgNDAwCmxpbmUgMjE6IHZhbHVlIDQ0MQpsaW5lIDIyOiB2YWx1ZSA0ODQKbGluZSAyMzogdmFsdWUgNTI5CmxpbmUgMjQ6IHZhbHVlIDU3NgpsaW5lIDI1OiB2YWx1ZSA2MjUKbGluZSAyNjogdmFsdWUgNjc2CmxpbmUgMjc6IHZhbHVlIDcyOQpsaW5lIDI4OiB2YWx1ZSA3ODQKbGluZSAyOTogdmFsdWUgODQxCmxpbmUgMzA6IHZhbHVlIDkwMApsaW5lIDMxOiB2YWx1ZSA5NjEKbGluZSAzMjogdmFsdWUgMTAyNApsaW5lIDMzOiB2YWx1ZSAxMDg5CmxpbmUgMzQ6IHZhbHVlIDExNTYKbGluZSAzNTogdmFsdWUgMTIyNQpsaW5lIDM2OiB2YWx1ZSAxMjk2CmxpbmUgMzc6IHZhbHVlIDEzNjkKbGluZSAzODogdmFsdWUgMTQ0NApsaW5lIDM5OiB2YWx1ZSAxNTIxCmxpbmUgNDA6IHZhbHVlIDE2MDAKbGluZSA0MTogdmFsdWUgMTY4MQpsaW5lIDQyOiB2YWx1ZSAxNzY0CmxpbmUgNDM6IHZhbHVlIDE4NDkKbGluZSA0NDogdmFsdWUgMTkzNgpsaW5lIDQ1OiB2YWx1ZSAyMDI1CmxpbmUgNDY6IHZhbHVlIDIxMTYKbGluZSA0NzogdmFsdWUgMjIwOQpsaW5lIDQ4OiB2YWx1ZSAyMzA0CmxpbmUgNDk6IHZhbHVlIDI0MDEKbGluZSA1MDogdmFsdWUgMjUwMApsaW5lIDUxOiB2YWx1ZSAyNjAxCmxpbmUgNTI6IHZhbHVlIDI3MDQKbGluZSA1MzogdmFsdWUgMjgwOQpsaW5lIDU0OiB2YWx1ZSAyOTE2CmxpbmUgNTU6IHZhbHVlIDMwMjUKbGluZSA1NjogdmFsdWUgMzEzNgpsaW5lIDU3OiB2YWx1ZSAzMjQ5CmxpbmUgNTg6IHZhbHVlIDMzNjQKbGluZSA1OTogdmFsdWUgMzQ4MQo=",
+      "outputType": "resource"
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-json",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "data.json.gz",
+      "data": "data:application/json,%7B%22a%22%3A1%7D",
+      "outputType": "resource"
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-empty",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "empty.gz",
+      "data": "data:text/plain;base64,",
+      "outputType": "resource"
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-replace",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "hello.txt.gz",
+      "data": "data:text/plain,replaced%20content"
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-list-after-replace",
+   "endpoint": "MCP resources/list",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "gzip-read-replaced",
+   "endpoint": "MCP resources/read:demo://resource/session/hello.txt.gz",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/session/hello.txt.gz"
+    }
+   }
+  },
+  {
+   "id": "gzip-spaces-name",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "my file.gz",
+      "data": "data:text/plain;base64,SGVsbG8sIEZhdXhDYWxsIQ=="
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-default",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "gzip-unreachable",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "x.gz",
+      "data": "https://fauxcall-probe.invalid/readme.md"
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-ftp",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "x.gz",
+      "data": "ftp://example.com/file.txt"
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-not-url",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "x.gz",
+      "data": "not a url"
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-bad-output",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": "x.gz",
+      "data": "data:text/plain;base64,SGVsbG8sIEZhdXhDYWxsIQ==",
+      "outputType": "inline"
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-name-number",
+   "endpoint": "MCP tools/call:gzip-file-as-resource",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "gzip-file-as-resource",
+     "arguments": {
+      "name": 5,
+      "data": "data:text/plain;base64,SGVsbG8sIEZhdXhDYWxsIQ=="
+     }
+    }
+   }
+  },
+  {
+   "id": "gzip-list-end",
+   "endpoint": "MCP resources/list",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  }
+ ]
+}

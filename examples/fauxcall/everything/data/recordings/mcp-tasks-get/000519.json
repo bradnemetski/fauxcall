@@ -1,11 +1,11 @@
 {
   "id": "000519",
   "endpoint": "MCP tasks/get",
-  "purpose": "job_poll",
-  "plan_call": "rq-cw-poll",
-  "started_at": "2026-10-25T23:09:56.733120Z",
-  "started_ns": 1792969796733120000,
-  "elapsed_ms": 7.029,
+  "purpose": "time_profile",
+  "plan_call": "stale-wait",
+  "started_at": "2026-10-27T01:27:54.502314Z",
+  "started_ns": 1793064474502314000,
+  "elapsed_ms": 8.27,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,10 +33,10 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 3,
+        "id": 20,
         "method": "tasks/get",
         "params": {
-          "taskId": "7b041a67f0b4487ce52d175db02d36f6"
+          "taskId": "a49820f57fc101e82d83fc3d68276e7d"
         }
       }
     }
@@ -78,11 +78,11 @@
       ],
       [
         "content-length",
-        "316"
+        "377"
       ],
       [
         "date",
-        "Sun, 25 Oct 2026 23:09:56 GMT"
+        "Tue, 27 Oct 2026 01:27:54 GMT"
       ]
     ],
     "body": {
@@ -90,26 +90,26 @@
       "content_type": "text/event-stream",
       "json": {
         "result": {
-          "taskId": "7b041a67f0b4487ce52d175db02d36f6",
-          "status": "working",
+          "taskId": "a49820f57fc101e82d83fc3d68276e7d",
+          "status": "input_required",
           "ttl": 300000,
-          "createdAt": "2026-10-25T23:09:56.247Z",
-          "lastUpdatedAt": "2026-10-25T23:09:56.247Z",
+          "createdAt": "2026-10-27T01:27:03.902Z",
+          "lastUpdatedAt": "2026-10-27T01:27:05.906Z",
           "pollInterval": 1000,
-          "statusMessage": "Gathering sources..."
+          "statusMessage": "Found multiple interpretations for \"stale\". Requesting clarification..."
         },
         "jsonrpc": "2.0",
-        "id": 3
+        "id": 20
       }
     }
   },
   "stream": [
     {
-      "t_ms": 6.74,
+      "t_ms": 7.99,
       "kind": "sse",
       "event": "message",
-      "id": "36f62b42-4924-4df8-870d-f4df6233aeb3",
-      "data": "{\"result\":{\"taskId\":\"7b041a67f0b4487ce52d175db02d36f6\",\"status\":\"working\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:09:56.247Z\",\"lastUpdatedAt\":\"2026-10-25T23:09:56.247Z\",\"pollInterval\":1000,\"statusMessage\":\"Gathering sources...\"},\"jsonrpc\":\"2.0\",\"id\":3}"
+      "id": "41d67919-87c4-48db-9913-d2de1e9bdcb0",
+      "data": "{\"result\":{\"taskId\":\"a49820f57fc101e82d83fc3d68276e7d\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-27T01:27:03.902Z\",\"lastUpdatedAt\":\"2026-10-27T01:27:05.906Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"stale\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\",\"id\":20}"
     }
   ],
   "redacted": [

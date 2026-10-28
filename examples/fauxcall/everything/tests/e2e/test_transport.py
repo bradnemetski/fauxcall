@@ -1,65 +1,60 @@
-"""The HTTP layer under MCP: how the server refuses requests before any JSON-RPC handling.
-
-Only reads (GET, OPTIONS) are compared with the real server here: a raw POST, DELETE or PUT is
-a write the approval doesn't cover. Their refusals are recorded by introspection and checked
-against those recordings in ``tests/unit/test_transport_refusals.py``.
-"""
+"""The HTTP side of the Streamable HTTP transport: sessions, routing, CORS (safe methods only)."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
-
-import pytest
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from fauxcall.testing import ApiClient
 
-STALE_SESSION = "0b34feaa-9571-49de-839c-6b562b3b2dfa"
+NO_SESSION = {
+    "jsonrpc": "2.0",
+    "error": {"code": -32000, "message": "Bad Request: No valid session ID provided"},
+}
 
 
-@pytest.mark.parametrize(
-    "headers",
-    [
-        {"accept": "text/event-stream", "mcp-session-id": STALE_SESSION},
-        {"accept": "text/event-stream"},
-        {"accept": "application/json"},
-        {},
-        {"mcp-session-id": STALE_SESSION, "mcp-protocol-version": "1999-01-01"},
-    ],
-)
-async def test_stream_needs_a_session(api: ApiClient, headers: dict[str, str]) -> None:
-    response: Any = await api.get("/mcp", headers=headers)
-    assert response.status_code == 400
+async def test_get_stream_needs_a_session(api: ApiClient) -> None:
+    missing = await api.get("/mcp", headers={"Accept": "text/event-stream"})
+    assert missing.status_code == 400
+    assert missing.json() == NO_SESSION
+    unknown = await api.get(
+        "/mcp",
+        headers={
+            "Accept": "text/event-stream",
+            "Mcp-Session-Id": "0f9d4a52-5d3e-4b8e-9f00-3a1c2b4d5e6f",
+        },
+    )
+    assert unknown.status_code == 400
+    assert unknown.json() == NO_SESSION
 
 
-@pytest.mark.parametrize("path", ["/MCP", "/mcp/", "/Mcp/"])
-async def test_mcp_path_matches_any_case_and_trailing_slash(api: ApiClient, path: str) -> None:
-    response: Any = await api.get(path, headers={"accept": "text/event-stream"})
-    assert response.status_code == 400
-
-
-@pytest.mark.parametrize(
-    "path", ["/not-mcp", "/mcp/extra", "/sse", "/.well-known/oauth-protected-resource"]
-)
-async def test_unknown_routes(api: ApiClient, path: str) -> None:
-    response: Any = await api.get(path)
-    assert response.status_code == 404
+async def test_routing(api: ApiClient) -> None:
+    unknown = await api.get("/sse")
+    assert unknown.status_code == 404
+    assert "<pre>Cannot GET /sse</pre>" in unknown.text
+    upper = await api.get("/MCP")
+    assert upper.status_code == 400
+    slash = await api.get("/mcp/")
+    assert slash.status_code == 400
+    nested = await api.get("/mcp/extra")
+    assert nested.status_code == 404
 
 
 async def test_cors_preflight(api: ApiClient) -> None:
-    response: Any = await api.request(
+    preflight = await api.request(
         "OPTIONS",
         "/mcp",
         headers={
-            "origin": "https://inspector.example",
-            "access-control-request-method": "POST",
-            "access-control-request-headers": "content-type,mcp-session-id",
+            "Origin": "https://inspector.example",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "content-type,mcp-session-id",
         },
     )
-    assert response.status_code == 204
-    assert response.headers["access-control-allow-origin"] == "*"
-
-
-async def test_cors_on_answers(api: ApiClient) -> None:
-    response: Any = await api.get("/mcp", headers={"origin": "https://inspector.example"})
-    assert response.headers["access-control-allow-origin"] == "*"
+    assert preflight.status_code == 204
+    assert preflight.headers["access-control-allow-origin"] == "*"
+    assert preflight.headers["access-control-allow-methods"] == "GET,POST,DELETE"
+    assert preflight.headers["access-control-allow-headers"] == "content-type,mcp-session-id"
+    plain = await api.get("/mcp", headers={"Origin": "https://inspector.example"})
+    assert plain.headers["access-control-expose-headers"] == (
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+    )

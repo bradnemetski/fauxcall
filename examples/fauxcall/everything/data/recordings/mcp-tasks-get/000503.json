@@ -1,0 +1,119 @@
+{
+  "id": "000503",
+  "endpoint": "MCP tasks/get",
+  "purpose": "edge",
+  "plan_call": "tasks-get-number",
+  "started_at": "2026-10-27T01:26:58.873203Z",
+  "started_ns": 1793064418873203000,
+  "elapsed_ms": 2.062,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tasks/get",
+        "params": {
+          "taskId": "2c79bd2cac395fd916ad5ba0ba872ca6"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "352"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 01:26:58 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "taskId": "2c79bd2cac395fd916ad5ba0ba872ca6",
+          "status": "failed",
+          "ttl": 300000,
+          "createdAt": "2026-10-27T01:26:53.358Z",
+          "lastUpdatedAt": "2026-10-27T01:26:57.878Z",
+          "pollInterval": 1000,
+          "statusMessage": "TypeError: state.clarification.includes is not a function"
+        },
+        "jsonrpc": "2.0",
+        "id": 4
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 1.922,
+      "kind": "sse",
+      "event": "message",
+      "id": "600ad06e-4f61-4519-af42-4d1db66323e3",
+      "data": "{\"result\":{\"taskId\":\"2c79bd2cac395fd916ad5ba0ba872ca6\",\"status\":\"failed\",\"ttl\":300000,\"createdAt\":\"2026-10-27T01:26:53.358Z\",\"lastUpdatedAt\":\"2026-10-27T01:26:57.878Z\",\"pollInterval\":1000,\"statusMessage\":\"TypeError: state.clarification.includes is not a function\"},\"jsonrpc\":\"2.0\",\"id\":4}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

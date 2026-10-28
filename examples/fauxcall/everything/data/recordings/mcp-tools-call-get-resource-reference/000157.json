@@ -1,10 +1,11 @@
 {
   "id": "000157",
   "endpoint": "MCP tools/call:get-resource-reference",
-  "plan_call": "ref-text-1",
-  "started_at": "2026-10-25T21:14:53.833399Z",
-  "started_ns": 1792962893833399000,
-  "elapsed_ms": 6.612,
+  "purpose": "time_profile",
+  "plan_call": "ref-time",
+  "started_at": "2026-10-26T23:58:20.664156Z",
+  "started_ns": 1793059100664156000,
+  "elapsed_ms": 10.577,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -32,13 +33,13 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 2,
+        "id": 20,
         "method": "tools/call",
         "params": {
           "name": "get-resource-reference",
           "arguments": {
             "resourceType": "Text",
-            "resourceId": 1
+            "resourceId": 9
           }
         }
       }
@@ -81,7 +82,7 @@
       ],
       [
         "date",
-        "Sun, 25 Oct 2026 21:14:53 GMT"
+        "Mon, 26 Oct 2026 23:58:20 GMT"
       ],
       [
         "transfer-encoding",
@@ -96,34 +97,34 @@
           "content": [
             {
               "type": "text",
-              "text": "Returning resource reference for Resource 1:"
+              "text": "Returning resource reference for Resource 9:"
             },
             {
               "type": "resource",
               "resource": {
-                "uri": "demo://resource/dynamic/text/1",
+                "uri": "demo://resource/dynamic/text/9",
                 "mimeType": "text/plain",
-                "text": "Resource 1: This is a plaintext resource created at 5:14:53 PM"
+                "text": "Resource 9: This is a plaintext resource created at 7:58:20 PM"
               }
             },
             {
               "type": "text",
-              "text": "You can access this resource using the URI: demo://resource/dynamic/text/1"
+              "text": "You can access this resource using the URI: demo://resource/dynamic/text/9"
             }
           ]
         },
         "jsonrpc": "2.0",
-        "id": 2
+        "id": 20
       }
     }
   },
   "stream": [
     {
-      "t_ms": 6.292,
+      "t_ms": 10.249,
       "kind": "sse",
       "event": "message",
-      "id": "e8de45bb-9c9a-4f20-92ff-a1d47fb16226",
-      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Returning resource reference for Resource 1:\"},{\"type\":\"resource\",\"resource\":{\"uri\":\"demo://resource/dynamic/text/1\",\"mimeType\":\"text/plain\",\"text\":\"Resource 1: This is a plaintext resource created at 5:14:53 PM\"}},{\"type\":\"text\",\"text\":\"You can access this resource using the URI: demo://resource/dynamic/text/1\"}]},\"jsonrpc\":\"2.0\",\"id\":2}"
+      "id": "47b3de73-4901-4bb1-b9e6-e1ba5598ec88",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Returning resource reference for Resource 9:\"},{\"type\":\"resource\",\"resource\":{\"uri\":\"demo://resource/dynamic/text/9\",\"mimeType\":\"text/plain\",\"text\":\"Resource 9: This is a plaintext resource created at 7:58:20 PM\"}},{\"type\":\"text\",\"text\":\"You can access this resource using the URI: demo://resource/dynamic/text/9\"}]},\"jsonrpc\":\"2.0\",\"id\":20}"
     }
   ],
   "redacted": [

@@ -1,0 +1,114 @@
+{
+  "id": "000405",
+  "endpoint": "MCP resources/read:demo://resource/session/never.gz",
+  "purpose": "invalid",
+  "plan_call": "read-session-missing",
+  "started_at": "2026-10-27T00:11:15.130819Z",
+  "started_ns": 1793059875130819000,
+  "elapsed_ms": 7.379,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 30,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/session/never.gz"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "195"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:11:15 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 30,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Resource demo://resource/session/never.gz not found"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 7.061,
+      "kind": "sse",
+      "event": "message",
+      "id": "09571c1e-9a2c-4ae1-95b8-0dc540aa7faf",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":30,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Resource demo://resource/session/never.gz not found\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

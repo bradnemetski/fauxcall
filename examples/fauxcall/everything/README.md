@@ -64,56 +64,60 @@ Tools: 19 · resources: 7 · prompts: 4.
 ## Known limitations and notes
 
 <!-- fauxcall:notes (kept by `fauxcall scaffold`; the rest of this file is regenerated) -->
-Built from @modelcontextprotocol/server-everything 2026.8.31 (TypeScript SDK 1.32.2) running
-locally, ~540 recorded exchanges, and the server's published source read as documentation. Every
-tool, resource, template, prompt, completion and task method is computed by handlers that
-reproduce the recordings value for value (`tests/unit/test_exact_replay.py`,
-`tests/unit/test_sessions.py`); the last parity run against the real server scored 100%
-(independent 100%, real writes included).
+What this fake reproduces, and where it knowingly differs from the real
+`@modelcontextprotocol/server-everything` 2026.8.31 (TypeScript SDK 1.32.2) it was recorded from.
 
-**Where it follows the source rather than a recording** (the recorder can't express these):
-protocol versions (2024-10-07 accepted; an unsupported version negotiates 2025-11-25),
-`notifications/tools/list_changed` sent once per capability tool when the client is
-initialized, gzip resources shared across the sessions of one evaluation, the session-less
-POST rules (only one schema-valid initialize; its version header unchecked), and the 60 s
-client-request timeout.
+**How it was built.** Every tool, resource, prompt, completion and `tasks/*` method was recorded
+(489 exchanges); behavior that can't be replayed is computed in `src/fauxcall_everything/`
+from that evidence and the server's published source: zod-worded argument errors, JavaScript
+number spelling (`1e+21`, `5e-7`), `Number()` parsing of resource ids, WHATWG URL normalization
+of resource URIs, Node-identical gzip bytes, the server's local time (America/New_York,
+`7:54:20 PM`) in dynamic resources, per-session state (session resources, subscriptions, logging
+level, roots, toggles, tasks) and the requests the server sends the client.
 
 **Known differences**
 
-- *Client cancellation* (`notifications/cancelled` mid-call): FauxCall stops the handler. The
-  real server lets it run to the end: progress keeps coming, gzip still registers its resource,
-  and only the answer is suppressed.
-- *Requests to the client time out on the wall clock* (FauxCall's `ask_client`), while the
-  research task's clarification timeout follows the fake's clock.
-- *Fast mode* (`FAUXCALL_FAST=1`, the tests) skips the long-running operation's step waits and
-  the async tools' 1 s polls. Task stages, 5 s log and update ticks, and `tasks/result` polling
-  follow the fake's clock in every mode.
-- *gzip-file-as-resource never fetches.* `data:` URLs are compressed locally; the result is
-  byte-identical to the real server, which forces the gzip OS byte to 0x13. A zlib other than
-  the one this was checked with (zlib-ng) could deflate differently. An http(s) URL returns the
-  bytes the real server fetched when recorded: the GitHub README (default), `https://example.com/`
-  and one 404 page. Any other URL fails with `fetch failed`, as the real server does offline.
-  The real server's fetch size and time limits are not reproduced.
-- *Transport details FauxCall answers its own way*:
-  - A DELETE with an unsupported `MCP-Protocol-Version` ends the session (real: 400; the session
-    is kept).
-  - HEAD with a session id gets 404 (real: 405).
-  - `Content-Type` is matched by substring for in-session POSTs.
-  - SSE answers are `text/event-stream; charset=utf-8`, and their headers wait for the first
-    event (real: sent at once, plus `x-powered-by`, `cache-control`, `x-accel-buffering`).
-  - On `Last-Event-ID` replay, priming events are written without `event:`, and the event store
-    keeps at most 1000 events.
-- *Elicitation request ids* inside a research task are numbered when the request is delivered
-  (real: when it is queued).
-- *Subscriptions*: update order follows each session's first subscription to a URI. The real
-  server orders by its process-wide map.
-- *Requests tied to a live task* (`_meta` related-task naming an existing task): the real
-  server queues the answer in the task's message queue and never sends it; the fake answers.
-  An unknown task id is refused as on the real server.
-- *`notifications/tools/list_changed`* is sent but not in the model's `server_messages`: no
-  recording can show it (the recorder listens after initialization), so parity can't hear it.
-- *No credentials*: the server takes none, so the fake has no auth to refuse.
-- *Not compared value by value in parity* (the test client compares them by shape and count):
-  timestamps inside task notifications, random log levels, and per-session ids. The scenarios
-  assert the deterministic parts on both sides.
+- **No network.** `gzip-file-as-resource` compresses `data:` URLs itself, and the default README
+  URL from its recording (fetched 2026-10-26). Any other http(s) URL answers `fetch failed`, as
+  the real server does for an unreachable host; the real server would fetch it.
+- **Sessions stay apart.** The real server keeps some state in module-wide maps shared by every
+  session:
+  - Gzip session resources: a second session registering the same name removes the first
+    session's resource.
+  - The subscription list: the order of `resources/updated` follows the first subscription by
+    any session.
+
+  The fake keeps each session's state to itself.
+- **`notifications/tools/list_changed` at initialization.** The real server registers its
+  conditional tools on `notifications/initialized`, and sends one `list_changed` per tool. A client
+  that opens its GET stream only after initializing (every common client) never sees them; only
+  a client whose stream was already open, or that resumes with `Last-Event-ID`, would. The fake
+  doesn't send them.
+- **Requests the fake can't keep.** Without a GET stream, the real server's `roots/list` request is
+  dropped but kept in its event store, and times out after 60 s with a `notifications/cancelled`.
+  The fake reproduces the dropped request and the 60 s wait of `get-roots-list`, but not the late
+  cancellation notice or the request's replay on `Last-Event-ID`.
+- **Protocol versions.** An unsupported version is answered with 2025-11-25, and 2024-10-07 is
+  accepted, as the SDK source says. This wasn't recorded, because the recorder can't open a fresh
+  session per `initialize`.
+- **Time zone.** Dynamic resources print the time of day in America/New_York, the recorded host's
+  zone. A real server on another host would use that host's zone.
+- **URL parsing.** URLs are parsed as WHATWG `new URL` does, for what was recorded and checked.
+  Rare hosts differ:
+  - Malformed numeric IPv4 hosts (`http://1.2.3.4.5/`) are accepted by the fake, while Node
+    refuses them.
+  - Hex IPv4 hosts (`http://0x7f.1/`) aren't normalized.
+  - IDNA2008 special cases differ (`faß.de`: Node writes `xn--fa-hia.de`, the fake `fass.de`).
+- **Rare validation shapes.** Zod's wording is reproduced for every case recorded or exercised
+  (tool and prompt arguments, client answers to sampling, elicitation and async tasks, request
+  shapes). Unusual nested shapes are approximations, e.g. invalid content inside a sampling
+  answer's `content` object.
+- **Source-only facts.** The timeout cancellation reason (`McpError: MCP error -32001: Request timed
+  out`) and the session-wide event replay on `Last-Event-ID` (`resumption: session`) come from the
+  SDK and server source. They weren't recorded, because the recorder always answers the server's
+  requests.
+
+**Parity:** see `data/reports/parity.md` (the latest full run, against the real server with
+real writes) and the build summary in `data/reports/summary.md`. The server takes no credentials,
+so there's no refused-credential scenario.
 <!-- /fauxcall:notes -->

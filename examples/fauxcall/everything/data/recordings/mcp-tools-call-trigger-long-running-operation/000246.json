@@ -1,0 +1,159 @@
+{
+  "id": "000246",
+  "endpoint": "MCP tools/call:trigger-long-running-operation",
+  "purpose": "variation",
+  "plan_call": "lro-duration-only",
+  "started_at": "2026-10-27T00:03:32.409549Z",
+  "started_ns": 1793059412409549000,
+  "elapsed_ms": 618.103,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 10,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": 0.6
+          },
+          "_meta": {
+            "progressToken": "donly"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:03:32 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Long running operation completed. Duration: 0.6 seconds, Steps: 5."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 10
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 130.563,
+      "kind": "sse",
+      "event": "message",
+      "id": "7fe3c2c3-97be-40be-a87e-e87817f32b09",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":1,\"total\":5,\"progressToken\":\"donly\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 254.474,
+      "kind": "sse",
+      "event": "message",
+      "id": "fdc7bbf3-3851-42c5-be54-1f469fcd3996",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":2,\"total\":5,\"progressToken\":\"donly\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 375.581,
+      "kind": "sse",
+      "event": "message",
+      "id": "acdb1883-e3f0-4f72-b780-c2bbd6229776",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":3,\"total\":5,\"progressToken\":\"donly\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 495.536,
+      "kind": "sse",
+      "event": "message",
+      "id": "1b3e21f9-2905-4d21-a13a-891a80a6426f",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":4,\"total\":5,\"progressToken\":\"donly\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 617.74,
+      "kind": "sse",
+      "event": "message",
+      "id": "7a718f36-c1e3-487a-82cc-ad3b457c6f3f",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":5,\"total\":5,\"progressToken\":\"donly\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 617.827,
+      "kind": "sse",
+      "event": "message",
+      "id": "83fbdac6-cb43-4a38-8e57-2f0ea0345127",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Long running operation completed. Duration: 0.6 seconds, Steps: 5.\"}]},\"jsonrpc\":\"2.0\",\"id\":10}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

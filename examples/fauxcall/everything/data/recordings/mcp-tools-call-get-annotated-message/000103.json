@@ -1,11 +1,11 @@
 {
   "id": "000103",
   "endpoint": "MCP tools/call:get-annotated-message",
-  "purpose": "invalid",
-  "plan_call": "annotated-bad-bool",
-  "started_at": "2026-10-25T21:13:21.676901Z",
-  "started_ns": 1792962801676901000,
-  "elapsed_ms": 5.273,
+  "purpose": "variation",
+  "plan_call": "ann-debug-noimg",
+  "started_at": "2026-10-26T23:57:15.392694Z",
+  "started_ns": 1793059035392694000,
+  "elapsed_ms": 6.262,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,13 +33,13 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 13,
+        "id": 8,
         "method": "tools/call",
         "params": {
           "name": "get-annotated-message",
           "arguments": {
-            "messageType": "success",
-            "includeImage": "yes"
+            "messageType": "debug",
+            "includeImage": false
           }
         }
       }
@@ -82,7 +82,7 @@
       ],
       [
         "date",
-        "Sun, 25 Oct 2026 21:13:21 GMT"
+        "Mon, 26 Oct 2026 23:57:15 GMT"
       ],
       [
         "transfer-encoding",
@@ -97,23 +97,28 @@
           "content": [
             {
               "type": "text",
-              "text": "MCP error -32602: Input validation error: Invalid arguments for tool get-annotated-message: Invalid input: expected boolean, received string at includeImage"
+              "text": "Debug: Cache hit ratio 0.95, latency 150ms",
+              "annotations": {
+                "audience": [
+                  "assistant"
+                ],
+                "priority": 0.3
+              }
             }
-          ],
-          "isError": true
+          ]
         },
         "jsonrpc": "2.0",
-        "id": 13
+        "id": 8
       }
     }
   },
   "stream": [
     {
-      "t_ms": 5.039,
+      "t_ms": 5.935,
       "kind": "sse",
       "event": "message",
-      "id": "d3c23b19-a268-4103-97c2-12ce8a38959d",
-      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"MCP error -32602: Input validation error: Invalid arguments for tool get-annotated-message: Invalid input: expected boolean, received string at includeImage\"}],\"isError\":true},\"jsonrpc\":\"2.0\",\"id\":13}"
+      "id": "4394e3e9-8e87-4e09-a282-1eed3ff793b0",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Debug: Cache hit ratio 0.95, latency 150ms\",\"annotations\":{\"audience\":[\"assistant\"],\"priority\":0.3}}]},\"jsonrpc\":\"2.0\",\"id\":8}"
     }
   ],
   "redacted": [

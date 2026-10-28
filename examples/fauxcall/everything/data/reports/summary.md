@@ -6,7 +6,7 @@ Source: http://127.0.0.1:3101/mcp (mcp) · real API: http://127.0.0.1:3101
 
 - endpoints: 0 (n/a)
 - MCP tools: 19 · resources: 7 · prompts: 4
-- recordings: 538 exchanges
+- recordings: 545 exchanges
 - collections: none; relations: 0
 - field policies: none
 - jobs: 0 · calendars: 0 · rate limits: 0 · error templates: 2
@@ -14,7 +14,7 @@ Source: http://127.0.0.1:3101/mcp (mcp) · real API: http://127.0.0.1:3101
 ## Parity
 
 Compliance **100.00%** (threshold 98%) — PASS.
-Independent of recordings: **100.00%** over 243 of 352 calls.
+Independent of recordings: **100.00%** over 173 of 257 calls.
 
 ## Open items
 

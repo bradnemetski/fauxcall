@@ -8,7 +8,7 @@
     "spec_url": "http://127.0.0.1:3101/mcp",
     "spec_file": "source/mcp.json",
     "title": "Everything Reference Server",
-    "fetched_at": "2026-10-25T20:59:19.252067Z"
+    "fetched_at": "2026-10-26T23:48:44.308592Z"
   },
   "real": {
     "base_url": "http://127.0.0.1:3101"
@@ -37,11 +37,11 @@
     "transport": {
       "get_stream": "sse",
       "protocol_versions": {
+        "2024-10-07": "2024-10-07",
         "2024-11-05": "2024-11-05",
         "2025-03-26": "2025-03-26",
         "2025-06-18": "2025-06-18",
-        "2025-11-25": "2025-11-25",
-        "2024-10-07": "2024-10-07"
+        "2025-11-25": "2025-11-25"
       },
       "default_protocol_version": "2025-11-25",
       "sse_event_ids": true,
@@ -190,10 +190,11 @@
           ]
         ]
       },
-      "resumption": "session",
-      "timeout_cancel_reason": "McpError: MCP error -32001: Request timed out",
       "keep_alive": ": keepalive",
-      "reinitialize_status": 400
+      "reinitialize_status": 400,
+      "on_cancel": "finish",
+      "resumption": "session",
+      "timeout_cancel_reason": "McpError: MCP error -32001: Request timed out"
     },
     "initialize_result": {
       "protocolVersion": "2025-06-18",
@@ -260,34 +261,30 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            4.546,
-            4.629,
-            6.756,
-            7.25,
-            7.411,
-            7.509,
-            7.664,
-            8.645,
-            8.865,
-            9.744,
-            10.691,
-            11.619,
-            11.842
+            5.491,
+            5.544,
+            5.559,
+            5.952,
+            6.315,
+            6.607,
+            8.204,
+            8.659,
+            8.861,
+            9.415,
+            10.246,
+            11.874
           ],
           "error_samples_ms": [
-            4.275,
-            5.837,
-            8.232,
-            8.597,
-            9.403,
-            9.675,
-            10.007,
-            10.066,
-            10.668
+            6.381,
+            7.27,
+            7.743,
+            8.168,
+            9.331,
+            9.459
           ],
-          "p50_ms": 7.664,
-          "p90_ms": 11.433399999999999,
-          "p99_ms": 11.81524
+          "p50_ms": 7.405500000000001,
+          "p90_ms": 10.1629,
+          "p99_ms": 11.69492
         }
       },
       {
@@ -332,26 +329,25 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            8.131,
-            8.311,
-            9.857,
-            10.041,
-            10.454,
-            10.457,
-            10.932,
-            10.935
+            2.772,
+            4.934,
+            6.262,
+            7.912,
+            8.706,
+            8.969,
+            9.65,
+            11.735
           ],
           "error_samples_ms": [
-            5.273,
-            5.399,
-            8.402,
-            8.471,
-            10.408,
-            10.672
+            5.328,
+            7.763,
+            8.452,
+            8.664,
+            8.997
           ],
-          "p50_ms": 10.2475,
-          "p90_ms": 10.9329,
-          "p99_ms": 10.93479
+          "p50_ms": 8.309,
+          "p90_ms": 10.2755,
+          "p99_ms": 11.58905
         }
       },
       {
@@ -374,19 +370,17 @@
             "taskSupport": "forbidden"
           }
         },
-        "behavior": "computed",
+        "behavior": "match",
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            6.338,
-            7.214,
-            9.034,
-            10.559,
-            11.118
+            5.2,
+            6.407,
+            7.09
           ],
-          "p50_ms": 9.034,
-          "p90_ms": 10.894400000000001,
-          "p99_ms": 11.095640000000001
+          "p50_ms": 6.407,
+          "p90_ms": 6.9534,
+          "p99_ms": 7.076339999999999
         }
       },
       {
@@ -421,26 +415,25 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            6.396,
-            6.695,
-            7.358,
-            7.783,
-            8.06,
-            8.62,
-            8.803,
-            9.691,
-            58.45
+            2.581,
+            2.738,
+            3.333,
+            6.574,
+            8.084,
+            8.355,
+            8.867,
+            52.051
           ],
           "error_samples_ms": [
-            5.309,
-            6.621,
-            8.937,
-            9.477,
-            10.226
+            2.45,
+            2.794,
+            5.21,
+            7.378,
+            9.017
           ],
-          "p50_ms": 8.06,
-          "p90_ms": 19.442800000000002,
-          "p99_ms": 54.54928000000001
+          "p50_ms": 7.329,
+          "p90_ms": 21.822200000000002,
+          "p99_ms": 49.02812000000001
         }
       },
       {
@@ -481,31 +474,32 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.473,
-            6.612,
-            7.743,
-            8.308,
-            9.385,
-            9.5,
-            10.13,
-            10.178,
-            10.421,
-            10.424,
-            11.046,
-            11.047,
-            12.194
+            6.028,
+            6.106,
+            7.406,
+            7.553,
+            7.57,
+            8.429,
+            8.534,
+            10.098,
+            10.386,
+            10.577,
+            10.958,
+            11.188,
+            11.504,
+            21.502
           ],
           "error_samples_ms": [
-            5.956,
-            6.173,
-            6.998,
-            7.243,
-            7.781,
-            7.92
+            5.057,
+            6.446,
+            7.433,
+            7.879,
+            11.301,
+            11.617
           ],
-          "p50_ms": 10.13,
-          "p90_ms": 11.046800000000001,
-          "p99_ms": 12.056360000000002
+          "p50_ms": 9.316,
+          "p90_ms": 11.4092,
+          "p99_ms": 20.20226
         },
         "varies": true
       },
@@ -570,20 +564,21 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            4.906,
-            6.425,
-            6.77,
-            9.671
+            6.258,
+            9.182,
+            11.902,
+            12.174,
+            13.365
           ],
           "error_samples_ms": [
-            4.875,
-            8.1,
-            8.731,
-            9.586
+            6.354,
+            6.628,
+            6.733,
+            9.356
           ],
-          "p50_ms": 6.5975,
-          "p90_ms": 8.800699999999999,
-          "p99_ms": 9.583969999999999
+          "p50_ms": 11.901999999999997,
+          "p90_ms": 12.888599999999999,
+          "p99_ms": 13.317359999999999
         }
       },
       {
@@ -623,32 +618,31 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            4.462,
-            4.552,
-            4.832,
-            6.023,
-            7.029,
-            7.139,
-            7.385,
-            8.049,
-            8.367,
-            8.534,
-            9.357,
-            9.451,
-            9.452,
-            9.699,
-            10.38
+            5.861,
+            6.276,
+            6.535,
+            7.096,
+            7.152,
+            7.467,
+            7.488,
+            8.44,
+            8.748,
+            8.958,
+            9.383,
+            9.441,
+            9.93,
+            10.526
           ],
           "error_samples_ms": [
-            4.918,
-            7.062,
-            7.11,
-            7.36,
-            9.234
+            3.356,
+            5.669,
+            6.363,
+            8.152,
+            8.439
           ],
-          "p50_ms": 8.049,
-          "p90_ms": 9.6002,
-          "p99_ms": 10.28466
+          "p50_ms": 7.964000000000001,
+          "p90_ms": 9.7833,
+          "p99_ms": 10.448519999999998
         }
       },
       {
@@ -671,18 +665,18 @@
             "taskSupport": "forbidden"
           }
         },
-        "behavior": "computed",
+        "behavior": "match",
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            4.34,
-            6.261,
-            8.919,
-            9.894
+            6.477,
+            6.709,
+            8.248,
+            10.045
           ],
-          "p50_ms": 7.59,
-          "p90_ms": 9.601500000000001,
-          "p99_ms": 9.864749999999999
+          "p50_ms": 7.4784999999999995,
+          "p90_ms": 9.505899999999999,
+          "p99_ms": 9.99109
         }
       },
       {
@@ -730,28 +724,25 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            5.371,
-            5.739,
-            6.5,
-            7.376,
-            7.915,
-            8.218,
-            8.272,
-            9.599,
-            16.407
+            5.415,
+            5.459,
+            5.858,
+            5.905,
+            6.387,
+            6.532,
+            11.377,
+            13.137
           ],
           "error_samples_ms": [
-            3.107,
-            5.337,
-            5.413,
-            5.465,
-            5.575,
-            5.76,
-            8.173
+            5.481,
+            6.628,
+            7.163,
+            7.266,
+            50.608
           ],
-          "p50_ms": 7.915,
-          "p90_ms": 16.407,
-          "p99_ms": 16.407
+          "p50_ms": 6.146,
+          "p90_ms": 11.905,
+          "p99_ms": 13.014
         }
       },
       {
@@ -778,16 +769,16 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.483,
-            4.149,
-            4.323,
-            5.073,
-            5.282,
-            7.061
+            4.502,
+            4.632,
+            4.754,
+            5.413,
+            5.814,
+            5.945
           ],
-          "p50_ms": 4.698,
-          "p90_ms": 6.171500000000001,
-          "p99_ms": 6.972049999999999
+          "p50_ms": 5.0835,
+          "p90_ms": 5.8795,
+          "p99_ms": 5.9384500000000005
         },
         "varies": true
       },
@@ -815,15 +806,14 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            5.519,
-            5.525,
-            5.597,
-            6.324,
-            8.033
+            4.867,
+            5.089,
+            5.297,
+            6.435
           ],
-          "p50_ms": 5.597,
-          "p90_ms": 7.349399999999999,
-          "p99_ms": 7.964639999999999
+          "p50_ms": 5.193,
+          "p90_ms": 6.0936,
+          "p99_ms": 6.400859999999999
         },
         "varies": true
       },
@@ -862,17 +852,24 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            2.432,
-            7.106,
-            8.715
+            6.248,
+            6.367,
+            6.409,
+            7.902,
+            12.0,
+            16.218,
+            17.962,
+            18.103,
+            18.247,
+            18.782
           ],
           "error_samples_ms": [
-            5.837,
-            10.284
+            4.094,
+            4.569
           ],
-          "p50_ms": 7.106,
-          "p90_ms": 8.715,
-          "p99_ms": 8.715
+          "p50_ms": 14.109,
+          "p90_ms": 18.3,
+          "p99_ms": 18.734
         }
       },
       {
@@ -899,19 +896,16 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            8.521,
-            9.025,
-            9.638,
-            11.638,
-            11.758,
-            12.108
+            8.456,
+            8.995,
+            12.769,
+            13.484,
+            13.705,
+            15.812
           ],
-          "error_samples_ms": [
-            10.488
-          ],
-          "p50_ms": 11.638,
-          "p90_ms": 12.108,
-          "p99_ms": 12.108
+          "p50_ms": 13.1265,
+          "p90_ms": 14.7585,
+          "p99_ms": 15.70665
         },
         "requires": [
           [
@@ -943,31 +937,24 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            4.863,
-            5.518,
-            8.531,
-            8.54,
-            9.743,
-            10.027,
-            10.268,
-            10.468,
-            11.187
+            9.242,
+            9.841,
+            9.858,
+            10.016,
+            12.216,
+            12.793
           ],
           "error_samples_ms": [
-            5.353,
-            9.207,
-            12.723
+            8.375,
+            13.322
           ],
-          "p50_ms": 9.743,
-          "p90_ms": 10.6118,
-          "p99_ms": 11.12948
+          "p50_ms": 9.937000000000001,
+          "p90_ms": 12.504499999999998,
+          "p99_ms": 12.764149999999999
         },
         "requires": [
           [
             "elicitation"
-          ],
-          [
-            "elicitation.url"
           ]
         ]
       },
@@ -1018,28 +1005,24 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            8.512,
-            8.529,
-            8.771,
-            9.744,
-            10.053,
-            10.496,
-            10.827,
-            10.919
+            4.72,
+            9.511,
+            9.946,
+            10.198,
+            11.757
           ],
           "error_samples_ms": [
-            2.818,
-            4.32,
-            4.587,
-            4.896,
-            4.979,
-            5.465,
-            5.808,
-            8.967
+            4.267,
+            4.384,
+            5.041,
+            5.205,
+            5.505,
+            5.634,
+            12.023
           ],
-          "p50_ms": 9.8985,
-          "p90_ms": 10.8546,
-          "p99_ms": 10.912560000000001
+          "p50_ms": 9.946,
+          "p90_ms": 11.1334,
+          "p99_ms": 11.69464
         },
         "requires": [
           [
@@ -1084,25 +1067,21 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            8.202,
-            8.751,
-            9.277,
-            10.466,
-            10.657,
-            11.184,
-            11.85
+            8.432,
+            8.799,
+            9.298,
+            11.08,
+            13.07
           ],
           "error_samples_ms": [
-            5.539,
-            5.77,
-            5.805,
-            6.203,
-            8.352,
-            9.401
+            3.944,
+            4.434,
+            8.696,
+            11.094
           ],
-          "p50_ms": 10.466,
-          "p90_ms": 11.4504,
-          "p99_ms": 11.810039999999999
+          "p50_ms": 9.298,
+          "p90_ms": 12.274000000000001,
+          "p99_ms": 12.9904
         },
         "requires": [
           [
@@ -1147,24 +1126,23 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            4.224,
-            4.289,
-            4.682,
-            5.822,
-            5.988,
-            6.034,
-            6.174,
-            7.727,
-            9.783
+            3.189,
+            3.703,
+            4.468,
+            4.669,
+            4.675,
+            5.045,
+            5.055,
+            10.459
           ],
           "error_samples_ms": [
-            4.935,
-            4.995,
-            5.128
+            5.53,
+            5.564,
+            6.664
           ],
-          "p50_ms": 5.988,
-          "p90_ms": 8.138200000000001,
-          "p99_ms": 9.61852
+          "p50_ms": 4.672,
+          "p90_ms": 6.676199999999999,
+          "p99_ms": 10.08072
         },
         "requires": [
           []
@@ -1207,19 +1185,18 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            7.841,
-            11.176,
-            12.112
+            13.007,
+            9.72,
+            22.601,
+            19.368,
+            16.96
           ],
           "error_samples_ms": [
-            2.007,
-            4.944,
-            6.623,
-            9.79
+            4.376
           ],
-          "p50_ms": 11.176,
-          "p90_ms": 12.112,
-          "p99_ms": 12.112
+          "p50_ms": 16.96,
+          "p90_ms": 21.308,
+          "p99_ms": 22.472
         },
         "requires": [
           [
@@ -1252,15 +1229,15 @@
         "invalid_args": "accept",
         "latency": {
           "samples_ms": [
-            7.386,
-            9.259
+            11.856,
+            8.218,
+            22.352,
+            18.963,
+            15.364
           ],
-          "error_samples_ms": [
-            12.051
-          ],
-          "p50_ms": 9.259,
-          "p90_ms": 9.259,
-          "p99_ms": 9.259
+          "p50_ms": 15.364,
+          "p90_ms": 20.996,
+          "p99_ms": 22.216
         },
         "requires": [
           [
@@ -1467,23 +1444,12 @@
     "arguments_probe_tool": "echo"
   },
   "notes": [
-    "Server: @modelcontextprotocol/server-everything 2026.8.31 (TypeScript SDK 1.32.2), run locally; its published dist/ source was read as documentation alongside the recordings.",
-    "Tools are listed in the server's registration order: the 12 base tools, then the ones registered after notifications/initialized (get-roots-list, trigger-elicitation-request, trigger-url-elicitation, trigger-sampling-request, simulate-research-query, the two async tools), each only to clients whose capabilities allow it (recordings 000044, 000461-000492).",
-    "simulate-research-query carries requires [[]]: offered to every client, but only after notifications/initialized, as the real server registers it then (000044 lists 12 tools).",
-    "Every tool except get-env and get-tiny-image is computed: handlers reproduce the SDK's zod v4 validation messages ('MCP error -32602: Input validation error: Invalid arguments for tool X: <issues joined by newline>') and the tools' logic from the recordings.",
-    "Times inside dynamic resources (toLocaleTimeString, e.g. '5:14:53 PM') follow the fake's clock in America/New_York, the real server's local zone (21:14:53Z was written 5:14:53 PM).",
-    "gzip-file-as-resource compresses data: URIs itself (zlib, byte-identical to the recordings, OS byte 0x13); http(s) URLs are answered from the recorded fetches of the same URL, and any other URL fails with 'fetch failed', as the real server does when the network is unreachable (000330, 000331). The fake never fetches.",
-    "timeout_cancel_reason is the TypeScript SDK's (shared/protocol.js: String(McpError) of a -32001 timeout); no recording shows it because the only timeout (000439) happened with no GET stream open.",
-    "resumption 'session': the server's own InMemoryEventStore replays every later event of the session after Last-Event-ID, whatever stream it came from.",
-    "GET and DELETE on /mcp without any Mcp-Session-Id are refused with the recorded 400 'No valid session ID provided' by the fake's own SessionRequired middleware (app.py): the real express handlers check the session before the transport checks Accept (recording 000024; parity confirmed the 400 for a bare GET). FauxCall's runtime only refuses an unknown session id, not a missing one.",
-    "Protocol versions follow the TypeScript SDK 1.32.2 (types.js): SUPPORTED_PROTOCOL_VERSIONS adds 2024-10-07 to the four introspection negotiated, and an unsupported requested version negotiates LATEST_PROTOCOL_VERSION 2025-11-25 (server/index.js _oninitialize). Introspection only probed the four versions; the recorded refusal text lists all five.",
-    "Server-sent messages are written method, params, jsonrpc, id, as in the recordings (000062, 000176, 000376).",
-    "Malformed client answers (sampling/elicitation results, task polls the SDK's zod schemas refuse) fail the tool with zod's issues as JSON; recordings 000397, 000410, 000497-000501 and two parity runs show the formats (discriminated union, union of options, z.any() reported as 'nonoptional').",
-    "tasks/result delivers a queued clarification request without waiting for the answer and keeps checking every poll interval; a clarification left unanswered times out 60 s after it was queued (recording 000527-000543: Continuing at +62.5 s), no notifications/cancelled is seen, and the stale request is still delivered on the next tasks/result (000542). Cancelling while waiting answers tasks/result at once (000518-000525).",
-    "notifications/tools/list_changed: the real server registers its capability tools when notifications/initialized arrives, one tools/list_changed per tool registered (TypeScript SDK mcp.js registerTool -> sendToolListChanged): the fake sends the same count on the client's GET stream. Not recordable (the recorder opens its GET stream after initialization; the real server keeps them only for Last-Event-ID replay).",
-    "gzip-file-as-resource's resource registry is shared by all sessions on the real server (resources/session.js module-level map): a name created in another session of the same evaluation removes it from the first, which hears list_changed. The fake shares it across the MCP sessions of one FauxCall evaluation session.",
-    "Session-less POSTs follow the SDK transport (webStandardStreamableHttp.js): an initialize must match InitializeRequestSchema (else 400 'Bad Request: Server not initialized'), may not share a batch (400 -32600 'Invalid Request: Only one initialization request is allowed'), and its MCP-Protocol-Version header is not checked; enforced by the fake's SessionRequired middleware (app.py).",
-    "Answers to roots/list without a 'roots' list are refused by the SDK's schema and only logged to the server console: no log message reaches the client (recording 000494-000495).",
-    "Known runtime differences (FauxCall, not the model): client cancellation stops the handler (the real SDK lets it finish and only suppresses the answer); requests to the client time out on the wall clock; DELETE with an unsupported protocol header ends the session; HEAD with a session id gets 404; SSE answers carry '; charset=utf-8' and their headers wait for the first event. See README."
+    "Recorded from @modelcontextprotocol/server-everything 2026.8.31 on @modelcontextprotocol/sdk 1.32.2 (local, no credentials); behavior that can't be replayed is computed in src/fauxcall_everything from the recordings and the server's published source.",
+    "From the SDK source, not recorded (the recorder can't open a fresh session per initialize): an unsupported protocol version is answered with LATEST_PROTOCOL_VERSION 2025-11-25 (server/index.js); 2024-10-07 is supported (also named in the recorded protocol-header refusal, 000016).",
+    "From the SDK source, not recorded: transport.timeout_cancel_reason (McpError string of a -32001 timeout) and resumption=session (the server's InMemoryEventStore replays every later event of the session).",
+    "on_cancel=finish from recordings: a cancelled gzip still registered its resource (000256, 000259); progress continued after a cancel (000249). Tools that check their abort signal through extra.sendRequest (the async tools, tasks/result) stop at their next request (000530).",
+    "requires per tool and the tool order from tools/list per declared client capability (000039-000045, 000310-000375); simulate-research-query requires [[]]: offered to every client, but only after notifications/initialized.",
+    "Dynamic resources print the server host's local time (America/New_York, recorded 23:54 UTC as 7:54:20 PM).",
+    "gzip-file-as-resource never reaches the network: data: URLs are compressed (Node-identical bytes, 000159-000166), the default README comes from 000260, any other http(s) URL answers 'fetch failed' like an unreachable host (000172)."
   ]
 }

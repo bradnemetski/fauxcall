@@ -1,0 +1,119 @@
+{
+  "id": "000510",
+  "endpoint": "MCP tasks/get",
+  "purpose": "time_profile",
+  "plan_call": "stale-wait",
+  "started_at": "2026-10-27T01:27:09.415281Z",
+  "started_ns": 1793064429415281000,
+  "elapsed_ms": 6.761,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 11,
+        "method": "tasks/get",
+        "params": {
+          "taskId": "a49820f57fc101e82d83fc3d68276e7d"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "377"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 01:27:09 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "taskId": "a49820f57fc101e82d83fc3d68276e7d",
+          "status": "input_required",
+          "ttl": 300000,
+          "createdAt": "2026-10-27T01:27:03.902Z",
+          "lastUpdatedAt": "2026-10-27T01:27:05.906Z",
+          "pollInterval": 1000,
+          "statusMessage": "Found multiple interpretations for \"stale\". Requesting clarification..."
+        },
+        "jsonrpc": "2.0",
+        "id": 11
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.529,
+      "kind": "sse",
+      "event": "message",
+      "id": "02a3baf8-655e-4c4a-8c97-2f08ee602c9e",
+      "data": "{\"result\":{\"taskId\":\"a49820f57fc101e82d83fc3d68276e7d\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-27T01:27:03.902Z\",\"lastUpdatedAt\":\"2026-10-27T01:27:05.906Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"stale\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\",\"id\":11}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

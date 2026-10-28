@@ -1,0 +1,135 @@
+{
+  "id": "000362",
+  "endpoint": "MCP tools/call:trigger-sampling-request-async",
+  "purpose": "edge",
+  "plan_call": "async-sampling-cancelled",
+  "started_at": "2026-10-27T00:08:25.914073Z",
+  "started_ns": 1793059705914073000,
+  "elapsed_ms": 1016.96,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "Cancel the task"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:08:25 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[CANCELLED] No message\n\nProgress:\nTask created: client-task-3\nPoll 1: cancelled"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 6
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.106,
+      "kind": "sse",
+      "event": "message",
+      "id": "2e4ef9f3-7e80-477f-9288-93611a929359",
+      "data": "{\"method\":\"sampling/createMessage\",\"params\":{\"task\":{\"ttl\":300000},\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"Resource trigger-sampling-request-async context: Cancel the task\"}}],\"systemPrompt\":\"You are a helpful test server.\",\"maxTokens\":100,\"temperature\":0.7},\"jsonrpc\":\"2.0\",\"id\":6}"
+    },
+    {
+      "t_ms": 1010.936,
+      "kind": "sse",
+      "event": "message",
+      "id": "e726dc31-8234-4a07-bf08-b1b51e71f649",
+      "data": "{\"method\":\"tasks/get\",\"params\":{\"taskId\":\"client-task-3\"},\"jsonrpc\":\"2.0\",\"id\":7}"
+    },
+    {
+      "t_ms": 1016.664,
+      "kind": "sse",
+      "event": "message",
+      "id": "9a8f8bff-b912-4e36-9c36-6730ac5d7f5a",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[CANCELLED] No message\\n\\nProgress:\\nTask created: client-task-3\\nPoll 1: cancelled\"}]},\"jsonrpc\":\"2.0\",\"id\":6}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

@@ -1,0 +1,220 @@
+{
+ "name": "simulate-research-query-elicitation",
+ "created_at": "2026-10-26T20:00:00Z",
+ "client_capabilities": {
+  "elicitation": {}
+ },
+ "listen": true,
+ "listen_after_seconds": 2,
+ "calls": [
+  {
+   "id": "research-python-ambiguous",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "Python",
+      "ambiguous": true
+     },
+     "task": {
+      "ttl": 60000
+     }
+    }
+   },
+   "capture": {
+    "p": "$.result.task.taskId"
+   }
+  },
+  {
+   "id": "tasks-get-p-poll",
+   "endpoint": "MCP tasks/get",
+   "purpose": "time_profile",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{p}}"
+    }
+   },
+   "repeat": 4,
+   "interval_ms": 700
+  },
+  {
+   "id": "tasks-result-p",
+   "endpoint": "MCP tasks/result",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{p}}"
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "accept",
+     "content": {
+      "interpretation": "programming"
+     }
+    }
+   }
+  },
+  {
+   "id": "research-ambiguous-decline",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "jaguar speed",
+      "ambiguous": true
+     },
+     "task": {
+      "ttl": 60000
+     }
+    }
+   },
+   "capture": {
+    "q": "$.result.task.taskId"
+   }
+  },
+  {
+   "id": "tasks-result-q",
+   "endpoint": "MCP tasks/result",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{q}}"
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "decline"
+    }
+   }
+  },
+  {
+   "id": "research-ambiguous-cancel",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "mercury",
+      "ambiguous": true
+     },
+     "task": {
+      "ttl": 60000
+     }
+    }
+   },
+   "capture": {
+    "r": "$.result.task.taskId"
+   }
+  },
+  {
+   "id": "tasks-result-r",
+   "endpoint": "MCP tasks/result",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{r}}"
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "action": "cancel"
+    }
+   }
+  },
+  {
+   "id": "research-ambiguous-refused",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "python packaging",
+      "ambiguous": true
+     },
+     "task": {
+      "ttl": 60000
+     }
+    }
+   },
+   "capture": {
+    "s": "$.result.task.taskId"
+   }
+  },
+  {
+   "id": "tasks-result-s",
+   "endpoint": "MCP tasks/result",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{s}}"
+    }
+   },
+   "client_replies": {
+    "elicitation/create": {
+     "error": {
+      "code": -32601,
+      "message": "Method not found"
+     }
+    }
+   }
+  },
+  {
+   "id": "research-clear",
+   "endpoint": "MCP tools/call:simulate-research-query",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "simulate-research-query",
+     "arguments": {
+      "topic": "coral reefs"
+     },
+     "task": {
+      "ttl": 60000
+     }
+    }
+   },
+   "capture": {
+    "c": "$.result.task.taskId"
+   }
+  },
+  {
+   "id": "tasks-result-c",
+   "endpoint": "MCP tasks/result",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "taskId": "{{c}}"
+    }
+   }
+  }
+ ]
+}

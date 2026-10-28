@@ -1,47 +1,46 @@
 {
-  "name": "get-tiny-image",
-  "created_at": "2026-10-25T21:15:00Z",
-  "calls": [
-    {
-      "id": "image-1",
-      "endpoint": "MCP tools/call:get-tiny-image",
-      "purpose": "sample",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-tiny-image",
-          "arguments": {}
-        }
-      }
-    },
-    {
-      "id": "image-2",
-      "endpoint": "MCP tools/call:get-tiny-image",
-      "purpose": "variation",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-tiny-image",
-          "arguments": {}
-        }
-      }
-    },
-    {
-      "id": "image-extra",
-      "endpoint": "MCP tools/call:get-tiny-image",
-      "purpose": "edge",
-      "request": {
-        "method": "POST",
-        "path": "/mcp",
-        "json_body": {
-          "name": "get-tiny-image",
-          "arguments": {
-            "size": "large"
-          }
-        }
-      }
+ "name": "get-tiny-image",
+ "created_at": "2026-10-26T20:00:00Z",
+ "calls": [
+  {
+   "id": "image-1",
+   "endpoint": "MCP tools/call:get-tiny-image",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-tiny-image",
+     "arguments": {}
     }
-  ]
+   }
+  },
+  {
+   "id": "image-extra",
+   "endpoint": "MCP tools/call:get-tiny-image",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-tiny-image",
+     "arguments": {
+      "size": "large"
+     }
+    }
+   }
+  },
+  {
+   "id": "image-noargs",
+   "endpoint": "MCP tools/call:get-tiny-image",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-tiny-image"
+    }
+   }
+  }
+ ]
 }

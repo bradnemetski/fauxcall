@@ -1,11 +1,11 @@
 {
   "id": "000521",
   "endpoint": "MCP tasks/get",
-  "purpose": "job_poll",
-  "plan_call": "rq-cw-poll",
-  "started_at": "2026-10-25T23:09:59.163785Z",
-  "started_ns": 1792969799163785000,
-  "elapsed_ms": 6.996,
+  "purpose": "time_profile",
+  "plan_call": "stale-wait",
+  "started_at": "2026-10-27T01:28:04.526594Z",
+  "started_ns": 1793064484526594000,
+  "elapsed_ms": 7.686,
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:3101/mcp",
@@ -33,10 +33,10 @@
       "content_type": "application/json",
       "json": {
         "jsonrpc": "2.0",
-        "id": 5,
+        "id": 22,
         "method": "tasks/get",
         "params": {
-          "taskId": "7b041a67f0b4487ce52d175db02d36f6"
+          "taskId": "a49820f57fc101e82d83fc3d68276e7d"
         }
       }
     }
@@ -82,7 +82,7 @@
       ],
       [
         "date",
-        "Sun, 25 Oct 2026 23:09:59 GMT"
+        "Tue, 27 Oct 2026 01:28:04 GMT"
       ]
     ],
     "body": {
@@ -90,26 +90,26 @@
       "content_type": "text/event-stream",
       "json": {
         "result": {
-          "taskId": "7b041a67f0b4487ce52d175db02d36f6",
+          "taskId": "a49820f57fc101e82d83fc3d68276e7d",
           "status": "input_required",
           "ttl": 300000,
-          "createdAt": "2026-10-25T23:09:56.247Z",
-          "lastUpdatedAt": "2026-10-25T23:09:58.252Z",
+          "createdAt": "2026-10-27T01:27:03.902Z",
+          "lastUpdatedAt": "2026-10-27T01:27:05.906Z",
           "pollInterval": 1000,
-          "statusMessage": "Found multiple interpretations for \"python\". Requesting clarification..."
+          "statusMessage": "Found multiple interpretations for \"stale\". Requesting clarification..."
         },
         "jsonrpc": "2.0",
-        "id": 5
+        "id": 22
       }
     }
   },
   "stream": [
     {
-      "t_ms": 6.685,
+      "t_ms": 7.358,
       "kind": "sse",
       "event": "message",
-      "id": "88a68534-21e3-4864-9003-6a5ed9a81641",
-      "data": "{\"result\":{\"taskId\":\"7b041a67f0b4487ce52d175db02d36f6\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-25T23:09:56.247Z\",\"lastUpdatedAt\":\"2026-10-25T23:09:58.252Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"python\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\",\"id\":5}"
+      "id": "c9b63c09-b8e8-449a-810b-f699b1f03e36",
+      "data": "{\"result\":{\"taskId\":\"a49820f57fc101e82d83fc3d68276e7d\",\"status\":\"input_required\",\"ttl\":300000,\"createdAt\":\"2026-10-27T01:27:03.902Z\",\"lastUpdatedAt\":\"2026-10-27T01:27:05.906Z\",\"pollInterval\":1000,\"statusMessage\":\"Found multiple interpretations for \\\"stale\\\". Requesting clarification...\"},\"jsonrpc\":\"2.0\",\"id\":22}"
     }
   ],
   "redacted": [

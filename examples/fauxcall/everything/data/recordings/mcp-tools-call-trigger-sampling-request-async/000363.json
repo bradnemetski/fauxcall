@@ -1,0 +1,135 @@
+{
+  "id": "000363",
+  "endpoint": "MCP tools/call:trigger-sampling-request-async",
+  "purpose": "edge",
+  "plan_call": "async-sampling-immediate",
+  "started_at": "2026-10-27T00:08:26.944631Z",
+  "started_ns": 1793059706944631000,
+  "elapsed_ms": 9.72,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-sampling-request-async",
+          "arguments": {
+            "prompt": "Already done"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:08:26 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[COMPLETED] Async sampling completed!\n\n**Progress:**\nTask created: client-task-4\n\n**Result:**\n{\n  \"role\": \"assistant\",\n  \"content\": {\n    \"type\": \"text\",\n    \"text\": \"Done before polling\"\n  },\n  \"model\": \"fauxcall-test-model\",\n  \"stopReason\": \"endTurn\"\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 7
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 4.776,
+      "kind": "sse",
+      "event": "message",
+      "id": "e3094d09-f3bc-4461-929c-b87962825a1e",
+      "data": "{\"method\":\"sampling/createMessage\",\"params\":{\"task\":{\"ttl\":300000},\"messages\":[{\"role\":\"user\",\"content\":{\"type\":\"text\",\"text\":\"Resource trigger-sampling-request-async context: Already done\"}}],\"systemPrompt\":\"You are a helpful test server.\",\"maxTokens\":100,\"temperature\":0.7},\"jsonrpc\":\"2.0\",\"id\":8}"
+    },
+    {
+      "t_ms": 7.848,
+      "kind": "sse",
+      "event": "message",
+      "id": "e849d21f-9bb6-49a7-8421-bf6482004626",
+      "data": "{\"method\":\"tasks/result\",\"params\":{\"taskId\":\"client-task-4\"},\"jsonrpc\":\"2.0\",\"id\":9}"
+    },
+    {
+      "t_ms": 9.51,
+      "kind": "sse",
+      "event": "message",
+      "id": "5102fbc9-e742-4410-9802-cd7dbe6bb064",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[COMPLETED] Async sampling completed!\\n\\n**Progress:**\\nTask created: client-task-4\\n\\n**Result:**\\n{\\n  \\\"role\\\": \\\"assistant\\\",\\n  \\\"content\\\": {\\n    \\\"type\\\": \\\"text\\\",\\n    \\\"text\\\": \\\"Done before polling\\\"\\n  },\\n  \\\"model\\\": \\\"fauxcall-test-model\\\",\\n  \\\"stopReason\\\": \\\"endTurn\\\"\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":7}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

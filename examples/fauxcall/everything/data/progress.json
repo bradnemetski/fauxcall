@@ -1,58 +1,62 @@
 {
   "fake": "everything",
   "source": "http://127.0.0.1:3101/mcp",
-  "started_at": "2026-10-25T20:59:19.252067Z",
-  "updated_at": "2026-10-25T23:35:57.242873Z",
+  "started_at": "2026-10-26T23:48:44.308592Z",
+  "updated_at": "2026-10-27T01:42:51.398077Z",
   "phases": {
     "discover": {
       "status": "done",
-      "started_at": "2026-10-25T20:59:19.252067Z",
-      "finished_at": "2026-10-25T20:59:19.252067Z"
+      "started_at": "2026-10-26T23:48:44.308592Z",
+      "finished_at": "2026-10-26T23:48:44.308592Z"
     },
     "gate": {
       "status": "done",
-      "finished_at": "2026-10-25T21:11:53.047358Z"
+      "finished_at": "2026-10-27T00:12:39.155270Z"
     },
     "record": {
       "status": "done",
-      "finished_at": "2026-10-25T21:34:06.077865Z"
+      "finished_at": "2026-10-27T00:15:58.022662Z"
     },
     "model": {
       "status": "done",
-      "finished_at": "2026-10-25T21:34:39.883478Z"
+      "finished_at": "2026-10-27T00:17:16.773368Z"
     },
     "world": {
-      "status": "done",
-      "finished_at": "2026-10-25T21:34:40.489103Z"
+      "status": "skipped",
+      "finished_at": "2026-10-27T00:17:17.366624Z",
+      "notes": [
+        "MCP server without collections: cross-references (resource links -> resources/read, gzip session resources -> resources/list/read, task ids -> tasks/*) are kept by handlers and checked by e2e scenarios"
+      ]
     },
     "scaffold": {
       "status": "done",
-      "finished_at": "2026-10-25T21:35:06.618562Z"
+      "finished_at": "2026-10-27T00:44:14.973010Z"
     },
     "implement": {
       "status": "done",
-      "finished_at": "2026-10-25T21:58:01.414641Z"
+      "started_at": "2026-10-27T00:44:15.570637Z",
+      "finished_at": "2026-10-27T00:55:32.384473Z"
     },
     "unit_tests": {
       "status": "done",
-      "finished_at": "2026-10-25T22:29:20.538618Z"
+      "finished_at": "2026-10-27T00:55:33.017353Z"
     },
     "e2e_tests": {
       "status": "done",
-      "finished_at": "2026-10-25T22:29:21.131033Z"
+      "finished_at": "2026-10-27T00:56:16.501021Z"
     },
     "parity": {
       "status": "done",
-      "finished_at": "2026-10-25T22:31:21.941728Z"
+      "finished_at": "2026-10-27T01:42:26.404288Z"
     },
     "review": {
       "status": "done",
-      "started_at": "2026-10-25T22:31:23.148282Z",
-      "finished_at": "2026-10-25T23:35:55.848248Z"
+      "started_at": "2026-10-27T00:59:32.893720Z",
+      "finished_at": "2026-10-27T01:42:27.619787Z"
     },
     "report": {
       "status": "done",
-      "finished_at": "2026-10-25T23:35:57.242464Z"
+      "finished_at": "2026-10-27T01:42:39.838971Z"
     }
   },
   "endpoints": [
@@ -249,21 +253,14 @@
   ],
   "gate": {
     "mutations": "approved",
-    "answered_at": "2026-10-25T21:11:53.046060Z"
+    "answered_at": "2026-10-27T00:12:39.154119Z"
   },
   "log": [
-    "2026-10-25 21:11 Headless gate from answers.json: no credentials, no Jev, all MCP tools/call approved at 60 calls per tool (recording+parity). Plans for every tool/method are in data/plans; heaviest planned write use is gzip at 21/60.",
-    "2026-10-25 21:11 Repaired the dev venv at FAUXCALL_SOURCE (src/.venv lacked pyvenv.cfg, so fauxcall could not import); rebuilt with uv sync.",
-    "2026-10-25 21:34 Recorded ~490 exchanges: every tool (valid/invalid args, edge values), resources (static, dynamic templates, session gzip resources), prompts, completions, logging/setLevel, subscriptions, tasks (get/result/list/cancel, input_required elicitation), sampling/elicitation/roots client requests, capability gating, protocol probes.",
-    "2026-10-25 21:34 Model: all tools but get-env/get-tiny-image computed (zod-exact validation in handlers); requires fixed for async tools (sampling|elicitation + tasks.requests.*), simulate-research-query requires [[]] (only after initialized); tools reordered to registration order; resumption=session; timeout_cancel_reason from SDK.",
-    "2026-10-25 21:34 Privacy: maxTokens was redacted as secret-like; added allow_names, deleted and re-recorded the 5 affected exchanges (000039/45/400/463/466 -> 000486-000492).",
-    "2026-10-25 21:34 World: MCP fake has no collections; consistency (gzip session resources in resources/list+read, tasks in tasks/list+get, subscriptions->updates, resource links/prompt embeds -> dynamic templates) lives in handler session state.",
-    "2026-10-25 21:58 Handlers implemented (tools.py, resources.py, prompts.py, tasks.py, client_tools.py + jsfmt/zod/whatwg helpers). 250 recorded answers replay value-exact at recording time; 22 recorded sessions replay value-exact with recorded client answers. Unit coverage 81% so far (tasks/whatwg/jsfmt gaps).",
-    "2026-10-25 22:15 Parity #1 (read-only) 99.82% -> fixed session-less GET/DELETE (middleware) -> 100%. Parity #2 (with writes) 99.94% / independent 99.91%; fixed zod union error texts for malformed client answers and a random prerequisite elicitationId comparison (test policy).",
-    "2026-10-25 22:29 Quality gates pass: ruff, ruff format, mypy strict, 907 tests (unit+e2e on fake), coverage 98.08%. Stages/ticks now scheduled on absolute deadlines so clock jumps finish due work. Fixed WHATWG userinfo/IPv6 serialization found by unit tests.",
-    "2026-10-25 22:31 Parity #3 with real writes: 100% overall, 100% independent (233 of 347 calls), 227 scenarios x2, none skipped, nothing uncovered. No credential exists to refuse (the server takes none).",
-    "2026-10-25 23:26 Review (fauxcall:reviewer) found 11 issue groups; recorded its probes A-E (000494-000543) as evidence; fixed: protocol negotiation (2024-10-07, default 2025-11-25), non-blocking clarification delivery + queue-time timeout + stale delivery, tools/list_changed on initialize, shared gzip registry, message member order, session-less POST/HEAD/empty-session rules, completion/cursor/related-task schema refusals, roots no-log, exact async union errors. Remaining runtime differences in README. Parity #4: 100%/100% (243 independent calls).",
-    "2026-10-25 23:27 Official MCP Python SDK 2.3.0 client connected to the served fake (fauxcall up): initialize (2025-11-25), tools/list by capability, echo, get-sum, sampling round trip, resources/read, prompts/get, completion, structured content: all OK.",
-    "2026-10-25 23:35 Reviewer re-check: no regressions; fixed its 3 remaining low items (related-task lookup first, ClientCapabilitiesSchema check on initialize, stale relay not kept waiting), documented 2 (answers to requests tied to a live task, list_changed not in server_messages). Final parity (#5, real writes): 100% / 100% independent (243 of 352), 456 runs, none skipped. 950 tests, coverage 97.45%."
+    "2026-10-27 00:12 Gate from answers.json: no credentials, no Jev, all tools/call approved (60/tool incl. parity). All writes are session-scoped state on a local reference server (gzip session resources, toggles, tasks); nothing persists past a session.",
+    "2026-10-27 00:12 Recorded every tool, resources, prompts, completions, tasks/*, listings per client capability; server source (server-everything 2026.8.31, SDK 1.32.2) read for on_cancel/resumption/timeout facts.",
+    "2026-10-27 00:15 Model: tools reordered to the real with-all listing order; requires fixed from capability probes (async tools need tasks.requests.<kind> + base capability; simulate-research-query requires [[]] = listed only after initialized); on_cancel=finish (cancelled gzip still registered its resource, 000256/000259); resumption=session (InMemoryEventStore replays all later session events: server source); timeout reason from SDK source.",
+    "2026-10-27 00:44 Handlers: 17 computed tools + resources/list|read, subscribe, setLevel, prompts/get, completion/complete, tasks/*, notifications/initialized|roots/list_changed. Partial parity runs: listings/simple tools 100%, resources/prompts 99.4%, long-running 100%, write tools 99.7% (report newline bug fixed).",
+    "2026-10-27 00:57 Full parity (verify --target parity --allow-real-writes): 100% overall, 100% independent over 163 of 236 calls, 54 scenarios, nothing uncovered.",
+    "2026-10-27 01:42 Review fixes (reviewer a752f399): version negotiation from SDK source; cancel stops async tools/tasks/result; tasks/result on its 1 s grid with stale queued elicitations (000523); zod url trim (000490-000493); task param on unknown/unoffered tools (000496-000497); async answer + poll + elicitation value validation (000526-000529); failed task on non-string interpretation (000502-000503); Node 1 ms timer floor (000534); numeric tasks/list cursor (000498); gzip fetch time. Full parity after: 100% / independent 100% over 173 of 257 calls, 60 scenarios."
   ]
 }

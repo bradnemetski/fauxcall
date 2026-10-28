@@ -1,0 +1,133 @@
+{
+  "id": "000334",
+  "endpoint": "MCP tools/call:trigger-url-elicitation",
+  "purpose": "variation",
+  "plan_call": "url-decline",
+  "started_at": "2026-10-27T00:08:03.436912Z",
+  "started_ns": 1793059683436912000,
+  "elapsed_ms": 4.72,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-url-elicitation",
+          "arguments": {
+            "url": "https://example.com/oauth",
+            "elicitationId": "fauxcall-elicit-2"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:08:03 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "❌ User declined to open the URL (Elicitation ID: fauxcall-elicit-2)."
+            },
+            {
+              "type": "text",
+              "text": "\nRaw result: {\n  \"action\": \"decline\"\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 5
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 2.59,
+      "kind": "sse",
+      "event": "message",
+      "id": "7667811f-0ace-40d9-8c48-9edf138011df",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"mode\":\"url\",\"url\":\"https://example.com/oauth\",\"message\":\"Please open the link to complete this action.\",\"elicitationId\":\"fauxcall-elicit-2\"},\"jsonrpc\":\"2.0\",\"id\":2}"
+    },
+    {
+      "t_ms": 4.57,
+      "kind": "sse",
+      "event": "message",
+      "id": "40df96ce-7fb3-4053-ae69-9e22b819746e",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"❌ User declined to open the URL (Elicitation ID: fauxcall-elicit-2).\"},{\"type\":\"text\",\"text\":\"\\nRaw result: {\\n  \\\"action\\\": \\\"decline\\\"\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":5}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

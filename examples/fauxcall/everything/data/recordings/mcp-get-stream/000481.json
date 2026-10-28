@@ -1,0 +1,94 @@
+{
+  "id": "000481",
+  "endpoint": "MCP GET:stream",
+  "started_at": "2026-10-27T00:17:40.903368Z",
+  "started_ns": 1793060260903368000,
+  "elapsed_ms": 6038.977,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:17:40 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "content_type": "text/event-stream"
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 518.861,
+      "kind": "sse",
+      "event": "message",
+      "id": "bdfc2a7d-1fb3-4446-a91b-409b4181b24b",
+      "data": "{\"method\":\"notifications/resources/list_changed\",\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 2523.218,
+      "kind": "sse",
+      "event": "message",
+      "id": "63fa7a8f-39c9-4e8c-b8b3-b0ee58f99799",
+      "data": "{\"method\":\"notifications/resources/list_changed\",\"jsonrpc\":\"2.0\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

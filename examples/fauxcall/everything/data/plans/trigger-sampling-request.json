@@ -1,0 +1,244 @@
+{
+ "name": "trigger-sampling-request",
+ "created_at": "2026-10-26T20:00:00Z",
+ "client_capabilities": {
+  "sampling": {}
+ },
+ "calls": [
+  {
+   "id": "sampling-tools-list",
+   "endpoint": "MCP tools/list",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "sampling-hello",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "Say hello in five words."
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "role": "assistant",
+     "content": {
+      "type": "text",
+      "text": "Hello there, how are you?"
+     },
+     "model": "fauxcall-test-model",
+     "stopReason": "endTurn"
+    }
+   }
+  },
+  {
+   "id": "sampling-max-tokens",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "Summarize the MCP spec.",
+      "maxTokens": 50
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "role": "assistant",
+     "content": {
+      "type": "text",
+      "text": "MCP connects models to tools and data."
+     },
+     "model": "claude-test",
+     "stopReason": "maxTokens"
+    }
+   }
+  },
+  {
+   "id": "sampling-multiline",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "Write a haiku about servers"
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "role": "assistant",
+     "content": {
+      "type": "text",
+      "text": "Quiet racks hum on\nPackets drift like autumn leaves\nUptime holds its breath"
+     },
+     "model": "fauxcall-test-model",
+     "stopReason": "endTurn"
+    }
+   }
+  },
+  {
+   "id": "sampling-no-stop",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "What is 2+2?",
+      "maxTokens": 5
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "role": "assistant",
+     "content": {
+      "type": "text",
+      "text": "4"
+     },
+     "model": "fauxcall-test-model"
+    }
+   }
+  },
+  {
+   "id": "sampling-image-reply",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "Draw a dot"
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "role": "assistant",
+     "content": {
+      "type": "image",
+      "data": "iVBORw0KGgo=",
+      "mimeType": "image/png"
+     },
+     "model": "img-model"
+    }
+   }
+  },
+  {
+   "id": "sampling-refused",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "Please refuse"
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "error": {
+      "code": -1,
+      "message": "User rejected sampling request"
+     }
+    }
+   }
+  },
+  {
+   "id": "sampling-bad-reply",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "Return garbage"
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "unexpected": true
+    }
+   }
+  },
+  {
+   "id": "sampling-missing-prompt",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {}
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "role": "assistant",
+     "content": {
+      "type": "text",
+      "text": "x"
+     },
+     "model": "fauxcall-test-model",
+     "stopReason": "endTurn"
+    }
+   }
+  },
+  {
+   "id": "sampling-bad-maxtokens",
+   "endpoint": "MCP tools/call:trigger-sampling-request",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "trigger-sampling-request",
+     "arguments": {
+      "prompt": "hi",
+      "maxTokens": "many"
+     }
+    }
+   },
+   "client_replies": {
+    "sampling/createMessage": {
+     "role": "assistant",
+     "content": {
+      "type": "text",
+      "text": "x"
+     },
+     "model": "fauxcall-test-model",
+     "stopReason": "endTurn"
+    }
+   }
+  }
+ ]
+}

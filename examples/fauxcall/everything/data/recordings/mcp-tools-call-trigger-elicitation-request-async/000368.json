@@ -1,0 +1,147 @@
+{
+  "id": "000368",
+  "endpoint": "MCP tools/call:trigger-elicitation-request-async",
+  "plan_call": "async-elicitation-task",
+  "started_at": "2026-10-27T00:08:30.166371Z",
+  "started_ns": 1793059710166371000,
+  "elapsed_ms": 1022.352,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-elicitation-request-async",
+          "arguments": {}
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:08:30 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[COMPLETED] User provided the requested information!"
+            },
+            {
+              "type": "text",
+              "text": "User inputs:\n- Name: Grace\n- Favorite Color: green\n- Agreed to terms: false"
+            },
+            {
+              "type": "text",
+              "text": "\nProgress:\nTask created: client-elicit-1\nPoll 1: completed\n\nRaw result: {\n  \"action\": \"accept\",\n  \"content\": {\n    \"name\": \"Grace\",\n    \"favoriteColor\": \"green\",\n    \"agreeToTerms\": false\n  }\n}"
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 4
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 5.247,
+      "kind": "sse",
+      "event": "message",
+      "id": "5b63ef13-b817-45b2-b1e9-84cba1d8822d",
+      "data": "{\"method\":\"elicitation/create\",\"params\":{\"task\":{\"ttl\":600000},\"message\":\"Please provide inputs for the following fields (async task demo):\",\"requestedSchema\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"Your Name\",\"type\":\"string\",\"description\":\"Your full name\"},\"favoriteColor\":{\"title\":\"Favorite Color\",\"type\":\"string\",\"description\":\"What is your favorite color?\",\"enum\":[\"Red\",\"Blue\",\"Green\",\"Yellow\",\"Purple\"]},\"agreeToTerms\":{\"title\":\"Terms Agreement\",\"type\":\"boolean\",\"description\":\"Do you agree to the terms and conditions?\"}},\"required\":[\"name\"]}},\"jsonrpc\":\"2.0\",\"id\":1}"
+    },
+    {
+      "t_ms": 1013.254,
+      "kind": "sse",
+      "event": "message",
+      "id": "6f538b7a-0093-450c-b056-7f9c748b98f7",
+      "data": "{\"method\":\"tasks/get\",\"params\":{\"taskId\":\"client-elicit-1\"},\"jsonrpc\":\"2.0\",\"id\":2}"
+    },
+    {
+      "t_ms": 1019.15,
+      "kind": "sse",
+      "event": "message",
+      "id": "b6e7c7d1-e751-46f5-937b-0a3321eee718",
+      "data": "{\"method\":\"tasks/result\",\"params\":{\"taskId\":\"client-elicit-1\"},\"jsonrpc\":\"2.0\",\"id\":3}"
+    },
+    {
+      "t_ms": 1022.03,
+      "kind": "sse",
+      "event": "message",
+      "id": "9019ab78-67d9-4848-86f4-0c66d0cca101",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[COMPLETED] User provided the requested information!\"},{\"type\":\"text\",\"text\":\"User inputs:\\n- Name: Grace\\n- Favorite Color: green\\n- Agreed to terms: false\"},{\"type\":\"text\",\"text\":\"\\nProgress:\\nTask created: client-elicit-1\\nPoll 1: completed\\n\\nRaw result: {\\n  \\\"action\\\": \\\"accept\\\",\\n  \\\"content\\\": {\\n    \\\"name\\\": \\\"Grace\\\",\\n    \\\"favoriteColor\\\": \\\"green\\\",\\n    \\\"agreeToTerms\\\": false\\n  }\\n}\"}]},\"jsonrpc\":\"2.0\",\"id\":4}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

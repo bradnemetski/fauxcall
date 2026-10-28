@@ -1,0 +1,114 @@
+{
+  "id": "000472",
+  "endpoint": "MCP resources/read:demo://resource/session/my file.gz",
+  "purpose": "edge",
+  "plan_call": "gap-read-space-raw",
+  "started_at": "2026-10-27T00:17:41.907335Z",
+  "started_ns": 1793060261907335000,
+  "elapsed_ms": 6.899,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "resources/read",
+        "params": {
+          "uri": "demo://resource/session/my file.gz"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "content-length",
+        "198"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:17:41 GMT"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "error": {
+          "code": -32602,
+          "message": "MCP error -32602: Resource demo://resource/session/my%20file.gz not found"
+        }
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 6.613,
+      "kind": "sse",
+      "event": "message",
+      "id": "3f36835c-54eb-4a48-ac3e-c884475f37ee",
+      "data": "{\"jsonrpc\":\"2.0\",\"id\":3,\"error\":{\"code\":-32602,\"message\":\"MCP error -32602: Resource demo://resource/session/my%20file.gz not found\"}}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

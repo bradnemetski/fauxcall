@@ -1,0 +1,1525 @@
+{
+  "id": "000534",
+  "endpoint": "MCP tools/call:trigger-long-running-operation",
+  "purpose": "time_profile",
+  "plan_call": "lro-timer-clamp",
+  "started_at": "2026-10-27T01:28:21.205822Z",
+  "started_ns": 1793064501205822000,
+  "elapsed_ms": 277.427,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 10,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": 0,
+            "steps": 200
+          },
+          "_meta": {
+            "progressToken": "clamp"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 01:28:21 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "text/event-stream",
+      "json": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Long running operation completed. Duration: 0 seconds, Steps: 200."
+            }
+          ]
+        },
+        "jsonrpc": "2.0",
+        "id": 10
+      }
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 9.783,
+      "kind": "sse",
+      "event": "message",
+      "id": "28da94fd-4332-4e76-8424-30a82835bbd1",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":1,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 11.195,
+      "kind": "sse",
+      "event": "message",
+      "id": "b02da4f3-856a-4b3f-ae12-4862c5b3145b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":2,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 12.665,
+      "kind": "sse",
+      "event": "message",
+      "id": "ca9b41d4-4f9c-43e6-bd30-a7a5fd580a16",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":3,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 13.406,
+      "kind": "sse",
+      "event": "message",
+      "id": "fb63b87d-89d9-44ed-b542-892f88431b22",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":4,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 14.804,
+      "kind": "sse",
+      "event": "message",
+      "id": "04f5dcc5-cc74-4622-922e-d4e3807fef54",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":5,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 15.002,
+      "kind": "sse",
+      "event": "message",
+      "id": "fc0de59c-9911-4fb5-8006-d90b727b814b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":6,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 16.297,
+      "kind": "sse",
+      "event": "message",
+      "id": "33c8d7e5-a5d4-49c6-bdf2-aca32823c721",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":7,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 17.678,
+      "kind": "sse",
+      "event": "message",
+      "id": "cac365ea-4173-4820-8b35-9b201dcd2501",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":8,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 19.059,
+      "kind": "sse",
+      "event": "message",
+      "id": "60cbb8b9-c711-48b5-8c73-8f1167e7520f",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":9,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 20.444,
+      "kind": "sse",
+      "event": "message",
+      "id": "0d19977f-f55d-4f1c-aa4b-82d6824ef501",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":10,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 21.828,
+      "kind": "sse",
+      "event": "message",
+      "id": "d67e2f80-653e-45fa-aa32-20ad1e154f7c",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":11,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 21.994,
+      "kind": "sse",
+      "event": "message",
+      "id": "1950c568-85db-4bd5-9f9e-b6f1157a89d5",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":12,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 23.29,
+      "kind": "sse",
+      "event": "message",
+      "id": "af8daad1-ed08-4853-8148-7eb8660ec840",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":13,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 24.673,
+      "kind": "sse",
+      "event": "message",
+      "id": "2569133b-a258-4490-8a78-4fe565d971df",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":14,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 26.056,
+      "kind": "sse",
+      "event": "message",
+      "id": "58688534-fdf4-4a24-815d-7dc524b22ece",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":15,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 27.442,
+      "kind": "sse",
+      "event": "message",
+      "id": "0d8b13bd-b397-4cb8-bf88-5e95c9b297d2",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":16,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 28.85,
+      "kind": "sse",
+      "event": "message",
+      "id": "810697f6-68d6-42d5-9127-0c7c21d73f86",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":17,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 30.458,
+      "kind": "sse",
+      "event": "message",
+      "id": "b017e956-14bb-4d9a-80de-d0e0155e883f",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":18,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 32.641,
+      "kind": "sse",
+      "event": "message",
+      "id": "dc80f361-2cb8-4f6a-8368-e98908a0a770",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":19,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 34.514,
+      "kind": "sse",
+      "event": "message",
+      "id": "0803d2fe-348a-47fc-b7fd-694849267b25",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":20,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 35.672,
+      "kind": "sse",
+      "event": "message",
+      "id": "0325ccf9-a001-413e-b093-9ac6d522e957",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":21,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 37.086,
+      "kind": "sse",
+      "event": "message",
+      "id": "ad91eb3b-a260-4084-b5a1-4d921da7828a",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":22,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 38.499,
+      "kind": "sse",
+      "event": "message",
+      "id": "010354db-932b-41c7-b0ca-8951f4a0d3fa",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":23,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 40.223,
+      "kind": "sse",
+      "event": "message",
+      "id": "1d87e4f8-d8c8-4ecc-b5b8-aac639656f39",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":24,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 40.439,
+      "kind": "sse",
+      "event": "message",
+      "id": "e069c0f1-c8a5-45df-b799-672a7be2932e",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":25,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 41.738,
+      "kind": "sse",
+      "event": "message",
+      "id": "e0ed2922-9a0b-4dc2-8802-9ab8d1ab2044",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":26,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 43.12,
+      "kind": "sse",
+      "event": "message",
+      "id": "98fe3012-a324-42f8-ae1d-c5dcd253c4c5",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":27,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 45.207,
+      "kind": "sse",
+      "event": "message",
+      "id": "f0de43c3-00d7-46c6-95c7-92e2c7c2fa67",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":28,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 45.565,
+      "kind": "sse",
+      "event": "message",
+      "id": "654b759c-1c23-442c-a098-860c9147e225",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":29,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 46.6,
+      "kind": "sse",
+      "event": "message",
+      "id": "1cbcceac-9ff1-4d40-9ba1-523032b4da19",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":30,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 48.164,
+      "kind": "sse",
+      "event": "message",
+      "id": "2d9fee5e-ca54-4cf5-97a6-64ae3fa1f618",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":31,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 49.467,
+      "kind": "sse",
+      "event": "message",
+      "id": "414afdc6-c6e9-40db-9a61-4185de2169fe",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":32,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 50.658,
+      "kind": "sse",
+      "event": "message",
+      "id": "e8b5ceb0-cb2a-4c8d-8cdd-c5d5699c105a",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":33,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 51.997,
+      "kind": "sse",
+      "event": "message",
+      "id": "6b54d165-916f-48d2-ae78-a4de3a468b0b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":34,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 53.58,
+      "kind": "sse",
+      "event": "message",
+      "id": "8b194851-9c13-4d8f-9985-920fdf2be5ea",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":35,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 55.236,
+      "kind": "sse",
+      "event": "message",
+      "id": "67b386dd-20e5-4c65-b016-b3f2e46e5f80",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":36,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 56.789,
+      "kind": "sse",
+      "event": "message",
+      "id": "a669b7b4-3696-4ace-ba36-214164d08850",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":37,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 58.343,
+      "kind": "sse",
+      "event": "message",
+      "id": "9d5c43cc-5b23-4cbb-a6a9-2a77fa0ca625",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":38,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 60.514,
+      "kind": "sse",
+      "event": "message",
+      "id": "05262b84-2729-4786-a16f-0e1a86146a7b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":39,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 61.915,
+      "kind": "sse",
+      "event": "message",
+      "id": "86202781-178d-4227-8840-991427a52590",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":40,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 63.549,
+      "kind": "sse",
+      "event": "message",
+      "id": "b959e824-4537-493c-a7ec-dcef52d6d0b8",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":41,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 64.871,
+      "kind": "sse",
+      "event": "message",
+      "id": "ee2159f1-3449-452d-a164-e37d83d38b73",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":42,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 66.291,
+      "kind": "sse",
+      "event": "message",
+      "id": "f4706655-7840-446f-b454-c6bbd2297d32",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":43,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 67.707,
+      "kind": "sse",
+      "event": "message",
+      "id": "6b13b0ea-9855-4289-833a-bb26349be33d",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":44,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 70.089,
+      "kind": "sse",
+      "event": "message",
+      "id": "ed96d171-fdbe-4858-980b-917dfb74e233",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":45,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 71.433,
+      "kind": "sse",
+      "event": "message",
+      "id": "c00fb05e-b7c1-41e1-8790-fc8b5990b272",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":46,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 72.964,
+      "kind": "sse",
+      "event": "message",
+      "id": "67620b80-c3ec-42f3-991a-6fa385d077a3",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":47,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 74.463,
+      "kind": "sse",
+      "event": "message",
+      "id": "ed10d769-6ffd-4760-810c-12eb6f20a449",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":48,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 76.304,
+      "kind": "sse",
+      "event": "message",
+      "id": "9d7ae4f6-5d1a-4230-a8fa-37217be8207e",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":49,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 77.852,
+      "kind": "sse",
+      "event": "message",
+      "id": "b8ef557b-05d0-450c-be64-ddb8ece529b6",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":50,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 85.339,
+      "kind": "sse",
+      "event": "message",
+      "id": "94b5e962-5358-4f93-b4f7-311433de9c6f",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":51,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 85.504,
+      "kind": "sse",
+      "event": "message",
+      "id": "4750a6c4-73bc-4c80-8e27-83aeb29b1592",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":52,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 86.839,
+      "kind": "sse",
+      "event": "message",
+      "id": "40242a6a-6d01-4590-85ec-bc62d23243f6",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":53,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 88.148,
+      "kind": "sse",
+      "event": "message",
+      "id": "a5fd9089-81fe-4fec-a2da-ffec3eb06718",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":54,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 89.54,
+      "kind": "sse",
+      "event": "message",
+      "id": "fc299eec-771b-43a9-9fcd-049882233cd4",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":55,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 90.872,
+      "kind": "sse",
+      "event": "message",
+      "id": "713885ef-1f52-4b5d-9e6d-9b076c2bec85",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":56,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 92.246,
+      "kind": "sse",
+      "event": "message",
+      "id": "f9b0f99c-ab0d-4540-969f-00c3b961e8c2",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":57,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 93.59,
+      "kind": "sse",
+      "event": "message",
+      "id": "6c7fde6e-40ab-4fd0-919f-b93315431342",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":58,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 94.941,
+      "kind": "sse",
+      "event": "message",
+      "id": "f241923f-00bd-488e-bc3b-a0ff0fd0a724",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":59,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 96.296,
+      "kind": "sse",
+      "event": "message",
+      "id": "c5041241-f8df-4148-8af6-0f2e72f0c57f",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":60,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 97.65,
+      "kind": "sse",
+      "event": "message",
+      "id": "17afa81a-379f-48f7-8791-70473236143b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":61,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 99.002,
+      "kind": "sse",
+      "event": "message",
+      "id": "871938d7-af45-4e20-b102-8794b1b42533",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":62,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 100.351,
+      "kind": "sse",
+      "event": "message",
+      "id": "2e1375f4-76a8-47f5-bfcb-114bff8fd269",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":63,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 101.698,
+      "kind": "sse",
+      "event": "message",
+      "id": "493f60d5-8d0b-4036-a135-88c459cdfcc5",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":64,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 103.049,
+      "kind": "sse",
+      "event": "message",
+      "id": "aa59586f-327b-4e19-a524-4c0619584622",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":65,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 104.406,
+      "kind": "sse",
+      "event": "message",
+      "id": "a7aac3e4-13d9-45ae-8f50-24f9ac9f0ba0",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":66,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 105.5,
+      "kind": "sse",
+      "event": "message",
+      "id": "522c997c-818a-4e6d-b86d-00d94e933e95",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":67,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 106.854,
+      "kind": "sse",
+      "event": "message",
+      "id": "0e071dd5-1f26-4338-8acf-c888a0b55039",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":68,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 108.218,
+      "kind": "sse",
+      "event": "message",
+      "id": "53b328fb-a142-4bd0-815a-a110beb0d104",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":69,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 109.639,
+      "kind": "sse",
+      "event": "message",
+      "id": "f2a7381f-19b8-4d26-89bc-d57cf629348a",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":70,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 110.957,
+      "kind": "sse",
+      "event": "message",
+      "id": "1e92d306-24b7-4724-bb75-4b981e641774",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":71,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 112.537,
+      "kind": "sse",
+      "event": "message",
+      "id": "c714b841-18a5-49f0-9d9f-40a7b57a35a7",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":72,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 113.856,
+      "kind": "sse",
+      "event": "message",
+      "id": "1e72da90-2079-4c99-a7f7-012335c3a410",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":73,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 115.187,
+      "kind": "sse",
+      "event": "message",
+      "id": "6af05e28-6aad-45ca-914f-9407eae2f057",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":74,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 116.522,
+      "kind": "sse",
+      "event": "message",
+      "id": "44fc175d-bed2-409a-9a80-ad6686978678",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":75,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 117.921,
+      "kind": "sse",
+      "event": "message",
+      "id": "a1132ad8-7ec4-4d9e-923e-006a21821bd7",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":76,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 119.278,
+      "kind": "sse",
+      "event": "message",
+      "id": "9625248b-1732-486e-8df5-6dd4768c377f",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":77,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 120.683,
+      "kind": "sse",
+      "event": "message",
+      "id": "0196a9b3-88c1-499d-93b2-8833a6bb7b73",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":78,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 122.034,
+      "kind": "sse",
+      "event": "message",
+      "id": "d13ba5cd-b44a-4e77-97f4-0d2928c68308",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":79,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 123.375,
+      "kind": "sse",
+      "event": "message",
+      "id": "65d5ab06-6a58-424b-b72b-d6f26975d5e6",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":80,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 124.811,
+      "kind": "sse",
+      "event": "message",
+      "id": "a3d79502-7921-4941-9171-2856d3a6229c",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":81,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 124.994,
+      "kind": "sse",
+      "event": "message",
+      "id": "fc4aa8ca-cdfb-475a-a254-2e83ac54e44d",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":82,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 126.188,
+      "kind": "sse",
+      "event": "message",
+      "id": "fc0e62bb-2512-4609-9f55-066ed81ab17b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":83,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 127.567,
+      "kind": "sse",
+      "event": "message",
+      "id": "7541b30f-c51d-4250-a951-2975205046d2",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":84,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 128.968,
+      "kind": "sse",
+      "event": "message",
+      "id": "f83f7633-d4f6-4725-8cd2-9ff20afd868e",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":85,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 130.285,
+      "kind": "sse",
+      "event": "message",
+      "id": "a91c8232-b87c-41f4-a0a2-a9b566cabf19",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":86,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 131.628,
+      "kind": "sse",
+      "event": "message",
+      "id": "a6edd6a0-6171-419d-b60b-0f27689f2ccc",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":87,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 132.955,
+      "kind": "sse",
+      "event": "message",
+      "id": "08d42e81-70ba-44e3-873f-324fcd4a8a1a",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":88,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 134.343,
+      "kind": "sse",
+      "event": "message",
+      "id": "a4ffd83c-90c5-4522-b7ba-403d4e708682",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":89,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 135.709,
+      "kind": "sse",
+      "event": "message",
+      "id": "f83b0ba1-0b98-4b79-8966-c370ca5ba936",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":90,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 137.055,
+      "kind": "sse",
+      "event": "message",
+      "id": "174f3156-6592-4fe8-8ece-e422a27c5717",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":91,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 138.405,
+      "kind": "sse",
+      "event": "message",
+      "id": "818288f0-1998-4012-894e-66bd75d2907e",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":92,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 139.76,
+      "kind": "sse",
+      "event": "message",
+      "id": "9714ebba-54ce-4fc7-bc12-0882468a2c4d",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":93,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 139.902,
+      "kind": "sse",
+      "event": "message",
+      "id": "044b2594-bfdf-4060-90e6-3c87da88580b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":94,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 141.174,
+      "kind": "sse",
+      "event": "message",
+      "id": "15efd4aa-0f08-47c6-85c7-f8c86dd47d9f",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":95,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 142.509,
+      "kind": "sse",
+      "event": "message",
+      "id": "2367091a-a562-4bac-bc67-5d8486f65d31",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":96,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 143.863,
+      "kind": "sse",
+      "event": "message",
+      "id": "56173056-0d16-44dd-b641-2b10bfb48a4f",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":97,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 145.279,
+      "kind": "sse",
+      "event": "message",
+      "id": "f962d763-4ca8-4cf9-ac73-696cc84e27de",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":98,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 145.964,
+      "kind": "sse",
+      "event": "message",
+      "id": "2b79b94a-e14a-4164-9e00-b79e4b8c91ac",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":99,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 147.315,
+      "kind": "sse",
+      "event": "message",
+      "id": "81ff18ae-09bf-4af4-a0b9-0c1da8a32846",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":100,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 148.671,
+      "kind": "sse",
+      "event": "message",
+      "id": "2cb1b1c8-57d3-4ab1-aa8f-b3e57ada5467",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":101,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 150.019,
+      "kind": "sse",
+      "event": "message",
+      "id": "bb268547-1228-4ee4-bcd9-60ee93a38951",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":102,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 151.457,
+      "kind": "sse",
+      "event": "message",
+      "id": "1249367a-36b5-41bf-a0d6-7af76b8afb56",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":103,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 152.81,
+      "kind": "sse",
+      "event": "message",
+      "id": "8cc39752-8d24-44f1-b5e7-b6f5b9f94b14",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":104,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 154.173,
+      "kind": "sse",
+      "event": "message",
+      "id": "95f771b0-3d4d-419c-ac5d-835d637d5f38",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":105,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 155.526,
+      "kind": "sse",
+      "event": "message",
+      "id": "6061b6e0-8d53-4467-8148-d6c5bb4b9e81",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":106,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 156.885,
+      "kind": "sse",
+      "event": "message",
+      "id": "5e5c2641-68f2-405e-b619-d3a3599756a6",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":107,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 158.245,
+      "kind": "sse",
+      "event": "message",
+      "id": "bcf92a20-8f8f-484d-9f55-3ea80e4fcdcd",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":108,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 159.637,
+      "kind": "sse",
+      "event": "message",
+      "id": "1f89a249-6350-468a-a729-9c962395df46",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":109,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 160.986,
+      "kind": "sse",
+      "event": "message",
+      "id": "ff908835-7758-484e-8fdb-bec64a0d18f6",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":110,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 162.354,
+      "kind": "sse",
+      "event": "message",
+      "id": "b7031d9c-c677-4f8b-a1fa-a8ece7e3c1f0",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":111,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 163.705,
+      "kind": "sse",
+      "event": "message",
+      "id": "2335c9b6-ff2d-4a24-bbab-e8278f94eb65",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":112,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 165.137,
+      "kind": "sse",
+      "event": "message",
+      "id": "ae6ab2e5-d593-4a36-a1cd-ed09a86ecf6c",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":113,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 166.488,
+      "kind": "sse",
+      "event": "message",
+      "id": "3f9dd356-76e5-4644-b8b5-b605aec4fcb4",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":114,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 167.85,
+      "kind": "sse",
+      "event": "message",
+      "id": "1d72b3e0-d834-41a2-9cf4-2265c6299890",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":115,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 169.207,
+      "kind": "sse",
+      "event": "message",
+      "id": "11d72373-819c-4a7a-8140-f25e37202d79",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":116,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 170.558,
+      "kind": "sse",
+      "event": "message",
+      "id": "dccf718b-7c7a-446a-a64a-a67aa3f828db",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":117,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 171.922,
+      "kind": "sse",
+      "event": "message",
+      "id": "e2cb6181-1b82-4e6e-8208-ab8d733bddd9",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":118,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 173.275,
+      "kind": "sse",
+      "event": "message",
+      "id": "376a8ac2-c235-4ccf-af5a-6e5959e197c7",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":119,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 174.654,
+      "kind": "sse",
+      "event": "message",
+      "id": "d35c3fb6-746e-4c7f-b18e-c91cfc9121b4",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":120,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 176.033,
+      "kind": "sse",
+      "event": "message",
+      "id": "1aeffb82-4776-414c-a580-8371431d04da",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":121,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 177.394,
+      "kind": "sse",
+      "event": "message",
+      "id": "b8888819-8a36-4435-9ac3-26c432c484de",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":122,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 178.74,
+      "kind": "sse",
+      "event": "message",
+      "id": "c51c2bf4-f29e-4936-b81f-ee040faf9a32",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":123,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 180.096,
+      "kind": "sse",
+      "event": "message",
+      "id": "b3936aaf-063f-4583-8701-a101ed1d9287",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":124,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 181.462,
+      "kind": "sse",
+      "event": "message",
+      "id": "4f542b83-a5a8-4d08-bc3f-db2bebbcf1e5",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":125,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 182.801,
+      "kind": "sse",
+      "event": "message",
+      "id": "690d0bf8-34c0-406d-8c6b-3bbb9153d96d",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":126,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 184.169,
+      "kind": "sse",
+      "event": "message",
+      "id": "dd1ef2ae-bb45-4c0b-a9d6-5d72d31ac901",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":127,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 185.527,
+      "kind": "sse",
+      "event": "message",
+      "id": "fd9fca45-2e7a-4843-8f3b-6d37a0b11f35",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":128,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 186.888,
+      "kind": "sse",
+      "event": "message",
+      "id": "e48b26ad-ad72-4161-8824-e5465020a27f",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":129,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 188.249,
+      "kind": "sse",
+      "event": "message",
+      "id": "b40dcce8-ad74-4639-a655-07ddb4d8a55b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":130,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 189.672,
+      "kind": "sse",
+      "event": "message",
+      "id": "c045d01f-d976-4d38-ab8c-80b27d690812",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":131,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 190.408,
+      "kind": "sse",
+      "event": "message",
+      "id": "47c2b685-9062-4720-a981-f7b135554f4b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":132,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 191.793,
+      "kind": "sse",
+      "event": "message",
+      "id": "cf8dc92d-9769-4f40-8bad-c09db9a2a03e",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":133,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 191.94,
+      "kind": "sse",
+      "event": "message",
+      "id": "4b5db619-1e8c-48b9-8678-c3a3dde7bdd5",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":134,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 193.177,
+      "kind": "sse",
+      "event": "message",
+      "id": "3b336f2b-f28f-4984-b1d8-c2ce9f99d92a",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":135,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 194.51,
+      "kind": "sse",
+      "event": "message",
+      "id": "924a588f-5d75-40bb-96b4-973b0def3940",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":136,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 195.848,
+      "kind": "sse",
+      "event": "message",
+      "id": "e61d0bb6-2d28-478b-a6ef-4b47811c9999",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":137,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 197.357,
+      "kind": "sse",
+      "event": "message",
+      "id": "926f2720-7a7a-4a72-8251-302a5c5a293a",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":138,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 198.77,
+      "kind": "sse",
+      "event": "message",
+      "id": "48a21665-f5b4-4eba-9760-4c58c92e54df",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":139,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 200.059,
+      "kind": "sse",
+      "event": "message",
+      "id": "e618a23c-715f-4588-b4fe-62ea41a00375",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":140,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 201.397,
+      "kind": "sse",
+      "event": "message",
+      "id": "882fa0c8-d2ec-4870-a758-ac34e273122c",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":141,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 202.871,
+      "kind": "sse",
+      "event": "message",
+      "id": "f2f670b0-8fa6-448d-90ec-d2c3598c5fb2",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":142,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 202.998,
+      "kind": "sse",
+      "event": "message",
+      "id": "92b41186-50a8-4db7-9306-2e2eeda5709a",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":143,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 204.294,
+      "kind": "sse",
+      "event": "message",
+      "id": "173e61f7-9a08-4760-8383-1c47063521cf",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":144,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 205.636,
+      "kind": "sse",
+      "event": "message",
+      "id": "6bd3ef87-8d0e-4528-b249-c4fa10d14533",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":145,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 206.982,
+      "kind": "sse",
+      "event": "message",
+      "id": "941d57b3-ad06-4c02-8970-951121cdc2d8",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":146,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 208.419,
+      "kind": "sse",
+      "event": "message",
+      "id": "adad830b-db76-42ee-b01e-1e5480ab358d",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":147,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 209.784,
+      "kind": "sse",
+      "event": "message",
+      "id": "934d2c36-b24d-42f3-a4ff-0c89aecffcc7",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":148,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 209.97,
+      "kind": "sse",
+      "event": "message",
+      "id": "c03401a1-840a-4475-be7b-b4690ff90fd9",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":149,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 211.152,
+      "kind": "sse",
+      "event": "message",
+      "id": "6c43894c-2cce-40e7-8735-ee0cc410455d",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":150,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 212.489,
+      "kind": "sse",
+      "event": "message",
+      "id": "89825bd6-3545-4b39-85aa-cd9a6ce940ea",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":151,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 213.838,
+      "kind": "sse",
+      "event": "message",
+      "id": "f6b8efa6-5bf7-456f-9481-cb672bb201b0",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":152,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 215.226,
+      "kind": "sse",
+      "event": "message",
+      "id": "327b5461-5cf2-4413-a3a3-16608ca407c9",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":153,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 216.505,
+      "kind": "sse",
+      "event": "message",
+      "id": "1dcfbe83-65f8-4c63-8244-27e1dcbb0f3b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":154,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 217.848,
+      "kind": "sse",
+      "event": "message",
+      "id": "5a69565d-dd54-4348-9796-277b0bceac96",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":155,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 219.185,
+      "kind": "sse",
+      "event": "message",
+      "id": "a3d85179-97de-4c3f-8b72-24bfa2d4d543",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":156,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 220.528,
+      "kind": "sse",
+      "event": "message",
+      "id": "175204bd-8690-45da-acd9-0f7b9f589ab2",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":157,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 221.892,
+      "kind": "sse",
+      "event": "message",
+      "id": "32613f52-b9d7-4290-9ae3-48f7e916ec10",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":158,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 223.228,
+      "kind": "sse",
+      "event": "message",
+      "id": "17d12bf8-96db-4e08-9468-a7d9c98bddc7",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":159,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 224.605,
+      "kind": "sse",
+      "event": "message",
+      "id": "37dbe1a6-abfd-473c-a79b-acaf0317f110",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":160,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 225.965,
+      "kind": "sse",
+      "event": "message",
+      "id": "f40592c9-58d8-4b0e-8472-326b1db1d308",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":161,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 227.302,
+      "kind": "sse",
+      "event": "message",
+      "id": "e3aa2cfe-accb-4b14-baab-58066b5462f3",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":162,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 228.658,
+      "kind": "sse",
+      "event": "message",
+      "id": "8848e5c9-9e58-4f76-bfd7-84d8630bda97",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":163,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 230.037,
+      "kind": "sse",
+      "event": "message",
+      "id": "cbc7340a-af69-4ab2-be4c-9ade3c3b58ab",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":164,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 231.785,
+      "kind": "sse",
+      "event": "message",
+      "id": "f7a341e6-d6a7-4823-b00f-d96201b38c2f",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":165,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 233.195,
+      "kind": "sse",
+      "event": "message",
+      "id": "c5e6062c-f1f3-4ade-9271-d50ae5d521b1",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":166,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 234.51,
+      "kind": "sse",
+      "event": "message",
+      "id": "5a31ffbe-1888-448b-ab4c-4e5b521a08e8",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":167,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 235.867,
+      "kind": "sse",
+      "event": "message",
+      "id": "9c5b7d3f-c058-41db-a523-a32ebeb5887a",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":168,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 237.181,
+      "kind": "sse",
+      "event": "message",
+      "id": "d8eab89e-d807-4674-a8ae-3a611d1ef896",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":169,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 238.507,
+      "kind": "sse",
+      "event": "message",
+      "id": "18102f94-7436-4f9e-91f8-c1ce6d43d3ea",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":170,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 239.851,
+      "kind": "sse",
+      "event": "message",
+      "id": "3bbcb6bc-708e-4aa9-a308-d8c481392c71",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":171,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 241.195,
+      "kind": "sse",
+      "event": "message",
+      "id": "247e185c-fe2b-4b17-8b5f-012f5d0c26eb",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":172,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 242.54,
+      "kind": "sse",
+      "event": "message",
+      "id": "fbb329ba-729e-40e9-979e-fe481b8ffda0",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":173,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 243.866,
+      "kind": "sse",
+      "event": "message",
+      "id": "eaa714df-6cad-45b0-ae1a-dab5e2bf6cbc",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":174,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 245.199,
+      "kind": "sse",
+      "event": "message",
+      "id": "7cc4dee1-49a6-4de3-a8f8-565496208da5",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":175,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 246.566,
+      "kind": "sse",
+      "event": "message",
+      "id": "f3b4f850-1a42-4cee-bede-2062c614580d",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":176,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 247.885,
+      "kind": "sse",
+      "event": "message",
+      "id": "932adb45-524b-4f11-8241-140a34dd98a0",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":177,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 249.221,
+      "kind": "sse",
+      "event": "message",
+      "id": "900231e5-d47f-48ba-955d-66501ff90c70",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":178,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 250.549,
+      "kind": "sse",
+      "event": "message",
+      "id": "b8deac90-eef6-421b-8b0a-83f83ee9f842",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":179,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 251.901,
+      "kind": "sse",
+      "event": "message",
+      "id": "0c231fa2-bdeb-435b-b0d9-445700a01b4a",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":180,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 253.241,
+      "kind": "sse",
+      "event": "message",
+      "id": "ab5c32fc-4524-48a9-b7d7-2cc5b2c00195",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":181,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 254.575,
+      "kind": "sse",
+      "event": "message",
+      "id": "8cab516a-32d2-4917-a66b-c18012809010",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":182,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 255.911,
+      "kind": "sse",
+      "event": "message",
+      "id": "91650c24-0b1c-4b74-a31d-3d3592f6870c",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":183,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 257.249,
+      "kind": "sse",
+      "event": "message",
+      "id": "395eef15-a6ed-4a56-8182-5f6ef73638de",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":184,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 258.59,
+      "kind": "sse",
+      "event": "message",
+      "id": "ee2e87ac-6c0d-40ac-b2e2-33fb042a6e7e",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":185,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 259.932,
+      "kind": "sse",
+      "event": "message",
+      "id": "005831c7-c0fc-4ebe-aaff-e03221b14167",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":186,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 261.306,
+      "kind": "sse",
+      "event": "message",
+      "id": "d7990536-b85e-4752-a616-816520ea58f4",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":187,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 262.601,
+      "kind": "sse",
+      "event": "message",
+      "id": "9bc94fd5-7015-48fb-8dcc-a9d15fdfdae6",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":188,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 263.935,
+      "kind": "sse",
+      "event": "message",
+      "id": "54bdeca1-10e7-4a0f-aea4-d7613e04b132",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":189,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 265.28,
+      "kind": "sse",
+      "event": "message",
+      "id": "fc198644-e957-4ba7-90ac-17ca9cb7f95b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":190,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 266.612,
+      "kind": "sse",
+      "event": "message",
+      "id": "15b3b8d9-3449-4cee-ad3d-2a99cfa64c1a",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":191,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 267.962,
+      "kind": "sse",
+      "event": "message",
+      "id": "2f167283-73d4-44a2-97da-3669ee4c522d",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":192,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 269.314,
+      "kind": "sse",
+      "event": "message",
+      "id": "118afcba-cb29-4ed4-91ac-c7861c572bf7",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":193,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 270.686,
+      "kind": "sse",
+      "event": "message",
+      "id": "76c32b13-aced-4cc1-9d00-e7240965ec6b",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":194,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 272.024,
+      "kind": "sse",
+      "event": "message",
+      "id": "19a04ae7-8dfb-413b-882b-3b8bd03eca55",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":195,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 273.392,
+      "kind": "sse",
+      "event": "message",
+      "id": "41661bc8-68c8-4264-8548-452cae69d6e5",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":196,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 274.769,
+      "kind": "sse",
+      "event": "message",
+      "id": "d219fbeb-f2c7-4de5-8644-67f9272006a4",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":197,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 275.428,
+      "kind": "sse",
+      "event": "message",
+      "id": "fc78fc98-e00c-426d-b8d5-a45bfb54514a",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":198,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 276.773,
+      "kind": "sse",
+      "event": "message",
+      "id": "bfe2784c-c32b-4c59-9420-20ce5afe2247",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":199,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 277.094,
+      "kind": "sse",
+      "event": "message",
+      "id": "0332919e-d51d-4f4b-b76d-06b4801c3ad4",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":200,\"total\":200,\"progressToken\":\"clamp\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 277.143,
+      "kind": "sse",
+      "event": "message",
+      "id": "e5027f32-02c5-4629-9d6e-640a3bb12404",
+      "data": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Long running operation completed. Duration: 0 seconds, Steps: 200.\"}]},\"jsonrpc\":\"2.0\",\"id\":10}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

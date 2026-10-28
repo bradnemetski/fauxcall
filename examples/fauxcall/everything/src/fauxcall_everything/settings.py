@@ -25,5 +25,5 @@ class Settings(FakeSettings):
     )
 
     name: str = "everything"
-    port: int = 8701
+    port: int = 8706
     data_dir: Path = ROOT / "data"

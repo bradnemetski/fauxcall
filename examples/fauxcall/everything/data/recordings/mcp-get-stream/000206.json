@@ -1,0 +1,108 @@
+{
+  "id": "000206",
+  "endpoint": "MCP GET:stream",
+  "started_at": "2026-10-27T00:00:51.856078Z",
+  "started_ns": 1793059251856078000,
+  "elapsed_ms": 38240.564,
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "accept",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:00:51 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "content_type": "text/event-stream"
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 510.644,
+      "kind": "sse",
+      "event": "message",
+      "id": "a75fee51-ec0b-40af-8da4-42e7d5fbbace",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"warning\",\"data\":\"Warning-level message - SessionId a17113ee-8ed4-4425-aaaf-8fb91a1f617b\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 5512.423,
+      "kind": "sse",
+      "event": "message",
+      "id": "be1f9d5b-c65d-4325-8a15-875d8f1a9d0c",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"notice\",\"data\":\"Notice-level message - SessionId a17113ee-8ed4-4425-aaaf-8fb91a1f617b\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 10516.177,
+      "kind": "sse",
+      "event": "message",
+      "id": "57cbb692-8632-4d7b-aa82-34381e10ddfb",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"alert\",\"data\":\"Alert level-message - SessionId a17113ee-8ed4-4425-aaaf-8fb91a1f617b\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 17113.404,
+      "kind": "sse",
+      "event": "message",
+      "id": "a7766553-8c61-49fc-b240-cfe04dc3ccbe",
+      "data": "{\"method\":\"notifications/message\",\"params\":{\"level\":\"alert\",\"data\":\"Alert level-message - SessionId a17113ee-8ed4-4425-aaaf-8fb91a1f617b\"},\"jsonrpc\":\"2.0\"}"
+    }
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}

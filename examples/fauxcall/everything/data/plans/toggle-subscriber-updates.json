@@ -1,0 +1,190 @@
+{
+ "name": "toggle-subscriber-updates",
+ "created_at": "2026-10-26T20:00:00Z",
+ "listen": true,
+ "listen_after_seconds": 3,
+ "calls": [
+  {
+   "id": "subs-on-none",
+   "endpoint": "MCP tools/call:toggle-subscriber-updates",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "toggle-subscriber-updates",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "subs-wait-none",
+   "endpoint": "MCP ping",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   },
+   "repeat": 3,
+   "interval_ms": 2000
+  },
+  {
+   "id": "subs-subscribe-doc",
+   "endpoint": "MCP resources/subscribe",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/static/document/features.md"
+    }
+   }
+  },
+  {
+   "id": "subs-subscribe-dyn",
+   "endpoint": "MCP resources/subscribe",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/dynamic/text/3"
+    }
+   }
+  },
+  {
+   "id": "subs-wait-2",
+   "endpoint": "MCP ping",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   },
+   "repeat": 6,
+   "interval_ms": 2000
+  },
+  {
+   "id": "subs-unsubscribe-doc",
+   "endpoint": "MCP resources/unsubscribe",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/static/document/features.md"
+    }
+   }
+  },
+  {
+   "id": "subs-wait-3",
+   "endpoint": "MCP ping",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   },
+   "repeat": 3,
+   "interval_ms": 2000
+  },
+  {
+   "id": "subs-off",
+   "endpoint": "MCP tools/call:toggle-subscriber-updates",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "toggle-subscriber-updates",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "subs-wait-off",
+   "endpoint": "MCP ping",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   },
+   "repeat": 3,
+   "interval_ms": 2000
+  },
+  {
+   "id": "subs-subscribe-unknown",
+   "endpoint": "MCP resources/subscribe",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/does-not-exist"
+    }
+   }
+  },
+  {
+   "id": "subs-unsubscribe-never",
+   "endpoint": "MCP resources/unsubscribe",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "uri": "demo://resource/static/document/startup.md"
+    }
+   }
+  },
+  {
+   "id": "subs-subscribe-missing",
+   "endpoint": "MCP resources/subscribe",
+   "purpose": "invalid",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   }
+  },
+  {
+   "id": "subs-on-again",
+   "endpoint": "MCP tools/call:toggle-subscriber-updates",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "toggle-subscriber-updates",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "subs-wait-4",
+   "endpoint": "MCP ping",
+   "purpose": "sample",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {}
+   },
+   "repeat": 3,
+   "interval_ms": 2000
+  },
+  {
+   "id": "subs-off-again",
+   "endpoint": "MCP tools/call:toggle-subscriber-updates",
+   "purpose": "variation",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "toggle-subscriber-updates",
+     "arguments": {}
+    }
+   }
+  }
+ ]
+}

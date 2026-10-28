@@ -9,5 +9,5 @@ WORKDIR /workspace
 COPY . /workspace
 RUN uv sync --package fauxcall-everything --no-dev --frozen
 
-EXPOSE 8701
+EXPOSE 8706
 CMD ["uv", "run", "--no-sync", "--package", "fauxcall-everything", "fauxcall-everything"]

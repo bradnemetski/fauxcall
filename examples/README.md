@@ -61,7 +61,7 @@ which an image build can't reach.
 ## What changed after they were built
 
 The fakes are snapshots: they were built with FauxCall as it was on 11 October 2026 (Everything on
-25 October), and FauxCall kept improving from what these runs revealed. So:
+26 October), and FauxCall kept improving from what these runs revealed. So:
 
 - **Their READMEs mention limits that FauxCall has since fixed.** The reference API's README says a
   429 can't be lifted by moving the fake's clock (an `advance` now lifts it), and that the fake

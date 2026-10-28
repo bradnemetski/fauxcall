@@ -1,0 +1,86 @@
+{
+ "name": "gaps-2-task-param",
+ "created_at": "2026-10-26T20:00:00Z",
+ "listen": true,
+ "listen_after_seconds": 1,
+ "note": "A task parameter on tools that don't support tasks: the SDK runs them, then refuses the result.",
+ "calls": [
+  {
+   "id": "task-echo",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": "as a task"
+     },
+     "task": {
+      "ttl": 1000
+     }
+    }
+   }
+  },
+  {
+   "id": "task-sum-invalid",
+   "endpoint": "MCP tools/call:get-sum",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "get-sum",
+     "arguments": {
+      "a": "x"
+     },
+     "task": {}
+    }
+   }
+  },
+  {
+   "id": "task-toggle-logging",
+   "endpoint": "MCP tools/call:toggle-simulated-logging",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "toggle-simulated-logging",
+     "arguments": {},
+     "task": {}
+    }
+   }
+  },
+  {
+   "id": "after-task-toggle",
+   "endpoint": "MCP tools/call:toggle-simulated-logging",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "toggle-simulated-logging",
+     "arguments": {}
+    }
+   }
+  },
+  {
+   "id": "task-bad-shape",
+   "endpoint": "MCP tools/call:echo",
+   "purpose": "edge",
+   "request": {
+    "method": "POST",
+    "path": "/mcp",
+    "json_body": {
+     "name": "echo",
+     "arguments": {
+      "message": "x"
+     },
+     "task": "soon"
+    }
+   }
+  }
+ ]
+}

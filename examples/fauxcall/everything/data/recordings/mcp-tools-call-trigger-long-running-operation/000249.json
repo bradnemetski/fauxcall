@@ -1,0 +1,124 @@
+{
+  "id": "000249",
+  "endpoint": "MCP tools/call:trigger-long-running-operation",
+  "purpose": "edge",
+  "plan_call": "lro-cancelled",
+  "started_at": "2026-10-27T00:03:34.037724Z",
+  "started_ns": 1793059414037724000,
+  "elapsed_ms": 2511.991,
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:3101/mcp",
+    "path": "/mcp",
+    "headers": [
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "accept",
+        "application/json, text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "mcp-protocol-version",
+        "2025-06-18"
+      ]
+    ],
+    "body": {
+      "kind": "json",
+      "content_type": "application/json",
+      "json": {
+        "jsonrpc": "2.0",
+        "id": 13,
+        "method": "tools/call",
+        "params": {
+          "name": "trigger-long-running-operation",
+          "arguments": {
+            "duration": 3,
+            "steps": 3
+          },
+          "_meta": {
+            "progressToken": "cancel-me"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": [
+      [
+        "x-powered-by",
+        "Express"
+      ],
+      [
+        "access-control-allow-origin",
+        "*"
+      ],
+      [
+        "access-control-expose-headers",
+        "mcp-session-id,last-event-id,mcp-protocol-version"
+      ],
+      [
+        "cache-control",
+        "no-cache, no-transform"
+      ],
+      [
+        "connection",
+        "keep-alive"
+      ],
+      [
+        "content-type",
+        "text/event-stream"
+      ],
+      [
+        "mcp-session-id",
+        "[REDACTED]"
+      ],
+      [
+        "x-accel-buffering",
+        "no"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 00:03:34 GMT"
+      ],
+      [
+        "transfer-encoding",
+        "chunked"
+      ]
+    ],
+    "body": {
+      "kind": "text",
+      "content_type": "text/event-stream",
+      "text": "event: message\nid: 8ecc16a7-139b-4a82-9a0b-71ca9f15bb57\ndata: {\"method\":\"notifications/progress\",\"params\":{\"progress\":1,\"total\":3,\"progressToken\":\"cancel-me\"},\"jsonrpc\":\"2.0\"}\n\nevent: message\nid: 8d7434c9-8ecb-41a3-86f2-61918ca10b65\ndata: {\"method\":\"notifications/progress\",\"params\":{\"progress\":2,\"total\":3,\"progressToken\":\"cancel-me\"},\"jsonrpc\":\"2.0\"}\n\n"
+    }
+  },
+  "stream": [
+    {
+      "t_ms": 1010.222,
+      "kind": "sse",
+      "event": "message",
+      "id": "8ecc16a7-139b-4a82-9a0b-71ca9f15bb57",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":1,\"total\":3,\"progressToken\":\"cancel-me\"},\"jsonrpc\":\"2.0\"}"
+    },
+    {
+      "t_ms": 2011.539,
+      "kind": "sse",
+      "event": "message",
+      "id": "8d7434c9-8ecb-41a3-86f2-61918ca10b65",
+      "data": "{\"method\":\"notifications/progress\",\"params\":{\"progress\":2,\"total\":3,\"progressToken\":\"cancel-me\"},\"jsonrpc\":\"2.0\"}"
+    }
+  ],
+  "tags": [
+    "cancelled"
+  ],
+  "redacted": [
+    "request.header:mcp-session-id",
+    "response.header:mcp-session-id"
+  ]
+}
