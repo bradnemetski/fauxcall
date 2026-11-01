@@ -6,6 +6,19 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.4.0]
+
+Parity now covers what an MCP server does on its own: the log messages, resource updates and
+requests it pushes, and the progress a call streams while it runs. Background work follows the
+fake's clock, so tests fast-forward through it. FauxCall learns what a cancelled call does, how
+the server negotiates protocol versions and what it says when a request to the client times
+out. The Everything example was rebuilt with all of it, at 100% parity with no code of its own
+for the transport. Existing fakes keep working: a fake scaffolded with 0.3 depends on
+`fauxcall>=0.3…,<0.4`, so raise that in its `pyproject.toml` to move it to 0.4. Then
+`fauxcall model check` lists `on_cancel` as undecided for MCP servers with tools that may write
+(until it's decided, a cancelled call stops, as before), and a refresh or rebuild picks up the
+rest.
+
 ### Added
 
 - **Parity compares what an MCP server sends on its own.** Scenarios `await mcp.listen()` and
@@ -19,14 +32,15 @@ All notable changes to FauxCall are listed here. The format follows
 - **Background work follows the fake's clock.** `channel.pause` and `ctx.pause` wait on the
   session's clock: advancing it through `/__fauxcall/clock` ends the waits that are due, so tests
   and agents fast-forward through periodic pushes, task stages and timeouts; a frozen clock holds
-  them. Requests to the client time out on the same clock. Background waits aren't skipped in fast mode (a periodic loop would spin).
+  them. Requests to the client time out on the same clock. Background waits aren't skipped in
+  fast mode (a periodic loop would spin).
 - **What a cancelled MCP call does, learned.** `transport.on_cancel` says whether a call the client
   cancels stops (the Python SDK) or finishes its work, still streaming its progress, with only
-  the answer dropped (the TypeScript SDK, checked against the Everything server); handlers check `ctx.cancelled` where the real tool checks its abort signal.
-  Plan calls record a cancel (`cancel_after_ms`), scenarios compare one
-  (`call_tool(..., cancel_after=…)`), and `fauxcall model check` lists `on_cancel` as undecided
-  for servers with tools that may write. Recordings of cancelled calls are evidence only, never
-  replayed as answers.
+  the answer dropped (the TypeScript SDK, checked against the Everything server); handlers check
+  `ctx.cancelled` where the real tool checks its abort signal. Plan calls record a cancel
+  (`cancel_after_ms`), scenarios compare one (`call_tool(..., cancel_after=…)`), and
+  `fauxcall model check` lists `on_cancel` as undecided for servers with tools that may write.
+  Recordings of cancelled calls are evidence only, never replayed as answers.
 - **Version negotiation and timeouts, recorded.** Introspection also offers the `2024-10-07`
   draft and a version no server speaks, each in a session of its own, so
   `default_protocol_version` is what the server really answers an unsupported version (it was
@@ -374,7 +388,8 @@ The first release.
   outcomes, with cached answers and deterministic fallbacks.
 - Examples: fakes FauxCall built on its own while it was validated, from a single prompt each.
 
-[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/bradnemetski/fauxcall/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/bradnemetski/fauxcall/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/bradnemetski/fauxcall/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/bradnemetski/fauxcall/compare/v0.1.3...v0.2.0
