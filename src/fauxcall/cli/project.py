@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import fnmatch
-import itertools
 import json
 import os
 import shutil
@@ -15,6 +14,7 @@ import typer
 
 from fauxcall import __version__
 from fauxcall.build.init import ensure_env, init_fake, origin
+from fauxcall.build.scaffold import pinned_releases, release
 from fauxcall.cli import common
 from fauxcall.cli.common import (
     clean_errors,
@@ -687,17 +687,6 @@ def skill_version(skill_dir: Path) -> str | None:
     return None
 
 
-def _release(version: str) -> tuple[int, ...]:
-    """``"0.1.10"`` -> ``(0, 1, 10)``, so versions compare as numbers (suffixes are ignored)."""
-    parts = []
-    for part in version.split("."):
-        digits = "".join(itertools.takewhile(str.isdigit, part))
-        if not digits:
-            break
-        parts.append(int(digits))
-    return tuple(parts)
-
-
 def _skill_check(skill_dir: Path | None) -> tuple[str, bool, str] | None:
     """Whether the skill's instructions and this CLI come from the same release."""
     if skill_dir is None:
@@ -709,7 +698,7 @@ def _skill_check(skill_dir: Path | None) -> tuple[str, bool, str] | None:
         return ("skill matches the CLI", True, version)
     fix = (
         f"update the plugin: {PLUGIN_UPDATE}"
-        if _release(version) < _release(__version__)
+        if release(version) < release(__version__)
         else "upgrade the CLI (`uv tool upgrade fauxcall`) or run the plugin's own `fauxcall`"
     )
     return (
@@ -717,6 +706,44 @@ def _skill_check(skill_dir: Path | None) -> tuple[str, bool, str] | None:
         False,
         f"skill {version}, CLI {__version__}: the instructions and the tool disagree; {fix}",
     )
+
+
+def _fakes_check() -> tuple[str, bool, str] | None:
+    """Whether the fakes' FauxCall pins allow this release (None when no fake pins a range)."""
+    floors = {
+        fake.name: max(pinned, key=release)
+        for fake in workspace().fakes()
+        if (pinned := pinned_releases(fake.root / "pyproject.toml"))
+    }
+    if not floors:
+        return None
+    current = release(__version__)
+    newer = [
+        f"{name} (>={floor})" for name, floor in sorted(floors.items()) if release(floor) > current
+    ]
+    older = [
+        f"{name} (>={floor})" for name, floor in sorted(floors.items()) if release(floor) < current
+    ]
+    label = "fakes run this FauxCall"
+    if newer:
+        return (
+            label,
+            False,
+            (
+                f"{', '.join(newer)} need a newer FauxCall than {__version__}; "
+                f"update the plugin: {PLUGIN_UPDATE}"
+            ),
+        )
+    if older:
+        return (
+            label,
+            True,
+            (
+                f"{', '.join(older)} on an older one: `fauxcall scaffold <name>` moves a fake to "
+                f"{__version__} (models this release writes don't load in older ones)"
+            ),
+        )
+    return (label, True, __version__)
 
 
 @clean_errors
@@ -732,12 +759,14 @@ def doctor(
     settings = cli_settings()
     uv = shutil.which("uv")
     skill = _skill_check(skill_dir)
+    fakes = _fakes_check()
     checks = [
         ("fauxcall", True, __version__),
         *([skill] if skill is not None else []),
         ("python >= 3.12", sys.version_info >= (3, 12), sys.version.split()[0]),
         ("uv on PATH", uv is not None, uv or "install: https://docs.astral.sh/uv/"),
         ("workspace", True, f"{settings.workspace} ({len(workspace().fakes())} fakes)"),
+        *([fakes] if fakes is not None else []),
         (
             "Jev key (optional)",
             True,

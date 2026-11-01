@@ -53,13 +53,16 @@ from fauxcall.build.scaffold import (
     credential_lines,
     doc_text,
     fauxcall_requirement,
+    follow_this_release,
     identifier,
     import_line,
     markdown_text,
     overlong,
     param_identifier,
+    pinned_releases,
     py_literal,
     py_string,
+    release,
     route_path,
     routes_for,
     routes_imports,
@@ -1030,6 +1033,98 @@ def test_rescaffold_keeps_owned_files_and_rewrites_generated_ones(tmp_path: Path
     send = "refuses calls without credentials: send `Authorization: Bearer any-token` (any\n"
     assert send in readme
     assert workspace.root / "pyproject.toml" in result.kept
+
+
+def test_rescaffold_moves_the_fauxcall_pins_to_this_release(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    workspace = Workspace(tmp_path / "fakes")
+    monkeypatch.setattr(scaffold_module, "__version__", "0.3.1")
+    layout, _ = scaffold_tricky(workspace, tmp_path)
+    pyproject = layout.root / "pyproject.toml"
+    pinned = '"fauxcall>=0.3.1,<0.4"'
+    assert f"dependencies = [{pinned}]" in pyproject.read_text()
+    assert '"fauxcall[testing]>=0.3.1,<0.4"' in pyproject.read_text()
+    authors = f'dependencies = [\n    {pinned},\n    # the author\'s\n    "tzdata==2026.2",\n]'
+    pyproject.write_text(pyproject.read_text().replace(f"dependencies = [{pinned}]", authors))
+    edited = pyproject.read_text()
+
+    monkeypatch.setattr(scaffold_module, "__version__", "0.4.1")
+    result = scaffold(layout, workspace, tricky_model(), project_root=tmp_path)
+    assert pyproject.read_text() == edited.replace(">=0.3.1,<0.4", ">=0.4.1,<0.5")
+    assert pyproject not in result.kept
+    assert pyproject not in result.written
+    note = "`pyproject.toml`: fauxcall >=0.3.1,<0.4 is now >=0.4.1,<0.5, this release"
+    assert f"- {note} (`uv sync` installs it)" in result.summary(tmp_path)
+
+    result = scaffold(layout, workspace, tricky_model(), project_root=tmp_path)
+    assert pyproject in result.kept  # already this release's
+    assert not any("fauxcall >=" in line for line in result.notes)
+
+    monkeypatch.setattr(scaffold_module, "__version__", "0.4.2")
+    scaffold(layout, workspace, tricky_model(), project_root=tmp_path)
+    text = pyproject.read_text()  # a newer patch release moves the floor: its models may be newer
+    assert '"fauxcall>=0.4.2,<0.5"' in text
+    assert '"fauxcall[testing]>=0.4.2,<0.5"' in text
+    assert '    # the author\'s\n    "tzdata==2026.2",' in text
+
+
+def test_scaffold_refuses_a_fake_that_needs_a_newer_fauxcall(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    workspace = Workspace(tmp_path / "fakes")
+    monkeypatch.setattr(scaffold_module, "__version__", "0.5.0")
+    layout, _ = scaffold_tricky(workspace, tmp_path)
+    routes = layout.src / "routes.py"
+    routes.write_text(routes.read_text() + "# edited by hand\n")
+    pyproject = (layout.root / "pyproject.toml").read_text()
+    monkeypatch.setattr(scaffold_module, "__version__", "0.4.1")
+    with pytest.raises(
+        ConfigurationError, match=r"needs fauxcall>=0\.5\.0, and this is FauxCall 0\.4\.1"
+    ):
+        scaffold(layout, workspace, tricky_model(), project_root=tmp_path)
+    assert routes.read_text().endswith("# edited by hand\n")  # refused before writing anything
+    assert (layout.root / "pyproject.toml").read_text() == pyproject
+
+
+@pytest.mark.parametrize(
+    "dependency",
+    [
+        '"fauxcall"',  # a local checkout (FAUXCALL_SOURCE)
+        '"fauxcall==0.3.1"',
+        '"fauxcall>=0.3"',
+        '"fauxcall~=0.3.1"',
+        '"fauxcall<0.4,>=0.3.1"',
+        '"fauxcall>=0.3.1,<0.4,!=0.3.2"',
+        "\"fauxcall>=0.3.1,<0.4; python_version >= '3.12'\"",
+    ],
+)
+def test_pins_scaffold_did_not_write_are_left_alone(tmp_path: Path, dependency: str) -> None:
+    pyproject = tmp_path / "pyproject.toml"
+    text = f"[project]\ndependencies = [{dependency}]\n"
+    pyproject.write_text(text)
+    assert follow_this_release(pyproject, None) is None
+    assert pyproject.read_text() == text
+    assert pinned_releases(pyproject) == []
+
+
+def test_pins_chosen_with_fauxcall_source_are_left_alone(tmp_path: Path) -> None:
+    pyproject = tmp_path / "pyproject.toml"
+    text = '[project]\ndependencies = ["fauxcall>=0.0.1,<0.1"]\n'
+    pyproject.write_text(text)
+    assert follow_this_release(pyproject, ">=0.0.1,<0.1") is None
+    assert pyproject.read_text() == text
+    assert pinned_releases(pyproject) == ["0.0.1"]
+    assert follow_this_release(tmp_path / "missing.toml", None) is None
+    assert pinned_releases(tmp_path / "missing.toml") == []
+    (tmp_path / "binary.toml").write_bytes(b"\xff\xfe")
+    assert pinned_releases(tmp_path / "binary.toml") == []
+
+
+def test_release() -> None:
+    assert release("0.1.10") > release("0.1.2")
+    assert release("1.2.3rc1") == (1, 2, 3)
+    assert release("dev") == ()
 
 
 def test_images_never_get_credentials(tmp_path: Path) -> None:

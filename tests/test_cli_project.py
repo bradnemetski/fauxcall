@@ -21,7 +21,7 @@ from fauxcall import __version__
 from fauxcall.cli import common
 from fauxcall.cli import main as cli_main
 from fauxcall.cli.main import app
-from fauxcall.cli.project import _release, skill_version
+from fauxcall.cli.project import skill_version
 from fauxcall.config import FakeSettings
 from fauxcall.model.api import ApiModel, RealTarget, SourceInfo
 from fauxcall.model.auth import AuthModel, AuthScheme
@@ -940,6 +940,31 @@ def test_doctor_checks_the_skill_matches_the_cli(ws: Workspace, tmp_path: Path) 
     assert "unknown (a copied skill)" in invoke("doctor", "--skill-dir", str(copied)).output
 
 
+def test_doctor_checks_the_fakes_run_this_fauxcall(
+    ws: Workspace, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(shutil, "which", lambda name: f"/usr/bin/{name}")
+    assert "fakes run this FauxCall" not in invoke("doctor").output  # no fakes
+    write_fake(ws, "shop", rest_model())
+    pyproject = ws.fake("shop").root / "pyproject.toml"
+    pyproject.write_text('[project]\ndependencies = ["fauxcall"]\n')
+    assert "fakes run this FauxCall" not in invoke("doctor").output  # a local checkout
+    pyproject.write_text(f'[project]\ndependencies = ["fauxcall>={__version__},<99"]\n')
+    assert f"✓ fakes run this FauxCall: {__version__}" in invoke("doctor").output
+    pyproject.write_text('[project]\ndependencies = ["fauxcall>=0.0.1,<0.1"]\n')
+    assert (
+        "✓ fakes run this FauxCall: shop (>=0.0.1) on an older one: `fauxcall scaffold <name>` "
+        f"moves a fake to {__version__}" in invoke("doctor").output
+    )
+    pyproject.write_text('[project]\ndependencies = ["fauxcall>=99.0.0,<100"]\n')
+    output = invoke("doctor", code=1).output
+    assert (
+        f"✗ fakes run this FauxCall: shop (>=99.0.0) need a newer FauxCall than {__version__}"
+        in output
+    )
+    assert "claude plugin update fauxcall@fauxcall" in output
+
+
 def test_skill_version_of_odd_plugins(tmp_path: Path) -> None:
     broken = _plugin_skill(tmp_path / "broken", "1")
     (tmp_path / "broken" / ".claude-plugin" / "plugin.json").write_text("not json")
@@ -947,9 +972,6 @@ def test_skill_version_of_odd_plugins(tmp_path: Path) -> None:
     unversioned = _plugin_skill(tmp_path / "unversioned", "1")
     (tmp_path / "unversioned" / ".claude-plugin" / "plugin.json").write_text("{}")
     assert skill_version(unversioned) is None
-    assert _release("0.1.10") > _release("0.1.2")
-    assert _release("1.2.3rc1") == (1, 2, 3)
-    assert _release("dev") == ()
 
 
 def test_module_entry_point_in_process(

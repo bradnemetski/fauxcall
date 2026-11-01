@@ -6,6 +6,26 @@ All notable changes to FauxCall are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.4.1]
+
+`fauxcall scaffold` moves a fake to the FauxCall release that runs it, so a fake built with an
+older release keeps loading what newer tools write.
+
+### Fixed
+
+- `fauxcall scaffold` moves a fake's FauxCall pins in `pyproject.toml` up to the running release
+  (`>=0.3.1,<0.4` becomes `>=0.4.1,<0.5`) and changes nothing else in the file. A fake stayed on
+  the release it was built with while the plugin ran the newest, and a model the newer release
+  wrote (`on_cancel`, `server_messages` …) didn't load in the older one, so refreshing or
+  extending a fake built with 0.3 could leave it unable to start. Pins set with `FAUXCALL_SOURCE`
+  or by hand are left alone, and scaffold refuses a fake that needs a newer FauxCall than the one
+  running.
+- `fauxcall doctor` lists fakes on an older FauxCall (scaffold moves them) or on a newer one than
+  the CLI (update the plugin). The refresh and extend skills move a fake first and run its offline
+  tests, so what the upgrade breaks isn't mistaken for drift in the real API.
+- The examples' README has the Everything build's current numbers, and says what FauxCall now
+  records that Everything's README says it couldn't.
+
 ## [0.4.0]
 
 Parity now covers what an MCP server does on its own: the log messages, resource updates and
@@ -388,7 +408,8 @@ The first release.
   outcomes, with cached answers and deterministic fallbacks.
 - Examples: fakes FauxCall built on its own while it was validated, from a single prompt each.
 
-[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/bradnemetski/fauxcall/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/bradnemetski/fauxcall/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/bradnemetski/fauxcall/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/bradnemetski/fauxcall/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/bradnemetski/fauxcall/compare/v0.2.0...v0.3.0

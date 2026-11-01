@@ -67,7 +67,9 @@ fauxcall status                      # existing fakes and their next action
 
 If doctor says the skill doesn't match the CLI, **stop** and give the user the fix it prints: these
 instructions were written for a different release of the tool, and following them with it goes wrong
-in ways that are hard to see.
+in ways that are hard to see. If it says a fake runs an older FauxCall, `fauxcall scaffold <name>`
+moves it to this one (only its FauxCall pins change): do that before working on the fake, since a
+model this release writes doesn't load in an older one.
 
 If a fake for this input exists, run `fauxcall status <name>` and continue at its next action
 (skip to that phase). Otherwise create it, always with `--name`:

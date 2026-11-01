@@ -16,6 +16,7 @@ the few lines that can never fit (a long string) carry a ``# noqa: E501``.
 from __future__ import annotations
 
 import builtins
+import itertools
 import json
 import keyword
 import os
@@ -309,6 +310,70 @@ def fauxcall_requirement(source: str | None) -> tuple[str, str | None]:
     if major == "0":
         return f"fauxcall>={__version__},<0.{int(minor) + 1}", None
     return f"fauxcall>={__version__},<{int(major) + 1}", None
+
+
+def release(version: str) -> tuple[int, ...]:
+    """``"0.1.10"`` -> ``(0, 1, 10)``, so versions compare as numbers (suffixes are ignored)."""
+    parts = []
+    for part in version.split("."):
+        digits = "".join(itertools.takewhile(str.isdigit, part))
+        if not digits:
+            break
+        parts.append(int(digits))
+    return tuple(parts)
+
+
+_PINNED_RANGE: Final = re.compile(
+    r'"fauxcall(?P<extras>\[[^\]"]*\])?\s*>=\s*(?P<floor>[^,"\s]+)\s*,\s*<\s*(?P<ceiling>[^",\s]+)"'
+)
+"""A range of releases as scaffold pins it: ``"fauxcall[testing]>=0.3.1,<0.4"``."""
+
+
+def pinned_releases(pyproject: Path) -> list[str]:
+    """The lowest FauxCall release each scaffold-made pin in ``pyproject`` allows."""
+    try:
+        text = pyproject.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return []
+    return [match["floor"] for match in _PINNED_RANGE.finditer(text)]
+
+
+def follow_this_release(pyproject: Path, source: str | None) -> str | None:
+    """Move a fake's FauxCall pins up to this release; what moved, for the summary (else None).
+
+    The fake runs on the FauxCall its pins allow, the plugin on the newest one, and a model the
+    newer release wrote doesn't load in the older (unknown fields are refused). So pins as
+    scaffold writes them (``>=0.3.1,<0.4``) that allow a release older than this one become this
+    release's range; the rest of the file, which is the author's, stays as it is. Pins chosen with
+    ``FAUXCALL_SOURCE``, a local checkout's bare ``fauxcall`` and other spellings are left alone.
+
+    Raises:
+        ConfigurationError: the fake needs a newer FauxCall than this one (checked before anything
+            is written).
+    """
+    if source or not pyproject.exists():
+        return None
+    text = pyproject.read_text(encoding="utf-8")
+    pins = list(_PINNED_RANGE.finditer(text))
+    if not pins:
+        return None
+    current = release(__version__)
+    newest = max((pin["floor"] for pin in pins), key=release)
+    if release(newest) > current:
+        raise ConfigurationError(
+            f"{pyproject} needs fauxcall>={newest}, and this is FauxCall {__version__}: update "
+            "the plugin (or the fauxcall CLI) first"
+        )
+    if all(release(pin["floor"]) == current for pin in pins):
+        return None
+    allowed = fauxcall_requirement(None)[0].removeprefix("fauxcall")
+    was = f">={pins[0]['floor']},<{pins[0]['ceiling']}"
+    atomic_write_text(
+        pyproject, _PINNED_RANGE.sub(lambda pin: f'"fauxcall{pin["extras"] or ""}{allowed}"', text)
+    )
+    return (
+        f"`{pyproject.name}`: fauxcall {was} is now {allowed}, this release (`uv sync` installs it)"
+    )
 
 
 def checkout_reference(local_path: str | None, workspace_root: Path) -> str | None:
@@ -747,6 +812,7 @@ def scaffold(
 ) -> ScaffoldResult:
     """Create/refresh the fake's package and the workspace files."""
     env = _environment()
+    moved = follow_this_release(layout.root / "pyproject.toml", source)  # first: it may refuse
     result = ScaffoldResult(notes=separate_ports(workspace, layout.name))
     requirement, local_path = fauxcall_requirement(source)
     port = assign_port(workspace, layout)
@@ -810,6 +876,9 @@ def scaffold(
     ]
     for template, target, mode in fake_files:
         _write(target, env.get_template(template).render(**context), mode, result)
+    if moved is not None:  # kept, but no longer as it was: the note says what changed
+        result.kept.remove(layout.root / "pyproject.toml")
+        result.notes.append(moved)
     _write_workspace(env, workspace, layout, local_path, result)
     root = project_root if project_root is not None else workspace.root
     workspace_context = {

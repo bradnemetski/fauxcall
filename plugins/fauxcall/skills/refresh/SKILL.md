@@ -14,7 +14,9 @@ The argument is the fake's name (see `fauxcall status`). Follow the main `/fauxc
 rules (approvals, secrets, evidence) and its reference guides.
 
 0. `fauxcall doctor --skill-dir "<the folder this SKILL.md is in>"`: if it says the skill doesn't
-   match the CLI, stop and give the user the fix it prints.
+   match the CLI, stop and give the user the fix it prints. If it says the fake runs an older
+   FauxCall, move it first: `fauxcall scaffold <name>`, then `uv run pytest` in the fake (offline).
+   Failures there come from the upgrade, not the real API: fix them before the drift check.
 1. `fauxcall status <name>` and `fauxcall report <name>` — know what exists and the last parity score.
 2. **Drift check first (read-only):** `fauxcall verify <name> --target parity` (no writes). The report
    lists every place the real API now differs.
@@ -24,6 +26,7 @@ rules (approvals, secrets, evidence) and its reference guides.
    `fauxcall endpoints <name>` vs the current spec (new endpoints → the `extend` skill, `/fauxcall:extend` in Claude Code).
 4. `fauxcall analyze endpoint <name> "<E>" --apply` for each drifted endpoint; update policies, error
    templates, relations; `fauxcall world build <name>`; `fauxcall model check <name>`.
-5. `fauxcall scaffold <name>` (regenerates routes/README only), update handlers and tests.
+5. `fauxcall scaffold <name>` (regenerates routes/README, keeps the fake on this FauxCall), update
+   handlers and tests.
 6. `fauxcall verify <name>` then `fauxcall verify <name> --target parity` until ≥ 98 %.
 7. `fauxcall report <name>` and summarize for the user: what drifted, what changed in the fake, score.

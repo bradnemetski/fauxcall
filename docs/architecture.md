@@ -46,6 +46,10 @@ the same way every time.
    referenced records are recorded rather than invented.
 7. **Scaffold** (`fauxcall scaffold`): generates an ordinary uv/FastAPI project. It has one route
    per real endpoint, custom handlers for computed behavior, tests, a Dockerfile, compose and CI.
+   Running it again regenerates what it alone writes (routes, the README outside its notes,
+   compose, CI) and keeps the files you edit (handlers, tests, `pyproject.toml` …), except the
+   fake's FauxCall pins: those move up to the running release, because a model it writes doesn't
+   load in an older one.
 8. **Test** (`fauxcall verify`): unit tests, replays of every recorded request, and end-to-end
    scenarios. These run against both the real service and the fake, and must agree on at least
    98% of weighted checks.

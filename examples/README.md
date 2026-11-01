@@ -9,7 +9,7 @@ folder per fake, sharing a uv workspace.
 
 | Fake | Imitates | Built from | Endpoints | Recordings | Parity with the real API | Offline tests |
 |---|---|---|---|---|---|---|
-| [`everything`](fauxcall/everything/README.md) | The MCP project's [Everything](https://github.com/modelcontextprotocol/servers/tree/main/src/everything) reference server, which exercises the whole protocol | MCP server (Streamable HTTP) | 19 tools, 7 resources, 2 resource templates, 4 prompts | 538 | **100%** over 228 scenarios (independent: 100% over 243 of 352 calls) | 962, 97% coverage |
+| [`everything`](fauxcall/everything/README.md) | The MCP project's [Everything](https://github.com/modelcontextprotocol/servers/tree/main/src/everything) reference server, which exercises the whole protocol | MCP server (Streamable HTTP) | 19 tools, 7 resources, 2 resource templates, 4 prompts | 545 | **100%** over 60 scenarios (independent: 100% over 173 of 257 calls) | 396, 98% coverage |
 | [`fakerestapi`](fauxcall/fakerestapi/README.md) | [FakeRESTApi](https://fakerestapi.azurewebsites.net), a demo API that echoes writes without storing them | Swagger UI page | 27 | 323 | **100%** over 115 scenarios | 671, 99% coverage |
 | [`frankfurter`](fauxcall/frankfurter/README.md) | [Frankfurter](https://frankfurter.dev), ECB exchange rates | OpenAPI document | 9 | 219 | **100%** over 142 scenarios | 427, 99% coverage |
 | [`petstore`](fauxcall/petstore/README.md) | [Swagger Petstore v3](https://petstore3.swagger.io), a shared public sandbox | Swagger UI page | 19 | 370 | **99.71%** over 96 scenarios; 98.48% over 80 with real writes | 361, 99% coverage |
@@ -60,13 +60,18 @@ which an image build can't reach.
 
 ## What changed after they were built
 
-The fakes are snapshots: they were built with FauxCall as it was on 11 October 2026 (Everything on
-26 October), and FauxCall kept improving from what these runs revealed. So:
+The fakes are snapshots: they were built with FauxCall as it was on 11 October 2026 (the reference
+API on 15 October, Everything on 26 October), and FauxCall kept improving from what these runs
+revealed. So:
 
-- **Their READMEs mention limits that FauxCall has since fixed.** The reference API's README says a
-  429 can't be lifted by moving the fake's clock (an `advance` now lifts it), and that the fake
-  accepts the test harness's key `fauxcall-test-key` (the tests now add that key for themselves, so a
-  newly built fake wouldn't list it in its `fauxcall.toml`).
+- **Everything's README mentions limits that FauxCall has since fixed.** It says two facts come
+  from the SDK's source because the recorder couldn't capture them: how the server answers an
+  unsupported or draft protocol version (the recorder couldn't open a fresh session per
+  `initialize`), and the reason it gives when its request to the client times out (the recorder
+  always answered those requests). Since 0.4.0, introspection offers those versions in sessions of
+  their own and `client_replies: null` leaves a request unanswered, so a rebuild would record both.
+  The protocol versions have since been checked against the real server, and the README has them
+  right.
 - **Petstore records its users' details as they are.** The sandbox seeds public demo users
   (`user1`, `email1@test.com` …) that agents look up by name, so the run excluded the user fields
   from pseudonymization. FauxCall now has a precise option for this (`public_values` in
