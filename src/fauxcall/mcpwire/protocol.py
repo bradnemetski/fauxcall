@@ -32,6 +32,8 @@ REQUEST_TIMEOUT: Final = -32001
 
 LATEST_HANDSHAKE_VERSION: Final = "2025-06-18"
 KNOWN_VERSIONS: Final = ("2024-11-05", "2025-03-26", "2025-06-18", "2025-11-25")
+DRAFT_VERSIONS: Final = ("2024-10-07",)
+"""Versions from before the first release that some SDKs still accept (the TypeScript SDK)."""
 
 SESSION_HEADER: Final = "mcp-session-id"
 PROTOCOL_HEADER: Final = "mcp-protocol-version"

@@ -104,6 +104,11 @@ class StreamEvent(Model):
 
 CANCELLED: Final = "cancelled"
 """The tag of an MCP call the client cancelled: evidence of what that does, never an answer."""
+UNANSWERED: Final = "unanswered"
+"""The tag of an MCP call whose requests to the client were left unanswered (the server's
+timeout): evidence of what the server does then, never an answer."""
+EVIDENCE_ONLY: Final = frozenset({CANCELLED, UNANSWERED})
+"""Tags of recordings never answered with, replayed or timed."""
 
 
 class Exchange(Model):
@@ -125,3 +130,8 @@ class Exchange(Model):
     note: str | None = None
     redacted: list[str] = Field(default_factory=list)
     pseudonymized: list[str] = Field(default_factory=list)
+
+    @property
+    def evidence_only(self) -> bool:
+        """Recorded to show what the server does, not to answer with (see EVIDENCE_ONLY)."""
+        return not EVIDENCE_ONLY.isdisjoint(self.tags)

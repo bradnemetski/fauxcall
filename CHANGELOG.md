@@ -27,6 +27,13 @@ All notable changes to FauxCall are listed here. The format follows
   (`call_tool(..., cancel_after=…)`), and `fauxcall model check` lists `on_cancel` as undecided
   for servers with tools that may write. Recordings of cancelled calls are evidence only, never
   replayed as answers.
+- **Version negotiation and timeouts, recorded.** Introspection also offers the `2024-10-07`
+  draft and a version no server speaks, each in a session of its own, so
+  `default_protocol_version` is what the server really answers an unsupported version (it was
+  the answer to the latest handshake). A plan call to `MCP initialize` runs in a session of its
+  own, to record any other handshake. `client_replies` with `null` leaves a server's request
+  unanswered: the recorder waits out the server's timeout and tags the recording `unanswered`
+  (evidence only), and `fauxcall analyze stream --apply` learns `timeout_cancel_reason` from it.
 - The Everything example was rebuilt with all of this: 100% parity over 60 scenarios
   (independent: 100% over 173 of 257 calls), every message the server sends on its own compared,
   `on_cancel: finish` decided from a recorded cancel, and no middleware of its own.

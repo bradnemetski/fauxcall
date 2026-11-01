@@ -148,7 +148,8 @@ class PlannedCall(Model):
         default_factory=dict,
         description=(
             "MCP: how the recorder answers requests the server sends during this call, by method "
-            "(``sampling/createMessage`` -> a result, or ``{'error': {...}}``); others get "
+            "(``sampling/createMessage`` -> a result, ``{'error': {...}}``, or null to leave it "
+            "unanswered and record the server's timeout: tagged 'unanswered'); others get "
             "'Method not found', like a client without that capability."
         ),
     )

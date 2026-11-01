@@ -308,8 +308,10 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
         "MCP initialize:version-2025-03-26",
         "MCP initialize:version-2025-06-18",
         "MCP initialize:version-2025-11-25",
+        "MCP initialize:version-2024-10-07",  # a draft some SDKs still speak
+        "MCP initialize:version-1999-01-01",  # what it answers a version it doesn't speak
     ]
-    assert len(found.exchanges) == (49 if mode == "sse" else 45)
+    assert len(found.exchanges) == (51 if mode == "sse" else 47)
     stored = {e.endpoint: e for _, e in RecordingStore(tmp_path / "recordings").iter_exchanges()}
     assert stored["MCP GET /fauxcall-probe-unknown-route:unknown_route"].request.path == (
         "/fauxcall-probe-unknown-route"  # where the probe went, not the MCP path
@@ -318,7 +320,7 @@ async def test_introspect_the_fake(tmp_path: Path, mode: str) -> None:
     assert (unparsed.kind, unparsed.text) == ("text", "{")  # the bytes sent, kept as sent
     # every request was paced: 2 rps -> 0.5 s apart (cleanup DELETEs included); each
     # capability probe: initialize, 2 pages, DELETE; watching the stream: it and a second one
-    assert clock.sleeps == [0.5] * (67 if mode == "sse" else 62)
+    assert clock.sleeps == [0.5] * (71 if mode == "sse" else 66)
     # A fake built from what was learned behaves the same on the wire.
     rebuilt = fake_model(transport=model.transport, page_size=model.tools_page_size)
     rebuilt.mcp = model.model_copy(update={"tools": rebuilt.mcp.tools if rebuilt.mcp else []})
@@ -341,7 +343,15 @@ async def test_introspect_the_official_sdk_server(tmp_path: Path) -> None:
     assert learned.get_stream == "sse"
     assert (learned.missing_session_status, learned.requires_session) == (400, True)
     assert learned.delete_status == 200
-    assert learned.protocol_versions == {v: v for v in protocol.KNOWN_VERSIONS}
+    assert learned.protocol_versions == {v: v for v in protocol.KNOWN_VERSIONS}  # not the draft
+    # what it answers a version it doesn't speak: its own choice, recorded
+    probed = {e.endpoint: e for _, e in RecordingStore(tmp_path / "recordings").iter_exchanges()}
+    answer = probed["MCP initialize:version-1999-01-01"].response
+    assert answer is not None
+    assert (
+        learned.default_protocol_version == (j(answer.body.parsed())["result"]["protocolVersion"])
+    )
+    assert learned.default_protocol_version in protocol.KNOWN_VERSIONS
     assert j(model.errors["missing_session"])["error"] == {
         "code": -32600,
         "message": "Bad Request: Missing session ID",
@@ -638,7 +648,10 @@ async def test_version_probes_skip_refusals_and_stop_at_the_budget(tmp_path: Pat
             "2025-03-26": "2025-03-26",
             "2025-06-18": "2025-06-18",
             "2025-11-25": "2025-11-25",
+            "2024-10-07": "2024-10-07",  # a draft it speaks
         }
+        # it echoes even a version no server speaks: that says nothing about its default
+        assert found.model.transport.default_protocol_version == "2025-06-18"
         assert found.model.transport.issues_session is False
         assert found.model.transport.get_stream == "status"
         assert "missing_session" not in found.model.errors
@@ -1443,3 +1456,77 @@ async def test_the_http_layer_round_trip(tmp_path: Path) -> None:
         ("unknown_route", 404, page),
         ("method_not_allowed", 404, page),
     ]
+
+
+async def test_a_request_left_unanswered_records_the_servers_timeout(tmp_path: Path) -> None:
+    from _mcp import mcp_app, mcp_model  # noqa: PLC0415
+    from fauxcall.analysis.stream import stream_report  # noqa: PLC0415
+    from fauxcall.model.recording import UNANSWERED  # noqa: PLC0415
+    from fauxcall.runtime import RequestContext, register_tool  # noqa: PLC0415
+    from fauxcall.runtime.mcp_server import ClientError  # noqa: PLC0415
+    from fauxcall.runtime.recordings import RecordingIndex  # noqa: PLC0415
+
+    roots: JsonValue = {
+        "name": "list_roots",
+        "inputSchema": {"type": "object"},
+        "annotations": {"readOnlyHint": True},
+    }
+    reason = "McpError: MCP error -32001: Request timed out"
+    transport = McpTransportModel(response_mode="sse", timeout_cancel_reason=reason)
+    tools = [McpToolModel(definition=roots, behavior="computed")]
+    app, _ = mcp_app(tmp_path / "server", mcp_model(transport=transport, tools=tools))
+
+    async def list_roots(ctx: RequestContext, arguments: JsonObject) -> JsonValue:
+        try:
+            listed = await ctx.ask_client("roots/list", within=0.1)
+        except ClientError as error:
+            return {"content": [{"type": "text", "text": error.message}], "isError": True}
+        return {"content": [{"type": "text", "text": str(listed)}]}
+
+    register_tool(app, "list_roots", list_roots)
+    waited = tool_call("list_roots", {}, id="waited")
+    waited["client_replies"] = {"roots/list": None}  # never answered: the server gives up
+    answered = tool_call("list_roots", {}, id="answered")
+    answered["client_replies"] = {"roots/list": {"roots": []}}
+    the_plan = plan(waited, answered)
+    the_plan.client_capabilities = {"roots": {}}
+    async with streaming_client(app) as http:
+        made = recorder(tmp_path, http, "http://fake.test/mcp", rps=0)
+        report = await made.run(the_plan, {"list_roots": roots})
+    assert [o.answers for o in report.outcomes] == [["isError"], ["ok"]]
+    stored = {e.plan_call: e for _, e in RecordingStore(tmp_path / "recordings").iter_exchanges()}
+    assert stored["waited"].tags == [UNANSWERED]
+    assert stored["answered"].tags == []
+    assert stream_report(stored.values()).timeout_reason == reason
+    answers = RecordingIndex(tmp_path / "recordings").for_endpoint("MCP tools/call:list_roots")
+    assert [e.plan_call for e in answers] == ["answered"]  # the timeout is evidence, not an answer
+
+
+async def test_a_plans_initialize_opens_a_session_of_its_own(tmp_path: Path) -> None:
+    from _mcp import mcp_app, mcp_model  # noqa: PLC0415
+
+    transport = McpTransportModel(default_protocol_version="2025-11-25")
+    app, _ = mcp_app(tmp_path / "server", mcp_model(transport=transport))
+    offered = {
+        "id": "unsupported",
+        "endpoint": "MCP initialize",
+        "request": {"method": "POST", "path": "/mcp", "json_body": {"protocolVersion": "1999"}},
+    }
+    listed = {
+        "id": "listed",
+        "endpoint": "MCP tools/list",
+        "request": {"method": "POST", "path": "/mcp"},
+    }
+    async with streaming_client(app) as http:
+        made = recorder(tmp_path, http, "http://fake.test/mcp", rps=0)
+        report = await made.run(plan(offered, listed))
+    assert [o.status_text() for o in report.outcomes] == ["200 ok", "200 ok"]  # its session lives
+    stored = {e.plan_call: e for _, e in RecordingStore(tmp_path / "recordings").iter_exchanges()}
+    sent = j(stored["unsupported"].request.body.parsed())
+    assert sent["params"]["protocolVersion"] == "1999"  # the plan's, over the defaults
+    assert sent["params"]["clientInfo"]["name"] == "fauxcall"
+    answer = stored["unsupported"].response
+    assert answer is not None
+    assert j(answer.body.parsed())["result"]["protocolVersion"] == "2025-11-25"
+    # the plan's session (initialize, DELETE), the call's own (initialize, DELETE), the list
+    assert made.calls_made == 5

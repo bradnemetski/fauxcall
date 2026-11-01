@@ -39,7 +39,7 @@ The results land in the model's `mcp` section.
 | `issues_session`, `session_header`, `requires_session`, `missing_session_status` | session handling |
 | `get_stream`, `get_status` | `sse` (GET opens a stream) or `status` (GET answered with `get_status`, usually 405) |
 | `delete_status` | DELETE response |
-| `protocol_versions`, `default_protocol_version` | negotiation (requested → answered); the default is what the real server answers an unsupported version (probe one), and wins over the recorded handshake's version |
+| `protocol_versions`, `default_protocol_version` | negotiation (requested → answered), learned by introspection: each known version, the `2024-10-07` draft (kept when the server speaks it) and a version no server speaks (`1999-01-01`), each in a session of its own; the default is the answer to that last one, and wins over the recorded handshake's version. A plan call to `MCP initialize` also runs in a session of its own, with the plan's params over the defaults (`{"protocolVersion": "2024-10-07"}`), to record any other handshake |
 
 ## Recording tool calls
 
@@ -184,7 +184,10 @@ client's answer. A refusal, or no answer within 60 s (`within=` to change it), r
 as an SDK server does. To record such tools, a plan declares the client's capabilities
 (`"client_capabilities": {"sampling": {}}`) and each call says how the recorder answers the
 server's requests (`"client_replies": {"sampling/createMessage": {...a result...}}`, or
-`{"error": {...}}` to refuse); unlisted requests get "Method not found".
+`{"error": {...}}` to refuse); unlisted requests get "Method not found". `null` leaves a request
+unanswered (`"client_replies": {"roots/list": null}`): the recorder reads on until the server
+gives up (up to 300 s between messages), and tags the recording `unanswered`. It shows the call's
+answer after the timeout and what the server tells the client then: evidence, never an answer.
 
 **What the server sends outside a call.** Many servers also send on the client's GET stream: log
 messages, resource updates, and requests such as `roots/list`. To record them, set
@@ -226,9 +229,10 @@ with `await mcp.call_tool("create_item", {...}, cancel_after=0.2)` (logged as 20
 then a call that shows the outcome.
 
 **Timeouts and cancellation.** When a request the fake sent the client times out, SDK servers
-tell the client with `notifications/cancelled`; set `transport.timeout_cancel_reason` to the
-reason the real server writes (the TypeScript SDK: `"McpError: MCP error -32001: Request timed
-out"`) and the fake sends it too. A `METHOD_HANDLERS["tools/call"]` handler runs before FauxCall's
+tell the client with `notifications/cancelled`, and the fake does with
+`transport.timeout_cancel_reason` (the TypeScript SDK: `"McpError: MCP error -32001: Request timed
+out"`). Record it: a plan call leaving the request unanswered (`null` in `client_replies`), then
+`fauxcall analyze stream <name> --apply` sets it from what the server sent. A `METHOD_HANDLERS["tools/call"]` handler runs before FauxCall's
 own checks of a tool call (a name that isn't a string, arguments that aren't an object, an unknown
 tool): return a result to answer as the real server does, `None` to leave the call to FauxCall.
 
@@ -304,7 +308,8 @@ once, and compares them by method, shape and count (`values=True` compares value
 values like random log levels differ). `progress=True` asks for progress notifications and
 compares them; `notifications=True` compares what a call sent without asking. After recording
 plans with `"listen": true`, `fauxcall analyze stream <name> --apply` sets `server_messages` (and
-`message_member_order`), and the parity report lists every one no scenario heard.
+`message_member_order`, and `timeout_cancel_reason` from calls left unanswered), and the parity
+report lists every one no scenario heard.
 
 Also run the official SDK against the fake once (the generated unit tests do) — real MCP clients must
 connect without noticing anything.

@@ -1605,3 +1605,52 @@ def test_analyze_stream(ws: Workspace) -> None:
     assert learned.transport.message_member_order == ["method", "params", "jsonrpc"]
     rest = make_fake(ws)
     assert "is not an MCP fake" in invoke("analyze", "stream", rest.name, code=1).output
+
+
+def test_analyze_stream_learns_what_the_server_says_when_it_gives_up(ws: Workspace) -> None:
+    from fauxcall.model.recording import UNANSWERED, StreamEvent  # noqa: PLC0415
+
+    model = ApiModel(
+        name="asker",
+        title="Asker",
+        kind="mcp",
+        source=SourceInfo(kind="mcp", url="http://mcp.test/mcp", fetched_at=datetime.now(UTC)),
+        real=RealTarget(base_url="http://mcp.test"),
+        mcp=McpModel(server_messages=["notifications/message"]),
+    )
+    fake = make_fake(ws, model)
+    store = RecordingStore(fake.recordings)
+    reason = "McpError: MCP error -32001: Request timed out"
+
+    def call(tags: list[str], *sent: str) -> None:
+        store.save(
+            Exchange(
+                id=store.next_id(),
+                endpoint="MCP tools/call:list_roots",
+                started_at=datetime(2026, 1, 5, tzinfo=UTC),
+                started_ns=0,
+                request=CapturedRequest(
+                    method=HttpMethod.POST, url="http://mcp.test/mcp", path="/mcp"
+                ),
+                response=CapturedResponse(status=200),
+                stream=[
+                    StreamEvent(t_ms=float(i), kind="sse", event="message", data=data)
+                    for i, data in enumerate(sent)
+                ],
+                tags=tags,
+            )
+        )
+
+    asked = '{"method":"roots/list","jsonrpc":"2.0","id":3}'
+    gave_up = '{"method":"notifications/cancelled","params":{"requestId":%s,"reason":"%s"}}'
+    bare = '{"method":"notifications/cancelled"}'
+    call([UNANSWERED], asked, bare, gave_up % (3, reason), gave_up % (9, "not its request"))
+    call([], asked, gave_up % (3, "a call the recorder answered"))  # not left unanswered
+    shown = invoke("analyze", "stream", "asker").output
+    assert f"Requests left unanswered are cancelled with: {reason!r}" in shown
+    assert "| method |" not in shown  # nothing recorded on the GET stream
+    invoke("analyze", "stream", "asker", "--apply")
+    learned = read_model(fake.model_path, ApiModel).mcp
+    assert learned is not None
+    assert learned.transport.timeout_cancel_reason == reason
+    assert learned.server_messages == ["notifications/message"]  # left as it was

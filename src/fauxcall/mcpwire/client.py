@@ -760,12 +760,15 @@ def replier(
 ) -> Callable[[JsonObject], Awaitable[JsonValue | None]]:
     """How a client answers the server's requests (sampling, elicitation, roots …) mid-call.
 
-    ``replies`` maps a method to its result, or to ``{"error": {...}}`` to refuse it; any other
-    request gets "Method not found", as from a client without that capability.
+    ``replies`` maps a method to its result, to ``{"error": {...}}`` to refuse it, or to ``None``
+    to leave it unanswered (the server's timeout); any other request gets "Method not found", as
+    from a client without that capability.
     """
 
     async def reply(request: JsonObject) -> JsonValue | None:
         method = str(request.get("method"))
+        if method in replies and replies[method] is None:
+            return None
         found = replies.get(method)
         request_id = request.get("id")
         if isinstance(found, dict) and isinstance(found.get("error"), dict):

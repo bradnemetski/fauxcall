@@ -22,7 +22,7 @@ from urllib.parse import parse_qsl, urlsplit, urlunsplit
 
 import httpx2
 
-from fauxcall import jsonfmt, jsonpath
+from fauxcall import __version__, jsonfmt, jsonpath
 from fauxcall.errors import CredentialsRefusedError, HttpStatusError, RecordingError
 from fauxcall.logs import get_logger
 from fauxcall.mcpwire import protocol
@@ -42,6 +42,7 @@ from fauxcall.model.mcp import (
 from fauxcall.model.plan import Approval, Approvals
 from fauxcall.model.recording import (
     CANCELLED,
+    UNANSWERED,
     Body,
     CapturedRequest,
     CapturedResponse,
@@ -114,6 +115,9 @@ UNKNOWN_SESSION: Final = "fauxcall-unknown-session"
 UNKNOWN_ROUTE: Final = "/fauxcall-probe-unknown-route"
 """A path no server serves, to record its 404 page."""
 PROBE_ORIGIN: Final = "https://fauxcall.invalid"
+UNANSWERED_READ_SECONDS: Final = 300.0
+"""How long a call whose request to the client goes unanswered waits for the server's next
+message (SDK servers give up after 60 s)."""
 PROBE_VERSION: Final = "1999-01-01"
 """A protocol version no server speaks, to record how it refuses one."""
 LIMIT_PROBE_ID: Final = 9_100_000
@@ -584,7 +588,10 @@ class McpRecorder:
         if probe_versions and model.transport.kind == "streamable_http":
             primed = model.transport.priming_versions
             asked: dict[str, bool] = {}
-            model.transport.protocol_versions = await self._probe_versions(exchanges, primed, asked)
+            versions, unsupported = await self._probe_versions(exchanges, primed, asked)
+            model.transport.protocol_versions = versions
+            if unsupported is not None:  # what it answers a version it doesn't speak
+                model.transport.default_protocol_version = unsupported
             model.transport.priming_versions = sorted(set(primed))
             model.transport.priming_since = _priming_since(asked)
         counts = (len(model.tools), len(model.resources), len(model.prompts))
@@ -1164,14 +1171,18 @@ class McpRecorder:
         exchanges: list[str],
         primed: list[str] | None = None,
         asked: dict[str, bool] | None = None,
-    ) -> dict[str, str]:
-        """Which protocol version the server answers to each known version it is offered.
+    ) -> tuple[dict[str, str], str | None]:
+        """Which protocol version the server answers to each version offered (one session each).
 
-        Versions whose handshake opened with a priming event are added to ``primed``; ``asked``
-        maps each version offered to whether its handshake primed.
+        Returns the known versions' answers (and drafts the server speaks: answered as
+        themselves), and its answer to a version no server speaks (``None``: refused or not
+        probed). Versions whose handshake opened with a priming event are added to ``primed``;
+        ``asked`` maps each known version offered to whether its handshake primed.
         """
         mapping: dict[str, str] = {}
-        for version in protocol.KNOWN_VERSIONS:
+        unsupported: str | None = None
+        offered = (*protocol.KNOWN_VERSIONS, *protocol.DRAFT_VERSIONS, PROBE_VERSION)
+        for version in offered:
             client = self._client(version=version)
             try:
                 await self._pace()
@@ -1185,15 +1196,18 @@ class McpRecorder:
                 exchanges.append(
                     self.save(call, method_endpoint("initialize", f"version-{version}"))
                 )
-                if client.negotiated_version:
-                    mapping[version] = client.negotiated_version
+                answered = client.negotiated_version
+                if version == PROBE_VERSION:
+                    unsupported = answered if answered != version else None  # echoes anything
+                elif answered and (version in protocol.KNOWN_VERSIONS or answered == version):
+                    mapping[version] = answered
                     if _primes(call) and primed is not None:
-                        primed.append(client.negotiated_version)
-                    if asked is not None:
+                        primed.append(answered)
+                    if asked is not None and version in protocol.KNOWN_VERSIONS:
                         asked[version] = _primes(call)
             finally:
                 await self._close(client)
-        return mapping
+        return mapping, unsupported
 
     # -- tool calls --------------------------------------------------------------------------------
 
@@ -1286,6 +1300,76 @@ class McpRecorder:
         message = protocol.request(request_id, method, _params_for(call.endpoint, params))
         return await probe.post(message, include_session=False)
 
+    async def _send(
+        self,
+        client: McpWireClient,
+        call: PlannedCall,
+        method: str,
+        params: JsonValue,
+        tags: list[str],
+    ) -> RpcCall:
+        """Send one plan call as it says (cancelled, without credentials …), tagging what it was.
+
+        A request of the server's that the call's ``client_replies`` leave unanswered (``null``)
+        is waited out: the call is read until the server gives up on it (its timeout), however
+        long that takes, up to :data:`UNANSWERED_READ_SECONDS` between messages.
+        """
+        unanswered: list[str] = []
+        answer = replier(call.client_replies)
+
+        async def on_request(request: JsonObject) -> JsonValue | None:
+            reply = await answer(request)
+            if reply is None:
+                unanswered.append(str(request.get("method")))
+            return reply
+
+        client.on_request = on_request
+        if method == "initialize" and call.request.auth == "default":
+            return await self._fresh_initialize(client, params)
+        if call.request.auth != "default":
+            tags.append(f"auth:{call.request.auth}")
+            return await self._auth_probe(client, call, method, params)
+        waits = None in call.client_replies.values()
+        read_timeout = client.timeout_s
+        client.timeout_s = max(read_timeout, UNANSWERED_READ_SECONDS) if waits else read_timeout
+        try:
+            rpc = await client.call(
+                method,
+                _params_for(call.endpoint, params),
+                cancel_after=None if call.cancel_after_ms is None else call.cancel_after_ms / 1000,
+            )
+        finally:
+            client.timeout_s = read_timeout
+        if rpc.cancelled_after_ms is not None:
+            tags.append(CANCELLED)
+        if unanswered:
+            tags.append(UNANSWERED)
+        return rpc
+
+    async def _fresh_initialize(self, client: McpWireClient, params: JsonValue) -> RpcCall:
+        """A plan's ``initialize``, in a session of its own (the plan's is already open).
+
+        The plan's params go as given, over the defaults (the latest handshake version, no
+        capabilities, FauxCall as the client), so a plan records what the server answers any
+        version, capabilities or client info, refusals included.
+        """
+        if client.transport != "streamable_http":
+            raise RecordingError("a plan's initialize needs the Streamable HTTP transport")
+        offered = params if isinstance(params, dict) else {}
+        sent: JsonObject = {
+            "protocolVersion": protocol.LATEST_HANDSHAKE_VERSION,
+            "capabilities": {},
+            "clientInfo": {"name": "fauxcall", "version": __version__},
+            **offered,
+        }
+        fresh = self._client()
+        try:
+            rpc = await fresh.post(protocol.request(1, "initialize", sent), include_session=False)
+            fresh.session_id = rpc.header(protocol.SESSION_HEADER)
+        finally:
+            await self._close(fresh)
+        return rpc
+
     def _current_approvals(self) -> Approvals:
         """The approvals in force: the file when there is one (it may have changed meanwhile)."""
         if self.approvals_path is not None and self.approvals_path.exists():
@@ -1337,21 +1421,8 @@ class McpRecorder:
                 return
             params = render(call.request.json_body, from_mapping(variables))
             tags = list(call.tags)
-            client.on_request = replier(call.client_replies)
             try:
-                if call.request.auth == "default":
-                    rpc = await client.call(
-                        method,
-                        _params_for(call.endpoint, params),
-                        cancel_after=None
-                        if call.cancel_after_ms is None
-                        else call.cancel_after_ms / 1000,
-                    )
-                    if rpc.cancelled_after_ms is not None:
-                        tags.append(CANCELLED)
-                else:
-                    rpc = await self._auth_probe(client, call, method, params)
-                    tags.append(f"auth:{call.request.auth}")
+                rpc = await self._send(client, call, method, params, tags)
             except NOT_SENT:
                 self._refund(approval)
                 raise
